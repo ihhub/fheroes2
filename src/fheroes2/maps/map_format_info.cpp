@@ -119,12 +119,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.resources;
+        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.resources;
+        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
@@ -140,13 +140,13 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
@@ -185,7 +185,7 @@ namespace Maps::Map_Format
         compressed.setbigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata;
+                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -224,7 +224,7 @@ namespace Maps::Map_Format
         }
 
         decompressed >> map.additionalInfo >> map.tiles >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata
-            >> map.signMetadata >> map.adventureMapEventMetadata;
+            >> map.signMetadata >> map.adventureMapEventMetadata >> map.rumors;
 
         return msg;
     }

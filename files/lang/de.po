@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3910,7 +3910,7 @@ msgid "Allow Castle build"
 msgstr "Wolkenburg"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standardaktion"
 
 #, fuzzy
@@ -3933,10 +3933,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Standardaktion"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -4005,9 +4001,16 @@ msgstr "Speichern der aktuellen Karte."
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Schieße auf %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Zufälliges ultimatives Artefakt"
 
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
@@ -5197,10 +5200,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Der Editor benötigt Dateien des Erweiterungspacks \"The Price of Loyalty\"."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Heroes of Might and Magic II beenden und zum Betriebssystem zurückkehren."
@@ -5216,6 +5215,10 @@ msgstr "Bestenliste"
 
 msgid "View the high scores screen."
 msgstr "Die Bestenliste anzeigen."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Eine vorhandene Karte laden."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
@@ -11897,21 +11900,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Ein Feld wählen, das keine Objekt enthält."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Verteidigung setzen"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Zauberkraft setzen"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Wissen setzen"
-
-#~ msgid "Multiple"
-#~ msgstr "Verschied"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "und viele andere Mitwirkende!"

@@ -73,6 +73,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
@@ -143,12 +144,12 @@ namespace
 
             const auto & tile = world.GetTiles( pos.x, pos.y );
 
-            if ( MP2::isActionObject( tile.GetObject() ) ) {
-                // An action already exist. We cannot allow to put anything on top of it.
+            if ( MP2::isOffGameActionObject( tile.GetObject() ) ) {
+                // An action object already exist. We cannot allow to put anything on top of it.
                 return false;
             }
 
-            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
                 // We are trying to place an action object on a tile that has some other objects.
                 return false;
             }
@@ -264,6 +265,19 @@ namespace
                     // Remove this town metadata.
                     assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
                     mapFormat.castleMetadata.erase( objectId );
+
+                    // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
+                    const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
+                    assert( bottomTileIndex < mapFormat.tiles.size() );
+                    auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
+                    const bool isRoadAtBottom
+                        = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
+                                        []( const Maps::Map_Format::ObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
+                          != bottomTileObjects.end();
+                    if ( isRoadAtBottom ) {
+                        // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
+                        Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( bottomTileIndex ) ), false );
+                    }
 
                     needRedraw = true;
                 }
@@ -557,7 +571,7 @@ namespace Interface
                     }
 
                     std::string fileName;
-                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                    if ( !Dialog::inputString( _( "Map filename" ), fileName, {}, 128, false ) ) {
                         continue;
                     }
 
@@ -924,7 +938,7 @@ namespace Interface
 
                 const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
 
-                const bool isActionObject = MP2::isActionObject( objectType );
+                const bool isActionObject = MP2::isOffGameActionObject( objectType );
                 if ( !isActionObject ) {
                     // Only action objects can have metadata.
                     continue;
@@ -956,6 +970,18 @@ namespace Interface
                     const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
                     Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
                 }
+                else if ( objectType == MP2::OBJ_SIGN || objectType == MP2::OBJ_BOTTLE ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    std::string header = _( "Input %{object} text" );
+                    StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
+
+                    std::string signText = _mapFormat.signMetadata[object.id].message;
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
+                        _mapFormat.signMetadata[object.id].message = std::move( signText );
+                        action.commit();
+                    }
+                }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
 
@@ -964,18 +990,35 @@ namespace Interface
                         monsterCount = monsterMetadata->second.metadata[0];
                     }
 
+                    Monster tempMonster( static_cast<int>( object.index ) + 1 );
+
                     std::string str = _( "Set %{monster} Count" );
-                    StringReplace( str, "%{monster}", Monster( static_cast<int>( object.index ) + 1 ).GetName() );
+                    StringReplace( str, "%{monster}", tempMonster.GetName() );
+
+                    fheroes2::Sprite surface;
+
+                    if ( tempMonster.isValid() ) {
+                        surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+                        fheroes2::renderMonsterFrame( Monster( static_cast<int>( object.index ) + 1 ), surface, { 6, 6 } );
+                    }
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
                         _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
-                        // TODO: add a dialog to modify Random Ultimate artifact radius.
+                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+
+                        uint32_t radius = static_cast<uint32_t>( _mapFormat.standardMetadata[object.id].metadata[0] );
+
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius" ), 0, 100, radius ) ) {
+                            _mapFormat.standardMetadata[object.id].metadata[0] = static_cast<int32_t>( radius );
+                            action.commit();
+                        }
                     }
                     else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                         // Find Spell Scroll object.
@@ -1526,7 +1569,10 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( objectInfo.objectType == MP2::OBJ_EVENT ) {
+                // Only event objects are allowed to be placed anywhere.
+            }
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
                 return;
             }

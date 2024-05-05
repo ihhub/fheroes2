@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -267,7 +267,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( isAfterGameCompletion ) {
         const auto inputPlayerName = []( std::string & playerName ) {
-            Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
+            Dialog::inputString( _( "Your Name" ), playerName, {}, 15, false );
             if ( playerName.empty() ) {
                 playerName = _( "Unknown Hero" );
             }

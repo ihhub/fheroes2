@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3830,7 +3830,7 @@ msgid "Allow Castle build"
 msgstr "Небесный замок"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Стандартные действия"
 
 #, fuzzy
@@ -3853,10 +3853,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Стандартные действия"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3921,9 +3917,16 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Стрелять в %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Случайный великий артефакт"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
@@ -5053,11 +5056,6 @@ msgstr ""
 "\n"
 "Желаем Вам приятной игры!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Редактору карт необходимы файлы из дополнения к оригинальной игре \"Цена "
-"верности\"."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
 
@@ -5072,6 +5070,10 @@ msgstr "Рейтинги"
 
 msgid "View the high scores screen."
 msgstr "Просмотр лучших результатов."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Загрузить существующую карту."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Сменить язык, разрешение и настройки игры."
@@ -11489,21 +11491,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Выберите ячейку карты, на которой нет никаких объектов."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Защита"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Сила магии"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Знания"
-
-#~ msgid "Multiple"
-#~ msgstr "Нейтральный"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "и многим другим участникам!"

@@ -165,6 +165,8 @@ namespace Maps::Map_Format
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
 
+        int32_t artifactMetadata{ 0 };
+
         // Resources to be given as a reward.
         Funds resources;
     };
@@ -187,6 +189,8 @@ namespace Maps::Map_Format
 
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
+
+        int32_t artifactMetadata{ 0 };
 
         // Resources to be given as a reward.
         Funds resources;
@@ -261,6 +265,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
+
+        std::vector<std::string> rumors;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

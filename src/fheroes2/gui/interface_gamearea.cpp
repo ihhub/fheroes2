@@ -485,6 +485,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
+    const bool isEditor = _interface.isEditor();
+
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
@@ -496,7 +498,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
-                if ( _interface.isEditor() ) {
+                if ( isEditor ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
@@ -543,8 +545,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = getMonsterSpritesPerTile( tile, _interface.isEditor() );
-                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, _interface.isEditor() );
+                auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -750,7 +752,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         for ( int32_t y = minY; y < maxY; ++y ) {
             for ( int32_t x = minX; x < maxX; ++x ) {
-                redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
+                redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this, isEditor );
             }
         }
     }

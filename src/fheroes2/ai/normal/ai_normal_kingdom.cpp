@@ -798,7 +798,7 @@ namespace AI
                 continue;
             }
 
-            if ( !MP2::isActionObject( objectType ) ) {
+            if ( !MP2::isInGameActionObject( objectType ) ) {
                 continue;
             }
 
