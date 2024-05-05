@@ -283,9 +283,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     // Header text.
     textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, BOXAREA_WIDTH, display );
 
-    fheroes2::Point dst_pt;
-    dst_pt.y = frameBoxArea.y + 10 + titleHeight + textboxHeight + 10;
-    dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2;
+    fheroes2::Point dst_pt{ frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2, frameBoxArea.y + 10 + titleHeight + textboxHeight + 10 };
 
     fheroes2::Rect inputAreaOffset;
     if ( isMultiLine ) {
