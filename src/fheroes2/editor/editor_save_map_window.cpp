@@ -57,16 +57,6 @@ namespace
     const int32_t maxFileNameWidth = 200;
     const int32_t maxNameWidth = 160;
 
-    std::string resizeToShortName( const std::string & str )
-    {
-        std::string res = System::GetBasename( str );
-        const size_t it = res.rfind( '.' );
-        if ( it != std::string::npos ) {
-            res.resize( it );
-        }
-        return res;
-    }
-
     bool redrawSaveFileName( const std::string & name, const fheroes2::Rect & roi )
     {
         if ( name.empty() ) {
@@ -109,7 +99,7 @@ namespace
             // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
             StringReplace( fullPath, "\\", "/" );
 
-            const fheroes2::Text header( resizeToShortName( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -289,11 +279,11 @@ namespace Editor
         listbox.updateScrollBarImage();
 
         if ( fileName.empty() ) {
-            fileName = _( "My map" );
+            fileName = "My map";
         }
 
         if ( mapName.empty() ) {
-            mapName = _( "My map" );
+            mapName = "My map";
         }
 
         size_t charInsertPos = 0;
@@ -302,7 +292,7 @@ namespace Editor
 
         MapsFileInfoList::iterator it = lists.begin();
         for ( ; it != lists.end(); ++it ) {
-            if ( resizeToShortName( ( *it ).filename ) == fileName ) {
+            if ( System::truncateFileExtensionAndPath( ( *it ).filename ) == fileName ) {
                 break;
             }
         }
@@ -473,7 +463,7 @@ namespace Editor
             }
 
             if ( needFileNameRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? resizeToShortName( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;

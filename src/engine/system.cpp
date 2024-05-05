@@ -366,6 +366,16 @@ std::string System::GetBasename( std::string_view path )
     return std::string{ path.substr( pos + 1 ) };
 }
 
+std::string System::truncateFileExtensionAndPath( std::string_view path )
+{
+    std::string res = System::GetBasename( path );
+    const size_t it = res.rfind( '.' );
+    if ( it != std::string::npos ) {
+        res.resize( it );
+    }
+    return res;
+}
+
 bool System::IsFile( const std::string & path, bool writable )
 {
     if ( path.empty() ) {

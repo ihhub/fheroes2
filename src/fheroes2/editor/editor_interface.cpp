@@ -541,7 +541,7 @@ namespace Interface
                     res = eventNewMap();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    saveMapFile();
+                    saveMapToFile();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();
@@ -840,7 +840,7 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 back.restore();
 
-                Get().saveMapFile();
+                Get().saveMapToFile();
 
                 break;
             }
@@ -1597,32 +1597,28 @@ namespace Interface
 
         updateWorldCastlesHeroes( _mapFormat );
 
-        _loadedFileName = System::GetBasename( filePath );
-        const size_t it = _loadedFileName.rfind( '.' );
-        if ( it != std::string::npos ) {
-            _loadedFileName.resize( it );
-        }
+        _loadedFileName = System::truncateFileExtensionAndPath( filePath );
 
         return true;
     }
 
-    void EditorInterface::saveMapFile()
+    void EditorInterface::saveMapToFile()
     {
-        const std::string dataPath = System::GetDataDirectory( "fheroes2" );
-        if ( dataPath.empty() ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+        if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "The map is corrupted." ), Dialog::OK );
             return;
         }
 
-        if ( !Maps::updateMapPlayers( _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "The map is corrupted.", Dialog::OK );
+        const std::string dataPath = System::GetDataDirectory( "fheroes2" );
+        if ( dataPath.empty() ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate data directory to save the map." ), Dialog::OK );
             return;
         }
 
         const std::string mapDirectory = System::concatPath( dataPath, "maps" );
 
         if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
             return;
         }
 
@@ -1644,7 +1640,7 @@ namespace Interface
         _loadedFileName = std::move( fileName );
 
         if ( _mapFormat.description.empty() ) {
-            _mapFormat.description = "Put a real description here.";
+            _mapFormat.description = "No description.";
         }
 
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
@@ -1657,6 +1653,6 @@ namespace Interface
             return;
         }
 
-        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Failed to save the map." ), Dialog::OK );
     }
 }
