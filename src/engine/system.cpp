@@ -368,7 +368,7 @@ std::string System::GetBasename( std::string_view path )
 
 std::string System::truncateFileExtensionAndPath( std::string_view path )
 {
-    std::string res = System::GetBasename( path );
+    std::string res = GetBasename( path );
     const size_t it = res.rfind( '.' );
     if ( it != std::string::npos ) {
         res.resize( it );
