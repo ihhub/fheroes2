@@ -52,7 +52,7 @@ namespace
         int32_t characterCount{ 0 };
     };
 
-    int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
+    int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
     {
         assert( data != nullptr && size > 0 );
 
@@ -70,7 +70,7 @@ namespace
         return width;
     }
 
-    int32_t getMaxCharacterCount( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType, const int32_t maxWidth )
+    int32_t getMaxCharacterCount( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType, const int32_t maxWidth )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
 
@@ -90,7 +90,7 @@ namespace
     }
 
     // Ignore spaces at the end of the line. This function must be used only at the time of final rendering.
-    int32_t getTruncatedLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
+    int32_t getTruncatedLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
     {
         assert( data != nullptr && size > 0 );
 
@@ -119,7 +119,7 @@ namespace
     }
 
     // Returns text lines parameters (in pixels) in 'offsets': x - line widths, y - vertical line shift. And in 'charsInLine' - the number of characters on the line.
-    void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType & fontType, const int32_t rowHeight,
+    void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType fontType, const int32_t rowHeight,
                           std::deque<TextLineInfo> & textLineInfo )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
@@ -239,7 +239,7 @@ namespace
     }
 
     int32_t renderSingleLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
-                              const fheroes2::FontType & fontType )
+                              const fheroes2::FontType fontType )
     {
         assert( data != nullptr && size > 0 && !output.empty() );
 
@@ -258,7 +258,7 @@ namespace
 
             // TODO: remove this hack or expand it to cover more cases.
             if ( isLineSeparator( *data ) ) {
-                // This should never happen as line cannot contain line separator in the middle.
+                // This should never happen as a line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
                 // The only way is to just ignore it here.
                 continue;
@@ -280,7 +280,7 @@ namespace
     }
 
     void renderLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                     const fheroes2::Rect & imageRoi, const fheroes2::FontType & fontType, const bool align )
+                     const fheroes2::Rect & imageRoi, const fheroes2::FontType fontType, const bool align )
     {
         if ( align ) {
             const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
@@ -299,7 +299,7 @@ namespace
     }
 
     void renderMultiLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                          const fheroes2::Rect & imageRoi, const fheroes2::FontType & fontType, const int32_t rowHeight, const bool align,
+                          const fheroes2::Rect & imageRoi, const fheroes2::FontType fontType, const int32_t rowHeight, const bool align,
                           std::deque<TextLineInfo> & lineInfos )
     {
         assert( data != nullptr && size > 0 && !output.empty() && maxWidth > 0 );
@@ -444,7 +444,7 @@ namespace
         }
     }
 
-    int32_t getMaxWordWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
+    int32_t getMaxWordWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
     {
         assert( data != nullptr && size > 0 );
 
