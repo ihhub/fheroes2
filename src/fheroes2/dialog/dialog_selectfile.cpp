@@ -412,10 +412,14 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
-            le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
             if ( isEditing ) {
-                le.MousePressLeft( buttonVirtualKB->area() ) ? buttonVirtualKB->drawOnPress() : buttonVirtualKB->drawOnRelease();
+                buttonVirtualKB->drawOnState( le.MousePressLeft( buttonVirtualKB->area() ) );
+            }
+
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                return {};
             }
 
             const int listId = listbox.getCurrentId();
@@ -435,9 +439,6 @@ namespace
                     result = listbox.GetCurrent().filename;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                break;
-            }
             else if ( isEditing ) {
                 if ( le.MouseClickLeft( buttonVirtualKB->area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputRoi ) ) ) {
                     fheroes2::openVirtualKeyboard( filename );
@@ -446,6 +447,14 @@ namespace
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;
+
+                    if ( filename.empty() ) {
+                        buttonOk.disable();
+                    }
+                    else {
+                        buttonOk.enable();
+                    }
+                    buttonOk.draw();
 
                     // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
@@ -468,9 +477,11 @@ namespace
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                     if ( filename.empty() ) {
                         buttonOk.disable();
+                        buttonOk.draw();
                     }
                     else {
                         buttonOk.enable();
+                        buttonOk.draw();
                     }
 
                     needRedraw = true;
@@ -504,10 +515,11 @@ namespace
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
-                    if ( lists.empty() || filename.empty() ) {
-                        buttonOk.disable();
-                        isListboxSelected = false;
-                        filename.clear();
+                    if ( lists.empty() ) {
+                        listbox.Redraw();
+                        textInputAndDateBackground.restore();
+                        fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
+                        return {};
                     }
 
                     listbox.updateScrollBarImage();
