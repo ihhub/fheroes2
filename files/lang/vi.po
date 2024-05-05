@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3869,7 +3869,7 @@ msgid "Allow Castle build"
 msgstr "Lâu đài Mây"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Hành động Mặc định"
 
 #, fuzzy
@@ -3892,10 +3892,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Hành động Mặc định"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11726,26 +11722,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Chọn Kỹ năng Phòng thủ"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Chọn kỹ năng Sức mạnh"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Chọn Kỹ năng Trí thức"
-
-#~ msgid "Multiple"
-#~ msgstr "Bội số"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "và nhiều những người đóng góp khác!"

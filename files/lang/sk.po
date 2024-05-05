@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3873,7 +3873,7 @@ msgid "Allow Castle build"
 msgstr "Oblačné mesto"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "predvolená činnosť"
 
 #, fuzzy
@@ -3896,10 +3896,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "predvolená činnosť"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11609,24 +11605,3 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Zvoľ zručnosť obrany"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Zvoľ zručnosť moci"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Zvoľ zručnosť vedomostí"
-
-#~ msgid "Multiple"
-#~ msgstr "Viaceré"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "a mnoho ďalších prispievateľov!"

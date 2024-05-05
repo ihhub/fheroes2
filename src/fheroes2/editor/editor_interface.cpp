@@ -144,12 +144,12 @@ namespace
 
             const auto & tile = world.GetTiles( pos.x, pos.y );
 
-            if ( MP2::isActionObject( tile.GetObject() ) ) {
-                // An action already exist. We cannot allow to put anything on top of it.
+            if ( MP2::isOffGameActionObject( tile.GetObject() ) ) {
+                // An action object already exist. We cannot allow to put anything on top of it.
                 return false;
             }
 
-            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
                 // We are trying to place an action object on a tile that has some other objects.
                 return false;
             }
@@ -558,7 +558,7 @@ namespace Interface
                     }
 
                     std::string fileName;
-                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                    if ( !Dialog::inputString( _( "Map filename" ), fileName, {}, 128, false ) ) {
                         continue;
                     }
 
@@ -925,7 +925,7 @@ namespace Interface
 
                 const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
 
-                const bool isActionObject = MP2::isActionObject( objectType );
+                const bool isActionObject = MP2::isOffGameActionObject( objectType );
                 if ( !isActionObject ) {
                     // Only action objects can have metadata.
                     continue;
@@ -956,6 +956,18 @@ namespace Interface
                     const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
                     const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
                     Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
+                }
+                else if ( objectType == MP2::OBJ_SIGN || objectType == MP2::OBJ_BOTTLE ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    std::string header = _( "Input %{object} text" );
+                    StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
+
+                    std::string signText = _mapFormat.signMetadata[object.id].message;
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
+                        _mapFormat.signMetadata[object.id].message = std::move( signText );
+                        action.commit();
+                    }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
@@ -1544,7 +1556,10 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( objectInfo.objectType == MP2::OBJ_EVENT ) {
+                // Only event objects are allowed to be placed anywhere.
+            }
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
                 return;
             }

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3813,7 +3813,7 @@ msgid "Allow Castle build"
 msgstr "Fellegvár"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Alapértelmezett cselekvés"
 
 #, fuzzy
@@ -3839,10 +3839,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Alapértelmezett cselekvés"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11461,26 +11457,3 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Védőerő beállítása"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Varázserő beállítása"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Tudás beállítása"
-
-#~ msgid "Multiple"
-#~ msgstr "Több"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "és sok egyéb további közreműködőnek!"

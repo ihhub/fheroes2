@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3734,7 +3734,7 @@ msgstr ""
 msgid "Allow Castle build"
 msgstr ""
 
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr ""
 
 msgid "Default Army"
@@ -3753,9 +3753,6 @@ msgid "Allow to build a castle in this town."
 msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr ""
-
-msgid "Default Buildings"
 msgstr ""
 
 msgid "Toggle building construction restriction mode."
@@ -10394,15 +10391,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Verdedigingsvaardigheid instellen"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Krachtsvaardigheid instellen"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Kennisvaardigheid instellen"
-
-#~ msgid "Multiple"
-#~ msgstr "Meerdere"
