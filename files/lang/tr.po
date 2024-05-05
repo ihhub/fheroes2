@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3546,7 +3546,7 @@ msgstr ""
 msgid "Allow Castle build"
 msgstr ""
 
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr ""
 
 msgid "Default Army"
@@ -3565,9 +3565,6 @@ msgid "Allow to build a castle in this town."
 msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr ""
-
-msgid "Default Buildings"
 msgstr ""
 
 msgid "Toggle building construction restriction mode."
@@ -10201,15 +10198,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Savunma Becerisini Ayarla"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Güç Becerisini Ayarla"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Bilgi Becerisini Ayarla"
-
-#~ msgid "Multiple"
-#~ msgstr "Çoklu"
