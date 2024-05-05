@@ -207,9 +207,8 @@ msgstr "VÁR"
 msgid "TOWN"
 msgstr "VÁROS"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "ÚJRA"
+msgstr "KORLÁTOZ"
 
 msgid ""
 "D\n"
@@ -2414,51 +2413,41 @@ msgstr "Laboratórium"
 msgid "Shrine"
 msgstr "Szentély"
 
-#, fuzzy
 msgid "Special"
-msgstr "Semmi érdekes"
+msgstr "Különleges"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Sereg épület"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 2"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 3"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 4"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x fejl. toborzóhely"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2516,13 +2505,12 @@ msgstr ""
 "A Koponyahalom a Csontvázak termelődését hetente ennyivel növeli: %{count}."
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
-msgstr ""
+msgstr "A különleges építmény egy különleges bónuszt ad a kiválasztott vártípushoz."
 
-#, fuzzy
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr "A Kút hetente ennyivel növeli az összes lény szaporulatát: %{count}."
+msgstr "A Sereg épület 8-ccal növeli az 1. szintű lények szaporulatát."
 
 msgid "Thieves' Guild"
 msgstr "Tolvajcéh"
@@ -3804,67 +3792,58 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Véletlenszerű vár"
+msgstr "Véletlenszerű vár név"
 
-#, fuzzy
 msgid "Allow Castle build"
-msgstr "Fellegvár"
+msgstr "Vár építhetőség"
 
-#, fuzzy
 msgid "Default Buildings"
-msgstr "Alapértelmezett cselekvés"
+msgstr "Alapértelmezett épületek"
 
-#, fuzzy
 msgid "Default Army"
-msgstr "Alapértelmezett cselekvés"
+msgstr "Alapértelmezett sereg"
 
-#, fuzzy
 msgid "Castle Army"
-msgstr "Vár"
+msgstr "Várvédők"
 
-#, fuzzy
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
-"Kattints a hős nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
+"Kattints a vár nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
 "áll."
 
-#, fuzzy
 msgid "Enter Castle name"
-msgstr "Hős nevének megadása"
+msgstr "Vár nevének megadása"
 
 msgid "Allow to build a castle in this town."
-msgstr ""
+msgstr "Lehetővé teszi vár építését a városban."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr ""
+msgstr "Alapértelmezett épületek használata. Korábbi egyéni beállítások törlődnek!"
 
 msgid "Toggle building construction restriction mode."
-msgstr ""
+msgstr "Épület építés korlátozásának kapcsolója."
 
 msgid "Restrict Building Construction"
-msgstr ""
+msgstr "Épület építésének korlátozása"
 
 msgid "Use default defenders army."
-msgstr ""
+msgstr "Alapértelmezett védősereg használata."
 
-#, fuzzy
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
-"A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
+"Várvédők egyéni beállítása. Jobb kattintásra az egységek alaphelyzetbe "
 "állnak."
 
 msgid "Map filename"
 msgstr "Térképfájl neve"
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
 msgstr ""
-"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
-"változtatásai el fognak veszni.)"
+"Biztos hogy vissza akarsz lépni a főmenübe? Minden változtatás el fog "
+"veszni."
 
 msgid "Editor"
 msgstr "Szerkesztő"
@@ -3908,22 +3887,19 @@ msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
 msgid "Input %{object} text"
-msgstr ""
+msgstr "%{object} szöveg megadása"
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "%{monster} létszám beállítása"
+msgstr "%{monster} számosság megadása"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
-msgstr "Véletlenszerű Szent Varázstárgy"
+msgstr"Véletlenszerű Szent Varázstárgy sugarának megadása"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
-#, fuzzy
 msgid "Action objects must be placed on clear tiles."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
+msgstr "Cselekmény objektumot tiszta területre kell elhelyezni."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
@@ -3944,9 +3920,8 @@ msgstr "A játékos adatainak frissítése nem sikerült."
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
+msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen."
 
 msgid "Mountains cannot be placed on water."
 msgstr "Vízen nem helyezhetők el hegyek."
@@ -4678,9 +4653,8 @@ msgstr "Legutolsó cselekvés visszavonása (UNDO)"
 msgid "hotkey|redo last action"
 msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
-#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "új térkép menü"
+msgstr "főmenü megnyitása"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
@@ -5062,9 +5036,8 @@ msgstr "Dicsőségtábla"
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
 
-#, fuzzy
 msgid "Create new or modify existing maps."
-msgstr "Létező térkép betöltése"
+msgstr "Új térkép létrehozása vagy meglévő módosítása."
 
 msgid "Change language, resolution and settings of the game."
 msgstr ""
@@ -8757,22 +8730,22 @@ msgid "Frozen Lake"
 msgstr "Befagyott tó"
 
 msgid "randomRace|level 1 creatures"
-msgstr ""
+msgstr "1. szintű lények"
 
 msgid "randomRace|level 2 creatures"
-msgstr ""
+msgstr "2. szintű lények"
 
 msgid "randomRace|level 3 creatures"
-msgstr ""
+msgstr "3. szintű lények"
 
 msgid "randomRace|level 4 creatures"
-msgstr ""
+msgstr "4. szintű lények"
 
 msgid "randomRace|level 5 creatures"
-msgstr ""
+msgstr "5. szintű lények"
 
 msgid "randomRace|level 6 creatures"
-msgstr ""
+msgstr "6. szintű lények"
 
 msgid "Unknown Monsters"
 msgstr "Ismeretlen lények"
