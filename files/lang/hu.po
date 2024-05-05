@@ -3893,7 +3893,7 @@ msgid "Set %{monster} Count"
 msgstr "%{monster} számosság megadása"
 
 msgid "Set Random Ultimate Artifact Radius"
-msgstr"Véletlenszerű Szent Varázstárgy sugarának megadása"
+msgstr "Véletlenszerű Szent Varázstárgy sugarának megadása"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
