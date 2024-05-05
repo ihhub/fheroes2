@@ -135,8 +135,6 @@ namespace
         // We need to cut sentences not in the middle of a word but by a space or invalid characters.
         const uint8_t * dataEnd = data + size;
 
-        const int32_t stepY = rowHeight;
-
         int32_t lineLength = lineInfo->characterCount;
         int32_t lastWordLength = 0;
         int32_t lineWidth = lineInfo->offset.x;
@@ -152,7 +150,7 @@ namespace
 
                 textLineInfo.emplace_back();
                 lineInfo = &textLineInfo.back();
-                lineInfo->offset.y = lineInfo->offset.y + stepY;
+                lineInfo->offset.y = lineInfo->offset.y + rowHeight;
 
                 ++data;
             }
@@ -222,7 +220,7 @@ namespace
 
                     textLineInfo.emplace_back();
                     lineInfo = &textLineInfo.back();
-                    lineInfo->offset.y = lineInfo->offset.y + stepY;
+                    lineInfo->offset.y = lineInfo->offset.y + rowHeight;
                 }
                 else {
                     lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
