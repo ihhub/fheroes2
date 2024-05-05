@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -212,6 +212,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "NEUSTART"
 
 msgid ""
 "D\n"
@@ -2453,6 +2457,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Schrein"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nichts besonderes"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Halblinge"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2508,6 +2558,17 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "Der Schädelhaufen erhöht die Produktion von Skeletten um %{count} pro Woche."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} Lebewesen "
+"pro Woche."
 
 msgid "Thieves' Guild"
 msgstr "Diebesgilde"
@@ -3841,10 +3902,70 @@ msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Zufälliges Burg"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Wolkenburg"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Standardaktion"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standardaktion"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Burg"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Den Helden verlieren: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standardaktion"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Karten-\n"
 "größe"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Seid Ihr sicher, dass Ihr eine neue Karte erstellen wollt? (Alle nicht "
+"gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
+
+msgid "Editor"
+msgstr "Editor"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3889,14 +4010,19 @@ msgid "Set %{monster} Count"
 msgstr "Schieße auf %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Zufälliges ultimatives Artefakt"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Ein Feld wählen, das keine Objekt enthält."
 
 #, fuzzy
 msgid "Treasures cannot be placed on water."
@@ -3914,6 +4040,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
@@ -4690,6 +4820,10 @@ msgstr "Standardaktion"
 msgid "hotkey|redo last action"
 msgstr "Standardaktion"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Neue Karte Menü"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -4953,9 +5087,6 @@ msgstr "Heldenbildschirm"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr "Editor"
-
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -5070,10 +5201,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Der Editor benötigt Dateien des Erweiterungspacks \"The Price of Loyalty\"."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Heroes of Might and Magic II beenden und zum Betriebssystem zurückkehren."
@@ -5089,6 +5216,10 @@ msgstr "Bestenliste"
 
 msgid "View the high scores screen."
 msgstr "Die Bestenliste anzeigen."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Eine vorhandene Karte laden."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
@@ -8941,11 +9072,29 @@ msgstr "Sumpf"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Unbekanntes Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Unbekannte Monster"
+
+msgid "Unknown Monster"
+msgstr "Unbekanntes Monster"
 
 msgid "Peasant"
 msgstr "Bauer"
@@ -11752,6 +11901,15 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Der Editor benötigt Dateien des Erweiterungspacks \"The Price of "
+#~ "Loyalty\"."
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Ein Feld wählen, das keine Objekt enthält."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Verteidigung setzen"

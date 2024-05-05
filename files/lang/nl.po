@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -186,6 +186,9 @@ msgid "CASTLE"
 msgstr ""
 
 msgid "TOWN"
+msgstr ""
+
+msgid "RESTRICT"
 msgstr ""
 
 msgid ""
@@ -2433,6 +2436,47 @@ msgstr ""
 msgid "Shrine"
 msgstr ""
 
+msgid "Special"
+msgstr ""
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Upg. Dwelling 2"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Upg. Dwelling 3"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Upg. Dwelling 4"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Upg. Dwelling 6"
+msgstr ""
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2474,6 +2518,14 @@ msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
 msgstr ""
 
 msgid "Thieves' Guild"
@@ -3676,7 +3728,57 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Random Castle Name"
+msgstr ""
+
+msgid "Allow Castle build"
+msgstr ""
+
+msgid "Default buildings"
+msgstr ""
+
+msgid "Default Army"
+msgstr ""
+
+msgid "Castle Army"
+msgstr ""
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+msgid "Enter Castle name"
+msgstr ""
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Default Buildings"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+
+msgid "Editor"
 msgstr ""
 
 msgid ""
@@ -3715,13 +3817,16 @@ msgstr ""
 msgid "Set %{monster} Count"
 msgstr "Schiet %{monster}"
 
+msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
+msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Treasures cannot be placed on water."
@@ -3738,6 +3843,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "Mountains cannot be placed on water."
@@ -4431,6 +4539,10 @@ msgstr "Systeem instellingen aanpassen"
 msgid "hotkey|redo last action"
 msgstr "Systeem instellingen aanpassen"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Systeem instellingen aanpassen"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4692,9 +4804,6 @@ msgstr "Held Scherm"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Het spiegelbeeld wordt gecreëerd."
@@ -4790,9 +4899,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
@@ -4806,6 +4912,9 @@ msgid "High Scores"
 msgstr ""
 
 msgid "View the high scores screen."
+msgstr ""
+
+msgid "Create new or modify existing maps."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
@@ -7961,10 +8070,28 @@ msgstr ""
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
 msgstr ""
 
 msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Unknown Monster"
 msgstr ""
 
 msgid "Peasant"

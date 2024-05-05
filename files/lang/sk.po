@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -215,6 +215,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "REŠTART"
 
 msgid ""
 "D\n"
@@ -2454,6 +2458,52 @@ msgstr "Laboratórium"
 msgid "Shrine"
 msgstr "Svätyňa"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nič zvláštne"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Polčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Polčíci"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2500,6 +2550,17 @@ msgstr "Búrka pridáva +2 k sile kúziel brániaceho kúzelníka."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Hromada lebiek zvyšuje produkciu kostlivcov o %{count} za týždeň."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Studňa zvyšuje rýchlosť nárastu bojovníkov všetkých obydlí o %{count} za "
+"týždeň."
 
 msgid "Thieves' Guild"
 msgstr "Cech zlodejov"
@@ -3804,8 +3865,68 @@ msgid "Best Monster:"
 msgstr "Najlepší bojovník:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Náhodný hrad"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Oblačné mesto"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "predvolená činnosť"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "predvolená činnosť"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Hrad"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Stratíš hrdinu '%{name}'."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "predvolená činnosť"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr "Veľkosť mapy"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
+msgid "Editor"
+msgstr ""
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3849,13 +3970,18 @@ msgid "Set %{monster} Count"
 msgstr "Streľ do: %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Náhodný ultimátny artefakt"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Toto kúzlo nemožno použiť na lodi."
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 #, fuzzy
@@ -3874,6 +4000,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
@@ -4631,6 +4761,10 @@ msgstr "predvolená činnosť"
 msgid "hotkey|redo last action"
 msgstr "predvolená činnosť"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "nová mapa"
+
 msgid "hotkey|roland campaign"
 msgstr "kampaň roland"
 
@@ -4892,9 +5026,6 @@ msgstr "Okno hrdinu"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 msgid "The save file is corrupted."
 msgstr "Uložený súbor je poškodený."
 
@@ -5003,10 +5134,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Ukončiť hru Heroes of Might and Magic II a vrátiť sa do operačného systému."
@@ -5022,6 +5149,10 @@ msgstr "Najvyššie skóre"
 
 msgid "View the high scores screen."
 msgstr "Zobrazenie obrazovky s najvyššími výsledkami."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Načítať existujúcu mapu."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Zmena jazyka, rozlíšenia a nastavení hry."
@@ -8754,11 +8885,29 @@ msgstr "Močiar"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Neznámy bojovník"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Neznámi bojovníci"
+
+msgid "Unknown Monster"
+msgstr "Neznámy bojovník"
 
 msgid "Peasant"
 msgstr "Roľník"
@@ -11460,6 +11609,12 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Zvoľ zručnosť obrany"

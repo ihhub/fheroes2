@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -205,6 +205,10 @@ msgstr "SLOTT"
 
 msgid "TOWN"
 msgstr "STAD"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "OMSTART"
 
 msgid ""
 "D\n"
@@ -2413,6 +2417,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Helgedom"
 
+#, fuzzy
+msgid "Special"
+msgstr "Ingenting Speciellt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Bostäder"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Bostäder"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2461,6 +2511,16 @@ msgstr "Stormen ökar Trollkonsten för en försvarande besvärjelsekastare med 
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Benhögen ökar produktionen av Skelett med %{count} per vecka."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Brunnen ökar produktionen i alla boningar med %{count} varelser per vecka."
 
 msgid "Thieves' Guild"
 msgstr "Tjuvgille"
@@ -3741,8 +3801,68 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Varelse:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Slumpat Slott"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Molnslott"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Standardåtgärder"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standardåtgärder"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Slott"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Förlora hjälten: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standardåtgärder"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Kartfilnamn"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
+"nuvarande karta kommer försvinna.)"
+
+msgid "Editor"
+msgstr "Redigerare"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3786,14 +3906,19 @@ msgstr "Lämna kartredigeraren."
 msgid "Set %{monster} Count"
 msgstr "Skjut %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Slumpad Ultimat artefakt"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Havsföremål måste placeras på vatten."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Välj en ruta som inte har några objekt."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Skatter kan inte placeras på vatten."
@@ -3809,6 +3934,10 @@ msgid "Failed to update player information."
 msgstr "Misslyckades att uppdatera spelarinformation."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Artefakter kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan inte placeras på vatten."
 
 msgid "Mountains cannot be placed on water."
@@ -4546,6 +4675,10 @@ msgstr "Ångra senaste åtgärden"
 msgid "hotkey|redo last action"
 msgstr "Gör om senaste åtgärden"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Nytt karta"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
 
@@ -4802,9 +4935,6 @@ msgstr "Stadsvy"
 msgid "Army Actions"
 msgstr "Arméåtgärder"
 
-msgid "Editor"
-msgstr "Redigerare"
-
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
 
@@ -4913,11 +5043,6 @@ msgstr ""
 " menyn. \n"
 "Spela på!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för att "
-"fungera."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
 
@@ -4932,6 +5057,10 @@ msgstr "Poänglistan"
 
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Laddar en karta."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Ändra spelets språk, upplösning och inställningar."
@@ -8641,11 +8770,29 @@ msgstr "Träsk"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Okänt Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Okända Monster"
+
+msgid "Unknown Monster"
+msgstr "Okänt Monster"
 
 msgid "Peasant"
 msgstr "Bonde"
@@ -11333,6 +11480,15 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för "
+#~ "att fungera."
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Välj en ruta som inte har några objekt."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Ange Försvarsförmåga"

@@ -83,7 +83,7 @@ namespace
 
     enum EditorOptions : uint32_t
     {
-        EDITOR_ENABLE = 0x00000001,
+        EDITOR_UNUSED = 0x00000001,
         EDITOR_ANIMATION = 0x00000002,
         EDITOR_PASSABILITY = 0x00000004
     };
@@ -331,16 +331,12 @@ bool Settings::Read( const std::string & filePath )
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
-    if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
-        _editorOptions.SetModes( EDITOR_ENABLE );
+    if ( config.Exists( "editor animation" ) ) {
+        setEditorAnimation( config.StrParams( "editor animation" ) == "on" );
     }
 
-    if ( config.Exists( "editor animation" ) && config.StrParams( "editor animation" ) == "on" ) {
-        _editorOptions.SetModes( EDITOR_ANIMATION );
-    }
-
-    if ( config.Exists( "editor passability" ) && config.StrParams( "editor passability" ) == "on" ) {
-        _editorOptions.SetModes( EDITOR_PASSABILITY );
+    if ( config.Exists( "editor passability" ) ) {
+        setEditorPassability( config.StrParams( "editor passability" ) == "on" );
     }
 
     return true;
@@ -490,15 +486,11 @@ std::string Settings::String() const
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
     os << "screen scaling type = " << ( _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
-    if ( _editorOptions.Modes( EDITOR_ENABLE ) ) {
-        os << std::endl << "editor = beta" << std::endl;
+    os << std::endl << "# show object animation in the Editor: on/off" << std::endl;
+    os << "editor animation = " << ( _editorOptions.Modes( EDITOR_ANIMATION ) ? "on" : "off" ) << std::endl;
 
-        os << std::endl << "# show object animation in the Editor: on/off" << std::endl;
-        os << "editor animation = " << ( _editorOptions.Modes( EDITOR_ANIMATION ) ? "on" : "off" ) << std::endl;
-
-        os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
-        os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
-    }
+    os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
+    os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -886,11 +878,6 @@ bool Settings::isHideInterfaceEnabled() const
 bool Settings::isEvilInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_EVIL_INTERFACE );
-}
-
-bool Settings::isEditorEnabled() const
-{
-    return _editorOptions.Modes( EDITOR_ENABLE );
 }
 
 bool Settings::isEditorAnimationEnabled() const

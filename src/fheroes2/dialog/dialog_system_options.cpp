@@ -37,6 +37,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "game_language.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"

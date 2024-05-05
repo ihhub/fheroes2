@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,6 +97,16 @@ namespace fheroes2
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnRelease( Display & output = Display::instance() );
+
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnState( const bool isPressedState, Display & output = Display::instance() )
+        {
+            if ( isPressedState ) {
+                return drawOnPress( output );
+            }
+
+            return drawOnRelease( output );
+        }
 
         Rect area() const;
 

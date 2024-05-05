@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -209,6 +209,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "РЕСТАРТ"
 
 msgid ""
 "D\n"
@@ -2454,6 +2458,52 @@ msgstr "Лаборатория"
 msgid "Shrine"
 msgstr "Светилище"
 
+#, fuzzy
+msgid "Special"
+msgstr "Нищо специално"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Хобити"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2506,6 +2556,17 @@ msgstr "Бурята добавя +2 към силата на заклинани
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "Купчината черепи увеличава производството на Скелети с %{count} на седмица."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
+"същества на седмица."
 
 msgid "Thieves' Guild"
 msgstr "Гилдия на крадците"
@@ -3827,8 +3888,68 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Случаен замък"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Замък в облаците"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "действие по подразбиране"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "действие по подразбиране"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Замък"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Губиш героя: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "действие по подразбиране"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr "Размер на карта"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+msgid "Editor"
+msgstr "Редактор"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3873,14 +3994,19 @@ msgid "Set %{monster} Count"
 msgstr "Застреляй %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Случаен върховен артефакт"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Избери плочка, която не съдържа никакви предмети."
 
 #, fuzzy
 msgid "Treasures cannot be placed on water."
@@ -3898,6 +4024,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
@@ -4670,6 +4800,10 @@ msgstr "отмени последното действие"
 msgid "hotkey|redo last action"
 msgstr "повтори последното действие"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "ново меню на карта"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
 
@@ -4928,9 +5062,6 @@ msgstr "Екран на героя"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr "Редактор"
-
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -5042,10 +5173,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Редакторът изисква разширителни файлове „Цената на лоялността“, за да работи."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Излез от Heroes of Might and Magic II и се върни към операционната система."
@@ -5061,6 +5188,10 @@ msgstr "Класиране"
 
 msgid "View the high scores screen."
 msgstr "Виж екрана с високи резултати."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Зареди съществуваща карта."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Промени езика, резолюцията и настройките на играта."
@@ -8827,11 +8958,29 @@ msgstr "Блато"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Неизвестно чудовище"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Неизвестни чудовища"
+
+msgid "Unknown Monster"
+msgstr "Неизвестно чудовище"
 
 msgid "Peasant"
 msgstr "Селянин"
@@ -11561,6 +11710,15 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Редакторът изисква разширителни файлове „Цената на лоялността“, за да "
+#~ "работи."
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Избери плочка, която не съдържа никакви предмети."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Задайте умение за защита"
