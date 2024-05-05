@@ -351,8 +351,14 @@ public:
     void RemoveMapObject( const MapObjectSimple * );
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
-    double getWaterPercentage() const;
-    double getLandRoughness() const;
+
+    uint8_t getWaterPercentage() const {
+        return waterPercentage;
+    }
+
+    double getLandRoughness() const {
+        return landRoughness;
+    }
 
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
@@ -412,8 +418,8 @@ private:
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
 
-    double waterPercentage = 0.0;
-    double mapRoughness = 0.0;
+    uint8_t waterPercentage = 0;
+    double landRoughness = 1.0;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

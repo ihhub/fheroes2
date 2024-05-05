@@ -921,8 +921,8 @@ namespace
             return ( roughness > 1.25 ) ? 1000.0 : ( roughness > 1.1 ) ? 250.0 : 100.0;
         }
         case Skill::Secondary::NAVIGATION: {
-            const double waterPercentage = world.getWaterPercentage();
-            return ( waterPercentage > 0.6 ) ? 1000.0 : ( waterPercentage > 0.25 ) ? 100.0 : 0.0;
+            const uint8_t waterPercentage = world.getWaterPercentage();
+            return ( waterPercentage > 60 ) ? 1000.0 : ( waterPercentage > 25 ) ? 100.0 : 0.0;
         }
         case Skill::Secondary::SCOUTING: {
             const Heroes::Role role = hero.getAIRole();
@@ -938,8 +938,11 @@ namespace
         case Skill::Secondary::DIPLOMACY:
             // discourage AI picking it up, but if it's already there prioritise leveling to save gold
             return level == Skill::Level::BASIC ? 100.0 : 1250.0;
+        case Skill::Secondary::UNKNOWN:
+            return 0;
         default:
-            // UNKNOWN skill can be a valid check
+            // If you make a new secondary skill don't forget to update this.
+            assert( 0 );
             break;
         }
         return 0;

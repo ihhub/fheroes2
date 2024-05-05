@@ -235,9 +235,13 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    const double passableTileCount = ( width * height ) - obstacleCount;
-    waterPercentage = waterCount / passableTileCount;
-    mapRoughness = terrainPenalty / ( ( passableTileCount - waterCount ) * Maps::Ground::defaultGroundPenalty );
+    const int passableTileCount = ( width * height ) - obstacleCount;
+    assert( passableTileCount > 0 );
+
+    waterPercentage = static_cast<uint8_t>( waterCount * 100 / passableTileCount );
+
+    const int landTiles = passableTileCount - waterCount;
+    landRoughness = ( landTiles > 0 ) ? terrainPenalty / ( landTiles * Maps::Ground::defaultGroundPenalty ) : 1.0;
 
     // sort the map rows and columns based on amount of obstacles
     for ( int i = 0; i < 4; ++i )
