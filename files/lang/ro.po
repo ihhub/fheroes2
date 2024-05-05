@@ -10327,15 +10327,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Setează abilitățile de apărare"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Setează abilitățile de putere"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Setează abilitățile de cunoaștere"
-
-#~ msgid "Multiple"
-#~ msgstr "Multiple"

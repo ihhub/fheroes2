@@ -10198,15 +10198,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Savunma Becerisini Ayarla"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Güç Becerisini Ayarla"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Bilgi Becerisini Ayarla"
-
-#~ msgid "Multiple"
-#~ msgstr "Çoklu"

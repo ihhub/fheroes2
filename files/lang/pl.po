@@ -11740,27 +11740,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "domyślna akcja"
-
-#, fuzzy
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr "Jedna z czterech kampani z rozszerzenia Cena Lojalności."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Ustaw wartość Obrony"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Ustaw wartość Mocy zaklęć"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Ustaw wartość Wiedzy"
-
-#~ msgid "Multiple"
-#~ msgstr "Różne"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "i wielu innych!"

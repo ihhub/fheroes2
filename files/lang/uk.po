@@ -11423,22 +11423,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Дії по замовчуванню"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Встановити Захист"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Встановити Силу Магії"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Встановити Знання"
-
-#~ msgid "Multiple"
-#~ msgstr "Різноманітні"

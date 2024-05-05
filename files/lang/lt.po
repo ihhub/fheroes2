@@ -10465,19 +10465,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Gynybos įgūdis"
-
-#, fuzzy
-#~ msgid "Set Defense Skill"
-#~ msgstr "Gynybos įgūdis"
-
-#, fuzzy
-#~ msgid "Set Power Skill"
-#~ msgstr "Burtų galia"
-
-#, fuzzy
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Išmanymas"

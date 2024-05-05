@@ -11919,29 +11919,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Standard handling"
-
-#, fuzzy
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for "
-#~ "trofasthet."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Spesifiser forsvarsevne"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Spesifiser kraftsevne"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Spesifiser kunnskapsevne"
-
-#~ msgid "Multiple"
-#~ msgstr "Flere"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "og mange andre bidragsytere!"

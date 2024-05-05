@@ -11897,31 +11897,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Standardaktion"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Der Editor benötigt Dateien des Erweiterungspacks \"The Price of "
-#~ "Loyalty\"."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Ein Feld wählen, das keine Objekt enthält."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Verteidigung setzen"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Zauberkraft setzen"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Wissen setzen"
-
-#~ msgid "Multiple"
-#~ msgstr "Verschied"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "und viele andere Mitwirkende!"

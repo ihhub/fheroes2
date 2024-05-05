@@ -11476,31 +11476,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Standardåtgärder"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för "
-#~ "att fungera."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Välj en ruta som inte har några objekt."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Ange Försvarsförmåga"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Ange Trollkonst"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Ange Kunskapsnivå"
-
-#~ msgid "Multiple"
-#~ msgstr "Flera"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "och många andra som bidragit!"

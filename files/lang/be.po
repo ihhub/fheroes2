@@ -10388,7 +10388,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Хобіты"

@@ -10883,24 +10883,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Půlčíci"
-
-#, fuzzy
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Nastav obrannou sílu"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Nastav sílu kouzel"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Nastav znalosti"
-
-#~ msgid "Multiple"
-#~ msgstr "Vícero"

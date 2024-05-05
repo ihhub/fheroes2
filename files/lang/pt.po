@@ -11595,16 +11595,3 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Default buildings"
-#~ msgstr "Ações Padrão"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "O Editor requer os arquivos de expansão \"O Preço da Lealdade\" para "
-#~ "funcionar."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Escolha um ladrilho que não contenha nenhum objeto."

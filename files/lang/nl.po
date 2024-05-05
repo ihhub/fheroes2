@@ -10391,15 +10391,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Verdedigingsvaardigheid instellen"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Krachtsvaardigheid instellen"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Kennisvaardigheid instellen"
-
-#~ msgid "Multiple"
-#~ msgstr "Meerdere"
