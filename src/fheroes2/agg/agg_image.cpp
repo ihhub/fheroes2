@@ -4967,7 +4967,7 @@ namespace fheroes2
             return 0;
         }
 
-        const Sprite & getChar( const uint8_t character, const FontType fontType )
+        const Sprite & getChar( const uint8_t character, const FontType & fontType )
         {
             if ( character < 0x21 ) {
                 return errorImage;
