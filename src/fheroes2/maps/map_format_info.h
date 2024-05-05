@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
 
@@ -65,18 +66,18 @@ namespace Maps::Map_Format
         // If the name is empty a random name is going to be set by the engine.
         std::string customName;
 
-        // Defending monsters that are set in the castle. Type 0 means not set.
+        // Defending monsters that are set in the castle. Type ( < 0 ) means default units (for neutral race) and 0 means an empty army slot.
         std::array<int32_t, 5> defenderMonsterType{ 0 };
         std::array<int32_t, 5> defenderMonsterCount{ 0 };
 
-        // Whether the captain is being hired in the town / castle.
-        bool isCaptainAvailable{ false };
+        // Whether the buildings are customized.
+        bool customBuildings{ false };
 
         // A list of built buildings.
-        std::vector<int32_t> builtBuildings;
+        std::vector<uint32_t> builtBuildings;
 
         // A list of buildings that cannot be built.
-        std::vector<int32_t> bannedBuildings;
+        std::vector<uint32_t> bannedBuildings;
 
         // Spells that must appear in the Magic Guild.
         std::vector<int32_t> mustHaveSpells;
@@ -164,6 +165,8 @@ namespace Maps::Map_Format
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
 
+        int32_t artifactMetadata{ 0 };
+
         // Resources to be given as a reward.
         Funds resources;
     };
@@ -186,6 +189,8 @@ namespace Maps::Map_Format
 
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
+
+        int32_t artifactMetadata{ 0 };
 
         // Resources to be given as a reward.
         Funds resources;
@@ -232,6 +237,8 @@ namespace Maps::Map_Format
         std::vector<uint32_t> lossConditionMetadata;
 
         int32_t size{ 0 };
+
+        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;

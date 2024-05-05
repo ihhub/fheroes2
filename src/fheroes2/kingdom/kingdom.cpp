@@ -453,7 +453,7 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isActionObject( objectType ) )
+    if ( !MP2::isInGameActionObject( objectType ) )
         return false;
 
     if ( isVisited( tile.GetIndex(), objectType ) )

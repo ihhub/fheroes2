@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -186,6 +186,9 @@ msgid "CASTLE"
 msgstr ""
 
 msgid "TOWN"
+msgstr ""
+
+msgid "RESTRICT"
 msgstr ""
 
 msgid ""
@@ -2284,6 +2287,47 @@ msgstr "Laboratorija"
 msgid "Shrine"
 msgstr ""
 
+msgid "Special"
+msgstr ""
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Gynybos įgūdis"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Gynybos įgūdis"
+
+msgid "Upg. Dwelling 2"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Gynybos įgūdis"
+
+msgid "Upg. Dwelling 3"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Gynybos įgūdis"
+
+msgid "Upg. Dwelling 4"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Gynybos įgūdis"
+
+msgid "Upg. Dwelling 6"
+msgstr ""
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2328,6 +2372,16 @@ msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
 
 msgid "Thieves' Guild"
 msgstr "Vagių gildija"
@@ -3587,10 +3641,65 @@ msgid "Best Monster:"
 msgstr ""
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Atsitiktinė pilis"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Dangaus pilis"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Gynybos įgūdis"
+
+msgid "Default Army"
+msgstr ""
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Pilis"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Išeiti iš pilies"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Pasaulio\n"
 "dydis"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
+"prarastas, jei neįrašėte)"
+
+msgid "Editor"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -3632,17 +3741,24 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Pulti %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Rasti magišką artefaktą '%{name}'"
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
+msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Treasures cannot be placed on water."
@@ -3659,6 +3775,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "Mountains cannot be placed on water."
@@ -4373,6 +4492,10 @@ msgstr "Rodyti kitą miestą"
 msgid "hotkey|redo last action"
 msgstr "Rodyti kitą miestą"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Rodyti kitą miestą"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4640,9 +4763,6 @@ msgstr ""
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 msgid "The save file is corrupted."
 msgstr ""
 
@@ -4737,9 +4857,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
@@ -4753,6 +4870,9 @@ msgid "High Scores"
 msgstr "Geriausi rezultatai"
 
 msgid "View the high scores screen."
+msgstr ""
+
+msgid "Create new or modify existing maps."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
@@ -7982,10 +8102,28 @@ msgstr "Pelkė"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
 msgstr ""
 
 msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Unknown Monster"
 msgstr ""
 
 msgid "Peasant"
@@ -10330,15 +10468,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Set Defense Skill"
-#~ msgstr "Gynybos įgūdis"
-
-#, fuzzy
-#~ msgid "Set Power Skill"
-#~ msgstr "Burtų galia"
-
-#, fuzzy
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Išmanymas"

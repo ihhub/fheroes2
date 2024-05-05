@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -210,6 +210,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "OMSTART"
 
 msgid ""
 "D\n"
@@ -2491,6 +2495,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Mørkets alter"
 
+#, fuzzy
+msgid "Special"
+msgstr "Ingenting spesielt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Halvinger"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Halvinger"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2539,6 +2589,18 @@ msgstr "Stormen legger til +2 på kraften til en forsvarende trolldomsbruker."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Beinhaugen øker veksten av skjeletter med %{count} i uka."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Brønnen øker den ukentlige veksten til alle borgens bosteder med %{count} "
+"krigere. Hvis du besøker den kan du få en oversikt over alle de forskjellige "
+"krigerne i borgen i tillegg til at du kan verve dem derfra."
 
 msgid "Thieves' Guild"
 msgstr "Tyvenes laug"
@@ -3871,10 +3933,66 @@ msgid "Best Monster:"
 msgstr "Beste krigerslag:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Vilkårlig borg"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Himmelslott"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standard handling"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standard handling"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Borg"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Mist helten kalt %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Kartets\n"
 "størrelse"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
+"kartet vil gå tapt.)"
+
+msgid "Editor"
+msgstr ""
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3912,18 +4030,26 @@ msgstr "Lagre det nåværende kartet."
 msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Skyt på %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Tilfeldig sjeldneste skatt"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 #, fuzzy
@@ -3942,6 +4068,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4714,6 +4844,10 @@ msgstr "Standard handling"
 msgid "hotkey|redo last action"
 msgstr "Standard handling"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Menyen for nye kart"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
 
@@ -4977,9 +5111,6 @@ msgstr "Heltevindu"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 msgid "The save file is corrupted."
 msgstr "Lagringsfilen er korrupt."
 
@@ -5090,11 +5221,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Forlat Heroes of Might and Magic II og dra tilbake til operativsystemet."
@@ -5110,6 +5236,10 @@ msgstr "Rekordtavle"
 
 msgid "View the high scores screen."
 msgstr "Vis rekordtavlen."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Last inn et eksisterende kart."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Endre språket, oppløsningen og andre spillinnstillinger."
@@ -8959,11 +9089,29 @@ msgstr "Myr"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Ukjent monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Ukjente monstre"
+
+msgid "Unknown Monster"
+msgstr "Ukjent monster"
 
 msgid "Peasant"
 msgstr "Bonde"
@@ -11774,18 +11922,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Spesifiser forsvarsevne"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Spesifiser kraftsevne"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Spesifiser kunnskapsevne"
-
-#~ msgid "Multiple"
-#~ msgstr "Flere"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "og mange andre bidragsytere!"

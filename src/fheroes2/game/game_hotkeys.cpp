@@ -37,6 +37,7 @@
 #include "battle_arena.h"
 #include "dialog.h"
 #include "game_interface.h"
+#include "game_language.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
@@ -157,6 +158,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU )]
+            = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
@@ -389,7 +392,13 @@ std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> Game::getAllHotK
     std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> events;
     events.reserve( hotKeyEventInfo.size() - 1 );
 
+    const bool disableEditor = !Settings::Get().isPriceOfLoyaltySupported();
+
     for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
+        if ( disableEditor && ( hotKeyEventInfo[i].category == HotKeyCategory::EDITOR ) ) {
+            continue;
+        }
+
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ), hotKeyEventInfo[i].category );
     }
 

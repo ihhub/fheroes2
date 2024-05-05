@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -210,6 +210,10 @@ msgstr "ЗАМОК"
 
 msgid "TOWN"
 msgstr "МІСТО"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "РЕСТАРТ"
 
 msgid ""
 "D\n"
@@ -2440,6 +2444,52 @@ msgstr "Лабораторія"
 msgid "Shrine"
 msgstr "Святиня"
 
+#, fuzzy
+msgid "Special"
+msgstr "Нічого Особливого"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Житло"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2489,6 +2539,15 @@ msgstr "Буря додає +2 до сили магії заклинателя, 
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Купа черепів збільшує виробництво Скелетів на %{count} в тиждень."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr "Колодязь підвищує приріст в усіх житлах на %{count} істот на тиждень."
 
 msgid "Thieves' Guild"
 msgstr "Гільдія Злодіїв"
@@ -3757,8 +3816,64 @@ msgstr "Особистість:"
 msgid "Best Monster:"
 msgstr "Найсильніший монстр:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Випадковий Замок"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Хмарна Фортеця"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Дії по замовчуванню"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Дії по замовчуванню"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Замок"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Вийти з Замку"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Назва файлу мапи"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ви певні, що хочете створити нову мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
+
+msgid "Editor"
+msgstr "Редактор"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3796,18 +3911,26 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Зробити постріл у %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Випадковий Унікальний Артефакт"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Неможливо розмістити об'єкт поза мапою."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Об'єкти океану мають бути розміщені на воді."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Монстрів не можна розмістити на воді."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Скарби неможливо розмістити на воді."
@@ -3823,6 +3946,10 @@ msgid "Failed to update player information."
 msgstr "Не вдалося оновити інформацію по гравцю."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Артефакт не можна розмістити на воді."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакт не можна розмістити на воді."
 
 msgid "Mountains cannot be placed on water."
@@ -4558,6 +4685,10 @@ msgstr "відмінити останню дію"
 msgid "hotkey|redo last action"
 msgstr "повторити останню дію"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "нова гра"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4816,9 +4947,6 @@ msgstr "Вікно міста"
 msgid "Army Actions"
 msgstr "Дії армії"
 
-msgid "Editor"
-msgstr "Редактор"
-
 msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
@@ -4926,9 +5054,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Залишити Heroes of Might and Magic II і повернутися до операційної системи."
@@ -4944,6 +5069,10 @@ msgstr ""
 
 msgid "View the high scores screen."
 msgstr ""
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Завантажити існуючу мапу."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Змінити мову, роздільну здатність та налаштування гри."
@@ -8600,11 +8729,29 @@ msgstr "Болотисте озеро"
 msgid "Frozen Lake"
 msgstr "Замерзле озеро"
 
-msgid "Unknown Monster"
-msgstr "Невідомий монстр"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Невідомі монстри"
+
+msgid "Unknown Monster"
+msgstr "Невідомий монстр"
 
 msgid "Peasant"
 msgstr "Cелянин"
@@ -11279,15 +11426,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Встановити Захист"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Встановити Силу Магії"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Встановити Знання"
-
-#~ msgid "Multiple"
-#~ msgstr "Різноманітні"

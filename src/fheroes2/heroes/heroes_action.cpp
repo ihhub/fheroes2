@@ -3406,7 +3406,7 @@ namespace
             StringReplace( question, "%{riddle}", riddle->message );
 
             std::string answer;
-            Dialog::InputString( question, answer, title );
+            Dialog::inputString( question, answer, title, 0, false );
 
             if ( !riddle->AnswerCorrect( answer ) ) {
                 fheroes2::showStandardTextMessage(
@@ -3623,7 +3623,7 @@ void Heroes::Action( int tileIndex )
     }
 
     const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
-    if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
+    if ( MP2::isInGameActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );
     }
 

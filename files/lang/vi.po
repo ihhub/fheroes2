@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -205,6 +205,10 @@ msgstr "LÂU ĐÀI"
 
 msgid "TOWN"
 msgstr "THỊ TRẤN"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "LÀM LẠI"
 
 msgid ""
 "D\n"
@@ -2445,6 +2449,48 @@ msgstr "Phòng thí nghiệm"
 msgid "Shrine"
 msgstr "Đền thờ"
 
+#, fuzzy
+msgid "Special"
+msgstr "Không có gì Đặc biệt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Chọn Phép:"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 2"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 3"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 4"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 6"
+msgstr ""
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2495,6 +2541,17 @@ msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Đống đầu lâu tăng sản lượng Xương thêm %{count} mỗi tuần."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Giếng tăng tốc độ phát triển của tất cả các ngôi nhà thêm %{count} sinh vật "
+"mỗi tuần."
 
 msgid "Thieves' Guild"
 msgstr "Băng Cướp"
@@ -3803,8 +3860,64 @@ msgstr "Nhân cách:"
 msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Ngẫu nhiên Lâu đài"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Lâu đài Mây"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Hành động Mặc định"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Hành động Mặc định"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Lâu đài"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Mất tướng: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Tệp bản đồ"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
+msgid "Editor"
+msgstr "Biên tập"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3842,18 +3955,26 @@ msgstr "Lưu bản đồ hiện tại."
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Bắn %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Ngẫu nhiên Bảo vật Tối thượng"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Quái vật không thể đặt trên nước."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
@@ -3869,6 +3990,10 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Bảo vật không thể đặt trên nước."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "Mountains cannot be placed on water."
@@ -4624,6 +4749,10 @@ msgstr "hoàn tác tác vụ cuối"
 msgid "hotkey|redo last action"
 msgstr "thực hiện lại tác vụ cuối"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "trình đơn bản đồ mới"
+
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
 
@@ -4882,9 +5011,6 @@ msgstr "Màn hình Thị trấn"
 msgid "Army Actions"
 msgstr "Hành động Quân đội"
 
-msgid "Editor"
-msgstr "Biên tập"
-
 msgid "The save file is corrupted."
 msgstr "File lưu bị hỏng."
 
@@ -4993,10 +5119,6 @@ msgstr ""
 "\n"
 "Hãy thưởng thức trò chơi!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Thoát khỏi Heroes of Might and Magic II và quay lại hệ điều hành."
 
@@ -5011,6 +5133,10 @@ msgstr "Điểm Cao"
 
 msgid "View the high scores screen."
 msgstr "Xem màn hình điểm cao."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Tải một bản đồ đã có."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Thay đổi ngôn ngữ, độ phân giải và các cài đặt của trò chơi."
@@ -8792,10 +8918,28 @@ msgstr "Đầm lầy"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Quái vật Vô danh"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
+msgstr "Quái vật Vô danh"
+
+msgid "Unknown Monster"
 msgstr "Quái vật Vô danh"
 
 msgid "Peasant"
@@ -11581,18 +11725,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Chọn Kỹ năng Phòng thủ"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Chọn kỹ năng Sức mạnh"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Chọn Kỹ năng Trí thức"
-
-#~ msgid "Multiple"
-#~ msgstr "Bội số"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "và nhiều những người đóng góp khác!"

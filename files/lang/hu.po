@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -206,6 +206,10 @@ msgstr "VÁR"
 
 msgid "TOWN"
 msgstr "VÁROS"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "ÚJRA"
 
 msgid ""
 "D\n"
@@ -2410,6 +2414,52 @@ msgstr "Laboratórium"
 msgid "Shrine"
 msgstr "Szentély"
 
+#, fuzzy
+msgid "Special"
+msgstr "Semmi érdekes"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Toborzóhelyek"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2464,6 +2514,15 @@ msgstr "A Vihar növeli a védő varázserejét kettővel."
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "A Koponyahalom a Csontvázak termelődését hetente ennyivel növeli: %{count}."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr "A Kút hetente ennyivel növeli az összes lény szaporulatát: %{count}."
 
 msgid "Thieves' Guild"
 msgstr "Tolvajcéh"
@@ -3745,8 +3804,70 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Véletlenszerű vár"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Fellegvár"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Alapértelmezett cselekvés"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Alapértelmezett cselekvés"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Vár"
+
+#, fuzzy
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+"Kattints a hős nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
+"áll."
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Hős nevének megadása"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+"A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
+"állnak."
+
 msgid "Map filename"
 msgstr "Térképfájl neve"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
+
+msgid "Editor"
+msgstr "Szerkesztő"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3786,17 +3907,26 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
+msgid "Input %{object} text"
+msgstr ""
+
+#, fuzzy
 msgid "Set %{monster} Count"
 msgstr "%{monster} létszám beállítása"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Véletlenszerű Szent Varázstárgy"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Vízen nem helyezhetők el kincsek."
@@ -3812,6 +3942,10 @@ msgid "Failed to update player information."
 msgstr "A játékos adatainak frissítése nem sikerült."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
 msgid "Mountains cannot be placed on water."
@@ -4544,6 +4678,10 @@ msgstr "Legutolsó cselekvés visszavonása (UNDO)"
 msgid "hotkey|redo last action"
 msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "új térkép menü"
+
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
 
@@ -4801,9 +4939,6 @@ msgstr "Város képernyő"
 msgid "Army Actions"
 msgstr "Sereg cselekvései"
 
-msgid "Editor"
-msgstr "Szerkesztő"
-
 msgid "The save file is corrupted."
 msgstr "A mentés fájl sérült."
 
@@ -4910,10 +5045,6 @@ msgstr ""
 "\n"
 "Élvezetes játékot!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Kilépés a Heroes of Might and Magic II-ből és visszatérés az operációs "
@@ -4930,6 +5061,10 @@ msgstr "Dicsőségtábla"
 
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Létező térkép betöltése"
 
 msgid "Change language, resolution and settings of the game."
 msgstr ""
@@ -8621,11 +8756,29 @@ msgstr "Mocsaras tó"
 msgid "Frozen Lake"
 msgstr "Befagyott tó"
 
-msgid "Unknown Monster"
-msgstr "Ismeretlen lény"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Ismeretlen lények"
+
+msgid "Unknown Monster"
+msgstr "Ismeretlen lény"
 
 msgid "Peasant"
 msgstr "Jobbágy"
@@ -11305,18 +11458,3 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Védőerő beállítása"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Varázserő beállítása"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Tudás beállítása"
-
-#~ msgid "Multiple"
-#~ msgstr "Több"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "és sok egyéb további közreműködőnek!"

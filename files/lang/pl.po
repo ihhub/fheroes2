@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -215,6 +215,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "OD NOWA"
 
 msgid ""
 "D\n"
@@ -2454,6 +2458,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Kapliczka"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nic specjalnego"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Niziołki"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2502,6 +2552,17 @@ msgstr "Wieczna burza dodaje +2 do mocy zaklęć obrońcy zamku."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Stos czaszek zwiększa przyrost Szkieletów o %{count} tygodniowo."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Studnia zwiększa przyrost populacji wszystkich stworzeń o %{count} jednostki "
+"tygodniowo."
 
 msgid "Thieves' Guild"
 msgstr "Gildia złodziei"
@@ -3815,10 +3876,65 @@ msgid "Best Monster:"
 msgstr "Najlepszy potwór:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Losowy zamek"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Zamek w chmurach"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "domyślna akcja"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "domyślna akcja"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Zamek"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Przegrywa bohater: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Wielkość\n"
 "mapy"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Czy na pewno chcesz wczytać nową grę? (aktualna rozgrywka zostanie przerwana)"
+
+msgid "Editor"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -3859,18 +3975,26 @@ msgstr "Zapisz bieżącą grę."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Strzelaj do %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Losowy najpotężniejszy artefakt"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 #, fuzzy
@@ -3889,6 +4013,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
@@ -4641,6 +4769,10 @@ msgstr "domyślna akcja"
 msgid "hotkey|redo last action"
 msgstr "domyślna akcja"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "nowa mapa"
+
 msgid "hotkey|roland campaign"
 msgstr "kampania Rolanda"
 
@@ -4903,9 +5035,6 @@ msgstr "Ekran bohatera"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
 
@@ -5019,10 +5148,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Jedna z czterech kampani z rozszerzenia Cena Lojalności."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Zakończ grę Heroes of Might and Magic II i przejdź do systemu operacyjnego."
@@ -5038,6 +5163,10 @@ msgstr "Najlepsze wyniki"
 
 msgid "View the high scores screen."
 msgstr "Obejrzyj najlepsze wyniki."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Wczytaj istniejącą mapę."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Wybierz język, rozdzielczość i ustawienia gry."
@@ -8815,11 +8944,29 @@ msgstr "Bagno"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Nieznany potwór"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Nieznane potwory"
+
+msgid "Unknown Monster"
+msgstr "Nieznany potwór"
 
 msgid "Peasant"
 msgstr "Chłop"
@@ -11596,18 +11743,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Ustaw wartość Obrony"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Ustaw wartość Mocy zaklęć"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Ustaw wartość Wiedzy"
-
-#~ msgid "Multiple"
-#~ msgstr "Różne"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "i wielu innych!"

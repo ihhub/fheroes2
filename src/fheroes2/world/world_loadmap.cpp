@@ -696,6 +696,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
     const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+    const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -739,9 +740,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
                 }
 
+                assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_CASTLE ) != castleInfo.builtBuildings.end() )
+                        == ( townObjects[object.index].metadata[1] != 0 ) );
+                assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_TENT ) != castleInfo.builtBuildings.end() )
+                        == ( townObjects[object.index].metadata[1] == 0 ) );
+
                 Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
                 castle->SetColor( color );
-                castle->loadFromResurrectionMap( castleInfo, ( townObjects[object.index].metadata[1] != 0 ) );
+                castle->loadFromResurrectionMap( castleInfo );
 
                 vec_castles.AddCastle( castle );
 
@@ -801,12 +807,13 @@ bool World::loadResurrectionMap( const std::string & filename )
 #if defined( WITH_DEBUG )
                 standardMetadataUIDs.emplace( object.id );
 #endif
+                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+                auto & objectInfo = map.standardMetadata[object.id];
 
-                const std::array<int32_t, 3> & source = map.standardMetadata[object.id].metadata;
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
-                for ( size_t idx = 0; idx < source.size(); idx++ ) {
-                    tileData[idx] = static_cast<uint32_t>( source[idx] );
+                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
+                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
@@ -933,6 +940,28 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
 
                     map_objects.add( signObject );
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+#if defined( WITH_DEBUG )
+                standardMetadataUIDs.emplace( object.id );
+#endif
+
+                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+                auto & objectInfo = map.standardMetadata[object.id];
+
+                std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
+                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
+                }
+
+                assert( object.index < artifactObjects.size() );
+                if ( artifactObjects[object.index].objectType == MP2::OBJ_ARTIFACT && artifactObjects[object.index].metadata[0] == Artifact::SPELL_SCROLL ) {
+                    // This is a hack we need to do since in the original game spells start from 0.
+                    // TODO: fix this hack.
+                    assert( tileData[0] > 0 );
+                    tileData[0] = tileData[0] - 1U;
                 }
             }
         }

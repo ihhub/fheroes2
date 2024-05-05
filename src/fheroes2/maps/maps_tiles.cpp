@@ -690,7 +690,7 @@ int Maps::Tiles::getOriginalPassability() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isActionObject( objectType ) ) {
+    if ( MP2::isOffGameActionObject( objectType ) ) {
         return MP2::getActionObjectDirection( objectType );
     }
 
@@ -729,7 +729,8 @@ void Maps::Tiles::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent() && !isShadow() ) {
+    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent()
+         && !isShadow() ) {
         // This is a non-action object.
 
         if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
@@ -785,7 +786,7 @@ void Maps::Tiles::updatePassability()
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
-            if ( MP2::isActionObject( bottomTileObjectType ) ) {
+            if ( MP2::isOffGameActionObject( bottomTileObjectType ) ) {
                 if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                     if ( isShortObject( bottomTileObjectType ) ) {
                         _tilePassabilityDirections &= ~Direction::BOTTOM;
@@ -796,7 +797,7 @@ void Maps::Tiles::updatePassability()
                     }
                 }
             }
-            else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+            else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isOffGameActionObject( correctedObjectType )
                       && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
             }
