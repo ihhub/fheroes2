@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3906,14 +3906,19 @@ msgstr "Lämna kartredigeraren."
 msgid "Set %{monster} Count"
 msgstr "Skjut %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Slumpad Ultimat artefakt"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Havsföremål måste placeras på vatten."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Välj en ruta som inte har några objekt."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Skatter kan inte placeras på vatten."
@@ -5038,11 +5043,6 @@ msgstr ""
 " menyn. \n"
 "Spela på!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för att "
-"fungera."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
 
@@ -5057,6 +5057,10 @@ msgstr "Poänglistan"
 
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Laddar en karta."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Ändra spelets språk, upplösning och inställningar."
@@ -11476,6 +11480,15 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för "
+#~ "att fungera."
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Välj en ruta som inte har några objekt."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Ange Försvarsförmåga"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3963,14 +3963,19 @@ msgstr "Thoát khỏi biên tập bản đồ."
 msgid "Set %{monster} Count"
 msgstr "Bắn %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Ngẫu nhiên Bảo vật Tối thượng"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Quái vật không thể đặt trên nước."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
@@ -5115,10 +5120,6 @@ msgstr ""
 "\n"
 "Hãy thưởng thức trò chơi!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Thoát khỏi Heroes of Might and Magic II và quay lại hệ điều hành."
 
@@ -5133,6 +5134,10 @@ msgstr "Điểm Cao"
 
 msgid "View the high scores screen."
 msgstr "Xem màn hình điểm cao."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Tải một bản đồ đã có."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Thay đổi ngôn ngữ, độ phân giải và các cài đặt của trò chơi."
@@ -11721,6 +11726,14 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Chọn Kỹ năng Phòng thủ"

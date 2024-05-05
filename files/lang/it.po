@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3825,13 +3825,18 @@ msgstr ""
 msgid "Set %{monster} Count"
 msgstr "Tira a %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Artefatto estremo casuale"
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Opzioni Avventura"
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Treasures cannot be placed on water."
@@ -4968,11 +4973,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Una delle quattro nuove campagne dalla espansione 'The Price of Loyalty\"."
-
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Lascia fheroes2."
 
@@ -4987,6 +4987,9 @@ msgstr "Classifiche"
 
 msgid "View the high scores screen."
 msgstr "Vedi i migliori punteggi."
+
+msgid "Create new or modify existing maps."
+msgstr ""
 
 #, fuzzy
 msgid "Change language, resolution and settings of the game."
@@ -10710,6 +10713,12 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Una delle quattro nuove campagne dalla espansione 'The Price of Loyalty\"."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Scegli Difesa"

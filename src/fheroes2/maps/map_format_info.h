@@ -165,6 +165,8 @@ namespace Maps::Map_Format
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
 
+        int32_t artifactMetadata{ 0 };
+
         // Resources to be given as a reward.
         Funds resources;
     };
@@ -187,6 +189,8 @@ namespace Maps::Map_Format
 
         // An artifact to be given as a reward.
         int32_t artifact{ 0 };
+
+        int32_t artifactMetadata{ 0 };
 
         // Resources to be given as a reward.
         Funds resources;

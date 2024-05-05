@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -177,7 +177,3 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 
     fheroes2::Display::instance().render( _restorer->rect() );
 }
-
-Dialog::FrameBox::FrameBox( int height, bool buttons )
-    : Dialog::NonFixedFrameBox( height, -1, buttons )
-{}

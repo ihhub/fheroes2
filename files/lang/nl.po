@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3817,13 +3817,16 @@ msgstr ""
 msgid "Set %{monster} Count"
 msgstr "Schiet %{monster}"
 
+msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
+msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Treasures cannot be placed on water."
@@ -4896,9 +4899,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
@@ -4912,6 +4912,9 @@ msgid "High Scores"
 msgstr ""
 
 msgid "View the high scores screen."
+msgstr ""
+
+msgid "Create new or modify existing maps."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
