@@ -265,6 +265,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
+
+        std::vector<std::string> rumors;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
