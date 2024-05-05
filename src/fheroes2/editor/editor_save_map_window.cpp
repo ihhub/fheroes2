@@ -382,7 +382,7 @@ namespace Editor
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::InputString( _( "Map Name" ), editableMapName, {}, 17 ) ) {
+                if ( Dialog::inputString( _( "Map Name" ), editableMapName, {}, 17, false ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a name.
                         continue;
