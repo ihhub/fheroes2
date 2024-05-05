@@ -1228,7 +1228,7 @@ namespace
             assert( partInfo.objectType != MP2::OBJ_NONE );
 
             bool setObjectType = true;
-            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+            if ( !MP2::isOffGameActionObject( partInfo.objectType ) ) {
                 for ( const auto & addon : currentTile.getTopLayerAddons() ) {
                     const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
                     if ( type != MP2::OBJ_NONE ) {
@@ -1266,7 +1266,7 @@ namespace
 
             currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
-            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.GetObject() ) ) {
                 currentTile.SetObject( partInfo.objectType );
             }
         }
@@ -2966,7 +2966,7 @@ namespace Maps
 
         if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
              || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
-            return !MP2::isActionObject( objectType, tile.isWater() );
+            return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
         return false;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3837,7 +3837,7 @@ msgid "Allow Castle build"
 msgstr "Castelo Nebuloso"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Ações Padrão"
 
 #, fuzzy
@@ -3863,10 +3863,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Ações Padrão"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3933,6 +3929,9 @@ msgstr "Salvar o mapa atual."
 
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
+
+msgid "Input %{object} text"
+msgstr ""
 
 msgid "Set %{monster} Count"
 msgstr "Definir Quantidade de %{monster}"
@@ -11599,12 +11598,3 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "O Editor requer os arquivos de expansão \"O Preço da Lealdade\" para "
-#~ "funcionar."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Escolha um ladrilho que não contenha nenhum objeto."

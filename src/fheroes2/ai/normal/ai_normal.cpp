@@ -43,7 +43,7 @@ namespace AI
     void Normal::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( !MP2::isActionObject( object ) ) {
+        if ( !MP2::isInGameActionObject( object ) ) {
             return;
         }
 
@@ -180,14 +180,14 @@ namespace AI
                                       []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
 
         if ( iter != _mapActionObjects.end() && iter->first == mapIndex ) {
-            if ( MP2::isActionObject( objectType ) ) {
+            if ( MP2::isInGameActionObject( objectType ) ) {
                 iter->second = objectType;
             }
             else {
                 _mapActionObjects.erase( iter );
             }
         }
-        else if ( MP2::isActionObject( objectType ) ) {
+        else if ( MP2::isInGameActionObject( objectType ) ) {
             _mapActionObjects.emplace( iter, IndexObject{ mapIndex, objectType } );
         }
     }

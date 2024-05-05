@@ -372,7 +372,7 @@ namespace Editor
         // Default buildings checkbox indicator.
         dstPt.y += 30;
         fheroes2::MovableSprite defaultBuildingsSign;
-        const fheroes2::Rect defaultBuildingsArea = drawCheckboxBackground( defaultBuildingsSign, _( "Default buildings" ), dstPt.x, dstPt.y, isEvilInterface );
+        const fheroes2::Rect defaultBuildingsArea = drawCheckboxBackground( defaultBuildingsSign, _( "Default Buildings" ), dstPt.x, dstPt.y, isEvilInterface );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
         // Build restrict mode button.
@@ -502,7 +502,7 @@ namespace Editor
                 bool redrawName = false;
                 if ( le.MouseClickLeft() ) {
                     std::string res = castleMetadata.customName;
-                    if ( Dialog::InputString( _( "Enter Castle name" ), res, {}, 30 ) && !res.empty() ) {
+                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }

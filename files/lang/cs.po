@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3855,7 +3855,7 @@ msgid "Allow Castle build"
 msgstr "Zámek Mraků"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Půlčíci"
 
 msgid "Default Army"
@@ -3877,10 +3877,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Půlčíci"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3945,6 +3941,9 @@ msgid "Save the current map."
 msgstr "Uložit aktuální hru."
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
@@ -10887,20 +10886,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Nastav obrannou sílu"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Nastav sílu kouzel"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Nastav znalosti"
-
-#~ msgid "Multiple"
-#~ msgstr "Vícero"

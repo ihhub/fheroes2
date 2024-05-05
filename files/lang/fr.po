@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3880,7 +3880,7 @@ msgid "Allow Castle build"
 msgstr "Château céleste"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Actions par défaut"
 
 #, fuzzy
@@ -3903,10 +3903,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Actions par défaut"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3973,6 +3969,9 @@ msgstr "Sauvegarder la carte actuelle."
 
 msgid "Quit out of the map editor."
 msgstr "Quitter l'éditeur de carte."
+
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set %{monster} Count"
@@ -11706,27 +11705,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "L'éditeur a besoin que l'extension \"The Price of Loyalty\" soit "
-#~ "installée pour fonctionner."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Sélectionnez une case qui n'est pas déjà occupée."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Régler Défense"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Régler Puissance"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Régler Connaissance"
-
-#~ msgid "Multiple"
-#~ msgstr "Multiple"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "et aux nombreux autres contributeurs !"

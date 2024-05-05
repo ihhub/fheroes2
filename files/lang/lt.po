@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3649,7 +3649,7 @@ msgid "Allow Castle build"
 msgstr "Dangaus pilis"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Gynybos įgūdis"
 
 msgid "Default Army"
@@ -3671,10 +3671,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Gynybos įgūdis"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3743,6 +3739,9 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
@@ -10469,15 +10468,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Set Defense Skill"
-#~ msgstr "Gynybos įgūdis"
-
-#, fuzzy
-#~ msgid "Set Power Skill"
-#~ msgstr "Burtų galia"
-
-#, fuzzy
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Išmanymas"

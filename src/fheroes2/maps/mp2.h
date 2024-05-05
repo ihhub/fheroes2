@@ -495,16 +495,23 @@ namespace MP2
     bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
     // The method checks whether the object is an action object depending on whether it is accessed from water or from land.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
     // For example, castle can't be accessed from water.
     //
     // TODO: make a separate function to determine whether the object is an action object depending on its location and not
     // TODO: on where it is accessed from.
-    bool isActionObject( const MapObjectType objectType, const bool accessedFromWater );
+    bool isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
     // The method checks if the object is an action object regardless of where it is accessed from.
-    bool isActionObject( const MapObjectType objectType );
+    // Use it only during actual gameplay. Event object is not considered as an action object.
+    bool isInGameActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object regardless of where it is accessed from.
+    // Use it only for cases when gameplay is not active, like Editor and map initialization.
+    bool isOffGameActionObject( const MapObjectType objectType );
 
     // The method checks if the object is an action object if it is accessed from water.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
     bool isWaterActionObject( const MapObjectType objectType );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.

@@ -796,7 +796,7 @@ namespace
     {
         // The value above 1.0 means that the object is useful only if it is nearby.
         // The value below 1.0 means that the object should remain in focus even on greater distances.
-        if ( !MP2::isActionObject( objectType ) ) {
+        if ( !MP2::isInGameActionObject( objectType ) ) {
             return 1.0;
         }
 
@@ -1517,7 +1517,7 @@ namespace AI
         }
         default:
             // Did you forget to add logic for an action object?
-            assert( !MP2::isActionObject( objectType ) );
+            assert( !MP2::isInGameActionObject( objectType ) );
             break;
         }
 

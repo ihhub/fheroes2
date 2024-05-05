@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -310,7 +310,7 @@ void World::ComputeStaticAnalysis()
             node.isWater = tile.isWater();
 
             const MP2::MapObjectType objectType = tile.GetObject();
-            node.mapObject = MP2::isActionObject( objectType, node.isWater ) ? objectType : 0;
+            node.mapObject = MP2::isInGameActionObject( objectType, node.isWater ) ? objectType : 0;
             if ( node.passable != 0 ) {
                 node.type = REGION_NODE_OPEN;
             }
