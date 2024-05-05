@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 04:32+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3734,6 +3734,9 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
