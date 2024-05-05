@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3875,7 +3875,7 @@ msgid "Allow Castle build"
 msgstr "Skyslot"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standardhandlinger"
 
 #, fuzzy
@@ -3898,10 +3898,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Standardhandlinger"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11615,6 +11611,10 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Default buildings"
+#~ msgstr "Standardhandlinger"
 
 #~ msgid ""
 #~ "The Editor requires \"The Price of Loyalty\" expansion files to work."

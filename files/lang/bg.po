@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3896,7 +3896,7 @@ msgid "Allow Castle build"
 msgstr "Замък в облаците"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "действие по подразбиране"
 
 #, fuzzy
@@ -3919,10 +3919,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "действие по подразбиране"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11710,6 +11706,10 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Default buildings"
+#~ msgstr "действие по подразбиране"
 
 #~ msgid ""
 #~ "The Editor requires \"The Price of Loyalty\" expansion files to work."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3809,7 +3809,7 @@ msgid "Allow Castle build"
 msgstr "Castillo de las Nubes"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Medianos"
 
 msgid "Default Army"
@@ -3831,10 +3831,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Medianos"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -11345,6 +11341,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Default buildings"
+#~ msgstr "Medianos"
 
 #, fuzzy
 #~ msgid "Set Defense Skill"
