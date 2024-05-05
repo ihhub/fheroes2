@@ -148,9 +148,11 @@ namespace
                     lineWidth = 0;
                 }
 
+                const int32_t prevY = textLineInfo.back().offset.y;
+
                 textLineInfo.emplace_back();
                 lineInfo = &textLineInfo.back();
-                lineInfo->offset.y = lineInfo->offset.y + rowHeight;
+                lineInfo->offset.y = prevY + rowHeight;
 
                 ++data;
             }
@@ -218,9 +220,11 @@ namespace
                     lastWordLength = 0;
                     lineWidth = 0;
 
+                    const int32_t prevY = textLineInfo.back().offset.y;
+
                     textLineInfo.emplace_back();
                     lineInfo = &textLineInfo.back();
-                    lineInfo->offset.y = lineInfo->offset.y + rowHeight;
+                    lineInfo->offset.y = prevY + rowHeight;
                 }
                 else {
                     lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
