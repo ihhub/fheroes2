@@ -89,8 +89,10 @@ namespace fheroes2
 
         const bool isProperDialog = ( buttons != 0 );
 
+        const int cusorTheme = isProperDialog ? ( ::Cursor::POINTER ) : ( ::Cursor::Get().Themes() );
+
         // setup cursor
-        const CursorRestorer cursorRestorer( isProperDialog, ::Cursor::POINTER );
+        const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
 
         const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
 
@@ -211,16 +213,18 @@ namespace fheroes2
         bool delayInEventHandling = true;
 
         while ( result == Dialog::ZERO && le.HandleEvents( delayInEventHandling ) ) {
-            if ( !buttons && !le.MousePressRight() ) {
+            if ( !isProperDialog ) {
+                if ( le.MousePressRight() ) {
+                    continue;
+                }
+
                 break;
             }
 
-            if ( isProperDialog ) {
-                elementId = 0;
-                for ( const DialogElement * element : elements ) {
-                    element->processEvents( elementOffsets[elementId] );
-                    ++elementId;
-                }
+            elementId = 0;
+            for ( const DialogElement * element : elements ) {
+                element->processEvents( elementOffsets[elementId] );
+                ++elementId;
             }
 
             result = group.processEvents();
@@ -235,7 +239,7 @@ namespace fheroes2
             }
 
             if ( !delayInEventHandling ) {
-                display.render();
+                display.render( pos );
             }
         }
 
