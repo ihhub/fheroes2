@@ -480,20 +480,21 @@ namespace
 
 namespace fheroes2
 {
-    int32_t getFontHeight( const fheroes2::FontSize fontSize )
+    int32_t getFontHeight( const FontSize fontSize )
     {
         switch ( fontSize ) {
-        case fheroes2::FontSize::SMALL:
+        case FontSize::SMALL:
             return 8 + 2 + 1;
-        case fheroes2::FontSize::NORMAL:
+        case FontSize::NORMAL:
             return 13 + 3 + 1;
-        case fheroes2::FontSize::LARGE:
+        case FontSize::LARGE:
             return 26 + 6 + 1;
-        case fheroes2::FontSize::BUTTON_RELEASED:
-        case fheroes2::FontSize::BUTTON_PRESSED:
+        case FontSize::BUTTON_RELEASED:
+        case FontSize::BUTTON_PRESSED:
             return 15;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
+            break;
         }
 
         return 0;
@@ -863,9 +864,9 @@ namespace fheroes2
         return output;
     }
 
-    FontCharHandler::FontCharHandler( const fheroes2::FontType fontType )
+    FontCharHandler::FontCharHandler( const FontType fontType )
         : _fontType( fontType )
-        , _charLimit( fheroes2::AGG::getCharacterLimit( fontType.size ) )
+        , _charLimit( AGG::getCharacterLimit( fontType.size ) )
         , _spaceCharWidth( _getSpaceCharWidth() )
     {
         // Do nothing.
@@ -876,10 +877,10 @@ namespace fheroes2
         return ( isSpaceChar( character ) || _isValid( character ) || isLineSeparator( character ) );
     }
 
-    const fheroes2::Sprite & FontCharHandler::getSprite( const uint8_t character ) const
+    const Sprite & FontCharHandler::getSprite( const uint8_t character ) const
     {
         // Display '?' in place of the invalid character.
-        return fheroes2::AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
+        return AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
     }
 
     int32_t FontCharHandler::getWidth( const uint8_t character ) const
@@ -888,9 +889,9 @@ namespace fheroes2
             return _spaceCharWidth;
         }
 
-        const fheroes2::Sprite & image = getSprite( character );
+        const Sprite & image = getSprite( character );
 
-        assert( ( _fontType.size != fheroes2::FontSize::BUTTON_RELEASED && _fontType.size != fheroes2::FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
+        assert( ( _fontType.size != FontSize::BUTTON_RELEASED && _fontType.size != FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
 
         return image.x() + image.width();
     }
@@ -903,13 +904,13 @@ namespace fheroes2
     int32_t FontCharHandler::_getSpaceCharWidth() const
     {
         switch ( _fontType.size ) {
-        case fheroes2::FontSize::SMALL:
+        case FontSize::SMALL:
             return 4;
-        case fheroes2::FontSize::NORMAL:
+        case FontSize::NORMAL:
             return 6;
-        case fheroes2::FontSize::LARGE:
-        case fheroes2::FontSize::BUTTON_RELEASED:
-        case fheroes2::FontSize::BUTTON_PRESSED:
+        case FontSize::LARGE:
+        case FontSize::BUTTON_RELEASED:
+        case FontSize::BUTTON_PRESSED:
             return 8;
         default:
             // Did you add a new font size? Please add implementation.

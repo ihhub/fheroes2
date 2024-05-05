@@ -231,12 +231,12 @@ namespace fheroes2
     class FontCharHandler
     {
     public:
-        explicit FontCharHandler( const fheroes2::FontType fontType );
+        explicit FontCharHandler( const FontType fontType );
 
         // Returns true if character is available to render, including space (' ') and new line ('\n').
         bool isAvailable( const uint8_t character ) const;
 
-        const fheroes2::Sprite & getSprite( const uint8_t character ) const;
+        const Sprite & getSprite( const uint8_t character ) const;
 
         int32_t getWidth( const uint8_t character ) const;
 
@@ -251,7 +251,7 @@ namespace fheroes2
 
         int32_t _getSpaceCharWidth() const;
 
-        const fheroes2::FontType _fontType;
+        const FontType _fontType;
         const uint32_t _charLimit;
         const int32_t _spaceCharWidth;
     };
