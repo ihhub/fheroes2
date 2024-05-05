@@ -3147,8 +3147,8 @@ namespace Maps
             }
             return true;
         case MP2::OBJ_CASTLE:
-        case MP2::OBJ_RANDOM_TOWN:
         case MP2::OBJ_RANDOM_CASTLE:
+        case MP2::OBJ_RANDOM_TOWN:
             if ( !placeObjectOnTile( tile, info ) ) {
                 return false;
             }
