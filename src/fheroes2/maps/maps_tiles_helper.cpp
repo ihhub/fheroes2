@@ -922,6 +922,14 @@ namespace
 
         // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
 
+        // There might be a castle entrance above. Check for it to properly connect the road to it.
+        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
+            const MP2::MapObjectType aboveObject = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).GetObject( false );
+            if ( aboveObject == MP2::OBJ_CASTLE || aboveObject == MP2::OBJ_RANDOM_TOWN || aboveObject == MP2::OBJ_RANDOM_CASTLE ) {
+                return 31U;
+            }
+        }
+
         if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
              && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
             // = - horizontal road in this and in the upper tile.
@@ -1228,7 +1236,7 @@ namespace
             assert( partInfo.objectType != MP2::OBJ_NONE );
 
             bool setObjectType = true;
-            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+            if ( !MP2::isOffGameActionObject( partInfo.objectType ) ) {
                 for ( const auto & addon : currentTile.getTopLayerAddons() ) {
                     const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
                     if ( type != MP2::OBJ_NONE ) {
@@ -1251,6 +1259,7 @@ namespace
             static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
             currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
+            currentTile.setObjectLayerType( partInfo.layerType );
         }
 
         for ( const auto & partInfo : info.topLevelParts ) {
@@ -1265,7 +1274,7 @@ namespace
 
             currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
-            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.GetObject() ) ) {
                 currentTile.SetObject( partInfo.objectType );
             }
         }
@@ -2110,7 +2119,11 @@ namespace Maps
                 static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
 
                 // Spell ID has a value of 1 bigger than in the original game.
-                const uint32_t spell = std::clamp( tile.metadata()[0] + 1, static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
+                Artifact tempArt( art );
+                tempArt.SetSpell( static_cast<int>( tile.metadata()[0] ) + 1 );
+
+                const uint32_t spell
+                    = std::clamp( static_cast<uint32_t>( tempArt.getSpellId() ), static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
 
                 tile.metadata()[1] = spell;
                 tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
@@ -2961,7 +2974,7 @@ namespace Maps
 
         if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
              || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
-            return !MP2::isActionObject( objectType, tile.isWater() );
+            return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
         return false;
@@ -3128,6 +3141,24 @@ namespace Maps
             // Set resource type and income per day.
             tile.metadata()[0] = info.metadata[0];
             tile.metadata()[1] = info.metadata[1];
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJ_RANDOM_CASTLE:
+        case MP2::OBJ_RANDOM_TOWN:
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            if ( hasBits( getRoadDirecton( tile ), Direction::BOTTOM ) ) {
+                // There is a road in front of the castle entrance, connect it with the castle.
+                Tiles & bottomTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM ) );
+
+                updateRoadSpriteOnTile( bottomTile, false );
+            }
 
             if ( updateMapPassabilities ) {
                 world.updatePassabilities();

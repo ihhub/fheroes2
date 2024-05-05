@@ -211,6 +211,7 @@ public:
     const char * GetName() const;
     const char * GetMultiName() const;
     const char * GetPluralName( uint32_t ) const;
+    static const char * getRandomRaceMonstersName( const uint32_t building );
 
     bool isValid() const
     {

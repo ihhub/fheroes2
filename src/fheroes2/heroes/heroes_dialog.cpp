@@ -666,7 +666,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( isEditor ) {
             if ( le.MouseClickLeft( titleRoi ) ) {
                 std::string res = name;
-                if ( Dialog::InputString( _( "Enter hero's name" ), res, {}, 30 ) && !res.empty() ) {
+                if ( Dialog::inputString( _( "Enter hero's name" ), res, {}, 30, false ) && !res.empty() ) {
                     name = std::move( res );
                     drawTitleText( name, _race, true );
                     needRedraw = true;
