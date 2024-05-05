@@ -566,13 +566,20 @@ namespace Interface
                         continue;
                     }
 
+                    std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
+
+                    if ( System::IsFile( fullPath )
+                         && Dialog::NO
+                                == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the existing map?" ), Dialog::YES | Dialog::NO ) ) {
+                        continue;
+                    }
+
                     _mapFormat.name = std::move( mapName );
+                    _loadedFileName = std::move( fileName );
 
                     if ( _mapFormat.description.empty() ) {
                         _mapFormat.description = "Put a real description here.";
                     }
-
-                    std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
 
                     if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
                         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
