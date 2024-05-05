@@ -438,7 +438,7 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
-    const char * getSupportedText( const char * text, const fheroes2::FontType & font )
+    const char * getSupportedText( const char * text, const fheroes2::FontType font )
     {
         const char * translatedText = _( text );
         return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;

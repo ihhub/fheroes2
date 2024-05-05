@@ -27,10 +27,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "game_delays.h"
 #include "image_palette.h"
@@ -656,7 +654,7 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset )
     {
         if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
@@ -667,16 +665,18 @@ namespace fheroes2
         const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
+        const FontCharHandler charHandler( fontType );
+
         for ( size_t i = 0; i < textSize; ++i ) {
-            positionOffset += AGG::getChar( static_cast<uint8_t>( text[i] ), fontType ).width();
+            positionOffset += charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
 
             if ( positionOffset > maxOffset ) {
                 return i;
             }
 
-            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account.
             if ( i == currentTextCursorPosition ) {
-                positionOffset += AGG::getChar( '_', fontType ).width();
+                positionOffset += charHandler.getWidth( '_' );
             }
         }
 

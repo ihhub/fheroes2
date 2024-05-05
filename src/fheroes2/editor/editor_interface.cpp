@@ -558,7 +558,7 @@ namespace Interface
                     }
 
                     std::string fileName;
-                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                    if ( !Dialog::inputString( _( "Map filename" ), fileName, {}, 128, false ) ) {
                         continue;
                     }
 
@@ -956,6 +956,18 @@ namespace Interface
                     const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
                     const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
                     Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
+                }
+                else if ( objectType == MP2::OBJ_SIGN || objectType == MP2::OBJ_BOTTLE ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    std::string header = _( "Input %{object} text" );
+                    StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
+
+                    std::string signText = _mapFormat.signMetadata[object.id].message;
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
+                        _mapFormat.signMetadata[object.id].message = std::move( signText );
+                        action.commit();
+                    }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
