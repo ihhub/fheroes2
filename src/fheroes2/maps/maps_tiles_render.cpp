@@ -911,7 +911,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
+    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
@@ -921,7 +921,7 @@ namespace Maps
         (void)friendColors;
 #endif
 
-        const bool isActionObject = MP2::isActionObject( tile.GetObject() );
+        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.GetObject() ) : MP2::isInGameActionObject( tile.GetObject() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }

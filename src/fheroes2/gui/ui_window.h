@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,6 +91,7 @@ namespace fheroes2
         void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface );
 
         void applyTextBackgroundShading( const Rect & roi );
+        static void applyTextBackgroundShading( Image & output, const Rect & roi );
 
         static void renderBackgroundImage( fheroes2::Image & output, const Rect & roi, const int32_t borderOffset, const bool isEvilInterface );
 

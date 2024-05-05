@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3896,7 +3896,7 @@ msgid "Allow Castle build"
 msgstr "Замък в облаците"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "действие по подразбиране"
 
 #, fuzzy
@@ -3919,10 +3919,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "действие по подразбиране"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3988,6 +3984,9 @@ msgstr "Запазете текущата карта."
 
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
+
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set %{monster} Count"
@@ -11710,27 +11709,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Редакторът изисква разширителни файлове „Цената на лоялността“, за да "
-#~ "работи."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Избери плочка, която не съдържа никакви предмети."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Задайте умение за защита"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Задайте умение за сила"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Задайте умение за знание"
-
-#~ msgid "Multiple"
-#~ msgstr "Многократни"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "и много други сътрудници!"

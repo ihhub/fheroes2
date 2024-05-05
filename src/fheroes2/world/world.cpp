@@ -624,7 +624,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             continue;
         }
 
-        if ( MP2::isActionObject( objectType ) ) {
+        if ( MP2::isInGameActionObject( objectType ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
                 continue;
             }
