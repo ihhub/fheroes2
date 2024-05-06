@@ -370,7 +370,7 @@ namespace Editor
                 // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                 display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
             }
-            else if ( le.MouseClickLeft( fileNameRoi ) ) {
+            else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
                 const int32_t textStartOffsetX = isTextLimit ? 8 : ( fileNameRoi.width - text.width() ) / 2;
                 charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
@@ -399,7 +399,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+            else if ( isListboxSelected && le.KeyPress( fheroes2::Key::KEY_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
