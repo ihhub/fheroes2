@@ -536,7 +536,21 @@ namespace
 
     bool verifyObjectPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
-        if ( groupType == Maps::ObjectGroup::MONSTERS ) {
+        switch ( groupType ) {
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+        case Maps::ObjectGroup::MONSTERS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
@@ -548,112 +562,9 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+        case Maps::ObjectGroup::KINGDOM_TOWNS: {
             Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
@@ -681,63 +592,13 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-        }
-        else {
+        default: {
             // Did you add a new object group? Add the logic for it!
             assert( 0 );
             return false;
+        }
         }
 
         return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
