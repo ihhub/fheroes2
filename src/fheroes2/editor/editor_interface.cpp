@@ -548,8 +548,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -563,8 +561,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -578,8 +574,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -593,8 +587,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -608,8 +600,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -623,8 +613,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -638,8 +626,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -653,8 +639,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -668,8 +652,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
@@ -699,8 +681,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -714,8 +694,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -729,8 +707,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -744,8 +720,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -759,15 +733,14 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
-            return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
         }
         else {
             // Did you add a new object group? Add the logic for it!
             assert( 0 );
+            return false;
         }
 
-        return true;
+        return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
     }
 }
 
