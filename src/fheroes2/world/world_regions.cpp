@@ -21,6 +21,7 @@
 #include "world_regions.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
