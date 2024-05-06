@@ -182,12 +182,12 @@ namespace
                             ++data;
                         }
                         else {
-                            if ( lineInfo->offset.x == 0 ) {
+                            if ( lineInfo->offset.x < maxWidth / 2 ) {
                                 lineInfo->characterCount = lineLength;
                                 lineInfo->offset.x = lineWidth;
                             }
                             else {
-                                // This word was not the first in the line so we can move it to the next line.
+                                // This first word starts from the end of the line so we can move it to the next line.
                                 // It can happen in the case of the multi-font text.
                                 data -= lastWordLength;
                             }
@@ -381,11 +381,11 @@ namespace
                             ++data;
                         }
                         else {
-                            if ( lineInfo->offset.x == 0 ) {
+                            if ( lineInfo->offset.x < maxWidth / 2 ) {
                                 renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
                             }
                             else {
-                                // This word was not the first in the line so we can move it to the next line.
+                                // This first word starts from the end of the line so we can move it to the next line.
                                 // It can happen in the case of the multi-font text.
                                 data -= lastWordLength;
                             }
