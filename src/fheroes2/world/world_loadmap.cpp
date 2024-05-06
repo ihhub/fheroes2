@@ -1018,6 +1018,11 @@ bool World::loadResurrectionMap( const std::string & filename )
         newEvent.resource = event.resources;
     }
 
+    // Load rumors.
+    for ( auto & rumor : map.rumors ) {
+        _rumors.emplace_back( std::move( rumor ) );
+    }
+
     // Verify that a capture or loss object exists.
     if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
         auto iter = hiredHeroPos.find( { static_cast<int32_t>( map.lossConditionMetadata[0] ), static_cast<int32_t>( map.lossConditionMetadata[1] ) } );

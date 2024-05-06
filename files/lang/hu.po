@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1009,7 +1009,7 @@ msgid "Reset"
 msgstr "Reset"
 
 msgid "Reset to default settings."
-msgstr "Alapbeállítások visszaállítása"
+msgstr "Alapbeállítások visszaállítása."
 
 msgid "Please select another hero."
 msgstr "Kérlek válassz másik hőst."
@@ -2707,10 +2707,10 @@ msgid "%{name} is a level %{value} %{race} "
 msgstr "%{name} %{value}. szintű %{race} "
 
 msgid "with %{count} artifacts."
-msgstr "%{count} varázstárggyal"
+msgstr "%{count} varázstárggyal."
 
 msgid "with 1 artifact."
-msgstr "egy varázstárggyal"
+msgstr "egy varázstárggyal."
 
 msgid "without artifacts."
 msgstr "varázstárgyak nélkül."
@@ -2802,7 +2802,7 @@ msgid "Puzzle"
 msgstr "Rejtvény"
 
 msgid "View the obelisk puzzle."
-msgstr "Az obeliszk rejtvény mutatása"
+msgstr "Az obeliszk rejtvény mutatása."
 
 msgid "Scenario Information"
 msgstr "Küldetés információ"
@@ -2919,7 +2919,7 @@ msgstr ""
 "Elfogadod az ajánlatukat?"
 
 msgid "(Rate: %{percent})"
-msgstr "(arány: %{count})"
+msgstr "(Arány: %{percent})"
 
 msgid "off"
 msgstr "ki"
@@ -3252,10 +3252,10 @@ msgid "Min"
 msgstr "Min"
 
 msgid "Qty to trade"
-msgstr "darab eladása"
+msgstr "Darab eladása"
 
 msgid "Trading Post"
-msgstr "Kereskedelmi Állomás"
+msgstr "Kereskedelmi állomás"
 
 msgid "Your Resources"
 msgstr "Erőforrásaid"
@@ -3813,7 +3813,7 @@ msgid "Allow Castle build"
 msgstr "Fellegvár"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Alapértelmezett cselekvés"
 
 #, fuzzy
@@ -3839,10 +3839,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Alapértelmezett cselekvés"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3900,7 +3896,7 @@ msgid "Load Map"
 msgstr "Térkép betöltése"
 
 msgid "Load an existing map."
-msgstr "Létező térkép betöltése"
+msgstr "Létező térkép betöltése."
 
 msgid "Save Map"
 msgstr "Térkép mentése"
@@ -3911,9 +3907,12 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
-msgstr "%{monster} lövése"
+msgstr "%{monster} létszám beállítása"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -3983,7 +3982,7 @@ msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
 
 msgid "Select object type"
-msgstr "Objektum típus kiválasztása:"
+msgstr "Objektum típus kiválasztása"
 
 msgid ""
 "Click here to\n"
@@ -5761,10 +5760,10 @@ msgid "Keyboard|ABC"
 msgstr "ABC"
 
 msgid "Kingdom Income"
-msgstr "Királyság jövedelme:"
+msgstr "Királyság jövedelme"
 
 msgid "Kingdom Income per day."
-msgstr "Királyság napi jövedelme:"
+msgstr "Királyság napi jövedelme."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
@@ -7471,9 +7470,8 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Hős képernyő"
+msgstr "Hős osztály:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a hőst?"
@@ -7511,9 +7509,8 @@ msgstr "Járőrözési sugár beállítása"
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Kattints a következő város mutatásához."
+msgstr "Kattints az osztály megváltoztatásához."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7890,7 +7887,7 @@ msgid ""
 "their army, and reduces the cost of surrender."
 msgstr ""
 "A(z) %{skill} lehetővé teszi a hős seregénél gyengébb lényekkel való "
-"tárgyalást. "
+"tárgyalást."
 
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
@@ -8395,7 +8392,7 @@ msgid "Next sign 50 miles."
 msgstr "Következő jelzés 50 mérföldre."
 
 msgid "See Rock City."
-msgstr "Kőváros"
+msgstr "Nézd Kővárost."
 
 msgid "This space for rent."
 msgstr "Ez a hely kiadó."
@@ -11087,7 +11084,7 @@ msgid "Disrupting Ray"
 msgstr "Gyengítő sugár"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Csökkenti egy ellenséges egység védelmi osztályát hárommal."
+msgstr "Csökkenti egy ellenséges egység védelmi képességét hárommal."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Az összes élő (nem élőhalott) egység a csatatéren sebződik."
@@ -11461,26 +11458,3 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Védőerő beállítása"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Varázserő beállítása"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Tudás beállítása"
-
-#~ msgid "Multiple"
-#~ msgstr "Több"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "és sok egyéb további közreműködőnek!"

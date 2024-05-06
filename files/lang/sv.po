@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3810,7 +3810,7 @@ msgid "Allow Castle build"
 msgstr "Molnslott"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standardåtgärder"
 
 #, fuzzy
@@ -3833,10 +3833,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Standardåtgärder"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3901,6 +3897,9 @@ msgstr "Spara nuvarande karta."
 
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
+
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set %{monster} Count"
@@ -11480,27 +11479,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för "
-#~ "att fungera."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Välj en ruta som inte har några objekt."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Ange Försvarsförmåga"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Ange Trollkonst"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Ange Kunskapsnivå"
-
-#~ msgid "Multiple"
-#~ msgstr "Flera"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "och många andra som bidragit!"

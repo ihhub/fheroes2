@@ -3888,9 +3888,6 @@ msgstr ""
 "Skift brugen af standardbygninger. Brugerdefinerede bygninger vil blive "
 "nulstillet!"
 
-msgid "Default Buildings"
-msgstr "Standardbygninger"
-
 msgid "Toggle building construction restriction mode."
 msgstr "Skift begrænsningstilstand for bygningskonstruktion."
 
@@ -3952,6 +3949,9 @@ msgstr "Gem nuværende kort."
 
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
+
+msgid "Input %{object} text"
+msgstr "Indsæt %{object} tekst"
 
 msgid "Set %{monster} Count"
 msgstr "Indstil %{monster} antal"
@@ -11586,27 +11586,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
-#~ msgstr ""
-#~ "Editoren kræver filerne fra \"Prisen for Loyalitet\"-udvidelsen, for at "
-#~ "virke."
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Vælg et felt, som ikke indeholder nogen objekter."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Indstil forsvarsevne"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Indstil magisk evne"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Indstil kundskabsevne"
-
-#~ msgid "Multiple"
-#~ msgstr "Mange"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "og mange andre bidragere!"

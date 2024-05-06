@@ -643,7 +643,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
