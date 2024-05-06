@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-04 12:08+0000\n"
-"PO-Revision-Date: 2024-03-05 13:55+0100\n"
+"PO-Revision-Date: 2024-05-06 09:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -405,7 +405,7 @@ msgid ""
 "Default\n"
 "troop"
 msgstr ""
-"Standard-\n"
+"standard\n"
 "trop"
 
 msgid "View %{name}"
@@ -3864,20 +3864,18 @@ msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
 msgid "Default buildings"
-msgstr ""
-"Standard-\n"
-"bygninger"
+msgstr "Standardbygninger"
 
 msgid "Default Army"
 msgstr ""
-"Standard-\n"
+"standard\n"
 "hær"
 
 msgid "Castle Army"
 msgstr "Borghær"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr "Klik for at ændre borgnavnet. Højreklik for at nulstille til standard."
+msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
 
 msgid "Enter Castle name"
 msgstr "Skriv borgnavn"
@@ -3891,9 +3889,7 @@ msgstr ""
 "nulstillet!"
 
 msgid "Default Buildings"
-msgstr ""
-"Standard-\n"
-"bygninger"
+msgstr "Standardbygninger"
 
 msgid "Toggle building construction restriction mode."
 msgstr "Skift bygningskonstruktionsbegrænsningstilstand."
@@ -3905,7 +3901,7 @@ msgid "Use default defenders army."
 msgstr "Brug standard forsvarshær."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Indstil brugerdefinerede borghær. Højreklik for at nulstille troppen."
+msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 
 msgid "Map filename"
 msgstr "Kort-filnavn"
@@ -3960,16 +3956,14 @@ msgstr "Forlad korteditoren."
 msgid "Set %{monster} Count"
 msgstr "Indstil %{monster} antal"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
-msgstr "Tilfældigt ultimativt artefakt"
+msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
-#, fuzzy
 msgid "Action objects must be placed on clear tiles."
-msgstr "Hav-objekter må kun placeres på vand."
+msgstr "Hav-objekter må kun placeres på ryddede felter."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Væsener kan ikke placeres på vand."
@@ -5109,9 +5103,8 @@ msgstr "Ranglister"
 msgid "View the high scores screen."
 msgstr "Vis skærmen for højeste score."
 
-#, fuzzy
 msgid "Create new or modify existing maps."
-msgstr "indlæs et eksisterende kort."
+msgstr "Modificer et eksisterende kort eller opret et nyt."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Skift spillets sprog, opløsning og indstillinger."
@@ -5787,16 +5780,14 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
-"Standard-\n"
+"standard\n"
 "værdi"
 
 msgid "Set %{skill} Skill"
 msgstr "Indstil %{skill} Evne"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
-msgstr ""
-"Indstil %{skill} startværdi. Højreklik for at nulstille alle evner til "
-"standard."
+msgstr "Indstil %{skill} startværdi. Højreklik: Nulstil evner til standard."
 
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
@@ -5805,7 +5796,7 @@ msgid ""
 "Default\n"
 "skill"
 msgstr ""
-"Standard\n"
+"standard\n"
 "evne"
 
 msgid "Keyboard|123"
@@ -7578,8 +7569,7 @@ msgid "Set custom Experience value. Current value is default."
 msgstr "Indstil tilpasset erfaringspointværdi. Nuværende værdi er standard."
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
-"Skift erfaringspointværdi. Højreklik for at nulstille til standardværdien."
+msgstr "Skift erfaringspointværdi. Højreklik: Nulstil til standardværdi."
 
 msgid "Set Experience value"
 msgstr "Indstil erfaringspoint"
@@ -7588,11 +7578,10 @@ msgid "View Experience Info"
 msgstr "Vis erfaringsinfo"
 
 msgid "Set custom Spell Points value. Current value is default."
-msgstr ""
-"Indstil magipointværdi. Højreklik for at nulstille til standardværdien."
+msgstr "Indstil magipointværdi. Højreklik: Nulstil til standardværdi."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
-msgstr "Skift magipointværdi. Højreklik for at nulstille til standardværdien."
+msgstr "Skift magipointværdi. Højreklik: Nulstil til standardværdi."
 
 msgid "Set Spell Points value"
 msgstr "Indstil antal magipoint"
@@ -7648,26 +7637,22 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Sæt hærens kampformation til 'grupperet'"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
-msgstr "Indstil heltens artefakter. Højreklik for at nulstille til standard."
+msgstr "Indstil heltens artefakter. Højreklik: Fjern artefakt."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
-msgstr ""
-"Indstil heltens sekundære evner. Højreklik for at nulstille til standard."
+msgstr "Indstil heltens sekundære evner. Højreklik: Fjern evne."
 
 msgid "Set hero's Army. Right-click to reset unit."
-msgstr "Indstil heltenes hær. Højreklik for at nulstille til standard."
+msgstr "Indstil heltenes hær. Højreklik: Fjern trop."
 
 msgid "Set hero's portrait. Right-click to reset to default."
-msgstr "Indstil heltens portræt. Højreklik for at nulstille til standard."
+msgstr "Indstil heltens portræt. Højreklik: Nulstil til standard."
 
 msgid "Click to change hero's name. Right-click to reset to default."
-msgstr ""
-"Klik for at ændre heltens navn. Højreklik for at nulstille til standard."
+msgstr "Klik for at ændre heltens navn. Højreklik: Nulstil til standard."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
-msgstr ""
-"Helten patruljerer et område på %{tiles} felters radius. Klik for at slå det "
-"fra."
+msgstr "Helten patruljerer en radius på %{tiles} felter. Venstreklik: Slå fra."
 
 msgid "Click to enable hero's patrol mode."
 msgstr "Klik for at aktivere heltens patruljetilstand."
