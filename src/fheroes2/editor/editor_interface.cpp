@@ -1764,7 +1764,7 @@ namespace Interface
                     continue;
                 }
 
-                if ( !verifyTerrainPlacement( pos, object.group, object.index, errorMessage ) ) {
+                if ( !verifyTerrainPlacement( pos, object.group, static_cast<int32_t>( object.index ), errorMessage ) ) {
                     uids.emplace( object.id );
                 }
             }
