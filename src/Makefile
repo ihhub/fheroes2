@@ -101,6 +101,9 @@ CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
 CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++17
 CPPFLAGS := $(CPPFLAGS) $(CPPFLAGS_FH2)
 
+ifdef FHEROES2_WITH_SYSTEM_SMACKER
+LIBS := $(LIBS) -lsmacker
+endif
 LIBS := $(LIBS) -lz $(LDLIBS)
 
 ifdef FHEROES2_WITH_DEBUG
@@ -154,7 +157,9 @@ export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
 .PHONY: all clean
 
 all:
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)" CPPFLAGS="$(CPPFLAGS_TP)"
+endif
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef FHEROES2_WITH_TOOLS
@@ -163,7 +168,9 @@ endif
 	$(MAKE) -C dist pot
 
 clean:
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker clean
+endif
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean

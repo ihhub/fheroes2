@@ -100,7 +100,7 @@ public:
     virtual void putLE16( uint16_t ) = 0;
 
     virtual std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) = 0;
-    virtual void putRaw( const char *, size_t ) = 0;
+    virtual void putRaw( const void *, size_t ) = 0;
 
     uint16_t get16();
     uint32_t get32();
@@ -322,7 +322,7 @@ public:
     void putLE16( uint16_t v ) override;
 
     std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
-    void putRaw( const char * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t sz ) override;
 
     std::string toString( const size_t size = 0 );
 
@@ -383,7 +383,7 @@ public:
     // 0 stands for full data.
     std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
 
-    void putRaw( const char *, size_t ) override;
+    void putRaw( const void * ptr, size_t sz ) override;
 
     std::string toString( const size_t size = 0 );
 

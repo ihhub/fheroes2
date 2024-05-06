@@ -40,6 +40,7 @@
 #include "agg_file.h"
 #include "battle_cell.h"
 #include "exception.h"
+#include "game_language.h"
 #include "h2d.h"
 #include "icn.h"
 #include "image.h"
@@ -160,6 +161,8 @@ namespace
                                                 ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_TOWN_GOOD,
                                                 ICN::BUTTON_TOWN_EVIL,
+                                                ICN::BUTTON_RESTRICT_GOOD,
+                                                ICN::BUTTON_RESTRICT_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -168,6 +171,7 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_VERTICAL_PATROL,
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
@@ -434,7 +438,7 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
-    const char * getSupportedText( const char * text, const fheroes2::FontType & font )
+    const char * getSupportedText( const char * text, const fheroes2::FontType font )
     {
         const char * translatedText = _( text );
         return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
@@ -1799,6 +1803,16 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_RESTRICT_GOOD:
+            case ICN::BUTTON_RESTRICT_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTRICT" ),
+                                      id == ICN::BUTTON_RESTRICT_EVIL ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                      id == ICN::BUTTON_RESTRICT_EVIL ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
@@ -1950,6 +1964,19 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_VERTICAL_PATROL: {
+                _icnVsSprite[id].resize( 2 );
+
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-centered when we are displaying one letter per line
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
+
+                break;
+            }
+
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
@@ -2640,6 +2667,8 @@ namespace fheroes2
             case ICN::BUTTON_CASTLE_EVIL:
             case ICN::BUTTON_TOWN_GOOD:
             case ICN::BUTTON_TOWN_EVIL:
+            case ICN::BUTTON_RESTRICT_GOOD:
+            case ICN::BUTTON_RESTRICT_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:
@@ -2648,6 +2677,7 @@ namespace fheroes2
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
+            case ICN::BUTTON_VERTICAL_PATROL:
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
@@ -3155,6 +3185,25 @@ namespace fheroes2
                         // Fix incorrect pixel at position 260x305.
                         original.image()[195460] = 31;
                     }
+
+                    // Since we cannot access game settings from here we are checking an existance
+                    // of one of POL resources as an indicator for this version.
+                    if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                        Sprite editorIcon;
+                        h2d::readImage( "main_menu_editor_icon.image", editorIcon );
+
+                        Blit( editorIcon, 0, 0, original, editorIcon.x(), editorIcon.y(), editorIcon.width(), editorIcon.height() );
+                    }
+                }
+                return true;
+            case ICN::BTNSHNGL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 20 ) {
+                    _icnVsSprite[id].resize( 23 );
+
+                    h2d::readImage( "main_menu_editor_released_button.image", _icnVsSprite[id][20] );
+                    h2d::readImage( "main_menu_editor_highlighted_button.image", _icnVsSprite[id][21] );
+                    h2d::readImage( "main_menu_editor_pressed_button.image", _icnVsSprite[id][22] );
                 }
                 return true;
             case ICN::TOWNBKG3:

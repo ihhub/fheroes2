@@ -29,19 +29,12 @@
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "profit.h"
-#include "rand.h"
 #include "resource.h"
 #include "route.h"
 #include "world.h"
 
 namespace AI
 {
-    Normal::Normal()
-        : _pathfinder( ARMY_ADVANTAGE_LARGE )
-    {
-        _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
-    }
-
     void Normal::resetPathfinder()
     {
         _pathfinder.reset();
@@ -50,7 +43,7 @@ namespace AI
     void Normal::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( !MP2::isActionObject( object ) ) {
+        if ( !MP2::isInGameActionObject( object ) ) {
             return;
         }
 
@@ -187,14 +180,14 @@ namespace AI
                                       []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
 
         if ( iter != _mapActionObjects.end() && iter->first == mapIndex ) {
-            if ( MP2::isActionObject( objectType ) ) {
+            if ( MP2::isInGameActionObject( objectType ) ) {
                 iter->second = objectType;
             }
             else {
                 _mapActionObjects.erase( iter );
             }
         }
-        else if ( MP2::isActionObject( objectType ) ) {
+        else if ( MP2::isInGameActionObject( objectType ) ) {
             _mapActionObjects.emplace( iter, IndexObject{ mapIndex, objectType } );
         }
     }

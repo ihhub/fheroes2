@@ -1231,7 +1231,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
             ++result;
             if ( strs ) {
                 std::string str = _( "All %{race} troops +1" );
-                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "Multiple" ) : Race::String( *races.begin() ) );
+                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "NeutralRaceTroops|Neutral" ) : Race::String( *races.begin() ) );
                 strs->append( str );
                 *strs += '\n';
             }

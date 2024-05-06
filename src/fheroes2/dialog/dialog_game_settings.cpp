@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_game_settings.h"
+
 #include <cassert>
 #include <cstdint>
 #include <vector>
@@ -25,11 +27,11 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_audio.h"
-#include "dialog_game_settings.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
@@ -273,11 +275,11 @@ namespace fheroes2
                 break;
             }
             case SelectedWindow::Graphics:
-                fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog( false );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::HotKeys:

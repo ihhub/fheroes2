@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -133,6 +133,11 @@ namespace Maps
         void setObjectIcnType( const MP2::ObjectIcnType type )
         {
             _mainAddon._objectIcnType = type;
+        }
+
+        void setObjectLayerType( const ObjectLayerType type )
+        {
+            _mainAddon._layerType = type;
         }
 
         uint8_t GetObjectSpriteIndex() const
@@ -404,13 +409,13 @@ namespace Maps
 
         uint16_t _terrainImageIndex{ 0 };
 
-        uint8_t _terrainFlags{ 0 };
-
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
         std::array<uint32_t, 3> _metadata{ 0 };
 
         uint16_t _tilePassabilityDirections{ DIRECTION_ALL };
+
+        uint8_t _terrainFlags{ 0 };
 
         bool _isTileMarkedAsRoad{ false };
 

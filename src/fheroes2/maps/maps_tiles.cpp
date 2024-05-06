@@ -690,7 +690,7 @@ int Maps::Tiles::getOriginalPassability() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isActionObject( objectType ) ) {
+    if ( MP2::isOffGameActionObject( objectType ) ) {
         return MP2::getActionObjectDirection( objectType );
     }
 
@@ -729,7 +729,8 @@ void Maps::Tiles::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent() && !isShadow() ) {
+    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent()
+         && !isShadow() ) {
         // This is a non-action object.
 
         if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
@@ -785,7 +786,7 @@ void Maps::Tiles::updatePassability()
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
-            if ( MP2::isActionObject( bottomTileObjectType ) ) {
+            if ( MP2::isOffGameActionObject( bottomTileObjectType ) ) {
                 if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                     if ( isShortObject( bottomTileObjectType ) ) {
                         _tilePassabilityDirections &= ~Direction::BOTTOM;
@@ -796,7 +797,7 @@ void Maps::Tiles::updatePassability()
                     }
                 }
             }
-            else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+            else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isOffGameActionObject( correctedObjectType )
                       && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
             }
@@ -1864,12 +1865,21 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._mainAddon._imageIndex;
 
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
-    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint8_t>, "Type of _mainObjectType has been changed, check the logic below" );
+    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint16_t>, "Type of _mainObjectType has been changed, check the logic below" );
 
-    MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
-    msg >> mainObjectType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        uint8_t mainObjectType = static_cast<uint8_t>( MP2::OBJ_NONE );
+        msg >> mainObjectType;
 
-    tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+    }
+    else {
+        MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
+        msg >> mainObjectType;
+
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+    }
 
     return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
            >> tile._mainAddon._layerType >> tile._boatOwnerColor;

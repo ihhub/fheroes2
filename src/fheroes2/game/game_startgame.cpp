@@ -307,7 +307,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false );
 
         if ( needFade ) {
             needFade = false;
@@ -643,7 +643,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 

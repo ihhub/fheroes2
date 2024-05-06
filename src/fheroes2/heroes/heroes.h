@@ -57,6 +57,11 @@ namespace Battle
 namespace Maps
 {
     class Tiles;
+
+    namespace Map_Format
+    {
+        struct HeroMetadata;
+    }
 }
 
 namespace fheroes2
@@ -297,6 +302,10 @@ public:
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
+    void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor );
+    // Updates data in heroMetadata and returns true if it has changes.
+    Maps::Map_Format::HeroMetadata getHeroMetadata() const;
+
     int GetRace() const override;
     const std::string & GetName() const override;
     int GetColor() const override;
@@ -314,6 +323,50 @@ public:
     double getMeetingValue( const Heroes & otherHero ) const;
     double getRecruitValue() const;
     int getStatsValue() const;
+
+    void setAttackBaseValue( const int baseValue )
+    {
+        attack = baseValue;
+    }
+
+    void setDefenseBaseValue( const int baseValue )
+    {
+        defense = baseValue;
+    }
+
+    void setPowerBaseValue( const int baseValue )
+    {
+        power = baseValue;
+    }
+
+    void setKnowledgeBaseValue( const int baseValue )
+    {
+        knowledge = baseValue;
+    }
+
+    // Get hero's Attack skill base value without any modificators.
+    int getAttackBaseValue() const
+    {
+        return attack;
+    }
+
+    // Get hero's Defense skill base value without any modificators.
+    int getDefenseBaseValue() const
+    {
+        return defense;
+    }
+
+    // Get hero's Spell Power skill base value without any modificators.
+    int getPowerBaseValue() const
+    {
+        return power;
+    }
+
+    // Get hero's Knowledge skill base value without any modificators.
+    int getKnowledgeBaseValue() const
+    {
+        return knowledge;
+    }
 
     int GetAttack() const override;
     int GetDefense() const override;
@@ -419,7 +472,7 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );

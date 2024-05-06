@@ -32,8 +32,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "dialog_system_options.h"
 #include "editor_interface.h"
+#include "editor_options.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
@@ -597,8 +597,6 @@ namespace Interface
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
-
-        display.render( _rectInstrumentPanel );
     }
 
     int32_t EditorPanel::getSelectedObjectType() const
@@ -1192,8 +1190,7 @@ namespace Interface
             res = Interface::EditorInterface::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
-            // Replace this with Editor options dialog.
-            fheroes2::showSystemOptionsDialog();
+            Editor::openEditorSettings();
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );

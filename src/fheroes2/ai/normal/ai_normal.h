@@ -119,15 +119,17 @@ namespace AI
     {
         EnemyArmy() = default;
 
-        EnemyArmy( const int32_t index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+        EnemyArmy( const int32_t index_, const int color_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
             : index( index_ )
+            , color( color_ )
             , hero( hero_ )
             , strength( strength_ )
             , movePoints( movePoints_ )
         {}
 
         int32_t index{ -1 };
-        const Heroes * hero = nullptr;
+        int color{ Color::NONE };
+        const Heroes * hero{ nullptr };
         double strength{ 0 };
         uint32_t movePoints{ 0 };
     };
@@ -251,10 +253,36 @@ namespace AI
         bool _cautiousOffensive = false;
     };
 
+    class AIWorldPathfinderStateRestorer
+    {
+    public:
+        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+            : _pathfinder( pathfinder )
+            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+        {}
+
+        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
+
+        ~AIWorldPathfinderStateRestorer()
+        {
+            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+        }
+
+        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
+
+    private:
+        AIWorldPathfinder & _pathfinder;
+
+        const double _originalMinimalArmyStrengthAdvantage;
+        const double _originalSpellPointsReserveRatio;
+    };
+
     class Normal : public Base
     {
     public:
-        Normal();
+        Normal() = default;
 
         void KingdomTurn( Kingdom & kingdom ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;

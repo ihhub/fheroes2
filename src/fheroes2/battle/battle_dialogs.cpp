@@ -417,7 +417,7 @@ void Battle::DialogBattleSettings()
             action = openBattleOptionDialog( saveConfiguration );
             break;
         case DialogAction::AudioSettings:
-            Dialog::openAudioSettingsDialog( false );
+            saveConfiguration |= Dialog::openAudioSettingsDialog( false );
             action = DialogAction::Open;
             break;
         case DialogAction::HotKeys:
@@ -939,7 +939,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 11 };
     text.draw( tp.x, tp.y + 2, display );
 
-    const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
+    const int32_t letterShadowCompensation = 1;
+    const fheroes2::Point statsTextOffset{ pos_rt.x + 133 + letterShadowCompensation, pos_rt.y + 40 };
     const int32_t maxStatsTextWidth{ 109 };
     const int32_t statsTextRowHeight{ 11 };
 
@@ -1069,7 +1070,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             LocalEvent::GetClean();
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
-            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false );
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false, false );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );

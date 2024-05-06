@@ -36,6 +36,7 @@ class Monster
 public:
     enum
     {
+        JOIN_CONDITION_UNSET = -1,
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
         JOIN_CONDITION_FREE = 2
@@ -210,6 +211,7 @@ public:
     const char * GetName() const;
     const char * GetMultiName() const;
     const char * GetPluralName( uint32_t ) const;
+    static const char * getRandomRaceMonstersName( const uint32_t building );
 
     bool isValid() const
     {

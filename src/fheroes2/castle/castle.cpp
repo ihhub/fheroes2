@@ -52,6 +52,8 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -325,26 +327,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         dataStream.skip( 5 );
 
         // Set default buildings.
-        building |= DWELLING_MONSTER1;
-        uint32_t dwelling2 = 0;
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            dwelling2 = 75;
-            break;
-        case Difficulty::NORMAL:
-            dwelling2 = 50;
-            break;
-        case Difficulty::HARD:
-            dwelling2 = 25;
-            break;
-        case Difficulty::EXPERT:
-            dwelling2 = 10;
-            break;
-        default:
-            break;
-        }
-        if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) )
-            building |= DWELLING_MONSTER2;
+        _setDefaultBuildings();
     }
 
     const bool customDefenders = ( dataStream.get() != 0 );
@@ -429,53 +412,99 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     PostLoad();
 }
 
+void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata )
+{
+    modes = 0;
+
+    building = Maps::getBuildingsFromVector( metadata.builtBuildings );
+
+    if ( !metadata.customBuildings ) {
+        _setDefaultBuildings();
+    }
+
+    if ( std::find( metadata.bannedBuildings.begin(), metadata.bannedBuildings.end(), BUILD_CASTLE ) == metadata.bannedBuildings.end() ) {
+        SetModes( ALLOWCASTLE );
+    }
+
+    // Check the default Army state for the Neutral player.
+    if ( Maps::loadCastleArmy( army, metadata ) ) {
+        SetModes( CUSTOMARMY );
+    }
+
+    if ( !metadata.customName.empty() ) {
+        name = metadata.customName;
+    }
+
+    PostLoad();
+}
+
 void Castle::PostLoad()
 {
-    // dwelling pack
-    if ( building & DWELLING_MONSTER1 )
-        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
-    if ( building & DWELLING_MONSTER2 )
-        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
-    if ( building & DWELLING_UPGRADE2 )
-        dwelling[1] = Monster( race, DWELLING_UPGRADE2 ).GetGrown();
-    if ( building & DWELLING_MONSTER3 )
-        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
-    if ( building & DWELLING_UPGRADE3 )
-        dwelling[2] = Monster( race, DWELLING_UPGRADE3 ).GetGrown();
-    if ( building & DWELLING_MONSTER4 )
-        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
-    if ( building & DWELLING_UPGRADE4 )
-        dwelling[3] = Monster( race, DWELLING_UPGRADE4 ).GetGrown();
-    if ( building & DWELLING_MONSTER5 )
-        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
-    if ( building & DWELLING_UPGRADE5 )
-        dwelling[4] = Monster( race, DWELLING_UPGRADE5 ).GetGrown();
-    if ( building & DWELLING_MONSTER6 )
-        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE6 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE7 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
-
-    // fix upgrade dwelling dependent from race
+    // Fix dwelling upgrades dependent from race. (For random race towns.)
     switch ( race ) {
+    case Race::KNGT:
+        building &= ~DWELLING_UPGRADE7;
+        break;
     case Race::BARB:
-        building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 );
+        building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::SORC:
-        building &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 );
+        building &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::WRLK:
         building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE5 );
         break;
     case Race::WZRD:
-        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 );
+        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 | DWELLING_UPGRADE7 );
         break;
     case Race::NECR:
-        building &= ~DWELLING_UPGRADE6;
+        building &= ~( DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     default:
         break;
+    }
+
+    // Fill built dwellings with weekly growth monsters.
+    if ( building & DWELLING_MONSTER1 ) {
+        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE2 ) {
+        dwelling[1] = Monster( race, DWELLING_UPGRADE2 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER2 ) {
+        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE3 ) {
+        dwelling[2] = Monster( race, DWELLING_UPGRADE3 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER3 ) {
+        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE4 ) {
+        dwelling[3] = Monster( race, DWELLING_UPGRADE4 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER4 ) {
+        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE5 ) {
+        dwelling[4] = Monster( race, DWELLING_UPGRADE5 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER5 ) {
+        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE7 ) {
+        dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
+    }
+    else if ( building & DWELLING_UPGRADE6 ) {
+        dwelling[5] = Monster( race, DWELLING_UPGRADE6 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER6 ) {
+        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
     }
 
     army.SetColor( GetColor() );
@@ -518,6 +547,33 @@ void Castle::PostLoad()
     // end
     DEBUG_LOG( DBG_GAME, DBG_INFO,
                ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
+}
+
+void Castle::_setDefaultBuildings()
+{
+    building |= DWELLING_MONSTER1;
+    uint32_t dwelling2 = 0;
+
+    switch ( Game::getDifficulty() ) {
+    case Difficulty::EASY:
+        dwelling2 = 75;
+        break;
+    case Difficulty::NORMAL:
+        dwelling2 = 50;
+        break;
+    case Difficulty::HARD:
+        dwelling2 = 25;
+        break;
+    case Difficulty::EXPERT:
+        dwelling2 = 10;
+        break;
+    default:
+        break;
+    }
+
+    if ( dwelling2 >= Rand::Get( 1, 100 ) ) {
+        building |= DWELLING_MONSTER2;
+    }
 }
 
 uint32_t Castle::CountBuildings() const
@@ -1009,11 +1065,6 @@ const char * Castle::GetStringBuilding( uint32_t build, int race )
     return fheroes2::getBuildingName( race, static_cast<building_t>( build ) );
 }
 
-const char * Castle::GetDescriptionBuilding( uint32_t build, int race )
-{
-    return fheroes2::getBuildingDescription( race, static_cast<building_t>( build ) );
-}
-
 bool Castle::AllowBuyHero( std::string * msg ) const
 {
     const Heroes * hero = world.GetHero( *this );
@@ -1226,273 +1277,6 @@ uint32_t Castle::getMonstersInDwelling( uint32_t dw ) const
     return 0;
 }
 
-/* return requirement for building */
-uint32_t Castle::GetBuildingRequirement( uint32_t build ) const
-{
-    uint32_t requirement = 0;
-
-    switch ( build ) {
-    case BUILD_SPEC:
-        switch ( race ) {
-        case Race::WZRD:
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER2:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-        case Race::WZRD:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_TAVERN;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER3:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::BARB:
-        case Race::SORC:
-        case Race::WZRD:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER4:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_TAVERN;
-            break;
-
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        case Race::WZRD:
-        case Race::WRLK:
-            requirement |= DWELLING_MONSTER2;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_THIEVESGUILD;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER5:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::WRLK:
-            requirement |= DWELLING_MONSTER3;
-            break;
-
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER6:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::BARB:
-        case Race::SORC:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::WRLK:
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER4;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE2:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER2;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE3:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER3;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE4:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE5:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::WZRD:
-            requirement |= BUILD_SPEC;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::NECR:
-            requirement |= BUILD_MAGEGUILD2;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE6:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER6;
-            break;
-
-        case Race::WRLK:
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER6;
-            break;
-
-        default:
-            break;
-        }
-        break;
-    case DWELLING_UPGRADE7:
-        if ( race == Race::WRLK )
-            requirement |= DWELLING_UPGRADE6;
-        break;
-
-    default:
-        break;
-    }
-
-    return requirement;
-}
-
 int Castle::CheckBuyBuilding( const uint32_t build ) const
 {
     if ( build & building ) {
@@ -1577,7 +1361,7 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         break;
     }
 
-    const uint32_t requirement = Castle::GetBuildingRequirement( build );
+    const uint32_t requirement = fheroes2::getBuildingRequirement( race, static_cast<building_t>( build ) );
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
         if ( ( requirement & itr ) && !( building & itr ) ) {
@@ -2324,101 +2108,14 @@ uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
     return BUILD_NOTHING;
 }
 
-uint32_t Castle::GetUpgradeBuilding( uint32_t build ) const
+uint32_t Castle::GetUpgradeBuilding( const uint32_t buildingId ) const
 {
-    switch ( build ) {
-    case BUILD_TENT:
-        return BUILD_CASTLE;
-    case BUILD_MAGEGUILD1:
-        return BUILD_MAGEGUILD2;
-    case BUILD_MAGEGUILD2:
-        return BUILD_MAGEGUILD3;
-    case BUILD_MAGEGUILD3:
-        return BUILD_MAGEGUILD4;
-    case BUILD_MAGEGUILD4:
-        return BUILD_MAGEGUILD5;
-    default:
-        break;
+    if ( race == Race::WRLK && buildingId == DWELLING_MONSTER6 && isBuild( DWELLING_UPGRADE6 ) ) {
+        // Warlock's dwelling 6 is a special case.
+        return fheroes2::getUpgradeForBuilding( race, DWELLING_UPGRADE6 );
     }
 
-    if ( Race::BARB == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::KNGT == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::NECR == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::SORC == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WRLK == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER6:
-            return isBuild( DWELLING_UPGRADE6 ) ? DWELLING_UPGRADE7 : DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WZRD == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-
-    return build;
+    return fheroes2::getUpgradeForBuilding( race, static_cast<building_t>( buildingId ) );
 }
 
 bool Castle::PredicateIsCastle( const Castle * castle )
@@ -2951,7 +2648,7 @@ std::string Castle::GetStringBuilding( uint32_t build ) const
 
 std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 {
-    std::string res = GetDescriptionBuilding( build, GetRace() );
+    std::string res = fheroes2::getBuildingDescription( GetRace(), static_cast<building_t>( build ) );
 
     switch ( build ) {
     case BUILD_WELL:

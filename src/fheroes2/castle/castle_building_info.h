@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "castle.h"
@@ -34,6 +35,15 @@ namespace fheroes2
     const char * getBuildingName( const int race, const building_t buildingId );
 
     const char * getBuildingDescription( const int race, const building_t buildingId );
+
+    // Returns the upgraded building ID for the given one or the input building if no upgrade is available.
+    building_t getUpgradeForBuilding( const int race, const building_t buildingId );
+
+    building_t getBuildingRequirement( const int race, const building_t building );
+
+    std::string getBuildingRequirementString( const int race, const building_t building );
+
+    int getIndexBuildingSprite( const building_t build );
 
     std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version );
 }

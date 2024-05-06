@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,17 +27,14 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
+#include "skill.h"
 
 class Heroes;
-namespace Skill
-{
-    class Secondary;
-}
 
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    PrimarySkillsBar( const Heroes * hero, bool mini );
+    PrimarySkillsBar( Heroes * hero, const bool useSmallSize, const bool isEditMode, const bool allowSkillReset );
 
     void SetTextOff( int32_t, int32_t );
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -49,11 +46,27 @@ public:
 
     bool QueueEventProcessing( std::string * = nullptr );
 
+    // In Editor primary skills values may be reset to their default state. This method returns this state.
+    bool isDefaultValues() const
+    {
+        return _isDefault;
+    }
+
+    // In Editor primary skills values may be reset to their default state by this method.
+    void useDefaultValues()
+    {
+        _isDefault = true;
+    }
+
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
-    const bool useSmallSize;
-    std::vector<int> content;
+    bool _useSmallSize{ false };
+    bool _isEditMode{ false };
+    bool _allowSkillReset{ false };
+    // The '_isDefault' is used only in Editor mode.
+    bool _isDefault{ false };
+    std::vector<int> _content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE };
     fheroes2::Point toff;
     std::string msg;
 };
@@ -61,7 +74,7 @@ private:
 class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 {
 public:
-    SecondarySkillsBar( const Heroes & hero, bool mini = true, bool change = false );
+    SecondarySkillsBar( const Heroes & hero, const bool mini = true, const bool change = false, const bool showDefaultSkillsMessage = false );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Skill::Secondary &, const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -76,6 +89,7 @@ private:
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool can_change;
+    const bool _showDefaultSkillsMessage;
     std::string msg;
     const Heroes & _hero;
 };
