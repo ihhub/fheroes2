@@ -1617,9 +1617,9 @@ namespace Interface
         std::set<uint32_t> uids;
 
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
-            fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
+            const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
 
-            for ( auto & object : _mapFormat.tiles[i].objects ) {
+            for ( const auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_FLAGS || object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
                     // These objects belong to the main objects and will be checked with them.
                     continue;
