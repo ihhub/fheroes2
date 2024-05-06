@@ -142,6 +142,8 @@ namespace Interface
 
         void handleObjectMouseLeftClick( Maps::Tiles & tile );
 
+        void validateObjectsOnTerrainUpdate();
+
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };
