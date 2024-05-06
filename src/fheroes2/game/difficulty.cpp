@@ -119,11 +119,13 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
                 result += ProfitConditions::FromMine( Resource::MERCURY );
                 break;
             case Race::WRLK:
-            case Race::NECR:
                 result += ProfitConditions::FromMine( Resource::SULFUR );
                 break;
             case Race::WZRD:
                 result += ProfitConditions::FromMine( Resource::GEMS );
+                break;
+            case Race::NECR:
+                // The maximum level units in the necromancer's castle do not require resources for their recruitment
                 break;
             default:
                 assert( 0 );
