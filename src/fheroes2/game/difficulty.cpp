@@ -70,10 +70,10 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
 
 Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles )
 {
-    const auto getIncomeFromSetsOfResourceMines = []( const uint32_t numOfSets ) {
+    const auto getIncomeFromSetsOfResourceMines = []( const int resourceTypes, const uint32_t numOfSets ) {
         Funds result;
 
-        Resource::forEach( ( Resource::ALL & ~Resource::GOLD ), [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
+        Resource::forEach( resourceTypes, [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
 
         return result * numOfSets;
     };
@@ -84,20 +84,46 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
         for ( const Castle * castle : castles ) {
             assert( castle != nullptr );
 
+            // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles. It is necessary to give it the appropriate amount of
+            // bonus gold (some castles have more expensive units than others), as well as additional resources to redeem units of the maximum level.
+
             switch ( castle->GetRace() ) {
             case Race::KNGT:
             case Race::BARB:
-                result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
+            case Race::SORC:
+            case Race::NECR:
+                result += ProfitConditions::FromMine( Resource::GOLD );
+                break;
+            case Race::WRLK:
+            case Race::WZRD:
+                result += ProfitConditions::FromMine( Resource::GOLD ) * 2;
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            // Offer additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
+            if ( !castle->isBuild( DWELLING_MONSTER6 ) ) {
+                continue;
+            }
+
+            switch ( castle->GetRace() ) {
+            case Race::KNGT:
+                // The maximum level units in the knight's castle do not require resources for their recruitment
+                break;
+            case Race::BARB:
+                result += ProfitConditions::FromMine( Resource::CRYSTAL );
                 break;
             case Race::SORC:
-                result += { 0, 0, 1, 0, 0, 0, 0 }; // 1 unit of Mercury
+                result += ProfitConditions::FromMine( Resource::MERCURY );
                 break;
             case Race::WRLK:
             case Race::NECR:
-                result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
+                result += ProfitConditions::FromMine( Resource::SULFUR );
                 break;
             case Race::WZRD:
-                result += { 0, 0, 0, 0, 0, 1, 0 }; // 1 unit of Gems
+                result += ProfitConditions::FromMine( Resource::GEMS );
                 break;
             default:
                 assert( 0 );
@@ -110,11 +136,11 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
 
     switch ( difficulty ) {
     case Difficulty::HARD:
-        return getIncomeFromSetsOfResourceMines( 1 );
+        return getIncomeFromSetsOfResourceMines( Resource::ORE | Resource::WOOD | Resource::GOLD, 1 );
     case Difficulty::EXPERT:
-        return getIncomeFromSetsOfResourceMines( 2 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::ORE | Resource::WOOD | Resource::GOLD, 1 ) + getBonusForCastles();
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromSetsOfResourceMines( 3 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::ALL, 1 ) + getBonusForCastles();
     default:
         break;
     }
@@ -128,12 +154,6 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     case Difficulty::EASY:
         // It is deduction from the income.
         return -0.25;
-    case Difficulty::HARD:
-        return 1.0;
-    case Difficulty::EXPERT:
-        return 2.0;
-    case Difficulty::IMPOSSIBLE:
-        return 3.0;
     default:
         break;
     }
