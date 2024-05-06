@@ -468,7 +468,7 @@ namespace
             }
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
+            const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
                 errorMessage = _( "Towns cannot be placed on water." );
@@ -565,7 +565,7 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
-            Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
+            const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
                 errorMessage = _( "Towns cannot be placed on water." );
