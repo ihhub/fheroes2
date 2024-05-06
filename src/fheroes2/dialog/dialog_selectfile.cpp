@@ -430,8 +430,41 @@ namespace
 
             bool needRedraw = listId != listbox.getCurrentId();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
-                 || listbox.isDoubleClicked() ) {
+            if ( le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+                listbox.SetCurrent( listId );
+                listbox.Redraw();
+
+                std::string msg( _( "Are you sure you want to delete file:" ) );
+                msg.append( "\n\n" );
+                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                    System::Unlink( listbox.GetCurrent().filename );
+                    listbox.RemoveSelected();
+                    if ( lists.empty() ) {
+                        listbox.Redraw();
+
+                        if ( !isEditing ) {
+                            textInputAndDateBackground.restore();
+                            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
+                            return {};
+                        }
+
+                        isListboxSelected = false;
+                        charInsertPos = 0;
+                        filename.clear();
+
+                        buttonOk.disable();
+                        buttonOk.draw();
+                    }
+
+                    listbox.updateScrollBarImage();
+                    listbox.SetCurrent( std::max( listId - 1, 0 ) );
+                }
+
+                needRedraw = true;
+            }
+            else if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
+                      || listbox.isDoubleClicked() ) {
                 if ( !filename.empty() ) {
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
@@ -459,21 +492,19 @@ namespace
                     // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
                 }
-                else if ( le.MouseClickLeft( textInputRoi ) ) {
+                else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
                     const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
                     const int32_t textStartOffsetX = isTextLimit ? 8 : ( textInputRoi.width - text.width() ) / 2;
                     charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
                                                                           textInputRoi.x + textStartOffsetX );
-                    if ( filename.empty() ) {
-                        buttonOk.disable();
-                    }
 
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;
                 }
                 else if ( !listboxEvent && le.KeyPress()
-                          && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
+                          && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
+                          && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                     if ( filename.empty() ) {
                         buttonOk.disable();
@@ -503,30 +534,6 @@ namespace
             }
             else if ( isEditing && le.MousePressRight( buttonVirtualKB->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
-            }
-
-            if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
-                listbox.SetCurrent( listId );
-                listbox.Redraw();
-
-                std::string msg( _( "Are you sure you want to delete file:" ) );
-                msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().filename );
-                    listbox.RemoveSelected();
-                    if ( lists.empty() ) {
-                        listbox.Redraw();
-                        textInputAndDateBackground.restore();
-                        fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
-                        return {};
-                    }
-
-                    listbox.updateScrollBarImage();
-                    listbox.SetCurrent( std::max( listId - 1, 0 ) );
-                }
-
-                needRedraw = true;
             }
 
             // Text input cursor blink.
