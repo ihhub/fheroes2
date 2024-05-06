@@ -2570,14 +2570,15 @@ namespace AI
             // if both left and right are invalid returning either is fine
             return left;
         }
-        DEBUG_LOG( DBG_AI, DBG_TRACE,
-                   hero.GetName() << " picking a skill: " << getSecondarySkillValue( hero, left ) << " for " << left.String( left.first ) << " and "
-                                  << getSecondarySkillValue( hero, right ) << " for " << right.String( right.first ) )
-
         const double leftValue = getSecondarySkillValue( hero, left );
         const double rightValue = getSecondarySkillValue( hero, right );
 
+        DEBUG_LOG( DBG_AI, DBG_TRACE,
+                   hero.GetName() << " picking a skill: " << leftValue << " for " << left.String( left.first ) << " and " << rightValue << " for "
+                                  << right.String( right.first ) )
+
         if ( std::fabs( leftValue - rightValue ) < 0.001 ) {
+            // If skill value is lower than the threshold then it's undesireable. Avoid learning it.
             if ( leftValue < 300.0 ) {
                 return left.Level() == Skill::Level::BASIC ? right : left;
             }

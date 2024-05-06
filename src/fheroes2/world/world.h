@@ -352,11 +352,13 @@ public:
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
-    uint8_t getWaterPercentage() const {
+    uint8_t getWaterPercentage() const
+    {
         return waterPercentage;
     }
 
-    double getLandRoughness() const {
+    double getLandRoughness() const
+    {
         return landRoughness;
     }
 
