@@ -84,24 +84,8 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
         for ( const Castle * castle : castles ) {
             assert( castle != nullptr );
 
-            // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles. It is necessary to give it the appropriate amount of
-            // bonus gold (some castles have more expensive units than others), as well as additional resources to redeem units of the maximum level.
-
-            switch ( castle->GetRace() ) {
-            case Race::KNGT:
-            case Race::BARB:
-            case Race::SORC:
-            case Race::NECR:
-                result += ProfitConditions::FromMine( Resource::GOLD );
-                break;
-            case Race::WRLK:
-            case Race::WZRD:
-                result += ProfitConditions::FromMine( Resource::GOLD ) * 2;
-                break;
-            default:
-                assert( 0 );
-                break;
-            }
+            // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles
+            result += ProfitConditions::FromMine( Resource::GOLD );
 
             // Offer additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
             if ( !castle->isBuild( DWELLING_MONSTER6 ) ) {
@@ -110,7 +94,8 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
 
             switch ( castle->GetRace() ) {
             case Race::KNGT:
-                // The maximum level units in the knight's castle do not require resources for their recruitment
+            case Race::NECR:
+                // Rare resources are not required to hire maximum-level units in these castles
                 break;
             case Race::BARB:
                 result += ProfitConditions::FromMine( Resource::CRYSTAL );
@@ -120,12 +105,13 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
                 break;
             case Race::WRLK:
                 result += ProfitConditions::FromMine( Resource::SULFUR );
+                // The maximum level units in this castle are more expensive than in others
+                result += ProfitConditions::FromMine( Resource::GOLD );
                 break;
             case Race::WZRD:
                 result += ProfitConditions::FromMine( Resource::GEMS );
-                break;
-            case Race::NECR:
-                // The maximum level units in the necromancer's castle do not require resources for their recruitment
+                // The maximum level units in this castle are more expensive than in others
+                result += ProfitConditions::FromMine( Resource::GOLD );
                 break;
             default:
                 assert( 0 );
