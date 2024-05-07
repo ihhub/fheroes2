@@ -1619,15 +1619,32 @@ namespace Interface
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
 
+            bool removeRoadAndStream = false;
+
             for ( const auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_FLAGS || object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
                     // These objects belong to the main objects and will be checked with them.
                     continue;
                 }
 
+                if ( object.group == Maps::ObjectGroup::ROADS || object.group == Maps::ObjectGroup::STREAMS ) {
+                    if ( world.GetTiles( static_cast<int32_t>( i ) ).isWater() ) {
+                        removeRoadAndStream = true;
+                    }
+
+                    continue;
+                }
+
                 if ( !verifyTerrainPlacement( pos, object.group, static_cast<int32_t>( object.index ), errorMessage ) ) {
                     uids.emplace( object.id );
                 }
+            }
+
+            if ( removeRoadAndStream ) {
+                auto & worldTile = world.GetTiles( static_cast<int32_t>( i ) );
+
+                Maps::updateRoadOnTile( worldTile, false );
+                Maps::updateStreamOnTile( worldTile, false );
             }
         }
 
