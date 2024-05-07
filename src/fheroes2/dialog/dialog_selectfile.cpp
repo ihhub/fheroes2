@@ -381,6 +381,17 @@ namespace
             charInsertPos = filename.size();
         }
 
+        auto buttoOkdisabler = [&buttonOk, &filename]() {
+            if ( filename.empty() ) {
+                buttonOk.disable();
+                buttonOk.draw();
+            }
+            else if ( buttonOk.isDisabled() ) {
+                buttonOk.enable();
+                buttonOk.draw();
+            }
+        };
+
         listbox.Redraw();
         redrawTextInputField( filename, textInputRoi, isEditing );
 
@@ -481,13 +492,7 @@ namespace
                     isListboxSelected = false;
                     needRedraw = true;
 
-                    if ( filename.empty() ) {
-                        buttonOk.disable();
-                    }
-                    else {
-                        buttonOk.enable();
-                    }
-                    buttonOk.draw();
+                    buttoOkdisabler();
 
                     // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
@@ -506,14 +511,8 @@ namespace
                           && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
                           && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                    if ( filename.empty() ) {
-                        buttonOk.disable();
-                        buttonOk.draw();
-                    }
-                    else {
-                        buttonOk.enable();
-                        buttonOk.draw();
-                    }
+
+                    buttoOkdisabler();
 
                     needRedraw = true;
                     listbox.Unselect();
@@ -556,6 +555,8 @@ namespace
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
                     charInsertPos = filename.size();
+
+                    buttoOkdisabler();
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
