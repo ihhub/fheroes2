@@ -51,6 +51,11 @@ namespace fheroes2
     class Image;
 }
 
+namespace Maps::Map_Format
+{
+    struct CastleMetadata;
+}
+
 struct Funds;
 class HeroBase;
 class Heroes;
@@ -138,6 +143,8 @@ public:
     Castle & operator=( const Castle & ) = delete;
 
     void LoadFromMP2( const std::vector<uint8_t> & data );
+
+    void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata );
 
     Captain & GetCaptain()
     {
@@ -259,7 +266,6 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
@@ -273,11 +279,10 @@ public:
     std::string GetDescriptionBuilding( uint32_t ) const;
 
     static const char * GetStringBuilding( uint32_t, int race );
-    static const char * GetDescriptionBuilding( uint32_t, int race );
 
     static int GetICNBuilding( uint32_t, int race );
     static int GetICNBoat( int race );
-    uint32_t GetUpgradeBuilding( uint32_t ) const;
+    uint32_t GetUpgradeBuilding( const uint32_t buildingId ) const;
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
@@ -323,6 +328,8 @@ private:
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
     void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+
+    void _setDefaultBuildings();
 
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );

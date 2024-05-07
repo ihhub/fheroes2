@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -214,6 +214,10 @@ msgstr "CASTILLO"
 
 msgid "TOWN"
 msgstr "CIUDAD"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "REINICIAR"
 
 msgid ""
 "D\n"
@@ -2376,6 +2380,52 @@ msgstr "Laboratorio"
 msgid "Shrine"
 msgstr "Santuario"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nada especial"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Medianos"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Medianos"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2432,6 +2482,17 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "La Pila de Calaberas incrementa la producción de Esqueletos en %{count} por "
 "semana."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"El Pozo incrementa el ritmo de crecimiento de todas las moradas en %{count} "
+"criaturas por semana."
 
 msgid "Thieves' Guild"
 msgstr "Gremio de Ladrones"
@@ -3740,10 +3801,65 @@ msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Castillo de las Nubes"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Medianos"
+
+msgid "Default Army"
+msgstr ""
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Castillo"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Pierdes el héroe: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Tamaño\n"
 "del Mapa"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
+"perderá)"
+
+msgid "Editor"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -3787,18 +3903,26 @@ msgstr "Guardar la partida en curso."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Input %{object} text"
+msgstr ""
+
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Dispara a %{monster}"
 
 #, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Encuentra el artefacto definitivo"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Este pueblo no se puede actualizar a castillo."
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 #, fuzzy
@@ -3817,6 +3941,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
@@ -4573,6 +4701,10 @@ msgstr "Ver ciudad siguiente"
 msgid "hotkey|redo last action"
 msgstr "Ver ciudad siguiente"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Mostrar el siguiente héroe"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4836,9 +4968,6 @@ msgstr "Pantalla de Héroe"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Reflejo creado."
@@ -4870,10 +4999,10 @@ msgid "Hot Seat"
 msgstr "Asiento caliente"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Juega una partida de \"Asiento caliente\" donde de 2 a 4 jugadores juegan en "
+"Juega una partida de \"Asiento caliente\" donde de 2 a 6 jugadores juegan en "
 "el mismo PC por turnos."
 
 msgid "A single player game playing out a single map."
@@ -4946,9 +5075,6 @@ msgstr ""
 "\n"
 "¡Disfruta del juego!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Sal de Heroes of Might and Magic II y vuelve al sistema operativo."
 
@@ -4963,6 +5089,9 @@ msgstr "Puntuaciones más altas"
 
 msgid "View the high scores screen."
 msgstr "Ver la pantalla de puntuaciones más altas."
+
+msgid "Create new or modify existing maps."
+msgstr ""
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Cambia el idioma, la resolución y la configuración del juego."
@@ -5038,10 +5167,10 @@ msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Juega una partida de \"Asiento caliente\" donde de 2 a 4 jugadores juegan en "
+"Juega una partida de \"Asiento caliente\" donde de 2 a 6 jugadores juegan en "
 "el mismo dispositivo por turnos."
 
 msgid "2 Players"
@@ -8678,13 +8807,31 @@ msgstr "Ciénaga"
 msgid "Frozen Lake"
 msgstr ""
 
-#, fuzzy
-msgid "Unknown Monster"
-msgstr "Monstruo"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 #, fuzzy
 msgid "Unknown Monsters"
 msgstr "Monstruos"
+
+#, fuzzy
+msgid "Unknown Monster"
+msgstr "Monstruo"
 
 msgid "Peasant"
 msgstr "Campesino"
@@ -11197,18 +11344,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Set Defense Skill"
-#~ msgstr "Defensa"
-
-#, fuzzy
-#~ msgid "Set Power Skill"
-#~ msgstr "Pot. de Hech."
-
-#, fuzzy
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Conocimiento"
-
-#~ msgid "Multiple"
-#~ msgstr "Múltiple"

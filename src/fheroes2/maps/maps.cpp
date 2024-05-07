@@ -471,7 +471,7 @@ Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
 {
     const Maps::Tiles & tile = world.GetTiles( targetIndex );
-    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isActionObject( tile.GetObject( true ) );
+    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isInGameActionObject( tile.GetObject( true ) );
 }
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )

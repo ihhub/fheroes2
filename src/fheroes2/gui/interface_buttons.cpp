@@ -227,7 +227,7 @@ void Interface::ButtonsArea::SetButtonStatus()
         buttonHeroMovement.setICNIndexes( 2, 3 );
         buttonHeroMovement.enable();
     }
-    else if ( currentHero && MP2::isActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+    else if ( currentHero && MP2::isInGameActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
         buttonHeroMovement.setICNIndexes( 16, 17 );
         buttonHeroMovement.enable();
     }

@@ -67,6 +67,18 @@ namespace Maps::Map_Format
         return msg >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
     }
 
+    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo )
+    {
+        return msg << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay << eventInfo.repeatPeriodInDays
+                   << eventInfo.resources;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo )
+    {
+        return msg >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay >> eventInfo.repeatPeriodInDays
+               >> eventInfo.resources;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
     {
         return msg << metadata.metadata;
@@ -79,13 +91,13 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
     {
-        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.isCaptainAvailable << metadata.builtBuildings
+        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
                    << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
     {
-        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.isCaptainAvailable >> metadata.builtBuildings
+        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
                >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
     }
 
@@ -107,12 +119,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.resources;
+        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.resources;
+        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
@@ -128,27 +140,39 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
     {
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
                    << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
-                   << map.lossCondition << map.lossConditionMetadata << map.size << map.name << map.description;
+                   << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name
+                   << map.description;
     }
 
     StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map )
     {
-        return msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
-               >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
-               >> map.lossCondition >> map.lossConditionMetadata >> map.size >> map.name >> map.description;
+        msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
+            >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
+            >> map.lossConditionType >> map.lossConditionMetadata >> map.size;
+
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
+        LanguageUnderlyingType language;
+
+        msg >> language;
+        map.language = static_cast<fheroes2::SupportedLanguage>( language );
+
+        return msg >> map.name >> map.description;
     }
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
@@ -160,8 +184,8 @@ namespace Maps::Map_Format
         StreamBuf compressed;
         compressed.setbigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
-                   << map.adventureMapEventMetadata;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
+                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -199,8 +223,8 @@ namespace Maps::Map_Format
             decompressed.putRaw( decompressedData.data(), decompressedData.size() );
         }
 
-        decompressed >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata;
+        decompressed >> map.additionalInfo >> map.tiles >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata
+            >> map.signMetadata >> map.adventureMapEventMetadata >> map.rumors;
 
         return msg;
     }
