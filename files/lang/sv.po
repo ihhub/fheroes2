@@ -4994,7 +4994,7 @@ msgstr ""
 "fheroes2 behöver datafiler från originalspelet Heroes of Might and Magic II "
 "för att fungera. Du verkar använda dig av demoversionen av Heroes of Might "
 "and Magic II för detta, vilket innebär att endast ett scenarie kommer vara "
-"tillgängligt med demoversionen."
+"tillgängligt."
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
