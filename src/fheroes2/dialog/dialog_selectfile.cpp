@@ -381,7 +381,7 @@ namespace
             charInsertPos = filename.size();
         }
 
-        auto buttoOkDisabler = [&buttonOk, &filename]() {
+        auto buttonOkDisabler = [&buttonOk, &filename]() {
             if ( filename.empty() && buttonOk.isEnabled() ) {
                 buttonOk.disable();
                 buttonOk.draw();
@@ -492,7 +492,7 @@ namespace
                     isListboxSelected = false;
                     needRedraw = true;
 
-                    buttoOkDisabler();
+                    buttonOkDisabler();
 
                     // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
@@ -512,7 +512,7 @@ namespace
                           && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
-                    buttoOkDisabler();
+                    buttonOkDisabler();
 
                     needRedraw = true;
                     listbox.Unselect();
@@ -556,7 +556,7 @@ namespace
                     filename = selectedFileName;
                     charInsertPos = filename.size();
 
-                    buttoOkDisabler();
+                    buttonOkDisabler();
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
