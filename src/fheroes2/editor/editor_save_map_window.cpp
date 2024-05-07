@@ -301,6 +301,17 @@ namespace Editor
             listbox.Unselect();
         }
 
+        auto buttonOkDisabler = [&buttonOk, &fileName]() {
+            if ( fileName.empty() && buttonOk.isEnabled() ) {
+                buttonOk.disable();
+                buttonOk.draw();
+            }
+            else if ( !fileName.empty() && buttonOk.isDisabled() ) {
+                buttonOk.enable();
+                buttonOk.draw();
+            }
+        };
+
         listbox.Redraw();
         redrawSaveFileName( fileName, fileNameRoi );
         fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
@@ -359,13 +370,7 @@ namespace Editor
                 isListboxSelected = false;
                 needFileNameRedraw = true;
 
-                if ( fileName.empty() ) {
-                    buttonOk.disable();
-                }
-                else {
-                    buttonOk.enable();
-                }
-                buttonOk.draw();
+                buttonOkDisabler();
 
                 // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                 display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
@@ -427,14 +432,8 @@ namespace Editor
             else if ( !listboxEvent && le.KeyPress() && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
                       && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                 charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                if ( fileName.empty() || mapName.empty() ) {
-                    buttonOk.disable();
-                    buttonOk.draw();
-                }
-                else {
-                    buttonOk.enable();
-                    buttonOk.draw();
-                }
+
+                buttonOkDisabler();
 
                 needFileNameRedraw = true;
                 listbox.Unselect();
@@ -474,6 +473,8 @@ namespace Editor
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;
                     charInsertPos = fileName.size();
+
+                    buttonOkDisabler();
                 }
                 else {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
