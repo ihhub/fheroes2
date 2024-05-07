@@ -146,17 +146,17 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
-        std::string saveName( System::GetBasename( info.filename ) );
+        std::string mapFileName( System::GetBasename( info.filename ) );
 
-        if ( saveName.empty() ) {
+        if ( mapFileName.empty() ) {
             return;
         }
 
-        const std::string saveExtension = ".fh2m";
-        const size_t dotPos = saveName.size() - saveExtension.size();
+        std::string saveExtension = ".fh2m";
+        const size_t dotPos = mapFileName.size() - saveExtension.size();
 
-        if ( StringLower( saveName.substr( dotPos ) ) == saveExtension ) {
-            saveName.erase( dotPos );
+        if ( StringLower( mapFileName.substr( dotPos ) ) == saveExtension ) {
+            mapFileName.erase( dotPos );
         }
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
@@ -164,12 +164,18 @@ namespace
 
         posY += 2;
 
-        fheroes2::Text text{ std::move( saveName ), font };
-        text.fitToOneRow( maxFileNameWidth );
-        text.draw( posX + 4 + ( maxFileNameWidth - text.width() ) / 2, posY, display );
+        fheroes2::Text fileNameText( saveExtension, fheroes2::FontType::normalWhite() );
+        const int32_t saveExtensionWidth = fileNameText.width();
+        fileNameText.set( std::move( mapFileName ), font );
+        fileNameText.fitToOneRow( maxFileNameWidth - saveExtensionWidth );
 
-        text.set( info.name, font );
-        text.draw( posX + 12 + maxFileNameWidth + ( maxNameWidth - text.width() ) / 2, posY, display );
+        fheroes2::MultiFontText fullFileName;
+        fullFileName.add( std::move( fileNameText ) );
+        fullFileName.add( { std::move( saveExtension ), current ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() } );
+        fullFileName.draw( posX + 4 + ( maxFileNameWidth - fullFileName.width() ) / 2, posY, display );
+
+        const fheroes2::Text mapName( info.name, font );
+        mapName.draw( posX + 12 + maxFileNameWidth + ( maxNameWidth - mapName.width() ) / 2, posY, display );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
