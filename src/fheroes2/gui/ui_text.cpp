@@ -182,12 +182,12 @@ namespace
                             ++data;
                         }
                         else {
-                            if ( lineInfo->offset.x < maxWidth / 2 ) {
+                            if ( lineInfo->offset.x == 0 ) {
                                 lineInfo->characterCount = lineLength;
                                 lineInfo->offset.x = lineWidth;
                             }
                             else {
-                                // This first word starts from the end of the line so we can move it to the next line.
+                                // This word was not the first in the line so we can move it to the next line.
                                 // It can happen in the case of the multi-font text.
                                 data -= lastWordLength;
                             }
