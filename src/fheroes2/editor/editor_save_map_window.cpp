@@ -54,8 +54,9 @@
 namespace
 {
     // This constant sets the maximum displayed file name width. This value affects the dialog horizontal size.
-    const int32_t maxFileNameWidth = 200;
-    const int32_t maxNameWidth = 160;
+    const int32_t maxFileNameWidth = 300;
+
+    const std::string mapFileExtension = ".fh2m";
 
     bool redrawSaveFileName( const std::string & name, const fheroes2::Rect & roi )
     {
@@ -152,30 +153,11 @@ namespace
             return;
         }
 
-        std::string saveExtension = ".fh2m";
-        const size_t dotPos = mapFileName.size() - saveExtension.size();
-
-        if ( StringLower( mapFileName.substr( dotPos ) ) == saveExtension ) {
-            mapFileName.erase( dotPos );
-        }
-
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
-        fheroes2::Display & display = fheroes2::Display::instance();
 
-        posY += 2;
-
-        fheroes2::Text fileNameText( saveExtension, fheroes2::FontType::normalWhite() );
-        const int32_t saveExtensionWidth = fileNameText.width();
-        fileNameText.set( std::move( mapFileName ), font );
-        fileNameText.fitToOneRow( maxFileNameWidth - saveExtensionWidth );
-
-        fheroes2::MultiFontText fullFileName;
-        fullFileName.add( std::move( fileNameText ) );
-        fullFileName.add( { std::move( saveExtension ), current ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() } );
-        fullFileName.draw( posX + 4 + ( maxFileNameWidth - fullFileName.width() ) / 2, posY, display );
-
-        const fheroes2::Text mapName( info.name, font );
-        mapName.draw( posX + 12 + maxFileNameWidth + ( maxNameWidth - mapName.width() ) / 2, posY, display );
+        fheroes2::Text fileNameText( std::move( mapFileName ), font );
+        fileNameText.fitToOneRow( maxFileNameWidth );
+        fileNameText.draw( posX + 4, posY + 2, fheroes2::Display::instance() );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
@@ -212,14 +194,13 @@ namespace Editor
 
         MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
 
-        const int32_t listWidth = maxFileNameWidth + maxNameWidth + 18;
+        const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
 
         // If we don't have many map files, we reduce the maximum dialog height,
-        // but not less than enough for 11 elements.
-        // We also limit the maximum list height to 22 lines.
+        // but not less than enough for 11 elements. We also limit the maximum list height to 22 lines.
         const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 )
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
@@ -231,25 +212,28 @@ namespace Editor
         const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37 + 17, listWidth, area.height - listHeightDeduction );
         const fheroes2::Rect fileNameRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
-        const fheroes2::Rect mapNameRoi( listRoi.x + fileNameRoi.width, fileNameRoi.y, listRoi.width - fileNameRoi.width, fileNameRoi.height );
 
-        fheroes2::Text header( _( "Save Map" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text header( _( "Save Map:" ), fheroes2::FontType::normalYellow() );
         header.draw( area.x + ( area.width - header.width() ) / 2, area.y + 16, display );
 
-        header.set( _( "File Name" ), fheroes2::FontType::normalWhite() );
-        header.draw( fileNameRoi.x + ( fileNameRoi.width - header.width() ) / 2, area.y + 16 + 20, display );
-        header.set( _( "Map Name" ), fheroes2::FontType::normalWhite() );
-        header.draw( fileNameRoi.x + maxFileNameWidth + 8 + ( maxNameWidth - header.width() ) / 2, area.y + 16 + 20, display );
+        if ( fileName.empty() ) {
+            fileName = "My map";
+        }
 
-        // We divide the save-files list: file name and file date/time.
+        if ( mapName.empty() ) {
+            mapName = fileName;
+        }
+
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        const int32_t mapNameTextWidth = mapNameText.width();
+        fheroes2::Rect mapNameRoi( area.x + ( area.width - mapNameTextWidth ) / 2, area.y + 32, mapNameTextWidth, mapNameText.height() );
+        fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
+        mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, display, mapNameRoi );
+
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
-        background.applyTextBackgroundShading( { listRoi.x + fileNameRoi.width, listRoi.y, mapNameRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( fileNameRoi );
-        // Make background for the selected file date and time.
-        background.applyTextBackgroundShading( mapNameRoi );
 
         fheroes2::ImageRestorer fileNameBackground( display, fileNameRoi.x, fileNameRoi.y, fileNameRoi.width, fileNameRoi.height );
-        fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -280,14 +264,6 @@ namespace Editor
         listbox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         listbox.SetListContent( lists );
         listbox.updateScrollBarImage();
-
-        if ( fileName.empty() ) {
-            fileName = "My map";
-        }
-
-        if ( mapName.empty() ) {
-            mapName = "My map";
-        }
 
         size_t charInsertPos = 0;
 
@@ -320,9 +296,6 @@ namespace Editor
 
         listbox.Redraw();
         redrawSaveFileName( fileName, fileNameRoi );
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
-        mapNameText.fitToOneRow( maxNameWidth );
-        mapNameText.drawInRoi( mapNameRoi.x + 4 + ( maxNameWidth - mapNameText.width() ) / 2, mapNameRoi.y + 4, display, mapNameRoi );
 
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
@@ -350,6 +323,11 @@ namespace Editor
                 return false;
             }
 
+            if ( buttonOk.isEnabled()
+                 && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.isDoubleClicked() ) ) {
+                return true;
+            }
+
             const int listId = listbox.getCurrentId();
 
             const bool listboxEvent = listbox.QueueEventProcessing();
@@ -357,13 +335,6 @@ namespace Editor
             bool isListboxSelected = listbox.isSelected();
 
             bool needFileNameRedraw = listId != listbox.getCurrentId();
-
-            if ( buttonOk.isEnabled()
-                 && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.isDoubleClicked() ) ) {
-                assert( !fileName.empty() );
-
-                return true;
-            }
 
             if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( fileNameRoi ) ) ) {
                 fheroes2::openVirtualKeyboard( fileName );
@@ -390,20 +361,23 @@ namespace Editor
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Map Name" ), editableMapName, {}, 17, false ) ) {
+                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false ) ) {
                     if ( editableMapName.empty() ) {
-                        // Map should have a name.
+                        // Map should have a non empty name.
                         continue;
                     }
 
                     mapName = std::move( editableMapName );
                     mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
-                    mapNameText.fitToOneRow( maxNameWidth );
+                    mapNameRoi.width = mapNameText.width();
+                    mapNameRoi.x = area.x + ( area.width - mapNameRoi.width ) / 2;
 
                     mapNameBackground.restore();
-                    mapNameText.drawInRoi( mapNameRoi.x + 4 + ( maxNameWidth - mapNameText.width() ) / 2, mapNameRoi.y + 4, display, mapNameRoi );
+                    mapNameBackground.update( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
+                    mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, display, mapNameRoi );
 
                     display.render( mapNameRoi );
+
                     continue;
                 }
             }
