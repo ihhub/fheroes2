@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:47+0000\n"
+"POT-Creation-Date: 2024-05-08 14:37+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3978,6 +3978,22 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Kartets\n"
@@ -4041,24 +4057,6 @@ msgstr "Skyt på %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfeldig sjeldneste skatt"
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -4067,51 +4065,7 @@ msgid "Failed to update player information."
 msgstr ""
 
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4140,16 +4094,16 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Erase"
+msgstr "Viskemodus"
+
+#, fuzzy
 msgid "Roads"
 msgstr "Vei"
 
 #, fuzzy
 msgid "Streams"
 msgstr "Bekkmodus"
-
-#, fuzzy
-msgid "Erase"
-msgstr "Viskemodus"
 
 msgid "Mountains"
 msgstr "Fjell"
@@ -4186,11 +4140,11 @@ msgstr "Kraft"
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
 
-msgid "Towns"
-msgstr "Byer"
-
 msgid "Heroes"
 msgstr "Helter"
+
+msgid "Towns"
+msgstr "Byer"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -11922,3 +11876,43 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:47+0000\n"
+"POT-Creation-Date: 2024-05-08 14:37+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3759,6 +3759,21 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Opzioni Avventura"
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Opzioni Avventura"
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Opzioni Avventura"
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Dimensioni\n"
@@ -3828,22 +3843,6 @@ msgstr "Tira a %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Artefatto estremo casuale"
 
-msgid "Objects cannot be placed outside the map."
-msgstr ""
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Opzioni Avventura"
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3851,43 +3850,8 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
-
-msgid "Mountains cannot be placed on water."
-msgstr ""
-
-msgid "Rocks cannot be placed on water."
-msgstr ""
-
-msgid "Trees cannot be placed on water."
-msgstr ""
-
-msgid "Ocean object must be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Opzioni Avventura"
-
-msgid "Towns cannot be placed on water."
-msgstr ""
-
-msgid "Mines cannot be placed on water."
-msgstr ""
-
-msgid "Dwellings cannot be placed on water."
-msgstr ""
-
-msgid "Power-ups cannot be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Opzioni Avventura"
 
 msgid "Used to place %{object}."
 msgstr ""
@@ -3913,14 +3877,14 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Strada"
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -3959,12 +3923,12 @@ msgstr "Potere"
 msgid "Treasures"
 msgstr "Tesoro"
 
+msgid "Heroes"
+msgstr "Eroi"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
-
-msgid "Heroes"
-msgstr "Eroi"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -10712,3 +10676,7 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Opzioni Avventura"
