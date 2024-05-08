@@ -332,7 +332,6 @@ namespace Editor
 
         display.render( background.totalArea() );
 
-        std::string result;
         bool isTextLimit = false;
         std::string lastSelectedSaveFileName;
 
@@ -342,7 +341,7 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
             buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
             buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
             buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
@@ -359,16 +358,14 @@ namespace Editor
 
             bool needFileNameRedraw = listId != listbox.getCurrentId();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
-                 || listbox.isDoubleClicked() ) {
-                if ( !fileName.empty() ) {
-                    result = fileName;
-                }
-                else if ( isListboxSelected ) {
-                    result = listbox.GetCurrent().filename;
-                }
+            if ( buttonOk.isEnabled()
+                 && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.isDoubleClicked() ) ) {
+                assert( !fileName.empty() );
+
+                return true;
             }
-            else if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( fileNameRoi ) ) ) {
+
+            if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( fileNameRoi ) ) ) {
                 fheroes2::openVirtualKeyboard( fileName );
 
                 charInsertPos = fileName.size();
@@ -496,6 +493,6 @@ namespace Editor
             display.render( area );
         }
 
-        return !fileName.empty() && !mapName.empty();
+        return false;
     }
 }

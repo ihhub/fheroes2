@@ -1567,16 +1567,19 @@ namespace Interface
 
         std::string fileName = _loadedFileName;
         std::string mapName = _mapFormat.name;
+        std::string fullPath;
 
-        if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
-            return;
-        }
+        while ( true ) {
+            if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
+                return;
+            }
 
-        std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
+            fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
 
-        if ( System::IsFile( fullPath )
-             && Dialog::NO == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the existing map?" ), Dialog::YES | Dialog::NO ) ) {
-            return;
+            if ( !System::IsFile( fullPath )
+                 || fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the existing map?" ), Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                break;
+            }
         }
 
         _mapFormat.name = std::move( mapName );
