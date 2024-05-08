@@ -3424,17 +3424,17 @@ msgstr ""
 "\n"
 "Vị trí: "
 
-msgid "Click to save the current game."
-msgstr "Nhấp để lưu trò chơi hiện tại."
-
-msgid "Click to load a previously saved game."
-msgstr "Nhấp để tải chò trơi đã lưu trước đây."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Ngươi có chắc muốn xóa file:"
 
 msgid "Warning!"
 msgstr "Cảnh báo!"
+
+msgid "Click to save the current game."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Click to load a previously saved game."
+msgstr "Nhấp để tải chò trơi đã lưu trước đây."
 
 msgid "File to Save:"
 msgstr "Tệp để Lưu:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3487,17 +3487,17 @@ msgstr ""
 "\n"
 "Ort: "
 
-msgid "Click to save the current game."
-msgstr "Klicken um das aktuelle Spiel zu speichern."
-
-msgid "Click to load a previously saved game."
-msgstr "Klicken um ein zuvor gespeichertes Spiel zu laden."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Seid Ihr sicher, dass Ihr die Datei löschen möchten:"
 
 msgid "Warning!"
 msgstr "Achtung!"
+
+msgid "Click to save the current game."
+msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Click to load a previously saved game."
+msgstr "Klicken um ein zuvor gespeichertes Spiel zu laden."
 
 msgid "File to Save:"
 msgstr "Datei zum Speichern:"
