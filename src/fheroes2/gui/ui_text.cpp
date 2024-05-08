@@ -398,8 +398,7 @@ namespace
                     }
                     else {
                         // Exclude last word from this line.
-                        renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType,
-                                    align );
+                        renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
 
                         // Go back to the start of the word.
                         data -= lastWordLength;
