@@ -212,20 +212,14 @@ namespace
 
     void renderFileName( const Maps::FileInfo & info, bool selected, const int32_t posX, const int32_t posY, fheroes2::Display & display )
     {
-        std::string mapFileName( System::GetBasename( info.filename ) );
-
-        if ( mapFileName.empty() ) {
-            return;
-        }
-
-        fheroes2::Text text( mapFileName, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
+        fheroes2::Text text( System::GetBasename( info.filename ), selected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         text.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
+
         const int32_t xCoordinate = posX + SCENARIO_LIST_MAP_NAME_OFFSET_X;
         const int32_t yCoordinate = posY + MAP_LIST_ROW_SPACING_Y - 1;
 
         text.draw( xCoordinate, yCoordinate, display );
     }
-
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current )
