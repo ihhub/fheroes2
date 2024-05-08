@@ -209,6 +209,23 @@ namespace
         newlyPressedButton.press();
         return &newlyPressedButton;
     }
+
+    void renderFileName( const Maps::FileInfo & info, bool selected, const int32_t posX, const int32_t posY, fheroes2::Display & display )
+    {
+        std::string mapFileName( System::GetBasename( info.filename ) );
+
+        if ( mapFileName.empty() ) {
+            return;
+        }
+
+        fheroes2::Text text( mapFileName, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
+        text.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
+        const int32_t xCoordinate = posX + SCENARIO_LIST_MAP_NAME_OFFSET_X;
+        const int32_t yCoordinate = posY + MAP_LIST_ROW_SPACING_Y - 1;
+
+        text.draw( xCoordinate, yCoordinate, display );
+    }
+
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current )
@@ -234,7 +251,12 @@ void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fher
     fheroes2::Blit( _getPlayersCountIcon( info.kingdomColors ), display, _offsetX + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
     _renderMapIcon( info.width, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
     fheroes2::Blit( _getMapTypeIcon( info.version ), display, _offsetX + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
-    _renderMapName( info, current, dsty, display );
+    if ( _isForEditor ) {
+        renderFileName( info, current, _offsetX, dsty, display );
+    }
+    else {
+        _renderMapName( info, current, dsty, display );
+    }
     fheroes2::Blit( _getWinConditionsIcon( info.victoryConditionType ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
     fheroes2::Blit( _getLossConditionsIcon( info.lossConditionType ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
 }
@@ -373,12 +395,12 @@ const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( const uint8_t 
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
-void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
+void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
 {
-    selectOk = true;
+    _isDoubleClicked = true;
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps )
+const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor )
 {
     if ( allMaps.empty() ) {
         return nullptr;
@@ -462,6 +484,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
     listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
     listbox.SetAreaMaxItems( 9 ); // This has impact on displaying selected scenario info
     listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
+    listbox.setForEditorMode( isForEditor );
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
 
@@ -571,7 +594,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
         bool needRedraw = false;
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.isDoubleClicked() ) {
             MapsFileInfoList::const_iterator it = std::find( allMaps.begin(), allMaps.end(), listbox.GetCurrent() );
             return ( it != allMaps.end() ) ? &( *it ) : nullptr;
         }
