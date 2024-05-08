@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -36,6 +37,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "screen.h"
@@ -154,9 +156,19 @@ namespace
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         fheroes2::Text fileNameText( std::move( mapFileName ), font );
-        fileNameText.fitToOneRow( maxFileNameWidth );
-        fileNameText.draw( posX + 4, posY + 2, fheroes2::Display::instance() );
+        fileNameText.fitToOneRow( maxFileNameWidth - 38 );
+        fileNameText.draw( posX + 42, posY + 2, display );
+
+        const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.kingdomColors ) + 19 );
+        const fheroes2::Sprite & racesCount = fheroes2::AGG::GetICN( ICN::REQUESTS, racesCountIcnIndex );
+        fheroes2::Copy( racesCount, 0, 0, display, posX + 4, posY, racesCount.width(), racesCount.height() );
+
+        const uint32_t mapSizeIcnIndex = static_cast<uint32_t>( info.width / Maps::SMALL + 25 );
+        const fheroes2::Sprite & mapSize = fheroes2::AGG::GetICN( ICN::REQUESTS, mapSizeIcnIndex );
+        fheroes2::Copy( mapSize, 0, 0, display, posX + 23, posY, mapSize.width(), mapSize.height() );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
