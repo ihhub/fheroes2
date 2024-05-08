@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3443,17 +3443,17 @@ msgstr ""
 "\n"
 "Cesta: "
 
-msgid "Click to save the current game."
-msgstr "Klikni pro uložení aktuální hry."
-
-msgid "Click to load a previously saved game."
-msgstr "Klikni pro načtení dříve uložené hry."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
 msgstr "Výstraha!"
+
+msgid "Click to save the current game."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Click to load a previously saved game."
+msgstr "Klikni pro načtení dříve uložené hry."
 
 msgid "File to Save:"
 msgstr "Uložit do souboru:"

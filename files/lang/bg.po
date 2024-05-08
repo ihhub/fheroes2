@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3476,17 +3476,17 @@ msgstr ""
 "\n"
 "Местоположение: "
 
-msgid "Click to save the current game."
-msgstr "Кликни, за да запазиш текущата игра."
-
-msgid "Click to load a previously saved game."
-msgstr "Кликни, за да заредиш предварително запазена игра."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Сигурен ли си, че искаш да изтриеш файла:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "Click to save the current game."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Click to load a previously saved game."
+msgstr "Кликни, за да заредиш предварително запазена игра."
 
 msgid "File to Save:"
 msgstr "Файл за запазване:"

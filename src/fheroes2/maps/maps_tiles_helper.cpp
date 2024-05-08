@@ -922,6 +922,14 @@ namespace
 
         // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
 
+        // There might be a castle entrance above. Check for it to properly connect the road to it.
+        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
+            const MP2::MapObjectType aboveObject = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).GetObject( false );
+            if ( aboveObject == MP2::OBJ_CASTLE || aboveObject == MP2::OBJ_RANDOM_TOWN || aboveObject == MP2::OBJ_RANDOM_CASTLE ) {
+                return 31U;
+            }
+        }
+
         if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
              && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
             // = - horizontal road in this and in the upper tile.
@@ -1307,7 +1315,7 @@ namespace Maps
 
     bool updateRoadOnTile( Tiles & tile, const bool setRoad )
     {
-        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER && setRoad ) ) {
             // We cannot place roads on the water or above already placed roads.
             return false;
         }
@@ -1343,7 +1351,7 @@ namespace Maps
 
     bool updateStreamOnTile( Tiles & tile, const bool setStream )
     {
-        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER && setStream ) ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }
@@ -3133,6 +3141,24 @@ namespace Maps
             // Set resource type and income per day.
             tile.metadata()[0] = info.metadata[0];
             tile.metadata()[1] = info.metadata[1];
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJ_RANDOM_CASTLE:
+        case MP2::OBJ_RANDOM_TOWN:
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            if ( hasBits( getRoadDirecton( tile ), Direction::BOTTOM ) ) {
+                // There is a road in front of the castle entrance, connect it with the castle.
+                Tiles & bottomTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM ) );
+
+                updateRoadSpriteOnTile( bottomTile, false );
+            }
 
             if ( updateMapPassabilities ) {
                 world.updatePassabilities();

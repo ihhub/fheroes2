@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3242,18 +3242,18 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "Are you sure you want to delete file:"
+msgstr "Ar jūs tikrai norite ištrinti failą:"
+
+msgid "Warning!"
+msgstr "Įspėjimas!"
+
 msgid "Click to save the current game."
 msgstr ""
 
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Atverti prieš tai įrašytą žaidimą"
-
-msgid "Are you sure you want to delete file:"
-msgstr "Ar jūs tikrai norite ištrinti failą:"
-
-msgid "Warning!"
-msgstr "Įspėjimas!"
 
 msgid "File to Save:"
 msgstr "Įrašyti į failą:"

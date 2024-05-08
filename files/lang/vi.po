@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3462,17 +3462,17 @@ msgstr ""
 "\n"
 "Vị trí: "
 
-msgid "Click to save the current game."
-msgstr "Nhấp để lưu trò chơi hiện tại."
-
-msgid "Click to load a previously saved game."
-msgstr "Nhấp để tải chò trơi đã lưu trước đây."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Ngươi có chắc muốn xóa file:"
 
 msgid "Warning!"
 msgstr "Cảnh báo!"
+
+msgid "Click to save the current game."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Click to load a previously saved game."
+msgstr "Nhấp để tải chò trơi đã lưu trước đây."
 
 msgid "File to Save:"
 msgstr "Tệp để Lưu:"

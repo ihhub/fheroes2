@@ -143,6 +143,7 @@ namespace
             if ( isLineSeparator( *data ) ) {
                 if ( lineLength > 0 ) {
                     lineInfo->offset.x = lineWidth;
+                    lineInfo->characterCount = lineLength;
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
@@ -181,39 +182,35 @@ namespace
                             data = hyphenPos;
                             ++data;
                         }
-                        else {
-                            if ( lineInfo->offset.x == 0 ) {
-                                lineInfo->characterCount = lineLength;
-                                lineInfo->offset.x = lineWidth;
-                            }
-                            else {
-                                // This word was not the first in the line so we can move it to the next line.
-                                // It can happen in the case of the multi-font text.
-                                data -= lastWordLength;
-                            }
-                        }
-                    }
-                    else {
-                        if ( isSpaceChar( *data ) ) {
-                            // Current character could be a space character then current line is over.
-                            // For the characters count we take this space into the account.
-                            lineInfo->characterCount = lineLength + 1;
-                            lineInfo->offset.x = lineWidth;
-
-                            // We skip this space character.
-                            ++data;
-                        }
-                        else if ( lastWordLength > 0 ) {
-                            // Exclude last word from this line.
-                            data -= lastWordLength;
-
-                            lineInfo->characterCount = lineLength - lastWordLength;
-                            lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
-                        }
-                        else {
+                        else if ( lineInfo->characterCount == 0 ) {
                             lineInfo->characterCount = lineLength;
                             lineInfo->offset.x = lineWidth;
                         }
+                        else {
+                            // This word was not the first in the line so we can move it to the next line.
+                            // It can happen in the case of the multi-font text.
+                            data -= lastWordLength;
+                        }
+                    }
+                    else if ( isSpaceChar( *data ) ) {
+                        // Current character could be a space character then current line is over.
+                        // For the characters count we take this space into the account.
+                        lineInfo->characterCount = lineLength + 1;
+                        lineInfo->offset.x = lineWidth;
+
+                        // We skip this space character.
+                        ++data;
+                    }
+                    else if ( lastWordLength > 0 ) {
+                        // Exclude last word from this line.
+                        data -= lastWordLength;
+
+                        lineInfo->characterCount = lineLength - lastWordLength;
+                        lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
+                    }
+                    else {
+                        lineInfo->characterCount = lineLength;
+                        lineInfo->offset.x = lineWidth;
                     }
 
                     lineLength = 0;
@@ -380,33 +377,31 @@ namespace
                             data = hyphenPos;
                             ++data;
                         }
-                        else {
-                            if ( lineInfo->offset.x == 0 ) {
-                                renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-                            }
-                            else {
-                                // This word was not the first in the line so we can move it to the next line.
-                                // It can happen in the case of the multi-font text.
-                                data -= lastWordLength;
-                            }
-                        }
-                    }
-                    else {
-                        if ( isSpaceChar( *data ) ) {
-                            // Current character could be a space character then current line is over.
+                        else if ( lineInfo->offset.x < maxWidth / 2 ) {
+                            // TODO: this is a wrong way to do as renderer should not care about special cases
+                            //       but rather just follow 'instructions'.
+                            //       This check is done to fix possible crashes while rendering multi-font text.
                             renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-
-                            // We skip this space character.
-                            ++data;
                         }
                         else {
-                            // Exclude last word from this line.
-                            renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType,
-                                        align );
-
-                            // Go back to the start of the word.
+                            // This first word starts from the end of the line so we can move it to the next line.
+                            // It can happen in the case of the multi-font text.
                             data -= lastWordLength;
                         }
+                    }
+                    else if ( isSpaceChar( *data ) ) {
+                        // Current character could be a space character then current line is over.
+                        renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+
+                        // We skip this space character.
+                        ++data;
+                    }
+                    else {
+                        // Exclude last word from this line.
+                        renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+
+                        // Go back to the start of the word.
+                        data -= lastWordLength;
                     }
 
                     lineLength = 0;
