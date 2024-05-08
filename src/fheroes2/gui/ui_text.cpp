@@ -192,27 +192,25 @@ namespace
                             data -= lastWordLength;
                         }
                     }
+                    else if ( isSpaceChar( *data ) ) {
+                        // Current character could be a space character then current line is over.
+                        // For the characters count we take this space into the account.
+                        lineInfo->characterCount = lineLength + 1;
+                        lineInfo->offset.x = lineWidth;
+
+                        // We skip this space character.
+                        ++data;
+                    }
+                    else if ( lastWordLength > 0 ) {
+                        // Exclude last word from this line.
+                        data -= lastWordLength;
+
+                        lineInfo->characterCount = lineLength - lastWordLength;
+                        lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
+                    }
                     else {
-                        if ( isSpaceChar( *data ) ) {
-                            // Current character could be a space character then current line is over.
-                            // For the characters count we take this space into the account.
-                            lineInfo->characterCount = lineLength + 1;
-                            lineInfo->offset.x = lineWidth;
-
-                            // We skip this space character.
-                            ++data;
-                        }
-                        else if ( lastWordLength > 0 ) {
-                            // Exclude last word from this line.
-                            data -= lastWordLength;
-
-                            lineInfo->characterCount = lineLength - lastWordLength;
-                            lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
-                        }
-                        else {
-                            lineInfo->characterCount = lineLength;
-                            lineInfo->offset.x = lineWidth;
-                        }
+                        lineInfo->characterCount = lineLength;
+                        lineInfo->offset.x = lineWidth;
                     }
 
                     lineLength = 0;
@@ -391,22 +389,20 @@ namespace
                             data -= lastWordLength;
                         }
                     }
+                    else if ( isSpaceChar( *data ) ) {
+                        // Current character could be a space character then current line is over.
+                        renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+
+                        // We skip this space character.
+                        ++data;
+                    }
                     else {
-                        if ( isSpaceChar( *data ) ) {
-                            // Current character could be a space character then current line is over.
-                            renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+                        // Exclude last word from this line.
+                        renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType,
+                                    align );
 
-                            // We skip this space character.
-                            ++data;
-                        }
-                        else {
-                            // Exclude last word from this line.
-                            renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType,
-                                        align );
-
-                            // Go back to the start of the word.
-                            data -= lastWordLength;
-                        }
+                        // Go back to the start of the word.
+                        data -= lastWordLength;
                     }
 
                     lineLength = 0;
