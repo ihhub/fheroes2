@@ -181,16 +181,14 @@ namespace
                             data = hyphenPos;
                             ++data;
                         }
+                        else if ( lineInfo->characterCount == 0 ) {
+                            lineInfo->characterCount = lineLength;
+                            lineInfo->offset.x = lineWidth;
+                        }
                         else {
-                            if ( lineInfo->offset.x == 0 ) {
-                                lineInfo->characterCount = lineLength;
-                                lineInfo->offset.x = lineWidth;
-                            }
-                            else {
-                                // This word was not the first in the line so we can move it to the next line.
-                                // It can happen in the case of the multi-font text.
-                                data -= lastWordLength;
-                            }
+                            // This word was not the first in the line so we can move it to the next line.
+                            // It can happen in the case of the multi-font text.
+                            data -= lastWordLength;
                         }
                     }
                     else {
@@ -380,15 +378,16 @@ namespace
                             data = hyphenPos;
                             ++data;
                         }
+                        else if ( lineInfo->offset.x < maxWidth / 2 ) {
+                            // TODO: this is a wrong way to do as renderer should not care about special cases
+                            //       but rather just follow 'instructions'.
+                            //       This check is done to fix possible crashes while rendering multi-font text.
+                            renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+                        }
                         else {
-                            if ( lineInfo->offset.x < maxWidth / 2 ) {
-                                renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-                            }
-                            else {
-                                // This first word starts from the end of the line so we can move it to the next line.
-                                // It can happen in the case of the multi-font text.
-                                data -= lastWordLength;
-                            }
+                            // This first word starts from the end of the line so we can move it to the next line.
+                            // It can happen in the case of the multi-font text.
+                            data -= lastWordLength;
                         }
                     }
                     else {
