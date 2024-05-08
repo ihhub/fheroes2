@@ -64,14 +64,13 @@ namespace
             return false;
         }
 
-        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Text nameText( name + mapFileExtension, fheroes2::FontType::normalWhite() );
+        const bool isTextLimit = ( nameText.width() + 10 ) > maxFileNameWidth;
 
-        fheroes2::Text nameText( name, fheroes2::FontType::normalWhite() );
-        const int32_t initialTextWidth = nameText.width();
         nameText.fitToOneRow( maxFileNameWidth );
-        nameText.drawInRoi( roi.x + 4 + ( maxFileNameWidth - nameText.width() ) / 2, roi.y + 4, display, roi );
+        nameText.drawInRoi( roi.x + 4, roi.y + 4, fheroes2::Display::instance(), roi );
 
-        return ( initialTextWidth + 10 ) > maxFileNameWidth;
+        return isTextLimit;
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -351,9 +350,8 @@ namespace Editor
             }
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
-                const int32_t textStartOffsetX = isTextLimit ? 8 : ( fileNameRoi.width - text.width() ) / 2;
-                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
-                                                                      fileNameRoi.x + textStartOffsetX );
+
+                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, fileNameRoi.x );
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;
