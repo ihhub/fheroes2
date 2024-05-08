@@ -500,7 +500,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         ssp.resize( sprites[0].width(), sprites[0].height() );
         ssp.reset();
 
-        fheroes2::DrawBorder( ssp, 221 );
+        fheroes2::DrawBorder( ssp, 214 );
 
         if ( useFastSplit ) {
             ssp.setPosition( vrts[0].x, vrts[0].y );
