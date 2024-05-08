@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3348,16 +3348,16 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "Click to save the current game."
-msgstr ""
-
-msgid "Click to load a previously saved game."
-msgstr ""
-
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
 msgstr ""
 
 msgid "File to Save:"

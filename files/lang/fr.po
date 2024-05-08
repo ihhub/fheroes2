@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3481,17 +3481,17 @@ msgstr ""
 "\n"
 "Emplacement : "
 
-msgid "Click to save the current game."
-msgstr "Enregistrer le jeu en cours."
-
-msgid "Click to load a previously saved game."
-msgstr "Charger une partie sauvegardée."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Voulez-vous vraiment effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
+
+msgid "Click to save the current game."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Click to load a previously saved game."
+msgstr "Charger une partie sauvegardée."
 
 msgid "File to Save:"
 msgstr "Fichier à sauvegarder :"
