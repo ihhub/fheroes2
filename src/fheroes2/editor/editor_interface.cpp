@@ -395,63 +395,38 @@ namespace
 
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
-        if ( groupType == Maps::ObjectGroup::MONSTERS ) {
+        switch ( groupType ) {
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::MONSTERS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
             if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Monsters cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
+
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Treasures cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Heroes cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Artifacts cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Mountains cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Rocks cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Trees cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::LANDSCAPE_WATER: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
             if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Ocean object must be placed on water." );
+                errorMessage = _( "%{objects} must be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
+
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             assert( !objectInfo.groundLevelParts.empty() );
@@ -463,15 +438,19 @@ namespace
                 // This is a river delta. Just don't check the terrain type.
             }
             else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Landscape objects cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
+
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+        case Maps::ObjectGroup::KINGDOM_TOWNS: {
             const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
-                errorMessage = _( "Towns cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
 
@@ -482,53 +461,37 @@ namespace
             const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             if ( !checkConditionForUsedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Towns cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
 
             if ( !checkConditionForUsedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Towns cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Mines cannot be placed on water." );
-                return false;
-            }
+            break;
         }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Dwellings cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Power-ups cannot be placed on water." );
-                return false;
-            }
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( objectInfo.objectType == MP2::OBJ_EVENT ) {
                 // Only event objects are allowed to be placed anywhere.
             }
             else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                errorMessage = _( "Adventure objects cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
+
+            break;
         }
-        else {
+        default:
             // Did you add a new object group? Add the logic for it!
             assert( 0 );
+            break;
         }
 
         return true;
@@ -568,7 +531,8 @@ namespace
             const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
-                errorMessage = _( "Towns cannot be placed on water." );
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
 
