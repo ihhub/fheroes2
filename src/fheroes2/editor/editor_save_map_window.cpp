@@ -159,16 +159,16 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::Text fileNameText( std::move( mapFileName ), font );
-        fileNameText.fitToOneRow( maxFileNameWidth - 38 );
-        fileNameText.draw( posX + 42, posY + 2, display );
+        fileNameText.fitToOneRow( maxFileNameWidth - 40 );
+        fileNameText.draw( posX + 44, posY + 2, display );
 
         const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.kingdomColors ) + 19 );
         const fheroes2::Sprite & racesCount = fheroes2::AGG::GetICN( ICN::REQUESTS, racesCountIcnIndex );
-        fheroes2::Copy( racesCount, 0, 0, display, posX + 4, posY, racesCount.width(), racesCount.height() );
+        fheroes2::Copy( racesCount, 0, 0, display, posX + 6, posY, racesCount.width(), racesCount.height() );
 
         const uint32_t mapSizeIcnIndex = static_cast<uint32_t>( info.width / Maps::SMALL + 25 );
         const fheroes2::Sprite & mapSize = fheroes2::AGG::GetICN( ICN::REQUESTS, mapSizeIcnIndex );
-        fheroes2::Copy( mapSize, 0, 0, display, posX + 23, posY, mapSize.width(), mapSize.height() );
+        fheroes2::Copy( mapSize, 0, 0, display, posX + 25, posY, mapSize.width(), mapSize.height() );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
@@ -207,13 +207,14 @@ namespace Editor
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
-        const int32_t listAreaOffsetY = 3;
-        const int32_t listAreaHeightDeduction = 4;
+        const int32_t listAreaOffsetY = 6;
+        const int32_t listAreaHeightDeduction = 8;
 
         // If we don't have many map files, we reduce the maximum dialog height,
         // but not less than enough for 11 elements. We also limit the maximum list height to 22 lines.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 )
-                                        + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
+        const int32_t listItems = std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 );
+        const int32_t maxDialogHeight
+            = ( 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) * listItems + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -259,7 +260,7 @@ namespace Editor
         // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
         listbox.initListBackgroundRestorer( listRoi );
 
-        listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
+        listbox.SetAreaItems( { listRoi.x, listRoi.y + listAreaOffsetY, listRoi.width, listRoi.height - listAreaHeightDeduction } );
 
         int32_t scrollbarOffsetX = area.x + area.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -272,7 +273,7 @@ namespace Editor
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
         listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
-        listbox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
+        listbox.SetAreaMaxItems( listItems );
         listbox.SetListContent( lists );
         listbox.updateScrollBarImage();
 
