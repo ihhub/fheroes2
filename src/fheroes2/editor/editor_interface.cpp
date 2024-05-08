@@ -542,12 +542,7 @@ namespace
             const auto & townObjectInfo = Maps::getObjectInfo( groupType, objectType );
             const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
-            if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
-                return false;
-            }
-
-            if ( !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
+            if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) || !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
                 errorMessage = _( "Objects cannot be placed outside the map." );
                 return false;
             }
