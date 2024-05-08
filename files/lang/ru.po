@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3434,17 +3434,17 @@ msgstr ""
 "\n"
 "Путь к файлу: "
 
-msgid "Click to save the current game."
-msgstr "Нажмите, чтобы сохранить текущую игру."
-
-msgid "Click to load a previously saved game."
-msgstr "Нажмите, чтобы загрузить сохранённую игру."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "Click to save the current game."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Click to load a previously saved game."
+msgstr "Нажмите, чтобы загрузить сохранённую игру."
 
 msgid "File to Save:"
 msgstr "Сохранить файл:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 01:47+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3419,17 +3419,17 @@ msgstr ""
 "\n"
 "Hely: "
 
-msgid "Click to save the current game."
-msgstr "Kattints az aktuális játékállás mentéséhez."
-
-msgid "Click to load a previously saved game."
-msgstr "Kattints a mentett játékállás betöltéséhez."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Biztosan törlöd ezt a fájlt?:"
 
 msgid "Warning!"
 msgstr "Figyelem!"
+
+msgid "Click to save the current game."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Click to load a previously saved game."
+msgstr "Kattints a mentett játékállás betöltéséhez."
 
 msgid "File to Save:"
 msgstr "Fájl mentése:"
