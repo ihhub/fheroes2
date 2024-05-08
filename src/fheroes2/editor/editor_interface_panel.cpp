@@ -195,20 +195,15 @@ namespace
 
 namespace Interface
 {
-    const std::array<Maps::ObjectGroup, Interface::EditorPanel::LandscapeObjectBrush::LANDSCAPE_COUNT> EditorPanel::_selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_ROCKS,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_TREES,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_WATER,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
-    const std::array<Maps::ObjectGroup, Interface::EditorPanel::AdventureObjectBrush::ADVENTURE_COUNT> EditorPanel::_selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_DWELLINGS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_MINES,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_POWER_UPS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_TREASURES,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_WATER,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS };
-    const std::array<Maps::ObjectGroup, Interface::EditorPanel::KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> EditorPanel::_selectedKingdomObjectGroup{ Maps::ObjectGroup::KINGDOM_HEROES,
-                                                                                                                    Maps::ObjectGroup::KINGDOM_TOWNS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::LandscapeObjectBrush::LANDSCAPE_COUNT>
+        EditorPanel::_selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                                    Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::AdventureObjectBrush::ADVENTURE_COUNT>
+        EditorPanel::_selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,    Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES,
+                                                    Maps::ObjectGroup::ADVENTURE_POWER_UPS,    Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER,
+                                                    Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::KingdomObjectBrush::KINGDOM_OBJECTS_COUNT>
+        EditorPanel::_selectedKingdomObjectGroup{ Maps::ObjectGroup::KINGDOM_HEROES, Maps::ObjectGroup::KINGDOM_TOWNS };
 
     EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
