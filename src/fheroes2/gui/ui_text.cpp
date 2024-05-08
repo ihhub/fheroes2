@@ -143,6 +143,7 @@ namespace
             if ( isLineSeparator( *data ) ) {
                 if ( lineLength > 0 ) {
                     lineInfo->offset.x = lineWidth;
+                    lineInfo->characterCount = lineLength;
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
