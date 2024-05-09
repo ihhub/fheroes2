@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -48,6 +48,7 @@ namespace System
 
     std::string GetDirname( std::string_view path );
     std::string GetBasename( std::string_view path );
+    std::string truncateFileExtensionAndPath( std::string_view path );
 
     bool IsFile( const std::string & path, bool writable = false );
     bool IsDirectory( const std::string & path, bool writable = false );

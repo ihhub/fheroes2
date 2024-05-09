@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 14:37+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3479,17 +3479,17 @@ msgstr ""
 "\n"
 "Placering: "
 
-msgid "Click to save the current game."
-msgstr "Klik for at gemme igangværende spil."
-
-msgid "Click to load a previously saved game."
-msgstr "Klik for at indlæse et tidligere gemt spil."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "Click to save the current game."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Click to load a previously saved game."
+msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "File to Save:"
 msgstr "Fil som skal gemmes:"
@@ -3911,6 +3911,21 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Sten kan ikke placeres på vand."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Hav-objekter må kun placeres på vand."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Objekter kan ikke placeres udenfor kortet."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Hav-objekter må kun placeres på vand."
+
 msgid "Map filename"
 msgstr "Kort-filnavn"
 
@@ -3973,22 +3988,6 @@ msgstr "Skyd %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfældigt ultimativt artefakt"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Objekter kan ikke placeres udenfor kortet."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Hav-objekter må kun placeres på vand."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Monstre kan ikke placeres på vand."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Skatte kan ikke placeres på vand."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Helte kan ikke placeres på vand."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
@@ -3996,42 +3995,9 @@ msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 msgid "Failed to update player information."
 msgstr "Opdatering af spilleroplysninger mislykkedes."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Artefakter kan ikke placeres på vand."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan ikke placeres på vand."
-
-msgid "Mountains cannot be placed on water."
-msgstr "Bjerge kan ikke placeres på vand."
-
-msgid "Rocks cannot be placed on water."
-msgstr "Sten kan ikke placeres på vand."
-
-msgid "Trees cannot be placed on water."
-msgstr "Træer kan ikke placeres på vand."
-
-msgid "Ocean object must be placed on water."
-msgstr "Hav-objekter må kun placeres på vand."
-
-msgid "Landscape objects cannot be placed on water."
-msgstr "Landskabsobjekter kan ikke placeres på vand."
-
-msgid "Towns cannot be placed on water."
-msgstr "Byer kan ikke placeres på vand."
-
-msgid "Mines cannot be placed on water."
-msgstr "Miner kan ikke placeres på vand."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Bosteder kan ikke placeres på vand."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Power-ups kan ikke placeres på vand."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Eventyr-objekter kan ikke placeres på vand."
 
 msgid "Used to place %{object}."
 msgstr "Bruges til at placere %{object}."
@@ -4060,14 +4026,14 @@ msgstr ""
 "Celle-\n"
 "detaljer"
 
+msgid "Erase"
+msgstr "Udviske"
+
 msgid "Roads"
 msgstr "Veje"
 
 msgid "Streams"
 msgstr "Å-tilstand"
-
-msgid "Erase"
-msgstr "Udviske"
 
 msgid "Mountains"
 msgstr "Bjerge"
@@ -4099,11 +4065,11 @@ msgstr "Power Ups"
 msgid "Treasures"
 msgstr "Skatte"
 
-msgid "Towns"
-msgstr "Byer"
-
 msgid "Heroes"
 msgstr "Helte"
+
+msgid "Towns"
+msgstr "Byer"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -11614,3 +11580,39 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Monstre kan ikke placeres på vand."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Skatte kan ikke placeres på vand."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Helte kan ikke placeres på vand."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Artefakter kan ikke placeres på vand."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Bjerge kan ikke placeres på vand."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Træer kan ikke placeres på vand."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Landskabsobjekter kan ikke placeres på vand."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Byer kan ikke placeres på vand."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Miner kan ikke placeres på vand."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Bosteder kan ikke placeres på vand."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Power-ups kan ikke placeres på vand."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Eventyr-objekter kan ikke placeres på vand."

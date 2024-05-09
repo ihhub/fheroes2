@@ -91,6 +91,8 @@ namespace Interface
 
         bool loadMap( const std::string & filePath );
 
+        void saveMapToFile();
+
     private:
         class WarningMessage
         {
@@ -142,6 +144,8 @@ namespace Interface
 
         void handleObjectMouseLeftClick( Maps::Tiles & tile );
 
+        void validateObjectsOnTerrainUpdate();
+
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };
@@ -154,5 +158,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }
