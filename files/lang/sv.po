@@ -3909,7 +3909,6 @@ msgstr "Lämna kartredigeraren."
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Ange antal %{monster}"
 
