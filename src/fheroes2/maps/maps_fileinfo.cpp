@@ -703,7 +703,12 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const bool is
         }
     }
 
-    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+    if ( isForEditor ) {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+    }
+    else {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+    }
 
     return validMaps;
 }

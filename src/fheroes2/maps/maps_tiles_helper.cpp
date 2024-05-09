@@ -1315,7 +1315,7 @@ namespace Maps
 
     bool updateRoadOnTile( Tiles & tile, const bool setRoad )
     {
-        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER && setRoad ) ) {
             // We cannot place roads on the water or above already placed roads.
             return false;
         }
@@ -1351,7 +1351,7 @@ namespace Maps
 
     bool updateStreamOnTile( Tiles & tile, const bool setStream )
     {
-        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER && setStream ) ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }

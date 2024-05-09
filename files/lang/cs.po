@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-08 14:37+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3443,17 +3443,17 @@ msgstr ""
 "\n"
 "Cesta: "
 
-msgid "Click to save the current game."
-msgstr "Klikni pro uložení aktuální hry."
-
-msgid "Click to load a previously saved game."
-msgstr "Klikni pro načtení dříve uložené hry."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
 msgstr "Výstraha!"
+
+msgid "Click to save the current game."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Click to load a previously saved game."
+msgstr "Klikni pro načtení dříve uložené hry."
 
 msgid "File to Save:"
 msgstr "Uložit do souboru:"
@@ -3891,6 +3891,21 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Velikost\n"
@@ -3954,22 +3969,6 @@ msgstr "Vystřel na %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Náhodný Ultimátní Artefakt"
 
-msgid "Objects cannot be placed outside the map."
-msgstr ""
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3977,50 +3976,8 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
-
-#, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-msgid "Ocean object must be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4047,14 +4004,14 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Cesta"
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -4092,12 +4049,12 @@ msgstr "Síla"
 msgid "Treasures"
 msgstr "Poklad"
 
+msgid "Heroes"
+msgstr "Hrdinové"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Město"
-
-msgid "Heroes"
-msgstr "Hrdinové"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -10886,3 +10843,35 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Toto město nemůže být povýšeno na hrad."
