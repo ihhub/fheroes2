@@ -237,7 +237,7 @@ namespace Maps::Map_Format
         }
 
         decompressed >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-                     >> map.adventureMapEventMetadata >> map.rumors;
+            >> map.adventureMapEventMetadata >> map.rumors;
 
         return !msg.fail();
     }
