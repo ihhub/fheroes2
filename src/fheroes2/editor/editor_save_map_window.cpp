@@ -237,8 +237,7 @@ namespace Editor
         }
 
         fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
-        const int32_t mapNameTextWidth = 300;
-        const fheroes2::Rect mapNameRoi( area.x + ( area.width - mapNameTextWidth ) / 2, area.y + 28, mapNameTextWidth, mapNameText.height() + 4 );
+        const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );
         fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
