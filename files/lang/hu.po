@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:47+0000\n"
+"POT-Creation-Date: 2024-05-08 14:37+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3855,6 +3855,21 @@ msgstr ""
 "A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
 "állnak."
 
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Vízen nem helyezhetők el kövek."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
+
 msgid "Map filename"
 msgstr "Térképfájl neve"
 
@@ -3918,22 +3933,6 @@ msgstr "%{monster} létszám beállítása"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Véletlenszerű Szent Varázstárgy"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Vízen nem helyezhetők el lények."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kincsek."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Vízen nem helyezhetők el hősök."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
@@ -3941,42 +3940,9 @@ msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színbő
 msgid "Failed to update player information."
 msgstr "A játékos adatainak frissítése nem sikerült."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
-
-msgid "Mountains cannot be placed on water."
-msgstr "Vízen nem helyezhetők el hegyek."
-
-msgid "Rocks cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kövek."
-
-msgid "Trees cannot be placed on water."
-msgstr "Vízen nem helyezhetők el fák."
-
-msgid "Ocean object must be placed on water."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
-
-msgid "Landscape objects cannot be placed on water."
-msgstr "Vízen nem helyezhetők el szárazföldi objektumok."
-
-msgid "Towns cannot be placed on water."
-msgstr "Vízen nem helyezhetők el városok."
-
-msgid "Mines cannot be placed on water."
-msgstr "Vízen nem helyezhetők el bányák."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Vízen nem helyezhetők el toborzóhelyek."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Kaland objektumok nem helyezhetők el vízen."
 
 msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
@@ -4005,14 +3971,14 @@ msgstr ""
 "Cella\n"
 "részletek"
 
+msgid "Erase"
+msgstr "Törlés"
+
 msgid "Roads"
 msgstr "Utak"
 
 msgid "Streams"
 msgstr "Folyóvizek"
-
-msgid "Erase"
-msgstr "Törlés"
 
 msgid "Mountains"
 msgstr "Hegyek"
@@ -4044,11 +4010,11 @@ msgstr "Képességnövelők"
 msgid "Treasures"
 msgstr "Kincsek"
 
-msgid "Towns"
-msgstr "Városok"
-
 msgid "Heroes"
 msgstr "Hősök"
+
+msgid "Towns"
+msgstr "Városok"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Szárazföldi objektumok"
@@ -11458,3 +11424,39 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el lények."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el kincsek."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el hősök."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el hegyek."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el fák."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el szárazföldi objektumok."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el városok."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el bányák."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el toborzóhelyek."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Kaland objektumok nem helyezhetők el vízen."
