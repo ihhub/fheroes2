@@ -91,6 +91,8 @@ namespace Interface
 
         bool loadMap( const std::string & filePath );
 
+        void saveMapToFile();
+
     private:
         class WarningMessage
         {
@@ -156,5 +158,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }

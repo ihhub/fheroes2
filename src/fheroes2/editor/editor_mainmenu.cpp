@@ -308,7 +308,7 @@ namespace Editor
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
+        const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists, true );
         if ( fileInfo == nullptr ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
