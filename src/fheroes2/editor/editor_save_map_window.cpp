@@ -226,7 +226,7 @@ namespace Editor
         const fheroes2::Rect fileNameRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
 
         const fheroes2::Text header( _( "Save Map:" ), fheroes2::FontType::normalYellow() );
-        header.draw( area.x + ( area.width - header.width() ) / 2, area.y + 16, display );
+        header.draw( area.x + ( area.width - header.width() ) / 2, area.y + 10, display );
 
         if ( fileName.empty() ) {
             fileName = "My map";
@@ -237,10 +237,11 @@ namespace Editor
         }
 
         fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
-        const int32_t mapNameTextWidth = mapNameText.width();
-        fheroes2::Rect mapNameRoi( area.x + ( area.width - mapNameTextWidth ) / 2, area.y + 32, mapNameTextWidth, mapNameText.height() );
+        const int32_t mapNameTextWidth = mapNameText.width() + 9;
+        fheroes2::Rect mapNameRoi( area.x + ( area.width - mapNameTextWidth ) / 2, area.y + 28, mapNameTextWidth, mapNameText.height() + 4 );
         fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
-        mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, display, mapNameRoi );
+        background.applyTextBackgroundShading( mapNameRoi );
+        mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( fileNameRoi );
@@ -380,12 +381,13 @@ namespace Editor
 
                     mapName = std::move( editableMapName );
                     mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
-                    mapNameRoi.width = mapNameText.width();
+                    mapNameRoi.width = mapNameText.width() + 9;
                     mapNameRoi.x = area.x + ( area.width - mapNameRoi.width ) / 2;
 
                     mapNameBackground.restore();
                     mapNameBackground.update( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
-                    mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, display, mapNameRoi );
+                    background.applyTextBackgroundShading( mapNameRoi );
+                    mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
                     display.render( mapNameRoi );
 
