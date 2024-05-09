@@ -4241,7 +4241,7 @@ msgid "Passability"
 msgstr "Framkomlighet"
 
 msgid "Toggle animation of the objects."
-msgstr "Aktivera animationen för objekten"
+msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
 msgstr "Visa objektens framkomlighet."
@@ -7461,7 +7461,7 @@ msgid "Random hero (Level %{level})"
 msgstr "Slumpad hjälte (Nivå %{level})"
 
 msgid "Random %{race} hero (Level %{level})"
-msgstr "Slumpad %{race}hjälte (Nivå %{level} )"
+msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
 msgid "Hero race:"
 msgstr "Hjälteklass"
