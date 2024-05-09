@@ -560,7 +560,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::SMALL;
 
-                listbox.SelectMapSize( small, currentMapFilter );
+                listbox.SelectMapSize( small, Maps::SMALL );
 
                 currentPressedButton = &buttonSelectSmall;
                 needRedraw = true;
@@ -573,7 +573,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::MEDIUM;
 
-                listbox.SelectMapSize( medium, currentMapFilter );
+                listbox.SelectMapSize( medium, Maps::MEDIUM );
 
                 currentPressedButton = &buttonSelectMedium;
                 needRedraw = true;
@@ -586,7 +586,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::LARGE;
 
-                listbox.SelectMapSize( large, currentMapFilter );
+                listbox.SelectMapSize( large, Maps::LARGE );
 
                 currentPressedButton = &buttonSelectLarge;
                 needRedraw = true;
@@ -599,7 +599,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::XLARGE;
 
-                listbox.SelectMapSize( xlarge, currentMapFilter );
+                listbox.SelectMapSize( xlarge, Maps::XLARGE );
 
                 currentPressedButton = &buttonSelectXLarge;
                 needRedraw = true;
@@ -608,7 +608,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             currentMapFilter = Maps::ZERO;
 
-            listbox.SelectMapSize( all, currentMapFilter );
+            listbox.SelectMapSize( all, Maps::ZERO );
 
             currentPressedButton = &buttonSelectAll;
             needRedraw = true;
