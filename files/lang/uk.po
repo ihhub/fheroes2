@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3883,9 +3883,6 @@ msgstr "Неможливо розмістити об'єкт поза мапою.
 msgid "Action objects must be placed on clear tiles."
 msgstr "Об'єкти океану мають бути розміщені на воді."
 
-msgid "Map filename"
-msgstr "Назва файлу мапи"
-
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3954,6 +3951,28 @@ msgstr "Не вдалося оновити інформацію по гравц�
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакт не можна розмістити на воді."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Файл збереження пошкоджений."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Використовується для видалення об'єктів з мапи."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Ви впевнені, що хочете перезаписати збереження з такою назвою?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Зберегти файли:"
 
 msgid "Used to place %{object}."
 msgstr "Використовується для розміщення %{object}."
@@ -4260,6 +4279,41 @@ msgstr "Анімації об'єктів умівк/вимк."
 
 msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Розташування: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Зберегти мапу"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Натисніть, щоб зберегти поточну гру."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Натисніть для зміни раси."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Назва файлу мапи"
 
 msgid "difficulty|Easy"
 msgstr "Проста"
