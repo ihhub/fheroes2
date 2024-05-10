@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3869,9 +3869,6 @@ msgstr "Föremål kan inte placeras utanför kartan."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Havsföremål måste placeras på vatten."
 
-msgid "Map filename"
-msgstr "Kartfilnamn"
-
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3941,6 +3938,28 @@ msgstr "Misslyckades att uppdatera spelarinformation."
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan inte placeras på vatten."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Sparfilen är korrupt."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Används för att radera föremål från kartan."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Är du säker på att du vill skriva över sparningen med detta namn?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fil att Spara:"
 
 msgid "Used to place %{object}."
 msgstr "Används för att placera %{object}."
@@ -4245,6 +4264,41 @@ msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
 msgstr "Visa objektens framkomlighet."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Plats: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Spara Karta"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klicka för att spara nuvarande spel."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klicka för att visa nästa stad."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Kartfilnamn"
 
 msgid "difficulty|Easy"
 msgstr "Lätt"

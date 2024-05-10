@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3870,9 +3870,6 @@ msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
 
-msgid "Map filename"
-msgstr "Térképfájl neve"
-
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3943,6 +3940,28 @@ msgstr "A játékos adatainak frissítése nem sikerült."
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "A mentés fájl sérült."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Ezzel törölheted a tárgyakat a térképről."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Biztosan felülírod a mentést ezzel a névvel?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fájl mentése:"
 
 msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
@@ -4248,6 +4267,41 @@ msgstr "Objektumok animációjának kapcsolója."
 
 msgid "Toggle display of objects' passability."
 msgstr "Kattints az objektumok átjárhatóságának megjelenítéséhez."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Hely: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Térkép mentése"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kattints az osztály megváltoztatásához."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Térképfájl neve"
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"

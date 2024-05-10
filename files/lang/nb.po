@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3994,12 +3994,6 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
-msgid "Map filename"
-msgstr ""
-"Kartets\n"
-"størrelse"
-
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4067,6 +4061,28 @@ msgstr ""
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Lagringsfilen er korrupt."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Brukes til å fjerne ting fra kartet."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Er du sikker på at du vil overskrive lagringspunktet med dette navnet?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Lagringsfil:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4390,6 +4406,43 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Lagre kart"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Kartets\n"
+"størrelse"
 
 msgid "difficulty|Easy"
 msgstr "Lett"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3937,12 +3937,6 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
-msgid "Map filename"
-msgstr ""
-"Wielkość\n"
-"mapy"
-
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4012,6 +4006,27 @@ msgstr ""
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Plik z zapisaną grą jest uszkodzony."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+msgid "Unable to create a directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Czy na pewno chcesz zapisać stan gry z taką samą nazwą?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Zapisz plik:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4318,6 +4333,43 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Położenie pliku: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Zapisz grę"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Zapisz bieżącą grę."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Wielkość\n"
+"mapy"
 
 msgid "difficulty|Easy"
 msgstr "Łatwy"
