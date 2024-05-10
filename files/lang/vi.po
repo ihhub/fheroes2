@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3920,9 +3920,6 @@ msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
-msgid "Map filename"
-msgstr "Tệp bản đồ"
-
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3991,6 +3988,28 @@ msgstr ""
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "File lưu bị hỏng."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Dùng để xóa vật thể trên bản đồ."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Tệp để Lưu:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4308,6 +4327,41 @@ msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Lưu Bản đồ"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Tệp bản đồ"
 
 msgid "difficulty|Easy"
 msgstr "Dễ"
