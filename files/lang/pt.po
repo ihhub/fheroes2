@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-09 17:53+0000\n"
-"PO-Revision-Date: 2024-04-08 22:19-0300\n"
+"PO-Revision-Date: 2024-05-11 17:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -2513,7 +2513,7 @@ msgstr ""
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
 msgstr ""
-"A estrutura Especial concede um bônus específico ao tipo de castelo escolhido"
+"A estrutura Especial concede um bônus específico ao tipo de castelo escolhido."
 
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
@@ -3574,19 +3574,19 @@ msgid "Loss Condition"
 msgstr "Condição de Derrota"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr "Derrotar todos os heróis inimigos e cidades."
+msgstr "Vencer todos heróis e cidades inimigas."
 
 msgid "Capture a specific town."
-msgstr "Captura de uma cidade específica."
+msgstr "Capturar cidade específica."
 
 msgid "Defeat a specific hero."
 msgstr "Derrotar um herói específico."
 
 msgid "Find a specific artifact."
-msgstr "Encontre um artefato específico."
+msgstr "Encontrar artefato específico."
 
 msgid "Your side must defeat the opposing side."
-msgstr "Seu lado deve derrotar o lado oposto."
+msgstr "Seu lado deve vencer o oposto."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Acumular uma grande quantidade de ouro."
@@ -3857,16 +3857,14 @@ msgstr "Usar exército de defensores padrão."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
-"Definir Exército do Castelo personalizado. Clique com o botão direito para "
-"redefinir a unidade."
+"Definir Exército personalizado. Botão direito para "
+"redefinir."
 
-#, fuzzy
 msgid "%{objects} cannot be placed on water."
-msgstr "Rochas não podem ser colocadas na água."
+msgstr "O objeto %{objects} não pode ser colocado na água."
 
-#, fuzzy
 msgid "%{objects} must be placed on water."
-msgstr "Objeto oceânico deve ser colocado na água."
+msgstr "O objeto %{objects} deve ser colocado na água."
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
@@ -3922,7 +3920,7 @@ msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
 msgid "Input %{object} text"
-msgstr ""
+msgstr "Inserir texto de %{object}"
 
 msgid "Set %{monster} Count"
 msgstr "Definir Quantidade de %{monster}"
@@ -3940,28 +3938,23 @@ msgstr "Falha ao atualizar informações do jogador."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
-#, fuzzy
 msgid "The map is corrupted."
-msgstr "O arquivo salvo está corrompido."
+msgstr "O mapa está corrompido."
 
 msgid "Unable to locate data directory to save the map."
-msgstr ""
+msgstr "Não foi possível localizar a pasta de dados para salvar o mapa."
 
-#, fuzzy
 msgid "Unable to create a directory to save the map."
-msgstr "Usado para apagar objetos do mapa."
+msgstr "Não foi possível criar um diretório para salvar o mapa."
 
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
-msgstr ""
-"Você tem certeza de que deseja sobrescrever o jogo salvo com este nome?"
+msgstr "Tem certeza de que deseja substituir o mapa existente?"
 
 msgid "Map saved to: "
-msgstr ""
+msgstr "Mapa salvo em: "
 
-#, fuzzy
 msgid "Failed to save the map."
-msgstr "Arquivo à ser salvo:"
+msgstr "Falha ao salvar o mapa."
 
 msgid "Used to place %{object}."
 msgstr "Usado para colocar %{object}."
@@ -3987,8 +3980,8 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
-"Detalhes da\n"
-"Célula"
+"Detalhes do\n"
+"Ladrilho"
 
 msgid "Erase"
 msgstr "Apagar"
@@ -4276,8 +4269,10 @@ msgid ""
 "\n"
 "Size: "
 msgstr ""
+"\n"
+"\n"
+"Tamanho: "
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -4285,26 +4280,22 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Local: "
+"Descrição: "
 
-#, fuzzy
 msgid "Save Map:"
-msgstr "Salvar Mapa"
+msgstr "Salvar Mapa:"
 
 msgid "Change Map Name"
-msgstr ""
+msgstr "Alterar o Nome do Mapa"
 
-#, fuzzy
 msgid "Click to save the current map."
-msgstr "Clique para salvar o jogo atual."
+msgstr "Clique para salvar o mapa atual."
 
-#, fuzzy
 msgid "Click to change your map name."
-msgstr "Clique para alterar a raça."
+msgstr "Clique para alterar o nome do mapa."
 
-#, fuzzy
 msgid "Map Name"
-msgstr "Nome do arquivo de mapa"
+msgstr "Nome do Mapa"
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
