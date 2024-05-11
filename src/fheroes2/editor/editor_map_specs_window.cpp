@@ -63,8 +63,6 @@ namespace
     const int32_t playerStepX = 80;
     const int32_t difficultyStepX = 77;
 
-    const int32_t dropListItemHeight = 17 + 2;
-
     const char * getVictoryConditionText( const uint8_t victoryConditionType )
     {
         switch ( victoryConditionType ) {
