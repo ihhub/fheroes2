@@ -275,11 +275,10 @@ bool MapSphinx::isCorrectAnswer( std::string answer )
         const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == answer; };
         return std::any_of( answers.begin(), answers.end(), checkAnswer );
     }
-    else {
-        answer = StringLower( answer );
-        const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ) == answer; };
-        return std::any_of( answers.begin(), answers.end(), checkAnswer );
-    }
+
+    answer = StringLower( answer );
+    const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ) == answer; };
+    return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
 void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )

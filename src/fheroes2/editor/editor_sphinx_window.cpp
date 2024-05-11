@@ -62,7 +62,7 @@ namespace
             text.draw( posX + 5, posY + 5, fheroes2::Display::instance() );
         }
 
-        void RedrawBackground( const fheroes2::Point & ) override
+        void RedrawBackground( const fheroes2::Point & /*unused*/ ) override
         {
             _listBackground->restore();
         }
@@ -77,17 +77,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListDoubleClick( std::string & ) override
+        void ActionListDoubleClick( std::string & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListSingleClick( std::string & ) override
+        void ActionListSingleClick( std::string & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( std::string & ) override
+        void ActionListPressRight( std::string & /*unused*/ ) override
         {
             // Do nothing.
         }
@@ -308,7 +308,7 @@ namespace Editor
                 return true;
             }
 
-            const bool listboxEvent = answerList.QueueEventProcessing();
+            answerList.QueueEventProcessing();
 
             if ( answerList.IsNeedRedraw() ) {
                 answerList.Redraw();
@@ -324,7 +324,7 @@ namespace Editor
                     uint32_t temp = *resourcePtr;
 
                     if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
-                        *resourcePtr = temp;
+                        *resourcePtr = static_cast<int32_t>( temp );
                     }
 
                     resourceRoiRestorer.restore();
