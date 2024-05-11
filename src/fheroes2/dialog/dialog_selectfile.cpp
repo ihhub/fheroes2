@@ -535,10 +535,6 @@ namespace
                 continue;
             }
 
-            if ( listbox.IsNeedRedraw() ) {
-                listbox.Redraw();
-            }
-
             if ( needRedraw ) {
                 const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
@@ -566,7 +562,13 @@ namespace
                 }
             }
 
-            display.render( area );
+            if ( listbox.IsNeedRedraw() ) {
+                listbox.Redraw();
+                display.render( area );
+            }
+            else {
+                display.render( { textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height } );
+            }
         }
 
         return result;
