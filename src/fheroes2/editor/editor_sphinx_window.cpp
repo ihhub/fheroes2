@@ -20,20 +20,39 @@
 
 #include "editor_sphinx_window.h"
 
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "agg_image.h"
+#include "artifact.h"
 #include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "map_format_info.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_window.h"
 
 namespace
@@ -351,7 +370,7 @@ namespace Editor
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
                 if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, 64, false ) ) {
-                    if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const std::string & answer ) { return answer == newAnswer; } ) ) {
+                    if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const auto & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
                     }
@@ -367,7 +386,7 @@ namespace Editor
                 std::string temp = answerList.GetCurrent();
                 if ( Dialog::inputString( _( "Answer:" ), temp, {}, 100, false ) ) {
                     const auto count
-                        = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const std::string & answer ) { return answer == temp; } );
+                        = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
