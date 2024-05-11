@@ -67,6 +67,10 @@ namespace
 
     const size_t longestAnswer{ 64 };
 
+    // TODO: expand the question area to support more characters.
+    //       At the moment only up to 140 biggest characters can be added.
+    const size_t longestQuestion{ 140 };
+
     class AnswerListBox : public Interface::ListBox<std::string>
     {
     public:
@@ -358,9 +362,8 @@ namespace Editor
 
             if ( le.MouseClickLeft( questionRoi ) ) {
                 std::string temp = metadata.question;
-                // TODO: expand the question area to support more characters.
-                //       At the moment only up to 140 biggest characters can be added.
-                if ( Dialog::inputString( _( "Question:" ), temp, {}, 140, true ) ) {
+
+                if ( Dialog::inputString( _( "Question:" ), temp, {}, longestQuestion, true ) ) {
                     metadata.question = std::move( temp );
 
                     questionRoiRestorer.restore();
