@@ -385,8 +385,7 @@ namespace Editor
 
                 std::string temp = answerList.GetCurrent();
                 if ( Dialog::inputString( _( "Answer:" ), temp, {}, 100, false ) ) {
-                    const auto count
-                        = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
+                    const auto count = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
