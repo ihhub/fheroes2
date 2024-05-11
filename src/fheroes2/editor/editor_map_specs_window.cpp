@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_map_specs_window.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -157,7 +159,7 @@ namespace
         fheroes2::Copy( winIcon, 0, 0, output, roi.x + 1, roi.y, winIcon.width(), winIcon.height() );
         const fheroes2::Text winText( getVictoryConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
-    };
+    }
 
     void redrawLossCondition( const uint8_t condition, const fheroes2::Rect & roi, const bool yellowFont, fheroes2::Image & output )
     {
@@ -165,9 +167,9 @@ namespace
         fheroes2::Copy( icon, 0, 0, output, roi.x + 1, roi.y, icon.width(), icon.height() );
         const fheroes2::Text winText( getLossConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
-    };
+    }
 
-    class DropBoxList : public Interface::ListBox<uint8_t>
+    class DropBoxList final : public Interface::ListBox<uint8_t>
     {
     public:
         using Interface::ListBox<uint8_t>::ActionListDoubleClick;
@@ -219,7 +221,7 @@ namespace
             SetAreaItems( { pt.x + 5, pt.y + 5, listWidth - 10, listHeight - 10 } );
         }
 
-        ~DropBoxList() final
+        ~DropBoxList() override
         {
             _restorer->restore();
             fheroes2::Display::instance().render( _restorer->rect() );
@@ -249,7 +251,7 @@ namespace
             // Do nothing.
         }
 
-        void ActionListDoubleClick( uint8_t & /* item */ ) final
+        void ActionListDoubleClick( uint8_t & /* item */ ) override
         {
             _isClicked = true;
         }

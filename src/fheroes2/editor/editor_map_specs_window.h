@@ -20,7 +20,10 @@
 
 #pragma once
 
-struct Maps::Map_Format::MapFormat;
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
 
 namespace Editor
 {
