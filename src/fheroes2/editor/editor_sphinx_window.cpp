@@ -65,6 +65,8 @@ namespace
 
     const int32_t listAreaHeightDeduction{ 8 };
 
+    const size_t longestAnswer{ 64 };
+
     class AnswerListBox : public Interface::ListBox<std::string>
     {
     public:
@@ -369,7 +371,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
-                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, 64, false ) ) {
+                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, longestAnswer, false ) ) {
                     if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const auto & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
@@ -384,7 +386,7 @@ namespace Editor
                 }
 
                 std::string temp = answerList.GetCurrent();
-                if ( Dialog::inputString( _( "Answer:" ), temp, {}, 100, false ) ) {
+                if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false ) ) {
                     const auto count = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
