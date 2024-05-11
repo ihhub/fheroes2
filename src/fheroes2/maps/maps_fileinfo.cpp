@@ -723,7 +723,12 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
     MapsFileInfoList validMaps = getValidMaps( maps, isMultiplayer, isForEditor, false );
 
-    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+    if ( isForEditor ) {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+    }
+    else {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+    }
 
     return validMaps;
 }
