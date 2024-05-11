@@ -378,6 +378,9 @@ namespace Editor
                     }
 
                     metadata.answers.emplace_back( std::move( newAnswer ) );
+
+                    answerList.Redraw();
+                    isRedrawNeeded = true;
                 }
             }
             else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
