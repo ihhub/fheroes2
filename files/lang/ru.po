@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3434,17 +3434,17 @@ msgstr ""
 "\n"
 "Путь к файлу: "
 
-msgid "Click to save the current game."
-msgstr "Нажмите, чтобы сохранить текущую игру."
-
-msgid "Click to load a previously saved game."
-msgstr "Нажмите, чтобы загрузить сохранённую игру."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "Click to save the current game."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Click to load a previously saved game."
+msgstr "Нажмите, чтобы загрузить сохранённую игру."
 
 msgid "File to Save:"
 msgstr "Сохранить файл:"
@@ -3866,8 +3866,20 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Название файла карты"
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Камни нельзя размещать на воде."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Объекты для океана можно размещать только на воде."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Объекты нельзя размещать за пределами карты."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Объекты для океана можно размещать только на воде."
 
 #, fuzzy
 msgid ""
@@ -3928,22 +3940,6 @@ msgstr "Стрелять в %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случайный великий артефакт"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Объекты нельзя размещать за пределами карты."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Объекты для океана можно размещать только на воде."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Существ нельзя размещать на воде."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Сокровища нельзя размещать на воде."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Героев нельзя размещать на воде."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "На карте можно разместить максимум %{count} героев одного цвета."
@@ -3951,42 +3947,31 @@ msgstr "На карте можно разместить максимум %{count
 msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Артефакты нельзя размещать на воде."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакты нельзя размещать на воде."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Горы нельзя размещать на воде."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Файл сохранения повреждён."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Камни нельзя размещать на воде."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Деревья нельзя размещать на воде."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Используется для удаления объектов с карты."
 
-msgid "Ocean object must be placed on water."
-msgstr "Объекты для океана можно размещать только на воде."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Вы хотите перезаписать файл игры?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Объекты ландшафта нельзя размещать на воде."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Города нельзя размещать на воде."
-
-msgid "Mines cannot be placed on water."
-msgstr "Источники ресурсов нельзя размещать на воде."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Жилища нельзя размещать на воде."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Бонусы нельзя размещать на воде."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Интерактивные объекты нельзя размещать на воде."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Сохранить файл:"
 
 msgid "Used to place %{object}."
 msgstr "Используется для размещения объектов типа %{object}."
@@ -4017,14 +4002,14 @@ msgstr ""
 "Детали\n"
 "объекта"
 
+msgid "Erase"
+msgstr "Ластик"
+
 msgid "Roads"
 msgstr "Дороги"
 
 msgid "Streams"
 msgstr "Реки"
-
-msgid "Erase"
-msgstr "Ластик"
 
 msgid "Mountains"
 msgstr "Горы"
@@ -4056,11 +4041,11 @@ msgstr "Бонусы"
 msgid "Treasures"
 msgstr "Сокровища"
 
-msgid "Towns"
-msgstr "Города"
-
 msgid "Heroes"
 msgstr "Герои"
+
+msgid "Towns"
+msgstr "Города"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Объекты ландшафта"
@@ -4293,6 +4278,41 @@ msgstr "Включить или выключить анимацию объект
 
 msgid "Toggle display of objects' passability."
 msgstr "Включить или выключить отображение проходимости объектов."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Путь к файлу: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Сохранить карту"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Название файла карты"
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -11491,3 +11511,39 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Существ нельзя размещать на воде."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Сокровища нельзя размещать на воде."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Героев нельзя размещать на воде."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Артефакты нельзя размещать на воде."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Горы нельзя размещать на воде."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Деревья нельзя размещать на воде."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Объекты ландшафта нельзя размещать на воде."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Города нельзя размещать на воде."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Источники ресурсов нельзя размещать на воде."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Жилища нельзя размещать на воде."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Бонусы нельзя размещать на воде."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Интерактивные объекты нельзя размещать на воде."

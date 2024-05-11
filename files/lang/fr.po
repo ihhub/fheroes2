@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3481,17 +3481,17 @@ msgstr ""
 "\n"
 "Emplacement : "
 
-msgid "Click to save the current game."
-msgstr "Enregistrer le jeu en cours."
-
-msgid "Click to load a previously saved game."
-msgstr "Charger une partie sauvegardée."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Voulez-vous vraiment effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
+
+msgid "Click to save the current game."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Click to load a previously saved game."
+msgstr "Charger une partie sauvegardée."
 
 msgid "File to Save:"
 msgstr "Fichier à sauvegarder :"
@@ -3916,8 +3916,20 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Nom du fichier pour la carte"
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Les rochers ne peuvent pas être placés sur l'eau."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
@@ -3981,22 +3993,6 @@ msgstr "Tirer sur %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ultime artéfact aléatoire"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Les créatures ne peuvent pas être placées sur l'eau."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Les trésors ne peuvent pas être placés sur l'eau."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Les héros ne peuvent pas être placés sur l'eau."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -4006,42 +4002,31 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr "La mise à jour des informations sur les joueurs a échoué."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Les montagnes ne peuvent pas être placées sur l'eau."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Le fichier de sauvegarde est corrompu."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Les rochers ne peuvent pas être placés sur l'eau."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Les arbres ne peuvent pas être placés sur l'eau."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Permet d'effacer les éléments placés sur la carte."
 
-msgid "Ocean object must be placed on water."
-msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Voulez-vous vraiment remplacer la sauvegarde avec ce nom ?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Les éléments de paysage ne peuvent pas être placés sur l'eau."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Les villages ne peuvent pas être placés sur l'eau."
-
-msgid "Mines cannot be placed on water."
-msgstr "Les mines ne peuvent pas être placées sur l'eau."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Les demeures ne peuvent pas être placées sur l'eau."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Les bonus ne peuvent pas être placés sur l'eau."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Les éléments d'aventure ne peuvent pas être placés sur l'eau."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fichier à sauvegarder :"
 
 msgid "Used to place %{object}."
 msgstr "Permet de placer %{object}."
@@ -4070,14 +4055,14 @@ msgstr ""
 "Details\n"
 "cellule"
 
+msgid "Erase"
+msgstr "Effacer"
+
 msgid "Roads"
 msgstr "Routes"
 
 msgid "Streams"
 msgstr "Rivières"
-
-msgid "Erase"
-msgstr "Effacer"
 
 msgid "Mountains"
 msgstr "Montagnes"
@@ -4109,11 +4094,11 @@ msgstr "Bonus"
 msgid "Treasures"
 msgstr "Trésors"
 
-msgid "Towns"
-msgstr "Villages"
-
 msgid "Heroes"
 msgstr "Héros"
+
+msgid "Towns"
+msgstr "Villages"
 
 msgid "editorErasure|Landscape objects"
 msgstr "d'éléments de paysage"
@@ -4360,6 +4345,41 @@ msgstr "Effacement %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Emplacement : "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Sauvegarder la carte"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Enregistrer le jeu en cours."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Nom du fichier pour la carte"
 
 msgid "difficulty|Easy"
 msgstr "Facile"
@@ -11705,3 +11725,39 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Les créatures ne peuvent pas être placées sur l'eau."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Les trésors ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Les héros ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Les montagnes ne peuvent pas être placées sur l'eau."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Les arbres ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Les éléments de paysage ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Les villages ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Les mines ne peuvent pas être placées sur l'eau."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Les demeures ne peuvent pas être placées sur l'eau."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Les bonus ne peuvent pas être placés sur l'eau."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Les éléments d'aventure ne peuvent pas être placés sur l'eau."

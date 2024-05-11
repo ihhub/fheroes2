@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3456,17 +3456,17 @@ msgstr ""
 "\n"
 "Umiestnenie: "
 
-msgid "Click to save the current game."
-msgstr "Klikni pre uloženie terajšej hry."
-
-msgid "Click to load a previously saved game."
-msgstr "Klikni pre nahranie vopred uloženej hry."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Určite chceš vymazať súbor:"
 
 msgid "Warning!"
 msgstr "Pozor!"
+
+msgid "Click to save the current game."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Click to load a previously saved game."
+msgstr "Klikni pre nahranie vopred uloženej hry."
 
 msgid "File to Save:"
 msgstr "Uložiť súbor:"
@@ -3910,8 +3910,20 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
-msgid "Map filename"
-msgstr "Veľkosť mapy"
+msgid "%{objects} cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
 msgid ""
@@ -3972,24 +3984,6 @@ msgstr "Streľ do: %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Náhodný ultimátny artefakt"
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3998,52 +3992,30 @@ msgid "Failed to update player information."
 msgstr ""
 
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
+msgid "The map is corrupted."
+msgstr "Uložený súbor je poškodený."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
+msgid "Unable to create a directory to save the map."
+msgstr "Slúži na vymazanie objektov z mapy."
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Naozaj chceš prepísať uložený súbor s týmto názvom?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Toto kúzlo nemožno použiť na lodi."
+msgid "Failed to save the map."
+msgstr "Uložiť súbor:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4071,16 +4043,16 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Erase"
+msgstr "Režim mazania"
+
+#, fuzzy
 msgid "Roads"
 msgstr "Cesta"
 
 #, fuzzy
 msgid "Streams"
 msgstr "Režim tokov"
-
-#, fuzzy
-msgid "Erase"
-msgstr "Režim mazania"
 
 msgid "Mountains"
 msgstr "Hory"
@@ -4117,11 +4089,11 @@ msgstr "Sila"
 msgid "Treasures"
 msgstr "Poklady"
 
-msgid "Towns"
-msgstr "Mestá"
-
 msgid "Heroes"
 msgstr "Hrdinovia"
+
+msgid "Towns"
+msgstr "Mestá"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4359,6 +4331,41 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Ulož mapu"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klikni pre uloženie terajšej hry."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Veľkosť mapy"
 
 msgid "difficulty|Easy"
 msgstr "Ľahká"
@@ -11608,3 +11615,43 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Toto kúzlo nemožno použiť na lodi."

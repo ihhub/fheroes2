@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3160,16 +3160,16 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "Click to save the current game."
-msgstr ""
-
-msgid "Click to load a previously saved game."
-msgstr ""
-
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
 msgstr ""
 
 msgid "File to Save:"
@@ -3579,7 +3579,16 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
+msgid "%{objects} cannot be placed on water."
+msgstr ""
+
+msgid "%{objects} must be placed on water."
+msgstr ""
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid ""
@@ -3632,21 +3641,6 @@ msgstr "%{monster} vur"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
-msgstr ""
-
-msgid "Action objects must be placed on clear tiles."
-msgstr ""
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3654,40 +3648,27 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
-msgid "Mountains cannot be placed on water."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Ayna görüntüsü oluşturuldu."
+
+msgid "Unable to locate data directory to save the map."
 msgstr ""
 
-msgid "Rocks cannot be placed on water."
+msgid "Unable to create a directory to save the map."
 msgstr ""
 
-msgid "Trees cannot be placed on water."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Otomatik savaşı kesmek istediğine emin misin?"
+
+msgid "Map saved to: "
 msgstr ""
 
-msgid "Ocean object must be placed on water."
-msgstr ""
-
-msgid "Landscape objects cannot be placed on water."
-msgstr ""
-
-msgid "Towns cannot be placed on water."
-msgstr ""
-
-msgid "Mines cannot be placed on water."
-msgstr ""
-
-msgid "Dwellings cannot be placed on water."
-msgstr ""
-
-msgid "Power-ups cannot be placed on water."
-msgstr ""
-
-msgid "Adventure objects cannot be placed on water."
+msgid "Failed to save the map."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -3713,13 +3694,13 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -3752,10 +3733,10 @@ msgstr ""
 msgid "Treasures"
 msgstr ""
 
-msgid "Towns"
+msgid "Heroes"
 msgstr ""
 
-msgid "Heroes"
+msgid "Towns"
 msgstr ""
 
 #, fuzzy
@@ -3970,6 +3951,34 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+
+msgid "Save Map:"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
 msgstr ""
 
 msgid "difficulty|Easy"

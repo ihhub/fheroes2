@@ -314,7 +314,7 @@ namespace
 
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-                const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
                 const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
                 if ( fi && fi->filename != currentMapName ) {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3303,17 +3303,17 @@ msgstr ""
 "\n"
 "Percorso: "
 
-msgid "Click to save the current game."
-msgstr "Clicca per salvare la partita in corso."
-
-msgid "Click to load a previously saved game."
-msgstr "Clicca per caricare una partita precedente."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Sei sicuro di voler cancellare il file:"
 
 msgid "Warning!"
 msgstr "Attenzione!"
+
+msgid "Click to save the current game."
+msgstr "Clicca per salvare la partita in corso."
+
+msgid "Click to load a previously saved game."
+msgstr "Clicca per caricare una partita precedente."
 
 msgid "File to Save:"
 msgstr "File da Salvare:"
@@ -3759,10 +3759,19 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
-msgid "Map filename"
+msgid "%{objects} cannot be placed on water."
+msgstr "Opzioni Avventura"
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Opzioni Avventura"
+
+msgid "Objects cannot be placed outside the map."
 msgstr ""
-"Dimensioni\n"
-"Mappa"
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Opzioni Avventura"
 
 #, fuzzy
 msgid ""
@@ -3828,22 +3837,6 @@ msgstr "Tira a %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Artefatto estremo casuale"
 
-msgid "Objects cannot be placed outside the map."
-msgstr ""
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Opzioni Avventura"
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3851,43 +3844,29 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
-msgid "Mountains cannot be placed on water."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Non esistono punti di salvataggio da caricare."
+
+msgid "Unable to locate data directory to save the map."
 msgstr ""
 
-msgid "Rocks cannot be placed on water."
-msgstr ""
-
-msgid "Trees cannot be placed on water."
-msgstr ""
-
-msgid "Ocean object must be placed on water."
+msgid "Unable to create a directory to save the map."
 msgstr ""
 
 #, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Opzioni Avventura"
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Sei sicuro di voler sovrascrivere il salvataggio di questo nome?"
 
-msgid "Towns cannot be placed on water."
-msgstr ""
-
-msgid "Mines cannot be placed on water."
-msgstr ""
-
-msgid "Dwellings cannot be placed on water."
-msgstr ""
-
-msgid "Power-ups cannot be placed on water."
+msgid "Map saved to: "
 msgstr ""
 
 #, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Opzioni Avventura"
+msgid "Failed to save the map."
+msgstr "File da Salvare:"
 
 msgid "Used to place %{object}."
 msgstr ""
@@ -3913,14 +3892,14 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Strada"
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -3959,12 +3938,12 @@ msgstr "Potere"
 msgid "Treasures"
 msgstr "Tesoro"
 
+msgid "Heroes"
+msgstr "Eroi"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
-
-msgid "Heroes"
-msgstr "Eroi"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4194,6 +4173,43 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Percorso: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Salva Partita"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Dimensioni\n"
+"Mappa"
 
 msgid "difficulty|Easy"
 msgstr "Facile"
@@ -10712,3 +10728,7 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Opzioni Avventura"
