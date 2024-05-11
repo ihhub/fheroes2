@@ -350,7 +350,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
-                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, 100, false ) ) {
+                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, 64, false ) ) {
                     if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const std::string & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
