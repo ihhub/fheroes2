@@ -567,7 +567,7 @@ namespace
                 display.render( area );
             }
             else {
-                display.render( { textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height } );
+                display.render( textInputAndDateBackground.rect() );
             }
         }
 
