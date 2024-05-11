@@ -185,36 +185,43 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Sprite & top = fheroes2::AGG::GetICN( ICN::DROPLISL, 3 );
-            const fheroes2::Sprite & middle = fheroes2::AGG::GetICN( ICN::DROPLISL, 4 );
-            const fheroes2::Sprite & bottom = fheroes2::AGG::GetICN( ICN::DROPLISL, 5 );
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::DROPLISL, 0 );
 
-            const int32_t topPartHeight = top.height();
-            const int32_t listWidth = middle.width();
-            const int32_t middlePartHeight = middle.height();
-            const int32_t bottomPartHeight = bottom.height();
+            const int32_t topPartHeight = image.height() - 2;
+            const int32_t listWidth = image.width();
+            const int32_t middlePartHeight = topPartHeight - 2;
+            const int32_t bottomPartHeight = topPartHeight;
             const int32_t listHeight = itemsCount * ( _itemHeight + 2 ) + 10;
 
-            _itemWidth = listWidth - 4;
+            _itemWidth = listWidth - 3;
 
-            _restorer = std::make_unique<fheroes2::ImageRestorer>( display, pt.x, pt.y, listWidth, listHeight );
+            _restorer = std::make_unique<fheroes2::ImageRestorer>( display, pt.x, pt.y, listWidth + 1, listHeight );
 
             // Top part of list background.
-            fheroes2::Copy( top, 0, 0, display, pt.x, pt.y, listWidth, topPartHeight );
+            fheroes2::Copy( image, 0, 0, display, pt.x, pt.y, listWidth, topPartHeight );
+            const int32_t lineFixOffsetX = pt.x + listWidth;
+            fheroes2::Copy( image, 0, 0, display, lineFixOffsetX, pt.y, 1, topPartHeight );
 
             // Middle part of list background.
             const int32_t middlePartCount = ( listHeight - topPartHeight - bottomPartHeight + middlePartHeight - 1 ) / middlePartHeight;
             int32_t offsetY = topPartHeight;
 
             for ( int32_t i = 0; i < middlePartCount; ++i ) {
-                fheroes2::Copy( middle, 0, 0, display, pt.x, pt.y + offsetY, listWidth, std::min( middlePartHeight, listHeight - bottomPartHeight - offsetY ) );
+                const int32_t copyHeight = std::min( middlePartHeight, listHeight - bottomPartHeight - offsetY );
+                const int32_t posY = pt.y + offsetY;
+
+                fheroes2::Copy( image, 0, 2, display, pt.x, posY, listWidth, copyHeight );
+                fheroes2::Copy( image, 0, 2, display, lineFixOffsetX, posY, 1, copyHeight );
+
                 offsetY += middlePartHeight;
             }
 
             // Bottom part of list background.
-            fheroes2::Copy( bottom, 0, 0, display, pt.x, pt.y + listHeight - bottomPartHeight, listWidth, bottomPartHeight );
+            offsetY = pt.y + listHeight - bottomPartHeight;
+            fheroes2::Copy( image, 0, 2, display, pt.x, offsetY, listWidth, bottomPartHeight );
+            fheroes2::Copy( image, 0, 2, display, lineFixOffsetX, offsetY, 1, bottomPartHeight );
 
-            _background = std::make_unique<fheroes2::ImageRestorer>( display, pt.x, pt.y, listWidth, listHeight );
+            _background = std::make_unique<fheroes2::ImageRestorer>( display, pt.x + 2, pt.y + 2, listWidth - 3, listHeight - 4 );
 
             SetAreaItems( { pt.x + 5, pt.y + 5, listWidth - 10, listHeight - 10 } );
         }
