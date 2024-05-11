@@ -3855,8 +3855,20 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Tệp bản đồ"
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 #, fuzzy
 msgid ""
@@ -3916,31 +3928,12 @@ msgstr "Bắn %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ngẫu nhiên Bảo vật Tối thượng"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Đối tượng đại dương phải đặt trên mặt nước."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Kho báu không thể đặt trên nước."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Có thể đặt tối đa %{count} tướng cùng màu trên bản đồ."
 
 msgid "Failed to update player information."
 msgstr "Cập nhật thông tin người chơi thất bại."
-
-msgid "Artifacts cannot be placed on water."
-msgstr "Bảo vật không thể đặt trên nước."
 
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
@@ -3955,8 +3948,12 @@ msgstr "Đá không thể đặt trên nước."
 msgid "Trees cannot be placed on water."
 msgstr "Cây không thể đặt trên nước."
 
-msgid "Ocean object must be placed on water."
-msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "File lưu bị hỏng."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
 msgid "Landscape objects cannot be placed on water."
 msgstr "Đối tượng cảnh quan không thể đặt trên nước."
@@ -3975,6 +3972,21 @@ msgstr "Nhà nâng cấp không thể đặt trên nước."
 
 msgid "Adventure objects cannot be placed on water."
 msgstr "Đối tượng phiêu lưu thể đặt trên nước."
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Dùng để xóa vật thể trên bản đồ."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Tệp để Lưu:"
 
 msgid "Used to place %{object}."
 msgstr "Dùng để đặt %{object}."
@@ -4000,6 +4012,10 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+
+#, fuzzy
+msgid "Erase"
+msgstr "Chế độ Xóa"
 
 msgid "Roads"
 msgstr "Đường"
@@ -4040,11 +4056,11 @@ msgstr "Nâng cấp"
 msgid "Treasures"
 msgstr "Kho báu"
 
-msgid "Towns"
-msgstr "Thị trấn"
-
 msgid "Heroes"
 msgstr "Tướng"
+
+msgid "Towns"
+msgstr "Thị trấn"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4281,6 +4297,41 @@ msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Lưu Bản đồ"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Tệp bản đồ"
 
 msgid "difficulty|Easy"
 msgstr "Dễ"
@@ -11544,3 +11595,44 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Quái vật không thể đặt trên nước."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Kho báu không thể đặt trên nước."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Tướng không thể đặt trên nước."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Bảo vật không thể đặt trên nước."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Núi không thể đặt trên nước."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Kho báu không thể đặt trên nước."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Tướng không thể đặt trên nước."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Thị trấn không thể đặt trên nước."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Mỏ không thể đặt trên nước."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Tướng không thể đặt trên nước."

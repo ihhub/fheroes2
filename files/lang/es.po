@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:47+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3845,10 +3845,20 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
-msgid "Map filename"
-msgstr ""
-"Tamaño\n"
-"del Mapa"
+msgid "%{objects} cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid ""
@@ -3914,24 +3924,6 @@ msgstr "Dispara a %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Encuentra el artefacto definitivo"
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3940,52 +3932,30 @@ msgid "Failed to update player information."
 msgstr ""
 
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "The map is corrupted."
+msgstr "Reflejo creado."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+msgid "Unable to create a directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr ""
+"¿Estás seguro de que quieres sobreescribir la guardada con este nombre?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "Failed to save the map."
+msgstr "Archivo a Guardar:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4012,14 +3982,14 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Fin del camino"
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -4058,12 +4028,12 @@ msgstr "Poder"
 msgid "Treasures"
 msgstr "Tesoro"
 
+msgid "Heroes"
+msgstr "Héroes"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Pueblo"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4297,6 +4267,40 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr "Descripción seleccionada"
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Guardar Partida"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Tamaño\n"
+"del Mapa"
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -11344,3 +11348,43 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Este pueblo no se puede actualizar a castillo."
