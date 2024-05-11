@@ -449,10 +449,6 @@ namespace Editor
                 continue;
             }
 
-            if ( listbox.IsNeedRedraw() ) {
-                listbox.Redraw();
-            }
-
             if ( needFileNameRedraw ) {
                 const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
@@ -473,7 +469,13 @@ namespace Editor
                 isTextLimit = redrawSaveFileName( insertCharToString( fileName, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fileNameRoi );
             }
 
-            display.render( area );
+            if ( listbox.IsNeedRedraw() ) {
+                listbox.Redraw();
+                display.render( area );
+            }
+            else {
+                display.render( fileNameRoi );
+            }
         }
 
         return false;
