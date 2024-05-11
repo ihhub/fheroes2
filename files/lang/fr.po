@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3931,9 +3931,6 @@ msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
-msgid "Map filename"
-msgstr "Nom du fichier pour la carte"
-
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
 msgid ""
@@ -4008,6 +4005,28 @@ msgstr "La mise à jour des informations sur les joueurs a échoué."
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Le fichier de sauvegarde est corrompu."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Permet d'effacer les éléments placés sur la carte."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Voulez-vous vraiment remplacer la sauvegarde avec ce nom ?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fichier à sauvegarder :"
 
 msgid "Used to place %{object}."
 msgstr "Permet de placer %{object}."
@@ -4326,6 +4345,41 @@ msgstr "Effacement %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Emplacement : "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Sauvegarder la carte"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Enregistrer le jeu en cours."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Nom du fichier pour la carte"
 
 msgid "difficulty|Easy"
 msgstr "Facile"

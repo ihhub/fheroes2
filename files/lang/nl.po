@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3779,9 +3779,6 @@ msgstr ""
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
-msgid "Map filename"
-msgstr ""
-
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -3840,6 +3837,26 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Het spiegelbeeld wordt gecreëerd."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+msgid "Unable to create a directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Weet je zeker dat je het automatisch vechten wilt onderbreken?"
+
+msgid "Map saved to: "
+msgstr ""
+
+msgid "Failed to save the map."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -4124,6 +4141,35 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+
+msgid "Save Map:"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
 msgstr ""
 
 msgid "difficulty|Easy"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 14:37+0000\n"
+"POT-Creation-Date: 2024-05-09 17:53+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3949,10 +3949,6 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
-msgid "Map filename"
-msgstr "Размер на карта"
-
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4022,6 +4018,28 @@ msgstr ""
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Запазеният файл е повреден."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Използва се за изтриване на обекти от картата."
+
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+msgid "Map saved to: "
+msgstr ""
+
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Файл за запазване:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4350,6 +4368,41 @@ msgstr "Превключи изтриването на %{type} обекти."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Запазване на картата"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Кликни, за да запазиш текущата игра."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Размер на карта"
 
 msgid "difficulty|Easy"
 msgstr "Лесна"
