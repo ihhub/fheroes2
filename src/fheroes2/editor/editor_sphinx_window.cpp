@@ -269,8 +269,8 @@ namespace Editor
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
 
-        fheroes2::Button buttonDeleteArtifact(
-            artifactRoi.x + ( artifactRoi.width - buttonImage.width() ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonImage.width() ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17,
+                                               18 );
         buttonDeleteArtifact.draw();
 
         const fheroes2::Rect resourceRoi{ answerRoi.x, offsetY + text.height(), answerRoi.width, 99 };
@@ -279,7 +279,8 @@ namespace Editor
         fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
 
         std::array<fheroes2::Rect, 7> individualResourceRoi;
-        const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
+        const std::array<int, 7> resourceTypes
+            = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
         renderResources( metadata.resources, resourceRoi, display, individualResourceRoi );
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
@@ -303,8 +304,7 @@ namespace Editor
                 break;
             }
 
-            if ( buttonOk.isEnabled()
-                 && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
+            if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
                 return true;
             }
 
@@ -351,7 +351,7 @@ namespace Editor
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
                 if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, 100, false ) ) {
-                    if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const std::string & answer) { return answer == newAnswer; } ) ) {
+                    if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const std::string & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
                     }
@@ -366,8 +366,8 @@ namespace Editor
 
                 std::string temp = answerList.GetCurrent();
                 if ( Dialog::inputString( _( "Answer:" ), temp, {}, 100, false ) ) {
-                    const auto count =
-                        std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const std::string & answer) { return answer == temp; } );
+                    const auto count
+                        = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const std::string & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
@@ -419,7 +419,6 @@ namespace Editor
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
                 display.render( artifactRoi );
             }
-                
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }

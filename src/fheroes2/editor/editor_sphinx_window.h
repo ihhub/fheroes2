@@ -27,5 +27,5 @@ namespace Maps::Map_Format
 
 namespace Editor
 {
-    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata  );
+    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata );
 }
