@@ -3186,7 +3186,7 @@ namespace fheroes2
                         original.image()[195460] = 31;
                     }
 
-                    // Since we cannot access game settings from here we are checking an existance
+                    // Since we cannot access game settings from here we are checking an existence
                     // of one of POL resources as an indicator for this version.
                     if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
                         Sprite editorIcon;
@@ -3685,28 +3685,62 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
+
                 std::vector<Sprite> & images = _icnVsSprite[id];
 
-                if ( images.size() >= 34 ) {
-                    // Fix extra column at the end of AI controlled player.
-                    for ( size_t i = 27; i < 34; ++i ) {
-                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
-                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
-                        }
-                    }
+                if ( images.size() != 82 ) {
+                    // The game assets are wrong, skip modifications.
+                    return true;
+                }
 
-                    for ( size_t i = 39; i < 45; ++i ) {
-                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
-                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
-                        }
+                // Fix extra column at the end of AI controlled player.
+                for ( size_t i = 27; i < 34; ++i ) {
+                    if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                        Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
                     }
                 }
 
-                if ( images.size() >= 70 ) {
-                    // fix transparent corners on pressed OKAY and CANCEL buttons
-                    CopyTransformLayer( images[66], images[67] );
-                    CopyTransformLayer( images[68], images[69] );
+                for ( size_t i = 39; i < 45; ++i ) {
+                    if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                        Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                    }
                 }
+
+                // fix transparent corners on pressed OKAY and CANCEL buttons
+                CopyTransformLayer( images[66], images[67] );
+                CopyTransformLayer( images[68], images[69] );
+
+                // Add 12 special icons for the Editor.
+                images.resize( 82 + 12 );
+
+                const Sprite & notAvailableSprite = GetICN( ICN::SPELLS, 0 );
+
+                for ( size_t i = 0; i < 6; ++i ) {
+                    if ( images[i + 3].width() != 62 || images[i + 3].height() != 45 ) {
+                        continue;
+                    }
+
+                    Sprite & noPlayerImage = images[i + 82];
+                    Sprite & humonOrAiImage = images[i + 88];
+                    Copy( images[i + 3], noPlayerImage );
+
+                    // Fill the icon with the player's color.
+                    Fill( noPlayerImage, 15, 8, 32, 30, images[i + 82].image()[252] );
+
+                    Copy( noPlayerImage, humonOrAiImage );
+
+                    // Draw the "X" mark.
+                    Blit( notAvailableSprite, noPlayerImage, 21, 13 );
+
+                    // Make a temporary image to cut human icon's background.
+                    Image temp( 33, 35 );
+                    Copy( images[i + 9], 15, 5, temp, 0, 0, 33, 35 );
+                    ReplaceColorIdByTransformId( temp, images[i + 82].image()[252], 1U );
+
+                    Copy( images[i + 3], 15, 8, humonOrAiImage, 27, 8, 31, 30 );
+                    Blit( temp, humonOrAiImage, 4, 5 );
+                }
+
                 return true;
             }
             case ICN::DIFFICULTY_ICON_EASY:
@@ -4668,7 +4702,7 @@ namespace fheroes2
                     }
                 }
 
-                // An extra image for the neutral color.
+                // An extra image for the neutral color (for Editor).
                 if ( _icnVsSprite[id].size() == 7 ) {
                     Sprite neutralShield( GetICN( ICN::SPELLS, 15 ) );
                     if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {

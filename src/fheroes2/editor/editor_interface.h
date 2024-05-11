@@ -93,6 +93,8 @@ namespace Interface
 
         void saveMapToFile();
 
+        void openMapSpecificationsDialog();
+
     private:
         class WarningMessage
         {
@@ -138,13 +140,13 @@ namespace Interface
             // Do nothing.
         }
 
-        bool setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        bool setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void handleObjectMouseLeftClick( Maps::Tiles & tile );
+        void _handleObjectMouseLeftClick( Maps::Tiles & tile );
 
-        void validateObjectsOnTerrainUpdate();
+        void _validateObjectsOnTerrainUpdate();
 
         EditorPanel _editorPanel;
 
