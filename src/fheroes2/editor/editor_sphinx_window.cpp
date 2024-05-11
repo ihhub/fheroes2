@@ -408,6 +408,7 @@ namespace Editor
                 }
 
                 answerList.RemoveSelected();
+                isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
                 Artifact artifact = Dialog::selectArtifact( metadata.artifact );
