@@ -40,6 +40,7 @@
 #include "editor_castle_details_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
+#include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -1184,6 +1185,14 @@ namespace Interface
 
                         Maps::setSpellOnTile( tile, spellId );
 
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_SPHINX ) {
+                    assert( _mapFormat.sphinxMetadata.find( object.id ) != _mapFormat.sphinxMetadata.end() );
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( Editor::openSphinxWindow( _mapFormat.sphinxMetadata[object.id] ) ) {
                         action.commit();
                     }
                 }

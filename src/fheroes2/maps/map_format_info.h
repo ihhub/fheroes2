@@ -212,8 +212,9 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
+        // Change the version where there is a need to expand map format functionality.
         uint16_t version{ 1 };
+
         bool isCampaign{ false };
 
         uint8_t difficulty{ 0 };

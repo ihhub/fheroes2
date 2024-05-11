@@ -29,8 +29,10 @@
 #include <vector>
 
 #include "color.h"
+#include "game_io.h"
 #include "logging.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
@@ -266,11 +268,18 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     setUIDAndIndex( tileIndex );
 }
 
-bool MapSphinx::AnswerCorrect( const std::string & answer )
+bool MapSphinx::isCorrectAnswer( std::string answer )
 {
-    const std::string ans = StringLower( answer ).substr( 0, 4 );
-    const auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
-    return std::any_of( answers.begin(), answers.end(), checkAnswer );
+    if ( isTruncatedAnswer ) {
+        answer = StringLower( answer ).substr( 0, 4 );
+        const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == answer; };
+        return std::any_of( answers.begin(), answers.end(), checkAnswer );
+    }
+    else {
+        answer = StringLower( answer );
+        const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ) == answer; };
+        return std::any_of( answers.begin(), answers.end(), checkAnswer );
+    }
 }
 
 void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )
@@ -330,12 +339,22 @@ StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid << obj.isTruncatedAnswer;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
+    msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        obj.isTruncatedAnswer = true;
+    }
+    else {
+        msg >> obj.isTruncatedAnswer;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

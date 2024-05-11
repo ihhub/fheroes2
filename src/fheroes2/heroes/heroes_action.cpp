@@ -3408,7 +3408,7 @@ namespace
             std::string answer;
             Dialog::inputString( question, answer, title, 0, false );
 
-            if ( !riddle->AnswerCorrect( answer ) ) {
+            if ( !riddle->isCorrectAnswer( answer ) ) {
                 fheroes2::showStandardTextMessage(
                     title,
                     _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
@@ -3472,7 +3472,7 @@ namespace
                 hero.PickupArtifact( art );
             }
 
-            riddle->SetQuiet();
+            riddle->reset();
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
 

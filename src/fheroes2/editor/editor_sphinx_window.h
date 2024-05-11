@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,25 +20,12 @@
 
 #pragma once
 
-#include <cstdint>
-
-enum SaveFileFormat : uint16_t
+namespace Maps::Map_Format
 {
-    // !!! IMPORTANT !!!
-    // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
-    FORMAT_VERSION_1100_RELEASE = 10019,
-    FORMAT_VERSION_PRE3_1100_RELEASE = 10018,
-    FORMAT_VERSION_PRE2_1100_RELEASE = 10017,
-    FORMAT_VERSION_PRE1_1100_RELEASE = 10016,
-    FORMAT_VERSION_1010_RELEASE = 10015,
-    FORMAT_VERSION_1009_RELEASE = 10014,
-    FORMAT_VERSION_PRE2_1009_RELEASE = 10013,
-    FORMAT_VERSION_PRE1_1009_RELEASE = 10012,
-    FORMAT_VERSION_1007_RELEASE = 10011,
-    FORMAT_VERSION_1005_RELEASE = 10010,
+    struct SphinxMetadata;
+}
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_1005_RELEASE,
-
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_1100_RELEASE
-};
+namespace Editor
+{
+    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata  );
+}

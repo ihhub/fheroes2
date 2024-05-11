@@ -203,6 +203,7 @@ namespace Maps::Map_Format
     {
         // TODO: verify the correctness of metadata.
         if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
+            map = {};
             return false;
         }
 
@@ -233,6 +234,7 @@ namespace Maps::Map_Format
         decompressed >> map.additionalInfo >> map.tiles;
 
         if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+            map = {};
             return false;
         }
 

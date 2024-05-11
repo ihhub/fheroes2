@@ -119,9 +119,9 @@ struct MapSphinx : public MapObjectSimple
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
-    bool AnswerCorrect( const std::string & answer );
+    bool isCorrectAnswer( std::string answer );
 
-    void SetQuiet()
+    void reset()
     {
         valid = false;
         artifact = Artifact::UNKNOWN;
@@ -133,6 +133,10 @@ struct MapSphinx : public MapObjectSimple
     std::list<std::string> answers;
     std::string message;
     bool valid{ false };
+
+    // This is the behavior of the original game when each answer was cut only to 4 characters.
+    // This is not the case for new map format.
+    bool isTruncatedAnswer{ true };
 };
 
 struct MapSign : public MapObjectSimple

@@ -828,13 +828,16 @@ bool World::loadResurrectionMap( const std::string & filename )
                     assert( map.adventureMapEventMetadata.find( object.id ) != map.adventureMapEventMetadata.end() );
                     auto & eventInfo = map.adventureMapEventMetadata[object.id];
 
+                    eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
+                    eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
+
+                    // TODO: change MapEvent to support map format functionality.
                     MapEvent * eventObject = new MapEvent();
                     eventObject->resources = eventInfo.resources;
                     eventObject->artifact = eventInfo.artifact;
-
-                    // TODO: change MapEvent to support map format functionality.
-                    eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
-                    eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
+                    if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
+                    }
 
                     eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
                     eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
@@ -904,14 +907,28 @@ bool World::loadResurrectionMap( const std::string & filename )
                     sphinxObject->message = std::move( sphinxInfo.question );
 
                     for ( auto & answer : sphinxInfo.answers ) {
-                        sphinxObject->answers.push_back( std::move( answer ) );
+                        if ( !answer.empty() ) {
+                            sphinxObject->answers.push_back( std::move( answer ) );
+                        }
+                        else {
+                            // How is it even possible?
+                            assert( 0 );
+                        }
                     }
 
                     sphinxObject->resources = sphinxInfo.resources;
                     sphinxObject->artifact = sphinxInfo.artifact;
+                    if ( sphinxInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        sphinxObject->artifact.SetSpell( sphinxInfo.artifactMetadata );
+                    }
+
                     sphinxObject->valid = ( !sphinxObject->message.empty() && !sphinxObject->answers.empty() );
 
                     sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    // The original game assumes answers only to be up to 4 characters.
+                    // However, it seems logically incorrect.
+                    sphinxObject->isTruncatedAnswer = false;
 
                     map_objects.add( sphinxObject );
 
@@ -1002,14 +1019,13 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     // Load daily events.
     for ( auto & event : map.dailyEvents ) {
-        auto & newEvent = vec_eventsday.emplace_back();
-
-        newEvent.message = std::move( event.message );
-
-        // TODO: modify EventDate structure for have more flexibility.
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
+        // TODO: modify EventDate structure for have more flexibility.
+        auto & newEvent = vec_eventsday.emplace_back();
+
+        newEvent.message = std::move( event.message );
         newEvent.colors = ( event.humanPlayerColors | event.computerPlayerColors );
         newEvent.isApplicableForAIPlayers = ( event.computerPlayerColors != 0 );
 
