@@ -71,6 +71,9 @@ namespace
     //       At the moment only up to 140 biggest characters can be added.
     const size_t longestQuestion{ 140 };
 
+    const std::array<int, 7> resourceTypes
+            = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
+
     class AnswerListBox : public Interface::ListBox<std::string>
     {
     public:
@@ -304,8 +307,6 @@ namespace Editor
         fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
 
         std::array<fheroes2::Rect, 7> individualResourceRoi;
-        const std::array<int, 7> resourceTypes
-            = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
         renderResources( metadata.resources, resourceRoi, display, individualResourceRoi );
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
@@ -313,6 +314,8 @@ namespace Editor
         fheroes2::Button buttonCancel;
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+
+        display.render();
 
         bool isRedrawNeeded = false;
 
@@ -416,28 +419,29 @@ namespace Editor
             else if ( le.MouseClickLeft( artifactRoi ) ) {
                 Artifact artifact = Dialog::selectArtifact( metadata.artifact );
                 if ( !artifact.isValid() ) {
-                    continue;
-                }
-
-                int32_t artifactMetadata = metadata.artifactMetadata;
-
-                if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
-                    artifactMetadata = Dialog::selectSpell( artifactMetadata, true ).GetID();
-
-                    if ( artifactMetadata == Spell::NONE ) {
-                        // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
-                        continue;
-                    }
+                    isRedrawNeeded = true;
                 }
                 else {
-                    artifactMetadata = 0;
+                    int32_t artifactMetadata = metadata.artifactMetadata;
+
+                    if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
+                        artifactMetadata = Dialog::selectSpell( artifactMetadata, true ).GetID();
+
+                        if ( artifactMetadata == Spell::NONE ) {
+                            // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
+                            continue;
+                        }
+                    }
+                    else {
+                        artifactMetadata = 0;
+                    }
+
+                    metadata.artifact = artifact.GetID();
+                    metadata.artifactMetadata = artifactMetadata;
+
+                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
+                    display.render( artifactRoi );
                 }
-
-                metadata.artifact = artifact.GetID();
-                metadata.artifactMetadata = artifactMetadata;
-
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
-                display.render( artifactRoi );
             }
             else if ( le.MouseClickLeft( buttonDeleteArtifact.area() ) ) {
                 metadata.artifact = 0;
