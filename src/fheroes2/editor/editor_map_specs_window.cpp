@@ -21,10 +21,10 @@
 #include "editor_map_specs_window.h"
 
 #include <array>
-#include <memory>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
