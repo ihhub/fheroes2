@@ -148,11 +148,6 @@ struct MapSphinx : public MapObjectSimple
         valid = true;
     }
 
-    bool isValid() const
-    {
-        return valid;
-    }
-
     Funds resources;
     Artifact artifact;
     std::list<std::string> answers;
