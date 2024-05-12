@@ -61,7 +61,7 @@ namespace
 
     const fheroes2::Size answerArea{ 250, 155 };
 
-    const int32_t elementOffset{ 10 };
+    const int32_t elementOffset{ 9 };
 
     const int32_t listAreaHeightDeduction{ 8 };
 
@@ -255,7 +255,7 @@ namespace Editor
 
         answerList.SetAreaItems( { answerRoi.x, answerRoi.y, answerRoi.width, answerRoi.height - listAreaHeightDeduction } );
 
-        int32_t scrollbarOffsetX = answerRoi.x + answerRoi.width + 3;
+        int32_t scrollbarOffsetX = answerRoi.x + answerRoi.width + 5;
         background.renderScrollbarBackground( { scrollbarOffsetX, answerRoi.y, answerRoi.width, answerRoi.height }, isEvilInterface );
 
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
