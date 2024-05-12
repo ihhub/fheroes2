@@ -491,7 +491,7 @@ namespace Editor
             difficultyRects[i].y -= 3;
 
             text.set( Difficulty::String( setDifficultyByIndex( i ) ), fheroes2::FontType::normalWhite() );
-            text.draw( difficultyRects[i].x + ( difficultyRects[i].width - text.width() ) / 2, difficultyRects[i].y + difficultyRects[i].height + 3, display );
+            text.draw( difficultyRects[i].x + ( difficultyRects[i].width - text.width() ) / 2, difficultyRects[i].y + difficultyRects[i].height + 7, display );
         }
 
         fheroes2::MovableSprite difficultyCursor( difficultyCursorSprite );
@@ -506,7 +506,7 @@ namespace Editor
         text.set( _( "Map Description" ), fheroes2::FontType::normalWhite() );
         text.draw( offsetX + ( descriptionBoxWidth - text.width() ) / 2, offsetY, display );
 
-        offsetY += 20;
+        offsetY += 25;
         const fheroes2::Rect descriptionTextRoi( offsetX, offsetY, descriptionBoxWidth, descriptionBoxHeight );
         background.applyTextBackgroundShading( { descriptionTextRoi.x - 6, descriptionTextRoi.y - 6, descriptionTextRoi.width + 12, descriptionTextRoi.height + 12 } );
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
@@ -575,6 +575,9 @@ namespace Editor
 
         display.render( background.totalArea() );
 
+        // TODO: Remove this when Victory and Loss conditions are implemented.
+        const bool lockVictoryLossConditionType = true;
+
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.MousePressLeft( buttonOkRoi ) );
             buttonCancel.drawOnState( le.MousePressLeft( buttonCancelRoi ) );
@@ -623,6 +626,12 @@ namespace Editor
                     = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, victoryConditions, false );
 
                 if ( result != mapFormat.victoryConditionType ) {
+                    if ( lockVictoryLossConditionType ) {
+                        fheroes2::showStandardTextMessage( _( "Warning" ), _( "This feature is still in development and will be available in the next releases." ),
+                                                           Dialog::OK );
+                        continue;
+                    };
+
                     mapFormat.victoryConditionType = result;
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
@@ -634,6 +643,12 @@ namespace Editor
                 const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, lossConditions, true );
 
                 if ( result != mapFormat.lossConditionType ) {
+                    if ( lockVictoryLossConditionType ) {
+                        fheroes2::showStandardTextMessage( _( "Warning" ), _( "This feature is still in development and will be available in the next releases." ),
+                                                           Dialog::OK );
+                        continue;
+                    };
+
                     mapFormat.lossConditionType = result;
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
