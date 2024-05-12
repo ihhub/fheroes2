@@ -613,11 +613,24 @@ namespace Editor
                 if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true ) ) {
                     mapFormat.description = std::move( signText );
 
-                    descriptionBackground.restore();
-
                     text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
-                    text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
+                    // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
+                    if ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                        fheroes2::
+                            showStandardTextMessage( _( "Warning" ),
+                                                     _( "The entered map description exceeds the maximum allowed 5 rows. It is cut to fit the map description field." ),
+                                                     Dialog::OK );
+
+                        // As a temporary solution we cut the end of the text to fit 5 rows.
+                        while ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                            mapFormat.description.pop_back();
+                            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+                        }
+                    }
+
+                    descriptionBackground.restore();
+                    text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
                     display.render( descriptionTextRoi );
                 }
             }
