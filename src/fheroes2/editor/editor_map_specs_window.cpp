@@ -633,10 +633,9 @@ namespace Editor
 
                     // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
                     if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                        fheroes2::
-                            showStandardTextMessage( _( "Warning" ),
-                                                     _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                                                     Dialog::OK );
+                        fheroes2::showStandardTextMessage(
+                            _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
+                            Dialog::OK );
 
                         // As a temporary solution we cut the end of the text to fit 5 rows.
                         while ( text.rows( descriptionTextRoi.width ) > 5 ) {
