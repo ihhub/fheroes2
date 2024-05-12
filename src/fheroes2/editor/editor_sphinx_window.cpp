@@ -384,6 +384,7 @@ namespace Editor
 
                     metadata.answers.emplace_back( std::move( newAnswer ) );
 
+                    answerList.updateScrollBarImage();
                     answerList.Redraw();
                     isRedrawNeeded = true;
                 }
@@ -413,6 +414,7 @@ namespace Editor
                 }
 
                 answerList.RemoveSelected();
+                answerList.updateScrollBarImage();
                 isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
