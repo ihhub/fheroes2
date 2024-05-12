@@ -3710,27 +3710,19 @@ namespace fheroes2
                 CopyTransformLayer( images[66], images[67] );
                 CopyTransformLayer( images[68], images[69] );
 
-                // Add 12 special icons for the Editor.
-                images.resize( 82 + 12 );
-
-                const Sprite & notAvailableSprite = GetICN( ICN::SPELLS, 0 );
+                // Add 6 special icons for the Editor.
+                images.resize( 82 + 6 );
 
                 for ( size_t i = 0; i < 6; ++i ) {
                     if ( images[i + 3].width() != 62 || images[i + 3].height() != 45 ) {
                         continue;
                     }
 
-                    Sprite & noPlayerImage = images[i + 82];
-                    Sprite & humonOrAiImage = images[i + 88];
-                    Copy( images[i + 3], noPlayerImage );
+                    Sprite & humonOrAiImage = images[i + 82];
+                    Copy( images[i + 3], humonOrAiImage );
 
                     // Fill the icon with the player's color.
-                    Fill( noPlayerImage, 15, 8, 32, 30, images[i + 82].image()[252] );
-
-                    Copy( noPlayerImage, humonOrAiImage );
-
-                    // Draw the "X" mark.
-                    Blit( notAvailableSprite, noPlayerImage, 21, 13 );
+                    Fill( humonOrAiImage, 15, 8, 32, 30, images[i + 82].image()[252] );
 
                     // Make a temporary image to cut human icon's background.
                     Image temp( 33, 35 );

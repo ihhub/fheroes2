@@ -20,12 +20,10 @@
 
 #include "editor_map_specs_window.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,20 +36,30 @@
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_list.h"
 #include "localevent.h"
 #include "map_format_info.h"
-#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
+
+// TODO: Remove this when Victory and Loss conditions are fully implemented.
+#define HIDE_VICTORY_LOSS_CONDITIONS
+
+#ifndef HIDE_VICTORY_LOSS_CONDITIONS
+#include <algorithm>
+#include <memory>
+
+#include "game_over.h"
+#include "interface_list.h"
+#include "maps_fileinfo.h"
+#include "tools.h"
+#endif
 
 namespace
 {
@@ -64,17 +72,18 @@ namespace
     const int32_t playerStepX = 80;
     const int32_t difficultyStepX = 77;
 
+#ifndef HIDE_VICTORY_LOSS_CONDITIONS
     const char * getVictoryConditionText( const uint8_t victoryConditionType )
     {
         switch ( victoryConditionType ) {
         case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             return _( "None." );
         case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-            return _( "Capture a specific town." );
+            return GameOver::GetString( GameOver::WINS_TOWN );
         case Maps::FileInfo::VICTORY_KILL_HERO:
-            return _( "Defeat a specific hero." );
+            return GameOver::GetString( GameOver::WINS_HERO );
         case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
-            return _( "Find a specific artifact." );
+            return GameOver::GetString( GameOver::WINS_ARTIFACT );
         case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
             return _( "One side defeats another." );
         case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
@@ -118,9 +127,9 @@ namespace
         case Maps::FileInfo::LOSS_EVERYTHING:
             return _( "None." );
         case Maps::FileInfo::LOSS_TOWN:
-            return _( "Lose a specific town." );
+            return GameOver::GetString( GameOver::LOSS_TOWN );
         case Maps::FileInfo::LOSS_HERO:
-            return _( "Lose a specific hero." );
+            return GameOver::GetString( GameOver::LOSS_HERO );
         case Maps::FileInfo::LOSS_OUT_OF_TIME:
             return _( "Run out of time." );
         default:
@@ -194,7 +203,7 @@ namespace
             const int32_t bottomPartHeight = topPartHeight;
             const int32_t listHeight = itemsCount * ( _itemHeight + 2 ) + 10;
 
-            _itemWidth = listWidth - 3;
+            _itemWidth = listWidth - 6;
 
             _restorer = std::make_unique<fheroes2::ImageRestorer>( display, pt.x, pt.y, listWidth + 1, listHeight );
 
@@ -297,8 +306,17 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _background;
     };
 
-    uint8_t showWinLoseList( const fheroes2::Point & pt, const uint8_t current, std::vector<uint8_t> & conditions, const bool isLossList )
+    uint8_t showWinLoseList( const fheroes2::Point & pt, const uint8_t current, const bool isLossList )
     {
+        std::vector<uint8_t> conditions;
+        if ( isLossList ) {
+            conditions = { Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO, Maps::FileInfo::LOSS_OUT_OF_TIME };
+        }
+        else {
+            conditions = { Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,      Maps::FileInfo::VICTORY_KILL_HERO,
+                           Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT, Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
+        }
+
         DropBoxList victoryConditionsList( pt, static_cast<int32_t>( conditions.size() ), isLossList );
         victoryConditionsList.SetListContent( conditions );
         victoryConditionsList.SetCurrent( current );
@@ -332,18 +350,21 @@ namespace
 
         return current;
     }
+#endif // HIDE_VICTORY_LOSS_CONDITIONS
 
-    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint8_t currentColor )
+    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const int currentColor )
     {
         if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.
-            return 82;
+            assert( 0 );
+
+            return 70;
         }
 
         if ( mapFormat.humanPlayerColors & currentColor ) {
             if ( mapFormat.computerPlayerColors & currentColor ) {
                 // Both AI and human can choose this player color.
-                return 88;
+                return 82;
             }
 
             // Human only.
@@ -358,7 +379,7 @@ namespace
         // It is not possible to have available player which is not allowed to be controlled by AI or human.
         assert( 0 );
 
-        return 82;
+        return 70;
     }
 
     size_t getDifficultyIndex( const uint8_t difficulty )
@@ -439,19 +460,21 @@ namespace Editor
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
-        int32_t offsetX = activeArea.x + ( activeArea.width - 6 * playerStepX ) / 2;
+        const int32_t availablePlayersCount = Color::Count( mapFormat.availablePlayerColors );
+        int32_t offsetX = activeArea.x + ( activeArea.width - availablePlayersCount * playerStepX ) / 2;
         int32_t offsetY = scenarioBoxRoi.y + scenarioBoxRoi.height + 10;
 
-        std::array<fheroes2::Rect, 6> playerRects;
+        std::vector<fheroes2::Rect> playerRects( availablePlayersCount );
+        const Colors availableColors( mapFormat.availablePlayerColors );
 
         const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
-        for ( int32_t i = 0; i < 6; ++i ) {
+        for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
             playerRects[i].x = offsetX + i * playerStepX;
             playerRects[i].y = offsetY;
 
             fheroes2::Blit( playerIconShadow, display, playerRects[i].x - 5, playerRects[i].y + 3 );
 
-            const uint32_t icnIndex = i + getPlayerIcnIndex( mapFormat, Color::IndexToColor( i ) );
+            const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + getPlayerIcnIndex( mapFormat, availableColors[i] );
 
             const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
             playerRects[i].width = playerIcon.width();
@@ -486,7 +509,7 @@ namespace Editor
             difficultyRects[i].x -= 3;
             difficultyRects[i].y -= 3;
 
-            text.set( Difficulty::String( setDifficultyByIndex( i ) ), fheroes2::FontType::normalWhite() );
+            text.set( Difficulty::String( setDifficultyByIndex( i ) ), fheroes2::FontType::smallWhite() );
             text.draw( difficultyRects[i].x + ( difficultyRects[i].width - text.width() ) / 2, difficultyRects[i].y + difficultyRects[i].height + 7, display );
         }
 
@@ -499,6 +522,7 @@ namespace Editor
         // Map description.
         offsetX = activeArea.x + activeArea.width - descriptionBoxWidth - 15;
         offsetY -= 23;
+
         text.set( _( "Map Description" ), fheroes2::FontType::normalWhite() );
         text.draw( offsetX + ( descriptionBoxWidth - text.width() ) / 2, offsetY, display );
 
@@ -510,11 +534,8 @@ namespace Editor
         text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
+#ifndef HIDE_VICTORY_LOSS_CONDITIONS
         // Victory conditions.
-        std::vector<uint8_t> victoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE,   Maps::FileInfo::VICTORY_CAPTURE_TOWN,
-                                                Maps::FileInfo::VICTORY_KILL_HERO,         Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
-                                                Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
-
         offsetY += descriptionTextRoi.height + 20;
 
         text.set( _( "Special Victory Condition" ), fheroes2::FontType::normalWhite() );
@@ -523,11 +544,12 @@ namespace Editor
         offsetY += 20;
         const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( ICN::DROPLISL, 0 );
         const int32_t itemBackgroundWidth = itemBackground.width();
+        const int32_t itemBackgroundHeight = itemBackground.height();
         const int32_t itemBackgroundOffsetX = activeArea.width / 4 - itemBackgroundWidth / 2 - 11;
 
         offsetX = activeArea.x + itemBackgroundOffsetX;
-        fheroes2::Copy( itemBackground, 0, 0, display, offsetX, offsetY, itemBackgroundWidth, itemBackground.height() );
-        const fheroes2::Rect victoryTextRoi( offsetX + 2, offsetY + 3, itemBackgroundWidth - 4, itemBackground.height() - 5 );
+        fheroes2::Copy( itemBackground, 0, 0, display, offsetX, offsetY, itemBackgroundWidth, itemBackgroundHeight );
+        const fheroes2::Rect victoryTextRoi( offsetX + 2, offsetY + 3, itemBackgroundWidth - 4, itemBackgroundHeight - 5 );
 
         redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
 
@@ -537,8 +559,6 @@ namespace Editor
         victoryDroplistButton.draw();
 
         // Loss conditions.
-        std::vector<uint8_t> lossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO, Maps::FileInfo::LOSS_OUT_OF_TIME };
-
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
 
         text.set( _( "Special Loss Condition" ), fheroes2::FontType::normalWhite() );
@@ -555,6 +575,7 @@ namespace Editor
                                                    fheroes2::AGG::GetICN( ICN::DROPLISL, 2 ) );
         const fheroes2::Rect lossDroplistButtonRoi( fheroes2::getBoundaryRect( lossDroplistButton.area(), lossTextRoi ) );
         lossDroplistButton.draw();
+#endif // HIDE_VICTORY_LOSS_CONDITIONS
 
         // Buttons.
         fheroes2::Button buttonCancel;
@@ -571,14 +592,13 @@ namespace Editor
 
         display.render( background.totalArea() );
 
-        // TODO: Remove this when Victory and Loss conditions are implemented.
-        const bool lockVictoryLossConditionType = true;
-
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.MousePressLeft( buttonOkRoi ) );
             buttonCancel.drawOnState( le.MousePressLeft( buttonCancelRoi ) );
+#ifndef HIDE_VICTORY_LOSS_CONDITIONS
             victoryDroplistButton.drawOnState( le.MousePressLeft( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.MousePressLeft( lossDroplistButtonRoi ) );
+#endif // HIDE_VICTORY_LOSS_CONDITIONS
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelRoi ) ) {
                 return false;
@@ -630,17 +650,11 @@ namespace Editor
                     display.render( descriptionTextRoi );
                 }
             }
+#ifndef HIDE_VICTORY_LOSS_CONDITIONS
             else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) ) {
-                const uint8_t result
-                    = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, victoryConditions, false );
+                const uint8_t result = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false );
 
                 if ( result != mapFormat.victoryConditionType ) {
-                    if ( lockVictoryLossConditionType ) {
-                        fheroes2::showStandardTextMessage( _( "Warning" ), _( "This feature is still in development and will be available in the next releases." ),
-                                                           Dialog::OK );
-                        continue;
-                    };
-
                     mapFormat.victoryConditionType = result;
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
@@ -649,15 +663,9 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
-                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, lossConditions, true );
+                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true );
 
                 if ( result != mapFormat.lossConditionType ) {
-                    if ( lockVictoryLossConditionType ) {
-                        fheroes2::showStandardTextMessage( _( "Warning" ), _( "This feature is still in development and will be available in the next releases." ),
-                                                           Dialog::OK );
-                        continue;
-                    };
-
                     mapFormat.lossConditionType = result;
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
@@ -665,6 +673,7 @@ namespace Editor
                     display.render( lossTextRoi );
                 }
             }
+#endif // HIDE_VICTORY_LOSS_CONDITIONS
             else if ( le.MousePressRight( buttonCancelRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
@@ -678,38 +687,36 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
             }
 
-            for ( int32_t i = 0; i < 6; ++i ) {
+            for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
                 if ( le.MouseClickLeft( playerRects[i] ) ) {
-                    const uint8_t currentColor = Color::IndexToColor( i );
-
-                    if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
+                    if ( !( mapFormat.availablePlayerColors & availableColors[i] ) ) {
                         break;
                     }
 
-                    const bool allowAi = mapFormat.computerPlayerColors & currentColor;
-                    const bool allowHuman = mapFormat.humanPlayerColors & currentColor;
+                    const bool allowAi = mapFormat.computerPlayerColors & availableColors[i];
+                    const bool allowHuman = mapFormat.humanPlayerColors & availableColors[i];
 
                     if ( allowHuman ) {
                         if ( allowAi ) {
                             // Disable AI.
-                            mapFormat.computerPlayerColors ^= currentColor;
+                            mapFormat.computerPlayerColors ^= availableColors[i];
                         }
                         else {
                             // Enable AI.
-                            mapFormat.computerPlayerColors |= currentColor;
+                            mapFormat.computerPlayerColors |= availableColors[i];
                             if ( Color::Count( mapFormat.humanPlayerColors ) > 1 ) {
                                 // and disable human only if any other player can be controlled by human.
-                                mapFormat.humanPlayerColors ^= currentColor;
+                                mapFormat.humanPlayerColors ^= availableColors[i];
                             }
                         }
                     }
                     else {
                         // Enable human.
-                        mapFormat.humanPlayerColors |= currentColor;
+                        mapFormat.humanPlayerColors |= availableColors[i];
                     }
 
                     // Update player icon.
-                    const uint32_t icnIndex = i + getPlayerIcnIndex( mapFormat, currentColor );
+                    const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + getPlayerIcnIndex( mapFormat, availableColors[i] );
                     const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
                     fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
                     display.render( playerRects[i] );
