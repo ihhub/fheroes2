@@ -123,9 +123,34 @@ struct MapSphinx : public MapObjectSimple
 
     void reset()
     {
+        message = {};
+        answers = {};
+
         valid = false;
         artifact = Artifact::UNKNOWN;
         resources.Reset();
+    }
+
+    void validate()
+    {
+        if ( artifact == Artifact::UNKNOWN && resources.GetValidItemsCount() == 0 ) {
+            // No reward so nothing to ask.
+            valid = false;
+            return;
+        }
+
+        if ( message.empty() || answers.empty() ) {
+            // No question or no answers then nothing to do.
+            valid = false;
+            return;
+        }
+
+        valid = true;
+    }
+
+    bool isValid() const
+    {
+        return valid;
     }
 
     Funds resources;

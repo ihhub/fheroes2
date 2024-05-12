@@ -263,8 +263,6 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << message << "'." )
 
-    valid = true;
-
     setUIDAndIndex( tileIndex );
 }
 

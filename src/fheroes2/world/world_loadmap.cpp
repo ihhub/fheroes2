@@ -602,6 +602,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
                     obj->LoadFromMP2( objectTileId, pblock );
+
+                    obj->validate();
+
                     map_objects.add( obj );
                 }
                 break;
@@ -922,7 +925,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                         sphinxObject->artifact.SetSpell( sphinxInfo.artifactMetadata );
                     }
 
-                    sphinxObject->valid = ( !sphinxObject->message.empty() && !sphinxObject->answers.empty() );
+                    sphinxObject->validate();
 
                     sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
 
