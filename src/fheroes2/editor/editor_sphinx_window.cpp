@@ -153,9 +153,10 @@ namespace
         const int32_t midElementOffsetX = ( ( roi.width - 2 * offsetFromEdge ) - maxWidth * 4 ) / 3;
 
         const int32_t firstColumnOffset = roi.x + offsetFromEdge;
-        const int32_t secondColumnOffset = firstColumnOffset + maxWidth + midElementOffsetX;
-        const int32_t thirdColumnOffset = firstColumnOffset + ( maxWidth + midElementOffsetX ) * 2;
-        const int32_t forthColumnOffset = firstColumnOffset + ( maxWidth + midElementOffsetX ) * 3;
+        const int32_t columnStep = maxWidth + midElementOffsetX;
+        const int32_t secondColumnOffset = firstColumnOffset + columnStep;
+        const int32_t thirdColumnOffset = secondColumnOffset + columnStep;
+        const int32_t forthColumnOffset = thirdColumnOffset + columnStep;
 
         const fheroes2::FontType fontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE );
         const int32_t fontHeight = fheroes2::Text( std::string(), fontType ).height();
@@ -214,8 +215,6 @@ namespace Editor
 {
     bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata )
     {
-        Maps::Map_Format::SphinxMetadata backup = metadata;
-
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -273,7 +272,8 @@ namespace Editor
         answerList.Redraw();
 
         const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 13 );
-        const int32_t buttonOffset = ( answerArea.width - 3 * buttonImage.width() ) / 2 + buttonImage.width();
+        const int32_t buttonWidth = buttonImage.width();
+        const int32_t buttonOffset = ( answerArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
         fheroes2::Button buttonAdd( answerRoi.x, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 13, 14 );
         buttonAdd.draw();
@@ -281,7 +281,7 @@ namespace Editor
         fheroes2::Button buttonEdit( answerRoi.x + buttonOffset, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 15, 16 );
         buttonEdit.draw();
 
-        fheroes2::Button buttonDelete( answerRoi.x + answerArea.width - buttonImage.width(), answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDelete( answerRoi.x + answerArea.width - buttonWidth, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 17, 18 );
         buttonDelete.draw();
 
         offsetY += text.height() + riddleArea.height + elementOffset;
@@ -296,8 +296,7 @@ namespace Editor
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
 
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonImage.width() ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17,
-                                               18 );
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
         buttonDeleteArtifact.draw();
 
         const fheroes2::Rect resourceRoi{ answerRoi.x, offsetY + text.height(), answerRoi.width, 99 };
@@ -314,7 +313,7 @@ namespace Editor
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-        display.render();
+        display.render( background.totalArea() );
 
         bool isRedrawNeeded = false;
 
@@ -415,14 +414,12 @@ namespace Editor
 
                 answerList.RemoveSelected();
                 answerList.updateScrollBarImage();
+                answerList.Redraw();
                 isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                Artifact artifact = Dialog::selectArtifact( metadata.artifact );
-                if ( !artifact.isValid() ) {
-                    isRedrawNeeded = true;
-                }
-                else {
+                const Artifact artifact = Dialog::selectArtifact( metadata.artifact );
+                if ( artifact.isValid() ) {
                     int32_t artifactMetadata = metadata.artifactMetadata;
 
                     if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
@@ -440,16 +437,22 @@ namespace Editor
                     metadata.artifact = artifact.GetID();
                     metadata.artifactMetadata = artifactMetadata;
 
-                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6,
-                                    artifactRoi.y + 6 );
-                    display.render( artifactRoi );
+                    const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() );
+                    fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
                 }
+
+                // The opened selectArtifact() dialog might be bigger than the Sphinx dialog so we render the whole screen.
+                display.render();
+
+                isRedrawNeeded = false;
             }
             else if ( le.MouseClickLeft( buttonDeleteArtifact.area() ) ) {
                 metadata.artifact = 0;
                 metadata.artifactMetadata = 0;
 
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
+                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() );
+                fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+
                 display.render( artifactRoi );
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -505,7 +508,6 @@ namespace Editor
             }
         }
 
-        metadata = std::move( backup );
         return false;
     }
 }
