@@ -635,7 +635,7 @@ namespace Editor
                     if ( text.rows( descriptionTextRoi.width ) > 5 ) {
                         fheroes2::
                             showStandardTextMessage( _( "Warning" ),
-                                                     _( "The entered map description exceeds the maximum allowed 5 rows. It is cut to fit the map description field." ),
+                                                     _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
                                                      Dialog::OK );
 
                         // As a temporary solution we cut the end of the text to fit 5 rows.
