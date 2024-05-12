@@ -299,6 +299,16 @@ namespace Interface
             if ( content != nullptr && _currentId >= 0 && _currentId < _size() ) {
                 content->erase( content->begin() + _currentId );
 
+                if ( _currentId < _topId && _topId > 0 ) {
+                    // The removed item is upper than the list top - reduce the top position.
+                    --_topId;
+                }
+
+                if ( _currentId >= _size() ) {
+                    // The removed item is the last in the list - reduce the current position.
+                    --_currentId;
+                }
+
                 // List item is removed, so we need to redraw the list.
                 needRedraw = true;
             }
@@ -568,7 +578,7 @@ namespace Interface
                     }
                     else {
                         // Set top position to show the selected item.
-                        _topId = std::min( _currentId - maxItems / 2, maxTopId );
+                        _topId = std::clamp( _currentId - maxItems / 2, 0, maxTopId );
                     }
                 }
 
