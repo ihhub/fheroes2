@@ -426,10 +426,6 @@ namespace Editor
             mapFormat.name = "My Map";
         }
 
-        if ( mapFormat.description.empty() ) {
-            mapFormat.description = "No description.";
-        }
-
         // Map name.
         const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const fheroes2::Rect scenarioBoxRoi( activeArea.x + ( activeArea.width - scenarioBox.width() ) / 2, activeArea.y + 10, scenarioBox.width(),

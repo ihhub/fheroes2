@@ -1594,10 +1594,6 @@ namespace Interface
         _mapFormat.name = std::move( mapName );
         _loadedFileName = std::move( fileName );
 
-        if ( _mapFormat.description.empty() ) {
-            _mapFormat.description = "No description.";
-        }
-
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols with '/' symbols.
