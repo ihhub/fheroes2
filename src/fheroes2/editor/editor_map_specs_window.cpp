@@ -21,6 +21,7 @@
 #include "editor_map_specs_window.h"
 
 #include <array>
+#include <memory>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -53,7 +54,6 @@
 
 #ifndef HIDE_VICTORY_LOSS_CONDITIONS
 #include <algorithm>
-#include <memory>
 
 #include "game_over.h"
 #include "interface_list.h"
