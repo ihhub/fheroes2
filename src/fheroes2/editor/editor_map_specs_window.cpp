@@ -45,6 +45,7 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -228,6 +229,7 @@ namespace
 
         ~DropBoxList() override
         {
+            // After closing the drop list we also need to render the restored background.
             _restorer->restore();
             fheroes2::Display::instance().render( _restorer->rect() );
         }
@@ -246,6 +248,7 @@ namespace
         {
             _background->restore();
         }
+
         void ActionCurrentUp() override
         {
             // Do nothing.
@@ -301,8 +304,10 @@ namespace
         victoryConditionsList.SetCurrent( current );
         victoryConditionsList.Redraw();
 
+        const fheroes2::Rect listArea( victoryConditionsList.getArea() );
+
         fheroes2::Display & display = fheroes2::Display::instance();
-        display.render( victoryConditionsList.getArea() );
+        display.render( listArea );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -321,14 +326,14 @@ namespace
 
             if ( victoryConditionsList.IsNeedRedraw() ) {
                 victoryConditionsList.Redraw();
-                display.render( victoryConditionsList.getArea() );
+                display.render( listArea );
             }
         }
 
         return current;
     }
 
-    uint32_t getPlayerIcnIndexOffset( const Maps::Map_Format::MapFormat & mapFormat, const uint8_t currentColor )
+    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint8_t currentColor )
     {
         if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.
@@ -450,7 +455,7 @@ namespace Editor
 
             fheroes2::Blit( playerIconShadow, display, playerRects[i].x - 5, playerRects[i].y + 3 );
 
-            const uint32_t icnIndex = i + getPlayerIcnIndexOffset( mapFormat, Color::IndexToColor( i ) );
+            const uint32_t icnIndex = i + getPlayerIcnIndex( mapFormat, Color::IndexToColor( i ) );
 
             const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
             playerRects[i].width = playerIcon.width();
@@ -532,7 +537,7 @@ namespace Editor
 
         fheroes2::ButtonSprite victoryDroplistButton( offsetX + itemBackgroundWidth, offsetY, fheroes2::AGG::GetICN( ICN::DROPLISL, 1 ),
                                                       fheroes2::AGG::GetICN( ICN::DROPLISL, 2 ) );
-        const fheroes2::Rect victoryDroplistButtonRoi( victoryDroplistButton.area() );
+        const fheroes2::Rect victoryDroplistButtonRoi( fheroes2::getBoundaryRect( victoryDroplistButton.area(), victoryTextRoi ) );
         victoryDroplistButton.draw();
 
         // Loss conditions.
@@ -552,7 +557,7 @@ namespace Editor
 
         fheroes2::ButtonSprite lossDroplistButton( offsetX + itemBackgroundWidth, offsetY, fheroes2::AGG::GetICN( ICN::DROPLISL, 1 ),
                                                    fheroes2::AGG::GetICN( ICN::DROPLISL, 2 ) );
-        const fheroes2::Rect lossDroplistButtonRoi( lossDroplistButton.area() );
+        const fheroes2::Rect lossDroplistButtonRoi( fheroes2::getBoundaryRect( lossDroplistButton.area(), lossTextRoi ) );
         lossDroplistButton.draw();
 
         // Buttons.
@@ -613,25 +618,28 @@ namespace Editor
                     display.render( descriptionTextRoi );
                 }
             }
-            else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) || le.MouseClickLeft( victoryTextRoi ) ) {
-                mapFormat.victoryConditionType
+            else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) ) {
+                const uint8_t result
                     = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, victoryConditions, false );
 
-                fheroes2::Copy( itemBackground, 0, 0, display, victoryTextRoi.x - 2, victoryTextRoi.y - 3, itemBackgroundWidth, itemBackground.height() );
+                if ( result != mapFormat.victoryConditionType ) {
+                    mapFormat.victoryConditionType = result;
 
-                redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
-
-                display.render( victoryTextRoi );
+                    fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
+                    redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
+                    display.render( victoryTextRoi );
+                }
             }
-            else if ( le.MouseClickLeft( lossDroplistButtonRoi ) || le.MouseClickLeft( lossTextRoi ) ) {
-                mapFormat.lossConditionType
-                    = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, lossConditions, true );
+            else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
+                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, lossConditions, true );
 
-                fheroes2::Copy( itemBackground, 0, 0, display, lossTextRoi.x - 2, lossTextRoi.y - 3, itemBackgroundWidth, itemBackground.height() );
+                if ( result != mapFormat.lossConditionType ) {
+                    mapFormat.lossConditionType = result;
 
-                redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
-
-                display.render( lossTextRoi );
+                    fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
+                    redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
+                    display.render( lossTextRoi );
+                }
             }
             else if ( le.MousePressRight( buttonCancelRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
@@ -677,7 +685,7 @@ namespace Editor
                     }
 
                     // Update player icon.
-                    const uint32_t icnIndex = i + getPlayerIcnIndexOffset( mapFormat, currentColor );
+                    const uint32_t icnIndex = i + getPlayerIcnIndex( mapFormat, currentColor );
                     const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
                     fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
                     display.render( playerRects[i] );
