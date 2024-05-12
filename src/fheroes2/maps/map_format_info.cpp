@@ -119,12 +119,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )

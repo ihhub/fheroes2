@@ -156,7 +156,7 @@ namespace Maps::Map_Format
 
     struct SphinxMetadata
     {
-        std::string question;
+        std::string riddle;
 
         std::vector<std::string> answers;
 
@@ -212,7 +212,7 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // Change the version where there is a need to expand map format functionality.
+        // Change the version when there is a need to expand map format functionality.
         uint16_t version{ 1 };
 
         bool isCampaign{ false };

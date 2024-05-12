@@ -255,13 +255,13 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         }
     }
 
-    message = dataStream.toString();
-    if ( message.empty() ) {
+    riddle = dataStream.toString();
+    if ( riddle.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << message << "'." )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << riddle << "'." )
 
     setUIDAndIndex( tileIndex );
 }
@@ -336,12 +336,12 @@ StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid << obj.isTruncatedAnswer;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
 {
-    msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
+    msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {

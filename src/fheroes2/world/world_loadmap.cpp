@@ -907,7 +907,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     MapSphinx * sphinxObject = new MapSphinx();
 
-                    sphinxObject->message = std::move( sphinxInfo.question );
+                    sphinxObject->riddle = std::move( sphinxInfo.riddle );
 
                     for ( auto & answer : sphinxInfo.answers ) {
                         if ( !answer.empty() ) {
@@ -1025,7 +1025,7 @@ bool World::loadResurrectionMap( const std::string & filename )
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        // TODO: modify EventDate structure for have more flexibility.
+        // TODO: modify EventDate structure to have more flexibility.
         auto & newEvent = vec_eventsday.emplace_back();
 
         newEvent.message = std::move( event.message );

@@ -57,7 +57,7 @@
 
 namespace
 {
-    const fheroes2::Size questionArea{ 250, 180 };
+    const fheroes2::Size riddleArea{ 250, 180 };
 
     const fheroes2::Size answerArea{ 250, 155 };
 
@@ -67,9 +67,9 @@ namespace
 
     const size_t longestAnswer{ 64 };
 
-    // TODO: expand the question area to support more characters.
-    //       At the moment only up to 140 biggest characters can be added.
-    const size_t longestQuestion{ 140 };
+    // TODO: expand the riddle area to support more characters.
+    //       At the moment only up to 140 of the biggest characters can be added.
+    const size_t longestRiddle{ 140 };
 
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
@@ -219,7 +219,7 @@ namespace Editor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::StandardWindow background{ questionArea.width + answerArea.width + 50, questionArea.height + 220, true, display };
+        fheroes2::StandardWindow background{ riddleArea.width + answerArea.width + 50, riddleArea.height + 220, true, display };
 
         const fheroes2::Rect windowArea{ background.activeArea() };
 
@@ -230,19 +230,19 @@ namespace Editor
 
         offsetY += title.height() + elementOffset;
 
-        fheroes2::Text text{ _( "Question:" ), fheroes2::FontType::normalWhite() };
+        fheroes2::Text text{ _( "Riddle:" ), fheroes2::FontType::normalWhite() };
 
-        const fheroes2::Rect questionRoi{ windowArea.x + elementOffset, offsetY + text.height(), questionArea.width, questionArea.height };
-        background.applyTextBackgroundShading( questionRoi );
+        const fheroes2::Rect riddleRoi{ windowArea.x + elementOffset, offsetY + text.height(), riddleArea.width, riddleArea.height };
+        background.applyTextBackgroundShading( riddleRoi );
 
-        fheroes2::ImageRestorer questionRoiRestorer( display, questionRoi.x, questionRoi.y, questionRoi.width, questionRoi.height );
+        fheroes2::ImageRestorer riddleRoiRestorer( display, riddleRoi.x, riddleRoi.y, riddleRoi.width, riddleRoi.height );
 
-        text.draw( questionRoi.x + ( questionRoi.width - text.width() ) / 2, offsetY, display );
+        text.draw( riddleRoi.x + ( riddleRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( metadata.question, fheroes2::FontType::normalWhite() );
-        text.draw( questionRoi.x + 5, questionRoi.y + 5, questionRoi.width - 10, display );
+        text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+        text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
 
-        const fheroes2::Rect answerRoi{ windowArea.x + elementOffset + questionRoi.width + elementOffset, offsetY + text.height(), answerArea.width, answerArea.height };
+        const fheroes2::Rect answerRoi{ windowArea.x + elementOffset + riddleRoi.width + elementOffset, offsetY + text.height(), answerArea.width, answerArea.height };
         background.applyTextBackgroundShading( answerRoi );
 
         text.set( _( "Answers:" ), fheroes2::FontType::normalWhite() );
@@ -284,13 +284,13 @@ namespace Editor
         fheroes2::Button buttonDelete( answerRoi.x + answerArea.width - buttonImage.width(), answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 17, 18 );
         buttonDelete.draw();
 
-        offsetY += text.height() + questionArea.height + elementOffset;
+        offsetY += text.height() + riddleArea.height + elementOffset;
 
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
         text.draw( windowArea.x + ( windowArea.width - text.width() ) / 2, offsetY, display );
 
         const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        const fheroes2::Rect artifactRoi{ questionRoi.x + ( questionRoi.width - artifactFrame.width() ) / 2, offsetY + text.height(), artifactFrame.width(),
+        const fheroes2::Rect artifactRoi{ riddleRoi.x + ( riddleRoi.width - artifactFrame.width() ) / 2, offsetY + text.height(), artifactFrame.width(),
                                           artifactFrame.height() };
 
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
@@ -362,15 +362,15 @@ namespace Editor
                 }
             }
 
-            if ( le.MouseClickLeft( questionRoi ) ) {
-                std::string temp = metadata.question;
+            if ( le.MouseClickLeft( riddleRoi ) ) {
+                std::string temp = metadata.riddle;
 
-                if ( Dialog::inputString( _( "Question:" ), temp, {}, longestQuestion, true ) ) {
-                    metadata.question = std::move( temp );
+                if ( Dialog::inputString( _( "Riddle:" ), temp, {}, longestRiddle, true ) ) {
+                    metadata.riddle = std::move( temp );
 
-                    questionRoiRestorer.restore();
-                    text.set( metadata.question, fheroes2::FontType::normalWhite() );
-                    text.draw( questionRoi.x + 5, questionRoi.y + 5, questionRoi.width - 10, display );
+                    riddleRoiRestorer.restore();
+                    text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+                    text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }
             }
@@ -466,7 +466,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Delete Answer" ), _( "Delete an existing answer for the question." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( artifactRoi ) ) {
-                // Since Artifact class does not allow to set a random spell (by obvious reasons),
+                // Since Artifact class does not allow to set a random spell (for obvious reasons),
                 // we have to use special UI code to render the popup window with all needed information.
                 const Artifact artifact( metadata.artifact );
 
@@ -479,19 +479,19 @@ namespace Editor
                     fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
                 }
                 else {
-                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
                 }
             }
             else if ( le.MousePressRight( buttonDeleteArtifact.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete Artifact from being given as a reward." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( resourceRoi ) ) {
                 if ( metadata.resources.GetValidItemsCount() == 0 ) {
-                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
                 }
                 else {
                     fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
-                                                   fheroes2::Text{ _( "Resources will given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                                   fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                    metadata.resources );
                 }
             }

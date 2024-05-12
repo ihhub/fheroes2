@@ -123,7 +123,7 @@ struct MapSphinx : public MapObjectSimple
 
     void reset()
     {
-        message = {};
+        riddle = {};
         answers = {};
 
         valid = false;
@@ -139,7 +139,7 @@ struct MapSphinx : public MapObjectSimple
             return;
         }
 
-        if ( message.empty() || answers.empty() ) {
+        if ( riddle.empty() || answers.empty() ) {
             // No question or no answers then nothing to do.
             valid = false;
             return;
@@ -156,7 +156,7 @@ struct MapSphinx : public MapObjectSimple
     Funds resources;
     Artifact artifact;
     std::list<std::string> answers;
-    std::string message;
+    std::string riddle;
     bool valid{ false };
 
     // This is the behavior of the original game when each answer was cut only to 4 characters.

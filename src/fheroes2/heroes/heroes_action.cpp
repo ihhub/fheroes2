@@ -3403,7 +3403,7 @@ namespace
             }
 
             std::string question( _( "The Sphinx asks you the following riddle:\n\n'%{riddle}'\n\nYour answer?" ) );
-            StringReplace( question, "%{riddle}", riddle->message );
+            StringReplace( question, "%{riddle}", riddle->riddle );
 
             std::string answer;
             Dialog::inputString( question, answer, title, 0, false );
