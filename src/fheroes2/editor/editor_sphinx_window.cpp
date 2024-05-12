@@ -71,8 +71,7 @@ namespace
     //       At the moment only up to 140 biggest characters can be added.
     const size_t longestQuestion{ 140 };
 
-    const std::array<int, 7> resourceTypes
-            = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
+    const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
     class AnswerListBox : public Interface::ListBox<std::string>
     {
@@ -439,7 +438,8 @@ namespace Editor
                     metadata.artifact = artifact.GetID();
                     metadata.artifactMetadata = artifactMetadata;
 
-                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
+                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6,
+                                    artifactRoi.y + 6 );
                     display.render( artifactRoi );
                 }
             }
