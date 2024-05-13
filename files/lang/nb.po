@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:38+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4444,6 +4444,69 @@ msgstr ""
 "Kartets\n"
 "størrelse"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Gjenstand"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Velg en skatt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Råvare"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Lett"
 
@@ -6200,6 +6263,10 @@ msgstr " gir deg den beste kampånden"
 
 msgid " gives you maximum luck"
 msgstr " gir deg den beste flaksen"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Trylleboken kan ikke flyttes"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8848,9 +8915,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
-
-msgid "Artifact"
-msgstr "Gjenstand"
 
 msgid "Mermaid"
 msgstr "Havfrue"

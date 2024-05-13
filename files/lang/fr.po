@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:38+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4381,6 +4381,69 @@ msgstr "Cliquez pour afficher le village suivant."
 msgid "Map Name"
 msgstr "Nom du fichier pour la carte"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artéfact"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Choisir artéfact :"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ressource"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Facile"
 
@@ -6115,6 +6178,10 @@ msgstr " augmente votre moral à son maximum"
 
 msgid " gives you maximum luck"
 msgstr " augmente votre chance à son maximum"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Impossible de déplacer le grimoire"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Vous ne pouvez pas ramasser cet artéfact, vous êtes déjà surchargé !"
@@ -8718,9 +8785,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Moulin à vent"
 msgstr[1] "Moulins à vent"
-
-msgid "Artifact"
-msgstr "Artéfact"
 
 msgid "Mermaid"
 msgstr "Nymphe"

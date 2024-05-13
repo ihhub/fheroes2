@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:38+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4314,6 +4314,69 @@ msgstr "Нажмите, чтобы показать следующий горо�
 msgid "Map Name"
 msgstr "Название файла карты"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Выберите артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -6029,6 +6092,10 @@ msgstr " повышает Вашу мораль до максимума"
 
 msgid " gives you maximum luck"
 msgstr " повышает Вашу удачу до максимума"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Невозможно переместить книгу заклинаний"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -8565,9 +8632,6 @@ msgid_plural "Windmills"
 msgstr[0] "Ветряная мельница"
 msgstr[1] "Ветряные мельницы"
 msgstr[2] "Ветряных мельниц"
-
-msgid "Artifact"
-msgstr "Артефакт"
 
 msgid "Mermaid"
 msgstr "Русалка"

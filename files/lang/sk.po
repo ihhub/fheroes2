@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:38+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4367,6 +4367,69 @@ msgstr "Kliknutím zobraz ďalšie mesto."
 msgid "Map Name"
 msgstr "Veľkosť mapy"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Zvoľ artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Surovina"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Ľahká"
 
@@ -6097,6 +6160,10 @@ msgstr " dáva maximálnu morálku"
 
 msgid " gives you maximum luck"
 msgstr " dáva maximálne šťastie"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Kniha kúziel sa nedá presunúť"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Tento artefakt nemôžeš zdvihnúť, už máš plný náklad!"
@@ -8645,9 +8712,6 @@ msgid_plural "Windmills"
 msgstr[0] "Veterný mlyn"
 msgstr[1] "Veterné mlyny"
 msgstr[2] "Veterných mlynov"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Morská panna"
