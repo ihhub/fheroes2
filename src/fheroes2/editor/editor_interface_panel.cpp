@@ -1188,12 +1188,12 @@ namespace Interface
             }
         }
 
-        le.MousePressLeft( _rectMagnify ) ? _buttonMagnify.drawOnPress() : _buttonMagnify.drawOnRelease();
-        le.MousePressLeft( _rectUndo ) ? _buttonUndo.drawOnPress() : _buttonUndo.drawOnRelease();
-        le.MousePressLeft( _rectNew ) ? _buttonNew.drawOnPress() : _buttonNew.drawOnRelease();
-        le.MousePressLeft( _rectSpecs ) ? _buttonSpecs.drawOnPress() : _buttonSpecs.drawOnRelease();
-        le.MousePressLeft( _rectFile ) ? _buttonFile.drawOnPress() : _buttonFile.drawOnRelease();
-        le.MousePressLeft( _rectSystem ) ? _buttonSystem.drawOnPress() : _buttonSystem.drawOnRelease();
+        _buttonMagnify.drawOnState( le.MousePressLeft( _rectMagnify ) );
+        _buttonUndo.drawOnState( le.MousePressLeft( _rectUndo ) );
+        _buttonNew.drawOnState( le.MousePressLeft( _rectNew ) );
+        _buttonSpecs.drawOnState( le.MousePressLeft( _rectSpecs ) );
+        _buttonFile.drawOnState( le.MousePressLeft( _rectFile ) );
+        _buttonSystem.drawOnState( le.MousePressLeft( _rectSystem ) );
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
@@ -1206,8 +1206,7 @@ namespace Interface
             res = EditorInterface::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            // TODO: Make the scenario info editor.
-            Dialog::GameInfo();
+            EditorInterface::Get().openMapSpecificationsDialog();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = Interface::EditorInterface::eventFileDialog();

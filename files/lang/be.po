@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4058,6 +4058,80 @@ msgstr ""
 msgid "Warning"
 msgstr "Увага"
 
+msgid "None."
+msgstr ""
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Калі ласка, выбярыце іншага героя."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Назапасіць вялікую колькасць золата."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr "Складанасць мапы:"
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Апісанне"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Умова перамогі"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Умова паразы"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Апісанне"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Тып мапы"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Апісанне абранай мапы."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тып мапы"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Складанасць мапы вызначаецца ейным аўтарам. Болей складаныя мапы могуць "
+"утрымліваць больш ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
+
 #, fuzzy
 msgid "Animation"
 msgstr "Анексія"
@@ -4088,20 +4162,70 @@ msgstr "Апісанне"
 msgid "Save Map:"
 msgstr "Вялікія мапы"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Назва абранай мапы."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Тып мапы"
+msgid "Click to save the Sphinx properties."
+msgstr "Назва абранай мапы."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Лёгка"
@@ -5735,6 +5859,9 @@ msgid " gives you maximum morale"
 msgstr ""
 
 msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot have multiple spell books."
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -7824,9 +7951,6 @@ msgid_plural "Windmills"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-msgid "Artifact"
-msgstr ""
 
 msgid "Mermaid"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3941,6 +3941,69 @@ msgstr ""
 msgid "Warning"
 msgstr "Uyarı"
 
+#, fuzzy
+msgid "None."
+msgstr "Hiç"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Lütfen başka bir kahraman seç."
+
+msgid "Accumulate gold."
+msgstr ""
+
+msgid "Run out of time."
+msgstr ""
+
+msgid "Map Difficulty"
+msgstr ""
+
+msgid "Map Description"
+msgstr ""
+
+msgid "Special Victory Condition"
+msgstr ""
+
+msgid "Special Loss Condition"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+msgid "Player Type"
+msgstr ""
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
 msgid "Animation"
 msgstr ""
 
@@ -3968,17 +4031,69 @@ msgstr ""
 msgid "Save Map:"
 msgstr ""
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
-msgid "Click to change your map name."
+msgid "Riddle:"
 msgstr ""
 
-msgid "Map Name"
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -5568,6 +5683,9 @@ msgid " gives you maximum morale"
 msgstr ""
 
 msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot have multiple spell books."
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -7642,9 +7760,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Artifact"
-msgstr ""
 
 msgid "Mermaid"
 msgstr ""

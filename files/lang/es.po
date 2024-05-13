@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4255,6 +4255,88 @@ msgid "Warning"
 msgstr "Advertencia"
 
 #, fuzzy
+msgid "None."
+msgstr "Ninguno"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Por favor, selecciona otro héroe."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Acumula %{count} oro."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Dificultad\n"
+"del Mapa"
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Descripción seleccionada"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condiciones de victoria"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condiciones de derrota"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Descripción seleccionada"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Tamaño\n"
+"del Mapa"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "La descripción del mapa actualmente elegido."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Tamaño del Mapa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"La dificultad de mapa del mapa seleccionado actualmente. La dificultad de "
+"mapa se determina por el diseñador del escenario. Los mapas más difíciles "
+"pueden incluir enemigos más abundantes o poderosos, menos recursos, o "
+"algunas otras condiciones que vuelvan las cosas más duras para el jugador "
+"humano."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexión"
 
@@ -4285,22 +4367,72 @@ msgstr "Descripción seleccionada"
 msgid "Save Map:"
 msgstr "Guardar Partida"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Haz clic para volver al menú principal"
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Haga clic para ver la siguiente ciudad."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
+msgid "Click to save the Sphinx properties."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Add Answer"
 msgstr ""
-"Tamaño\n"
-"del Mapa"
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefacto"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefactos"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -6021,6 +6153,10 @@ msgstr ""
 
 msgid " gives you maximum luck"
 msgstr ""
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "No se puede transferir el Libro de Hechizos"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "No puedes recoger este artefacto, ¡tu inventario está lleno!"
@@ -8558,9 +8694,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Molino de Viento"
 msgstr[1] "Molinos de Viento"
-
-msgid "Artifact"
-msgstr "Artefacto"
 
 msgid "Mermaid"
 msgstr "Sirena"

@@ -37,7 +37,7 @@ namespace Maps::Map_Format
     {
         uint32_t id{ 0 };
 
-        ObjectGroup group{ ObjectGroup::LANDSCAPE_MOUNTAINS };
+        ObjectGroup group{ ObjectGroup::NONE };
 
         uint32_t index{ 0 };
     };
@@ -156,7 +156,7 @@ namespace Maps::Map_Format
 
     struct SphinxMetadata
     {
-        std::string question;
+        std::string riddle;
 
         std::vector<std::string> answers;
 
@@ -212,11 +212,13 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
+        // Change the version when there is a need to expand map format functionality.
         uint16_t version{ 1 };
+
         bool isCampaign{ false };
 
-        uint8_t difficulty{ 0 };
+        // Normal difficulty.
+        uint8_t difficulty{ 1 };
 
         uint8_t availablePlayerColors{ 0 };
         uint8_t humanPlayerColors{ 0 };

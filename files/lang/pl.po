@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4321,6 +4321,89 @@ msgid "Warning"
 msgstr "Uwaga"
 
 #, fuzzy
+msgid "None."
+msgstr "Brak"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Wybierz innego bohatera."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Zgromadź %{count} złota."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Trudność\n"
+"mapy"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Położenie pliku: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Warunki zwycięstwa"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Warunki porażki"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Wybrany opis"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Wielkość\n"
+"mapy"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Opis aktualnie wybranej mapy."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Poziom trudności na aktualnie wybranej mapie, określony przez autora "
+"scenariusza. Na bardziej złożonych mapach mogą występować silniejsi "
+"przeciwnicy, mniej zasobów lub inne specjalne warunki utrudniające rozgrywkę."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Aneksja"
 
@@ -4354,22 +4437,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Zapisz grę"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Zapisz bieżącą grę."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
+msgid "Click to save the Sphinx properties."
+msgstr "Zapisz bieżącą grę."
+
+msgid "Add Answer"
 msgstr ""
-"Wielkość\n"
-"mapy"
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Wybierz artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Surowiec"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Łatwy"
@@ -6116,6 +6249,10 @@ msgstr " zapewnia ci maksymalne morale"
 
 msgid " gives you maximum luck"
 msgstr " zapewnia ci maksymalne szczęście"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Nie można przenieść Księgi Zaklęć"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Nie możesz podnieść tego artefaktu, twój plecak jest pełny!"
@@ -8704,9 +8841,6 @@ msgid_plural "Windmills"
 msgstr[0] "Wiatrak"
 msgstr[1] "Wiatraki"
 msgstr[2] "Wiatraków"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Syrena"

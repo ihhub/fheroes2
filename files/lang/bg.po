@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4355,6 +4355,89 @@ msgid "Warning"
 msgstr "Внимание"
 
 #, fuzzy
+msgid "None."
+msgstr "Без"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Моля, избери друг герой."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Натрупай %{count} злато."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Излез от редактора на карти."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Трудност\n"
+"на Карта"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условие за победа"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Състояние на загуба"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Избрано описание"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Размер на карта"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Описание на избраната в момента карта."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тип на карта"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Трудността на картата на текущо избраната карта. Трудността на картата се "
+"определя от дизайнера на сценария. По-трудните карти може да включват повече "
+"или по-силни врагове, по-малко ресурси или други специални условия, които "
+"правят нещата по-трудни за играча."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Анексирам"
 
@@ -4389,20 +4472,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Запазване на картата"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Кликни, за да запазиш текущата игра."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Размер на карта"
+msgid "Click to save the Sphinx properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Избери артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Лесна"
@@ -6146,6 +6281,10 @@ msgstr " ти дава максимален морал"
 
 msgid " gives you maximum luck"
 msgstr " ти дава максимален късмет"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Не може да се премести книгата с магий"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Не можеш да вземеш този артефакт, вече нямаш място!"
@@ -8719,9 +8858,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Вятърна мелница"
 msgstr[1] "Вятърни мелници"
-
-msgid "Artifact"
-msgstr "Артефакт"
 
 msgid "Mermaid"
 msgstr "Русалка"

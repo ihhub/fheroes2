@@ -212,14 +212,17 @@ namespace Editor
 
         // If we don't have many map files, we reduce the maximum dialog height,
         // but not less than enough for 11 elements. We also limit the maximum list height to 22 lines.
-        const int32_t listItems = std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 );
-        const int32_t maxDialogHeight
-            = ( 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) * listItems + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
+        const int32_t listLineHeight = 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL );
+        const int32_t estraDialogHeight = listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
+        const int32_t maxDialogHeight = listLineHeight * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 ) + estraDialogHeight;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        const int32_t listItems = ( std::min( display.height() - 100, maxDialogHeight ) - estraDialogHeight ) / listLineHeight;
+        const int32_t dialogHeight = listLineHeight * listItems + estraDialogHeight;
+
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( listWidth + 75, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( listWidth + 75, dialogHeight, true, display );
 
         const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37 + 17, listWidth, area.height - listHeightDeduction );

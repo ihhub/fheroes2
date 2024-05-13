@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -247,6 +247,16 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"U\n"
+"L\n"
+"L\n"
+"E\n"
+"R\n"
+"A"
 
 msgid ""
 "C\n"
@@ -390,9 +400,8 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Endast %{race}trupper +1"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
-msgstr "Neutral"
+msgstr "Neutrala"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
@@ -400,11 +409,12 @@ msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Några odöda i armén -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Standardåtgärder"
+msgstr ""
+"Standard-\n"
+"trupper"
 
 msgid "View %{name}"
 msgstr "Visa %{name}"
@@ -3378,13 +3388,11 @@ msgstr "Klicka här för att öppna det virtuella tangentbordet."
 msgid "Open Virtual Keyboard"
 msgstr "Öppna virtuellt tangentbord."
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Antal trupper att flytta?"
+msgstr "Hur många varelser vill du flytta?"
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Välj stad att teleportera till."
+msgstr "Välj hur många enheter att dela till:"
 
 msgid "Map: "
 msgstr "Karta: "
@@ -3913,9 +3921,8 @@ msgstr "Lämna kartredigeraren."
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Skjut %{monster}"
+msgstr "Ange antal %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4027,20 +4034,17 @@ msgstr "Hjältar"
 msgid "Towns"
 msgstr "Städer"
 
-#, fuzzy
 msgid "editorErasure|Landscape objects"
-msgstr "Hjältar"
+msgstr "Landskapsobjekt"
 
-#, fuzzy
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "Artefakter"
+msgstr "Ej tagbara äventyrsobjekt"
 
 msgid "editorErasure|Castles"
 msgstr "Slott"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Artefakter"
+msgstr "Tagbara äventyrsobjekt"
 
 msgid "editorErasure|Monsters"
 msgstr "Varelser"
@@ -4250,19 +4254,98 @@ msgid "Warning"
 msgstr "Varning"
 
 #, fuzzy
+msgid "None."
+msgstr "Inga"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Välj en annan hjälte."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Samla ihop %{count} guld."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Lämna kartredigeraren."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kartans\n"
+"Svårighet"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Plats: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Segervillkor"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Förlustvillkor"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Vald beskrivning"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klicka för byta klass."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klicka för att visa nästa stad."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Kartfilnamn"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Den valda kartans beskrivning."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Karttyp"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Svårighetsgraden för den valda kartan. Kartans svårighet bestäms av kartans "
+"kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
+"färre resurser eller andra specialvillkor som gör det svårare för spelaren."
+
 msgid "Animation"
-msgstr "Annektering"
+msgstr "Animering"
 
-#, fuzzy
 msgid "Passability"
-msgstr "Personlighet:"
+msgstr "Framkomlighet"
 
-#, fuzzy
 msgid "Toggle animation of the objects."
-msgstr "Aktivera raderingen av %{type}objekt."
+msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
-msgstr ""
+msgstr "Visa objektens framkomlighet."
 
 msgid ""
 "\n"
@@ -4284,20 +4367,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Spara Karta"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande spel."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Klicka för att visa nästa stad."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Kartfilnamn"
+msgid "Click to save the Sphinx properties."
+msgstr "Klicka för att spara nuvarande spel."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Välj Artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resurs"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Lätt"
@@ -4438,7 +4573,6 @@ msgstr "Utveckling och Support"
 msgid "Special Thanks to"
 msgstr "Extra Tack till"
 
-#, fuzzy
 msgid "and many-many other contributors and supporters!"
 msgstr "och många många andra som gett sitt stöd!"
 
@@ -5139,6 +5273,10 @@ msgid ""
 "Magic II for this purpose. Please note that only one scenario will be "
 "available in this setup."
 msgstr ""
+"fheroes2 behöver datafiler från originalspelet Heroes of Might and Magic II "
+"för att fungera. Du verkar använda dig av demoversionen av Heroes of Might "
+"and Magic II för detta, vilket innebär att endast ett scenarie kommer vara "
+"tillgängligt."
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
@@ -5744,23 +5882,24 @@ msgstr ""
 msgid ""
 "Default\n"
 "value"
-msgstr ""
+msgstr "Standardvärde"
 
-#, fuzzy
 msgid "Set %{skill} Skill"
-msgstr "Ange Anfallsförmåga"
+msgstr "Ange %{skill}sförmåga"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
+"Ange %{skill} grundvärde. Högerklicka för att återställa till standard."
 
 msgid "View %{skill} Info"
 msgstr "Visa information om %{skill}"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "skill"
-msgstr "Försvar"
+msgstr ""
+"Standard-\n"
+"förmåga"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -6008,6 +6147,10 @@ msgstr " ger dig maximalt med stridsmoral"
 
 msgid " gives you maximum luck"
 msgstr " ger dig maximalt med tur"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Kan inte flytta Magibok"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -7506,57 +7649,51 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
 
-#, fuzzy
 msgid "Random hero (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgstr "Slumpad hjälte (Nivå %{level})"
 
-#, fuzzy
 msgid "Random %{race} hero (Level %{level})"
-msgstr "%{race}n %{name} (Nivå %{level})"
+msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Hjältevy"
+msgstr "Hjälteklass"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
 
 msgid "Set custom Experience value. Current value is default."
-msgstr ""
+msgstr "Ange erfarenhetspoäng. Nuvarande värde är standard."
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
+msgstr "Ändra erfarenhetspoäng. Högerklicka för att återställa till standard."
 
-#, fuzzy
 msgid "Set Experience value"
-msgstr "Erfarenhet"
+msgstr "Ange erfarenhetspoäng"
 
 msgid "View Experience Info"
 msgstr "Visa information för erfarenhet"
 
 msgid "Set custom Spell Points value. Current value is default."
-msgstr ""
+msgstr "Ändra besvärjelsepoängen. Nuvarande värde är standard."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
+"Ändra besvärjelsepoängen. Högerklicka för att återställa till standard."
 
-#, fuzzy
 msgid "Set Spell Points value"
-msgstr "Besvärjelsepoäng"
+msgstr "Ange Besvärjelsepoäng"
 
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Ange patrullradie i antal rutor"
 
-#, fuzzy
 msgid "Enter hero's name"
-msgstr "Förlora hjälten: %{name}."
+msgstr "Ange hjältens namn"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Klicka för att visa nästa stad."
+msgstr "Klicka för byta klass."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7597,26 +7734,29 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Ställ in arméns stridsformation på 'Grupperad'"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
-msgstr ""
+msgstr "Välj hjältens Artefakter. Högerklicka för att återställa Artefakt."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
 msgstr ""
+"Välj hjältens sekundära förmågor. Högerklicka för att återställa förmåga."
 
 msgid "Set hero's Army. Right-click to reset unit."
-msgstr ""
+msgstr "Ange hjältens Armé. Högerklicka för att återställa enhet."
 
 msgid "Set hero's portrait. Right-click to reset to default."
-msgstr ""
+msgstr "Välj hjälteporträtt. Högerklicka för att återställa till standard."
 
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
+"Klicka för att ändra hjältens namn. Högerklicka för att återställa till "
+"standard."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
+"Hjälten är i patrulläge med %{tiles}-rutors radie. Klicka för inaktivera det."
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Klicka här för att välja denna färgen."
+msgstr "Klicka här för att aktivera hjältens patrulläge."
 
 msgid "Blood Morale"
 msgstr "Blodtörst"
@@ -8546,9 +8686,6 @@ msgid_plural "Windmills"
 msgstr[0] "Väderkvarn"
 msgstr[1] "Väderkvarnar"
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "Mermaid"
 msgstr "Sjöjungfru"
 
@@ -8782,12 +8919,11 @@ msgstr "Jordaltare"
 msgid "Water Summoning Altar"
 msgstr "Vattenaltare"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Träsk"
+msgstr "Träsksjö"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Frusen Sjö"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
