@@ -36,7 +36,7 @@ namespace Maps
 {
     class Tiles;
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 }
 
 namespace Interface
