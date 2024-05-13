@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:24+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4302,6 +4302,69 @@ msgstr ""
 "Tamaño\n"
 "del Mapa"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefacto"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefactos"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -6021,6 +6084,10 @@ msgstr ""
 
 msgid " gives you maximum luck"
 msgstr ""
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "No se puede transferir el Libro de Hechizos"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "No puedes recoger este artefacto, ¡tu inventario está lleno!"
@@ -8558,9 +8625,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Molino de Viento"
 msgstr[1] "Molinos de Viento"
-
-msgid "Artifact"
-msgstr "Artefacto"
 
 msgid "Mermaid"
 msgstr "Sirena"

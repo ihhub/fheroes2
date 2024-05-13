@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:24+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4315,6 +4315,69 @@ msgstr "Натисніть для зміни раси."
 msgid "Map Name"
 msgstr "Назва файлу мапи"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Натисніть, щоб зберегти поточну гру."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Оберіть артефакти:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Проста"
 
@@ -5996,6 +6059,10 @@ msgstr " надає максимальний бойовий дух"
 
 msgid " gives you maximum luck"
 msgstr " надає максимальну удачу"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Неможливо перемістити книгу заклинань"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "У вас нема вільного місця щоб підібрати цей  артефакт!"
@@ -8547,9 +8614,6 @@ msgid_plural "Windmills"
 msgstr[0] "Вітряк"
 msgstr[1] "Вітряки"
 msgstr[2] "Вітряки"
-
-msgid "Artifact"
-msgstr "Артефакт"
 
 msgid "Mermaid"
 msgstr "Русалка"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:24+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4371,6 +4371,69 @@ msgstr ""
 "Wielkość\n"
 "mapy"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Zapisz bieżącą grę."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Wybierz artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Surowiec"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Łatwy"
 
@@ -6116,6 +6179,10 @@ msgstr " zapewnia ci maksymalne morale"
 
 msgid " gives you maximum luck"
 msgstr " zapewnia ci maksymalne szczęście"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Nie można przenieść Księgi Zaklęć"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Nie możesz podnieść tego artefaktu, twój plecak jest pełny!"
@@ -8704,9 +8771,6 @@ msgid_plural "Windmills"
 msgstr[0] "Wiatrak"
 msgstr[1] "Wiatraki"
 msgstr[2] "Wiatraków"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Syrena"

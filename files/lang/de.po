@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:24+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4421,6 +4421,69 @@ msgstr ""
 "Karten-\n"
 "größe"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefakt auswählen:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ressource"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -6193,6 +6256,10 @@ msgstr " gibt Euch maximale Moral"
 
 msgid " gives you maximum luck"
 msgstr " gibt Euch maximales Glück"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Das Zauberbuch kann nicht umgestellt werden"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8833,9 +8900,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Windmühle"
 msgstr[1] "Windmühlen"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Meerjungfrau"

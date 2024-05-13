@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-13 05:24+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4404,6 +4404,69 @@ msgstr "Кликни, за да покажеш следващия град."
 msgid "Map Name"
 msgstr "Размер на карта"
 
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Избери артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -6146,6 +6209,10 @@ msgstr " ти дава максимален морал"
 
 msgid " gives you maximum luck"
 msgstr " ти дава максимален късмет"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Не може да се премести книгата с магий"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Не можеш да вземеш този артефакт, вече нямаш място!"
@@ -8719,9 +8786,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Вятърна мелница"
 msgstr[1] "Вятърни мелници"
-
-msgid "Artifact"
-msgstr "Артефакт"
 
 msgid "Mermaid"
 msgstr "Русалка"
