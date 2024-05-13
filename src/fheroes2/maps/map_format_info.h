@@ -216,7 +216,8 @@ namespace Maps::Map_Format
         uint16_t version{ 1 };
         bool isCampaign{ false };
 
-        uint8_t difficulty{ 0 };
+        // Normal difficulty.
+        uint8_t difficulty{ 1 };
 
         uint8_t availablePlayerColors{ 0 };
         uint8_t humanPlayerColors{ 0 };
