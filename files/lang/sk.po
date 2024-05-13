@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 05:38+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4319,6 +4319,89 @@ msgid "Warning"
 msgstr "Pozor"
 
 #, fuzzy
+msgid "None."
+msgstr "Žiadny"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Prosím zvoľ ďalšieho hrdinu."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Nahromaď %{count} zlata."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Ukončiť prácu v editore máp."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Obtiažnosť\n"
+"mapy"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Podmienka výhry"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Podmienka prehry"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Zvolený opis"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Veľkosť mapy"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Opis aktuálne zvolenej mapy."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Obtiažnosť mapy aktuálne vybranej mapy. Obtiažnosť mapy určuje tvorca "
+"scenára. Ťažšie mapy môžu obsahovať viac alebo silnejších nepriateľov, menej "
+"zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
+"hráča."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexia"
 
@@ -4352,20 +4435,9 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Ulož mapu"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klikni pre uloženie terajšej hry."
-
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-#, fuzzy
-msgid "Map Name"
-msgstr "Veľkosť mapy"
 
 msgid "Riddle:"
 msgstr ""

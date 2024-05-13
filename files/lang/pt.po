@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 05:38+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4259,6 +4259,89 @@ msgstr "Nenhum mapa disponível!"
 msgid "Warning"
 msgstr "Aviso"
 
+#, fuzzy
+msgid "None."
+msgstr "Nenhum"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Por favor, selecione outro herói."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Acumule %{count} de ouro."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Sair do editor de mapas."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Dificuldade\n"
+"do Mapa"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Local: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condição de Vitória"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condição de Derrota"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Descrição Selecionada"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Clique para alterar a raça."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Clique para alterar a raça."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Nome do arquivo de mapa"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "A descrição do mapa atualmente selecionado."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Tipo de Mapa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"A dificuldade do mapa atualmente selecionado. A dificuldade do mapa é "
+"determinada pelo projetista do cenário. Os mapas mais difíceis podem incluir "
+"mais inimigos, menos recursos ou outras condições especiais que tornem as "
+"coisas mais difíceis para o jogador humano."
+
 msgid "Animation"
 msgstr "Animação"
 
@@ -4291,20 +4374,9 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Salvar Mapa"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Clique para salvar o jogo atual."
-
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Clique para alterar a raça."
-
-#, fuzzy
-msgid "Map Name"
-msgstr "Nome do arquivo de mapa"
 
 msgid "Riddle:"
 msgstr ""

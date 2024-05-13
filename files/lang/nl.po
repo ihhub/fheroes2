@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 05:38+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4131,6 +4131,71 @@ msgid "Warning"
 msgstr "Waarschuuwing"
 
 #, fuzzy
+msgid "None."
+msgstr "Geen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Selecteer een andere held."
+
+msgid "Accumulate gold."
+msgstr ""
+
+msgid "Run out of time."
+msgstr ""
+
+msgid "Map Difficulty"
+msgstr ""
+
+msgid "Map Description"
+msgstr ""
+
+msgid "Special Victory Condition"
+msgstr ""
+
+msgid "Special Loss Condition"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+msgid "Player Type"
+msgstr ""
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
+#, fuzzy
 msgid "Animation"
 msgstr "Annexatie"
 
@@ -4158,19 +4223,10 @@ msgstr ""
 msgid "Save Map:"
 msgstr ""
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
-
-msgid "Click to change your map name."
-msgstr ""
-
-msgid "Map Name"
-msgstr ""
 
 msgid "Riddle:"
 msgstr ""

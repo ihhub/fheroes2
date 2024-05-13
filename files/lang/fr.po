@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 05:38+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4332,6 +4332,90 @@ msgid "Warning"
 msgstr "Attention"
 
 #, fuzzy
+msgid "None."
+msgstr "Aucune"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Veuillez choisir un autre héros."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Amasser %{count} pièces d'or."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Quitter l'éditeur de carte."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Difficulté\n"
+"de la carte"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Emplacement : "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Conditions de victoire"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Conditions de défaite"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Description sélectionnée"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Nom du fichier pour la carte"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "La description de la carte actuellement sélectionnée."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Type de carte"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Difficulté de la carte actuellement sélectionnée. La difficulté de la carte "
+"est déterminée par le concepteur du scénario. Les cartes plus difficiles "
+"peuvent inclure des ennemis plus nombreux ou plus forts, moins de ressources "
+"ou d'autres conditions spéciales rendant les choses plus difficiles pour le "
+"joueur humain."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Annexion"
 
@@ -4366,20 +4450,9 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Sauvegarder la carte"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Enregistrer le jeu en cours."
-
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Cliquez pour afficher le village suivant."
-
-#, fuzzy
-msgid "Map Name"
-msgstr "Nom du fichier pour la carte"
 
 msgid "Riddle:"
 msgstr ""
