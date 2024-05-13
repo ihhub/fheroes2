@@ -26,14 +26,6 @@
 
 namespace fheroes2
 {
-    Scrollbar::Scrollbar()
-        : _minIndex( 0 )
-        , _maxIndex( 0 )
-        , _currentIndex( 0 )
-    {
-        // Do nothing.
-    }
-
     void Scrollbar::setImage( const Image & image )
     {
         Copy( image, *this );
@@ -203,8 +195,8 @@ namespace fheroes2
 
         const int32_t currentSliderLength = horizontalSlider ? originalSlider.width() : originalSlider.height();
 
-        if ( sliderAreaLength * elementCountPerView < currentSliderLength * totalElementCount ) {
-            // Slider is too big.
+        if ( sliderAreaLength * elementCountPerView == currentSliderLength * totalElementCount ) {
+            // There is no need change the slider image.
             return originalSlider;
         }
 
@@ -213,6 +205,7 @@ namespace fheroes2
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
+
         if ( horizontalSlider ) {
             width += middleLength;
         }
@@ -221,9 +214,33 @@ namespace fheroes2
         }
 
         Image output( width, height );
+
+        if ( originalSlider.singleLayer() ) {
+            output._disableTransformLayer();
+        }
+
         output.reset();
 
+        // Copy the start slider part.
         Copy( originalSlider, startSliderArea.x, startSliderArea.y, output, startSliderArea.x, startSliderArea.y, startSliderArea.width, startSliderArea.height );
+
+        if ( middleLength < 0 ) {
+            // The slider is shortened. Copy the rest slider part from the end.
+            if ( horizontalSlider ) {
+                const int32_t copyWidth = width - startSliderArea.width;
+                Copy( originalSlider, startSliderArea.x + originalSlider.width() - copyWidth, startSliderArea.y, output, startSliderArea.width, startSliderArea.y,
+                      copyWidth, startSliderArea.height );
+            }
+            else {
+                const int32_t copyHeight = height - startSliderArea.height;
+                Copy( originalSlider, startSliderArea.x, startSliderArea.y + originalSlider.height() - copyHeight, output, startSliderArea.x, startSliderArea.height,
+                      startSliderArea.width, copyHeight );
+            }
+
+            return output;
+        }
+
+        // The slider should be extended.
 
         int32_t offset = 0;
         if ( horizontalSlider ) {
@@ -233,6 +250,7 @@ namespace fheroes2
             offset = startSliderArea.y + startSliderArea.height;
         }
 
+        // Draw the middle slider part.
         const int32_t middleChunkCount = middleLength / step;
         for ( int32_t i = 0; i < middleChunkCount; ++i ) {
             if ( horizontalSlider ) {
@@ -247,7 +265,7 @@ namespace fheroes2
             }
         }
 
-        // Draw leftovers.
+        // Draw leftovers of the middle part.
         const int32_t leftover = middleLength - middleChunkCount * step;
         if ( leftover > 0 ) {
             if ( horizontalSlider ) {
@@ -262,6 +280,7 @@ namespace fheroes2
             }
         }
 
+        // Copy the end part.
         if ( horizontalSlider ) {
             Copy( originalSlider, startSliderArea.x + startSliderArea.width, startSliderArea.y, output, offset, startSliderArea.y,
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );
