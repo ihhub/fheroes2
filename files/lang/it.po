@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 05:38+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4161,6 +4161,90 @@ msgid "Warning"
 msgstr ""
 
 #, fuzzy
+msgid "None."
+msgstr "Nessun/a"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Per favore, scegli un altro eroe."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Accumula una grande quantità d'oro."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Difficoltà\n"
+"Mappa"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Percorso: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condizione Vittoria"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condizione Sconfitta"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Descrizione scelta"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Dimensioni\n"
+"Mappa"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "La descrizione della mappa scelta attualmente."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Tipo di mappa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"La difficoltà della mappa scelta attualmente. La difficoltà della mappa è "
+"data dallo scenario. Mappe più difficili includono più nemici (o più forti), "
+"meno risorse oppure altre condizioni speciali che rendono la partita più "
+"dura all'umano."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Navigazione"
 
@@ -4194,22 +4278,9 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Salva Partita"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Clicca per salvare la partita in corso."
-
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Clicca per andare alla città succ."
-
-#, fuzzy
-msgid "Map Name"
-msgstr ""
-"Dimensioni\n"
-"Mappa"
 
 msgid "Riddle:"
 msgstr ""
