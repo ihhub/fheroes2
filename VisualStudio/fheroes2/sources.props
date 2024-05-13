@@ -109,6 +109,7 @@
     <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_map_specs_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_object_popup_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_castle_details_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_options.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="src\fheroes2\editor\editor.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_map_specs_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_object_popup_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_castle_details_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_options.h" />
