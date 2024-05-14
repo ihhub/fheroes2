@@ -84,6 +84,12 @@ namespace
                                                 ICN::BUTTON_INFO_EVIL,
                                                 ICN::BUTTON_QUIT_GOOD,
                                                 ICN::BUTTON_QUIT_EVIL,
+                                                ICN::BUTTON_NEW_MAP_EVIL,
+                                                ICN::BUTTON_NEW_MAP_GOOD,
+                                                ICN::BUTTON_SAVE_MAP_EVIL,
+                                                ICN::BUTTON_SAVE_MAP_GOOD,
+                                                ICN::BUTTON_LOAD_MAP_EVIL,
+                                                ICN::BUTTON_LOAD_MAP_GOOD,
                                                 ICN::BUTTON_SMALL_CANCEL_GOOD,
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_SMALL_OKAY_GOOD,
@@ -804,6 +810,81 @@ namespace fheroes2
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
 
                 break;
+            }
+            case ICN::BUTTON_NEW_MAP_EVIL:
+            case ICN::BUTTON_NEW_MAP_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_NEW_MAP_EVIL );
+
+                if ( useOriginalResources() && !isEvilInterface ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::ECPANEL, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::ECPANEL, 1 );
+                    break;
+                }
+
+                const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+
+            }
+            case ICN::BUTTON_SAVE_MAP_EVIL:
+            case ICN::BUTTON_SAVE_MAP_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SAVE_MAP_EVIL );
+
+                if ( useOriginalResources() && !isEvilInterface ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::ECPANEL, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::ECPANEL, 5 );
+                    break;
+                }
+
+                const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+
+            }
+            case ICN::BUTTON_LOAD_MAP_EVIL:
+            case ICN::BUTTON_LOAD_MAP_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_LOAD_MAP_EVIL );
+
+                if ( useOriginalResources() && !isEvilInterface ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::ECPANEL, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::ECPANEL, 3 );
+                    break;
+                }
+
+                const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+
             }
             case ICN::BUTTON_SMALL_CANCEL_GOOD:
             case ICN::BUTTON_SMALL_CANCEL_EVIL: {
@@ -2590,6 +2671,12 @@ namespace fheroes2
             case ICN::BUTTON_INFO_EVIL:
             case ICN::BUTTON_QUIT_GOOD:
             case ICN::BUTTON_QUIT_EVIL:
+            case ICN::BUTTON_NEW_MAP_EVIL:
+            case ICN::BUTTON_NEW_MAP_GOOD:
+            case ICN::BUTTON_SAVE_MAP_EVIL:
+            case ICN::BUTTON_SAVE_MAP_GOOD:
+            case ICN::BUTTON_LOAD_MAP_EVIL:
+            case ICN::BUTTON_LOAD_MAP_GOOD:
             case ICN::BUTTON_SMALL_CANCEL_GOOD:
             case ICN::BUTTON_SMALL_CANCEL_EVIL:
             case ICN::BUTTON_SMALL_OKAY_GOOD:
