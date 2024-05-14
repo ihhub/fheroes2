@@ -43,7 +43,6 @@
 #include "map_format_info.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "pal.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -187,33 +186,11 @@ namespace Editor
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
 
-        // Recurring event checkbox
-        auto drawCheckboxBackground
-            = [&display, &dialogRoi]( fheroes2::MovableSprite & checkSprite, std::string str, const int32_t posX, const int32_t posY, const bool isEvil ) {
-                  const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-                  if ( isEvil ) {
-                      fheroes2::ApplyPalette( checkboxBackground, 0, 0, display, posX, posY, checkboxBackground.width(), checkboxBackground.height(),
-                                              PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-                  }
-                  else {
-                      fheroes2::Copy( checkboxBackground, 0, 0, display, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
-                  }
-
-                  fheroes2::addGradientShadow( checkboxBackground, display, { posX, posY }, { -4, 4 } );
-                  const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
-                  checkboxText.drawInRoi( posX + 23, posY + 4, display, dialogRoi );
-
-                  checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
-                  checkSprite.setPosition( posX + 2, posY + 2 );
-
-                  return fheroes2::Rect( posX, posY, 23 + checkboxText.width(), checkboxBackground.height() );
-              };
-
         const fheroes2::Point recurringEventPos{ playerRoi.x, offsetY + 64 };
 
         fheroes2::MovableSprite recurringEventCheckbox;
         const fheroes2::Rect recurringEventArea
-            = drawCheckboxBackground( recurringEventCheckbox, _( "Cancel event after first visit" ), recurringEventPos.x, recurringEventPos.y, isEvilInterface );
+            = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x, recurringEventPos.y, isEvilInterface );
         if ( eventMetadata.isRecurringEvent ) {
             recurringEventCheckbox.show();
         }

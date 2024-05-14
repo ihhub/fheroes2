@@ -21,16 +21,40 @@
 #include "editor_ui_helper.h"
 
 #include <cstdint>
-#include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
+#include "pal.h"
 #include "resource.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace Editor
 {
+    fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
+                                         const bool isEvil )
+    {
+        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        if ( isEvil ) {
+            fheroes2::ApplyPalette( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height(),
+                                    PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+        }
+        else {
+            fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
+        }
+
+        fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
+        const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
+        checkboxText.draw( posX + 23, posY + 4, output );
+
+        checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+        checkSprite.setPosition( posX + 2, posY + 2 );
+
+        return { posX, posY, 23 + checkboxText.width(), checkboxBackground.height() };
+    }
+
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi )
     {
         const int32_t offsetFromEdge{ 7 };

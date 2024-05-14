@@ -21,6 +21,7 @@
 #pragma once
 
 #include <array>
+#include <string>
 
 #include "math_base.h"
 
@@ -29,9 +30,13 @@ struct Funds;
 namespace fheroes2
 {
     class Image;
+    class MovableSprite;
 }
 
 namespace Editor
 {
+    fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
+                                         const bool isEvil );
+
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
 }
