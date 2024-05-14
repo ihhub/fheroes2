@@ -68,7 +68,6 @@ namespace
     public:
         Checkbox( fheroes2::Display & display, const int32_t x, const int32_t y, const int boxColor, const bool checked )
             : color( boxColor )
-            , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
         {
             const int32_t icnIndex = Color::GetIndex( color ) + 43;
             const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
@@ -111,7 +110,7 @@ namespace
     private:
         int color = Color::NONE;
         fheroes2::Rect rect;
-        fheroes2::MovableSprite checkmark;
+        fheroes2::MovableSprite checkmark{ fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) };
     };
 }
 
@@ -238,7 +237,8 @@ namespace Editor
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
 
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        const fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17,
+                                                     18 );
         buttonDeleteArtifact.draw();
 
         // Resources
@@ -273,7 +273,7 @@ namespace Editor
                 break;
             }
 
-            for ( auto & humanCheckbox : humanCheckboxes ) {
+            for ( const auto & humanCheckbox : humanCheckboxes ) {
                 if ( le.MouseClickLeft( humanCheckbox->getRect() ) ) {
                     const int color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
@@ -287,7 +287,7 @@ namespace Editor
                 }
             }
 
-            for ( auto & computerCheckbox : computerCheckboxes ) {
+            for ( const auto & computerCheckbox : computerCheckboxes ) {
                 if ( le.MouseClickLeft( computerCheckbox->getRect() ) ) {
                     const int color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
