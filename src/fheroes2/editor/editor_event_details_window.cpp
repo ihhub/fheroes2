@@ -20,31 +20,37 @@
 
 #include "editor_event_details_window.h"
 
+#include <array>
 #include <cassert>
-#include <ostream>
+#include <cstddef>
+#include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "artifact.h"
+#include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_selectitems.h"
-#include "editor_interface.h"
 #include "game_hotkeys.h"
-#include "ground.h"
 #include "icn.h"
-#include "interface_gamearea.h"
-#include "logging.h"
-#include "maps_tiles.h"
-#include "maps_tiles_helper.h"
+#include "image.h"
+#include "localevent.h"
+#include "map_format_info.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "pal.h"
 #include "resource.h"
-#include "statusbar.h"
+#include "screen.h"
+#include "settings.h"
+#include "spell.h"
 #include "translations.h"
-#include "ui_dialog.h"
-#include "ui_map_interface.h"
+#include "ui_button.h"
+#include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
-#include "world.h"
 
 namespace
 {
@@ -128,6 +134,7 @@ namespace
     public:
         Checkbox( fheroes2::Display & display, const int32_t x, const int32_t y, const int color, const bool checked )
             : color( color )
+            , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
         {
             rect.x = x;
             rect.y = y;
@@ -138,7 +145,6 @@ namespace
             rect.height = playerIcon.height();
             fheroes2::Copy( playerIcon, 0, 0, display, rect.x, rect.y, rect.width, rect.height );
 
-            checkmark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
             checkmark.setPosition( rect.x + 2, rect.y + 2 );
 
             if ( checked ) {
@@ -150,10 +156,10 @@ namespace
         }
 
         Checkbox( Checkbox && other ) noexcept
+            : color( other.color )
+            , rect( other.rect )
+            , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
         {
-            color = other.color;
-            rect = std::move( other.rect );
-            checkmark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
             checkmark.setPosition( rect.x + 2, rect.y + 2 );
 
             if ( other.checkmark.isHidden() ) {
@@ -163,6 +169,10 @@ namespace
                 checkmark.show();
             }
         }
+
+        ~Checkbox() = default;
+        Checkbox( Checkbox & ) = delete;
+        Checkbox & operator=( const Checkbox & ) = delete;
 
         fheroes2::Rect & getRect()
         {
@@ -249,7 +259,7 @@ namespace Editor
 
         createColorCheckboxes( playerCheckboxes, eventMetadata.humanPlayerColors, playerRoi.x + checkOff, offsetY + 32 );
 
-        assert( playerCheckboxes.size() == availablePlayersCount );
+        assert( playerCheckboxes.size() == static_cast<size_t>( availablePlayersCount ) );
 
         offsetY += 64;
 
@@ -363,7 +373,7 @@ namespace Editor
 
                     break;
                 }
-                else if ( le.MouseClickLeft( computerCheckboxes[i].getRect() ) ) {
+                if ( le.MouseClickLeft( computerCheckboxes[i].getRect() ) ) {
                     const int currentColor = computerCheckboxes[i].getColor();
                     if ( computerCheckboxes[i].toggle() ) {
                         eventMetadata.computerPlayerColors |= currentColor;

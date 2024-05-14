@@ -23,8 +23,6 @@
 
 namespace Maps
 {
-    class Tiles;
-
     namespace Map_Format
     {
         struct AdventureMapEventMetadata;
