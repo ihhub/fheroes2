@@ -108,7 +108,7 @@ namespace
         Checkbox( Checkbox & ) = delete;
         Checkbox & operator=( const Checkbox & ) = delete;
 
-        fheroes2::Rect & getRect()
+        const fheroes2::Rect & getRect() const
         {
             return rect;
         }
