@@ -673,6 +673,11 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 
 void StreamFile::putRaw( const void * ptr, size_t sz )
 {
+    if ( sz == 0 ) {
+        // Nothing to write. Ignore it.
+        return;
+    }
+
     if ( !_file ) {
         return;
     }
