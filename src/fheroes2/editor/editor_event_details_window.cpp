@@ -227,10 +227,11 @@ namespace Editor
                   return fheroes2::Rect( posX, posY, 23 + checkboxText.width(), checkboxBackground.height() );
               };
 
-        fheroes2::Point dstPt( playerRoi.x, offsetY + 64 );
+        const fheroes2::Point recurringEventPos{ playerRoi.x, offsetY + 64 };
 
         fheroes2::MovableSprite recurringEventCheckbox;
-        fheroes2::Rect recurringEventArea = drawCheckboxBackground( recurringEventCheckbox, _( "Cancel event after first visit" ), dstPt.x, dstPt.y, isEvilInterface );
+        fheroes2::Rect recurringEventArea = drawCheckboxBackground( recurringEventCheckbox, _( "Cancel event after first visit" ), recurringEventPos.x,
+                                                                    recurringEventPos.y, isEvilInterface );
         if ( eventMetadata.isRecurringEvent ) {
             recurringEventCheckbox.show();
         }
