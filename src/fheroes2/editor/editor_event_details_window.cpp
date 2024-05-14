@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -150,8 +151,8 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
-                                                 const int32_t boxOffsetY ) {
+        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
+                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
             int32_t colorsAdded = 0;
 
             for ( const int color : colorList ) {
