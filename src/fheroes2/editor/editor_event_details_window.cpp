@@ -65,7 +65,7 @@ namespace
     class Checkbox
     {
     public:
-        Checkbox( fheroes2::Display & display, const int32_t x, const int32_t y, const int boxColor, const bool checked )
+        Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Display & output = fheroes2::Display::instance() )
             : color( boxColor )
         {
             const int32_t icnIndex = Color::GetIndex( color ) + 43;
@@ -73,7 +73,7 @@ namespace
 
             rect = { x, y, playerIcon.width(), playerIcon.height() };
 
-            fheroes2::Copy( playerIcon, 0, 0, display, rect.x, rect.y, rect.width, rect.height );
+            fheroes2::Copy( playerIcon, 0, 0, output, rect.x, rect.y, rect.width, rect.height );
 
             checkmark.setPosition( rect.x + 2, rect.y + 2 );
 
@@ -100,9 +100,12 @@ namespace
             return color;
         }
 
-        bool toggle()
+        bool toggle( fheroes2::Display & output = fheroes2::Display::instance() )
         {
             checkmark.isHidden() ? checkmark.show() : checkmark.hide();
+
+            output.render( rect );
+
             return !checkmark.isHidden();
         }
 
@@ -154,7 +157,7 @@ namespace Editor
             int32_t colorsAdded = 0;
 
             for ( const int color : Colors( availableColors ) ) {
-                list.emplace_back( std::make_unique<Checkbox>( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 ) );
+                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
                 ++colorsAdded;
             }
         };
@@ -273,7 +276,7 @@ namespace Editor
             for ( const auto & humanCheckbox : humanCheckboxes ) {
                 if ( le.MouseClickLeft( humanCheckbox->getRect() ) ) {
                     const int color = humanCheckbox->getColor();
-                    if ( humanCheckbox->toggle() ) {
+                    if ( humanCheckbox->toggle( display ) ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
                     else {
@@ -287,7 +290,7 @@ namespace Editor
             for ( const auto & computerCheckbox : computerCheckboxes ) {
                 if ( le.MouseClickLeft( computerCheckbox->getRect() ) ) {
                     const int color = computerCheckbox->getColor();
-                    if ( computerCheckbox->toggle() ) {
+                    if ( computerCheckbox->toggle( display ) ) {
                         eventMetadata.computerPlayerColors |= color;
                     }
                     else {
