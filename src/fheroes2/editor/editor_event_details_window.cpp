@@ -165,17 +165,17 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        auto createColorCheckboxes
-            = [&display]( std::vector<Checkbox> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX, const int32_t boxOffsetY ) {
-                  int32_t colorsAdded = 0;
+        auto createColorCheckboxes = [&display]( std::vector<Checkbox> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
+                                                 const int32_t boxOffsetY ) {
+            int32_t colorsAdded = 0;
 
-                  for ( const int color : colorList ) {
-                      if ( ( availableColors & color ) == color ) {
-                          list.emplace_back( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 );
-                          ++colorsAdded;
-                      }
-                  }
-              };
+            for ( const int color : colorList ) {
+                if ( ( availableColors & color ) == color ) {
+                    list.emplace_back( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 );
+                    ++colorsAdded;
+                }
+            }
+        };
 
         offsetY += 32;
 
