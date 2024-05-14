@@ -70,13 +70,11 @@ namespace
             : color( boxColor )
             , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
         {
-            rect.x = x;
-            rect.y = y;
-
             const int32_t icnIndex = Color::GetIndex( color ) + 43;
             const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
-            rect.width = playerIcon.width();
-            rect.height = playerIcon.height();
+
+            rect = { x, y, playerIcon.width(), playerIcon.height() };
+
             fheroes2::Copy( playerIcon, 0, 0, display, rect.x, rect.y, rect.width, rect.height );
 
             checkmark.setPosition( rect.x + 2, rect.y + 2 );
