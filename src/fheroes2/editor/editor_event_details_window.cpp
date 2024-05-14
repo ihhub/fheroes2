@@ -201,9 +201,6 @@ namespace Editor
         // Bottom row
         offsetY = messageRoi.y + messageRoi.height + text.height() + elementOffset;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 13 );
-        const int32_t buttonWidth = buttonImage.width();
-
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
         text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
 
@@ -212,7 +209,16 @@ namespace Editor
                                           artifactFrame.height() };
 
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() ), display, artifactRoi.x + 6, artifactRoi.y + 6 );
+
+        auto redrawArtifactImage = [&display, &artifactRoi]( const int32_t artifactId ) {
+            const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( artifactId ).IndexSprite64() );
+            fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+        };
+
+        redrawArtifactImage( eventMetadata.artifact );
+
+        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 17 );
+        const int32_t buttonWidth = buttonImage.width();
 
         const fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17,
                                                      18 );
@@ -335,8 +341,7 @@ namespace Editor
                     eventMetadata.artifact = artifact.GetID();
                     eventMetadata.artifactMetadata = artifactMetadata;
 
-                    const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() );
-                    fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+                    redrawArtifactImage( eventMetadata.artifact );
                 }
 
                 // The opened selectArtifact() dialog might be bigger than the Sphinx dialog so we render the whole screen.
