@@ -834,7 +834,6 @@ namespace fheroes2
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
 
                 break;
-
             }
             case ICN::BUTTON_SAVE_MAP_EVIL:
             case ICN::BUTTON_SAVE_MAP_GOOD: {
@@ -859,7 +858,6 @@ namespace fheroes2
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
 
                 break;
-
             }
             case ICN::BUTTON_LOAD_MAP_EVIL:
             case ICN::BUTTON_LOAD_MAP_GOOD: {
@@ -884,7 +882,6 @@ namespace fheroes2
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
 
                 break;
-
             }
             case ICN::BUTTON_SMALL_CANCEL_GOOD:
             case ICN::BUTTON_SMALL_CANCEL_EVIL: {
