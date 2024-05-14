@@ -20,6 +20,7 @@
 
 #include "editor_event_details_window.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -132,8 +133,8 @@ namespace
     class Checkbox
     {
     public:
-        Checkbox( fheroes2::Display & display, const int32_t x, const int32_t y, const int color, const bool checked )
-            : color( color )
+        Checkbox( fheroes2::Display & display, const int32_t x, const int32_t y, const int boxColor, const bool checked )
+            : color( boxColor )
             , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
         {
             rect.x = x;
@@ -191,7 +192,7 @@ namespace
         }
 
     private:
-        int color;
+        int color = Color::NONE;
         fheroes2::Rect rect;
         fheroes2::MovableSprite checkmark;
     };
@@ -234,7 +235,7 @@ namespace Editor
         const Colors availableColors( availablePlayerColors );
 
         auto createColorCheckboxes
-            = [&availablePlayersCount, &availablePlayerColors, &display]( std::vector<Checkbox> & list, int colors, int32_t offsetX, int32_t offsetY ) {
+            = [&availablePlayersCount, &availablePlayerColors, &display]( std::vector<Checkbox> & list, int colors, int32_t boxOffsetX, int32_t boxOffsetY ) {
                   auto currentColorIt = colorList.begin();
 
                   for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
@@ -242,7 +243,7 @@ namespace Editor
                           ++currentColorIt;
                       }
                       const int currentColor = *currentColorIt;
-                      list.emplace_back( display, offsetX + i * 32, offsetY, currentColor, colors & currentColor );
+                      list.emplace_back( display, boxOffsetX + i * 32, boxOffsetY, currentColor, colors & currentColor );
                       ++currentColorIt;
                   }
               };

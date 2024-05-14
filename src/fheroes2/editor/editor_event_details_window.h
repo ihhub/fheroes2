@@ -21,12 +21,9 @@
 #pragma once
 #include <cstdint>
 
-namespace Maps
+namespace Maps::Map_Format
 {
-    namespace Map_Format
-    {
-        struct AdventureMapEventMetadata;
-    }
+    struct AdventureMapEventMetadata;
 }
 
 namespace Editor
