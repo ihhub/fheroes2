@@ -56,7 +56,6 @@
 
 namespace
 {
-    const std::array<int, 6> colorList = { Color::BLUE, Color::GREEN, Color::RED, Color::YELLOW, Color::ORANGE, Color::PURPLE };
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
     const fheroes2::Size messageArea{ 300, 200 };
@@ -154,11 +153,9 @@ namespace Editor
                                                  const int32_t boxOffsetX, const int32_t boxOffsetY ) {
             int32_t colorsAdded = 0;
 
-            for ( const int color : colorList ) {
-                if ( ( availableColors & color ) == color ) {
-                    list.emplace_back( std::make_unique<Checkbox>( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 ) );
-                    ++colorsAdded;
-                }
+            for ( const int color : Colors( availableColors ) ) {
+                list.emplace_back( std::make_unique<Checkbox>( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 ) );
+                ++colorsAdded;
             }
         };
 
