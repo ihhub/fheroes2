@@ -1143,7 +1143,10 @@ namespace Interface
                 else if ( objectType == MP2::OBJ_EVENT ) {
                     assert( _mapFormat.adventureMapEventMetadata.find( object.id ) != _mapFormat.adventureMapEventMetadata.end() );
 
-                    Editor::eventDetailsDialog( _mapFormat.adventureMapEventMetadata[object.id], _mapFormat.availablePlayerColors );
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( Editor::eventDetailsDialog( _mapFormat.adventureMapEventMetadata[object.id], _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors ) ) {
+                        action.commit();
+                    }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;

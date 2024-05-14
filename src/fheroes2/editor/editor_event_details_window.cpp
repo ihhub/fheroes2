@@ -131,8 +131,12 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t availablePlayerColors )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
     {
+        // First, make sure that the event has proper player colors according to the map specification.
+        eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
+        eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
+
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -161,21 +165,15 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        // Player configuration
-        const int32_t availablePlayersCount = Color::Count( availablePlayerColors );
-        const Colors availableColors( availablePlayerColors );
-
         auto createColorCheckboxes
-            = [&availablePlayersCount, &availablePlayerColors, &display]( std::vector<Checkbox> & list, int colors, int32_t boxOffsetX, int32_t boxOffsetY ) {
-                  auto currentColorIt = colorList.begin();
+            = [&display]( std::vector<Checkbox> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX, const int32_t boxOffsetY ) {
+                  int32_t colorsAdded = 0;
 
-                  for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
-                      while ( !( availablePlayerColors & *currentColorIt ) ) {
-                          ++currentColorIt;
+                  for ( const int color : colorList ) {
+                      if ( ( availableColors & color ) == color ) {
+                          list.emplace_back( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 );
+                          ++colorsAdded;
                       }
-                      const int currentColor = *currentColorIt;
-                      list.emplace_back( display, boxOffsetX + i * 32, boxOffsetY, currentColor, colors & currentColor );
-                      ++currentColorIt;
                   }
               };
 
@@ -185,13 +183,13 @@ namespace Editor
         text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
         text.draw( playerRoi.x + ( playerRoi.width - text.width() ) / 2, offsetY, display );
 
-        std::vector<Checkbox> playerCheckboxes;
+        const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
+        const int32_t checkOffX = ( playerRoi.width - availablePlayersCount * 32 ) / 2;
 
-        int checkOff = ( playerRoi.width - availablePlayersCount * 32 ) / 2;
+        std::vector<Checkbox> humanCheckboxes;
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerRoi.x + checkOffX, offsetY + 32 );
 
-        createColorCheckboxes( playerCheckboxes, eventMetadata.humanPlayerColors, playerRoi.x + checkOff, offsetY + 32 );
-
-        assert( playerCheckboxes.size() == static_cast<size_t>( availablePlayersCount ) );
+        assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
         offsetY += 64;
 
@@ -200,10 +198,9 @@ namespace Editor
         text.draw( computersRoi.x + ( computersRoi.width - text.width() ) / 2, offsetY, display );
 
         std::vector<Checkbox> computerCheckboxes;
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, computersRoi.x + checkOffX, offsetY + 32 );
 
-        createColorCheckboxes( computerCheckboxes, eventMetadata.computerPlayerColors, computersRoi.x + checkOff, offsetY + 32 );
-
-        assert( playerCheckboxes.size() == computerCheckboxes.size() );
+        assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
 
         // Recurring event checkbox
         auto drawCheckboxBackground
@@ -290,29 +287,28 @@ namespace Editor
                 break;
             }
 
-            for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
-                if ( !( availablePlayerColors & availableColors[i] ) ) {
-                    break;
-                }
-
-                if ( le.MouseClickLeft( playerCheckboxes[i].getRect() ) ) {
-                    const int currentColor = playerCheckboxes[i].getColor();
-                    if ( playerCheckboxes[i].toggle() ) {
-                        eventMetadata.humanPlayerColors |= currentColor;
+            for ( auto & humanCheckbox : humanCheckboxes ) {
+                if ( le.MouseClickLeft( humanCheckbox.getRect() ) ) {
+                    const int color = humanCheckbox.getColor();
+                    if ( humanCheckbox.toggle() ) {
+                        eventMetadata.humanPlayerColors |= color;
                     }
                     else {
-                        eventMetadata.humanPlayerColors ^= currentColor;
+                        eventMetadata.humanPlayerColors ^= color;
                     }
 
                     break;
                 }
-                if ( le.MouseClickLeft( computerCheckboxes[i].getRect() ) ) {
-                    const int currentColor = computerCheckboxes[i].getColor();
-                    if ( computerCheckboxes[i].toggle() ) {
-                        eventMetadata.computerPlayerColors |= currentColor;
+            }
+
+            for ( auto & computerCheckbox : computerCheckboxes ) {
+                if ( le.MouseClickLeft( computerCheckbox.getRect() ) ) {
+                    const int color = computerCheckbox.getColor();
+                    if ( computerCheckbox.toggle() ) {
+                        eventMetadata.computerPlayerColors |= color;
                     }
                     else {
-                        eventMetadata.computerPlayerColors ^= currentColor;
+                        eventMetadata.computerPlayerColors ^= color;
                     }
 
                     break;
