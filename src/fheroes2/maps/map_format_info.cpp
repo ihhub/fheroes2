@@ -140,13 +140,15 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
+               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
     bool saveToStream( StreamBase & msg, const BaseMapFormat & map )

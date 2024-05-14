@@ -192,6 +192,19 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        int16_t attack{ 0 };
+        int16_t defense{ 0 };
+        int16_t knowledge{ 0 };
+        int16_t spellPower{ 0 };
+
+        int32_t experience{ 0 };
+
+        int32_t secondarySkill{ 0 };
+        uint8_t secondarySkillLevel{ 0 };
+
+        std::array<int32_t, 5> monsterType{ 0 };
+        std::array<int32_t, 5> monsterCount{ 0 };
     };
 
     struct DailyEvent
