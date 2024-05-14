@@ -80,6 +80,12 @@ namespace Editor
             infoString = getObjectInfoText( tile );
         }
 
+        infoString += "\n[";
+        infoString += std::to_string( tile.GetIndex() % world.w() );
+        infoString += "; ";
+        infoString += std::to_string( tile.GetIndex() / world.w() );
+        infoString += ']';
+
         Interface::displayStandardPopupWindow( std::move( infoString ), Interface::EditorInterface::Get().getGameArea().GetROI() );
     }
 }
