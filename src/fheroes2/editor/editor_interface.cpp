@@ -995,7 +995,6 @@ namespace Interface
         fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
         fheroes2::Blit( background, display, rb.x, rb.y );
 
-        // TODO: Make Evil interface for New/Load/Save Map buttons.
         fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
         fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
         fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
