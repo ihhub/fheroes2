@@ -20,6 +20,9 @@
 
 #include "editor_ui_helper.h"
 
+#include <cstdint>
+#include <string>
+
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
