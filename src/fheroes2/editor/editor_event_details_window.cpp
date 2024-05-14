@@ -86,21 +86,7 @@ namespace
             }
         }
 
-        Checkbox( Checkbox && other ) noexcept
-            : color( other.color )
-            , rect( other.rect )
-            , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
-        {
-            checkmark.setPosition( rect.x + 2, rect.y + 2 );
-
-            if ( other.checkmark.isHidden() ) {
-                checkmark.hide();
-            }
-            else {
-                checkmark.show();
-            }
-        }
-
+        Checkbox( Checkbox && other ) = delete;
         ~Checkbox() = default;
         Checkbox( Checkbox & ) = delete;
         Checkbox & operator=( const Checkbox & ) = delete;
@@ -164,13 +150,13 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        auto createColorCheckboxes = [&display]( std::vector<Checkbox> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
+        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
                                                  const int32_t boxOffsetY ) {
             int32_t colorsAdded = 0;
 
             for ( const int color : colorList ) {
                 if ( ( availableColors & color ) == color ) {
-                    list.emplace_back( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 );
+                    list.emplace_back( std::make_unique<Checkbox>( display, boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0 ) );
                     ++colorsAdded;
                 }
             }
@@ -185,7 +171,7 @@ namespace Editor
         const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
         const int32_t checkOffX = ( playerRoi.width - availablePlayersCount * 32 ) / 2;
 
-        std::vector<Checkbox> humanCheckboxes;
+        std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
         createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerRoi.x + checkOffX, offsetY + 32 );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
@@ -196,7 +182,7 @@ namespace Editor
         text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
         text.draw( computersRoi.x + ( computersRoi.width - text.width() ) / 2, offsetY, display );
 
-        std::vector<Checkbox> computerCheckboxes;
+        std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
         createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, computersRoi.x + checkOffX, offsetY + 32 );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
@@ -287,9 +273,9 @@ namespace Editor
             }
 
             for ( auto & humanCheckbox : humanCheckboxes ) {
-                if ( le.MouseClickLeft( humanCheckbox.getRect() ) ) {
-                    const int color = humanCheckbox.getColor();
-                    if ( humanCheckbox.toggle() ) {
+                if ( le.MouseClickLeft( humanCheckbox->getRect() ) ) {
+                    const int color = humanCheckbox->getColor();
+                    if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
                     else {
@@ -301,9 +287,9 @@ namespace Editor
             }
 
             for ( auto & computerCheckbox : computerCheckboxes ) {
-                if ( le.MouseClickLeft( computerCheckbox.getRect() ) ) {
-                    const int color = computerCheckbox.getColor();
-                    if ( computerCheckbox.toggle() ) {
+                if ( le.MouseClickLeft( computerCheckbox->getRect() ) ) {
+                    const int color = computerCheckbox->getColor();
+                    if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }
                     else {
