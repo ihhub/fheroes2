@@ -455,7 +455,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
-    const int boxHeight = freeSlots > 1 ? 56 + spacer + titleHeight + bodyHeight : 45;
+    const int boxHeight = freeSlots > 1 ? 63 + spacer + titleHeight + bodyHeight : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     const NonFixedFrameBox box( boxHeight, boxYPosition, true );

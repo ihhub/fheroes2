@@ -31,15 +31,13 @@
 #include "map_object_info.h"
 #include "resource.h"
 
-class StreamBase;
-
 namespace Maps::Map_Format
 {
     struct ObjectInfo
     {
         uint32_t id{ 0 };
 
-        ObjectGroup group{ ObjectGroup::LANDSCAPE_MOUNTAINS };
+        ObjectGroup group{ ObjectGroup::NONE };
 
         uint32_t index{ 0 };
     };
@@ -158,7 +156,7 @@ namespace Maps::Map_Format
 
     struct SphinxMetadata
     {
-        std::string question;
+        std::string riddle;
 
         std::vector<std::string> answers;
 
@@ -214,11 +212,13 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
+        // Change the version when there is a need to expand map format functionality.
         uint16_t version{ 1 };
+
         bool isCampaign{ false };
 
-        uint8_t difficulty{ 0 };
+        // Normal difficulty.
+        uint8_t difficulty{ 1 };
 
         uint8_t availablePlayerColors{ 0 };
         uint8_t humanPlayerColors{ 0 };
@@ -273,37 +273,4 @@ namespace Maps::Map_Format
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
-
-    StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object );
-    StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );
-
-    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
-    StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
-
-    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo );
-    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo );
-
-    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map );
-    StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map );
-
-    StreamBase & operator<<( StreamBase & msg, const MapFormat & map );
-    StreamBase & operator>>( StreamBase & msg, MapFormat & map );
 }

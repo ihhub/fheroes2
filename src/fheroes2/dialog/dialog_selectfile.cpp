@@ -65,16 +65,6 @@ namespace
     // This constant sets the maximum displayed file name width. This value affects the dialog horizontal size.
     const int32_t maxFileNameWidth = 260;
 
-    std::string ResizeToShortName( const std::string & str )
-    {
-        std::string res = System::GetBasename( str );
-        const size_t it = res.rfind( '.' );
-        if ( std::string::npos != it ) {
-            res.resize( it );
-        }
-        return res;
-    }
-
     void redrawDateTime( fheroes2::Image & output, const time_t timestamp, const int32_t dstx, const int32_t dsty, const fheroes2::FontType font )
     {
         const size_t arraySize = 5;
@@ -147,13 +137,13 @@ namespace
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols by '/' symbols.
+            // To avoid this we have to replace all '\' symbols with '/' symbols.
             std::string fullPath = info.filename;
 
             // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
             StringReplace( fullPath, "\\", "/" );
 
-            const fheroes2::Text header( ResizeToShortName( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -354,7 +344,7 @@ namespace
         size_t charInsertPos = 0;
 
         if ( !lastfile.empty() ) {
-            filename = ResizeToShortName( lastfile );
+            filename = System::truncateFileExtensionAndPath( lastfile );
             charInsertPos = filename.size();
 
             MapsFileInfoList::iterator it = lists.begin();
@@ -377,7 +367,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = ResizeToShortName( listbox.GetCurrent().filename );
+            filename = System::truncateFileExtensionAndPath( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -545,12 +535,8 @@ namespace
                 continue;
             }
 
-            if ( listbox.IsNeedRedraw() ) {
-                listbox.Redraw();
-            }
-
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
@@ -576,7 +562,13 @@ namespace
                 }
             }
 
-            display.render( area );
+            if ( listbox.IsNeedRedraw() ) {
+                listbox.Redraw();
+                display.render( area );
+            }
+            else {
+                display.render( textInputAndDateBackground.rect() );
+            }
         }
 
         return result;

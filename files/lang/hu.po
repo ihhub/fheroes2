@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3419,17 +3419,17 @@ msgstr ""
 "\n"
 "Hely: "
 
-msgid "Click to save the current game."
-msgstr "Kattints az aktuális játékállás mentéséhez."
-
-msgid "Click to load a previously saved game."
-msgstr "Kattints a mentett játékállás betöltéséhez."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Biztosan törlöd ezt a fájlt?:"
 
 msgid "Warning!"
 msgstr "Figyelem!"
+
+msgid "Click to save the current game."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Click to load a previously saved game."
+msgstr "Kattints a mentett játékállás betöltéséhez."
 
 msgid "File to Save:"
 msgstr "Fájl mentése:"
@@ -3855,8 +3855,20 @@ msgstr ""
 "A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
 "állnak."
 
-msgid "Map filename"
-msgstr "Térképfájl neve"
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Vízen nem helyezhetők el kövek."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
 
 #, fuzzy
 msgid ""
@@ -3918,22 +3930,6 @@ msgstr "%{monster} létszám beállítása"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Véletlenszerű Szent Varázstárgy"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Vízen nem helyezhetők el lények."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kincsek."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Vízen nem helyezhetők el hősök."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
@@ -3941,42 +3937,31 @@ msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színbő
 msgid "Failed to update player information."
 msgstr "A játékos adatainak frissítése nem sikerült."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Vízen nem helyezhetők el hegyek."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "A mentés fájl sérült."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kövek."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Vízen nem helyezhetők el fák."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Ezzel törölheted a tárgyakat a térképről."
 
-msgid "Ocean object must be placed on water."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Biztosan felülírod a mentést ezzel a névvel?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Vízen nem helyezhetők el szárazföldi objektumok."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Vízen nem helyezhetők el városok."
-
-msgid "Mines cannot be placed on water."
-msgstr "Vízen nem helyezhetők el bányák."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Vízen nem helyezhetők el toborzóhelyek."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Kaland objektumok nem helyezhetők el vízen."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fájl mentése:"
 
 msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
@@ -4005,14 +3990,14 @@ msgstr ""
 "Cella\n"
 "részletek"
 
+msgid "Erase"
+msgstr "Törlés"
+
 msgid "Roads"
 msgstr "Utak"
 
 msgid "Streams"
 msgstr "Folyóvizek"
-
-msgid "Erase"
-msgstr "Törlés"
 
 msgid "Mountains"
 msgstr "Hegyek"
@@ -4044,11 +4029,11 @@ msgstr "Képességnövelők"
 msgid "Treasures"
 msgstr "Kincsek"
 
-msgid "Towns"
-msgstr "Városok"
-
 msgid "Heroes"
 msgstr "Hősök"
+
+msgid "Towns"
+msgstr "Városok"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Szárazföldi objektumok"
@@ -4271,6 +4256,89 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
+#, fuzzy
+msgid "None."
+msgstr "Nincs"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Kérlek válassz másik hőst."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "%{count} arany összegyűjtése."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Kilépés a térképszerkesztőből."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Térkép\n"
+"nehézség"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Hely: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Győzelmi feltétel"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Vesztési feltétel"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Kiválasztott leírás"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kattints az osztály megváltoztatásához."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Kattints az osztály megváltoztatásához."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Térképfájl neve"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "A kiválasztott térkép leírása."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Térkép típusa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Az aktuálisan kiválasztott térkép nehézségi fokozata. A térkép nehézségét a "
+"pálya szerkesztője határozta meg. A nehezebb pályák több és erősebb "
+"ellenfeleket, kevesebb erőforrást, vagy más különleges nehezítő feltételeket "
+"foglalhatnak magukban."
+
 msgid "Animation"
 msgstr "Animáció"
 
@@ -4282,6 +4350,93 @@ msgstr "Objektumok animációjának kapcsolója."
 
 msgid "Toggle display of objects' passability."
 msgstr "Kattints az objektumok átjárhatóságának megjelenítéséhez."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Hely: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Térkép mentése"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Varázstárgy"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Varázstárgy kiválasztása:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Erőforrás"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
@@ -5997,6 +6152,10 @@ msgstr " maximális morált ad"
 
 msgid " gives you maximum luck"
 msgstr " maximális szerencsét ad"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "A varázskönyv nem mozgatható"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8513,9 +8672,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Szélmalom"
 msgstr[1] "Szélmalmok"
-
-msgid "Artifact"
-msgstr "Varázstárgy"
 
 msgid "Mermaid"
 msgstr "Sellő"
@@ -11458,3 +11614,39 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el lények."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el kincsek."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el hősök."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el hegyek."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el fák."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el szárazföldi objektumok."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el városok."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el bányák."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el toborzóhelyek."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Kaland objektumok nem helyezhetők el vízen."

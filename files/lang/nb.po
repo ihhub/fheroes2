@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3517,17 +3517,17 @@ msgstr ""
 "\n"
 "Plassering: "
 
-msgid "Click to save the current game."
-msgstr "Klikk for å lagre det nåværende spillet."
-
-msgid "Click to load a previously saved game."
-msgstr "Klikk for å laste inn et tidligere lagret spill."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette filen:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "Click to save the current game."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Click to load a previously saved game."
+msgstr "Klikk for å laste inn et tidligere lagret spill."
 
 msgid "File to Save:"
 msgstr "Lagringsfil:"
@@ -3978,10 +3978,20 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
-msgid "Map filename"
-msgstr ""
-"Kartets\n"
-"størrelse"
+msgid "%{objects} cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
 msgid ""
@@ -4041,24 +4051,6 @@ msgstr "Skyt på %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfeldig sjeldneste skatt"
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-#, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -4067,52 +4059,30 @@ msgid "Failed to update player information."
 msgstr ""
 
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
+msgid "The map is corrupted."
+msgstr "Lagringsfilen er korrupt."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
+msgid "Unable to create a directory to save the map."
+msgstr "Brukes til å fjerne ting fra kartet."
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Er du sikker på at du vil overskrive lagringspunktet med dette navnet?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
+msgid "Failed to save the map."
+msgstr "Lagringsfil:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4140,16 +4110,16 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Erase"
+msgstr "Viskemodus"
+
+#, fuzzy
 msgid "Roads"
 msgstr "Vei"
 
 #, fuzzy
 msgid "Streams"
 msgstr "Bekkmodus"
-
-#, fuzzy
-msgid "Erase"
-msgstr "Viskemodus"
 
 msgid "Mountains"
 msgstr "Fjell"
@@ -4186,11 +4156,11 @@ msgstr "Kraft"
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
 
-msgid "Towns"
-msgstr "Byer"
-
 msgid "Heroes"
 msgstr "Helter"
+
+msgid "Towns"
+msgstr "Byer"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4424,6 +4394,91 @@ msgid "Warning"
 msgstr "Advarsel"
 
 #, fuzzy
+msgid "None."
+msgstr "Ingen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vennligst velg en annen helt."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Samle opp %{count} gullstykker."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Forlat karttegneren"
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kartets\n"
+"utfordring"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Seiersvilkår"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tapsvilkår"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Kartbeskrivelse"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Beskrivelse av det utvalgte kartet."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Kart-type"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Dette er utfordringen til det utvalgte kartet. Utfordringen til kartet er "
+"spesifisert av skaperen av kartet. De vanskeligste kartene kan inneholde "
+"sterkere fiender, færre råvarer, eller andre spesielle vilkår som skal gjøre "
+"ting mer utfordrende for den menneskelige spilleren."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Underleggelse"
 
@@ -4435,6 +4490,93 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Lagre kart"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Gjenstand"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Velg en skatt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Råvare"
+
+msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -6193,6 +6335,10 @@ msgstr " gir deg den beste kampånden"
 
 msgid " gives you maximum luck"
 msgstr " gir deg den beste flaksen"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Trylleboken kan ikke flyttes"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8841,9 +8987,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
-
-msgid "Artifact"
-msgstr "Gjenstand"
 
 msgid "Mermaid"
 msgstr "Havfrue"
@@ -11922,3 +12065,43 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Denne trolldommen kan ikke brukes på et skip."

@@ -195,6 +195,16 @@ namespace
 
 namespace Interface
 {
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::LandscapeObjectBrush::LANDSCAPE_COUNT>
+        EditorPanel::_selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                                    Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::AdventureObjectBrush::ADVENTURE_COUNT>
+        EditorPanel::_selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,    Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES,
+                                                    Maps::ObjectGroup::ADVENTURE_POWER_UPS,    Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER,
+                                                    Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::KingdomObjectBrush::KINGDOM_OBJECTS_COUNT>
+        EditorPanel::_selectedKingdomObjectGroup{ Maps::ObjectGroup::KINGDOM_HEROES, Maps::ObjectGroup::KINGDOM_TOWNS };
+
     EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
     {
@@ -520,7 +530,7 @@ namespace Interface
                                        { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, display );
         }
         else if ( _selectedInstrument == Instrument::MONSTERS ) {
-            const fheroes2::Text instrumentName( _( "Monsters" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::MONSTERS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             if ( _selectedMonsterType < 0 ) {
@@ -545,11 +555,11 @@ namespace Interface
             instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
         }
         else if ( _selectedInstrument == Instrument::ROAD ) {
-            const fheroes2::Text instrumentName( _( "Roads" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::ROADS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::STREAM ) {
-            const fheroes2::Text instrumentName( _( "Streams" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::STREAMS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
@@ -647,6 +657,56 @@ namespace Interface
         }
     }
 
+    const char * EditorPanel::getObjectGroupName( const Maps::ObjectGroup groupName )
+    {
+        switch ( groupName ) {
+        case Maps::ObjectGroup::ROADS:
+            return _( "Roads" );
+        case Maps::ObjectGroup::STREAMS:
+            return _( "Streams" );
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+            return _( "Mountains" );
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+            return _( "Rocks" );
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+            return _( "Trees" );
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+            return _( "Water Objects" );
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+            return _( "Miscellaneous" );
+        case Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS:
+            // You shouldn't call this path!
+            assert( 0 );
+            return "Towns";
+        case Maps::ObjectGroup::LANDSCAPE_FLAGS:
+            // You shouldn't call this path!
+            assert( 0 );
+            return "Flags";
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+            return _( "Artifacts" );
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+            return _( "Dwellings" );
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+            return _( "Mines" );
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+            return _( "Power-ups" );
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+            return _( "Treasures" );
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+            return _( "Heroes" );
+        case Maps::ObjectGroup::KINGDOM_TOWNS:
+            return _( "Towns" );
+        case Maps::ObjectGroup::MONSTERS:
+            return _( "Monsters" );
+        default:
+            // Did you add a new group? Add the logic for it!
+            assert( 0 );
+            return "Unknown objects";
+        }
+    }
+
     int EditorPanel::_getGroundId( const uint8_t brushId )
     {
         switch ( brushId ) {
@@ -678,66 +738,29 @@ namespace Interface
 
     const char * EditorPanel::_getLandscapeObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case LandscapeObjectBrush::MOUNTAINS:
-            return _( "Mountains" );
-        case LandscapeObjectBrush::ROCKS:
-            return _( "Rocks" );
-        case LandscapeObjectBrush::TREES:
-            return _( "Trees" );
-        case LandscapeObjectBrush::WATER_OBJECTS:
-            return _( "Water Objects" );
-        case LandscapeObjectBrush::LANDSCAPE_MISC:
-            return _( "Miscellaneous" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedLandscapeObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedLandscapeObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getAdventureObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case AdventureObjectBrush::ARTIFACTS:
-            return _( "Artifacts" );
-        case AdventureObjectBrush::DWELLINGS:
-            return _( "Dwellings" );
-        case AdventureObjectBrush::MINES:
-            return _( "Mines" );
-        case AdventureObjectBrush::POWER_UPS:
-            return _( "Power-ups" );
-        case AdventureObjectBrush::TREASURES:
-            return _( "Treasures" );
-        case AdventureObjectBrush::WATER_ADVENTURE:
-            return _( "Water Objects" );
-        case AdventureObjectBrush::ADVENTURE_MISC:
-            return _( "Miscellaneous" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedAdventureObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedAdventureObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getKingdomObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case KingdomObjectBrush::TOWNS:
-            return _( "Towns" );
-        case KingdomObjectBrush::HEROES:
-            return _( "Heroes" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedKingdomObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedKingdomObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
@@ -1165,12 +1188,12 @@ namespace Interface
             }
         }
 
-        le.MousePressLeft( _rectMagnify ) ? _buttonMagnify.drawOnPress() : _buttonMagnify.drawOnRelease();
-        le.MousePressLeft( _rectUndo ) ? _buttonUndo.drawOnPress() : _buttonUndo.drawOnRelease();
-        le.MousePressLeft( _rectNew ) ? _buttonNew.drawOnPress() : _buttonNew.drawOnRelease();
-        le.MousePressLeft( _rectSpecs ) ? _buttonSpecs.drawOnPress() : _buttonSpecs.drawOnRelease();
-        le.MousePressLeft( _rectFile ) ? _buttonFile.drawOnPress() : _buttonFile.drawOnRelease();
-        le.MousePressLeft( _rectSystem ) ? _buttonSystem.drawOnPress() : _buttonSystem.drawOnRelease();
+        _buttonMagnify.drawOnState( le.MousePressLeft( _rectMagnify ) );
+        _buttonUndo.drawOnState( le.MousePressLeft( _rectUndo ) );
+        _buttonNew.drawOnState( le.MousePressLeft( _rectNew ) );
+        _buttonSpecs.drawOnState( le.MousePressLeft( _rectSpecs ) );
+        _buttonFile.drawOnState( le.MousePressLeft( _rectFile ) );
+        _buttonSystem.drawOnState( le.MousePressLeft( _rectSystem ) );
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
@@ -1183,8 +1206,7 @@ namespace Interface
             res = EditorInterface::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            // TODO: Make the scenario info editor.
-            Dialog::GameInfo();
+            EditorInterface::Get().openMapSpecificationsDialog();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = Interface::EditorInterface::eventFileDialog();

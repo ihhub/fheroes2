@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-13 14:01+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3226,16 +3226,16 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "Click to save the current game."
-msgstr ""
-
-msgid "Click to load a previously saved game."
-msgstr ""
-
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
 msgstr ""
 
 msgid "File to Save:"
@@ -3677,7 +3677,16 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
+msgid "%{objects} cannot be placed on water."
+msgstr ""
+
+msgid "%{objects} must be placed on water."
+msgstr ""
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid ""
@@ -3736,21 +3745,6 @@ msgstr ""
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
-msgstr ""
-
-msgid "Action objects must be placed on clear tiles."
-msgstr ""
-
-msgid "Monsters cannot be placed on water."
-msgstr ""
-
-msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes cannot be placed on water."
-msgstr ""
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
@@ -3758,40 +3752,26 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
-msgid "Mountains cannot be placed on water."
+msgid "The map is corrupted."
 msgstr ""
 
-msgid "Rocks cannot be placed on water."
+msgid "Unable to locate data directory to save the map."
 msgstr ""
 
-msgid "Trees cannot be placed on water."
+msgid "Unable to create a directory to save the map."
 msgstr ""
 
-msgid "Ocean object must be placed on water."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
+
+msgid "Map saved to: "
 msgstr ""
 
-msgid "Landscape objects cannot be placed on water."
-msgstr ""
-
-msgid "Towns cannot be placed on water."
-msgstr ""
-
-msgid "Mines cannot be placed on water."
-msgstr ""
-
-msgid "Dwellings cannot be placed on water."
-msgstr ""
-
-msgid "Power-ups cannot be placed on water."
-msgstr ""
-
-msgid "Adventure objects cannot be placed on water."
+msgid "Failed to save the map."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -3818,13 +3798,13 @@ msgid ""
 "Details"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
 msgid "Streams"
-msgstr ""
-
-msgid "Erase"
 msgstr ""
 
 msgid "Mountains"
@@ -3859,12 +3839,12 @@ msgstr ""
 msgid "Treasures"
 msgstr ""
 
+msgid "Heroes"
+msgstr ""
+
 #, fuzzy
 msgid "Towns"
 msgstr "Горад"
-
-msgid "Heroes"
-msgstr ""
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4078,6 +4058,80 @@ msgstr ""
 msgid "Warning"
 msgstr "Увага"
 
+msgid "None."
+msgstr ""
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Калі ласка, выбярыце іншага героя."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Назапасіць вялікую колькасць золата."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr "Складанасць мапы:"
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Апісанне"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Умова перамогі"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Умова паразы"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Апісанне"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Тып мапы"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Апісанне абранай мапы."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тып мапы"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Складанасць мапы вызначаецца ейным аўтарам. Болей складаныя мапы могуць "
+"утрымліваць больш ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
+
 #, fuzzy
 msgid "Animation"
 msgstr "Анексія"
@@ -4089,6 +4143,88 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr "Апісанне"
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Вялікія мапы"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Назва абранай мапы."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Назва абранай мапы."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -5723,6 +5859,9 @@ msgid " gives you maximum morale"
 msgstr ""
 
 msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot have multiple spell books."
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -7812,9 +7951,6 @@ msgid_plural "Windmills"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-msgid "Artifact"
-msgstr ""
 
 msgid "Mermaid"
 msgstr ""
