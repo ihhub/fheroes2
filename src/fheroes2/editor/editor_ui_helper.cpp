@@ -24,8 +24,8 @@
 
 #include "agg_image.h"
 #include "icn.h"
-#include "resource.h"
 #include "image.h"
+#include "resource.h"
 #include "ui_text.h"
 
 namespace Editor
