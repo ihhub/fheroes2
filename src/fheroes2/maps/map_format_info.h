@@ -266,6 +266,8 @@ namespace Maps::Map_Format
 
         std::vector<DailyEvent> dailyEvents;
 
+        std::vector<std::string> rumors;
+
         // These are metadata maps in relation to object UID.
         std::map<uint32_t, StandardObjectMetadata> standardMetadata;
 
@@ -278,8 +280,6 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
-
-        std::vector<std::string> rumors;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
