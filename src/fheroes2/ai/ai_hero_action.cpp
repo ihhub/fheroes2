@@ -1119,11 +1119,15 @@ namespace
         MapEvent * event_maps = world.GetMapEvent( Maps::GetPoint( dst_index ) );
 
         if ( event_maps && event_maps->isAllow( hero.GetColor() ) && event_maps->computer ) {
-            if ( event_maps->resources.GetValidItemsCount() )
+            if ( event_maps->resources.GetValidItemsCount() ) {
                 hero.GetKingdom().AddFundsResource( event_maps->resources );
-            if ( event_maps->artifact.isValid() )
+            }
+
+            if ( event_maps->artifact.isValid() ) {
                 hero.PickupArtifact( event_maps->artifact );
-            event_maps->SetVisited( hero.GetColor() );
+            }
+
+            event_maps->SetVisited();
 
             if ( event_maps->isSingleTimeEvent ) {
                 hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
