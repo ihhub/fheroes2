@@ -60,8 +60,8 @@ namespace
 {
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
-    const fheroes2::Size messageArea{ 300, 200 };
-    const fheroes2::Size playerArea{ 300, 200 };
+    const fheroes2::Size messageArea{ 300, 210 };
+    const int32_t playerAreaWidth{ 300 };
     const int32_t elementOffset{ 9 };
 
     class Checkbox
@@ -132,7 +132,7 @@ namespace Editor
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, messageArea.height + 140, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         int32_t offsetY = dialogRoi.y + elementOffset;
@@ -154,42 +154,7 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
-                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
-            int32_t colorsAdded = 0;
-
-            for ( const int color : Colors( availableColors ) ) {
-                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
-                ++colorsAdded;
-            }
-        };
-
-        offsetY += 32;
-
-        const fheroes2::Rect playerRoi{ dialogRoi.x + elementOffset + messageRoi.width + elementOffset, offsetY + text.height(), playerArea.width, playerArea.height };
-        text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
-        text.draw( playerRoi.x + ( playerRoi.width - text.width() ) / 2, offsetY, display );
-
-        const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
-        const int32_t checkOffX = ( playerRoi.width - availablePlayersCount * 32 ) / 2;
-
-        std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerRoi.x + checkOffX, offsetY + 32 );
-
-        assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
-
-        offsetY += 64;
-
-        const fheroes2::Rect computersRoi{ dialogRoi.x + elementOffset + messageRoi.width + elementOffset, offsetY + text.height(), playerArea.width, playerArea.height };
-        text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
-        text.draw( computersRoi.x + ( computersRoi.width - text.width() ) / 2, offsetY, display );
-
-        std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, computersRoi.x + checkOffX, offsetY + 32 );
-
-        assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
-
-        const fheroes2::Point recurringEventPos{ playerRoi.x, offsetY + 64 };
+        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
 
         fheroes2::MovableSprite recurringEventCheckbox;
         const fheroes2::Rect recurringEventArea
@@ -201,15 +166,63 @@ namespace Editor
             recurringEventCheckbox.show();
         }
 
-        // Bottom row
-        offsetY = messageRoi.y + messageRoi.height + text.height() + elementOffset;
+        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
+                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
+            int32_t colorsAdded = 0;
+
+            for ( const int color : Colors( availableColors ) ) {
+                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
+                ++colorsAdded;
+            }
+        };
+
+        const int32_t playerAreaOffsetX = dialogRoi.x + elementOffset + messageRoi.width + elementOffset;
+
+        text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
+
+        int32_t textWidth = playerAreaWidth;
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
+
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+
+        const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
+        const int32_t checkOffX = ( playerAreaWidth - availablePlayersCount * 32 ) / 2;
+
+        offsetY += 3 + text.height( textWidth );
+        std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+
+        assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
+
+        offsetY += 35;
+
+        text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
+
+        textWidth = playerAreaWidth;
+
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
+
+        text.draw( playerAreaOffsetX - ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+
+        offsetY += 3 + text.height( textWidth );
+        std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+
+        assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
+
+        offsetY += 35;
 
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
-        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, display );
 
         const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        const fheroes2::Rect artifactRoi{ messageRoi.x + ( messageRoi.width - artifactFrame.width() ) / 2, offsetY + text.height(), artifactFrame.width(),
-                                          artifactFrame.height() };
+        const fheroes2::Rect artifactRoi{ playerAreaOffsetX, offsetY + text.height() + 4, artifactFrame.width(), artifactFrame.height() };
 
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
 
@@ -227,7 +240,8 @@ namespace Editor
         buttonDeleteArtifact.draw();
 
         // Resources
-        const fheroes2::Rect resourceRoi{ playerRoi.x, offsetY + text.height(), playerRoi.width, 99 };
+        const int32_t resourceOffsetX = artifactRoi.width + elementOffset;
+        const fheroes2::Rect resourceRoi{ playerAreaOffsetX + resourceOffsetX, artifactRoi.y, playerAreaWidth - resourceOffsetX, 99 };
         background.applyTextBackgroundShading( resourceRoi );
 
         fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
