@@ -49,6 +49,7 @@
 #include "spell.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -344,7 +345,7 @@ namespace Editor
                     redrawArtifactImage( eventMetadata.artifact );
                 }
 
-                // The opened selectArtifact() dialog might be bigger than the Sphinx dialog so we render the whole screen.
+                // The opened selectArtifact() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
 
                 isRedrawNeeded = false;
@@ -357,6 +358,42 @@ namespace Editor
                 fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
                 display.render( artifactRoi );
+            }
+            if ( le.MousePressRight( buttonCancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the Event properties." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( artifactRoi ) ) {
+                // Since Artifact class does not allow to set a random spell (for obvious reasons),
+                // we have to use special UI code to render the popup window with all needed information.
+                const Artifact artifact( eventMetadata.artifact );
+
+                if ( artifact.isValid() ) {
+                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
+                    const fheroes2::Text description( fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ),
+                                                      fheroes2::FontType::normalWhite() );
+
+                    fheroes2::ArtifactDialogElement artifactUI( artifact );
+                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
+                }
+            }
+            else if ( le.MousePressRight( buttonDeleteArtifact.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( resourceRoi ) ) {
+                if ( eventMetadata.resources.GetValidItemsCount() == 0 ) {
+                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
+                }
+                else {
+                    fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
+                                                   fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                                   eventMetadata.resources );
+                }
             }
 
             if ( isRedrawNeeded ) {
