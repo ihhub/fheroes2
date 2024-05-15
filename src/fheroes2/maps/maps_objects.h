@@ -91,7 +91,7 @@ struct MapEvent : public MapObjectSimple
         return ( color & colors ) != 0;
     }
 
-    void SetVisited( const int color )
+    void SetVisited()
     {
         if ( isSingleTimeEvent ) {
             colors = 0;

@@ -2758,7 +2758,7 @@ namespace
 
             fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( event_maps->message, fheroes2::FontType::normalWhite() ), Dialog::OK, elementUI );
 
-            event_maps->SetVisited( hero.GetColor() );
+            event_maps->SetVisited();
 
             if ( event_maps->isSingleTimeEvent ) {
                 hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
