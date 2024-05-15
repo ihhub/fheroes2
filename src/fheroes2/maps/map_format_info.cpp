@@ -119,12 +119,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
@@ -203,6 +203,7 @@ namespace Maps::Map_Format
     {
         // TODO: verify the correctness of metadata.
         if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
+            map = {};
             return false;
         }
 
@@ -233,6 +234,7 @@ namespace Maps::Map_Format
         decompressed >> map.additionalInfo >> map.tiles;
 
         if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+            map = {};
             return false;
         }
 

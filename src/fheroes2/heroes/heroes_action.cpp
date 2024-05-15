@@ -3403,12 +3403,12 @@ namespace
             }
 
             std::string question( _( "The Sphinx asks you the following riddle:\n\n'%{riddle}'\n\nYour answer?" ) );
-            StringReplace( question, "%{riddle}", riddle->message );
+            StringReplace( question, "%{riddle}", riddle->riddle );
 
             std::string answer;
             Dialog::inputString( question, answer, title, 0, false );
 
-            if ( !riddle->AnswerCorrect( answer ) ) {
+            if ( !riddle->isCorrectAnswer( answer ) ) {
                 fheroes2::showStandardTextMessage(
                     title,
                     _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
@@ -3472,7 +3472,7 @@ namespace
                 hero.PickupArtifact( art );
             }
 
-            riddle->SetQuiet();
+            riddle->reset();
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
 

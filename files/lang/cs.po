@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -51,6 +51,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "KONEC"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
 
 msgid "CANCEL"
 msgstr "ZRUŠIT"
@@ -4288,6 +4312,88 @@ msgid "Warning"
 msgstr "Varování"
 
 #, fuzzy
+msgid "None."
+msgstr "Nic"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vyber jiného hrdinu."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Nashromáždéní %{count} zlata."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Mapa\n"
+"Obtížnost"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Cesta: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr ""
+"Podmínky\n"
+"pro výhru"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr ""
+"Podmínky\n"
+"pro prohru"
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Velikost\n"
+"mapy"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Velikost mapy"
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
+#, fuzzy
 msgid "Animation"
 msgstr "Zabrání"
 
@@ -4321,22 +4427,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Uložit Hru"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klikni pro uložení aktuální hry."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Klikni pro zobrazení následujícího města."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
+msgid "Click to save the Sphinx properties."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Add Answer"
 msgstr ""
-"Velikost\n"
-"mapy"
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefakt"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Zdroje"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Lehká"
@@ -6053,6 +6209,10 @@ msgstr " dává maximální morálku"
 
 msgid " gives you maximum luck"
 msgstr " dává maximální štěstí"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Nelze přesunout knihu kouzel"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Tento artefakt nemůžeš vzít, již jich máš plno!"
@@ -8256,9 +8416,6 @@ msgid_plural "Windmills"
 msgstr[0] "Větrný mlýn"
 msgstr[1] "Větrné mlýny"
 msgstr[2] "Větrných mlýnů"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Mořská panna"

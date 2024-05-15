@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -56,6 +56,32 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВАЯ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+" СОХРА-\n"
+"НИТЬ\n"
+"ИГРУ"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+" ЗАГРУ-\n"
+"ЗИТЬ\n"
+"ИГРУ"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
@@ -4267,6 +4293,88 @@ msgstr "Нет доступных карт!"
 msgid "Warning"
 msgstr "Внимание"
 
+#, fuzzy
+msgid "None."
+msgstr "Отсутствуют"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Пожалуйста, выберите другого героя."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Накопить %{count} золота."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Выйти из редактора карт."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Сложность\n"
+"карты"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Путь к файлу: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условия победы"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Условия поражения"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Описание"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Название файла карты"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Расширенное описание выбранной карты."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тип карты"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Сложность выбранной карты. Этот параметр задаётся автором карты в редакторе. "
+"Более сложные карты могут иметь больше (или более сильных) врагов, меньше "
+"ресурсов или другие особые условия, осложняющие игру человеку."
+
 msgid "Animation"
 msgstr "Анимация"
 
@@ -4299,20 +4407,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Сохранить карту"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Нажмите, чтобы сохранить текущую игру."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Нажмите, чтобы показать следующий город."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Название файла карты"
+msgid "Click to save the Sphinx properties."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Выберите артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -6029,6 +6189,10 @@ msgstr " повышает Вашу мораль до максимума"
 
 msgid " gives you maximum luck"
 msgstr " повышает Вашу удачу до максимума"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Невозможно переместить книгу заклинаний"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -8565,9 +8729,6 @@ msgid_plural "Windmills"
 msgstr[0] "Ветряная мельница"
 msgstr[1] "Ветряные мельницы"
 msgstr[2] "Ветряных мельниц"
-
-msgid "Artifact"
-msgstr "Артефакт"
 
 msgid "Mermaid"
 msgstr "Русалка"

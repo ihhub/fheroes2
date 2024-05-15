@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -53,6 +53,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "AFSLUT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYT\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GEM\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"INDLÆS\n"
+"SPIL"
 
 msgid "CANCEL"
 msgstr "AFBRYD"
@@ -4318,6 +4342,89 @@ msgid "Warning"
 msgstr "Advarsel"
 
 #, fuzzy
+msgid "None."
+msgstr "Ingen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Akkumuler %{count} guldstykker."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Forlad korteditoren."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kort\n"
+"Niveau"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Placering: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Valgte beskrivelse"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Kort-filnavn"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Korttype"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Det nuværende kort-niveau for det valgte kort. Kortets sværhedsgrad er "
+"udelukkende bedømt af scenariets designer. Vanskeligere kort inkluderer "
+"flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
+"gør det sværere for menneskelige spillere."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anneksering"
 
@@ -4352,20 +4459,72 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Gem kort"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klik for at gemme igangværende spil."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Klik for at se næste by."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Kort-filnavn"
+msgid "Click to save the Sphinx properties."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Vælg artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resurse"
+
+msgid "Resources will be given as a reward."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Let"
@@ -6084,6 +6243,10 @@ msgstr " giver dig maksimal moral"
 
 msgid " gives you maximum luck"
 msgstr " giver dig maksimalt held"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Kan ikke flytte magibogen"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
@@ -8636,9 +8799,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Havfrue"
