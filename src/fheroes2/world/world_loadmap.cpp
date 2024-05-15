@@ -845,6 +845,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
                     eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
                     eventObject->message = std::move( eventInfo.message );
+                    eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     map_objects.add( eventObject );

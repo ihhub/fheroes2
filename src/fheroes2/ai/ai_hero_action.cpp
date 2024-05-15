@@ -1125,7 +1125,7 @@ namespace
                 hero.PickupArtifact( event_maps->artifact );
             event_maps->SetVisited( hero.GetColor() );
 
-            if ( event_maps->cancel ) {
+            if ( event_maps->isSingleTimeEvent ) {
                 hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }

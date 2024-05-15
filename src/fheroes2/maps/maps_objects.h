@@ -93,7 +93,7 @@ struct MapEvent : public MapObjectSimple
 
     void SetVisited( const int color )
     {
-        if ( cancel ) {
+        if ( isSingleTimeEvent ) {
             colors = 0;
         }
         else {
@@ -104,7 +104,7 @@ struct MapEvent : public MapObjectSimple
     Funds resources;
     Artifact artifact;
     bool computer{ false };
-    bool cancel{ true };
+    bool isSingleTimeEvent{ true };
     int colors{ 0 };
     std::string message;
 };
