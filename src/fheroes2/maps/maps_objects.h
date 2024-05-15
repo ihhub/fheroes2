@@ -96,9 +96,6 @@ struct MapEvent : public MapObjectSimple
         if ( isSingleTimeEvent ) {
             colors = 0;
         }
-        else {
-            colors &= ~color;
-        }
     }
 
     Funds resources;
