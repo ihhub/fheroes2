@@ -28,4 +28,7 @@ namespace Editor
     fheroes2::GameMode menuMain();
     fheroes2::GameMode menuNewMap();
     fheroes2::GameMode menuLoadMap();
+
+    // TODO: this is a temporary solution before we implement random maps.
+    fheroes2::GameMode menuNewFromScratchMap();
 }

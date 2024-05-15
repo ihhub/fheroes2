@@ -323,4 +323,23 @@ namespace Editor
 
         return Interface::EditorInterface::Get().startEdit( false );
     }
+
+    fheroes2::GameMode menuNewFromScratchMap()
+    {
+        fheroes2::drawEditorMainMenuScreen();
+
+        const Maps::mapsize_t mapSize = selectMapSize();
+        if ( mapSize != Maps::ZERO ) {
+            world.generateForEditor( mapSize );
+
+            // Reset object UID to keep track of newly added objects.
+            Maps::resetObjectUID();
+
+            fheroes2::fadeOutDisplay();
+            Game::setDisplayFadeIn();
+
+            return Interface::EditorInterface::Get().startEdit( true );
+        }
+        return fheroes2::GameMode::EDITOR_MAIN_MENU;
+    }
 }
