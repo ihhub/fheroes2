@@ -194,10 +194,10 @@ namespace Editor
         const fheroes2::Rect recurringEventArea
             = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x, recurringEventPos.y, isEvilInterface );
         if ( eventMetadata.isRecurringEvent ) {
-            recurringEventCheckbox.show();
+            recurringEventCheckbox.hide();
         }
         else {
-            recurringEventCheckbox.hide();
+            recurringEventCheckbox.show();
         }
 
         // Bottom row
@@ -320,7 +320,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( recurringEventArea ) ) {
                 eventMetadata.isRecurringEvent = !eventMetadata.isRecurringEvent;
-                eventMetadata.isRecurringEvent ? recurringEventCheckbox.show() : recurringEventCheckbox.hide();
+                eventMetadata.isRecurringEvent ? recurringEventCheckbox.hide() : recurringEventCheckbox.show();
                 display.render( recurringEventCheckbox.getArea() );
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
