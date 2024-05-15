@@ -48,6 +48,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -259,7 +260,9 @@ namespace Editor
             }
 
             for ( const auto & humanCheckbox : humanCheckboxes ) {
-                if ( le.MouseClickLeft( humanCheckbox->getRect() ) ) {
+                const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
+
+                if ( le.MouseClickLeft( checkboxRect ) ) {
                     const int color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle( display ) ) {
                         eventMetadata.humanPlayerColors |= color;
@@ -270,10 +273,25 @@ namespace Editor
 
                     break;
                 }
+
+                if ( le.MousePressRight( checkboxRect ) ) {
+                    std::string header = _( "Allow %{color} human player to get event" );
+                    std::string messageText = _( "If this checkbox is checked, this event will occur for the %{color} player if he is controlled by a human." );
+
+                    const std::string colorString = Color::String( humanCheckbox->getColor() );
+                    StringReplace( header, "%{color}", colorString );
+                    StringReplace( messageText, "%{color}", colorString );
+
+                    fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
+
+                    break;
+                }
             }
 
             for ( const auto & computerCheckbox : computerCheckboxes ) {
-                if ( le.MouseClickLeft( computerCheckbox->getRect() ) ) {
+                const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
+
+                if ( le.MouseClickLeft( checkboxRect ) ) {
                     const int color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle( display ) ) {
                         eventMetadata.computerPlayerColors |= color;
@@ -281,6 +299,19 @@ namespace Editor
                     else {
                         eventMetadata.computerPlayerColors ^= color;
                     }
+
+                    break;
+                }
+
+                if ( le.MousePressRight( checkboxRect ) ) {
+                    std::string header = _( "Allow %{color} computer player to get event" );
+                    std::string messageText = _( "If this checkbox is checked, this event will occur for the %{color} player if he is controlled by a computer." );
+
+                    const std::string colorString = Color::String( computerCheckbox->getColor() );
+                    StringReplace( header, "%{color}", colorString );
+                    StringReplace( messageText, "%{color}", colorString );
+
+                    fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
 
                     break;
                 }
@@ -360,7 +391,7 @@ namespace Editor
 
                 display.render( artifactRoi );
             }
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
+            else if ( le.MousePressRight( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonOk.area() ) ) {
@@ -395,6 +426,15 @@ namespace Editor
                                                    fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                    eventMetadata.resources );
                 }
+            }
+            else if ( le.MousePressRight( recurringEventArea ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Cancel event after first visit" ),
+                    _( "If this checkbox is checked, the event will occur only once. If not checked, the event will occur every time an allowed player crosses the event tile." ),
+                    Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( messageRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );
             }
 
             if ( isRedrawNeeded ) {
