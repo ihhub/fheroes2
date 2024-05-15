@@ -220,8 +220,7 @@ namespace Editor
         const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 17 );
         const int32_t buttonWidth = buttonImage.width();
 
-        const fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17,
-                                                     18 );
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
         buttonDeleteArtifact.draw();
 
         // Resources
@@ -247,6 +246,7 @@ namespace Editor
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
             buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
+            buttonDeleteArtifact.drawOnState( le.MousePressLeft( buttonDeleteArtifact.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
