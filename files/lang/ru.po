@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -56,6 +56,32 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВАЯ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+" СОХРА-\n"
+"НИТЬ\n"
+"ИГРУ"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+" ЗАГРУ-\n"
+"ЗИТЬ\n"
+"ИГРУ"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
