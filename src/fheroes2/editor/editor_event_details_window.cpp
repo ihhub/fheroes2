@@ -31,6 +31,7 @@
 
 #include "agg_image.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
