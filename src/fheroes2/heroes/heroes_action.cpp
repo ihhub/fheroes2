@@ -2733,34 +2733,39 @@ namespace
 
             const Funds fundsToUpdate = Resource::CalculateEventResourceUpdate( hero.GetKingdom().GetFunds(), event_maps->resources );
 
-            std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
-            std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
-
             if ( event_maps->resources.GetValidItemsCount() ) {
                 hero.GetKingdom().AddFundsResource( event_maps->resources );
             }
 
             const Artifact & art = event_maps->artifact;
-            if ( art.isValid() && hero.PickupArtifact( art ) ) {
-                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
-                AudioManager::PlaySound( M82::TREASURE );
-            }
+            const bool hasValidArtifact = art.isValid();
+
+            const std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
 
             std::vector<const fheroes2::DialogElement *> elementUI;
-            elementUI.reserve( resourceUI.size() );
+            elementUI.reserve( resourceUI.size() + ( hasValidArtifact ? 1 : 0 ) );
+
             for ( const fheroes2::ResourceDialogElement & element : resourceUI ) {
                 elementUI.emplace_back( &element );
             }
 
-            if ( artifactUI ) {
+            // Check for the presence of an artifact as a reward in the event and display it in the dialog.
+            std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
+            if ( hasValidArtifact ) {
+                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
+                AudioManager::PlaySound( M82::TREASURE );
                 elementUI.emplace_back( artifactUI.get() );
             }
 
             fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( event_maps->message, fheroes2::FontType::normalWhite() ), Dialog::OK, elementUI );
 
-            event_maps->SetVisited( hero.GetColor() );
+            // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
+            // and the fullness of the bag. Is also displays appropriate text when an artifact cannot be picked up.
+            hero.PickupArtifact( art );
 
-            if ( event_maps->cancel ) {
+            event_maps->SetVisited();
+
+            if ( event_maps->isSingleTimeEvent ) {
                 hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }

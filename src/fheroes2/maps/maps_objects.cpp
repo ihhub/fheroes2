@@ -122,7 +122,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     computer = ( dataStream.get() != 0 );
 
     // Does event occur only once?
-    cancel = ( dataStream.get() != 0 );
+    isSingleTimeEvent = ( dataStream.get() != 0 );
 
     dataStream.skip( 10 );
 
@@ -326,12 +326,12 @@ StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapEvent & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.cancel << obj.colors << obj.message;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.cancel >> obj.colors >> obj.message;
+    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )

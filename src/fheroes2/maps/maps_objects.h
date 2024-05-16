@@ -91,20 +91,17 @@ struct MapEvent : public MapObjectSimple
         return ( color & colors ) != 0;
     }
 
-    void SetVisited( const int color )
+    void SetVisited()
     {
-        if ( cancel ) {
+        if ( isSingleTimeEvent ) {
             colors = 0;
-        }
-        else {
-            colors &= ~color;
         }
     }
 
     Funds resources;
     Artifact artifact;
     bool computer{ false };
-    bool cancel{ true };
+    bool isSingleTimeEvent{ true };
     int colors{ 0 };
     std::string message;
 };
