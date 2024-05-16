@@ -756,15 +756,6 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
                     _gameArea.SetScroll( SCROLL_BOTTOM );
                 }
-                // default action
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. No actions are available yet.", Dialog::OK );
-                }
-                // open focus
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
-                                                       Dialog::OK );
-                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
                     undoAction();
                 }
