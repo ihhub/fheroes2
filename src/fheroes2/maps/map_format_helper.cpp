@@ -557,6 +557,12 @@ namespace Maps
             map.playerRace = { 0 };
         }
 
+        // Update events according to the possible changes in human and/or AI player colors.
+        for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
+            eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
+            eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
+        }
+
         return true;
     }
 
