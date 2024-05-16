@@ -140,13 +140,15 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
+               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
     bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
@@ -189,8 +191,8 @@ namespace Maps::Map_Format
         StreamBuf compressed;
         compressed.setbigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -238,8 +240,8 @@ namespace Maps::Map_Format
             return false;
         }
 
-        decompressed >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.rumors;
+        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
+            >> map.adventureMapEventMetadata;
 
         return !msg.fail();
     }

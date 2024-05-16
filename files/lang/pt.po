@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
-"PO-Revision-Date: 2024-04-08 22:19-0300\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"PO-Revision-Date: 2024-05-16 19:37-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -51,6 +51,27 @@ msgstr "INFO."
 
 msgid "QUIT"
 msgstr "SAIR"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVO\n"
+"MAPA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SALVAR\n"
+"MAPA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"CARREGAR\n"
+"MAPA"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -3860,6 +3881,83 @@ msgstr ""
 "Definir Exército personalizado. Botão direito para "
 "redefinir."
 
+msgid "Message Text:"
+msgstr "Texto da Mensagem:"
+
+msgid "Cancel event after first visit"
+msgstr "Cancelar evento após a primeira visita"
+
+msgid "Player colors allowed to get event:"
+msgstr "As cores dos jogadores podem receber o evento:"
+
+msgid "Computer colors allowed to get event:"
+msgstr "As cores do computador podem ser usadas em eventos:"
+
+msgid "Reward:"
+msgstr "Recompensa:"
+
+msgid "Allow %{color} human player to get event"
+msgstr "Permitir que jogador humano %{color}  obtenha o evento"
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+"Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
+"jogador %{color} se ele for controlado por um humano."
+
+msgid "Allow %{color} computer player to get event"
+msgstr "Permitir que jogador %{color} do computador obtenha o evento"
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+"Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
+"jogador %{color} se ele for controlado por um computador."
+
+msgid "Message:"
+msgstr "Mensagem:"
+
+msgid "Click to save the Event properties."
+msgstr "Clique para salvar as propriedades do Evento."
+
+msgid "Artifact"
+msgstr "Artefato"
+
+msgid "No artifact will be given as a reward."
+msgstr "Nenhum artefato será dado como recompensa."
+
+msgid "Delete Artifact"
+msgstr "Apagar Artefato"
+
+msgid "Delete an artifact from the reward."
+msgstr "Apagar um artefato da recompensa."
+
+msgid "No resources will be given as a reward."
+msgstr "Nenhum recurso será dado como recompensa."
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Resources will be given as a reward."
+msgstr "Recursos serão dados como recompensa."
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+"Se essa caixa de seleção estiver marcada, o evento será acionado apenas uma "
+"vez. Se não estiver marcada, o evento será acionado toda vez que um dos "
+"jogadores especificados cruzar o bloco do evento."
+
+msgid "Click here to change the event message."
+msgstr "Clique aqui para alterar a mensagem do evento."
+
+msgid "Event Message Text"
+msgstr "Texto da Mensagem do Evento"
+
 msgid "%{objects} cannot be placed on water."
 msgstr "O objeto %{objects} não pode ser colocado na água."
 
@@ -3896,10 +3994,8 @@ msgstr ""
 "Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
 "salvas no mapa atual serão perdidas.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Crie um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
+msgid "Create a new map from scratch."
+msgstr "Crie um novo mapa do zero."
 
 msgid "New Map"
 msgstr "Novo Mapa"
@@ -3920,7 +4016,7 @@ msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
 msgid "Input %{object} text"
-msgstr "Inserir texto de %{object}"
+msgstr "Inserir texto de%{object}"
 
 msgid "Set %{monster} Count"
 msgstr "Definir Quantidade de %{monster}"
@@ -4195,10 +4291,6 @@ msgstr "Desfazer"
 msgid "Undo your last action."
 msgstr "Desfazer sua última ação."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Criar um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Editar título do mapa, descrição e outras informações gerais."
 
@@ -4358,9 +4450,6 @@ msgstr "Enigma:"
 msgid "Answers:"
 msgstr "Respostas:"
 
-msgid "Reward:"
-msgstr "Recompensa:"
-
 msgid "Answer:"
 msgstr "Resposta:"
 
@@ -4390,27 +4479,6 @@ msgstr "Apagar Resposta"
 
 msgid "Delete an existing answer for the question."
 msgstr "Apagar uma resposta existente para a pergunta."
-
-msgid "Artifact"
-msgstr "Artefato"
-
-msgid "No artifact will be given as a reward."
-msgstr "Nenhum artefato será dado como recompensa."
-
-msgid "Delete Artifact"
-msgstr "Apagar Artefato"
-
-msgid "Delete an artifact from the reward."
-msgstr "Apagar um artefato da recompensa."
-
-msgid "No resources will be given as a reward."
-msgstr "Nenhum recurso será dado como recompensa."
-
-msgid "Resources"
-msgstr "Recursos"
-
-msgid "Resources will be given as a reward."
-msgstr "Recursos serão dados como recompensa."
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -11699,6 +11767,16 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Create a new map, either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Crie um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
+
+#~ msgid ""
+#~ "Create a new map either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Criar um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
 
 #~ msgid "Monsters cannot be placed on water."
 #~ msgstr "Monstros não podem ser colocados na água."

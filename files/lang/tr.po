@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -44,6 +44,21 @@ msgid "INFO"
 msgstr ""
 
 msgid "QUIT"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
 
 msgid "CANCEL"
@@ -3579,6 +3594,80 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
+#, fuzzy
+msgid "Message Text:"
+msgstr "Mesaj Çubuğu"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Mesaj Çubuğu"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Event Message Text"
+msgstr ""
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -3609,8 +3698,7 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 msgid "New Map"
@@ -3891,9 +3979,6 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4041,9 +4126,6 @@ msgstr ""
 msgid "Answers:"
 msgstr ""
 
-msgid "Reward:"
-msgstr ""
-
 msgid "Answer:"
 msgstr ""
 
@@ -4073,27 +4155,6 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
-msgstr ""
-
-msgid "Artifact"
-msgstr ""
-
-msgid "No artifact will be given as a reward."
-msgstr ""
-
-msgid "Delete Artifact"
-msgstr ""
-
-msgid "Delete an artifact from the reward."
-msgstr ""
-
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"

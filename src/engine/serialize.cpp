@@ -89,6 +89,12 @@ StreamBase & StreamBase::operator>>( char & v )
     return *this;
 }
 
+StreamBase & StreamBase::operator>>( int8_t & v )
+{
+    v = static_cast<int8_t>( get8() );
+    return *this;
+}
+
 StreamBase & StreamBase::operator>>( uint8_t & v )
 {
     v = get8();
@@ -154,6 +160,12 @@ StreamBase & StreamBase::operator<<( const bool v )
 StreamBase & StreamBase::operator<<( const char v )
 {
     put8( v );
+    return *this;
+}
+
+StreamBase & StreamBase::operator<<( const int8_t v )
+{
+    put8( static_cast<uint8_t>( v ) );
     return *this;
 }
 
@@ -673,6 +685,11 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 
 void StreamFile::putRaw( const void * ptr, size_t sz )
 {
+    if ( sz == 0 ) {
+        // Nothing to write. Ignore it.
+        return;
+    }
+
     if ( !_file ) {
         return;
     }

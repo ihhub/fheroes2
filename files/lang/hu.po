@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -51,6 +51,30 @@ msgstr "INFÓ"
 
 msgid "QUIT"
 msgstr "KILÉPÉS"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"ÚJ\n"
+"JÁTÉK"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"JÁTÉK\n"
+"MENTÉS"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"JÁTÉK\n"
+"BETÖLTÉS"
 
 msgid "CANCEL"
 msgstr "MÉGSEM"
@@ -3856,6 +3880,82 @@ msgstr ""
 "állnak."
 
 #, fuzzy
+msgid "Message Text:"
+msgstr "Üzenetsáv"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Üzenetsáv"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Artifact"
+msgstr "Varázstárgy"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Varázstárgy kiválasztása:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Erőforrás"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Kattints az aktuális játékállás mentéséhez."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Vízen nem helyezhetők el kövek."
 
@@ -3895,11 +3995,9 @@ msgstr ""
 "Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
 "változtatásai el fognak veszni.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Készíts új térképet a saját elképzelésed szerint vagy használd a "
-"véletlenszerű térkép generálót."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "teljesen új térkép"
 
 msgid "New Map"
 msgstr "Új térkép"
@@ -4200,11 +4298,6 @@ msgstr "Visszavonás"
 msgid "Undo your last action."
 msgstr "Utolsó cselekedet visszavonása."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Készíts új térképet a saját elképzelésed szerint vagy használd a "
-"véletlenszerű térkép generálót."
-
 msgid "Edit map title, description, and other general information."
 msgstr "A pályanevek, leírások és egyéb általános információk szerkesztése."
 
@@ -4381,9 +4474,6 @@ msgstr ""
 msgid "Answers:"
 msgstr ""
 
-msgid "Reward:"
-msgstr ""
-
 msgid "Answer:"
 msgstr ""
 
@@ -4413,29 +4503,6 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
-msgstr ""
-
-msgid "Artifact"
-msgstr "Varázstárgy"
-
-msgid "No artifact will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Delete Artifact"
-msgstr "Varázstárgy kiválasztása:"
-
-msgid "Delete an artifact from the reward."
-msgstr ""
-
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Erőforrás"
-
-msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -11614,6 +11681,18 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Create a new map, either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Készíts új térképet a saját elképzelésed szerint vagy használd a "
+#~ "véletlenszerű térkép generálót."
+
+#~ msgid ""
+#~ "Create a new map either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Készíts új térképet a saját elképzelésed szerint vagy használd a "
+#~ "véletlenszerű térkép generálót."
 
 #~ msgid "Monsters cannot be placed on water."
 #~ msgstr "Vízen nem helyezhetők el lények."
