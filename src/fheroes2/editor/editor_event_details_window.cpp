@@ -290,7 +290,7 @@ namespace Editor
 
                 if ( le.MousePressRight( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} human player to get event" );
-                    std::string messageText = _( "If this checkbox is checked, this event will occur for the %{color} player if he is controlled by a human." );
+                    std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a human." );
 
                     const std::string colorString = Color::String( humanCheckbox->getColor() );
                     StringReplace( header, "%{color}", colorString );
@@ -319,7 +319,7 @@ namespace Editor
 
                 if ( le.MousePressRight( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} computer player to get event" );
-                    std::string messageText = _( "If this checkbox is checked, this event will occur for the %{color} player if he is controlled by a computer." );
+                    std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a computer." );
 
                     const std::string colorString = Color::String( computerCheckbox->getColor() );
                     StringReplace( header, "%{color}", colorString );
@@ -444,7 +444,7 @@ namespace Editor
             else if ( le.MousePressRight( recurringEventArea ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Cancel event after first visit" ),
-                    _( "If this checkbox is checked, the event will occur only once. If not checked, the event will occur every time an allowed player crosses the event tile." ),
+                    _( "If this checkbox is checked, the event will trigger only once. If not checked, the event will trigger every time one of the specified players crosses the event tile." ),
                     Dialog::ZERO );
             }
             else if ( le.MousePressRight( messageRoi ) ) {
