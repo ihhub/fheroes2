@@ -38,6 +38,7 @@
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -61,8 +62,8 @@ namespace
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
     const fheroes2::Size messageArea{ 300, 210 };
-    const int32_t playerAreaWidth{ 300 };
     const int32_t elementOffset{ 9 };
+    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
 
     class Checkbox
     {
@@ -132,7 +133,7 @@ namespace Editor
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, messageArea.height + 140, true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 140, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         int32_t offsetY = dialogRoi.y + elementOffset;
