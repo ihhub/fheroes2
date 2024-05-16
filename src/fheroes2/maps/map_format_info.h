@@ -114,7 +114,7 @@ namespace Maps::Map_Format
         uint8_t patrolRadius{ 0 };
 
         // Secondary skills. Type 0 means not set.
-        std::array<int32_t, 8> secondarySkill{ 0 };
+        std::array<int8_t, 8> secondarySkill{ 0 };
         std::array<uint8_t, 8> secondarySkillLevel{ 0 };
 
         // Mutually exclusive settings: either a hero has a custom level or custom experience.
@@ -200,11 +200,11 @@ namespace Maps::Map_Format
 
         int32_t experience{ 0 };
 
-        int32_t secondarySkill{ 0 };
+        int8_t secondarySkill{ 0 };
         uint8_t secondarySkillLevel{ 0 };
 
-        std::array<int32_t, 5> monsterType{ 0 };
-        std::array<int32_t, 5> monsterCount{ 0 };
+        int32_t monsterType{ 0 };
+        int32_t monsterCount{ 0 };
     };
 
     struct DailyEvent
