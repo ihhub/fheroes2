@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_castle_details_window.h"
+#include "editor_event_details_window.h"
 #include "editor_map_specs_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
@@ -657,13 +658,13 @@ namespace Interface
         _redraw = 0;
     }
 
-    Interface::EditorInterface & Interface::EditorInterface::Get()
+    EditorInterface & EditorInterface::Get()
     {
         static EditorInterface editorInterface;
         return editorInterface;
     }
 
-    fheroes2::GameMode Interface::EditorInterface::startEdit( const bool isNewMap )
+    fheroes2::GameMode EditorInterface::startEdit( const bool isNewMap )
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
@@ -754,15 +755,6 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
                     _gameArea.SetScroll( SCROLL_BOTTOM );
-                }
-                // default action
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. No actions are available yet.", Dialog::OK );
-                }
-                // open focus
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
-                                                       Dialog::OK );
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
                     undoAction();
@@ -1045,7 +1037,9 @@ namespace Interface
                 break;
             }
             else if ( le.MousePressRight( buttonNew.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map, either from scratch or using the random map generator." ), Dialog::ZERO );
+                // TODO: update this text once random map generator is ready.
+                //       The original text should be "Create a new map, either from scratch or using the random map generator."
+                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonLoad.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
@@ -1096,7 +1090,6 @@ namespace Interface
                     continue;
                 }
 
-                // TODO: add more code to edit other action objects that have metadata.
                 if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
@@ -1131,6 +1124,14 @@ namespace Interface
                     std::string signText = _mapFormat.signMetadata[object.id].message;
                     if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
                         _mapFormat.signMetadata[object.id].message = std::move( signText );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_EVENT ) {
+                    assert( _mapFormat.adventureMapEventMetadata.find( object.id ) != _mapFormat.adventureMapEventMetadata.end() );
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( Editor::eventDetailsDialog( _mapFormat.adventureMapEventMetadata[object.id], _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors ) ) {
                         action.commit();
                     }
                 }

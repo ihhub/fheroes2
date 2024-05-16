@@ -1250,7 +1250,9 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectNew ) ) {
-            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
+            // TODO: update this text once random map generator is ready.
+            //       The original text should be "Create a new map, either from scratch or using the random map generator."
+            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectSpecs ) ) {
             fheroes2::showStandardTextMessage( _( "Specifications" ), _( "Edit map title, description, and other general information." ), Dialog::ZERO );

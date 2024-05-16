@@ -114,7 +114,7 @@ namespace Maps::Map_Format
         uint8_t patrolRadius{ 0 };
 
         // Secondary skills. Type 0 means not set.
-        std::array<int32_t, 8> secondarySkill{ 0 };
+        std::array<int8_t, 8> secondarySkill{ 0 };
         std::array<uint8_t, 8> secondarySkillLevel{ 0 };
 
         // Mutually exclusive settings: either a hero has a custom level or custom experience.
@@ -192,6 +192,19 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        int16_t attack{ 0 };
+        int16_t defense{ 0 };
+        int16_t knowledge{ 0 };
+        int16_t spellPower{ 0 };
+
+        int32_t experience{ 0 };
+
+        int8_t secondarySkill{ 0 };
+        uint8_t secondarySkillLevel{ 0 };
+
+        int32_t monsterType{ 0 };
+        int32_t monsterCount{ 0 };
     };
 
     struct DailyEvent
@@ -253,6 +266,8 @@ namespace Maps::Map_Format
 
         std::vector<DailyEvent> dailyEvents;
 
+        std::vector<std::string> rumors;
+
         // These are metadata maps in relation to object UID.
         std::map<uint32_t, StandardObjectMetadata> standardMetadata;
 
@@ -265,8 +280,6 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
-
-        std::vector<std::string> rumors;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
