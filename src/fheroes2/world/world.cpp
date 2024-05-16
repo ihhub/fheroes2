@@ -31,6 +31,7 @@
 #include <ostream>
 #include <set>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 
 #include "ai.h"

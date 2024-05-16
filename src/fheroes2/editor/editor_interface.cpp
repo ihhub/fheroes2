@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_castle_details_window.h"
+#include "editor_event_details_window.h"
 #include "editor_map_specs_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
@@ -657,13 +658,13 @@ namespace Interface
         _redraw = 0;
     }
 
-    Interface::EditorInterface & Interface::EditorInterface::Get()
+    EditorInterface & EditorInterface::Get()
     {
         static EditorInterface editorInterface;
         return editorInterface;
     }
 
-    fheroes2::GameMode Interface::EditorInterface::startEdit( const bool isNewMap )
+    fheroes2::GameMode EditorInterface::startEdit( const bool isNewMap )
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
@@ -738,10 +739,6 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) ) {
                     res = eventFileDialog();
-                }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
-                    // TODO: Make the scenario info editor.
-                    Dialog::GameInfo();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
@@ -995,10 +992,9 @@ namespace Interface
         fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
         fheroes2::Blit( background, display, rb.x, rb.y );
 
-        // TODO: Make Evil interface for New/Load/Save Map buttons.
-        fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, ICN::ECPANEL, 0, 1 );
-        fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, ICN::ECPANEL, 2, 3 );
-        fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, ICN::ECPANEL, 4, 5 );
+        fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
+        fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
+        fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
         fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
@@ -1101,7 +1097,6 @@ namespace Interface
                     continue;
                 }
 
-                // TODO: add more code to edit other action objects that have metadata.
                 if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
@@ -1136,6 +1131,14 @@ namespace Interface
                     std::string signText = _mapFormat.signMetadata[object.id].message;
                     if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
                         _mapFormat.signMetadata[object.id].message = std::move( signText );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_EVENT ) {
+                    assert( _mapFormat.adventureMapEventMetadata.find( object.id ) != _mapFormat.adventureMapEventMetadata.end() );
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( Editor::eventDetailsDialog( _mapFormat.adventureMapEventMetadata[object.id], _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors ) ) {
                         action.commit();
                     }
                 }

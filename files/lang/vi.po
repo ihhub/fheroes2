@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -50,6 +50,30 @@ msgstr "THÔNG TIN"
 
 msgid "QUIT"
 msgstr "RỜI KHỎI"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
+"GAME"
 
 msgid "CANCEL"
 msgstr "TỪ BỎ"

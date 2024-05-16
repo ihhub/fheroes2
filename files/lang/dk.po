@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:01+0000\n"
+"POT-Creation-Date: 2024-05-15 00:27+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -53,6 +53,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "AFSLUT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYT\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GEM\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"INDLÆS\n"
+"SPIL"
 
 msgid "CANCEL"
 msgstr "AFBRYD"

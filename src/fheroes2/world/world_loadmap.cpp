@@ -842,9 +842,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                         eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
                     }
 
-                    eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
-                    eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
+                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+
+                    eventObject->computer = ( computerColors != 0 );
+                    eventObject->colors = humanColors | computerColors;
                     eventObject->message = std::move( eventInfo.message );
+                    eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     map_objects.add( eventObject );
@@ -1028,9 +1032,12 @@ bool World::loadResurrectionMap( const std::string & filename )
         // TODO: modify EventDate structure to have more flexibility.
         auto & newEvent = vec_eventsday.emplace_back();
 
+        const int humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+
         newEvent.message = std::move( event.message );
-        newEvent.colors = ( event.humanPlayerColors | event.computerPlayerColors );
-        newEvent.isApplicableForAIPlayers = ( event.computerPlayerColors != 0 );
+        newEvent.colors = ( humanColors | computerColors );
+        newEvent.isApplicableForAIPlayers = ( computerColors != 0 );
 
         newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
         newEvent.repeatPeriodInDays = event.repeatPeriodInDays;
