@@ -375,7 +375,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             else {
                 fheroes2::openVirtualKeyboard( result );
             }
-            
+
             if ( charLimit > 0 && result.size() > charLimit ) {
                 result.resize( charLimit );
             }
