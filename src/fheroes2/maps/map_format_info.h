@@ -31,15 +31,13 @@
 #include "map_object_info.h"
 #include "resource.h"
 
-class StreamBase;
-
 namespace Maps::Map_Format
 {
     struct ObjectInfo
     {
         uint32_t id{ 0 };
 
-        ObjectGroup group{ ObjectGroup::LANDSCAPE_MOUNTAINS };
+        ObjectGroup group{ ObjectGroup::NONE };
 
         uint32_t index{ 0 };
     };
@@ -116,7 +114,7 @@ namespace Maps::Map_Format
         uint8_t patrolRadius{ 0 };
 
         // Secondary skills. Type 0 means not set.
-        std::array<int32_t, 8> secondarySkill{ 0 };
+        std::array<int8_t, 8> secondarySkill{ 0 };
         std::array<uint8_t, 8> secondarySkillLevel{ 0 };
 
         // Mutually exclusive settings: either a hero has a custom level or custom experience.
@@ -158,7 +156,7 @@ namespace Maps::Map_Format
 
     struct SphinxMetadata
     {
-        std::string question;
+        std::string riddle;
 
         std::vector<std::string> answers;
 
@@ -194,6 +192,19 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        int16_t attack{ 0 };
+        int16_t defense{ 0 };
+        int16_t knowledge{ 0 };
+        int16_t spellPower{ 0 };
+
+        int32_t experience{ 0 };
+
+        int8_t secondarySkill{ 0 };
+        uint8_t secondarySkillLevel{ 0 };
+
+        int32_t monsterType{ 0 };
+        int32_t monsterCount{ 0 };
     };
 
     struct DailyEvent
@@ -214,11 +225,13 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
+        // Change the version when there is a need to expand map format functionality.
         uint16_t version{ 1 };
+
         bool isCampaign{ false };
 
-        uint8_t difficulty{ 0 };
+        // Normal difficulty.
+        uint8_t difficulty{ 1 };
 
         uint8_t availablePlayerColors{ 0 };
         uint8_t humanPlayerColors{ 0 };
@@ -253,6 +266,8 @@ namespace Maps::Map_Format
 
         std::vector<DailyEvent> dailyEvents;
 
+        std::vector<std::string> rumors;
+
         // These are metadata maps in relation to object UID.
         std::map<uint32_t, StandardObjectMetadata> standardMetadata;
 
@@ -265,45 +280,10 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
-
-        std::vector<std::string> rumors;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
-
-    StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object );
-    StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );
-
-    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
-    StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
-
-    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo );
-    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo );
-
-    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata );
-
-    StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map );
-    StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map );
-
-    StreamBase & operator<<( StreamBase & msg, const MapFormat & map );
-    StreamBase & operator>>( StreamBase & msg, MapFormat & map );
 }

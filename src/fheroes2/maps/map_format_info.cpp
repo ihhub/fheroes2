@@ -119,12 +119,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
@@ -140,26 +140,29 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
+               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
+    bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
     {
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
 
-        return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
-                   << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
-                   << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name
-                   << map.description;
+        msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
+            << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
+            << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name << map.description;
+
+        return !msg.fail();
     }
 
-    StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map )
+    bool loadFromStream( StreamBase & msg, BaseMapFormat & map )
     {
         msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
             >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
@@ -172,32 +175,39 @@ namespace Maps::Map_Format
         msg >> language;
         map.language = static_cast<fheroes2::SupportedLanguage>( language );
 
-        return msg >> map.name >> map.description;
+        msg >> map.name >> map.description;
+
+        return !msg.fail();
     }
 
-    StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
+    bool saveToStream( StreamBase & msg, const MapFormat & map )
     {
         // Only the base map information is not encoded.
         // The rest of data must be compressed to prevent manual corruption of the file.
-        msg << static_cast<const BaseMapFormat &>( map );
+        if ( !saveToStream( msg, static_cast<const BaseMapFormat &>( map ) ) ) {
+            return false;
+        }
 
         StreamBuf compressed;
         compressed.setbigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
         msg.putRaw( temp.data(), temp.size() );
 
-        return msg;
+        return !msg.fail();
     }
 
-    StreamBase & operator>>( StreamBase & msg, MapFormat & map )
+    bool loadFromStream( StreamBase & msg, MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        msg >> static_cast<BaseMapFormat &>( map );
+        if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
+            map = {};
+            return false;
+        }
 
         StreamBuf decompressed;
         decompressed.setbigendian( true );
@@ -207,14 +217,14 @@ namespace Maps::Map_Format
             if ( temp.empty() ) {
                 // This is a corrupted file.
                 map = {};
-                return msg;
+                return false;
             }
 
             const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
             if ( decompressedData.empty() ) {
                 // This is a corrupted file.
                 map = {};
-                return msg;
+                return false;
             }
 
             // Let's try to free up some memory
@@ -223,10 +233,17 @@ namespace Maps::Map_Format
             decompressed.putRaw( decompressedData.data(), decompressedData.size() );
         }
 
-        decompressed >> map.additionalInfo >> map.tiles >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata
-            >> map.signMetadata >> map.adventureMapEventMetadata >> map.rumors;
+        decompressed >> map.additionalInfo >> map.tiles;
 
-        return msg;
+        if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+            map = {};
+            return false;
+        }
+
+        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
+            >> map.adventureMapEventMetadata;
+
+        return !msg.fail();
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
@@ -253,9 +270,7 @@ namespace Maps::Map_Format
             }
         }
 
-        fileStream >> map;
-
-        return true;
+        return loadFromStream( fileStream, map );
     }
 
     bool loadMap( const std::string & path, MapFormat & map )
@@ -282,9 +297,7 @@ namespace Maps::Map_Format
             }
         }
 
-        fileStream >> map;
-
-        return true;
+        return loadFromStream( fileStream, map );
     }
 
     bool saveMap( const std::string & path, const MapFormat & map )
@@ -304,8 +317,6 @@ namespace Maps::Map_Format
             fileStream.put( value );
         }
 
-        fileStream << map;
-
-        return true;
+        return saveToStream( fileStream, map );
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,15 +20,9 @@
 
 #pragma once
 
-#include "game.h"
-#include "game_mode.h"
+#include <string>
 
 namespace Editor
 {
-    fheroes2::GameMode menuMain();
-    fheroes2::GameMode menuNewMap();
-    fheroes2::GameMode menuLoadMap();
-
-    // TODO: this is a temporary solution before we implement random maps.
-    fheroes2::GameMode menuNewFromScratchMap();
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName );
 }

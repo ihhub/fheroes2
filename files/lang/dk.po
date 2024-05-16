@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -53,6 +53,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "AFSLUT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYT\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GEM\n"
+"SPIL"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"INDLÆS\n"
+"SPIL"
 
 msgid "CANCEL"
 msgstr "AFBRYD"
@@ -3479,17 +3503,17 @@ msgstr ""
 "\n"
 "Placering: "
 
-msgid "Click to save the current game."
-msgstr "Klik for at gemme igangværende spil."
-
-msgid "Click to load a previously saved game."
-msgstr "Klik for at indlæse et tidligere gemt spil."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "Click to save the current game."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Click to load a previously saved game."
+msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "File to Save:"
 msgstr "Fil som skal gemmes:"
@@ -3911,8 +3935,96 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Kort-filnavn"
+#, fuzzy
+msgid "Message Text:"
+msgstr "Beskedlinje"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Beskedlinje"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Vælg artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resurse"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Sten kan ikke placeres på vand."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Hav-objekter må kun placeres på vand."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Objekter kan ikke placeres udenfor kortet."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Hav-objekter må kun placeres på vand."
 
 #, fuzzy
 msgid ""
@@ -3939,10 +4051,9 @@ msgstr ""
 "Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
 "af det nuværende kort, vil gå tabt.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "Nyt blankt kort"
 
 msgid "New Map"
 msgstr "Nyt kort"
@@ -3973,22 +4084,6 @@ msgstr "Skyd %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfældigt ultimativt artefakt"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Objekter kan ikke placeres udenfor kortet."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Hav-objekter må kun placeres på vand."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Monstre kan ikke placeres på vand."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Skatte kan ikke placeres på vand."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Helte kan ikke placeres på vand."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
@@ -3996,42 +4091,31 @@ msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 msgid "Failed to update player information."
 msgstr "Opdatering af spilleroplysninger mislykkedes."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Artefakter kan ikke placeres på vand."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan ikke placeres på vand."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Bjerge kan ikke placeres på vand."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Det gemte spil er korrupt."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Sten kan ikke placeres på vand."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Træer kan ikke placeres på vand."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Bruges til at fjerne objekter fra kortet."
 
-msgid "Ocean object must be placed on water."
-msgstr "Hav-objekter må kun placeres på vand."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Er du sikker på, om du vil overskrive det gemte spil med dette navn?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Landskabsobjekter kan ikke placeres på vand."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Byer kan ikke placeres på vand."
-
-msgid "Mines cannot be placed on water."
-msgstr "Miner kan ikke placeres på vand."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Bosteder kan ikke placeres på vand."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Power-ups kan ikke placeres på vand."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Eventyr-objekter kan ikke placeres på vand."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Fil som skal gemmes:"
 
 msgid "Used to place %{object}."
 msgstr "Bruges til at placere %{object}."
@@ -4060,14 +4144,14 @@ msgstr ""
 "Celle-\n"
 "detaljer"
 
+msgid "Erase"
+msgstr "Udviske"
+
 msgid "Roads"
 msgstr "Veje"
 
 msgid "Streams"
 msgstr "Å-tilstand"
-
-msgid "Erase"
-msgstr "Udviske"
 
 msgid "Mountains"
 msgstr "Bjerge"
@@ -4099,11 +4183,11 @@ msgstr "Power Ups"
 msgid "Treasures"
 msgstr "Skatte"
 
-msgid "Towns"
-msgstr "Byer"
-
 msgid "Heroes"
 msgstr "Helte"
+
+msgid "Towns"
+msgstr "Byer"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4278,11 +4362,6 @@ msgstr "Fortryd"
 msgid "Undo your last action."
 msgstr "Fortryd din sidste handling."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Opret et nyt kort, enten fra bunden eller ved hjælp af den automatiske "
-"kortgenerator."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Rediger kortets navn, beskrivelse eller andre informationer."
 
@@ -4333,6 +4412,89 @@ msgid "Warning"
 msgstr "Advarsel"
 
 #, fuzzy
+msgid "None."
+msgstr "Ingen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Akkumuler %{count} guldstykker."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Forlad korteditoren."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kort\n"
+"Niveau"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Placering: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Valgte beskrivelse"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Kort-filnavn"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Korttype"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Det nuværende kort-niveau for det valgte kort. Kortets sværhedsgrad er "
+"udelukkende bedømt af scenariets designer. Vanskeligere kort inkluderer "
+"flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
+"gør det sværere for menneskelige spillere."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anneksering"
 
@@ -4345,6 +4507,67 @@ msgid "Toggle animation of the objects."
 msgstr "Vælg sletning af %{type}objekter til og fra."
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Placering: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Gem kort"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -6064,6 +6287,10 @@ msgstr " giver dig maksimal moral"
 
 msgid " gives you maximum luck"
 msgstr " giver dig maksimalt held"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Kan ikke flytte magibogen"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
@@ -8616,9 +8843,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
-
-msgid "Artifact"
-msgstr "Artefakt"
 
 msgid "Mermaid"
 msgstr "Havfrue"
@@ -11614,3 +11838,50 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Create a new map, either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
+
+#~ msgid ""
+#~ "Create a new map either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Opret et nyt kort, enten fra bunden eller ved hjælp af den automatiske "
+#~ "kortgenerator."
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Monstre kan ikke placeres på vand."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Skatte kan ikke placeres på vand."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Helte kan ikke placeres på vand."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Artefakter kan ikke placeres på vand."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Bjerge kan ikke placeres på vand."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Træer kan ikke placeres på vand."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Landskabsobjekter kan ikke placeres på vand."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Byer kan ikke placeres på vand."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Miner kan ikke placeres på vand."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Bosteder kan ikke placeres på vand."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Power-ups kan ikke placeres på vand."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Eventyr-objekter kan ikke placeres på vand."

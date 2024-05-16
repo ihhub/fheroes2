@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 13:54+0000\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -51,6 +51,30 @@ msgstr "INFO."
 
 msgid "QUIT"
 msgstr "SAIR"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVO\n"
+"JOGO"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SALVAR\n"
+"JOGO"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"CARREGAR\n"
+"JOGO"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -3426,17 +3450,17 @@ msgstr ""
 "\n"
 "Local: "
 
-msgid "Click to save the current game."
-msgstr "Clique para salvar o jogo atual."
-
-msgid "Click to load a previously saved game."
-msgstr "Clique para carregar o jogo salvo anteriormente."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Você tem certeza de que deseja apagar este arquivo:"
 
 msgid "Warning!"
 msgstr "Aviso!"
+
+msgid "Click to save the current game."
+msgstr "Clique para salvar o jogo atual."
+
+msgid "Click to load a previously saved game."
+msgstr "Clique para carregar o jogo salvo anteriormente."
 
 msgid "File to Save:"
 msgstr "Arquivo à ser salvo:"
@@ -3860,8 +3884,95 @@ msgstr ""
 "Definir Exército do Castelo personalizado. Clique com o botão direito para "
 "redefinir a unidade."
 
-msgid "Map filename"
-msgstr "Nome do arquivo de mapa"
+#, fuzzy
+msgid "Message Text:"
+msgstr "Barra de Mensagem"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Barra de Mensagem"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Clique para salvar o jogo atual."
+
+msgid "Artifact"
+msgstr "Artefato"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Selecionar Artefato:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Recurso"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Clique para salvar o jogo atual."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Rochas não podem ser colocadas na água."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Objeto oceânico deve ser colocado na água."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Objetos não podem ser colocados fora do mapa."
+
+msgid "Action objects must be placed on clear tiles."
+msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3887,10 +3998,9 @@ msgstr ""
 "Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
 "salvas no mapa atual serão perdidas.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Crie um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "novo mapa do zero"
 
 msgid "New Map"
 msgstr "Novo Mapa"
@@ -3919,21 +4029,6 @@ msgstr "Definir Quantidade de %{monster}"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Objetos não podem ser colocados fora do mapa."
-
-msgid "Action objects must be placed on clear tiles."
-msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Monstros não podem ser colocados na água."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Tesouros não podem ser colocados na água."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Heróis não podem ser colocados na água."
-
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
@@ -3941,41 +4036,31 @@ msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
 msgid "Failed to update player information."
 msgstr "Falha ao atualizar informações do jogador."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Artefatos não podem ser colocados na água."
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Montanhas não podem ser colocadas na água."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "O arquivo salvo está corrompido."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Rochas não podem ser colocadas na água."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Árvores não podem ser colocadas na água."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Usado para apagar objetos do mapa."
 
-msgid "Ocean object must be placed on water."
-msgstr "Objeto oceânico deve ser colocado na água."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr ""
+"Você tem certeza de que deseja sobrescrever o jogo salvo com este nome?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Objetos de paisagem não podem ser colocados na água."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Cidades não podem ser colocadas na água."
-
-msgid "Mines cannot be placed on water."
-msgstr "Minas não podem ser colocadas na água."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Moradias não podem ser colocadas na água."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Intensificadores não podem ser colocados na água."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Objetos de aventura não podem ser colocados na água."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Arquivo à ser salvo:"
 
 msgid "Used to place %{object}."
 msgstr "Usado para colocar %{object}."
@@ -4004,14 +4089,14 @@ msgstr ""
 "Detalhes da\n"
 "Célula"
 
+msgid "Erase"
+msgstr "Apagar"
+
 msgid "Roads"
 msgstr "Estradas"
 
 msgid "Streams"
 msgstr "Riachos"
-
-msgid "Erase"
-msgstr "Apagar"
 
 msgid "Mountains"
 msgstr "Montanhas"
@@ -4043,11 +4128,11 @@ msgstr "Intensificadores"
 msgid "Treasures"
 msgstr "Tesouros"
 
-msgid "Towns"
-msgstr "Cidades"
-
 msgid "Heroes"
 msgstr "Heróis"
+
+msgid "Towns"
+msgstr "Cidades"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Objetos de paisagem"
@@ -4216,10 +4301,6 @@ msgstr "Desfazer"
 msgid "Undo your last action."
 msgstr "Desfazer sua última ação."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Criar um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Editar título do mapa, descrição e outras informações gerais."
 
@@ -4273,6 +4354,89 @@ msgstr "Nenhum mapa disponível!"
 msgid "Warning"
 msgstr "Aviso"
 
+#, fuzzy
+msgid "None."
+msgstr "Nenhum"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Por favor, selecione outro herói."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Acumule %{count} de ouro."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Sair do editor de mapas."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Dificuldade\n"
+"do Mapa"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Local: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condição de Vitória"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condição de Derrota"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Descrição Selecionada"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Clique para alterar a raça."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Clique para alterar a raça."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Nome do arquivo de mapa"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "A descrição do mapa atualmente selecionado."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Tipo de Mapa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"A dificuldade do mapa atualmente selecionado. A dificuldade do mapa é "
+"determinada pelo projetista do cenário. Os mapas mais difíceis podem incluir "
+"mais inimigos, menos recursos ou outras condições especiais que tornem as "
+"coisas mais difíceis para o jogador humano."
+
 msgid "Animation"
 msgstr "Animação"
 
@@ -4284,6 +4448,67 @@ msgstr "Alternar animação dos objetos."
 
 msgid "Toggle display of objects' passability."
 msgstr "Alternar exibição da transitabilidade dos objetos."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Local: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Salvar Mapa"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Clique para salvar o jogo atual."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Clique para salvar o jogo atual."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -6017,6 +6242,10 @@ msgstr " concede o máximo de moral"
 
 msgid " gives you maximum luck"
 msgstr " concede o máximo de sorte"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Não é possível mover o Grimório"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Não é possível pegar este artefato, você está sobrecarregado!"
@@ -8587,9 +8816,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Moinho"
 msgstr[1] "Moinhos"
-
-msgid "Artifact"
-msgstr "Artefato"
 
 msgid "Mermaid"
 msgstr "Sereia"
@@ -11572,3 +11798,49 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Create a new map, either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Crie um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
+
+#~ msgid ""
+#~ "Create a new map either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Criar um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Monstros não podem ser colocados na água."
+
+#~ msgid "Treasures cannot be placed on water."
+#~ msgstr "Tesouros não podem ser colocados na água."
+
+#~ msgid "Heroes cannot be placed on water."
+#~ msgstr "Heróis não podem ser colocados na água."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Artefatos não podem ser colocados na água."
+
+#~ msgid "Mountains cannot be placed on water."
+#~ msgstr "Montanhas não podem ser colocadas na água."
+
+#~ msgid "Trees cannot be placed on water."
+#~ msgstr "Árvores não podem ser colocadas na água."
+
+#~ msgid "Landscape objects cannot be placed on water."
+#~ msgstr "Objetos de paisagem não podem ser colocados na água."
+
+#~ msgid "Towns cannot be placed on water."
+#~ msgstr "Cidades não podem ser colocadas na água."
+
+#~ msgid "Mines cannot be placed on water."
+#~ msgstr "Minas não podem ser colocadas na água."
+
+#~ msgid "Dwellings cannot be placed on water."
+#~ msgstr "Moradias não podem ser colocadas na água."
+
+#~ msgid "Power-ups cannot be placed on water."
+#~ msgstr "Intensificadores não podem ser colocados na água."
+
+#~ msgid "Adventure objects cannot be placed on water."
+#~ msgstr "Objetos de aventura não podem ser colocados na água."
