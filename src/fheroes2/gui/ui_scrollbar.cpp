@@ -207,10 +207,10 @@ namespace fheroes2
         int32_t height = originalSlider.height();
 
         if ( horizontalSlider ) {
-            width += middleLength;
+            width = std::max( width + middleLength, startSliderArea.width * 2 );
         }
         else {
-            height += middleLength;
+            height = std::max( height + middleLength, startSliderArea.height * 2 );
         }
 
         Image output( width, height );
