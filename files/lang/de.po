@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 00:27+0000\n"
+"POT-Creation-Date: 2024-05-16 14:25+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3971,6 +3971,82 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "Message Text:"
+msgstr "Nachrichtenleiste"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Nachrichtenleiste"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefakt auswählen:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ressource"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -4523,9 +4599,6 @@ msgstr ""
 msgid "Answers:"
 msgstr ""
 
-msgid "Reward:"
-msgstr ""
-
 msgid "Answer:"
 msgstr ""
 
@@ -4555,29 +4628,6 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
-msgstr ""
-
-msgid "Artifact"
-msgstr "Artefakt"
-
-msgid "No artifact will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Delete Artifact"
-msgstr "Artefakt auswählen:"
-
-msgid "Delete an artifact from the reward."
-msgstr ""
-
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Ressource"
-
-msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
