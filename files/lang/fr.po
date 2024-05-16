@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 00:27+0000\n"
+"POT-Creation-Date: 2024-05-16 14:46+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3941,6 +3941,82 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "Message Text:"
+msgstr "Barre d'informations"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Barre d'informations"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Artifact"
+msgstr "Artéfact"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Choisir artéfact :"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ressource"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Les rochers ne peuvent pas être placés sur l'eau."
 
@@ -3983,10 +4059,9 @@ msgstr ""
 "Voulez-vous vraiment créer une nouvelle carte ? (Toutes les modifications "
 "non enregistrées seront perdues.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "Carte vierge"
 
 msgid "New Map"
 msgstr "Nouvelle carte"
@@ -4298,10 +4373,6 @@ msgstr "Annuler"
 msgid "Undo your last action."
 msgstr "Annuler votre dernière action."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
-
 msgid "Edit map title, description, and other general information."
 msgstr ""
 "Modifier le titre de la carte, la description et d'autres informations "
@@ -4484,9 +4555,6 @@ msgstr ""
 msgid "Answers:"
 msgstr ""
 
-msgid "Reward:"
-msgstr ""
-
 msgid "Answer:"
 msgstr ""
 
@@ -4516,29 +4584,6 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
-msgstr ""
-
-msgid "Artifact"
-msgstr "Artéfact"
-
-msgid "No artifact will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Delete Artifact"
-msgstr "Choisir artéfact :"
-
-msgid "Delete an artifact from the reward."
-msgstr ""
-
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Ressource"
-
-msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -11886,6 +11931,16 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Create a new map, either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
+
+#~ msgid ""
+#~ "Create a new map either from scratch or using the random map generator."
+#~ msgstr ""
+#~ "Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
 
 #~ msgid "Monsters cannot be placed on water."
 #~ msgstr "Les créatures ne peuvent pas être placées sur l'eau."
