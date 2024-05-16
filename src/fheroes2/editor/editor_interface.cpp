@@ -1210,6 +1210,9 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else {
+                    fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "This object has no properties to change." ), Dialog::OK );
+                }
             }
         }
         else if ( _editorPanel.isTerrainEdit() ) {
