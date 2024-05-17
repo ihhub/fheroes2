@@ -1192,7 +1192,12 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             if ( isMagicBook( art ) ) {
                 art.Reset();
 
-                const_cast<Heroes *>( _hero )->SpellBookActivate();
+                if ( _hero->HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( Artifact( Artifact::MAGIC_BOOK ).GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    const_cast<Heroes *>( _hero )->SpellBookActivate();
+                }
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
                 const int spellId = Dialog::selectSpell( Spell::RANDOM, false ).GetID();
