@@ -1195,7 +1195,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, false ).GetID();
 
                 if ( spellId == Spell::NONE ) {
                     // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
