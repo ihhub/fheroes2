@@ -1122,7 +1122,7 @@ namespace Interface
                     StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
 
                     std::string signText = _mapFormat.signMetadata[object.id].message;
-                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true, true ) ) {
                         _mapFormat.signMetadata[object.id].message = std::move( signText );
                         action.commit();
                     }
@@ -1200,6 +1200,11 @@ namespace Interface
                     if ( Editor::openSphinxWindow( _mapFormat.sphinxMetadata[object.id] ) ) {
                         action.commit();
                     }
+                }
+                else {
+                    std::string msg = _( "%{object} has no properties to change." );
+                    StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );
+                    _warningMessage.reset( std::move( msg ) );
                 }
             }
         }

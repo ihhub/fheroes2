@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-17 15:30+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4040,6 +4040,9 @@ msgstr "Стрелять в %{monster}"
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случайный великий артефакт"
+
+msgid "%{object} has no properties to change."
+msgstr ""
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
