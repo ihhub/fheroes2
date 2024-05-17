@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-17 15:30+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4119,6 +4119,9 @@ msgstr "Schieße auf %{monster}"
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Zufälliges ultimatives Artefakt"
+
+msgid "%{object} has no properties to change."
+msgstr ""
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
