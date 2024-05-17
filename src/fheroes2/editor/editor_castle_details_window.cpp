@@ -355,7 +355,7 @@ namespace Editor
         const fheroes2::Rect defaultBuildingsArea = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
-#if defined(RESTRICT_FEATURE)
+#if defined( RESTRICT_FEATURE )
         // TODO: remove this macro definition check once the logic for building restriction is implemented.
         // Build restrict mode button.
         fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
@@ -364,6 +364,7 @@ namespace Editor
         fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
 #endif
+
         const bool isNeutral = ( color == Color::NONE );
 
         // Castle army.
@@ -472,7 +473,7 @@ namespace Editor
                 break;
             }
 
-#if defined(RESTRICT_FEATURE)
+#if defined( RESTRICT_FEATURE )
             if ( le.MouseClickLeft( buttonRestrictBuildingArea ) ) {
                 buildingRestriction = !buildingRestriction;
             }
@@ -543,7 +544,7 @@ namespace Editor
                 }
             }
 
-#if defined(RESTRICT_FEATURE)
+#if defined( RESTRICT_FEATURE )
             else if ( le.MouseCursor( buttonRestrictBuildingArea ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
