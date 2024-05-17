@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-17 15:30+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3917,6 +3917,9 @@ msgid "Set %{monster} Count"
 msgstr "Schiet %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
+msgid "%{object} has no properties to change."
 msgstr ""
 
 msgid ""
