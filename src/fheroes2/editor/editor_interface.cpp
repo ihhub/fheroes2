@@ -1201,6 +1201,11 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else {
+                    std::string msg = _( "%{object} has no properties to change." );
+                    StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );
+                    _warningMessage.reset( std::move( msg ) );
+                }
             }
         }
         else if ( _editorPanel.isTerrainEdit() ) {
