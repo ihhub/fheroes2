@@ -1211,7 +1211,9 @@ namespace Interface
                     }
                 }
                 else {
-                    fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "This object has no properties to change." ), Dialog::OK );
+                    std::string msg = _( "%{object} has no properties to change." );
+                    StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );
+                    _warningMessage.reset( std::move( msg ) );
                 }
             }
         }
