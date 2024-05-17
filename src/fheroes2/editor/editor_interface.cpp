@@ -1122,7 +1122,7 @@ namespace Interface
                     StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
 
                     std::string signText = _mapFormat.signMetadata[object.id].message;
-                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true, true ) ) {
                         _mapFormat.signMetadata[object.id].message = std::move( signText );
                         action.commit();
                     }

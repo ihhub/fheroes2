@@ -303,7 +303,7 @@ namespace Editor
             if ( le.MouseClickLeft( riddleRoi ) ) {
                 std::string temp = metadata.riddle;
 
-                if ( Dialog::inputString( _( "Riddle:" ), temp, {}, longestRiddle, true ) ) {
+                if ( Dialog::inputString( _( "Riddle:" ), temp, {}, longestRiddle, true, true ) ) {
                     metadata.riddle = std::move( temp );
 
                     riddleRoiRestorer.restore();
@@ -314,7 +314,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
-                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, longestAnswer, false ) ) {
+                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, longestAnswer, false, true ) ) {
                     if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const auto & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
@@ -333,7 +333,7 @@ namespace Editor
                 }
 
                 std::string temp = answerList.GetCurrent();
-                if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false ) ) {
+                if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false, true ) ) {
                     const auto count = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );

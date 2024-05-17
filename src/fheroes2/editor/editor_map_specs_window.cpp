@@ -612,7 +612,7 @@ namespace Editor
                 // TODO: Edit texts directly in this dialog.
 
                 std::string editableMapName = mapFormat.name;
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false ) ) {
+                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false, true ) ) {
                     mapFormat.name = std::move( editableMapName );
                     text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
                     fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
@@ -626,7 +626,7 @@ namespace Editor
                 // TODO: Limit description to 5 text lines.
 
                 std::string signText = mapFormat.description;
-                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true ) ) {
+                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true, true ) ) {
                     mapFormat.description = std::move( signText );
 
                     text.set( mapFormat.description, fheroes2::FontType::normalWhite() );

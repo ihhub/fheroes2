@@ -487,7 +487,7 @@ namespace Editor
                 bool redrawName = false;
                 if ( le.MouseClickLeft() ) {
                     std::string res = castleMetadata.customName;
-                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false ) && !res.empty() ) {
+                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false, true ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
