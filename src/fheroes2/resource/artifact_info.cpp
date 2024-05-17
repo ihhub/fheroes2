@@ -477,8 +477,8 @@ namespace
               {},
               {} },
 
-            // Magic Book cannot be located on a map.
-            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables the hero to cast spells." ), nullptr, {}, {} },
+            // Magic Book cannot be located on the original map. The Resurrection map format allows to place it on the map.
+            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables the hero to cast spells." ), gettext_noop( "You have found the Magic Book!" ), {}, {} },
 
             // These are artifacts used only for map editor (?).
             { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
