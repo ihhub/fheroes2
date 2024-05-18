@@ -367,10 +367,8 @@ namespace
             }
         }
 
-        if ( updateMapPlayerInformation ) {
-            if ( !Maps::updateMapPlayers( mapFormat ) ) {
-                assert( 0 );
-            }
+        if ( updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
+            assert( 0 );
         }
 
         return needRedraw;
