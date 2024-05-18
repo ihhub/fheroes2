@@ -740,6 +740,9 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) ) {
                     res = eventFileDialog();
                 }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
+                    openMapSpecificationsDialog();
+                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
