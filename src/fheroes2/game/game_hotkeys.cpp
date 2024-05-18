@@ -37,8 +37,6 @@
 #include "battle_arena.h"
 #include "dialog.h"
 #include "game_interface.h"
-#include "game_language.h"
-#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "players.h"
@@ -354,10 +352,6 @@ namespace
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    if ( le.KeyPress() ) {
-        // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
-        Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
-    }
     return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
