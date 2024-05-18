@@ -3262,25 +3262,26 @@ namespace fheroes2
             case ICN::MINIHERO:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 42 ) {
-                    // Fix cycling colors on the Green heroes' flag (Knight, Sorceress and Warlock).
+                    // Fix cycling colors on the Green heroes' flag for Knight, Sorceress and Warlock.
                     ApplyPalette( _icnVsSprite[id][7], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                     ApplyPalette( _icnVsSprite[id][9], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                     ApplyPalette( _icnVsSprite[id][10], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
 
+                    // Fix cycling colors on the Yellow heroes' flag.
                     for ( size_t i = 21; i < 28; ++i ) {
                         ApplyPalette( _icnVsSprite[id][i], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                     }
 
-                    // Fix Blue Random Hero flag.
+                    // Fix Blue Random hero flag.
                     Copy( _icnVsSprite[id][5], 1, 4, _icnVsSprite[id][6], 1, 4, 17, 7 );
 
-                    // Fix Orange Necromancer Hero flag.
+                    // Fix Orange Necromancer hero flag.
                     Copy( _icnVsSprite[id][32], 5, 4, _icnVsSprite[id][33], 5, 4, 14, 7 );
 
-                    // Fix Orange Random Hero flag (in original assets he has a purple flag).
+                    // Fix Orange Random hero flag (in original assets he has a purple flag).
                     Copy( _icnVsSprite[id][32], 6, 4, _icnVsSprite[id][34], 6, 4, 13, 7 );
 
-                    // Fix Knight heroes missing leftmost sprite column.
+                    // Fix Knight heroes missing 2 leftmost sprite columns.
                     for ( size_t i = 0; i < 6; ++i ) {
                         Sprite & kinght = _icnVsSprite[id][i * 7];
                         const Sprite & barbarian = _icnVsSprite[id][i * 7 + 1];
