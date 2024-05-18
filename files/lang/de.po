@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -435,8 +435,9 @@ msgstr "Letzte Truppe kann nicht umgestellt werden"
 msgid "Move the %{name}"
 msgstr "%{name} umstellen"
 
-msgid "Set Count"
-msgstr "Anzahl festlegen"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Schieße auf %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4113,15 +4114,23 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Schieße auf %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Zufälliges ultimatives Artefakt"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "mit 1 Artefakt."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Weg"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Wasserlauf-Modus"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4185,14 +4194,6 @@ msgstr ""
 #, fuzzy
 msgid "Erase"
 msgstr "Lösch-Modus"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Weg"
-
-#, fuzzy
-msgid "Streams"
-msgstr "Wasserlauf-Modus"
 
 msgid "Mountains"
 msgstr "Berge"
@@ -12113,58 +12114,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Eine neue Karte erstellen, entweder von Grund auf oder mit Hilfe des "
-#~ "Zufallsgenerators."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Eine neue Karte erstellen, entweder von Grund auf oder mit Hilfe des "
-#~ "Zufallsgenerators."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Monster können nicht auf Wasser plaziert werden."

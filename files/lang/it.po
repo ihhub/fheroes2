@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -397,8 +397,9 @@ msgstr "Impossibile spostare l'ultima unità"
 msgid "Move the %{name}"
 msgstr "Sposta %{name}"
 
-msgid "Set Count"
-msgstr "Seleziona quanti"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Tira a %{monster}"
 
 #, fuzzy
 msgid "%{name} destroys half the enemy troops!"
@@ -3918,14 +3919,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Tira a %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Artefatto estremo casuale"
 
 msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "con 1 artefatto."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Strada"
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3984,13 +3992,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Strada"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -10925,7 +10926,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Opzioni Avventura"

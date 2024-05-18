@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -460,8 +460,9 @@ msgstr "Невозможно переместить последний отря�
 msgid "Move the %{name}"
 msgstr "Переместить %{name}"
 
-msgid "Set Count"
-msgstr "Количество"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Стрелять в %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4034,15 +4035,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Стрелять в %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случайный великий артефакт"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "с 1 артефактом."
+
+msgid "Roads"
+msgstr "Дороги"
+
+msgid "Streams"
+msgstr "Реки"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4108,12 +4115,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Ластик"
-
-msgid "Roads"
-msgstr "Дороги"
-
-msgid "Streams"
-msgstr "Реки"
 
 msgid "Mountains"
 msgstr "Горы"
@@ -11720,49 +11721,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Существ нельзя размещать на воде."
-
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Сокровища нельзя размещать на воде."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Героев нельзя размещать на воде."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Артефакты нельзя размещать на воде."
-
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Горы нельзя размещать на воде."
-
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Деревья нельзя размещать на воде."
-
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Объекты ландшафта нельзя размещать на воде."
-
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Города нельзя размещать на воде."
-
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Источники ресурсов нельзя размещать на воде."
-
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Жилища нельзя размещать на воде."
-
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Бонусы нельзя размещать на воде."
-
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Интерактивные объекты нельзя размещать на воде."

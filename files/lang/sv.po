@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -464,8 +464,8 @@ msgstr "Kan ej flytta sista truppen"
 msgid "Move the %{name}"
 msgstr "Flytta %{name}"
 
-msgid "Set Count"
-msgstr "Ange Antal"
+msgid "Set %{monster} Count"
+msgstr "Ange antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4019,15 +4019,22 @@ msgstr "Lämna kartredigeraren."
 msgid "Input %{object} text"
 msgstr ""
 
-msgid "Set %{monster} Count"
-msgstr "Ange antal %{monster}"
-
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Slumpad Ultimat artefakt"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "med 1 artefakt."
+
+msgid "Roads"
+msgstr "Vägar"
+
+msgid "Streams"
+msgstr "Floder"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4092,12 +4099,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Radera"
-
-msgid "Roads"
-msgstr "Vägar"
-
-msgid "Streams"
-msgstr "Floder"
 
 msgid "Mountains"
 msgstr "Berg"
@@ -11707,49 +11708,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Skapa ny karta, antingen en blank karta eller genom att använda "
-#~ "kartgeneratorn."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Varelser kan inte placeras på vatten."
-
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Skatter kan inte placeras på vatten."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Hjältar kan inte placeras på vatten."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Artefakter kan inte placeras på vatten."
-
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Berg kan inte placeras på vatten."
-
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Träd kan inte placeras på vatten."
-
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Landskapsföremål kan inte placeras på vatten."
-
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Städer kan inte placeras på vatten."
-
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Gruvor kan inte placeras på vatten."
-
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Bostäder kan inte placeras på vatten."
-
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Kraftökningar kan inte placeras på vatten."
-
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Äventyrsföremål kan inte placeras på vatten."

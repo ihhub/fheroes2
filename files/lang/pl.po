@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -438,8 +438,9 @@ msgstr "Nie można przenieść ostatniej jednostki"
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
-msgid "Set Count"
-msgstr "Podaj liczbę"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Strzelaj do %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4088,14 +4089,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Strzelaj do %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Losowy najpotężniejszy artefakt"
 
 msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "z jednym artefaktem."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Droga"
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -4156,13 +4164,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Droga"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -11956,52 +11957,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr "Utwórz mapę albo od początku albo używając generatora losowych map."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr "Utwórz mapę albo od początku albo używając generatora losowych map."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."

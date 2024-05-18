@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -462,8 +462,9 @@ msgstr "Не може да премести последния отряд"
 msgid "Move the %{name}"
 msgstr "Премести %{name}"
 
-msgid "Set Count"
-msgstr "Задаване на броя"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Застреляй %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4099,15 +4100,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Застреляй %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случаен върховен артефакт"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "с 1 артефакт."
+
+msgid "Roads"
+msgstr "Пътища"
+
+msgid "Streams"
+msgstr "Потоци"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4170,12 +4177,6 @@ msgstr ""
 #, fuzzy
 msgid "Erase"
 msgstr "Режим на изтриване"
-
-msgid "Roads"
-msgstr "Пътища"
-
-msgid "Streams"
-msgstr "Потоци"
 
 msgid "Mountains"
 msgstr "Планини"
@@ -11922,61 +11923,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Създай нова карта от нулата, или като използвате генератора на произволни "
-#~ "карти."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Създай нова карта или от начало, или като използваш генератора на "
-#~ "произволни карти."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."
