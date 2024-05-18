@@ -580,10 +580,20 @@ namespace Interface
 {
     void EditorInterface::reset()
     {
+        Settings & settings = Settings::Get();
+        const bool isHideInterfaceEnabled = settings.isHideInterfaceEnabled();
+
+        // In the case when Hide Interface mode is enabled we temporary disable it
+        // to allow editor properly place all interface items.
+        if ( isHideInterfaceEnabled ) {
+            settings.setHideInterface( false );
+        }
+
         const fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
-        _radar.SetPos( xOffset, BORDERWIDTH );
+
+        _radar.SetPos( xOffset, Settings::Get().isHideInterfaceEnabled() ? 0 : BORDERWIDTH );
 
         _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + ( ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ? BORDERWIDTH : 0 ) );
 
@@ -596,6 +606,11 @@ namespace Interface
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
+
+        if ( isHideInterfaceEnabled ) {
+            // Restore Hide Interface mode if it was enabled.
+            settings.setHideInterface( true );
+        }
     }
 
     void EditorInterface::redraw( const uint32_t force )
