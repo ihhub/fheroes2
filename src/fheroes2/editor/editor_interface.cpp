@@ -1179,7 +1179,7 @@ namespace Interface
 
                     if ( tempMonster.isValid() ) {
                         surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                        fheroes2::renderMonsterFrame( Monster( static_cast<int>( object.index ) + 1 ), surface, { 6, 6 } );
+                        fheroes2::renderMonsterFrame( tempMonster, surface, { 6, 6 } );
                     }
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
