@@ -33,6 +33,11 @@ namespace
 
     // This value is set to avoid any corrupted files to be processed.
     const size_t minFileSize{ 128 };
+
+    const uint16_t minimumSupportedVersion{ 2 };
+
+    // Change the version when there is a need to expand map format functionality.
+    const uint16_t currentSupportedVersion{ 2 };
 }
 
 namespace Maps::Map_Format
@@ -151,22 +156,38 @@ namespace Maps::Map_Format
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
+    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata )
+    {
+        return msg << metadata.allowedSpells;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata )
+    {
+        return msg >> metadata.allowedSpells;
+    }
+
     bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
     {
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
 
-        msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
-            << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
-            << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name << map.description;
+        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
+            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
+            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
+            << map.name << map.description;
 
         return !msg.fail();
     }
 
     bool loadFromStream( StreamBase & msg, BaseMapFormat & map )
     {
-        msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
-            >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
-            >> map.lossConditionType >> map.lossConditionMetadata >> map.size;
+        msg >> map.version;
+        if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
+            return false;
+        }
+
+        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
+            >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
+            >> map.lossConditionMetadata >> map.size;
 
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
@@ -192,7 +213,7 @@ namespace Maps::Map_Format
         compressed.setbigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -241,7 +262,7 @@ namespace Maps::Map_Format
         }
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata;
+            >> map.adventureMapEventMetadata >> map.shrineMetadata;
 
         return !msg.fail();
     }

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
-"PO-Revision-Date: 2024-05-16 19:37-0300\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
+"PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -458,8 +458,8 @@ msgstr "Não é possível mover a última tropa"
 msgid "Move the %{name}"
 msgstr "Mover %{name}"
 
-msgid "Set Count"
-msgstr "Defina a quantidade"
+msgid "Set %{monster} Count"
+msgstr "Definir Quantidade de %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4018,11 +4018,21 @@ msgstr "Sair do editor de mapas."
 msgid "Input %{object} text"
 msgstr "Inserir texto de%{object}"
 
-msgid "Set %{monster} Count"
-msgstr "Definir Quantidade de %{monster}"
-
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "com 1 artefato."
+
+msgid "Roads"
+msgstr "Estradas"
+
+msgid "Streams"
+msgstr "Riachos"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4081,12 +4091,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Apagar"
-
-msgid "Roads"
-msgstr "Estradas"
-
-msgid "Streams"
-msgstr "Riachos"
 
 msgid "Mountains"
 msgstr "Montanhas"
@@ -10745,6 +10749,14 @@ msgstr "Grimório"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "O %{name} permite que o herói lance feitiços."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Fantoche 1"
 
@@ -10977,6 +10989,16 @@ msgstr ""
 "\"Você acha que isso é engraçado? Muito bem. Você pode levá-lo. Eu prefiro "
 "muito mais voar.\""
 
+msgid "Masthead"
+msgstr "Mastro"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} aumenta a sorte e o moral das tropas do herói em %{count} cada um em "
+"combates no mar."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10988,16 +11010,6 @@ msgstr ""
 "dificuldade. Ele então lhe entrega um mapa gasto que mostra onde ele o "
 "escondeu. Após muita exploração, você o encontra escondido debaixo de uma "
 "doca próxima."
-
-msgid "Masthead"
-msgstr "Mastro"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} aumenta a sorte e o moral das tropas do herói em %{count} cada um em "
-"combates no mar."
 
 msgid "Sphere of Negation"
 msgstr "Esfera da Negação"
@@ -11767,49 +11779,3 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Crie um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Criar um novo mapa, seja do zero ou usando o gerador de mapas aleatórios."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Monstros não podem ser colocados na água."
-
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Tesouros não podem ser colocados na água."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Heróis não podem ser colocados na água."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Artefatos não podem ser colocados na água."
-
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Montanhas não podem ser colocadas na água."
-
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Árvores não podem ser colocadas na água."
-
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Objetos de paisagem não podem ser colocados na água."
-
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Cidades não podem ser colocadas na água."
-
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Minas não podem ser colocadas na água."
-
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Moradias não podem ser colocadas na água."
-
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Intensificadores não podem ser colocados na água."
-
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Objetos de aventura não podem ser colocados na água."

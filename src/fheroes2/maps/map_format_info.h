@@ -207,6 +207,11 @@ namespace Maps::Map_Format
         int32_t monsterCount{ 0 };
     };
 
+    struct ShrineMetadata
+    {
+        std::vector<int32_t> allowedSpells;
+    };
+
     struct DailyEvent
     {
         std::string message;
@@ -225,7 +230,6 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // Change the version when there is a need to expand map format functionality.
         uint16_t version{ 1 };
 
         bool isCampaign{ false };
@@ -280,6 +284,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, SignMetadata> signMetadata;
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
+
+        std::map<uint32_t, ShrineMetadata> shrineMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -447,8 +447,9 @@ msgstr "Kan ikke flytte siste styrke i garnisonen"
 msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
-msgid "Set Count"
-msgstr "Velg antall"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skyt på %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4145,12 +4146,23 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Skyt på %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfeldig sjeldneste skatt"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "med 1 skatt."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Vei"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Bekkmodus"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4213,14 +4225,6 @@ msgstr ""
 #, fuzzy
 msgid "Erase"
 msgstr "Viskemodus"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Vei"
-
-#, fuzzy
-msgid "Streams"
-msgstr "Bekkmodus"
 
 msgid "Mountains"
 msgstr "Fjell"
@@ -11070,6 +11074,14 @@ msgstr "Tryllebok"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name}a gjør at du kan bruke trolldom."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Plassholder 1"
 
@@ -11310,6 +11322,15 @@ msgstr ""
 "Feen myser bort på deg og svarer: \"Syns du dette er morsomt? Greit. Da kan "
 "DU få bære den. Jeg foretrekker å fly uansett.\""
 
+msgid "Masthead"
+msgstr "Mastetoppen"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -11320,15 +11341,6 @@ msgstr ""
 "han brukte i sine yngre dager for å samle mannskapet sitt i vanskelig "
 "farvann. Han gir deg deretter et falmet kart som viser hvor han gjemte den. "
 "Etter mye leting finner du den bortgjemt under en brygge i nærheten."
-
-msgid "Masthead"
-msgstr "Mastetoppen"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
 
 msgid "Sphere of Negation"
 msgstr "Kulen av benektelse"
@@ -12135,53 +12147,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr "Lag et nytt kart, enten fra bunnen av eller automatisk."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Lag et nytt kart helt fra bunnen av eller ved å bruke den automatiske "
-#~ "kartlageren."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
