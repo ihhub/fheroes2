@@ -3279,7 +3279,7 @@ namespace fheroes2
                     Copy( _icnVsSprite[id][32], 5, 4, _icnVsSprite[id][33], 5, 4, 14, 7 );
 
                     // Fix Orange Random hero flag (in original assets he has a purple flag).
-                    Copy( _icnVsSprite[id][32], 6, 4, _icnVsSprite[id][34], 6, 4, 13, 7 );
+                    Copy( _icnVsSprite[id][32], 2, 4, _icnVsSprite[id][34], 2, 4, 16, 7 );
 
                     // Fix Knight heroes missing 2 leftmost sprite columns.
                     for ( size_t i = 0; i < 6; ++i ) {
