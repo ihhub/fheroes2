@@ -2108,7 +2108,7 @@ namespace Maps
         case MP2::OBJ_ARTIFACT: {
             assert( isFirstLoad );
 
-            const int art = Artifact::FromMP2IndexSprite( tile.GetObjectSpriteIndex() ).GetID();
+            const int art = Artifact::getArtifactFromMapSpriteIndex( tile.GetObjectSpriteIndex() ).GetID();
             if ( Artifact::UNKNOWN == art ) {
                 // This is an unknown artifact. Did you add a new one?
                 assert( 0 );
