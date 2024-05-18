@@ -34,7 +34,6 @@
 
 #include "agg_image.h"
 #include "ground.h"
-#include "icn.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
 #include "math_base.h"
