@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 04:50+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -11070,6 +11070,14 @@ msgstr "Zauberbuch"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "Das %{name} ermöglicht Euch Zaubersprüche auszusprechen."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Dummy 1"
 
@@ -11310,6 +11318,16 @@ msgstr ""
 "und antwortet: \"Findest Du das lustig? Gut. Dann nimm es. Ich fliege lieber "
 "davon.\""
 
+msgid "Masthead"
+msgstr "Gallionsfigur"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"Der %{name} erhöht Euer Glück und Eure Moral im Seekampf um jeweils %{count}."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -11320,16 +11338,6 @@ msgstr ""
 "Gallionsfigur, mit der er früher seine Crew in schwierigen Zeiten bei Laune "
 "hielt. Er gibt Euch eine ausgeblichene Karte, die zeigt, wo er sie versteckt "
 "hat. Nach langer Suche findet Ihr sie an einem nahen Dock."
-
-msgid "Masthead"
-msgstr "Gallionsfigur"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"Der %{name} erhöht Euer Glück und Eure Moral im Seekampf um jeweils %{count}."
 
 msgid "Sphere of Negation"
 msgstr "Zauberkugel der Aufhebung"
