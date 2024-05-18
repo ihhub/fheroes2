@@ -182,7 +182,7 @@ namespace Maps::Map_Format
 
         uint8_t computerPlayerColors{ 0 };
 
-        // Does this event occur only once?
+        // Does this event occur more than once?
         bool isRecurringEvent{ false };
 
         // An artifact to be given as a reward.
@@ -222,6 +222,7 @@ namespace Maps::Map_Format
 
         uint32_t firstOccurrenceDay{ 0 };
 
+        // Repeat period for the event. 0 value means no repetition.
         uint32_t repeatPeriodInDays{ 0 };
 
         // Resources to be given as a reward.
