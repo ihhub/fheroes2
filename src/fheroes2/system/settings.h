@@ -79,7 +79,7 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( const Maps::FileInfo & );
+    void SetCurrentFileInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {

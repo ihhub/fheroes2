@@ -393,10 +393,27 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
 {
     Reset();
 
-    Maps::Map_Format::MapFormat map;
+    Maps::Map_Format::BaseMapFormat map;
     if ( !Maps::Map_Format::loadBaseMap( filePath, map ) ) {
         return false;
     }
+
+    if ( !loadResurrectionMap( map, std::move( filePath ) ) ) {
+        return false;
+    }
+
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+        // This is not a valid map since no human players exist so it cannot be played.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
+        return false;
+    }
+
+    return true;
+}
+
+bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath )
+{
+    Reset();
 
     filename = std::move( filePath );
 
@@ -405,8 +422,8 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     width = static_cast<uint16_t>( map.size );
     height = static_cast<uint16_t>( map.size );
 
-    name = std::move( map.name );
-    description = std::move( map.description );
+    name = map.name;
+    description = map.description;
 
     assert( ( map.availablePlayerColors & map.humanPlayerColors ) == map.humanPlayerColors );
     assert( ( map.availablePlayerColors & map.computerPlayerColors ) == map.computerPlayerColors );
@@ -497,12 +514,6 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     }
 
     version = GameVersion::RESURRECTION;
-
-    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
-        // This is not a valid map since no human players exist so it cannot be played.
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
-        return false;
-    }
 
     return true;
 }
