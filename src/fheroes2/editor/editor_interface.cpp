@@ -198,14 +198,11 @@ namespace
         }
 
         bool needRedraw = false;
+        bool updateMapPlayerInformation = false;
 
         // Filter objects by group and remove them from '_mapFormat'.
         for ( size_t mapTileIndex = 0; mapTileIndex < mapFormat.tiles.size(); ++mapTileIndex ) {
             Maps::Map_Format::TileInfo & mapTile = mapFormat.tiles[mapTileIndex];
-
-            if ( mapTile.objects.empty() ) {
-                continue;
-            }
 
             for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
                 // LANDSCAPE_FLAGS and LANDSCAPE_TOWN_BASEMENTS are special objects that should be erased only when erasing the main object.
@@ -281,10 +278,7 @@ namespace
                     }
 
                     needRedraw = true;
-
-                    if ( !Maps::updateMapPlayers( mapFormat ) ) {
-                        assert( 0 );
-                    }
+                    updateMapPlayerInformation = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
@@ -308,9 +302,7 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
 
-                    if ( !Maps::updateMapPlayers( mapFormat ) ) {
-                        assert( 0 );
-                    }
+                    updateMapPlayerInformation = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::MONSTERS ) {
                     assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
@@ -373,6 +365,10 @@ namespace
                     break;
                 }
             }
+        }
+
+        if ( updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
+            assert( 0 );
         }
 
         return needRedraw;
