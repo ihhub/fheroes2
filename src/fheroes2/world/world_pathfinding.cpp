@@ -83,7 +83,7 @@ namespace
             return false;
         }
 
-        if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) ) {
+        if ( MP2::isPickupObject( objectType ) || MP2::isInGameActionObject( objectType, fromWater ) ) {
             return false;
         }
 
@@ -979,7 +979,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
         }
 
         // Don't go onto action objects as they might be castles or dwellings with guards.
-        if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+        if ( MP2::isInGameActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
             continue;
         }
 

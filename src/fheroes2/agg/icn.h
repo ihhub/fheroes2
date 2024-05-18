@@ -1071,6 +1071,9 @@ namespace ICN
         BUTTON_TOWN_GOOD,
         BUTTON_TOWN_EVIL,
 
+        BUTTON_RESTRICT_GOOD,
+        BUTTON_RESTRICT_EVIL,
+
         BUTTON_KINGDOM_EXIT,
         BUTTON_KINGDOM_HEROES,
         BUTTON_KINGDOM_TOWNS,
@@ -1105,6 +1108,13 @@ namespace ICN
 
         METALLIC_BORDERED_TEXTBOX_GOOD,
         METALLIC_BORDERED_TEXTBOX_EVIL,
+
+        BUTTON_NEW_MAP_EVIL,
+        BUTTON_NEW_MAP_GOOD,
+        BUTTON_SAVE_MAP_EVIL,
+        BUTTON_SAVE_MAP_GOOD,
+        BUTTON_LOAD_MAP_EVIL,
+        BUTTON_LOAD_MAP_GOOD,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

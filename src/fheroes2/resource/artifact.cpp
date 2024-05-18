@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -459,29 +459,38 @@ int Artifact::Rand( level_t lvl )
     return res;
 }
 
-Artifact Artifact::FromMP2IndexSprite( uint32_t index )
+Artifact Artifact::getArtifactFromMapSpriteIndex( const uint32_t index )
 {
     // Add 1 to all values to properly convert from the old map format.
-    if ( 0xA2 > index )
+    if ( ( index < 162 ) || ( Settings::Get().isPriceOfLoyaltySupported() && index > 171 && index < 206 ) ) {
         return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    }
 
-    if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
-        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    // The original game does not have the Magic Book adventure map sprite. But it uses the ID that is taken for "Dummy" sprite.
+    // The Resurrection map format allows to place a Magic Book and it has its own sprite that does not correlate with the original Magic Book artifact ID.
+    if ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION && index == 207 ) {
+        return { MAGIC_BOOK };
+    }
 
-    if ( 0xA3 == index )
+    if ( index == 163 ) {
         return { Rand( ART_LEVEL_ALL_NORMAL ) };
+    }
 
-    if ( 0xA4 == index )
+    if ( index == 164 ) {
         return { Rand( ART_ULTIMATE ) };
+    }
 
-    if ( 0xA7 == index )
+    if ( index == 167 ) {
         return { Rand( ART_LEVEL_TREASURE ) };
+    }
 
-    if ( 0xA9 == index )
+    if ( index == 169 ) {
         return { Rand( ART_LEVEL_MINOR ) };
+    }
 
-    if ( 0xAB == index )
-        return { ART_LEVEL_MAJOR };
+    if ( index == 171 ) {
+        return { Rand( ART_LEVEL_MAJOR ) };
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown Artifact object index: " << index )
 
@@ -1192,10 +1201,15 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             if ( isMagicBook( art ) ) {
                 art.Reset();
 
-                const_cast<Heroes *>( _hero )->SpellBookActivate();
+                if ( _hero->HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( Artifact( Artifact::MAGIC_BOOK ).GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    const_cast<Heroes *>( _hero )->SpellBookActivate();
+                }
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, false ).GetID();
 
                 if ( spellId == Spell::NONE ) {
                     // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.

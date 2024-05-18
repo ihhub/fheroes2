@@ -56,6 +56,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -627,18 +628,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         HeroBase::LoadDefaults( HeroBase::HEROES, _race );
     }
 
-    const bool doesHeroHaveCustomArmy
-        = isEditor
-          || std::any_of( heroMetadata.armyMonsterType.begin(), heroMetadata.armyMonsterType.end(), []( const int32_t monsterType ) { return monsterType != 0; } );
-    if ( doesHeroHaveCustomArmy ) {
-        std::vector<Troop> troops( heroMetadata.armyMonsterType.size() );
-        for ( size_t i = 0; i < troops.size(); ++i ) {
-            troops[i] = Troop{ heroMetadata.armyMonsterType[i], static_cast<uint32_t>( heroMetadata.armyMonsterCount[i] ) };
-        }
-
-        army.Assign( troops.data(), troops.data() + troops.size() );
-    }
-    else {
+    if ( !Maps::loadHeroArmy( army, heroMetadata ) && !isEditor ) {
         // Reset the army to default
         army.Reset( true );
     }
@@ -780,17 +770,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
 {
     Maps::Map_Format::HeroMetadata heroMetadata;
 
-    const size_t armySize = army.Size();
-    assert( heroMetadata.armyMonsterType.size() == armySize );
-
-    // Update army metadata.
-    for ( size_t i = 0; i < armySize; ++i ) {
-        const Troop * troop = army.GetTroop( i );
-        assert( troop != nullptr );
-
-        heroMetadata.armyMonsterType[i] = troop->GetID();
-        heroMetadata.armyMonsterCount[i] = static_cast<int32_t>( troop->GetCount() );
-    }
+    Maps::saveHeroArmy( army, heroMetadata );
 
     // Hero's portrait.
     heroMetadata.customPortrait = portrait;
@@ -823,7 +803,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     const size_t skillsSize = skills.size();
     assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
     for ( size_t i = 0; i < skillsSize; ++i ) {
-        heroMetadata.secondarySkill[i] = skills[i].Skill();
+        heroMetadata.secondarySkill[i] = static_cast<int8_t>( skills[i].Skill() );
         heroMetadata.secondarySkillLevel[i] = static_cast<uint8_t>( skills[i].Level() );
     }
 
@@ -1419,12 +1399,18 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art.GetID() == Artifact::MAGIC_BOOK ? fheroes2::showStandardTextMessage(
-                GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Dialog::OK )
-                                                : fheroes2::showStandardTextMessage( art.GetName(),
-                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            if ( art.GetID() == Artifact::MAGIC_BOOK && bag_artifacts.isPresentArtifact( Artifact::MAGIC_BOOK ) ) {
+                fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+            }
+            else if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+                fheroes2::showStandardTextMessage(
+                    GetName(),
+                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                    Dialog::OK );
+            }
+            else if ( bag_artifacts.isFull() ) {
+                fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            }
         }
 
         return false;
@@ -2561,8 +2547,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
     static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
             int temp = 0;

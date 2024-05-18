@@ -36,7 +36,7 @@ namespace Maps
 {
     class Tiles;
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 }
 
 namespace Interface
@@ -91,6 +91,10 @@ namespace Interface
 
         bool loadMap( const std::string & filePath );
 
+        void saveMapToFile();
+
+        void openMapSpecificationsDialog();
+
     private:
         class WarningMessage
         {
@@ -136,11 +140,13 @@ namespace Interface
             // Do nothing.
         }
 
-        bool setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void handleObjectMouseLeftClick( Maps::Tiles & tile );
+        void _handleObjectMouseLeftClick( Maps::Tiles & tile );
+
+        void _validateObjectsOnTerrainUpdate();
 
         EditorPanel _editorPanel;
 
@@ -154,5 +160,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }
