@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -466,8 +466,9 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr "Pierdes el héroe: %{name}."
 
-msgid "Set Count"
-msgstr ""
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Dispara a %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4016,14 +4017,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Dispara a %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Encuentra el artefacto definitivo"
 
 msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "con un artefacto."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Fin del camino"
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -4085,13 +4093,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Fin del camino"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -10542,6 +10543,14 @@ msgstr "El Libro de Hechizos"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} permite al héroe lanzar hechizos."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 #, fuzzy
 msgid "Dummy 1"
 msgstr "Momia"
@@ -10770,6 +10779,16 @@ msgstr ""
 "te mira y te responde: \"¿Crees que es divertido? Vale. Puedes llevártelo. "
 "De cualquier modo, prefiero volar.\""
 
+msgid "Masthead"
+msgstr "El Mástil"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} aumenta la suerte y la moral de las tropas del héroe en %{count} "
+"cada una en combate marítimo."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10780,16 +10799,6 @@ msgstr ""
 "usar para arengar a su tripulación en momentos difíciles. Te da entonces un "
 "mapa borroso que muestra dónde lo escondió. Después de un buen rato "
 "explorando, lo encuentras escondido debajo de un embarcadero cercano."
-
-msgid "Masthead"
-msgstr "El Mástil"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} aumenta la suerte y la moral de las tropas del héroe en %{count} "
-"cada una en combate marítimo."
 
 msgid "Sphere of Negation"
 msgstr "La Esfera de la Negación"
@@ -11554,43 +11563,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Este pueblo no se puede actualizar a castillo."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -462,8 +462,9 @@ msgstr "A sereg utolsó egységét nem lehet áthelyezni"
 msgid "Move the %{name}"
 msgstr "%{name} ide lép"
 
-msgid "Set Count"
-msgstr "Mennyiség"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "%{monster} létszám beállítása"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4021,15 +4022,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "%{monster} létszám beállítása"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Véletlenszerű Szent Varázstárgy"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "egy varázstárggyal."
+
+msgid "Roads"
+msgstr "Utak"
+
+msgid "Streams"
+msgstr "Folyóvizek"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4093,12 +4100,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Törlés"
-
-msgid "Roads"
-msgstr "Utak"
-
-msgid "Streams"
-msgstr "Folyóvizek"
 
 msgid "Mountains"
 msgstr "Hegyek"
@@ -10699,6 +10700,14 @@ msgstr "Varázskönyv"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "A %{name} lehetővé teszi, hogy a hős varázsolhasson."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Próba 1"
 
@@ -10927,6 +10936,16 @@ msgstr ""
 "gyanakodva méreget és azt válaszolja: \"Te ezt viccesnek találod? Jól van, "
 "akár tovább is cipelheted. Amúgy is jobb szeretek repkedni."
 
+msgid "Masthead"
+msgstr "Árbóc"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"Az %{name} %{count} ponttal növeli a hős egységeinek szerencséjét, illetve "
+"morálját tengeri ütközetben."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10937,16 +10956,6 @@ msgstr ""
 "még fiatalkorában használt, hogy csapatai új erőre kapjanak vész esetén. Egy "
 "megfakult térképet ad át neked, mely megmutatja, hova rejtették el. Hosszas "
 "keresés-kutatás után rátaláltok egy közeli hajódokk alá rejtve."
-
-msgid "Masthead"
-msgstr "Árbóc"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"Az %{name} %{count} ponttal növeli a hős egységeinek szerencséjét, illetve "
-"morálját tengeri ütközetben."
 
 msgid "Sphere of Negation"
 msgstr "Tagadás gömbje"
@@ -11684,51 +11693,3 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Készíts új térképet a saját elképzelésed szerint vagy használd a "
-#~ "véletlenszerű térkép generálót."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr ""
-#~ "Készíts új térképet a saját elképzelésed szerint vagy használd a "
-#~ "véletlenszerű térkép generálót."
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el lények."
-
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el kincsek."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el hősök."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el varázstárgyak."
-
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el hegyek."
-
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el fák."
-
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el szárazföldi objektumok."
-
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el városok."
-
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el bányák."
-
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el toborzóhelyek."
-
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
-
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Kaland objektumok nem helyezhetők el vízen."

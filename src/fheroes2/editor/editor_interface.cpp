@@ -88,6 +88,32 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
+    class HideInterfaceModeDisabler
+    {
+    public:
+        HideInterfaceModeDisabler()
+        {
+            // If Hide Interface mode is enabled we temporary disable it to allow editor properly place all interface items.
+            if ( _isHideInterfaceEnabled ) {
+                Settings::Get().setHideInterface( false );
+            }
+        }
+
+        HideInterfaceModeDisabler & operator=( const HideInterfaceModeDisabler & ) = delete;
+        HideInterfaceModeDisabler( const HideInterfaceModeDisabler & ) = delete;
+
+        ~HideInterfaceModeDisabler()
+        {
+            if ( _isHideInterfaceEnabled ) {
+                // Restore Hide Interface mode if it was enabled.
+                Settings::Get().setHideInterface( true );
+            }
+        }
+
+    private:
+        const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
+    };
+
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
@@ -198,14 +224,11 @@ namespace
         }
 
         bool needRedraw = false;
+        bool updateMapPlayerInformation = false;
 
         // Filter objects by group and remove them from '_mapFormat'.
         for ( size_t mapTileIndex = 0; mapTileIndex < mapFormat.tiles.size(); ++mapTileIndex ) {
             Maps::Map_Format::TileInfo & mapTile = mapFormat.tiles[mapTileIndex];
-
-            if ( mapTile.objects.empty() ) {
-                continue;
-            }
 
             for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
                 // LANDSCAPE_FLAGS and LANDSCAPE_TOWN_BASEMENTS are special objects that should be erased only when erasing the main object.
@@ -281,10 +304,7 @@ namespace
                     }
 
                     needRedraw = true;
-
-                    if ( !Maps::updateMapPlayers( mapFormat ) ) {
-                        assert( 0 );
-                    }
+                    updateMapPlayerInformation = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
@@ -308,9 +328,7 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
 
-                    if ( !Maps::updateMapPlayers( mapFormat ) ) {
-                        assert( 0 );
-                    }
+                    updateMapPlayerInformation = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::MONSTERS ) {
                     assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
@@ -373,6 +391,10 @@ namespace
                     break;
                 }
             }
+        }
+
+        if ( updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
+            assert( 0 );
         }
 
         return needRedraw;
@@ -580,6 +602,8 @@ namespace Interface
 {
     void EditorInterface::reset()
     {
+        const HideInterfaceModeDisabler hideInterfaceModeDisabler;
+
         const fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
@@ -739,6 +763,9 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) ) {
                     res = eventFileDialog();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
+                    openMapSpecificationsDialog();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
@@ -1152,7 +1179,7 @@ namespace Interface
 
                     if ( tempMonster.isValid() ) {
                         surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                        fheroes2::renderMonsterFrame( Monster( static_cast<int>( object.index ) + 1 ), surface, { 6, 6 } );
+                        fheroes2::renderMonsterFrame( tempMonster, surface, { 6, 6 } );
                     }
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -1191,6 +1218,11 @@ namespace Interface
                         Maps::setSpellOnTile( tile, spellId );
 
                         action.commit();
+                    }
+                    else {
+                        std::string msg = _( "%{object} has no properties to change." );
+                        StringReplace( msg, "%{object}", _( "This artifact" ) );
+                        _warningMessage.reset( std::move( msg ) );
                     }
                 }
                 else if ( objectType == MP2::OBJ_SPHINX ) {
@@ -1240,6 +1272,13 @@ namespace Interface
             Maps::readMapInEditor( _mapFormat );
         }
         else if ( _editorPanel.isRoadDraw() ) {
+            if ( tile.isWater() ) {
+                std::string msg = _( "%{objects} cannot be placed on water." );
+                StringReplace( msg, "%{objects}", _( "Roads" ) );
+                _warningMessage.reset( std::move( msg ) );
+                return;
+            }
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
@@ -1249,6 +1288,13 @@ namespace Interface
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
+            if ( tile.isWater() ) {
+                std::string msg = _( "%{objects} cannot be placed on water." );
+                StringReplace( msg, "%{objects}", _( "Streams" ) );
+                _warningMessage.reset( std::move( msg ) );
+                return;
+            }
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateStreamOnTile( tile, true ) ) {
