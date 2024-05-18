@@ -10389,6 +10389,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Count"
-#~ msgstr "Sayıyı Ayarla"

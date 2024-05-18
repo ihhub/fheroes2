@@ -11102,38 +11102,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Count"
-#~ msgstr "Zadat počet"
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
