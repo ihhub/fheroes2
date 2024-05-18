@@ -1240,6 +1240,13 @@ namespace Interface
             Maps::readMapInEditor( _mapFormat );
         }
         else if ( _editorPanel.isRoadDraw() ) {
+            if ( tile.isWater() ) {
+                std::string msg = _( "%{objects} cannot be placed on water." );
+                StringReplace( msg, "%{objects}", _( "Road" ) );
+                _warningMessage.reset( std::move( msg ) );
+                return;
+            }
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
@@ -1249,6 +1256,13 @@ namespace Interface
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
+            if ( tile.isWater() ) {
+                std::string msg = _( "%{objects} cannot be placed on water." );
+                StringReplace( msg, "%{objects}", _( "Stream" ) );
+                _warningMessage.reset( std::move( msg ) );
+                return;
+            }
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateStreamOnTile( tile, true ) ) {
