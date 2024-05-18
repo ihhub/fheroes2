@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 04:50+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10919,6 +10919,14 @@ msgstr "Магическа книга"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} ти позволява да правиш магии."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Манекен 1"
 
@@ -11150,6 +11158,15 @@ msgstr ""
 "ядосано и отговаря: \"Мислиш, че това е смешно? Добре. Може да го носиш. И "
 "без това предпочитам да летя.\""
 
+msgid "Masthead"
+msgstr "Мачтов връх"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -11160,15 +11177,6 @@ msgstr ""
 "младостта си, за да събере екипажа си по време на проблеми. След това той ти "
 "дава избледняла карта, която показва къде я е скрил. След дълго проучване я "
 "намирате скрита под близкия док."
-
-msgid "Masthead"
-msgstr "Мачтов връх"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
 
 msgid "Sphere of Negation"
 msgstr "Сфера на отрицанието"
