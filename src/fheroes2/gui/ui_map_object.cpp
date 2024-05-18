@@ -34,7 +34,6 @@
 
 #include "agg_image.h"
 #include "ground.h"
-#include "icn.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
 #include "math_base.h"
@@ -170,14 +169,9 @@ namespace fheroes2
             return {};
         }
 
-        if ( groundId == Maps::Ground::WATER ) {
-            // Towns can not be placed on water.
-            Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
-            image.setPosition( -image.width() / 2, -image.height() / 2 );
-            return image;
-        }
-
-        const int32_t basementOffset = getTownBasementId( groundId );
+        // Towns cannot be placed on water but we have to display them as cursor.
+        // So we are showing town basement as Grass for Water terrain.
+        const int32_t basementOffset = getTownBasementId( ( groundId == Maps::Ground::WATER ) ? Maps::Ground::GRASS : groundId );
 
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > static_cast<size_t>( basementOffset ) );
