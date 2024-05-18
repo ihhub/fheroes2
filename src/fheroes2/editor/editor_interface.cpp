@@ -1242,7 +1242,7 @@ namespace Interface
         else if ( _editorPanel.isRoadDraw() ) {
             if ( tile.isWater() ) {
                 std::string msg = _( "%{objects} cannot be placed on water." );
-                StringReplace( msg, "%{objects}", _( "Road" ) );
+                StringReplace( msg, "%{objects}", _( "Roads" ) );
                 _warningMessage.reset( std::move( msg ) );
                 return;
             }
@@ -1258,7 +1258,7 @@ namespace Interface
         else if ( _editorPanel.isStreamDraw() ) {
             if ( tile.isWater() ) {
                 std::string msg = _( "%{objects} cannot be placed on water." );
-                StringReplace( msg, "%{objects}", _( "Stream" ) );
+                StringReplace( msg, "%{objects}", _( "Streams" ) );
                 _warningMessage.reset( std::move( msg ) );
                 return;
             }
