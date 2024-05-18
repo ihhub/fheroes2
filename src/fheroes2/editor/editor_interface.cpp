@@ -1192,6 +1192,11 @@ namespace Interface
 
                         action.commit();
                     }
+                    else {
+                        std::string msg = _( "%{object} has no properties to change." );
+                        StringReplace( msg, "%{object}", _( "This artifact" ) );
+                        _warningMessage.reset( std::move( msg ) );
+                    }
                 }
                 else if ( objectType == MP2::OBJ_SPHINX ) {
                     assert( _mapFormat.sphinxMetadata.find( object.id ) != _mapFormat.sphinxMetadata.end() );
