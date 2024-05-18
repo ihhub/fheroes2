@@ -602,6 +602,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
                     obj->LoadFromMP2( objectTileId, pblock );
+
+                    obj->validate();
+
                     map_objects.add( obj );
                 }
                 break;
@@ -828,17 +831,24 @@ bool World::loadResurrectionMap( const std::string & filename )
                     assert( map.adventureMapEventMetadata.find( object.id ) != map.adventureMapEventMetadata.end() );
                     auto & eventInfo = map.adventureMapEventMetadata[object.id];
 
-                    MapEvent * eventObject = new MapEvent();
-                    eventObject->resources = eventInfo.resources;
-                    eventObject->artifact = eventInfo.artifact;
-
-                    // TODO: change MapEvent to support map format functionality.
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
-                    eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
-                    eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
+                    // TODO: change MapEvent to support map format functionality.
+                    MapEvent * eventObject = new MapEvent();
+                    eventObject->resources = eventInfo.resources;
+                    eventObject->artifact = eventInfo.artifact;
+                    if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
+                    }
+
+                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+
+                    eventObject->computer = ( computerColors != 0 );
+                    eventObject->colors = humanColors | computerColors;
                     eventObject->message = std::move( eventInfo.message );
+                    eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     map_objects.add( eventObject );
@@ -901,17 +911,31 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     MapSphinx * sphinxObject = new MapSphinx();
 
-                    sphinxObject->message = std::move( sphinxInfo.question );
+                    sphinxObject->riddle = std::move( sphinxInfo.riddle );
 
                     for ( auto & answer : sphinxInfo.answers ) {
-                        sphinxObject->answers.push_back( std::move( answer ) );
+                        if ( !answer.empty() ) {
+                            sphinxObject->answers.push_back( std::move( answer ) );
+                        }
+                        else {
+                            // How is it even possible?
+                            assert( 0 );
+                        }
                     }
 
                     sphinxObject->resources = sphinxInfo.resources;
                     sphinxObject->artifact = sphinxInfo.artifact;
-                    sphinxObject->valid = ( !sphinxObject->message.empty() && !sphinxObject->answers.empty() );
+                    if ( sphinxInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        sphinxObject->artifact.SetSpell( sphinxInfo.artifactMetadata );
+                    }
+
+                    sphinxObject->validate();
 
                     sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    // The original game assumes answers only to be up to 4 characters.
+                    // However, it seems logically incorrect.
+                    sphinxObject->isTruncatedAnswer = false;
 
                     map_objects.add( sphinxObject );
 
@@ -1002,16 +1026,18 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     // Load daily events.
     for ( auto & event : map.dailyEvents ) {
-        auto & newEvent = vec_eventsday.emplace_back();
-
-        newEvent.message = std::move( event.message );
-
-        // TODO: modify EventDate structure for have more flexibility.
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        newEvent.colors = ( event.humanPlayerColors | event.computerPlayerColors );
-        newEvent.isApplicableForAIPlayers = ( event.computerPlayerColors != 0 );
+        // TODO: modify EventDate structure to have more flexibility.
+        auto & newEvent = vec_eventsday.emplace_back();
+
+        const int humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+
+        newEvent.message = std::move( event.message );
+        newEvent.colors = ( humanColors | computerColors );
+        newEvent.isApplicableForAIPlayers = ( computerColors != 0 );
 
         newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
         newEvent.repeatPeriodInDays = event.repeatPeriodInDays;

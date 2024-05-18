@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -51,6 +51,31 @@ msgid "QUIT"
 msgstr ""
 "AV-\n"
 "SLUTT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LAST\n"
+"INN\n"
+"PARTI"
 
 msgid "CANCEL"
 msgstr "AVBRYT"
@@ -422,8 +447,9 @@ msgstr "Kan ikke flytte siste styrke i garnisonen"
 msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
-msgid "Set Count"
-msgstr "Velg antall"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skyt på %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -3978,6 +4004,82 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "Message Text:"
+msgstr "Kamplogg"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Kamplogg"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Artifact"
+msgstr "Gjenstand"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Velg en skatt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Råvare"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
@@ -4018,9 +4120,9 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr "Lag et nytt kart, enten fra bunnen av eller automatisk."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "Nytt kart fra bunnen av"
 
 msgid "New Map"
 msgstr "Nytt kart"
@@ -4044,12 +4146,23 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Skyt på %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfeldig sjeldneste skatt"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "med 1 skatt."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Vei"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Bekkmodus"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4112,14 +4225,6 @@ msgstr ""
 #, fuzzy
 msgid "Erase"
 msgstr "Viskemodus"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Vei"
-
-#, fuzzy
-msgid "Streams"
-msgstr "Bekkmodus"
 
 msgid "Mountains"
 msgstr "Fjell"
@@ -4337,11 +4442,6 @@ msgstr "Angre"
 msgid "Undo your last action."
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Lag et nytt kart helt fra bunnen av eller ved å bruke den automatiske "
-"kartlageren."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Rediger kartets navn, beskrivelse eller andre detaljer."
 
@@ -4394,6 +4494,91 @@ msgid "Warning"
 msgstr "Advarsel"
 
 #, fuzzy
+msgid "None."
+msgstr "Ingen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vennligst velg en annen helt."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Samle opp %{count} gullstykker."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Forlat karttegneren"
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kartets\n"
+"utfordring"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Seiersvilkår"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tapsvilkår"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Kartbeskrivelse"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Beskrivelse av det utvalgte kartet."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Kart-type"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Dette er utfordringen til det utvalgte kartet. Utfordringen til kartet er "
+"spesifisert av skaperen av kartet. De vanskeligste kartene kan inneholde "
+"sterkere fiender, færre råvarer, eller andre spesielle vilkår som skal gjøre "
+"ting mer utfordrende for den menneskelige spilleren."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Underleggelse"
 
@@ -4427,22 +4612,46 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Lagre kart"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klikk for å lagre det nåværende spillet."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Klikk for å vise neste by."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
+msgid "Click to save the Sphinx properties."
+msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Add Answer"
 msgstr ""
-"Kartets\n"
-"størrelse"
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Lett"
@@ -6200,6 +6409,10 @@ msgstr " gir deg den beste kampånden"
 
 msgid " gives you maximum luck"
 msgstr " gir deg den beste flaksen"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Trylleboken kan ikke flyttes"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8849,9 +9062,6 @@ msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
 
-msgid "Artifact"
-msgstr "Gjenstand"
-
 msgid "Mermaid"
 msgstr "Havfrue"
 
@@ -10864,6 +11074,14 @@ msgstr "Tryllebok"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name}a gjør at du kan bruke trolldom."
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Plassholder 1"
 
@@ -11104,6 +11322,15 @@ msgstr ""
 "Feen myser bort på deg og svarer: \"Syns du dette er morsomt? Greit. Da kan "
 "DU få bære den. Jeg foretrekker å fly uansett.\""
 
+msgid "Masthead"
+msgstr "Mastetoppen"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -11114,15 +11341,6 @@ msgstr ""
 "han brukte i sine yngre dager for å samle mannskapet sitt i vanskelig "
 "farvann. Han gir deg deretter et falmet kart som viser hvor han gjemte den. "
 "Etter mye leting finner du den bortgjemt under en brygge i nærheten."
-
-msgid "Masthead"
-msgstr "Mastetoppen"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
 
 msgid "Sphere of Negation"
 msgstr "Kulen av benektelse"
@@ -11929,43 +12147,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Denne trolldommen kan ikke brukes på et skip."

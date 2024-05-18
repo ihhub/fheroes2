@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,15 +20,24 @@
 
 #pragma once
 
-#include "game.h"
-#include "game_mode.h"
+#include <array>
+#include <cstdint>
+#include <string>
+
+#include "math_base.h"
+
+struct Funds;
+
+namespace fheroes2
+{
+    class Image;
+    class MovableSprite;
+}
 
 namespace Editor
 {
-    fheroes2::GameMode menuMain();
-    fheroes2::GameMode menuNewMap();
-    fheroes2::GameMode menuLoadMap();
+    fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
+                                         const bool isEvil );
 
-    // TODO: this is a temporary solution before we implement random maps.
-    fheroes2::GameMode menuNewFromScratchMap();
+    void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
 }
