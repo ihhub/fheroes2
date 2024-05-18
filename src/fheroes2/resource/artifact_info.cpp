@@ -481,7 +481,7 @@ namespace
             { gettext_noop( "Magic Book" ),
               gettext_noop( "The %{name} enables the hero to cast spells." ),
               gettext_noop(
-                  "A young man approaches you with words: \"Let me show you my newest invention for spreading knowledge!\" Upon entering his workshop, you see a large wooden and metal device with levers and cranks, partially covered with a black stuff. \"Here it is, the Printing Press!\" he said, offering you the Magic Book for free." ),
+                  "A young man approaches you and speaks: \"My Lord, allow me to show you my latest invention for spreading knowledge!\" You follow the man into his workshop and immediately observe a large apparatus constructed of wood and metal with levers and cranks. On one side some strange black matter is dripping. \"This here is it!\" the inventor says eagerly, \"The Printing Press.\" And before you get to say a word, he hands you a Magic Book, free of charge." ),
               {},
               {} },
 
@@ -540,13 +540,13 @@ namespace
                   "Suddenly, a biting coldness engulfs your body. You seize up, falling from your horse. The pain subsides, but you still feel as if your chest is frozen. As you pick yourself up off of the ground, you hear hearty laughter. You turn around just in time to see a Frost Giant run off into the woods and disappear." ),
               {},
               {} },
-            { gettext_noop( "Helmet of Anduran" ),
-              gettext_noop( "The %{name} increases the hero's spell power by %{count}." ),
+            { gettext_noop( "Helmet of Anduran" ), gettext_noop( "The %{name} increases the hero's spell power by %{count}." ), gettext_noop( "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." ), {}, {} },
+            { gettext_noop( "Holy Hammer" ),
+              gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ),
               gettext_noop(
-                  "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." ),
+                  "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ),
               {},
               {} },
-            { gettext_noop( "Holy Hammer" ), gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ), gettext_noop( "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ), {}, {} },
             { gettext_noop( "Legendary Scepter" ),
               gettext_noop( "The %{name} adds %{count} points to all attributes." ),
               gettext_noop(
@@ -582,12 +582,7 @@ namespace
                   "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran will slay you where you stand.\" You refuse. The troll grabs the sword hanging from its belt, screams in pain, and runs away. Picking up the fabled sword, you give thanks that half-witted Trolls tend to grab the wrong end of sharp objects." ),
               {},
               {} },
-            { gettext_noop( "Spade of Necromancy" ),
-              gettext_noop( "The %{name} gives the hero increased necromancy skill." ),
-              gettext_noop(
-                  "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
-              {},
-              {} },
+            { gettext_noop( "Spade of Necromancy" ), gettext_noop( "The %{name} gives the hero increased necromancy skill." ), gettext_noop( "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ), {}, {} },
         };
 
         assert( artifactData.size() == ( Artifact::ARTIFACT_COUNT ) );
