@@ -1607,6 +1607,11 @@ namespace Interface
 
         _loadedFileName = System::truncateFileExtensionAndPath( filePath );
 
+        // Set the loaded map as a default map for the new Standard Game.
+        Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+        mapInfo.filename = filePath;
+        mapInfo.name = _mapFormat.name;
+
         return true;
     }
 
@@ -1651,6 +1656,11 @@ namespace Interface
         _loadedFileName = std::move( fileName );
 
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
+            // Set the saved map as a default map for the new Standard Game.
+            Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+            mapInfo.filename = fullPath;
+            mapInfo.name = _mapFormat.name;
+
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols with '/' symbols.
             StringReplace( fullPath, "\\", "/" );
