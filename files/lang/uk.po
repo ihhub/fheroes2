@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -465,8 +465,9 @@ msgstr "Не вдалось перемістити останній загін"
 msgid "Move the %{name}"
 msgstr "Перемістити: %{name}"
 
-msgid "Set Count"
-msgstr "Встановити Кількість"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Задати кількість %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4035,15 +4036,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Задати кількість %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Випадковий Унікальний Артефакт"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "з одним артефактом."
+
+msgid "Roads"
+msgstr "Дороги"
+
+msgid "Streams"
+msgstr "Струмки"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4103,12 +4110,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Стерти"
-
-msgid "Roads"
-msgstr "Дороги"
-
-msgid "Streams"
-msgstr "Струмки"
 
 msgid "Mountains"
 msgstr "Гори"
@@ -11701,6 +11702,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Count"
+#~ msgstr "Встановити Кількість"
 
 #~ msgid ""
 #~ "Create a new map, either from scratch or using the random map generator."

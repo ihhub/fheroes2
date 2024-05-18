@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -420,8 +420,11 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr "Перамясціць: %{name}"
 
-msgid "Set Count"
+#, fuzzy
+msgid "Set %{monster} Count"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -3829,16 +3832,19 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr ""
-"Некалькі\n"
-"%{monster}"
-
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
 msgid "%{object} has no properties to change."
+msgstr ""
+
+msgid "This artifact"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3895,12 +3901,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"

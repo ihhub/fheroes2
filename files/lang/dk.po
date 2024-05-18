@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 15:30+0000\n"
+"POT-Creation-Date: 2024-05-18 04:50+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -449,8 +449,9 @@ msgstr "Sidste trop kan ikke flyttes"
 msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
-msgid "Set Count"
-msgstr "Bestem antal"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skyd %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4077,15 +4078,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Skyd %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Tilfældigt ultimativt artefakt"
 
 msgid "%{object} has no properties to change."
 msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "med 1 artefakt."
+
+msgid "Roads"
+msgstr "Veje"
+
+msgid "Streams"
+msgstr "Å-tilstand"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4149,12 +4156,6 @@ msgstr ""
 
 msgid "Erase"
 msgstr "Udviske"
-
-msgid "Roads"
-msgstr "Veje"
-
-msgid "Streams"
-msgstr "Å-tilstand"
 
 msgid "Mountains"
 msgstr "Bjerge"
@@ -11841,6 +11842,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Count"
+#~ msgstr "Bestem antal"
 
 #~ msgid ""
 #~ "Create a new map, either from scratch or using the random map generator."
