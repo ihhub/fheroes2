@@ -430,7 +430,23 @@ namespace
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
         switch ( groupType ) {
-        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS: {
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
+
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
+                return false;
+            }
+
+            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
+                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
+                errorMessage = _( "Ultimate Artifact cannot be placed on non-digable terrain." );
+                return false;
+            }
+
+            break;
+        }
         case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
         case Maps::ObjectGroup::ADVENTURE_MINES:
         case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
