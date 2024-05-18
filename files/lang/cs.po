@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-18 05:58+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -457,8 +457,9 @@ msgstr "Poslední jednotku nelze přesunout"
 msgid "Move the %{name}"
 msgstr "Přesunout %{name}"
 
-msgid "Set Count"
-msgstr "Zadat počet"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Vystřel na %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4055,12 +4056,22 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Vystřel na %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Náhodný Ultimátní Artefakt"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "s 1 artefaktem."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Cesta"
+
+msgid "Streams"
+msgstr ""
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4119,13 +4130,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Cesta"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -10184,6 +10188,14 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} kouzlu odolali!"
 
+msgid ""
+"A young man approaches you with words: \"Let me show you my newest invention "
+"for spreading knowledge!\" Upon entering his workshop, you see a large "
+"wooden and metal device with levers and cranks, partially covered with a "
+"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
+"Magic Book for free."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr ""
 
@@ -10355,13 +10367,6 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
@@ -10370,6 +10375,13 @@ msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr "%{skill} zvyšuje morálku u boj. jednotek hrdiny o %{count}."
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
+msgstr ""
 
 msgid "Sphere of Negation"
 msgstr "Sféra negace"
@@ -11098,35 +11110,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Toto město nemůže být povýšeno na hrad."

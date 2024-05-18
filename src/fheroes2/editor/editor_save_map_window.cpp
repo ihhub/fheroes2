@@ -33,6 +33,7 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -48,6 +49,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -354,7 +356,11 @@ namespace Editor
             bool needFileNameRedraw = listId != listbox.getCurrentId();
 
             if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( fileNameRoi ) ) ) {
-                fheroes2::openVirtualKeyboard( fileName );
+                {
+                    // TODO: allow to use other languages once we add support of filesystem language support.
+                    const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
+                    fheroes2::openVirtualKeyboard( fileName );
+                }
 
                 charInsertPos = fileName.size();
                 listbox.Unselect();
@@ -377,7 +383,7 @@ namespace Editor
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false ) ) {
+                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
