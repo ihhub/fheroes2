@@ -88,6 +88,32 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
+    class HideInterfaceModeDisabler
+    {
+    public:
+        HideInterfaceModeDisabler()
+        {
+            // If Hide Interface mode is enabled we temporary disable it to allow editor properly place all interface items.
+            if ( _isHideInterfaceEnabled ) {
+                Settings::Get().setHideInterface( false );
+            }
+        }
+
+        HideInterfaceModeDisabler & operator=( const HideInterfaceModeDisabler & ) = delete;
+        HideInterfaceModeDisabler( const HideInterfaceModeDisabler & ) = delete;
+
+        ~HideInterfaceModeDisabler()
+        {
+            if ( _isHideInterfaceEnabled ) {
+                // Restore Hide Interface mode if it was enabled.
+                Settings::Get().setHideInterface( true );
+            }
+        }
+
+    private:
+        const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
+    };
+
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
@@ -576,6 +602,8 @@ namespace Interface
 {
     void EditorInterface::reset()
     {
+        const HideInterfaceModeDisabler hideInterfaceModeDisabler;
+
         const fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
