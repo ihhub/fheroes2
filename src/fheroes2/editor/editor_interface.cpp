@@ -258,7 +258,7 @@ namespace
 
                     auto findTownPart = [objectId]( const Maps::Map_Format::TileInfo & tileToSearch, const Maps::ObjectGroup group ) {
                         auto foundObjectIter = std::find_if( tileToSearch.objects.begin(), tileToSearch.objects.end(),
-                                                             [objectId, group]( const Maps::Map_Format::ObjectInfo & mapObject ) {
+                                                             [objectId, group]( const Maps::Map_Format::TileObjectInfo & mapObject ) {
                                                                  return mapObject.group == group && mapObject.id == objectId;
                                                              } );
 
@@ -296,7 +296,7 @@ namespace
                     auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
                     const bool isRoadAtBottom
                         = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
-                                        []( const Maps::Map_Format::ObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
+                                        []( const Maps::Map_Format::TileObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
                           != bottomTileObjects.end();
                     if ( isRoadAtBottom ) {
                         // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
