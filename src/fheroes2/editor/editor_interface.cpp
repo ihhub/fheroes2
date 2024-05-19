@@ -61,6 +61,7 @@
 #include "map_format_helper.h"
 #include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -692,7 +693,7 @@ namespace Interface
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
-        fheroes2::ScreenPaletteRestorer restorer;
+        const fheroes2::ScreenPaletteRestorer restorer;
 
         const Settings & conf = Settings::Get();
 
@@ -1170,7 +1171,7 @@ namespace Interface
                         monsterCount = monsterMetadata->second.metadata[0];
                     }
 
-                    Monster tempMonster( static_cast<int>( object.index ) + 1 );
+                    const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
                     std::string str = _( "Set %{monster} Count" );
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
@@ -1607,6 +1608,15 @@ namespace Interface
 
         _loadedFileName = System::truncateFileExtensionAndPath( filePath );
 
+        // Set the loaded map as a default map for the new Standard Game.
+        Maps::FileInfo fi;
+        if ( fi.loadResurrectionMap( _mapFormat, filePath ) ) {
+            Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+        }
+        else {
+            assert( 0 );
+        }
+
         return true;
     }
 
@@ -1651,6 +1661,15 @@ namespace Interface
         _loadedFileName = std::move( fileName );
 
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
+            // Set the saved map as a default map for the new Standard Game.
+            Maps::FileInfo fi;
+            if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
+                Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+            }
+            else {
+                assert( 0 );
+            }
+
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols with '/' symbols.
             StringReplace( fullPath, "\\", "/" );
