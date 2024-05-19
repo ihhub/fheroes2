@@ -3205,18 +3205,19 @@ namespace Maps
             for ( int32_t x = startX; x <= endX; ++x ) {
                 const Maps::Tiles & currentTile = world.GetTiles( x + tileOffset );
 
-                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() == OBJECT_LAYER || currentTile.getLayerType() == TERRAIN_LAYER ) ) {
+                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() != SHADOW_LAYER ) ) {
                     objectsUids.insert( currentTile.GetObjectUID() );
                 }
 
                 for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                    if ( addon._uid != 0 && ( addon._layerType != SHADOW_LAYER ) ) {
                         objectsUids.insert( addon._uid );
                     }
                 }
 
                 for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                    // Top layer addons don't have layer type.
+                    if ( addon._uid != 0 ) {
                         objectsUids.insert( addon._uid );
                     }
                 }

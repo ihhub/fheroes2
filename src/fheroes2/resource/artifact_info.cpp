@@ -481,7 +481,7 @@ namespace
             { gettext_noop( "Magic Book" ),
               gettext_noop( "The %{name} enables the hero to cast spells." ),
               gettext_noop(
-                  "A young man approaches you with words: \"Let me show you my newest invention for spreading knowledge!\" Upon entering his workshop, you see a large wooden and metal device with levers and cranks, partially covered with a black stuff. \"Here it is, the Printing Press!\" he said, offering you the Magic Book for free." ),
+                  "A young man approaches you: \"My Lord, allow me to show you my latest invention for spreading knowledge!\" You follow the man into his workshop and immediately observe a large apparatus with levers and cranks. \"This here is it!\" he says eagerly, \"The Printing Press.\" And before you get to say a word, he hands you a Magic Book." ),
               {},
               {} },
 
