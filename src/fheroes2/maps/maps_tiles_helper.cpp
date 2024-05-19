@@ -291,12 +291,20 @@ namespace
     int getStreamDirecton( const Maps::Tiles & tile )
     {
         const int32_t centerTileIndex = tile.GetIndex();
-        int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
+        // Stream includes also the Deltas. Here we need to check only streams excluding Deltas.
+        int streamDirection = ( tile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } ) ) ? Direction::CENTER : 0;
 
         // For streams we can check only the next four directions.
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-            if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
-                streamDirection |= direction;
+            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
+                const Maps::Tiles & currectTile = world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) );
+
+                // Check also for Deltas connection.
+                if ( currectTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
+                     || ( direction == Direction::TOP && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
+                     || ( direction == Direction::BOTTOM && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) ) ) {
+                    streamDirection |= direction;
+                }
             }
         }
 
