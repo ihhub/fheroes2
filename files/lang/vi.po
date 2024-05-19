@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 05:58+0000\n"
+"POT-Creation-Date: 2024-05-19 14:38+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4011,6 +4011,12 @@ msgid "%{objects} cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
 #, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Bảo vật không thể đặt trên nước."
+
+#, fuzzy
 msgid "%{objects} must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
@@ -4302,7 +4308,8 @@ msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên b
 msgid "Detail Mode"
 msgstr "Chế độ Chi tiết"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
 
 #, fuzzy
@@ -10926,11 +10933,11 @@ msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} cho phép ngươi sử dụng phép thuật."
 
 msgid ""
-"A young man approaches you with words: \"Let me show you my newest invention "
-"for spreading knowledge!\" Upon entering his workshop, you see a large "
-"wooden and metal device with levers and cranks, partially covered with a "
-"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
-"Magic Book for free."
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
 msgstr ""
 
 msgid "Dummy 1"

@@ -3259,6 +3259,43 @@ namespace fheroes2
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 return true;
+            case ICN::MINIHERO:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 42 ) {
+                    // Fix cycling colors on the Green heroes' flag for Knight, Sorceress and Warlock.
+                    ApplyPalette( _icnVsSprite[id][7], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    ApplyPalette( _icnVsSprite[id][9], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    ApplyPalette( _icnVsSprite[id][10], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+
+                    // Fix cycling colors on the Yellow heroes' flag.
+                    for ( size_t i = 21; i < 28; ++i ) {
+                        ApplyPalette( _icnVsSprite[id][i], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    }
+
+                    // Fix Blue Random hero flag.
+                    Copy( _icnVsSprite[id][5], 1, 4, _icnVsSprite[id][6], 1, 4, 17, 7 );
+
+                    // Fix Orange Necromancer hero flag.
+                    Copy( _icnVsSprite[id][32], 5, 4, _icnVsSprite[id][33], 5, 4, 14, 7 );
+
+                    // Fix Orange Random hero flag (in original assets he has a purple flag).
+                    Copy( _icnVsSprite[id][32], 2, 4, _icnVsSprite[id][34], 2, 4, 16, 7 );
+
+                    // Fix Knight heroes missing 2 leftmost sprite columns.
+                    for ( size_t i = 0; i < 6; ++i ) {
+                        Sprite & kinght = _icnVsSprite[id][i * 7];
+                        const Sprite & barbarian = _icnVsSprite[id][i * 7 + 1];
+                        const int32_t width = kinght.width();
+                        const int32_t height = kinght.height();
+                        Sprite fixed( width + 2, height );
+                        Copy( kinght, 1, 0, fixed, 3, 0, width, height );
+                        fixed.setPosition( kinght.x(), kinght.y() );
+                        Copy( barbarian, 0, 0, fixed, 0, 0, 3, height );
+                        Copy( barbarian, 3, 28, fixed, 3, 28, 1, 1 );
+                        kinght = std::move( fixed );
+                    }
+                }
+                return true;
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
