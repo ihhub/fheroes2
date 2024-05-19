@@ -56,23 +56,7 @@ namespace Maps::Generator
     const std::vector<int> playerStartingTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND, Ground::BEACH, Ground::SWAMP, Ground::DESERT };
 
-    int convertExtendedIndex( int index, size_t width )
-    {
-        const size_t originalWidth = width - 2;
-        return static_cast<int>( ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1 );
-    }
-
-    enum
-    {
-        TOP = 0,
-        RIGHT = 1,
-        BOTTOM = 2,
-        LEFT = 3,
-        TOP_LEFT = 4,
-        TOP_RIGHT = 5,
-        BOTTOM_RIGHT = 6,
-        BOTTOM_LEFT = 7,
-    };
+    std::vector<fheroes2::Point> directionOffsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
 
     enum class NodeType
     {
@@ -86,7 +70,7 @@ namespace Maps::Generator
     struct Node
     {
         int index = -1;
-        NodeType type = NodeType::BORDER;
+        NodeType type = NodeType::OPEN;
         uint32_t region = 0;
         uint16_t mapObject = 0;
         uint16_t passable = DIRECTION_ALL;
@@ -97,35 +81,42 @@ namespace Maps::Generator
         {}
     };
 
-    struct NodeCache
+    class NodeCache
     {
-        size_t extendedWidth = 0;
+        int32_t mapSize = 0;
+        Node outOfBounds;
         std::vector<Node> data;
 
+    public:
         NodeCache( int32_t width, int32_t height )
-            : extendedWidth( width + 2 )
-            , data( extendedWidth * ( height + 2 ) )
+            : mapSize( width )
+            , outOfBounds( -1 )
+            , data( width * height )
         {
+            outOfBounds.type = NodeType::BORDER;
+
             for ( int y = 0; y < height; ++y ) {
                 const int rowIndex = y * width;
                 for ( int x = 0; x < width; ++x ) {
                     const int index = rowIndex + x;
-                    Node & node = data[convertExtendedIndex( index, extendedWidth )];
+                    Node & node = data[index];
 
                     node.index = index;
-                    node.type = NodeType::OPEN;
                 }
             }
         }
 
-        Node & getNode( int32_t index )
+        Node & getNode( const fheroes2::Point position )
         {
-            return data[convertExtendedIndex( index, extendedWidth )];
+            if ( position.x < 0 || position.x >= mapSize || position.y < 0 || position.y >= mapSize ) {
+                return outOfBounds;
+            }
+            return data[position.y * mapSize + position.x];
         }
 
-        Node & getNode( int32_t index, int32_t offset )
+        Node & getNode( int32_t index )
         {
-            return data[convertExtendedIndex( index, extendedWidth ) + offset];
+            return getNode( { index % mapSize, index / mapSize } );
         }
     };
 
@@ -161,26 +152,12 @@ namespace Maps::Generator
         }
     };
 
-    std::vector<int> getDirectionOffsets( const int width )
-    {
-        std::vector<int> offsets( 8 );
-        offsets[TOP] = -width;
-        offsets[RIGHT] = 1;
-        offsets[BOTTOM] = width;
-        offsets[LEFT] = -1;
-        offsets[TOP_LEFT] = -width - 1;
-        offsets[TOP_RIGHT] = -width + 1;
-        offsets[BOTTOM_RIGHT] = width + 1;
-        offsets[BOTTOM_LEFT] = width - 1;
-        return offsets;
-    }
-
     uint16_t getDirectionBitmask( uint8_t direction, bool reflect = false )
     {
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
     }
 
-    void checkAdjacentTiles( NodeCache & rawData, Region & region, const std::vector<int> & offsets )
+    void checkAdjacentTiles( NodeCache & rawData, Region & region )
     {
         Node & previousNode = region._nodes[region._lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -195,7 +172,9 @@ namespace Maps::Generator
             if ( direction > 3 && Rand::Get( 1 ) ) {
                 break;
             }
-            Node & newTile = rawData.getNode( nodeIndex, offsets[direction] );
+
+            fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
+            Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
             if ( newTile.passable & getDirectionBitmask( direction, true ) ) {
                 if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                     newTile.region = region._id;
@@ -209,33 +188,30 @@ namespace Maps::Generator
         }
     }
 
-    void RegionExpansion( NodeCache & rawData, Region & region, const std::vector<int> & offsets )
+    void regionExpansion( NodeCache & rawData, Region & region )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region._nodes.size();
 
         while ( region._lastProcessedNode < nodesEnd ) {
-            checkAdjacentTiles( rawData, region, offsets );
+            checkAdjacentTiles( rawData, region );
             ++region._lastProcessedNode;
         }
     }
 
-    bool markObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    bool canFitObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        // Active action object parts must be placed on a tile without any other objects.
-        // Only ground parts should be checked for this condition.
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
                 // Shadow and terrain layer parts are ignored.
                 continue;
             }
 
-            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+            Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
+
+            if ( node.type != NodeType::OPEN ) {
                 return false;
             }
-
-            data.getNode( pos.x );
         }
 
         return true;
@@ -269,11 +245,11 @@ namespace Maps::Generator
         return true;
     }
 
-    bool objectPlacer( Map_Format::MapFormat & mapFormat, Tiles & tile, ObjectGroup groupType, int32_t type )
+    bool objectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tiles & tile, ObjectGroup groupType, int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( entranceCheck( tilePos ) ) {
+        if ( canFitObject( data, objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
             // do not update passabilities after every object
             if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
                 return false;
@@ -285,7 +261,7 @@ namespace Maps::Generator
         return false;
     }
 
-    bool placeCastle( Map_Format::MapFormat & mapFormat, Region & region, int targetX, int targetY )
+    bool placeCastle( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, int targetX, int targetY )
     {
         const int regionX = region._centerIndex % mapFormat.size;
         const int regionY = region._centerIndex / mapFormat.size;
@@ -297,10 +273,10 @@ namespace Maps::Generator
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
 
-        //const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        //const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+        const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
 
-        if ( true ) {
+        if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos ) ) {
             setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             assert( Maps::getLastObjectUID() > 0 );
@@ -334,12 +310,12 @@ namespace Maps::Generator
         return true;
     }
 
-    bool placeMine( Map_Format::MapFormat & mapFormat, Region & region, const int resource )
+    bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
     {
         const auto & node = Rand::Get( region._nodes );
         Maps::Tiles & mineTile = world.GetTiles( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        return node.type == NodeType::OPEN && objectPlacer( mapFormat, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
+        return node.type == NodeType::OPEN && objectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
     bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
@@ -409,14 +385,13 @@ namespace Maps::Generator
         }
 
         // Step 3. Grow all regions one step at the time so they would compete for space
-        const std::vector<int> & offsets = getDirectionOffsets( static_cast<int>( width + 2 ) );
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
             // Skip the border region
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
-                RegionExpansion( data, region, offsets );
+                regionExpansion( data, region );
                 if ( region._lastProcessedNode != region._nodes.size() )
                     stillRoomToExpand = true;
             }
@@ -464,13 +439,13 @@ namespace Maps::Generator
                 }
             }
 
-            if ( region._colorIndex != NEUTRAL_COLOR && !placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+            if ( region._colorIndex != NEUTRAL_COLOR && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
                 // return early if we can't place a starting player castle
                 return false;
             }
             if ( region._nodes.size() > 300 ) {
                 // place non-mandatory castles in bigger neutral regions
-                placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
+                placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
 
             if ( config.basicOnly ) {
@@ -481,7 +456,7 @@ namespace Maps::Generator
             for ( const int resource : resoures ) {
                 // TODO: do a gradual distribution instead of guesses
                 for ( int tries = 0; tries < 5; tries++ ) {
-                    if ( placeMine( mapFormat, region, resource ) ) {
+                    if ( placeMine( mapFormat, data, region, resource ) ) {
                         break;
                     }
                 }
