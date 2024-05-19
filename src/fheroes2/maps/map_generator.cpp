@@ -37,7 +37,6 @@
 #include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
-#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -222,7 +221,7 @@ namespace Maps::Generator
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
+        if ( entranceCheck( tilePos ) ) {
             // do not update passabilities after every object
             if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
                 return false;
@@ -246,10 +245,10 @@ namespace Maps::Generator
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
 
-        const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+        //const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+        //const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
 
-        if ( isObjectPlacementAllowed( basementInfo, tilePos ) && isObjectPlacementAllowed( castleInfo, tilePos ) && isActionObjectAllowed( castleInfo, tilePos ) ) {
+        if ( true ) {
             setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             assert( Maps::getLastObjectUID() > 0 );

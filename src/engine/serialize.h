@@ -120,6 +120,7 @@ public:
 
     StreamBase & operator>>( bool & v );
     StreamBase & operator>>( char & v );
+    StreamBase & operator>>( int8_t & v );
     StreamBase & operator>>( uint8_t & v );
     StreamBase & operator>>( uint16_t & v );
     StreamBase & operator>>( int16_t & v );
@@ -131,6 +132,7 @@ public:
 
     StreamBase & operator<<( const bool v );
     StreamBase & operator<<( const char v );
+    StreamBase & operator<<( const int8_t v );
     StreamBase & operator<<( const uint8_t v );
     StreamBase & operator<<( const uint16_t v );
     StreamBase & operator<<( const int16_t v );

@@ -39,7 +39,7 @@ namespace Maps
         struct HeroMetadata;
     }
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );

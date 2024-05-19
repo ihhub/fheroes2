@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-19 00:29+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -51,6 +51,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "KONEC"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
 
 msgid "CANCEL"
 msgstr "ZRUŠIT"
@@ -433,8 +457,9 @@ msgstr "Poslední jednotku nelze přesunout"
 msgid "Move the %{name}"
 msgstr "Přesunout %{name}"
 
-msgid "Set Count"
-msgstr "Zadat počet"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Vystřel na %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -3443,17 +3468,17 @@ msgstr ""
 "\n"
 "Cesta: "
 
-msgid "Click to save the current game."
-msgstr "Klikni pro uložení aktuální hry."
-
-msgid "Click to load a previously saved game."
-msgstr "Klikni pro načtení dříve uložené hry."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
 msgstr "Výstraha!"
+
+msgid "Click to save the current game."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Click to load a previously saved game."
+msgstr "Klikni pro načtení dříve uložené hry."
 
 msgid "File to Save:"
 msgstr "Uložit do souboru:"
@@ -3855,7 +3880,7 @@ msgid "Allow Castle build"
 msgstr "Zámek Mraků"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Půlčíci"
 
 msgid "Default Army"
@@ -3878,10 +3903,6 @@ msgstr ""
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
 
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Půlčíci"
-
 msgid "Toggle building construction restriction mode."
 msgstr ""
 
@@ -3895,10 +3916,95 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
-msgid "Map filename"
+msgid "Message Text:"
+msgstr "Pruh správ"
+
+msgid "Cancel event after first visit"
 msgstr ""
-"Velikost\n"
-"mapy"
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Pruh správ"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefakt"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Zdroje"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
 msgid ""
@@ -3921,8 +4027,7 @@ msgid ""
 "current map will be lost.)"
 msgstr "Jsi si jist, že chceš načíst novou hru? (Aktuální hra bude ztracena.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 #, fuzzy
@@ -3947,24 +4052,25 @@ msgstr "Uložit aktuální hru."
 msgid "Quit out of the map editor."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Vystřel na %{monster}"
-
-msgid "Objects cannot be placed outside the map."
+msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Toto město nemůže být povýšeno na hrad."
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Náhodný Ultimátní Artefakt"
 
-msgid "Monsters cannot be placed on water."
+msgid "%{object} has no properties to change."
 msgstr ""
 
-msgid "Treasures cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "This artifact"
+msgstr "s 1 artefaktem."
 
-msgid "Heroes cannot be placed on water."
+#, fuzzy
+msgid "Roads"
+msgstr "Cesta"
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3974,50 +4080,29 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr ""
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 #, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
+msgid "The map is corrupted."
+msgstr "Soubor je požkozen."
 
-#, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-#, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-msgid "Ocean object must be placed on water."
+msgid "Unable to create a directory to save the map."
 msgstr ""
 
 #, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Jsi si jist, že chceš prěpsat soubor pod tímto názvem?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Toto město nemůže být povýšeno na hrad."
+msgid "Failed to save the map."
+msgstr "Uložit do souboru:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4042,13 +4127,6 @@ msgstr "Vyber jiného hrdinu."
 msgid ""
 "Cell\n"
 "Details"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Cesta"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Erase"
@@ -4089,12 +4167,12 @@ msgstr "Síla"
 msgid "Treasures"
 msgstr "Poklad"
 
+msgid "Heroes"
+msgstr "Hrdinové"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Město"
-
-msgid "Heroes"
-msgstr "Hrdinové"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4255,9 +4333,6 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4313,6 +4388,88 @@ msgid "Warning"
 msgstr "Varování"
 
 #, fuzzy
+msgid "None."
+msgstr "Nic"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vyber jiného hrdinu."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Nashromáždéní %{count} zlata."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Mapa\n"
+"Obtížnost"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Cesta: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr ""
+"Podmínky\n"
+"pro výhru"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr ""
+"Podmínky\n"
+"pro prohru"
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Velikost\n"
+"mapy"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Velikost mapy"
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
+#, fuzzy
 msgid "Animation"
 msgstr "Zabrání"
 
@@ -4324,6 +4481,67 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Cesta: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Uložit Hru"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -5106,10 +5324,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
 
@@ -5124,6 +5338,9 @@ msgstr "Nejlepší výsledky"
 
 msgid "View the high scores screen."
 msgstr "Zobraz tabulku s nej. skóre."
+
+msgid "Create new or modify existing maps."
+msgstr ""
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Změň jazyk, rozlišení a další nastavení hry."
@@ -6042,6 +6259,10 @@ msgstr " dává maximální morálku"
 
 msgid " gives you maximum luck"
 msgstr " dává maximální štěstí"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Nelze přesunout knihu kouzel"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Tento artefakt nemůžeš vzít, již jich máš plno!"
@@ -8246,9 +8467,6 @@ msgstr[0] "Větrný mlýn"
 msgstr[1] "Větrné mlýny"
 msgstr[2] "Větrných mlýnů"
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "Mermaid"
 msgstr "Mořská panna"
 
@@ -9970,6 +10188,14 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} kouzlu odolali!"
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr ""
 
@@ -10141,13 +10367,6 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
@@ -10156,6 +10375,13 @@ msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr "%{skill} zvyšuje morálku u boj. jednotek hrdiny o %{count}."
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
+msgstr ""
 
 msgid "Sphere of Negation"
 msgstr "Sféra negace"
@@ -10884,15 +11110,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Nastav obrannou sílu"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Nastav sílu kouzel"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Nastav znalosti"
-
-#~ msgid "Multiple"
-#~ msgstr "Vícero"
