@@ -545,7 +545,7 @@ msgid "Hot Keys"
 msgstr "Atalhos"
 
 msgid "Damage Info"
-msgstr "Informação do dano"
+msgstr "Informação do Dano"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Definir a velocidade das ações de combate e animações."
@@ -3141,7 +3141,7 @@ msgid "FPS"
 msgstr "QPS"
 
 msgid "System Info"
-msgstr "Informações do sistema"
+msgstr "Informações do Sistema"
 
 msgid "Change the resolution of the game."
 msgstr "Mude a resolução do jogo."
@@ -3959,10 +3959,10 @@ msgid "Event Message Text"
 msgstr "Texto da Mensagem do Evento"
 
 msgid "%{objects} cannot be placed on water."
-msgstr "O objeto %{objects} não pode ser colocado na água."
+msgstr "%{objects} não podem ser colocados na água."
 
 msgid "%{objects} must be placed on water."
-msgstr "O objeto %{objects} deve ser colocado na água."
+msgstr "%{objects} devem ser colocado na água."
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
@@ -4016,13 +4016,13 @@ msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
 msgid "Input %{object} text"
-msgstr "Inserir texto de%{object}"
+msgstr "Inserir texto de %{object}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
 
 msgid "%{object} has no properties to change."
-msgstr "O objeto %{object} não tem propriedades a serem alteradas."
+msgstr "%{object} não tem propriedades a serem alteradas."
 
 msgid "This artifact"
 msgstr "Esse artefato"
@@ -4065,7 +4065,7 @@ msgid "Used to place %{object}."
 msgstr "Usado para colocar %{object}."
 
 msgid "Select object type"
-msgstr "Selecionar tipo de objeto"
+msgstr "Selec. tipo de objeto"
 
 msgid ""
 "Click here to\n"
