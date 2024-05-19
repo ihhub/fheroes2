@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_mainmenu.h"
+
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -29,7 +31,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
-#include "editor.h"
 #include "editor_interface.h"
 #include "game.h"
 #include "game_hotkeys.h"

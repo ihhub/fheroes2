@@ -39,7 +39,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
-#include "editor.h"
+#include "editor_mainmenu.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
