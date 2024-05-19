@@ -655,12 +655,16 @@ namespace Interface
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
 
-                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
+                    assert( Maps::isValidAbsIndex( indices.x ) );
+                    const bool isActionObject = MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() );
+                    const bool isRenderForActionObject = ( isActionObject && brushSize.width == 1 && brushSize.height == 1 && _editorPanel.isDetailEdit() );
+
+                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isRenderForActionObject );
                 }
                 else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
                     assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
-                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
+                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor, false );
                 }
             }
         }
