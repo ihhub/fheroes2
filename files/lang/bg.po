@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 09:48+0000\n"
+"POT-Creation-Date: 2024-05-19 14:38+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4036,6 +4036,12 @@ msgstr ""
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
 msgid "%{objects} must be placed on water."
