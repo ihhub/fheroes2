@@ -656,10 +656,10 @@ namespace Interface
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
 
                     assert( Maps::isValidAbsIndex( indices.x ) );
-                    const bool isActionObject = MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() );
-                    const bool isRenderForActionObject = ( isActionObject && brushSize.width == 1 && brushSize.height == 1 && _editorPanel.isDetailEdit() );
+                    const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1 &&
+                                                    MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() ) );
 
-                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isRenderForActionObject );
+                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
                 }
                 else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
                     assert( brushSize == fheroes2::Rect() );
