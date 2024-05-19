@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 00:29+0000\n"
+"POT-Creation-Date: 2024-05-19 09:48+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4302,7 +4302,8 @@ msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên b
 msgid "Detail Mode"
 msgstr "Chế độ Chi tiết"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
 
 #, fuzzy

@@ -33,7 +33,7 @@
 
 namespace Maps::Map_Format
 {
-    struct ObjectInfo
+    struct TileObjectInfo
     {
         uint32_t id{ 0 };
 
@@ -47,7 +47,7 @@ namespace Maps::Map_Format
         uint16_t terrainIndex{ 0 };
         uint8_t terrainFlag{ 0 };
 
-        std::vector<ObjectInfo> objects;
+        std::vector<TileObjectInfo> objects;
     };
 
     // This structure should be used for any object that require simple data to be saved into map.

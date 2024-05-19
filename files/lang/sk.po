@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 00:29+0000\n"
+"POT-Creation-Date: 2024-05-19 09:48+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4305,7 +4305,8 @@ msgstr "Slúži na umiestnenie objektov (hôr, stromov, pokladov atď.) na mapu.
 msgid "Detail Mode"
 msgstr "Režim detailov"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Slúži na špeciálne úpravy príšer, hrdinov a miest."
 
 #, fuzzy
