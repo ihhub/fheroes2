@@ -42,14 +42,14 @@ namespace
 
 namespace Maps::Map_Format
 {
-    StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object )
+    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object )
     {
         using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
 
         return msg << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
     }
 
-    StreamBase & operator>>( StreamBase & msg, ObjectInfo & object )
+    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object )
     {
         msg >> object.id;
 
