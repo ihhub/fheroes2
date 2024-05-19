@@ -18,12 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\fheroes2\maps\map_generator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\fheroes2\maps\map_generator.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DD8F214C-C405-4951-8F98-66B969BA8E08}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

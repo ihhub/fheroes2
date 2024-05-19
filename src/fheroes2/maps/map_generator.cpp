@@ -56,6 +56,12 @@ namespace Maps::Generator
     const std::vector<int> playerStartingTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND, Ground::BEACH, Ground::SWAMP, Ground::DESERT };
 
+    int convertExtendedIndex( int index, size_t width )
+    {
+        const size_t originalWidth = width - 2;
+        return static_cast<int>( ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1 );
+    }
+
     enum
     {
         TOP = 0,
@@ -91,6 +97,38 @@ namespace Maps::Generator
         {}
     };
 
+    struct NodeCache
+    {
+        size_t extendedWidth = 0;
+        std::vector<Node> data;
+
+        NodeCache( int32_t width, int32_t height )
+            : extendedWidth( width + 2 )
+            , data( extendedWidth * ( height + 2 ) )
+        {
+            for ( int y = 0; y < height; ++y ) {
+                const int rowIndex = y * width;
+                for ( int x = 0; x < width; ++x ) {
+                    const int index = rowIndex + x;
+                    Node & node = data[convertExtendedIndex( index, extendedWidth )];
+
+                    node.index = index;
+                    node.type = NodeType::OPEN;
+                }
+            }
+        }
+
+        Node & getNode( int32_t index )
+        {
+            return data[convertExtendedIndex( index, extendedWidth )];
+        }
+
+        Node & getNode( int32_t index, int32_t offset )
+        {
+            return data[convertExtendedIndex( index, extendedWidth ) + offset];
+        }
+    };
+
     struct Region
     {
     public:
@@ -123,7 +161,7 @@ namespace Maps::Generator
         }
     };
 
-    std::vector<int> GetDirectionOffsets( const int width )
+    std::vector<int> getDirectionOffsets( const int width )
     {
         std::vector<int> offsets( 8 );
         offsets[TOP] = -width;
@@ -137,18 +175,12 @@ namespace Maps::Generator
         return offsets;
     }
 
-    uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
+    uint16_t getDirectionBitmask( uint8_t direction, bool reflect = false )
     {
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
     }
 
-    int ConvertExtendedIndex( int index, uint32_t width )
-    {
-        const uint32_t originalWidth = width - 2;
-        return static_cast<int>( ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1 );
-    }
-
-    void CheckAdjacentTiles( std::vector<Node> & rawData, Region & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
+    void checkAdjacentTiles( NodeCache & rawData, Region & region, const std::vector<int> & offsets )
     {
         Node & previousNode = region._nodes[region._lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -163,9 +195,8 @@ namespace Maps::Generator
             if ( direction > 3 && Rand::Get( 1 ) ) {
                 break;
             }
-            const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
-            Node & newTile = rawData[newIndex];
-            if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
+            Node & newTile = rawData.getNode( nodeIndex, offsets[direction] );
+            if ( newTile.passable & getDirectionBitmask( direction, true ) ) {
                 if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                     newTile.region = region._id;
                     region._nodes.push_back( newTile );
@@ -178,15 +209,36 @@ namespace Maps::Generator
         }
     }
 
-    void RegionExpansion( std::vector<Node> & rawData, uint32_t rawDataWidth, Region & region, const std::vector<int> & offsets )
+    void RegionExpansion( NodeCache & rawData, Region & region, const std::vector<int> & offsets )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region._nodes.size();
 
         while ( region._lastProcessedNode < nodesEnd ) {
-            CheckAdjacentTiles( rawData, region, rawDataWidth, offsets );
+            checkAdjacentTiles( rawData, region, offsets );
             ++region._lastProcessedNode;
         }
+    }
+
+    bool markObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    {
+        // Active action object parts must be placed on a tile without any other objects.
+        // Only ground parts should be checked for this condition.
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadow and terrain layer parts are ignored.
+                continue;
+            }
+
+            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                return false;
+            }
+
+            data.getNode( pos.x );
+        }
+
+        return true;
     }
 
     bool setObjectOnTile( Map_Format::MapFormat & mapFormat, Tiles & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -302,6 +354,8 @@ namespace Maps::Generator
         const int32_t width = world.w();
         const int32_t height = world.h();
 
+        NodeCache data( width, height );
+
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::max( std::min( x, width - 1 ), 0 );
             y = std::max( std::min( y, height - 1 ), 0 );
@@ -315,19 +369,6 @@ namespace Maps::Generator
         // Aiming for region size to be ~300 tiles in a 200-500 range
         // const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / static_cast<int>( config.regionSizeLimit );
-
-        const uint32_t extendedWidth = width + 2;
-        std::vector<Node> data( static_cast<size_t>( extendedWidth ) * ( height + 2 ) );
-        for ( int y = 0; y < height; ++y ) {
-            const int rowIndex = y * width;
-            for ( int x = 0; x < width; ++x ) {
-                const int index = rowIndex + x;
-                Node & node = data[ConvertExtendedIndex( index, extendedWidth )];
-
-                node.index = index;
-                node.type = NodeType::OPEN;
-            }
-        }
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
@@ -363,19 +404,19 @@ namespace Maps::Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
-                data[ConvertExtendedIndex( centerTile, extendedWidth )].region = regionID;
+                data.getNode( centerTile ).region = regionID;
             }
         }
 
         // Step 3. Grow all regions one step at the time so they would compete for space
-        const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
+        const std::vector<int> & offsets = getDirectionOffsets( static_cast<int>( width + 2 ) );
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
             // Skip the border region
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
-                RegionExpansion( data, extendedWidth, region, offsets );
+                RegionExpansion( data, region, offsets );
                 if ( region._lastProcessedNode != region._nodes.size() )
                     stillRoomToExpand = true;
             }
