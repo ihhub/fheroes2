@@ -1392,6 +1392,15 @@ namespace Maps
         return true;
     }
 
+    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection )
+    {
+        const int32_t tileIndex = tile.GetIndex();
+        const int direction = isDeltaBottomConnection ? Direction::BOTTOM : Direction::TOP;
+        if ( isValidDirection( tileIndex, direction ) ) {
+            updateStreamSpritesAround( world.GetTiles( GetDirectionIndex( tileIndex, direction ) ) );
+        }
+    }
+
     int32_t getMineSpellIdFromTile( const Tiles & tile )
     {
         if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {

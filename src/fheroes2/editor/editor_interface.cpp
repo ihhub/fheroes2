@@ -1534,6 +1534,25 @@ namespace Interface
             // TODO: Place owner flag according to the color state.
             action.commit();
         }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return;
+            }
+
+            // For River Deltas we update the nearby Streams to properly connect to them.
+            const Maps::ObjectInfo & objectInfo = Maps::getObjectInfo( groupType, objectType );
+            std::for_each( objectInfo.groundLevelParts.begin(), objectInfo.groundLevelParts.end(), [&tile]( const Maps::LayeredObjectPartInfo & info ) {
+                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 && info.icnIndex != 0 && info.icnIndex != 13 ) {
+                    return;
+                }
+
+                Maps::updateStreamsToDeltaConnection( tile, info.icnIndex == 13 );
+            } );
+
+            action.commit();
+        }
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
