@@ -441,7 +441,7 @@ namespace
 
             if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
                  && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
-                errorMessage = _( "Ultimate Artifact cannot be placed on non-digable terrain." );
+                errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
             }
 
