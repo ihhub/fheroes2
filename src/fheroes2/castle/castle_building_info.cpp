@@ -669,9 +669,9 @@ namespace
         case DWELLING_UPGRADE4:
             return _( "Upg. Dwelling 4" );
         case DWELLING_MONSTER5:
-            return _( "Dwelling 6" );
+            return _( "Dwelling 5" );
         case DWELLING_UPGRADE5:
-            return _( "Upg. Dwelling 6" );
+            return _( "Upg. Dwelling 5" );
         case DWELLING_MONSTER6:
             return _( "Dwelling 6" );
         case DWELLING_UPGRADE6:
