@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2472,6 +2472,14 @@ msgstr "Toborzóhelyek"
 
 #, fuzzy
 msgid "Upg. Dwelling 4"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Toborzóhelyek"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
 msgstr "Toborzóhelyek"
 
 #, fuzzy

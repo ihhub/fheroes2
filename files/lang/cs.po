@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2505,6 +2505,14 @@ msgstr "Půlčíci"
 
 #, fuzzy
 msgid "Upg. Dwelling 4"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
 msgstr "Půlčíci"
 
 #, fuzzy
