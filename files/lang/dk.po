@@ -4076,9 +4076,6 @@ msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
 msgid "%{object} has no properties to change."
 msgstr ""
 
-msgid "Action objects must be placed on clear tiles."
-msgstr "Hav-objekter må kun placeres på ryddede felter."
-
 msgid "Monsters cannot be placed on water."
 msgstr "Væsener kan ikke placeres på vand."
 
