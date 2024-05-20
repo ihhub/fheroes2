@@ -456,9 +456,8 @@ msgstr "Sidste trop kan ikke flyttes"
 msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Skyd %{monster}"
+msgstr "Indstil antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -4070,9 +4069,6 @@ msgstr "Forlad korteditoren."
 
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
-
-msgid "Set %{monster} Count"
-msgstr "Indstil antal %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
