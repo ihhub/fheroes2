@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-19 14:38+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -51,6 +51,32 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "SALIR"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NUEVO\n"
+"JUEGO"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GUARD.\n"
+"PAR-\n"
+"TIDA"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"CARGAR\n"
+"PAR-\n"
+"TIDA"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -440,8 +466,9 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr "Pierdes el héroe: %{name}."
 
-msgid "Set Count"
-msgstr ""
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Dispara a %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -3389,6 +3416,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "Are you sure you want to delete file:"
+msgstr "Estas seguro de que quieres eliminar el archivo:"
+
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Haz clic para volver al menú principal"
@@ -3396,12 +3429,6 @@ msgstr "Haz clic para volver al menú principal"
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Cargar una partida previamente grabada."
-
-msgid "Are you sure you want to delete file:"
-msgstr "Estas seguro de que quieres eliminar el archivo:"
-
-msgid "Warning!"
-msgstr "¡Advertencia!"
 
 msgid "File to Save:"
 msgstr "Archivo a Guardar:"
@@ -3844,11 +3871,101 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-#, fuzzy
-msgid "Map filename"
+msgid "Message Text:"
 msgstr ""
-"Tamaño\n"
-"del Mapa"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+msgid "Message:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Artifact"
+msgstr "Artefacto"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artefactos"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid ""
@@ -3877,8 +3994,7 @@ msgstr ""
 "¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
 "perderá)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 #, fuzzy
@@ -3907,29 +4023,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Dispara a %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Encuentra el artefacto definitivo"
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "Monsters cannot be placed on water."
+msgid "%{object} has no properties to change."
 msgstr ""
 
 #, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "This artifact"
+msgstr "con un artefacto."
 
-msgid "Heroes cannot be placed on water."
+#, fuzzy
+msgid "Roads"
+msgstr "Fin del camino"
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3940,52 +4048,30 @@ msgid "Failed to update player information."
 msgstr ""
 
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "The map is corrupted."
+msgstr "Reflejo creado."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
+
+msgid "Unable to create a directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr ""
+"¿Estás seguro de que quieres sobreescribir la guardada con este nombre?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Este pueblo no se puede actualizar a castillo."
+msgid "Failed to save the map."
+msgstr "Archivo a Guardar:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4010,13 +4096,6 @@ msgstr "Por favor, selecciona otro héroe."
 msgid ""
 "Cell\n"
 "Details"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Fin del camino"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Erase"
@@ -4058,12 +4137,12 @@ msgstr "Poder"
 msgid "Treasures"
 msgstr "Tesoro"
 
+msgid "Heroes"
+msgstr "Héroes"
+
 #, fuzzy
 msgid "Towns"
 msgstr "Pueblo"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4167,7 +4246,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr "Derrota a todos los heroes enemígos y sus ciudades."
 
 #, fuzzy
@@ -4223,9 +4302,6 @@ msgid "Undo"
 msgstr ""
 
 msgid "Undo your last action."
-msgstr ""
-
-msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -4285,6 +4361,88 @@ msgid "Warning"
 msgstr "Advertencia"
 
 #, fuzzy
+msgid "None."
+msgstr "Ninguno"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Por favor, selecciona otro héroe."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Acumula %{count} oro."
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Dificultad\n"
+"del Mapa"
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Descripción seleccionada"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condiciones de victoria"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condiciones de derrota"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Descripción seleccionada"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+#, fuzzy
+msgid "Map Name"
+msgstr ""
+"Tamaño\n"
+"del Mapa"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "La descripción del mapa actualmente elegido."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Tamaño del Mapa"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"La dificultad de mapa del mapa seleccionado actualmente. La dificultad de "
+"mapa se determina por el diseñador del escenario. Los mapas más difíciles "
+"pueden incluir enemigos más abundantes o poderosos, menos recursos, o "
+"algunas otras condiciones que vuelvan las cosas más duras para el jugador "
+"humano."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexión"
 
@@ -4296,6 +4454,64 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr "Descripción seleccionada"
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Guardar Partida"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -6017,6 +6233,10 @@ msgstr ""
 
 msgid " gives you maximum luck"
 msgstr ""
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "No se puede transferir el Libro de Hechizos"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "No puedes recoger este artefacto, ¡tu inventario está lleno!"
@@ -8555,9 +8775,6 @@ msgid_plural "Windmills"
 msgstr[0] "Molino de Viento"
 msgstr[1] "Molinos de Viento"
 
-msgid "Artifact"
-msgstr "Artefacto"
-
 msgid "Mermaid"
 msgstr "Sirena"
 
@@ -10332,6 +10549,14 @@ msgstr "El Libro de Hechizos"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} permite al héroe lanzar hechizos."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 #, fuzzy
 msgid "Dummy 1"
 msgstr "Momia"
@@ -10560,6 +10785,16 @@ msgstr ""
 "te mira y te responde: \"¿Crees que es divertido? Vale. Puedes llevártelo. "
 "De cualquier modo, prefiero volar.\""
 
+msgid "Masthead"
+msgstr "El Mástil"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} aumenta la suerte y la moral de las tropas del héroe en %{count} "
+"cada una en combate marítimo."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10570,16 +10805,6 @@ msgstr ""
 "usar para arengar a su tripulación en momentos difíciles. Te da entonces un "
 "mapa borroso que muestra dónde lo escondió. Después de un buen rato "
 "explorando, lo encuentras escondido debajo de un embarcadero cercano."
-
-msgid "Masthead"
-msgstr "El Mástil"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} aumenta la suerte y la moral de las tropas del héroe en %{count} "
-"cada una en combate marítimo."
 
 msgid "Sphere of Negation"
 msgstr "La Esfera de la Negación"

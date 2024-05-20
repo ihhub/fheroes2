@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
-"PO-Revision-Date: 2024-02-19 16:13+0100\n"
+"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"PO-Revision-Date: 2024-05-20 10:12+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 msgid ""
 "BATTLE\n"
@@ -51,6 +51,27 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "AVSLUT."
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NY\n"
+"KARTA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SPARA\n"
+"KARTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LADDA\n"
+"KARTA"
 
 msgid "CANCEL"
 msgstr "AVBRYT"
@@ -206,9 +227,8 @@ msgstr "SLOTT"
 msgid "TOWN"
 msgstr "STAD"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "OMSTART"
+msgstr "BEGRÄNSA"
 
 msgid ""
 "D\n"
@@ -247,6 +267,16 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"U\n"
+"L\n"
+"L\n"
+"E\n"
+"R\n"
+"A"
 
 msgid ""
 "C\n"
@@ -390,9 +420,8 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Endast %{race}trupper +1"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
-msgstr "Neutral"
+msgstr "Neutrala"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
@@ -400,11 +429,12 @@ msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Några odöda i armén -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Standardåtgärder"
+msgstr ""
+"Standard-\n"
+"trupper"
 
 msgid "View %{name}"
 msgstr "Visa %{name}"
@@ -430,8 +460,8 @@ msgstr "Kan ej flytta sista truppen"
 msgid "Move the %{name}"
 msgstr "Flytta %{name}"
 
-msgid "Set Count"
-msgstr "Ange Antal"
+msgid "Set %{monster} Count"
+msgstr "Ange antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2417,51 +2447,41 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Helgedom"
 
-#, fuzzy
 msgid "Special"
-msgstr "Ingenting Speciellt"
+msgstr "Särskild"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Hordbyggnad"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Bostäder"
+msgstr "Boning 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Bostäder"
+msgstr "Boning 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Bostäder"
+msgstr "Uppg. Boning 2"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Bostäder"
+msgstr "Boning 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Bostäder"
+msgstr "Uppg. Boning 3"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Bostäder"
+msgstr "Boning 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Bostäder"
+msgstr "Uppg. Boning 4"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Bostäder"
+msgstr "Boning 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Bostäder"
+msgstr "Uppg. Boning 6"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x Uppg. Boning 6"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2515,12 +2535,12 @@ msgstr "Benhögen ökar produktionen av Skelett med %{count} per vecka."
 msgid "The Special building gives a specific bonus to the chosen castle type."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
 msgstr ""
-"Brunnen ökar produktionen i alla boningar med %{count} varelser per vecka."
+"Hordbyggnaden ökar produktionen i alla nivå 1-boningar med 8 varelser per "
+"vecka."
 
 msgid "Thieves' Guild"
 msgstr "Tjuvgille"
@@ -3378,13 +3398,11 @@ msgstr "Klicka här för att öppna det virtuella tangentbordet."
 msgid "Open Virtual Keyboard"
 msgstr "Öppna virtuellt tangentbord."
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Antal trupper att flytta?"
+msgstr "Hur många varelser vill du flytta?"
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Välj stad att teleportera till."
+msgstr "Välj hur många enheter att dela till:"
 
 msgid "Map: "
 msgstr "Karta: "
@@ -3413,17 +3431,17 @@ msgstr ""
 "\n"
 "Plats: "
 
-msgid "Click to save the current game."
-msgstr "Klicka för att spara nuvarande spel."
-
-msgid "Click to load a previously saved game."
-msgstr "Klicka för att ladda ett tidigare sparat spel."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
 
 msgid "Warning!"
 msgstr "Varning!"
+
+msgid "Click to save the current game."
+msgstr "Klicka för att spara nuvarande spel."
+
+msgid "Click to load a previously saved game."
+msgstr "Klicka för att ladda ett tidigare sparat spel."
 
 msgid "File to Save:"
 msgstr "Fil att Spara:"
@@ -3801,32 +3819,26 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Varelse:"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Slumpat Slott"
+msgstr "Slumpat Slottsnamn"
 
-#, fuzzy
 msgid "Allow Castle build"
-msgstr "Molnslott"
+msgstr "Tillåt Slottsbygge"
 
-#, fuzzy
 msgid "Default Buildings"
-msgstr "Standardåtgärder"
+msgstr "Standardbyggnader"
 
-#, fuzzy
 msgid "Default Army"
-msgstr "Standardåtgärder"
+msgstr "Standardarmé"
 
-#, fuzzy
 msgid "Castle Army"
-msgstr "Slott"
+msgstr "Slottsarmé"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
 
-#, fuzzy
 msgid "Enter Castle name"
-msgstr "Förlora hjälten: %{name}."
+msgstr "Skriv Slottsnamn"
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3844,10 +3856,94 @@ msgid "Use default defenders army."
 msgstr ""
 
 msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr "Ange anpassad Slottsarmé. Högerklicka för att återställa enheten."
+
+msgid "Message Text:"
+msgstr "Meddelandetext:"
+
+msgid "Cancel event after first visit"
 msgstr ""
 
-msgid "Map filename"
-msgstr "Kartfilnamn"
+msgid "Player colors allowed to get event:"
+msgstr "Spelarfärger som kan få händelsen:"
+
+msgid "Computer colors allowed to get event:"
+msgstr "Datorfärger som kan få händelsen:"
+
+msgid "Reward:"
+msgstr "Belöning:"
+
+msgid "Allow %{color} human player to get event"
+msgstr "Tillåt %{color} spelare att få händelsen"
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr "Tillåt %{color} datorspelare att få händelsen"
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+msgid "Message:"
+msgstr "Meddelande:"
+
+msgid "Click to save the Event properties."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr "Ingen artefakt kommer att ges som belöning."
+
+msgid "Delete Artifact"
+msgstr "Radera Artefakt"
+
+msgid "Delete an artifact from the reward."
+msgstr "Ta bort en artefakt från belöningen."
+
+msgid "No resources will be given as a reward."
+msgstr "Inga resurser kommer att ges som belöning."
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Resources will be given as a reward."
+msgstr "Resurser kommer att ges som belöning."
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+msgid "Click here to change the event message."
+msgstr "Klicka för att ändra händelsemeddelandet."
+
+msgid "Event Message Text"
+msgstr "Händelsetext"
+
+msgid "%{objects} cannot be placed on water."
+msgstr "%{objects}  kan inte placeras på vatten."
+
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Den Främsta Artefakten kan endast placeras på grävbar terräng."
+
+msgid "%{objects} must be placed on water."
+msgstr "%{objects}  måste placeras på vatten."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Föremål kan inte placeras utanför kartan."
+
+msgid "Action objects must be placed on clear tiles."
+msgstr "Händelseobjekt måste placeras på fria rutor."
 
 #, fuzzy
 msgid ""
@@ -3874,11 +3970,8 @@ msgstr ""
 "Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
 "nuvarande karta kommer försvinna.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Skapa ny karta, antingen en blank karta eller genom att använda "
-"kartgeneratorn."
+msgid "Create a new map from scratch."
+msgstr "Skapa en ny blank karta."
 
 msgid "New Map"
 msgstr "Ny Karta"
@@ -3901,29 +3994,21 @@ msgstr "Lämna kartredigeraren."
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Skjut %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
-msgstr "Slumpad Ultimat artefakt"
+msgstr "Ange slumpad radie för Främsta artefakt"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Föremål kan inte placeras utanför kartan."
+msgid "%{object} has no properties to change."
+msgstr "%{object} har inga ändringsbara egenskaper."
 
 #, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Havsföremål måste placeras på vatten."
+msgid "This artifact"
+msgstr "med 1 artefakt."
 
-msgid "Monsters cannot be placed on water."
-msgstr "Varelser kan inte placeras på vatten."
+msgid "Roads"
+msgstr "Vägar"
 
-msgid "Treasures cannot be placed on water."
-msgstr "Skatter kan inte placeras på vatten."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgid "Streams"
+msgstr "Floder"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -3932,42 +4017,26 @@ msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 msgid "Failed to update player information."
 msgstr "Misslyckades att uppdatera spelarinformation."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Artefakter kan inte placeras på vatten."
-
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Artefakter kan inte placeras på vatten."
+msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Berg kan inte placeras på vatten."
+msgid "The map is corrupted."
+msgstr "Kartan är korrupt."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Block kan inte placeras på vatten."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Träd kan inte placeras på vatten."
+msgid "Unable to create a directory to save the map."
+msgstr "Kunde inte skapa en sökväg för att spara kartan."
 
-msgid "Ocean object must be placed on water."
-msgstr "Havsföremål måste placeras på vatten."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Är du säker på att du vill skriva över existerande karta?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Landskapsföremål kan inte placeras på vatten."
+msgid "Map saved to: "
+msgstr "Kartan sparades i:"
 
-msgid "Towns cannot be placed on water."
-msgstr "Städer kan inte placeras på vatten."
-
-msgid "Mines cannot be placed on water."
-msgstr "Gruvor kan inte placeras på vatten."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Bostäder kan inte placeras på vatten."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Kraftökningar kan inte placeras på vatten."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Äventyrsföremål kan inte placeras på vatten."
+msgid "Failed to save the map."
+msgstr "Misslyckades att spara kartan."
 
 msgid "Used to place %{object}."
 msgstr "Används för att placera %{object}."
@@ -3996,12 +4065,6 @@ msgid ""
 msgstr ""
 "Cell-\n"
 "detaljer"
-
-msgid "Roads"
-msgstr "Vägar"
-
-msgid "Streams"
-msgstr "Floder"
 
 msgid "Erase"
 msgstr "Radera"
@@ -4036,26 +4099,23 @@ msgstr "Kraftökningar"
 msgid "Treasures"
 msgstr "Skatter"
 
-msgid "Towns"
-msgstr "Städer"
-
 msgid "Heroes"
 msgstr "Hjältar"
 
-#, fuzzy
-msgid "editorErasure|Landscape objects"
-msgstr "Hjältar"
+msgid "Towns"
+msgstr "Städer"
 
-#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Landskapsobjekt"
+
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "Artefakter"
+msgstr "Ej tagbara äventyrsobjekt"
 
 msgid "editorErasure|Castles"
 msgstr "Slott"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Artefakter"
+msgstr "Tagbara äventyrsobjekt"
 
 msgid "editorErasure|Monsters"
 msgstr "Varelser"
@@ -4155,7 +4215,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detaljläge"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Används för att redigera varelser, hjältar och städer."
 
 msgid "Adventure Objects Mode"
@@ -4211,9 +4272,6 @@ msgstr "Ångra"
 msgid "Undo your last action."
 msgstr "Ångra din sista åtgärd."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Redigera karttiteln, beskrivning och annan information."
 
@@ -4264,20 +4322,140 @@ msgstr "Inga kartor tillgängliga!"
 msgid "Warning"
 msgstr "Varning"
 
+msgid "None."
+msgstr "Inga."
+
+msgid "One side defeats another."
+msgstr "En sida besegrar den andra."
+
+msgid "Accumulate gold."
+msgstr "Samla ihop guld."
+
+msgid "Run out of time."
+msgstr "Få slut på tid."
+
+msgid "Map Difficulty"
+msgstr "Kartsvårighet"
+
+msgid "Map Description"
+msgstr "Kartbeskrivning"
+
+msgid "Special Victory Condition"
+msgstr "Särskilt Segervillkor"
+
+msgid "Special Loss Condition"
+msgstr "Särskilt Förlustvillkor"
+
+msgid "Change Map Name"
+msgstr "Ändra Kartnamn"
+
+msgid "Change Map Description"
+msgstr "Ändra Kartbeskrivning"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Click to change your map name."
+msgstr "Klicka för att ändra kartans namn."
+
+msgid "Map Name"
+msgstr "Kartnamn"
+
+msgid "Click to change the description of the current map."
+msgstr "Klicka för att ändra nuvarande kartans beskrivning."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr "Visar spelartyperna i scenariot. Tryck för att ändra."
+
+msgid "Player Type"
+msgstr "Spelartyp"
+
 #, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Svårighetsgraden för den valda kartan. Kartans svårighet bestäms av kartans "
+"kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
+"färre resurser eller andra specialvillkor som gör det svårare för spelaren."
+
 msgid "Animation"
-msgstr "Annektering"
+msgstr "Animering"
 
-#, fuzzy
 msgid "Passability"
-msgstr "Personlighet:"
+msgstr "Framkomlighet"
 
-#, fuzzy
 msgid "Toggle animation of the objects."
-msgstr "Aktivera raderingen av %{type}objekt."
+msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
+msgstr "Visa objektens framkomlighet."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
 msgstr ""
+"\n"
+"\n"
+"Storlek: "
+
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Beskrivning: "
+
+msgid "Save Map:"
+msgstr "Spara Karta:"
+
+msgid "Click to save the current map."
+msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Riddle:"
+msgstr "Gåta:"
+
+msgid "Answers:"
+msgstr "Svar:"
+
+msgid "Answer:"
+msgstr "Svar:"
+
+msgid "Answer"
+msgstr "Svar"
+
+msgid "This answer exists in the list."
+msgstr "Detta svar finns i listan."
+
+msgid "Click to save the Sphinx properties."
+msgstr "Klicka för att spara Sphinxens egenskaper."
+
+msgid "Add Answer"
+msgstr "Lägg till Svar"
+
+msgid "Add an additional answer for the question."
+msgstr "Lägg till ett ytterligare svar för gåtan."
+
+msgid "Edit Answer"
+msgstr "Redigera Svar"
+
+msgid "Edit an existing answer for the question."
+msgstr "Redigera ett redan existerande svar till gåtan."
+
+msgid "Delete Answer"
+msgstr "Radera Svar"
+
+msgid "Delete an existing answer for the question."
+msgstr "Radera ett redan existerande svar till frågan."
 
 msgid "difficulty|Easy"
 msgstr "Lätt"
@@ -4418,7 +4596,6 @@ msgstr "Utveckling och Support"
 msgid "Special Thanks to"
 msgstr "Extra Tack till"
 
-#, fuzzy
 msgid "and many-many other contributors and supporters!"
 msgstr "och många många andra som gett sitt stöd!"
 
@@ -4674,9 +4851,8 @@ msgstr "Ångra senaste åtgärden"
 msgid "hotkey|redo last action"
 msgstr "Gör om senaste åtgärden"
 
-#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "Nytt karta"
+msgstr "öppna spelets huvudmeny"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -5057,9 +5233,8 @@ msgstr "Poänglistan"
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
 
-#, fuzzy
 msgid "Create new or modify existing maps."
-msgstr "Laddar en karta."
+msgstr "Skapa nya eller redigera existerande kartor."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Ändra spelets språk, upplösning och inställningar."
@@ -5119,6 +5294,10 @@ msgid ""
 "Magic II for this purpose. Please note that only one scenario will be "
 "available in this setup."
 msgstr ""
+"fheroes2 behöver datafiler från originalspelet Heroes of Might and Magic II "
+"för att fungera. Du verkar använda dig av demoversionen av Heroes of Might "
+"and Magic II för detta, vilket innebär att endast ett scenarie kommer vara "
+"tillgängligt."
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
@@ -5724,23 +5903,24 @@ msgstr ""
 msgid ""
 "Default\n"
 "value"
-msgstr ""
+msgstr "Standardvärde"
 
-#, fuzzy
 msgid "Set %{skill} Skill"
-msgstr "Ange Anfallsförmåga"
+msgstr "Ange %{skill}sförmåga"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
+"Ange %{skill} grundvärde. Högerklicka för att återställa till standard."
 
 msgid "View %{skill} Info"
 msgstr "Visa information om %{skill}"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "skill"
-msgstr "Försvar"
+msgstr ""
+"Standard-\n"
+"förmåga"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -5988,6 +6168,9 @@ msgstr " ger dig maximalt med stridsmoral"
 
 msgid " gives you maximum luck"
 msgstr " ger dig maximalt med tur"
+
+msgid "You cannot have multiple spell books."
+msgstr "Hjälten kan inte ha flera besvärjelseböcker."
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -7486,57 +7669,51 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
 
-#, fuzzy
 msgid "Random hero (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgstr "Slumpad hjälte (Nivå %{level})"
 
-#, fuzzy
 msgid "Random %{race} hero (Level %{level})"
-msgstr "%{race}n %{name} (Nivå %{level})"
+msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Hjältevy"
+msgstr "Hjälteklass"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
 
 msgid "Set custom Experience value. Current value is default."
-msgstr ""
+msgstr "Ange erfarenhetspoäng. Nuvarande värde är standard."
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
+msgstr "Ändra erfarenhetspoäng. Högerklicka för att återställa till standard."
 
-#, fuzzy
 msgid "Set Experience value"
-msgstr "Erfarenhet"
+msgstr "Ange erfarenhetspoäng"
 
 msgid "View Experience Info"
 msgstr "Visa information för erfarenhet"
 
 msgid "Set custom Spell Points value. Current value is default."
-msgstr ""
+msgstr "Ändra besvärjelsepoängen. Nuvarande värde är standard."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
+"Ändra besvärjelsepoängen. Högerklicka för att återställa till standard."
 
-#, fuzzy
 msgid "Set Spell Points value"
-msgstr "Besvärjelsepoäng"
+msgstr "Ange Besvärjelsepoäng"
 
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Ange patrullradie i antal rutor"
 
-#, fuzzy
 msgid "Enter hero's name"
-msgstr "Förlora hjälten: %{name}."
+msgstr "Ange hjältens namn"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Klicka för att visa nästa stad."
+msgstr "Klicka för byta klass."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7577,26 +7754,29 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Ställ in arméns stridsformation på 'Grupperad'"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
-msgstr ""
+msgstr "Välj hjältens Artefakter. Högerklicka för att återställa Artefakt."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
 msgstr ""
+"Välj hjältens sekundära förmågor. Högerklicka för att återställa förmåga."
 
 msgid "Set hero's Army. Right-click to reset unit."
-msgstr ""
+msgstr "Ange hjältens Armé. Högerklicka för att återställa enhet."
 
 msgid "Set hero's portrait. Right-click to reset to default."
-msgstr ""
+msgstr "Välj hjälteporträtt. Högerklicka för att återställa till standard."
 
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
+"Klicka för att ändra hjältens namn. Högerklicka för att återställa till "
+"standard."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
+"Hjälten är i patrulläge med %{tiles}-rutors radie. Klicka för inaktivera det."
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Klicka här för att välja denna färgen."
+msgstr "Klicka här för att aktivera hjältens patrulläge."
 
 msgid "Blood Morale"
 msgstr "Blodtörst"
@@ -8526,9 +8706,6 @@ msgid_plural "Windmills"
 msgstr[0] "Väderkvarn"
 msgstr[1] "Väderkvarnar"
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "Mermaid"
 msgstr "Sjöjungfru"
 
@@ -8762,30 +8939,29 @@ msgstr "Jordaltare"
 msgid "Water Summoning Altar"
 msgstr "Vattenaltare"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Träsk"
+msgstr "Träsksjö"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Frusen Sjö"
 
 msgid "randomRace|level 1 creatures"
-msgstr ""
+msgstr "nivå 1 varelser"
 
 msgid "randomRace|level 2 creatures"
-msgstr ""
+msgstr "nivå 2 varelser"
 
 msgid "randomRace|level 3 creatures"
-msgstr ""
+msgstr "nivå 3 varelser"
 
 msgid "randomRace|level 4 creatures"
-msgstr ""
+msgstr "nivå 4 varelser"
 
 msgid "randomRace|level 5 creatures"
-msgstr ""
+msgstr "nivå 5 varelser"
 
 msgid "randomRace|level 6 creatures"
-msgstr ""
+msgstr "nivå 6 varelser"
 
 msgid "Unknown Monsters"
 msgstr "Okända Monster"
@@ -10462,6 +10638,14 @@ msgstr "Magibok"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name}en låter hjälten att kasta besvärjelser."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Atrapp 1"
 
@@ -10690,6 +10874,16 @@ msgstr ""
 "blänger på dig och svarar: \"Tror du att det är roligt? Visst, du kan bära "
 "den själv. Jag föredrar ändå att flyga.\""
 
+msgid "Masthead"
+msgstr "Mastlykta"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} ökar hjältens truppers Tur och höjer deras Stridsmoral med %{count} "
+"i sjöstrider."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10700,16 +10894,6 @@ msgstr ""
 "yngre dagar samlade sin besättning kring i bråda tider. Sen visar han en "
 "gammal blekt karta och visar var han glömde den. Efter mycket letande hittar "
 "du den under en närliggande kaj."
-
-msgid "Masthead"
-msgstr "Mastlykta"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} ökar hjältens truppers Tur och höjer deras Stridsmoral med %{count} "
-"i sjöstrider."
 
 msgid "Sphere of Negation"
 msgstr "Upphävningsklot"

@@ -495,9 +495,9 @@ std::string Settings::String() const
     return os.str();
 }
 
-void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
+void Settings::SetCurrentFileInfo( Maps::FileInfo fi )
 {
-    current_maps_file = fi;
+    current_maps_file = std::move( fi );
 
     players.Init( current_maps_file );
 
