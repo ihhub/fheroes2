@@ -2517,6 +2517,14 @@ msgstr "Bosted 4"
 msgid "Upg. Dwelling 4"
 msgstr "Opg. bosted 4"
 
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Bosted 5"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Opg. Bosted 5"
+
 msgid "Dwelling 6"
 msgstr "Bosted 6"
 
