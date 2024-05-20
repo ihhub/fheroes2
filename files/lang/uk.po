@@ -5226,7 +5226,7 @@ msgstr ""
 "на одній карті."
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Resurrection Team представляє"
+msgstr "Команда fheroes2 Resurrection представляє"
 
 msgid "Greetings!"
 msgstr "Вітання!"
