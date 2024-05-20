@@ -3998,7 +3998,7 @@ msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ange slumpad radie för Främsta artefakt"
 
 msgid "%{object} has no properties to change."
-msgstr "%{object} har inga egenskaper att ändra."
+msgstr "%{object} har inga ändringsbara egenskaper."
 
 #, fuzzy
 msgid "This artifact"
