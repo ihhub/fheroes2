@@ -1116,6 +1116,8 @@ namespace ICN
         BUTTON_LOAD_MAP_EVIL,
         BUTTON_LOAD_MAP_GOOD,
 
+        OLD_ADVENTURE_OBJECT_PARTS,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
