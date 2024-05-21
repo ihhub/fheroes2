@@ -4014,9 +4014,6 @@ msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színbő
 msgid "Failed to update player information."
 msgstr "A játékos adatainak frissítése nem sikerült."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
-
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen."
 
