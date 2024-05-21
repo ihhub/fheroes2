@@ -39,6 +39,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "editor_ui_helper.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -162,7 +163,7 @@ namespace
             if ( le.MousePressRight() ) {
                 const building_t building = _getBuildindTypeForRender();
                 std::string description = BuildingInfo::getBuildingDescription( _race, building );
-                std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
+                const std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
 
                 if ( !requirement.empty() ) {
                     description += "\n\n";
@@ -332,27 +333,6 @@ namespace Editor
         };
         drawCastleName();
 
-        auto drawCheckboxBackground
-            = [&display, &dialogRoi]( fheroes2::MovableSprite & checkSprite, std::string str, const int32_t posX, const int32_t posY, const bool isEvil ) {
-                  const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-                  if ( isEvil ) {
-                      fheroes2::ApplyPalette( checkboxBackground, 0, 0, display, posX, posY, checkboxBackground.width(), checkboxBackground.height(),
-                                              PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-                  }
-                  else {
-                      fheroes2::Copy( checkboxBackground, 0, 0, display, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
-                  }
-
-                  fheroes2::addGradientShadow( checkboxBackground, display, { posX, posY }, { -4, 4 } );
-                  const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
-                  checkboxText.drawInRoi( posX + 23, posY + 4, display, dialogRoi );
-
-                  checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
-                  checkSprite.setPosition( posX + 2, posY + 2 );
-
-                  return fheroes2::Rect( posX, posY, 23 + checkboxText.width(), checkboxBackground.height() );
-              };
-
         const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Allow castle building checkbox.
@@ -360,7 +340,7 @@ namespace Editor
         fheroes2::MovableSprite allowCastleSign;
         fheroes2::Rect allowCastleArea;
         if ( isTown ) {
-            allowCastleArea = drawCheckboxBackground( allowCastleSign, _( "Allow Castle build" ), dstPt.x, dstPt.y, isEvilInterface );
+            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface );
             if ( std::find( castleMetadata.bannedBuildings.begin(), castleMetadata.bannedBuildings.end(), BUILD_CASTLE ) == castleMetadata.bannedBuildings.end() ) {
                 allowCastleSign.show();
             }
@@ -372,15 +352,18 @@ namespace Editor
         // Default buildings checkbox indicator.
         dstPt.y += 30;
         fheroes2::MovableSprite defaultBuildingsSign;
-        const fheroes2::Rect defaultBuildingsArea = drawCheckboxBackground( defaultBuildingsSign, _( "Default Buildings" ), dstPt.x, dstPt.y, isEvilInterface );
+        const fheroes2::Rect defaultBuildingsArea = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
+#if defined( RESTRICT_FEATURE )
+        // TODO: remove this macro definition check once the logic for building restriction is implemented.
         // Build restrict mode button.
         fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
         buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
         const fheroes2::Rect buttonRestrictBuildingArea( buttonRestrictBuilding.area() );
         fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
+#endif
 
         const bool isNeutral = ( color == Color::NONE );
 
@@ -389,7 +372,7 @@ namespace Editor
         fheroes2::MovableSprite defaultArmySign;
         fheroes2::Rect defaultArmyArea;
         if ( isNeutral ) {
-            defaultArmyArea = drawCheckboxBackground( defaultArmySign, _( "Default Army" ), dstPt.x, dstPt.y, isEvilInterface );
+            defaultArmyArea = drawCheckboxWithText( defaultArmySign, _( "Default Army" ), display, dstPt.x, dstPt.y, isEvilInterface );
 
             if ( Maps::isDefaultCastleDefenderArmy( castleMetadata ) ) {
                 defaultArmySign.show();
@@ -490,11 +473,13 @@ namespace Editor
                 break;
             }
 
+#if defined( RESTRICT_FEATURE )
             if ( le.MouseClickLeft( buttonRestrictBuildingArea ) ) {
                 buildingRestriction = !buildingRestriction;
             }
 
             buttonRestrictBuilding.drawOnState( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) );
+#endif
 
             if ( le.MouseCursor( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
@@ -502,7 +487,7 @@ namespace Editor
                 bool redrawName = false;
                 if ( le.MouseClickLeft() ) {
                     std::string res = castleMetadata.customName;
-                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false ) && !res.empty() ) {
+                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false, true ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
@@ -558,6 +543,8 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Default Buildings" ), message, Dialog::ZERO );
                 }
             }
+
+#if defined( RESTRICT_FEATURE )
             else if ( le.MouseCursor( buttonRestrictBuildingArea ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
@@ -565,6 +552,8 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
+#endif
+
             else if ( isNeutral && le.MouseCursor( defaultArmyArea ) ) {
                 message = _( "Use default defenders army." );
 

@@ -123,6 +123,8 @@ namespace Interface
         void getTownObjectProperties( int32_t & type, int32_t & color ) const;
         void getMineObjectProperties( int32_t & type, int32_t & color ) const;
 
+        static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
+
     private:
         static int _getGroundId( const uint8_t brushId );
 
@@ -292,19 +294,8 @@ namespace Interface
         std::array<int32_t, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _selectedKingdomObjectType;
         int32_t _selectedMonsterType{ -1 };
 
-        const std::array<Maps::ObjectGroup, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_ROCKS,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_TREES,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_WATER,
-                                                                                                                  Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
-        const std::array<Maps::ObjectGroup, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_DWELLINGS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_MINES,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_POWER_UPS,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_TREASURES,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_WATER,
-                                                                                                                  Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS };
-        const std::array<Maps::ObjectGroup, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _selectedKingdomObjectGroup{ Maps::ObjectGroup::KINGDOM_HEROES,
-                                                                                                                    Maps::ObjectGroup::KINGDOM_TOWNS };
+        static const std::array<Maps::ObjectGroup, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectGroup;
+        static const std::array<Maps::ObjectGroup, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectGroup;
+        static const std::array<Maps::ObjectGroup, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _selectedKingdomObjectGroup;
     };
 }

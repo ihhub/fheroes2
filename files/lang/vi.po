@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -50,6 +50,30 @@ msgstr "THÔNG TIN"
 
 msgid "QUIT"
 msgstr "RỜI KHỎI"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
+"GAME"
 
 msgid "CANCEL"
 msgstr "TỪ BỎ"
@@ -431,8 +455,9 @@ msgstr "Không thể di chuyển quân cuối cùng"
 msgid "Move the %{name}"
 msgstr "Di chuyển %{name}"
 
-msgid "Set Count"
-msgstr "Đặt Số lượng"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Bắn %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2482,6 +2507,14 @@ msgid "Upg. Dwelling 4"
 msgstr ""
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Chọn Phép:"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Chọn Phép:"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Chọn Phép:"
 
@@ -3462,17 +3495,17 @@ msgstr ""
 "\n"
 "Vị trí: "
 
-msgid "Click to save the current game."
-msgstr "Nhấp để lưu trò chơi hiện tại."
-
-msgid "Click to load a previously saved game."
-msgstr "Nhấp để tải chò trơi đã lưu trước đây."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Ngươi có chắc muốn xóa file:"
 
 msgid "Warning!"
 msgstr "Cảnh báo!"
+
+msgid "Click to save the current game."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Click to load a previously saved game."
+msgstr "Nhấp để tải chò trơi đã lưu trước đây."
 
 msgid "File to Save:"
 msgstr "Tệp để Lưu:"
@@ -3905,8 +3938,102 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Tệp bản đồ"
+#, fuzzy
+msgid "Message Text:"
+msgstr "Thanh Tin nhắn"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Thanh Tin nhắn"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Artifact"
+msgstr "Bảo vật"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Chọn Bảo vật:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Tài nguyên"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Bảo vật không thể đặt trên nước."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 #, fuzzy
 msgid ""
@@ -3933,9 +4060,9 @@ msgstr ""
 "Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr "Tạo bản đồ mới, từ đầu hoặc sử dụng trình tạo bản đồ ngẫu nhiên."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "bắt đầu bản đồ mới"
 
 msgid "New Map"
 msgstr "Bản đồ Mới"
@@ -3959,28 +4086,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Bắn %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ngẫu nhiên Bảo vật Tối thượng"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
+msgid "%{object} has no properties to change."
+msgstr ""
 
 #, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+msgid "This artifact"
+msgstr "với 1 bảo vật."
 
-msgid "Monsters cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgid "Roads"
+msgstr "Đường"
 
-msgid "Treasures cannot be placed on water."
-msgstr "Kho báu không thể đặt trên nước."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
+msgid "Streams"
+msgstr "Suối"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -3989,48 +4109,31 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Bảo vật không thể đặt trên nước."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Núi không thể đặt trên nước."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "File lưu bị hỏng."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Thị trấn không thể đặt trên nước."
+msgid "Unable to create a directory to save the map."
+msgstr "Dùng để xóa vật thể trên bản đồ."
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Kho báu không thể đặt trên nước."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
 
-msgid "Ocean object must be placed on water."
-msgstr "Đối tượng đại dương phải đặt trên mặt nước."
-
-#, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
-
-msgid "Towns cannot be placed on water."
-msgstr "Thị trấn không thể đặt trên nước."
-
-msgid "Mines cannot be placed on water."
-msgstr "Mỏ không thể đặt trên nước."
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Thị trấn không thể đặt trên nước."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Thị trấn không thể đặt trên nước."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
+msgid "Failed to save the map."
+msgstr "Tệp để Lưu:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4056,12 +4159,6 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
-
-msgid "Roads"
-msgstr "Đường"
-
-msgid "Streams"
-msgstr "Suối"
 
 #, fuzzy
 msgid "Erase"
@@ -4101,11 +4198,11 @@ msgstr "Sức"
 msgid "Treasures"
 msgstr "Kho báu"
 
-msgid "Towns"
-msgstr "Thị trấn"
-
 msgid "Heroes"
 msgstr "Tướng"
+
+msgid "Towns"
+msgstr "Thị trấn"
 
 #, fuzzy
 msgid "editorErasure|Landscape objects"
@@ -4219,7 +4316,8 @@ msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên b
 msgid "Detail Mode"
 msgstr "Chế độ Chi tiết"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
 
 #, fuzzy
@@ -4280,9 +4378,6 @@ msgstr "Hoàn tác"
 msgid "Undo your last action."
 msgstr "Hoàn tác thao tác cuối cùng."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr "Tạo bản đồ mới từ đầu hoặc sử dụng trình tạo bản đồ ngẫu nhiên."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Chỉnh sửa tiêu đề bản đồ, mô tả và thông tin chung khác."
 
@@ -4335,6 +4430,89 @@ msgid "Warning"
 msgstr "Cảnh báo"
 
 #, fuzzy
+msgid "None."
+msgstr "Không"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Hãy chọn một tướng khác."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Đạt được %{count} vàng."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Thoát khỏi biên tập bản đồ."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Độ khó\n"
+"Bản đồ"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Điều kiện Thắng"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Điều kiện Thua"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Chọn Mô tả"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Tệp bản đồ"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Mô tả của bản đồ hiện được chọn."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Kiểu Bản đồ"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Độ khó bản đồ của bản đồ hiện được chọn. Độ khó của bản đồ được xác định bởi "
+"người thiết kế kịch bản. Các bản đồ khó hơn có thể bao gồm nhiều kẻ thù hơn "
+"hoặc mạnh hơn, ít tài nguyên hơn hoặc các điều kiện đặc biệt khác khiến mọi "
+"thứ trở nên khó khăn hơn đối với người chơi."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Thôn tính"
 
@@ -4347,6 +4525,67 @@ msgid "Toggle animation of the objects."
 msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Lưu Bản đồ"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -6073,6 +6312,10 @@ msgstr " cho ngươi tối đa tinh thần"
 
 msgid " gives you maximum luck"
 msgstr " cho ngươi tối đa may mắn"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Không thể chuyển Sách phép"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Ngươi không thể nhặt bảo vật này, ngươi đã có đầy đủ!"
@@ -8675,9 +8918,6 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Cối xay gió"
 
-msgid "Artifact"
-msgstr "Bảo vật"
-
 msgid "Mermaid"
 msgstr "Tiên cá"
 
@@ -10700,6 +10940,14 @@ msgstr "Sách Phép"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} cho phép ngươi sử dụng phép thuật."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Bù nhìn 1"
 
@@ -10937,6 +11185,17 @@ msgstr ""
 "trả lời: \"ngươi nghĩ điều này thật buồn cười? Tốt thôi. Ngươi có thể mang "
 "nó. Dù sao thì tôi cũng thích bay hơn.\""
 
+msgid "Masthead"
+msgstr "Tiêu đề"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} tăng cường may mắn và tinh thần của ngươi thêm %{count} trong trận "
+"chiến trên biển."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10948,17 +11207,6 @@ msgstr ""
 "thời điểm khó khăn. Sau đó anh ta đưa cho ngươi một tấm bản đồ đã mờ cho "
 "thấy nơi anh ta giấu nó. Sau nhiều lần khám phá, ngươi thấy nó được giấu bên "
 "dưới một bến tàu gần đó."
-
-msgid "Masthead"
-msgstr "Tiêu đề"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} tăng cường may mắn và tinh thần của ngươi thêm %{count} trong trận "
-"chiến trên biển."
 
 msgid "Sphere of Negation"
 msgstr "Quả cầu Phủ định"

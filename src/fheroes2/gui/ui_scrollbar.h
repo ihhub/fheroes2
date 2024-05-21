@@ -31,7 +31,7 @@ namespace fheroes2
     class Scrollbar : public fheroes2::MovableSprite
     {
     public:
-        Scrollbar();
+        Scrollbar() = default;
         Scrollbar( const Scrollbar & ) = delete;
         Scrollbar & operator=( const Scrollbar & ) = delete;
 
@@ -88,9 +88,9 @@ namespace fheroes2
 
     private:
         Rect _area;
-        int _minIndex;
-        int _maxIndex;
-        int _currentIndex;
+        int _minIndex{ 0 };
+        int _maxIndex{ 0 };
+        int _currentIndex{ 0 };
     };
 
     // The original scrollbar slider has fixed size. This is a not user-friendly solution as on big screens it might look extremely tiny.

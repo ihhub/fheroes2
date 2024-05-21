@@ -60,7 +60,7 @@ namespace
     {
         int32_t tileIndex{ -1 };
 
-        const Maps::Map_Format::ObjectInfo * info{ nullptr };
+        const Maps::Map_Format::TileObjectInfo * info{ nullptr };
     };
 
     void loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount )
@@ -166,7 +166,7 @@ namespace Maps
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
     }
 
-    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object )
+    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
         if ( object.index >= objectInfos.size() ) {
@@ -211,7 +211,7 @@ namespace Maps
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
                     // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::ObjectInfo>::difference_type>( objectIndex ) );
+                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
@@ -222,7 +222,7 @@ namespace Maps
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
                     // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::ObjectInfo>::difference_type>( objectIndex ) );
+                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
@@ -555,6 +555,12 @@ namespace Maps
 
             // No races are set.
             map.playerRace = { 0 };
+        }
+
+        // Update events according to the possible changes in human and/or AI player colors.
+        for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
+            eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
+            eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
         }
 
         return true;

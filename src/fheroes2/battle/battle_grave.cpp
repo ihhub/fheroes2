@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 #include <utility>
 
 #include "battle_board.h"
