@@ -4395,6 +4395,89 @@ msgstr "Intet kort tilgængelig!"
 msgid "Warning"
 msgstr "Advarsel"
 
+#, fuzzy
+msgid "None."
+msgstr "Ingen"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Akkumuler %{count} guldstykker."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Forlad korteditoren."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Kort\n"
+"Niveau"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Placering: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Valgte beskrivelse"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Klik for at se næste by."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Kort-filnavn"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Korttype"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Det nuværende kort-niveau for det valgte kort. Kortets sværhedsgrad er "
+"udelukkende bedømt af scenariets designer. Vanskeligere kort inkluderer "
+"flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
+"gør det sværere for menneskelige spillere."
+
 msgid "Animation"
 msgstr "Animation"
 
