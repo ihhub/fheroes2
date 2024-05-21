@@ -2590,7 +2590,7 @@ msgstr "Specialbygningen giver en specifik bonus til den valgte borgtype."
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr "hordebygningen øger tilvæksten for niveau 1 væsener med 8 per uge."
+msgstr "Hordebygningen øger tilvæksten for niveau 1 væsener med 8 per uge."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -3895,7 +3895,7 @@ msgstr "Tilfældigt borgnavn"
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standardbygninger"
 
 msgid "Default Army"
