@@ -199,8 +199,10 @@ namespace Maps::Generator
         }
     }
 
-    bool canFitObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    bool canFitObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction = false )
     {
+        fheroes2::Rect objectRect;
+
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
                 // Shadow and terrain layer parts are ignored.
@@ -209,24 +211,80 @@ namespace Maps::Generator
 
             Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
 
-            if ( node.type != NodeType::OPEN ) {
+            if ( node.index == -1 || node.type != NodeType::OPEN ) {
                 return false;
+            }
+
+            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
+            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
+        }
+
+        for ( const auto & partInfo : info.topLevelParts ) {
+            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
+
+            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+                return false;
+            }
+
+            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
+            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
+        }
+
+        if ( isAction ) {
+            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
+                Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
+                if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
+                    return false;
+                }
+                if ( pathNode.type == NodeType::BORDER ) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
 
-    bool setObjectOnTile( Map_Format::MapFormat & mapFormat, Tiles & tile, const ObjectGroup groupType, const int32_t objectIndex )
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction = false )
+    {
+        // mark object placement
+        fheroes2::Rect objectRect;
+
+        for ( const auto & objectPart : objectInfo.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadow and terrain layer parts are ignored.
+                continue;
+            }
+
+            Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
+            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
+            objectRect.y = std::min( objectRect.y, objectPart.tileOffset.y );
+            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
+            objectRect.height = std::max( objectRect.height, objectPart.tileOffset.y );
+
+            node.type = NodeType::OBSTACLE;
+        }
+
+        if ( isAction ) {
+            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
+                Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
+                pathNode.type = NodeType::PATH;
+            }
+            data.getNode( mainTilePos ).type = NodeType::ACTION;
+        }
+    }
+
+    bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tiles & tile, const ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
-            // Check your logic as you are trying to insert an empty object!
             assert( 0 );
             return false;
         }
 
-        if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
+        // do not update passabilities after every object
+        if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
+            assert( 0 );
             return false;
         }
 
@@ -235,27 +293,12 @@ namespace Maps::Generator
         return true;
     }
 
-    bool entranceCheck( const fheroes2::Point tilePos )
-    {
-        for ( int i = -2; i < 3; i++ ) {
-            if ( !Maps::isValidAbsPoint( tilePos.x + i, tilePos.y + 1 ) || !Maps::isClearGround( world.GetTiles( tilePos.x + i, tilePos.y + 1 ) ) ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool objectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tiles & tile, ObjectGroup groupType, int32_t type )
+    bool actionObjectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tiles & tile, ObjectGroup groupType, int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
-            // do not update passabilities after every object
-            if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
-                return false;
-            }
-
-            Maps::addObjectToMap( mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( type ) );
+        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, static_cast<uint32_t>( type ) ) ) {
+            markObjectPlacement( data, objectInfo, tilePos, true );
             return true;
         }
         return false;
@@ -276,14 +319,16 @@ namespace Maps::Generator
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
 
-        if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos ) ) {
-            setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+        if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos, true ) ) {
+            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+            markObjectPlacement( data, basementInfo, tilePos, false );
 
             assert( Maps::getLastObjectUID() > 0 );
             const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
             Maps::setLastObjectUID( objectId );
-            setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
+            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+            markObjectPlacement( data, castleInfo, tilePos, true );
 
             const uint8_t color = Color::IndexToColor( region._colorIndex );
             // By default use random (default) army for the neutral race town/castle.
@@ -295,19 +340,21 @@ namespace Maps::Generator
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
                 return false;
             }
 
             Maps::setLastObjectUID( objectId );
 
-            if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
                 return false;
             }
 
             world.addCastle( tile.GetIndex(), Race::IndexToRace( RANDOM_CASTLE_INDEX ), color );
+
+            return true;
         }
-        return true;
+        return false;
     }
 
     bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
@@ -315,7 +362,7 @@ namespace Maps::Generator
         const auto & node = Rand::Get( region._nodes );
         Maps::Tiles & mineTile = world.GetTiles( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        return node.type == NodeType::OPEN && objectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
+        return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
     bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
@@ -323,7 +370,7 @@ namespace Maps::Generator
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
             return false;
         }
-        if ( config.regionSizeLimit < 100 ) {
+        if ( config.regionSizeLimit < 200 ) {
             return false;
         }
 
@@ -342,7 +389,7 @@ namespace Maps::Generator
         // TODO: Balanced set up only / Pyramid later
         const int playerCount = static_cast<int>( config.playerCount );
 
-        // Aiming for region size to be ~300 tiles in a 200-500 range
+        // Aiming for region size to be ~400 tiles in a 300-600 range
         // const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / static_cast<int>( config.regionSizeLimit );
 
@@ -399,6 +446,8 @@ namespace Maps::Generator
 
         // Step 4. We're ready to save the result; reset the current world first
         world.generateForEditor( width );
+        mapFormat.tiles.clear();
+        mapFormat.tiles.resize( width * height );
 
         for ( Region & region : mapRegions ) {
             if ( region._id == 0 )
@@ -443,7 +492,7 @@ namespace Maps::Generator
                 // return early if we can't place a starting player castle
                 return false;
             }
-            if ( region._nodes.size() > 300 ) {
+            if ( region._nodes.size() > 400 ) {
                 // place non-mandatory castles in bigger neutral regions
                 placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
