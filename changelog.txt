@@ -2,7 +2,7 @@ version 1.1.0 (22 May 2024)
 - properly connect Streams and Deltas while placing Streams
 - do not allow placing Ultimate Artifact on non-diggable terrain in Editor
 - use golden color to highlight cells that are sometimes possible to edit
-- set the last edited map file as a default for the new Standard game
+- set the last edited map file as default for the new Standard game
 - allow picking-up the Magic Book artifact from the Adventure Map
 - show a warning message for no modification of normal artifacts
 - show a warning message that streams and roads cannot be placed on water

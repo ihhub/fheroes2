@@ -45,7 +45,7 @@
           <li>properly connect Streams and Deltas while placing Streams</li>
           <li>do not allow placing Ultimate Artifact on non-diggable terrain in Editor</li>
           <li>use golden color to highlight cells that are sometimes possible to edit</li>
-          <li>set the last edited map file as a default for the new Standard game</li>
+          <li>set the last edited map file as default for the new Standard game</li>
           <li>allow picking-up the Magic Book artifact from the Adventure Map</li>
           <li>show a warning message for no modification of normal artifacts</li>
           <li>show a warning message that streams and roads cannot be placed on water</li>
