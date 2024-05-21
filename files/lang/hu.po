@@ -3995,15 +3995,6 @@ msgstr "%{object} szöveg megadása"
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Véletlenszerű Szent Varázstárgy sugarának megadása"
 
-msgid "Monsters cannot be placed on water."
-msgstr "Vízen nem helyezhetők el lények."
-
-msgid "Treasures cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kincsek."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Vízen nem helyezhetők el hősök."
-
 msgid "%{object} has no properties to change."
 msgstr "Nincs megváltoztatható tulajdonsága ennek: %{object}"
 
