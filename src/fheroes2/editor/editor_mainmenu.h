@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "game.h"
 #include "game_mode.h"
 
 namespace Editor

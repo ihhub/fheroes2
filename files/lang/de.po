@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 05:58+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2518,6 +2518,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Halblinge"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Halblinge"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Halblinge"
 
@@ -4052,6 +4060,12 @@ msgid "%{objects} cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
 msgid "%{objects} must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -4346,7 +4360,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detail-Modus"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr ""
 "Wird für die spezielle Bearbeitung von Monstern, Helden und Städten "
 "verwendet."
@@ -11071,11 +11086,11 @@ msgid "The %{name} enables the hero to cast spells."
 msgstr "Das %{name} ermöglicht Euch Zaubersprüche auszusprechen."
 
 msgid ""
-"A young man approaches you with words: \"Let me show you my newest invention "
-"for spreading knowledge!\" Upon entering his workshop, you see a large "
-"wooden and metal device with levers and cranks, partially covered with a "
-"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
-"Magic Book for free."
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
 msgstr ""
 
 msgid "Dummy 1"
