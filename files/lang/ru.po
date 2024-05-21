@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -56,6 +56,32 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВАЯ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+" СОХРА-\n"
+"НИТЬ\n"
+"ИГРУ"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+" ЗАГРУ-\n"
+"ЗИТЬ\n"
+"ИГРУ"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
@@ -434,8 +460,9 @@ msgstr "Невозможно переместить последний отря�
 msgid "Move the %{name}"
 msgstr "Переместить %{name}"
 
-msgid "Set Count"
-msgstr "Количество"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Стрелять в %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2476,6 +2503,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Жилища"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Жилища"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Жилища"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Жилища"
 
@@ -3434,17 +3469,17 @@ msgstr ""
 "\n"
 "Путь к файлу: "
 
-msgid "Click to save the current game."
-msgstr "Нажмите, чтобы сохранить текущую игру."
-
-msgid "Click to load a previously saved game."
-msgstr "Нажмите, чтобы загрузить сохранённую игру."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "Click to save the current game."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Click to load a previously saved game."
+msgstr "Нажмите, чтобы загрузить сохранённую игру."
 
 msgid "File to Save:"
 msgstr "Сохранить файл:"
@@ -3866,8 +3901,102 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
-msgid "Map filename"
-msgstr "Название файла карты"
+#, fuzzy
+msgid "Message Text:"
+msgstr "Информационная строка"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Информационная строка"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Выберите артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Камни нельзя размещать на воде."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Артефакты нельзя размещать на воде."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Объекты для океана можно размещать только на воде."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Объекты нельзя размещать за пределами карты."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Объекты для океана можно размещать только на воде."
 
 #, fuzzy
 msgid ""
@@ -3894,10 +4023,9 @@ msgstr ""
 "Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
 "данной карты будут потеряны.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "новая карта с нуля"
 
 msgid "New Map"
 msgstr "Новая карта"
@@ -3921,28 +4049,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Стрелять в %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случайный великий артефакт"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Объекты нельзя размещать за пределами карты."
+msgid "%{object} has no properties to change."
+msgstr ""
 
 #, fuzzy
-msgid "Action objects must be placed on clear tiles."
-msgstr "Объекты для океана можно размещать только на воде."
+msgid "This artifact"
+msgstr "с 1 артефактом."
 
-msgid "Monsters cannot be placed on water."
-msgstr "Существ нельзя размещать на воде."
+msgid "Roads"
+msgstr "Дороги"
 
-msgid "Treasures cannot be placed on water."
-msgstr "Сокровища нельзя размещать на воде."
-
-msgid "Heroes cannot be placed on water."
-msgstr "Героев нельзя размещать на воде."
+msgid "Streams"
+msgstr "Реки"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -3951,42 +4072,31 @@ msgstr "На карте можно разместить максимум %{count
 msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
 
-msgid "Artifacts cannot be placed on water."
-msgstr "Артефакты нельзя размещать на воде."
-
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакты нельзя размещать на воде."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Горы нельзя размещать на воде."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Файл сохранения повреждён."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Камни нельзя размещать на воде."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Деревья нельзя размещать на воде."
+#, fuzzy
+msgid "Unable to create a directory to save the map."
+msgstr "Используется для удаления объектов с карты."
 
-msgid "Ocean object must be placed on water."
-msgstr "Объекты для океана можно размещать только на воде."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Вы хотите перезаписать файл игры?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Объекты ландшафта нельзя размещать на воде."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Города нельзя размещать на воде."
-
-msgid "Mines cannot be placed on water."
-msgstr "Источники ресурсов нельзя размещать на воде."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Жилища нельзя размещать на воде."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Бонусы нельзя размещать на воде."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Интерактивные объекты нельзя размещать на воде."
+#, fuzzy
+msgid "Failed to save the map."
+msgstr "Сохранить файл:"
 
 msgid "Used to place %{object}."
 msgstr "Используется для размещения объектов типа %{object}."
@@ -4016,12 +4126,6 @@ msgid ""
 msgstr ""
 "Детали\n"
 "объекта"
-
-msgid "Roads"
-msgstr "Дороги"
-
-msgid "Streams"
-msgstr "Реки"
 
 msgid "Erase"
 msgstr "Ластик"
@@ -4056,11 +4160,11 @@ msgstr "Бонусы"
 msgid "Treasures"
 msgstr "Сокровища"
 
-msgid "Towns"
-msgstr "Города"
-
 msgid "Heroes"
 msgstr "Герои"
+
+msgid "Towns"
+msgstr "Города"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Объекты ландшафта"
@@ -4170,7 +4274,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Характеристики"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr ""
 "Используется для определения специальных параметров существ, героев и "
 "городов."
@@ -4229,10 +4334,6 @@ msgstr "Отменить"
 msgid "Undo your last action."
 msgstr "Отменить последнее действие."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Изменить название карты, описание и прочие параметры."
 
@@ -4282,6 +4383,88 @@ msgstr "Нет доступных карт!"
 msgid "Warning"
 msgstr "Внимание"
 
+#, fuzzy
+msgid "None."
+msgstr "Отсутствуют"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Пожалуйста, выберите другого героя."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Накопить %{count} золота."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Выйти из редактора карт."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Сложность\n"
+"карты"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Путь к файлу: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условия победы"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Условия поражения"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Описание"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Название файла карты"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Расширенное описание выбранной карты."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тип карты"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Сложность выбранной карты. Этот параметр задаётся автором карты в редакторе. "
+"Более сложные карты могут иметь больше (или более сильных) врагов, меньше "
+"ресурсов или другие особые условия, осложняющие игру человеку."
+
 msgid "Animation"
 msgstr "Анимация"
 
@@ -4293,6 +4476,67 @@ msgstr "Включить или выключить анимацию объект
 
 msgid "Toggle display of objects' passability."
 msgstr "Включить или выключить отображение проходимости объектов."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Путь к файлу: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Сохранить карту"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Нажмите, чтобы сохранить текущую игру."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -6009,6 +6253,10 @@ msgstr " повышает Вашу мораль до максимума"
 
 msgid " gives you maximum luck"
 msgstr " повышает Вашу удачу до максимума"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Невозможно переместить книгу заклинаний"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -8546,9 +8794,6 @@ msgstr[0] "Ветряная мельница"
 msgstr[1] "Ветряные мельницы"
 msgstr[2] "Ветряных мельниц"
 
-msgid "Artifact"
-msgstr "Артефакт"
-
 msgid "Mermaid"
 msgstr "Русалка"
 
@@ -10487,6 +10732,14 @@ msgstr "Волшебная Книга"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} позволяет использовать заклинания."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Болванка 1"
 
@@ -10712,6 +10965,16 @@ msgstr ""
 "Фея смотрит на Вас и отвечает: \"Вы думаете, это смешно? Хорошо. Забирайте "
 "его себе, а я улетаю.\""
 
+msgid "Masthead"
+msgstr "Наконечник Мачты"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name}, при сражениях на воде, увеличивает удачу и мораль войск героя на "
+"%{count}."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10722,16 +10985,6 @@ msgstr ""
 "использовал во время штормов. Затем он вручает Вам карту, на которой "
 "отмечено, где он спрятал её. После продолжительных поисков, Вы находите "
 "шляпу."
-
-msgid "Masthead"
-msgstr "Наконечник Мачты"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name}, при сражениях на воде, увеличивает удачу и мораль войск героя на "
-"%{count}."
 
 msgid "Sphere of Negation"
 msgstr "Сфера Отрицания"

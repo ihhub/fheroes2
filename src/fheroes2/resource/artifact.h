@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -251,7 +251,7 @@ public:
     }
 
     static int Rand( level_t );
-    static Artifact FromMP2IndexSprite( uint32_t );
+    static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:

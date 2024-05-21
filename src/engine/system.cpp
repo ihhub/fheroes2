@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -364,6 +364,19 @@ std::string System::GetBasename( std::string_view path )
     assert( pos != path.size() - 1 );
 
     return std::string{ path.substr( pos + 1 ) };
+}
+
+std::string System::truncateFileExtensionAndPath( std::string_view path )
+{
+    std::string res = GetBasename( path );
+
+    const size_t pos = res.rfind( '.' );
+
+    if ( pos != std::string::npos ) {
+        res.resize( pos );
+    }
+
+    return res;
 }
 
 bool System::IsFile( const std::string & path, bool writable )
