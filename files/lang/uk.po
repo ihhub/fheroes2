@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-20 15:03+0000\n"
-"PO-Revision-Date: 2024-04-02 09:25+0300\n"
+"PO-Revision-Date: 2024-05-21 18:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -4672,13 +4672,13 @@ msgid "Support us at"
 msgstr "Підтримайте нас нас "
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr "Місцева платформа донатів|https://www.patreon.com/fheroes2"
+msgstr "https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
 msgstr "Зв'яжіться з нами на"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr "локальна соціальна мережа|https://www.facebook.com/groups/fheroes2"
+msgstr "https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
 msgstr "Потрібна допомога з грою грою?"
@@ -9043,22 +9043,22 @@ msgid "Frozen Lake"
 msgstr "Замерзле озеро"
 
 msgid "randomRace|level 1 creatures"
-msgstr "випадкова раса|істоти 1-го рівня"
+msgstr "істоти 1-го рівня"
 
 msgid "randomRace|level 2 creatures"
-msgstr "випадкова раса|істоти 2-го рівня"
+msgstr "істоти 2-го рівня"
 
 msgid "randomRace|level 3 creatures"
-msgstr "випадкова раса|істоти 3-го рівня"
+msgstr "істоти 3-го рівня"
 
 msgid "randomRace|level 4 creatures"
-msgstr "випадкова раса|істоти 4-го рівня"
+msgstr "істоти 4-го рівня"
 
 msgid "randomRace|level 5 creatures"
-msgstr "випадкова раса|істоти 5-го рівня"
+msgstr "істоти 5-го рівня"
 
 msgid "randomRace|level 6 creatures"
-msgstr "випадкова раса|істоти 6-го рівня"
+msgstr "істоти 6-го рівня"
 
 msgid "Unknown Monsters"
 msgstr "Невідомі монстри"
