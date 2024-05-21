@@ -355,7 +355,7 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true ) ) {
+                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true, true ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();

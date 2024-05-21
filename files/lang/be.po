@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 00:27+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -420,8 +420,11 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr "Перамясціць: %{name}"
 
-msgid "Set Count"
+#, fuzzy
+msgid "Set %{monster} Count"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2346,6 +2349,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Хобіты"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Хобіты"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Хобіты"
 
@@ -3699,7 +3710,84 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
+msgid "Message Text:"
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+msgid "Message:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Назва абранай мапы."
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Назва абранай мапы."
+
+msgid "Event Message Text"
+msgstr ""
+
 msgid "%{objects} cannot be placed on water."
+msgstr ""
+
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
 msgstr ""
 
 msgid "%{objects} must be placed on water."
@@ -3729,8 +3817,7 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 #, fuzzy
@@ -3758,13 +3845,19 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr ""
-"Некалькі\n"
-"%{monster}"
-
 msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+msgid "This artifact"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3821,12 +3914,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -3970,7 +4057,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
 
 msgid "Adventure Objects Mode"
@@ -4023,9 +4110,6 @@ msgid "Undo"
 msgstr ""
 
 msgid "Undo your last action."
-msgstr ""
-
-msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -4194,9 +4278,6 @@ msgstr ""
 msgid "Answers:"
 msgstr ""
 
-msgid "Reward:"
-msgstr ""
-
 msgid "Answer:"
 msgstr ""
 
@@ -4226,27 +4307,6 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
-msgstr ""
-
-msgid "Artifact"
-msgstr ""
-
-msgid "No artifact will be given as a reward."
-msgstr ""
-
-msgid "Delete Artifact"
-msgstr ""
-
-msgid "Delete an artifact from the reward."
-msgstr ""
-
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Resources will be given as a reward."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -9687,6 +9747,14 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr ""
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr ""
 
@@ -9858,13 +9926,6 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
@@ -9873,6 +9934,13 @@ msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
+msgstr ""
 
 msgid "Sphere of Negation"
 msgstr ""

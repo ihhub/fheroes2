@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_mainmenu.h"
+
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -29,7 +31,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
-#include "editor.h"
 #include "editor_interface.h"
 #include "game.h"
 #include "game_hotkeys.h"
@@ -206,7 +207,9 @@ namespace Editor
             }
 
             if ( le.MousePressRight( newMap.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
+                // TODO: update this text once random map generator is ready.
+                //       The original text should be "Create a new map, either from scratch or using the random map generator."
+                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( loadMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
@@ -322,5 +325,22 @@ namespace Editor
         Game::setDisplayFadeIn();
 
         return Interface::EditorInterface::Get().startEdit( false );
+    }
+
+    fheroes2::GameMode menuNewFromScratchMap()
+    {
+        const Maps::mapsize_t mapSize = selectMapSize();
+        if ( mapSize != Maps::ZERO ) {
+            world.generateForEditor( mapSize );
+
+            // Reset object UID to keep track of newly added objects.
+            Maps::resetObjectUID();
+
+            fheroes2::fadeOutDisplay();
+            Game::setDisplayFadeIn();
+
+            return Interface::EditorInterface::Get().startEdit( true );
+        }
+        return fheroes2::GameMode::EDITOR_MAIN_MENU;
     }
 }

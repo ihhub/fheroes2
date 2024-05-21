@@ -39,7 +39,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
-#include "editor.h"
+#include "editor_mainmenu.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -191,7 +191,7 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
             result = Editor::menuMain();
             break;
         case fheroes2::GameMode::EDITOR_NEW_MAP:
-            result = Editor::menuNewMap();
+            result = Editor::menuNewFromScratchMap();
             break;
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();

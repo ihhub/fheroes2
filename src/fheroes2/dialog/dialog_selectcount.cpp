@@ -36,6 +36,7 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -48,6 +49,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -244,7 +246,8 @@ bool Dialog::SelectCount( std::string header, const uint32_t min, const uint32_t
     return result == Dialog::OK;
 }
 
-bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine )
+bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
+                          const bool englishOnlyVirtualKeyboard )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -366,7 +369,15 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
         }
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
-            fheroes2::openVirtualKeyboard( result );
+            // TODO: remove this logic once the Editor is ready to support other languages.
+            if ( englishOnlyVirtualKeyboard ) {
+                const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
+                fheroes2::openVirtualKeyboard( result );
+            }
+            else {
+                fheroes2::openVirtualKeyboard( result );
+            }
+
             if ( charLimit > 0 && result.size() > charLimit ) {
                 result.resize( charLimit );
             }
