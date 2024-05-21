@@ -29,11 +29,8 @@
 #include <utility>
 
 #include "artifact.h"
-#include "maps.h"
-#include "maps_tiles_helper.h"
 #include "monster.h"
 #include "resource.h"
-#include "world.h"
 
 namespace
 {

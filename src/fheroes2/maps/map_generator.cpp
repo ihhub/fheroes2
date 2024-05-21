@@ -37,6 +37,7 @@
 #include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
