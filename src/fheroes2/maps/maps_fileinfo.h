@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -43,6 +43,11 @@ enum class GameVersion : int
 
 namespace Maps
 {
+    namespace Map_Format
+    {
+        struct BaseMapFormat;
+    }
+
     struct FileInfo
     {
     public:
@@ -67,6 +72,8 @@ namespace Maps
         bool readMP2Map( std::string filePath, const bool isForEditor );
 
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
+
+        bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
         bool isAllowCountPlayers( int playerCount ) const;
 

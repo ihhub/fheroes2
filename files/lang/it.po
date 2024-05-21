@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 05:58+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2368,6 +2368,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Frombolieri"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Frombolieri"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Frombolieri"
 
@@ -3852,6 +3860,11 @@ msgstr ""
 msgid "%{objects} cannot be placed on water."
 msgstr "Opzioni Avventura"
 
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr ""
+
 #, fuzzy
 msgid "%{objects} must be placed on water."
 msgstr "Opzioni Avventura"
@@ -4139,7 +4152,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr "Sconfiggi tutti gli eroi e città nemiche."
 
 #, fuzzy
@@ -9980,11 +9993,11 @@ msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} contiene le tue magie."
 
 msgid ""
-"A young man approaches you with words: \"Let me show you my newest invention "
-"for spreading knowledge!\" Upon entering his workshop, you see a large "
-"wooden and metal device with levers and cranks, partially covered with a "
-"black stuff. \"Here it is, the Printing Press!\" he said, offering you the "
-"Magic Book for free."
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
 msgstr ""
 
 #, fuzzy

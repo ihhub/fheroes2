@@ -61,6 +61,7 @@
 #include "map_format_helper.h"
 #include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -258,7 +259,7 @@ namespace
 
                     auto findTownPart = [objectId]( const Maps::Map_Format::TileInfo & tileToSearch, const Maps::ObjectGroup group ) {
                         auto foundObjectIter = std::find_if( tileToSearch.objects.begin(), tileToSearch.objects.end(),
-                                                             [objectId, group]( const Maps::Map_Format::ObjectInfo & mapObject ) {
+                                                             [objectId, group]( const Maps::Map_Format::TileObjectInfo & mapObject ) {
                                                                  return mapObject.group == group && mapObject.id == objectId;
                                                              } );
 
@@ -296,7 +297,7 @@ namespace
                     auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
                     const bool isRoadAtBottom
                         = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
-                                        []( const Maps::Map_Format::ObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
+                                        []( const Maps::Map_Format::TileObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
                           != bottomTileObjects.end();
                     if ( isRoadAtBottom ) {
                         // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
@@ -430,7 +431,23 @@ namespace
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
         switch ( groupType ) {
-        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS: {
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
+
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                errorMessage = _( "%{objects} cannot be placed on water." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
+                return false;
+            }
+
+            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
+                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
+                errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
+                return false;
+            }
+
+            break;
+        }
         case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
         case Maps::ObjectGroup::ADVENTURE_MINES:
         case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
@@ -655,12 +672,16 @@ namespace Interface
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
 
-                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
+                    assert( Maps::isValidAbsIndex( indices.x ) );
+                    const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1
+                                                  && MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() ) );
+
+                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
                 }
                 else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
                     assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
-                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
+                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor, false );
                 }
             }
         }
@@ -692,7 +713,7 @@ namespace Interface
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
-        fheroes2::ScreenPaletteRestorer restorer;
+        const fheroes2::ScreenPaletteRestorer restorer;
 
         const Settings & conf = Settings::Get();
 
@@ -1170,7 +1191,7 @@ namespace Interface
                         monsterCount = monsterMetadata->second.metadata[0];
                     }
 
-                    Monster tempMonster( static_cast<int>( object.index ) + 1 );
+                    const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
                     std::string str = _( "Set %{monster} Count" );
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
@@ -1529,6 +1550,25 @@ namespace Interface
             // TODO: Place owner flag according to the color state.
             action.commit();
         }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return;
+            }
+
+            // For River Deltas we update the nearby Streams to properly connect to them.
+            const Maps::ObjectInfo & objectInfo = Maps::getObjectInfo( groupType, objectType );
+            std::for_each( objectInfo.groundLevelParts.begin(), objectInfo.groundLevelParts.end(), [&tile]( const Maps::LayeredObjectPartInfo & info ) {
+                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 && info.icnIndex != 0 && info.icnIndex != 13 ) {
+                    return;
+                }
+
+                Maps::updateStreamsToDeltaConnection( tile, info.icnIndex == 13 );
+            } );
+
+            action.commit();
+        }
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
@@ -1607,6 +1647,15 @@ namespace Interface
 
         _loadedFileName = System::truncateFileExtensionAndPath( filePath );
 
+        // Set the loaded map as a default map for the new Standard Game.
+        Maps::FileInfo fi;
+        if ( fi.loadResurrectionMap( _mapFormat, filePath ) ) {
+            Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+        }
+        else {
+            assert( 0 );
+        }
+
         return true;
     }
 
@@ -1651,6 +1700,15 @@ namespace Interface
         _loadedFileName = std::move( fileName );
 
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
+            // Set the saved map as a default map for the new Standard Game.
+            Maps::FileInfo fi;
+            if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
+                Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+            }
+            else {
+                assert( 0 );
+            }
+
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols with '/' symbols.
             StringReplace( fullPath, "\\", "/" );

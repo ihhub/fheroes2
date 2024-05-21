@@ -167,6 +167,9 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
+    // Update the existing streams to connect them to the river delta.
+    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection );
+
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
     // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
