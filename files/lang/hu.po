@@ -3863,10 +3863,10 @@ msgid "Cancel event after first visit"
 msgstr "Esemény törlése az első látogatás után"
 
 msgid "Player colors allowed to get event:"
-msgstr "Játékosok, akiknek megengedett az esemény"
+msgstr "Játékosok, akiknek megengedett az esemény:"
 
 msgid "Computer colors allowed to get event:"
-msgstr "Gépi játékosok, akiknek megengedett az esemény"
+msgstr "Gépi játékosok, akiknek megengedett az esemény:"
 
 msgid "Reward:"
 msgstr "Jutalom:"
