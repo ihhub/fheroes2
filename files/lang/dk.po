@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-04 12:08+0000\n"
-"PO-Revision-Date: 2024-05-20 16:21+0200\n"
+"PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -53,6 +53,27 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "AFSLUT"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYT\n"
+"KORT"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GEM\n"
+"KORT"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"INDLÆS\n"
+"KORT"
 
 msgid "CANCEL"
 msgstr "AFBRYD"
@@ -432,8 +453,8 @@ msgstr "Sidste trop kan ikke flyttes"
 msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
-msgid "Set Count"
-msgstr "Bestem antal"
+msgid "Set %{monster} Count"
+msgstr "Indstil antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2493,6 +2514,12 @@ msgstr "Bosted 4"
 msgid "Upg. Dwelling 4"
 msgstr "Opg. bosted 4"
 
+msgid "Dwelling 5"
+msgstr "Bosted 5"
+
+msgid "Upg. Dwelling 5"
+msgstr "Opg. Bosted 5"
+
 msgid "Dwelling 6"
 msgstr "Bosted 6"
 
@@ -2558,7 +2585,7 @@ msgstr "Specialbygningen giver en specifik bonus til den valgte borgtype."
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr "hordebygningen øger tilvæksten for niveau 1 væsener med 8 per uge."
+msgstr "Hordebygningen øger tilvæksten for niveau 1 væsener med 8 per uge."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -3470,17 +3497,17 @@ msgstr ""
 "\n"
 "Placering: "
 
-msgid "Click to save the current game."
-msgstr "Klik for at gemme igangværende spil."
-
-msgid "Click to load a previously saved game."
-msgstr "Klik for at indlæse et tidligere gemt spil."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "Click to save the current game."
+msgstr "Klik for at gemme igangværende spil."
+
+msgid "Click to load a previously saved game."
+msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "File to Save:"
 msgstr "Fil som skal gemmes:"
@@ -3863,7 +3890,7 @@ msgstr "Tilfældigt borgnavn"
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standardbygninger"
 
 msgid "Default Army"
@@ -3900,8 +3927,94 @@ msgstr "Brug standard forsvarshær."
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 
-msgid "Map filename"
-msgstr "Kort-filnavn"
+msgid "Message Text:"
+msgstr "Tekstbesked:"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+msgid "Message:"
+msgstr "Besked:"
+
+msgid "Click to save the Event properties."
+msgstr "Klik for at gemme begivenhedens egenskaber."
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr "Slet artefakt:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+msgid "Click here to change the event message."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "%{objects} cannot be placed on water."
+msgstr "%{objects} kan ikke placeres på vand."
+
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr ""
+"Det Ultimative Artefakt kan kun placeres i terræn, hvor det er muligt at "
+"grave."
+
+msgid "%{objects} must be placed on water."
+msgstr "%{objects} må kun placeres på vand."
+
+msgid "Objects cannot be placed outside the map."
+msgstr "Objekter kan ikke placeres udenfor kortet."
+
+msgid "Action objects must be placed on clear tiles."
+msgstr "Handlingsobjekter skal placeres på rene felter."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -3927,10 +4040,8 @@ msgstr ""
 "Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
 "af det nuværende kort, vil gå tabt.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
+msgid "Create a new map from scratch."
+msgstr "Opret et nyt kort fra bunden."
 
 msgid "New Map"
 msgstr "Nyt kort"
@@ -3953,26 +4064,20 @@ msgstr "Forlad korteditoren."
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
 
-msgid "Set %{monster} Count"
-msgstr "Indstil antal %{monster}"
-
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
 
-msgid "Objects cannot be placed outside the map."
-msgstr "Objekter kan ikke placeres udenfor kortet."
-
-msgid "Action objects must be placed on clear tiles."
-msgstr "Hav-objekter må kun placeres på ryddede felter."
+msgid "%{object} has no properties to change."
+msgstr ""
 
 msgid "Monsters cannot be placed on water."
 msgstr "Væsener kan ikke placeres på vand."
 
-msgid "Treasures cannot be placed on water."
-msgstr "Skatte kan ikke placeres på vand."
+msgid "Roads"
+msgstr "Veje"
 
-msgid "Heroes cannot be placed on water."
-msgstr "Helte kan ikke placeres på vand."
+msgid "Streams"
+msgstr "Å-tilstand"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -3987,35 +4092,23 @@ msgstr "Artefakter kan ikke placeres på vand."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
 
-msgid "Mountains cannot be placed on water."
-msgstr "Bjerge kan ikke placeres på vand."
+msgid "The map is corrupted."
+msgstr "Kortet er beskadiget."
 
-msgid "Rocks cannot be placed on water."
-msgstr "Sten kan ikke placeres på vand."
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
-msgid "Trees cannot be placed on water."
-msgstr "Træer kan ikke placeres på vand."
+msgid "Unable to create a directory to save the map."
+msgstr "Kan ikke oprette en mappe til at gemme kortet i."
 
-msgid "Ocean object must be placed on water."
-msgstr "Hav-objekter må kun placeres på vand."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Er du sikker på, at du vil overskrive det eksisterende kort?"
 
-msgid "Landscape objects cannot be placed on water."
-msgstr "Landskabsobjekter kan ikke placeres på vand."
+msgid "Map saved to: "
+msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr "Byer kan ikke placeres på vand."
-
-msgid "Mines cannot be placed on water."
-msgstr "Miner kan ikke placeres på vand."
-
-msgid "Dwellings cannot be placed on water."
-msgstr "Bosteder kan ikke placeres på vand."
-
-msgid "Power-ups cannot be placed on water."
-msgstr "Power-ups kan ikke placeres på vand."
-
-msgid "Adventure objects cannot be placed on water."
-msgstr "Eventyr-objekter kan ikke placeres på vand."
+msgid "Failed to save the map."
+msgstr "Kunne ikke gemme kortet."
 
 msgid "Used to place %{object}."
 msgstr "Bruges til at placere %{object}."
@@ -4043,12 +4136,6 @@ msgid ""
 msgstr ""
 "Celle-\n"
 "detaljer"
-
-msgid "Roads"
-msgstr "Veje"
-
-msgid "Streams"
-msgstr "Å-tilstand"
 
 msgid "Erase"
 msgstr "Viskelæder"
@@ -4083,11 +4170,11 @@ msgstr "Power Ups"
 msgid "Treasures"
 msgstr "Skatte"
 
-msgid "Towns"
-msgstr "Byer"
-
 msgid "Heroes"
 msgstr "Helte"
+
+msgid "Towns"
+msgstr "Byer"
 
 msgid "editorErasure|Landscape objects"
 msgstr "Landskabsobjekter"
@@ -4203,8 +4290,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detalje-tilstand"
 
-msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Bruges til specialredigering af væsener, helte og byer."
+msgid "Used for special editing of action objects."
+msgstr "Bruges til speciel redigering af handlingsobjekter."
 
 msgid "Adventure Objects Mode"
 msgstr "Eventyr objekt-tilstand"
@@ -4258,11 +4345,6 @@ msgstr "Fortryd"
 
 msgid "Undo your last action."
 msgstr "Fortryd din sidste handling."
-
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Opret et nyt kort, enten fra bunden eller ved hjælp af den automatiske "
-"kortgenerator."
 
 msgid "Edit map title, description, and other general information."
 msgstr "Rediger kortets navn, beskrivelse eller andre informationer."
@@ -4324,6 +4406,63 @@ msgstr "Slå animation af objekterne til eller fra."
 
 msgid "Toggle display of objects' passability."
 msgstr "Slå visning af objekters fremkommelighed til eller fra."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Beskrivelse: "
+
+msgid "Save Map:"
+msgstr "Gem kort:"
+
+msgid "Click to save the current map."
+msgstr "Klik for at gemme det aktuelle kort."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+msgid "Click to save the Sphinx properties."
+msgstr "Klik for at gemme Sfinksens egenskaber."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Let"
@@ -6045,6 +6184,10 @@ msgstr " giver dig maksimal moral"
 
 msgid " gives you maximum luck"
 msgstr " giver dig maksimalt held"
+
+# "You can't have multiple spell books" will have ambiguous meanings. It could mean that you can't have more than you already have. 
+msgid "You cannot have multiple spell books."
+msgstr "Du kan kun have én Magibog."
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
@@ -8590,9 +8733,6 @@ msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
 
-msgid "Artifact"
-msgstr "Artefakt"
-
 msgid "Mermaid"
 msgstr "Havfrue"
 
@@ -10540,6 +10680,14 @@ msgstr "Magibog"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} gør det muligt for helten at kaste besværgelser."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Pladsholder 1"
 
@@ -10773,6 +10921,15 @@ msgstr ""
 "dig og svarer: \"Tror du, det her er sjovt? Fint. Du kan bære det. Jeg "
 "foretrækker alligevel at flyve.\""
 
+msgid "Masthead"
+msgstr "Masthovedet"
+
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} øger held og moral for heltens tropper med %{count} point, i søkamp."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10783,15 +10940,6 @@ msgstr ""
 "han, i sin ungdom, brugte til at samle sit mandskab i vanskeligheder. Han "
 "rækker dig så et falmet kort, der viser, hvor han gemte det. Efter megen "
 "udforskning finder du det gemt under en nærliggende dok."
-
-msgid "Masthead"
-msgstr "Masthovedet"
-
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} øger held og moral for heltens tropper med %{count} point, i søkamp."
 
 msgid "Sphere of Negation"
 msgstr "Negationskuglen"
