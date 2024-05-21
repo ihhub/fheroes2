@@ -5194,13 +5194,13 @@ msgid ""
 "clicking on the "
 msgstr ""
 "Mindig megváltoztathatod a játék nyelvét, felbontását, illetve beállításait, "
-"ha megnyomod a(z) "
+"ha megnyomod az "
 
 msgid "door"
-msgstr "ajtó"
+msgstr "ajtót"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr " gombot a főmenü baloldalán, illetve a(z) "
+msgstr " gombot a főmenü baloldalán, illetve a "
 
 msgid " button from the "
 msgstr " gomb megnyomásával a "
