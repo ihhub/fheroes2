@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"POT-Creation-Date: 2024-05-22 03:46+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -52,28 +52,25 @@ msgstr "INFÓ"
 msgid "QUIT"
 msgstr "KILÉPÉS"
 
-#, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "ÚJ\n"
-"JÁTÉK"
+"TÉRKÉP"
 
-#, fuzzy
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
-"JÁTÉK\n"
+"TÉRKÉP\n"
 "MENTÉS"
 
-#, fuzzy
 msgid ""
 "LOAD\n"
 "MAP"
 msgstr ""
-"JÁTÉK\n"
+"TÉRKÉP\n"
 "BETÖLTÉS"
 
 msgid "CANCEL"
@@ -231,9 +228,8 @@ msgstr "VÁR"
 msgid "TOWN"
 msgstr "VÁROS"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "ÚJRA"
+msgstr "KORLÁTOZ"
 
 msgid ""
 "D\n"
@@ -462,7 +458,6 @@ msgstr "A sereg utolsó egységét nem lehet áthelyezni"
 msgid "Move the %{name}"
 msgstr "%{name} ide lép"
 
-#, fuzzy
 msgid "Set %{monster} Count"
 msgstr "%{monster} létszám beállítása"
 
@@ -2439,51 +2434,47 @@ msgstr "Laboratórium"
 msgid "Shrine"
 msgstr "Szentély"
 
-#, fuzzy
 msgid "Special"
-msgstr "Semmi érdekes"
+msgstr "Különleges"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Sereg épület"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 2"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 3"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely 4"
 
-#, fuzzy
+msgid "Dwelling 5"
+msgstr "Toborzóhely 5"
+
+msgid "Upg. Dwelling 5"
+msgstr "Fejl. toborzóhely 5"
+
 msgid "Dwelling 6"
-msgstr "Toborzóhelyek"
+msgstr "Toborzóhely 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Toborzóhelyek"
+msgstr "Fejl. toborzóhely"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x fejl. toborzóhely"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2542,12 +2533,12 @@ msgstr ""
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
 msgstr ""
+"A különleges építmény egy különleges bónuszt ad a kiválasztott vártípushoz."
 
-#, fuzzy
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr "A Kút hetente ennyivel növeli az összes lény szaporulatát: %{count}."
+msgstr "A Sereg épület 8-ccal növeli az 1. szintű lények szaporulatát."
 
 msgid "Thieves' Guild"
 msgstr "Tolvajcéh"
@@ -3829,161 +3820,149 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Véletlenszerű vár"
+msgstr "Véletlenszerű vár név"
 
-#, fuzzy
 msgid "Allow Castle build"
-msgstr "Fellegvár"
+msgstr "Vár építhetőség"
 
-#, fuzzy
 msgid "Default Buildings"
-msgstr "Alapértelmezett cselekvés"
+msgstr "Alapértelmezett épületek"
 
-#, fuzzy
 msgid "Default Army"
-msgstr "Alapértelmezett cselekvés"
+msgstr "Alapértelmezett sereg"
 
-#, fuzzy
 msgid "Castle Army"
-msgstr "Vár"
+msgstr "Várvédők"
 
-#, fuzzy
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
-"Kattints a hős nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
+"Kattints a vár nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
 "áll."
 
-#, fuzzy
 msgid "Enter Castle name"
-msgstr "Hős nevének megadása"
+msgstr "Vár nevének megadása"
 
 msgid "Allow to build a castle in this town."
-msgstr ""
+msgstr "Lehetővé teszi vár építését a városban."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
+"Alapértelmezett épületek használata. Korábbi egyéni beállítások törlődnek!"
 
 msgid "Toggle building construction restriction mode."
-msgstr ""
+msgstr "Épület építés korlátozásának kapcsolója."
 
 msgid "Restrict Building Construction"
-msgstr ""
+msgstr "Épület építésének korlátozása"
 
 msgid "Use default defenders army."
-msgstr ""
+msgstr "Alapértelmezett védősereg használata."
 
-#, fuzzy
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
-"A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
+"Várvédők egyéni beállítása. Jobb kattintásra az egységek alaphelyzetbe "
 "állnak."
 
-#, fuzzy
 msgid "Message Text:"
-msgstr "Üzenetsáv"
+msgstr "Üzenet szövege:"
 
 msgid "Cancel event after first visit"
-msgstr ""
+msgstr "Esemény törlése az első látogatás után"
 
 msgid "Player colors allowed to get event:"
-msgstr ""
+msgstr "Játékosok, akiknek megengedett az esemény:"
 
 msgid "Computer colors allowed to get event:"
-msgstr ""
+msgstr "Gépi játékosok, akiknek megengedett az esemény:"
 
 msgid "Reward:"
-msgstr ""
+msgstr "Jutalom:"
 
 msgid "Allow %{color} human player to get event"
-msgstr ""
+msgstr "Esemény engedélyzése %{color} játékos számára"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a human."
 msgstr ""
+"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény %{color} emberi "
+"játékos számára ki fog váltódni."
 
 msgid "Allow %{color} computer player to get event"
-msgstr ""
+msgstr "Esemény engedélyzése %{color} gépi játékos számára"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a computer."
 msgstr ""
+"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény %{color} gépi "
+"játékos számára ki fog váltódni."
 
-#, fuzzy
 msgid "Message:"
-msgstr "Üzenetsáv"
+msgstr "Üzenet:"
 
-#, fuzzy
 msgid "Click to save the Event properties."
-msgstr "Kattints az aktuális játékállás mentéséhez."
+msgstr "Kattints az esemény beállítások mentéséhez."
 
 msgid "Artifact"
 msgstr "Varázstárgy"
 
 msgid "No artifact will be given as a reward."
-msgstr ""
+msgstr "Nincs varázstárgy jutalom."
 
-#, fuzzy
 msgid "Delete Artifact"
-msgstr "Varázstárgy kiválasztása:"
+msgstr "Varázstárgy törlése"
 
 msgid "Delete an artifact from the reward."
-msgstr ""
+msgstr "Varázstárgy törlése a jutalmak közül."
 
 msgid "No resources will be given as a reward."
-msgstr ""
+msgstr "Nincs erőforrás jutalom."
 
-#, fuzzy
 msgid "Resources"
-msgstr "Erőforrás"
+msgstr "Erőforrások"
 
 msgid "Resources will be given as a reward."
-msgstr ""
+msgstr "A jutalom erőforrás lesz."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény csak egyszer "
+"váltódik ki. Ha nincs bejelölve, akkor mindahányszor a megadott játékos "
+"rálép területre."
 
-#, fuzzy
 msgid "Click here to change the event message."
-msgstr "Kattints az aktuális játékállás mentéséhez."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
 
 msgid "Event Message Text"
-msgstr ""
+msgstr "Esemény üzenet szöveg"
 
-#, fuzzy
 msgid "%{objects} cannot be placed on water."
-msgstr "Vízen nem helyezhetők el kövek."
+msgstr "Vízen nem helyezhetők el %{objects}."
 
-#, fuzzy
 msgid ""
 "The Ultimate Artifact can only be placed on terrain where digging is "
 "possible."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
+msgstr "Szent Varázstárgy csak ásásra alkalmas terepen helyezhető el."
 
-#, fuzzy
 msgid "%{objects} must be placed on water."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
+msgstr "%{objects} elhelyezése vízre kell történjen."
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
-#, fuzzy
 msgid "Action objects must be placed on clear tiles."
-msgstr "Tengeri objektumot vízre kell elhelyezni."
+msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
 msgstr ""
-"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
-"változtatásai el fognak veszni.)"
+"Biztos hogy vissza akarsz lépni a főmenübe? Minden változtatás el fog veszni."
 
 msgid "Editor"
 msgstr "Szerkesztő"
@@ -4002,9 +3981,8 @@ msgstr ""
 "Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
 "változtatásai el fognak veszni.)"
 
-#, fuzzy
 msgid "Create a new map from scratch."
-msgstr "teljesen új térkép"
+msgstr "Teljesen új térkép létrehozása."
 
 msgid "New Map"
 msgstr "Új térkép"
@@ -4025,18 +4003,16 @@ msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
 msgid "Input %{object} text"
-msgstr ""
+msgstr "%{object} szöveg megadása"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
-msgstr "Véletlenszerű Szent Varázstárgy"
+msgstr "Véletlenszerű Szent Varázstárgy sugarának megadása"
 
 msgid "%{object} has no properties to change."
-msgstr ""
+msgstr "Nincs megváltoztatható tulajdonsága ennek: %{object}"
 
-#, fuzzy
 msgid "This artifact"
-msgstr "egy varázstárggyal."
+msgstr "Ez a varázstárgy"
 
 msgid "Roads"
 msgstr "Utak"
@@ -4051,31 +4027,26 @@ msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színbő
 msgid "Failed to update player information."
 msgstr "A játékos adatainak frissítése nem sikerült."
 
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Vízen nem helyezhetők el varázstárgyak."
+msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen."
 
-#, fuzzy
 msgid "The map is corrupted."
-msgstr "A mentés fájl sérült."
+msgstr "A térkép fájl sérült."
 
 msgid "Unable to locate data directory to save the map."
-msgstr ""
+msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
 
-#, fuzzy
 msgid "Unable to create a directory to save the map."
-msgstr "Ezzel törölheted a tárgyakat a térképről."
+msgstr "Nem hozható létre könyvtár a térkép mentéséhez."
 
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
-msgstr "Biztosan felülírod a mentést ezzel a névvel?"
+msgstr "Biztosan felülírod a meglévő térképet?"
 
 msgid "Map saved to: "
-msgstr ""
+msgstr "Térkép mentve ide: "
 
-#, fuzzy
 msgid "Failed to save the map."
-msgstr "Fájl mentése:"
+msgstr "Térkép mentése sikertelen."
 
 msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
@@ -4360,88 +4331,70 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#, fuzzy
 msgid "None."
-msgstr "Nincs"
+msgstr "Nincs."
 
-#, fuzzy
 msgid "One side defeats another."
-msgstr "Kérlek válassz másik hőst."
+msgstr "Egyik oldal legyőzi a másikat."
 
-#, fuzzy
 msgid "Accumulate gold."
-msgstr "%{count} arany összegyűjtése."
+msgstr "Arany összegyűjtése."
 
-#, fuzzy
 msgid "Run out of time."
-msgstr "Kilépés a térképszerkesztőből."
+msgstr "Kifutás az időből."
 
-#, fuzzy
 msgid "Map Difficulty"
-msgstr ""
-"Térkép\n"
-"nehézség"
+msgstr "Térkép nehézség"
 
-#, fuzzy
 msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Hely: "
+msgstr "Térkép leírása"
 
-#, fuzzy
 msgid "Special Victory Condition"
-msgstr "Győzelmi feltétel"
+msgstr "Speciális győzelmi feltétel"
 
-#, fuzzy
 msgid "Special Loss Condition"
-msgstr "Vesztési feltétel"
+msgstr "Speciális vesztési feltétel"
 
 msgid "Change Map Name"
-msgstr ""
+msgstr "Térkép nevének megváltoztatása"
 
-#, fuzzy
 msgid "Change Map Description"
-msgstr "Kiválasztott leírás"
+msgstr "Térképleírás megváltoztatása"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
+"A megadott térképleírás hosszabb, mint a maximálisan elfogadott 5 sor. A "
+"térképleírás lerövidítésre kerül, hogy beleférjen a rendelkezésre álló "
+"mezőbe."
 
-#, fuzzy
 msgid "Click to accept the changes made."
-msgstr "Kattints az osztály megváltoztatásához."
+msgstr "Kattints a változtatások elfogadásához."
 
-#, fuzzy
 msgid "Click to change your map name."
-msgstr "Kattints az osztály megváltoztatásához."
+msgstr "Kattints a térképed nevének megváltoztatásához."
 
-#, fuzzy
 msgid "Map Name"
-msgstr "Térképfájl neve"
+msgstr "Térkép neve"
 
-#, fuzzy
 msgid "Click to change the description of the current map."
-msgstr "A kiválasztott térkép leírása."
+msgstr "Kattints az aktuális térkép leírásának megváltoztatásához."
 
 msgid "Indicates the player types in the scenario. Click to change."
-msgstr ""
+msgstr "Jelzi a küldetés játékosainak típusait. Kattints a változtatáshoz."
 
-#, fuzzy
 msgid "Player Type"
-msgstr "Térkép típusa"
+msgstr "Játékos típusa"
 
-#, fuzzy
 msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
-"Az aktuálisan kiválasztott térkép nehézségi fokozata. A térkép nehézségét a "
-"pálya szerkesztője határozta meg. A nehezebb pályák több és erősebb "
-"ellenfeleket, kevesebb erőforrást, vagy más különleges nehezítő feltételeket "
-"foglalhatnak magukban."
+"Kattints a térkép nehézségi fokozatának beállításához. Nehezebb térképek "
+"több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
+"nehezítő feltételt tartalmazhatnak az emberi játékos számára."
 
 msgid "Animation"
 msgstr "Animáció"
@@ -4460,8 +4413,10 @@ msgid ""
 "\n"
 "Size: "
 msgstr ""
+"\n"
+"\n"
+"Méret: "
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -4469,52 +4424,49 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Hely: "
+"Leírás: "
 
-#, fuzzy
 msgid "Save Map:"
-msgstr "Térkép mentése"
+msgstr "Térkép mentése:"
 
-#, fuzzy
 msgid "Click to save the current map."
-msgstr "Kattints az aktuális játékállás mentéséhez."
+msgstr "Kattints az aktuális térkép mentéséhez."
 
 msgid "Riddle:"
-msgstr ""
+msgstr "Találós kérdés:"
 
 msgid "Answers:"
-msgstr ""
+msgstr "Válaszok:"
 
 msgid "Answer:"
-msgstr ""
+msgstr "Válasz:"
 
 msgid "Answer"
-msgstr ""
+msgstr "Válasz"
 
 msgid "This answer exists in the list."
-msgstr ""
+msgstr "A válasz megtalálható a listában."
 
-#, fuzzy
 msgid "Click to save the Sphinx properties."
-msgstr "Kattints az aktuális játékállás mentéséhez."
+msgstr "Kattints a Szfinx beállításainak mentéséhez."
 
 msgid "Add Answer"
-msgstr ""
+msgstr "Válasz hozzáadása"
 
 msgid "Add an additional answer for the question."
-msgstr ""
+msgstr "További válasz hozzáadása a kérdéshez."
 
 msgid "Edit Answer"
-msgstr ""
+msgstr "Válasz szerkesztése"
 
 msgid "Edit an existing answer for the question."
-msgstr ""
+msgstr "Meglévő válasz szerkesztése."
 
 msgid "Delete Answer"
-msgstr ""
+msgstr "Válasz törlése"
 
 msgid "Delete an existing answer for the question."
-msgstr ""
+msgstr "Meglévő válasz törlése."
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
@@ -4911,9 +4863,8 @@ msgstr "Legutolsó cselekvés visszavonása (UNDO)"
 msgid "hotkey|redo last action"
 msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
-#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "új térkép menü"
+msgstr "főmenü megnyitása"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
@@ -5255,13 +5206,15 @@ msgstr "Kérlek, ne felejtsd el"
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
-msgstr "Mindig megváltoztathatod a játék felbontását, ha megnyomod a(z) "
+msgstr ""
+"Mindig megváltoztathatod a játék nyelvét, felbontását, illetve beállításait, "
+"ha megnyomod az "
 
 msgid "door"
-msgstr "ajtó"
+msgstr "ajtót"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr " gombot a főmenü baloldalán, illetve a(z) "
+msgstr " gombot a főmenü baloldalán, illetve a "
 
 msgid " button from the "
 msgstr " gomb megnyomásával a "
@@ -5295,9 +5248,8 @@ msgstr "Dicsőségtábla"
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
 
-#, fuzzy
 msgid "Create new or modify existing maps."
-msgstr "Létező térkép betöltése"
+msgstr "Új térkép létrehozása vagy meglévő módosítása."
 
 msgid "Change language, resolution and settings of the game."
 msgstr ""
@@ -6231,9 +6183,8 @@ msgstr " maximális morált ad"
 msgid " gives you maximum luck"
 msgstr " maximális szerencsét ad"
 
-#, fuzzy
 msgid "You cannot have multiple spell books."
-msgstr "A varázskönyv nem mozgatható"
+msgstr "Nem birtokolhatsz több varázskönyvet."
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -8991,22 +8942,22 @@ msgid "Frozen Lake"
 msgstr "Befagyott tó"
 
 msgid "randomRace|level 1 creatures"
-msgstr ""
+msgstr "1. szintű lények"
 
 msgid "randomRace|level 2 creatures"
-msgstr ""
+msgstr "2. szintű lények"
 
 msgid "randomRace|level 3 creatures"
-msgstr ""
+msgstr "3. szintű lények"
 
 msgid "randomRace|level 4 creatures"
-msgstr ""
+msgstr "4. szintű lények"
 
 msgid "randomRace|level 5 creatures"
-msgstr ""
+msgstr "5. szintű lények"
 
 msgid "randomRace|level 6 creatures"
-msgstr ""
+msgstr "6. szintű lények"
 
 msgid "Unknown Monsters"
 msgstr "Ismeretlen lények"
