@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 12:08+0000\n"
+"POT-Creation-Date: 2024-05-22 01:43+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4070,8 +4070,9 @@ msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
 msgid "%{object} has no properties to change."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
-msgstr "Væsener kan ikke placeres på vand."
+#, fuzzy
+msgid "This artifact"
+msgstr "med 1 artefakt."
 
 msgid "Roads"
 msgstr "Veje"
@@ -4085,9 +4086,6 @@ msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 
 msgid "Failed to update player information."
 msgstr "Opdatering af spilleroplysninger mislykkedes."
-
-msgid "Artifacts cannot be placed on water."
-msgstr "Artefakter kan ikke placeres på vand."
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
@@ -11817,3 +11815,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Monsters cannot be placed on water."
+#~ msgstr "Væsener kan ikke placeres på vand."
+
+#~ msgid "Artifacts cannot be placed on water."
+#~ msgstr "Artefakter kan ikke placeres på vand."
