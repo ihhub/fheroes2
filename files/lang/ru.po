@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
-"PO-Revision-Date: 2024-03-15 21:35+0300\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 msgid ""
 "BATTLE\n"
@@ -57,31 +57,28 @@ msgstr ""
 msgid "QUIT"
 msgstr "ВЫЙТИ"
 
-#, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "НОВАЯ\n"
-"ИГРА"
+"КАРТА"
 
-#, fuzzy
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 " СОХРА-\n"
 "НИТЬ\n"
-"ИГРУ"
+"КАРТУ"
 
-#, fuzzy
 msgid ""
 "LOAD\n"
 "MAP"
 msgstr ""
 " ЗАГРУ-\n"
 "ЗИТЬ\n"
-"ИГРУ"
+"КАРТУ"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
@@ -237,9 +234,8 @@ msgstr "ЗАМОК"
 msgid "TOWN"
 msgstr "ГОРОД"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "СНАЧАЛА"
+msgstr "ЗАПРЕТ"
 
 msgid ""
 "D\n"
@@ -278,6 +274,13 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"П\n"
+"А\n"
+"Т\n"
+"Р\n"
+"У\n"
+"Л\n"
+"Ь"
 
 msgid ""
 "C\n"
@@ -430,17 +433,19 @@ msgstr "Существа %{count} разных фракций -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Нежить в армии -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Стандартные действия"
+msgstr ""
+"Отряд\n"
+"по умол-\n"
+"чанию"
 
 msgid "View %{name}"
 msgstr "Просмотреть %{name}"
 
 msgid "Move the %{name} "
-msgstr "Переместить %{name}"
+msgstr "Переместить %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "%{name}: перемеcтить или разделить (правой кнопкой)"
@@ -460,9 +465,8 @@ msgstr "Невозможно переместить последний отря�
 msgid "Move the %{name}"
 msgstr "Переместить %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Стрелять в %{monster}"
+msgstr "%{monster}: введите количество"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2467,51 +2471,47 @@ msgstr "Лаборатория"
 msgid "Shrine"
 msgstr "Алтарь"
 
-#, fuzzy
 msgid "Special"
-msgstr "Ничего особенного"
+msgstr "Особое"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Здание орды"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Жилища"
+msgstr "Жилище 1 ур."
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Жилища"
+msgstr "Жилище 2 ур."
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Жилища"
+msgstr "Ул. жилище 2 ур."
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Жилища"
+msgstr "Жилище 3 ур."
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Жилища"
+msgstr "Ул. жилище 3 ур."
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Жилища"
+msgstr "Жилище 4 ур."
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Жилища"
+msgstr "Ул. жилище 4 ур."
 
-#, fuzzy
+msgid "Dwelling 5"
+msgstr "Жилище 5 ур."
+
+msgid "Upg. Dwelling 5"
+msgstr "Ул. жилище 5 ур."
+
 msgid "Dwelling 6"
-msgstr "Жилища"
+msgstr "Жилище 6 ур."
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Жилища"
+msgstr "Ул. жилище 6 ур."
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x Ул. жилище 6 ур."
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2564,12 +2564,12 @@ msgstr "Груда черепов увеличивает прирост Скел
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
 msgstr ""
+"Особое здание даёт преимущества в соответствии с выбранным типом замка."
 
-#, fuzzy
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr "Колодец увеличивает прирост всех существ в замке на %{count} в неделю."
+msgstr "Здание орды увеличивает прирост существ 1 уровня на 8 в неделю."
 
 msgid "Thieves' Guild"
 msgstr "Гильдия воров"
@@ -3848,155 +3848,146 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Случайный замок"
+msgstr "Название случайного замка"
 
-#, fuzzy
 msgid "Allow Castle build"
-msgstr "Небесный замок"
+msgstr "Разрешить замок"
 
-#, fuzzy
 msgid "Default Buildings"
-msgstr "Стандартные действия"
+msgstr "Здания по умолч."
 
-#, fuzzy
 msgid "Default Army"
-msgstr "Стандартные действия"
+msgstr "Армия по умолч."
 
-#, fuzzy
 msgid "Castle Army"
-msgstr "Замок"
+msgstr "Армия замка"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+msgstr "Нажмите, чтобы изменить название замка. Правый клик - сбросить."
 
-#, fuzzy
 msgid "Enter Castle name"
-msgstr "Потерять героя по имени %{name}."
+msgstr "Введите название замка"
 
 msgid "Allow to build a castle in this town."
-msgstr ""
+msgstr "Разрешить строительство замка в данном городе."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr ""
+msgstr "Использовать здания по умолчанию. Постройки будут сброшены!"
 
 msgid "Toggle building construction restriction mode."
-msgstr ""
+msgstr "Переключить режим запрета постройки зданий."
 
 msgid "Restrict Building Construction"
-msgstr ""
+msgstr "Запретить постройку зданий"
 
 msgid "Use default defenders army."
-msgstr ""
+msgstr "Использовать армию защитников по умолчанию."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+msgstr "Установить армию замка. Правый клик - сброс отряда."
 
-#, fuzzy
 msgid "Message Text:"
-msgstr "Информационная строка"
+msgstr "Текст сообщения:"
 
 msgid "Cancel event after first visit"
-msgstr ""
+msgstr "Отменить после посещения"
 
 msgid "Player colors allowed to get event:"
-msgstr ""
+msgstr "Событие произойдёт для игроков-людей цвета:"
 
 msgid "Computer colors allowed to get event:"
-msgstr ""
+msgstr "Событие произойдёт для компьютерных игроков цвета:"
 
 msgid "Reward:"
-msgstr ""
+msgstr "Вознаграждение:"
 
 msgid "Allow %{color} human player to get event"
-msgstr ""
+msgstr "Позволить событие для игрока-человека цвета: %{color}"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a human."
 msgstr ""
+"Если этот флажок установлен, то это событие произойдёт для игрока-человека, "
+"если его цвет %{color}."
 
 msgid "Allow %{color} computer player to get event"
-msgstr ""
+msgstr "Позволить событие для компьютерного игрока цвета: %{color}"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a computer."
 msgstr ""
+"Если этот флажок установлен, то это событие произойдёт для компьютерного "
+"игрока, если его цвет %{color}."
 
-#, fuzzy
 msgid "Message:"
-msgstr "Информационная строка"
+msgstr "Сообщение:"
 
-#, fuzzy
 msgid "Click to save the Event properties."
-msgstr "Нажмите, чтобы сохранить текущую игру."
+msgstr "Нажмите, чтобы сохранить параметры события."
 
 msgid "Artifact"
 msgstr "Артефакт"
 
 msgid "No artifact will be given as a reward."
-msgstr ""
+msgstr "В вознаграждении не будет выдаваться артефакт."
 
-#, fuzzy
 msgid "Delete Artifact"
-msgstr "Выберите артефакт:"
+msgstr "Удалить артефакт"
 
 msgid "Delete an artifact from the reward."
-msgstr ""
+msgstr "Удалить артефакт из вознаграждения."
 
 msgid "No resources will be given as a reward."
-msgstr ""
+msgstr "В вознаграждении не будут выдаваться ресурсы."
 
-#, fuzzy
 msgid "Resources"
-msgstr "Ресурс"
+msgstr "Ресурсы"
 
 msgid "Resources will be given as a reward."
-msgstr ""
+msgstr "В вознаграждении будут предоставлены ресурсы."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+"Если этот флажок установлен, событие произойдёт только один раз. Если флажок "
+"не установлен, событие будет происходить каждый раз, когда один из указанных "
+"игроков пересечёт клетку события."
 
-#, fuzzy
 msgid "Click here to change the event message."
-msgstr "Нажмите, чтобы сохранить текущую игру."
+msgstr "Нажмите, чтобы изменить сообщение при событии."
 
 msgid "Event Message Text"
-msgstr ""
+msgstr "Сообщение при событии"
 
-#, fuzzy
 msgid "%{objects} cannot be placed on water."
-msgstr "Камни нельзя размещать на воде."
+msgstr "%{objects} нельзя размещать на воде."
 
-#, fuzzy
 msgid ""
 "The Ultimate Artifact can only be placed on terrain where digging is "
 "possible."
-msgstr "Артефакты нельзя размещать на воде."
+msgstr ""
+"Великий артефакт может быть размещён только на местности, где можно копать."
 
-#, fuzzy
 msgid "%{objects} must be placed on water."
-msgstr "Объекты для океана можно размещать только на воде."
+msgstr "%{objects} можно размещать только на воде."
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
 
-#, fuzzy
 msgid "Action objects must be placed on clear tiles."
-msgstr "Объекты для океана можно размещать только на воде."
+msgstr "Активные объекты можно размещать только в свободных клетках карты."
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
 msgstr ""
-"Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
-"данной карты будут потеряны.)"
+"Вы действительно хотите вернуться в главное меню игры? Все несохранённые "
+"изменения будут потеряны."
 
 msgid "Editor"
 msgstr "Редактор"
@@ -4015,9 +4006,8 @@ msgstr ""
 "Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
 "данной карты будут потеряны.)"
 
-#, fuzzy
 msgid "Create a new map from scratch."
-msgstr "новая карта с нуля"
+msgstr "Создать новую карту с нуля."
 
 msgid "New Map"
 msgstr "Новая карта"
@@ -4038,18 +4028,16 @@ msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
 msgid "Input %{object} text"
-msgstr ""
+msgstr "%{object}: введите текст"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
-msgstr "Случайный великий артефакт"
+msgstr "Установить радиус появления великого артефакта"
 
 msgid "%{object} has no properties to change."
-msgstr ""
+msgstr "%{object}: нет свойств, которые можно было бы изменить."
 
-#, fuzzy
 msgid "This artifact"
-msgstr "с 1 артефактом."
+msgstr "Этот артефакт"
 
 msgid "Roads"
 msgstr "Дороги"
@@ -4064,31 +4052,26 @@ msgstr "На карте можно разместить максимум %{count
 msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
 
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Артефакты нельзя размещать на воде."
+msgstr "На одной карте можно разместить только один великий артефакт."
 
-#, fuzzy
 msgid "The map is corrupted."
-msgstr "Файл сохранения повреждён."
+msgstr "Карта повреждена."
 
 msgid "Unable to locate data directory to save the map."
-msgstr ""
+msgstr "Не удалось найти папку для сохранения карты."
 
-#, fuzzy
 msgid "Unable to create a directory to save the map."
-msgstr "Используется для удаления объектов с карты."
+msgstr "Невозможно создать папку для сохранения карты."
 
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
-msgstr "Вы хотите перезаписать файл игры?"
+msgstr "Вы действительно хотите перезаписать существующую карту?"
 
 msgid "Map saved to: "
-msgstr ""
+msgstr "Карта сохранена в: "
 
-#, fuzzy
 msgid "Failed to save the map."
-msgstr "Сохранить файл:"
+msgstr "Не удалось сохранить карту."
 
 msgid "Used to place %{object}."
 msgstr "Используется для размещения объектов типа %{object}."
@@ -4266,11 +4249,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Характеристики"
 
-#, fuzzy
 msgid "Used for special editing of action objects."
-msgstr ""
-"Используется для определения специальных параметров существ, героев и "
-"городов."
+msgstr "Используется для изменения специальных параметров активных объектов."
 
 msgid "Adventure Objects Mode"
 msgstr "Режим размещения интерактивных объектов"
@@ -4375,87 +4355,70 @@ msgstr "Нет доступных карт!"
 msgid "Warning"
 msgstr "Внимание"
 
-#, fuzzy
 msgid "None."
-msgstr "Отсутствуют"
+msgstr "Нет."
 
-#, fuzzy
 msgid "One side defeats another."
-msgstr "Пожалуйста, выберите другого героя."
+msgstr "Одна сторона побеждает другую."
 
-#, fuzzy
 msgid "Accumulate gold."
-msgstr "Накопить %{count} золота."
+msgstr "Накопить золото."
 
-#, fuzzy
 msgid "Run out of time."
-msgstr "Выйти из редактора карт."
+msgstr "Не успеть вовремя."
 
-#, fuzzy
 msgid "Map Difficulty"
-msgstr ""
-"Сложность\n"
-"карты"
+msgstr "Сложность карты"
 
-#, fuzzy
 msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Путь к файлу: "
+msgstr "Описание карты"
 
-#, fuzzy
 msgid "Special Victory Condition"
-msgstr "Условия победы"
+msgstr "Особое условие победы"
 
-#, fuzzy
 msgid "Special Loss Condition"
-msgstr "Условия поражения"
+msgstr "Особое условие поражения"
 
 msgid "Change Map Name"
-msgstr ""
+msgstr "Изменить название карты"
 
-#, fuzzy
 msgid "Change Map Description"
-msgstr "Описание"
+msgstr "Изменить описание карты"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
+"Введённое описание карты превышает максимально допустимый размер в 5 строк. "
+"Оно будет сокращено до размера текстового поля описания карты."
 
-#, fuzzy
 msgid "Click to accept the changes made."
-msgstr "Нажмите, чтобы показать следующий город."
+msgstr "Нажмите, чтобы применить внесённые изменения."
 
-#, fuzzy
 msgid "Click to change your map name."
-msgstr "Нажмите, чтобы показать следующий город."
+msgstr "Нажмите, чтобы изменить название Вашей карты."
 
-#, fuzzy
 msgid "Map Name"
-msgstr "Название файла карты"
+msgstr "Название карты"
 
-#, fuzzy
 msgid "Click to change the description of the current map."
-msgstr "Расширенное описание выбранной карты."
+msgstr "Нажмите, чтобы изменить описание текущей карты."
 
 msgid "Indicates the player types in the scenario. Click to change."
-msgstr ""
+msgstr "Обозначает типы игроков в сценарии. Нажмите, чтобы изменить."
 
-#, fuzzy
 msgid "Player Type"
-msgstr "Тип карты"
+msgstr "Тип игрока"
 
-#, fuzzy
 msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
-"Сложность выбранной карты. Этот параметр задаётся автором карты в редакторе. "
-"Более сложные карты могут иметь больше (или более сильных) врагов, меньше "
-"ресурсов или другие особые условия, осложняющие игру человеку."
+"Нажмите, чтобы установить сложность карты. В более сложных карах может быть "
+"больше врагов, либо враги могут быть более сильными. Такие карты могут "
+"содержать меньше ресурсов или иметь прочие условия, усложняющие жизнь игроку-"
+"человеку."
 
 msgid "Animation"
 msgstr "Анимация"
@@ -4474,8 +4437,10 @@ msgid ""
 "\n"
 "Size: "
 msgstr ""
+"\n"
+"\n"
+"Размер: "
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -4483,52 +4448,49 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Путь к файлу: "
+"Описание: "
 
-#, fuzzy
 msgid "Save Map:"
-msgstr "Сохранить карту"
+msgstr "Сохранить карту:"
 
-#, fuzzy
 msgid "Click to save the current map."
-msgstr "Нажмите, чтобы сохранить текущую игру."
+msgstr "Нажмите, чтобы сохранить текущую карту."
 
 msgid "Riddle:"
-msgstr ""
+msgstr "Загадка:"
 
 msgid "Answers:"
-msgstr ""
+msgstr "Ответы:"
 
 msgid "Answer:"
-msgstr ""
+msgstr "Ответ:"
 
 msgid "Answer"
-msgstr ""
+msgstr "Ответ"
 
 msgid "This answer exists in the list."
-msgstr ""
+msgstr "Такой ответ уже есть в списке."
 
-#, fuzzy
 msgid "Click to save the Sphinx properties."
-msgstr "Нажмите, чтобы сохранить текущую игру."
+msgstr "Нажмите, чтобы сохранить параметры загадки сфинкса."
 
 msgid "Add Answer"
-msgstr ""
+msgstr "Добавить ответ"
 
 msgid "Add an additional answer for the question."
-msgstr ""
+msgstr "Добавить дополнительные ответ на вопрос загадки."
 
 msgid "Edit Answer"
-msgstr ""
+msgstr "Изменить ответ"
 
 msgid "Edit an existing answer for the question."
-msgstr ""
+msgstr "Изменить имеющийся ответ на вопрос."
 
 msgid "Delete Answer"
-msgstr ""
+msgstr "Удалить ответ"
 
 msgid "Delete an existing answer for the question."
-msgstr ""
+msgstr "Удалить имеющийся ответ на вопрос."
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -4927,9 +4889,8 @@ msgstr "отменить последнее действие"
 msgid "hotkey|redo last action"
 msgstr "повторить последнее действие"
 
-#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "меню новой карты"
+msgstr "открыть главное меню"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
@@ -5219,11 +5180,12 @@ msgstr "' языке, но текущий язык игры - "
 msgid "Hot Seat"
 msgstr "За одним компьютером"
 
-#, fuzzy
 msgid ""
 "Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr "Позволяет нескольким игрокам играть за одним компьютером."
+msgstr ""
+"Сыграть в игру в режиме \"Горячий стул\", когда от 2 до 6 игроков играют на "
+"одном устройстве, сменяя друг друга, когда наступает очередь их хода."
 
 msgid "A single player game playing out a single map."
 msgstr "Одиночная игра на одиночной карте."
@@ -5307,9 +5269,8 @@ msgstr "Рейтинги"
 msgid "View the high scores screen."
 msgstr "Просмотр лучших результатов."
 
-#, fuzzy
 msgid "Create new or modify existing maps."
-msgstr "Загрузить существующую карту."
+msgstr "Создать новую или изменить текущую карту."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Сменить язык, разрешение и настройки игры."
@@ -5981,22 +5942,27 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
+"Значение\n"
+"по умол-\n"
+"чанию"
 
-#, fuzzy
 msgid "Set %{skill} Skill"
-msgstr "Атака"
+msgstr "%{skill}: введите уровень"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
-msgstr ""
+msgstr "%{skill}: ввести базовое значение. Правый клик - сбросить."
 
 msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "skill"
-msgstr "Защита"
+msgstr ""
+"Навык\n"
+"по\n"
+"умол-\n"
+"чанию"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -6246,9 +6212,8 @@ msgstr " повышает Вашу мораль до максимума"
 msgid " gives you maximum luck"
 msgstr " повышает Вашу удачу до максимума"
 
-#, fuzzy
 msgid "You cannot have multiple spell books."
-msgstr "Невозможно переместить книгу заклинаний"
+msgstr "У Вас не может быть несколько волшебных книг."
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -7734,57 +7699,50 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
 
-#, fuzzy
 msgid "Random hero (Level %{level})"
-msgstr "%{name} (Уровень %{level})"
+msgstr "Случайный герой (Уровень %{level})"
 
-#, fuzzy
 msgid "Random %{race} hero (Level %{level})"
-msgstr "%{race} %{name} (уровень %{level})"
+msgstr "%{race}, случайный герой (Уровень %{level})"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Экран героя"
+msgstr "Фракция героя:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
 
 msgid "Set custom Experience value. Current value is default."
-msgstr ""
+msgstr "Установить величину опыта. Сейчас - по умолчанию."
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
+msgstr "Изменить величину опыта. Правый клик - сбросить."
 
-#, fuzzy
 msgid "Set Experience value"
-msgstr "Опыт"
+msgstr "Введите величину опыта"
 
 msgid "View Experience Info"
 msgstr "Опыт"
 
 msgid "Set custom Spell Points value. Current value is default."
-msgstr ""
+msgstr "Установить величину очков магии. Сейчас - по умолчанию."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
-msgstr ""
+msgstr "Изменить величину очков магии. Правый клик - сбросить."
 
-#, fuzzy
 msgid "Set Spell Points value"
-msgstr "Очки магии"
+msgstr "Введите величину очков магии"
 
 msgid "View Spell Points Info"
 msgstr "Очки магии"
 
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Введите радиус патрулирования в клетках"
 
-#, fuzzy
 msgid "Enter hero's name"
-msgstr "Потерять героя по имени %{name}."
+msgstr "Введите имя героя"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Нажмите, чтобы показать следующий город."
+msgstr "Нажмите, чтобы изменить фракцию."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7825,26 +7783,26 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Сомкнутый строй"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
-msgstr ""
+msgstr "Выбрать артефакты героя. Правый клик - сбросить."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
-msgstr ""
+msgstr "Выбрать вторичные навыки героя. Правый клик - сбросить."
 
 msgid "Set hero's Army. Right-click to reset unit."
-msgstr ""
+msgstr "Выбрать существо в армию героя. Правый клик - сбросить."
 
 msgid "Set hero's portrait. Right-click to reset to default."
-msgstr ""
+msgstr "Выбрать портрет героя. Правый клик - сбросить."
 
 msgid "Click to change hero's name. Right-click to reset to default."
-msgstr ""
+msgstr "Нажмите для изменения имени героя. Правый клик - сбросить."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
+"Герой патрулирует область радиусом в %{tiles} клеток. Нажмите для отключения."
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Нажмите сюда чтобы выбрать этот цвет."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
 
 msgid "Blood Morale"
 msgstr "В Бой!"
@@ -9027,22 +8985,22 @@ msgid "Frozen Lake"
 msgstr "Замёрзшее озеро"
 
 msgid "randomRace|level 1 creatures"
-msgstr ""
+msgstr "существа 1 уровня"
 
 msgid "randomRace|level 2 creatures"
-msgstr ""
+msgstr "существа 2 уровня"
 
 msgid "randomRace|level 3 creatures"
-msgstr ""
+msgstr "существа 3 уровня"
 
 msgid "randomRace|level 4 creatures"
-msgstr ""
+msgstr "существа 4 уровня"
 
 msgid "randomRace|level 5 creatures"
-msgstr ""
+msgstr "существа 5 уровня"
 
 msgid "randomRace|level 6 creatures"
-msgstr ""
+msgstr "существа 6 уровня"
 
 msgid "Unknown Monsters"
 msgstr "Неизвестные существа"
@@ -10731,6 +10689,11 @@ msgid ""
 "here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
 "say a word, he hands you a Magic Book."
 msgstr ""
+"К Вам подходит юноша: \"Господин, позвольте показать Вам моё изобретение для "
+"распространения знаний!\" Вы следуете за ним в мастерскую и сразу замечаете "
+"большой аппарат с рычагами и рукоятками. \"Вот оно!\", нетерпеливо говорит "
+"он, \"Печатный станок.\" Вы не успеваете ничего сказать, как он вручвет Вам "
+"волшебную книгу."
 
 msgid "Dummy 1"
 msgstr "Болванка 1"

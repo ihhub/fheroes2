@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2333,6 +2333,14 @@ msgstr "Gynybos įgūdis"
 
 msgid "Upg. Dwelling 4"
 msgstr ""
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Gynybos įgūdis"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Gynybos įgūdis"
 
 #, fuzzy
 msgid "Dwelling 6"

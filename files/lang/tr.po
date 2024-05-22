@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 14:38+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -2295,6 +2295,14 @@ msgstr "Büyü hedefini seç"
 
 msgid "Upg. Dwelling 4"
 msgstr ""
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Büyü hedefini seç"
 
 #, fuzzy
 msgid "Dwelling 6"
