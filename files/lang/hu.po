@@ -5732,7 +5732,7 @@ msgid "View a summary of your Kingdom."
 msgstr "Királyságod áttekintésének megjelenítése."
 
 msgid "Cast an adventure spell."
-msgstr "Kalandozó varázslat elsütése."
+msgstr "Kalandozó varázslat idézése."
 
 msgid "End Turn"
 msgstr "A kör befejezése"
