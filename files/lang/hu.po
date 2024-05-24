@@ -10666,7 +10666,7 @@ msgid ""
 msgstr ""
 "Egy fiatalember közeledik hozzád: \"Nagyuram, engedd meg, hogy megmutassam "
 "legújabb találmányomat, mely a tudást terjeszti!\" Követed az ifjút a "
-"műhelyébe és felfigyelsz egy karokkal és fogamtyúkkal ellátott készüléket. "
+"műhelyébe és felfigyelsz egy karokkal és fogantyúkkal ellátott készüléket. "
 "\"Ez az itt!\" - mondja izgatottan - \"A nyomdagép.\" Majd mielőtt "
 "megszólalhatnál, kezedbe nyom egy Varázskönyvet."
 
