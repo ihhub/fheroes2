@@ -132,7 +132,7 @@ void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
 {
     Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
     const Heroes * currentHero = GetFocusHeroes();
-    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
+    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
         return;
     }
     SetFocus( selectedHero, false );
