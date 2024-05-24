@@ -4914,6 +4914,15 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::OBJNDSRT: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 131 ) {
+                    _icnVsSprite[id].resize( 132 );
+                    h2d::readImage( "missing_sphinx_part.image", _icnVsSprite[id][131] );
+                }
+
+                return true;
+            }
             default:
                 break;
             }
