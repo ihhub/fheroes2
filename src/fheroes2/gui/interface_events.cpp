@@ -57,6 +57,7 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "mus.h"
+#include "players.h"
 #include "puzzle.h"
 #include "route.h"
 #include "screen.h"
