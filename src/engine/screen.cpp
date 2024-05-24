@@ -852,15 +852,16 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
+            int currentIndex = static_cast<int>( getCurrentDisplayIndex() );
+            std::vector<fheroes2::ResolutionInfo> filteredResolutions = [=]() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
                 if ( displayCount > 0 ) {
-                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+                    const int displayModeCount = SDL_GetNumDisplayModes( currentIndex );
                     for ( int i = 0; i < displayModeCount; ++i ) {
                         SDL_DisplayMode videoMode;
-                        const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                        const int returnCode = SDL_GetDisplayMode( currentIndex, i, &videoMode );
                         if ( returnCode < 0 ) {
                             ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
                         }
@@ -939,6 +940,51 @@ namespace
             }
         }
 
+        uint8_t getCurrentDisplayIndex() const override
+        {
+            if ( uint8_t maxDis = getMaximumDisplays(); _displayIndex >= maxDis ) {
+                return maxDis - 1;
+            }
+            return _displayIndex;
+        }
+
+        void setDisplayIndex( const uint8_t display ) override
+        {
+            if ( display == _displayIndex )
+                return;
+
+            SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+
+            if ( display < getMaximumDisplays() ) {
+                _displayIndex = display;
+            }
+            else {
+                _displayIndex = 0;
+            }
+
+            clear();
+        }
+
+        uint8_t getMaximumDisplays() const override
+        {
+            if ( !isAllocated() )
+                // If engine is not allocated returning highest uint8_t number
+                return 255;
+
+            const int displayCount = SDL_GetNumVideoDisplays();
+            if ( displayCount > 0 ) {
+                return static_cast<uint8_t>( displayCount );
+            }
+            ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
+            // There should be one display at least.
+            return 1;
+        }
+
+        const char * getDisplayName( const uint8_t display ) override
+        {
+            return SDL_GetDisplayName( display );
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -946,6 +992,7 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _driverIndex( -1 )
+            , _displayIndex( 0 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -1046,9 +1093,7 @@ namespace
 
             const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
             assert( !resolutions.empty() );
-            if ( !resolutions.empty() ) {
-                resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
-            }
+            resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
 
 #if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
@@ -1058,6 +1103,7 @@ namespace
 #endif
 
             uint32_t flags = SDL_WINDOW_SHOWN;
+
             if ( isFullScreen ) {
 #if defined( _WIN32 )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -1072,8 +1118,8 @@ namespace
             }
 
             flags |= SDL_WINDOW_RESIZABLE;
-
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ),
+                                        SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ), resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1156,12 +1202,19 @@ namespace
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
+        bool isAllocated() const override
+        {
+            // We should check for at least one of the variables destroyed in Clear()
+            return _window != nullptr;
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
+        uint8_t _displayIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1334,17 +1387,19 @@ namespace fheroes2
     void Display::setResolution( ResolutionInfo info )
     {
         if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
-             && info.screenHeight == _screenSize.height ) // nothing to resize
+             && info.screenHeight == _screenSize.height && _engine->isAllocated() ) {
+            // Nothing to resize
             return;
+        }
 
         const bool isFullScreen = _engine->isFullScreen();
 
-        // deallocate engine resources
+        // Deallocate engine resources
         _engine->clear();
 
         _prevRoi = {};
 
-        // allocate engine resources
+        // Allocate engine resources
         if ( !_engine->allocate( info, isFullScreen ) ) {
             clear();
         }
