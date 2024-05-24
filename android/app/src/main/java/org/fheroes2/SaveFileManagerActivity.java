@@ -292,7 +292,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         {
             final List<String> saveFileNames = new ArrayList<>();
 
-            final File[] saveFilesList = saveFileDir.listFiles( ( dir, name ) -> {
+            final File[] saveFileList = saveFileDir.listFiles( ( dir, name ) -> {
                 if ( !dir.equals( saveFileDir ) ) {
                     return false;
                 }
@@ -308,8 +308,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 return false;
             } );
 
-            if ( saveFilesList != null ) {
-                for ( final File saveFile : saveFilesList ) {
+            if ( saveFileList != null ) {
+                for ( final File saveFile : saveFileList ) {
                     if ( saveFile.isFile() ) {
                         saveFileNames.add( saveFile.getName() );
                     }
