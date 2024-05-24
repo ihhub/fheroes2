@@ -4224,9 +4224,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Részletes mód"
 
-#, fuzzy
 msgid "Used for special editing of action objects."
-msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
+msgstr "Cselekvés objektumok speciális szerkesztéséhez használatos."
 
 msgid "Adventure Objects Mode"
 msgstr "Kaland objektum mód"
@@ -10665,6 +10664,11 @@ msgid ""
 "here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
 "say a word, he hands you a Magic Book."
 msgstr ""
+"Egy fiatalember közeledik hozzád: \"Nagyuram, engedd meg, hogy megmutassam "
+"legújabb találmányomat, mely a tudást terjeszti!\" Követed az ifjút a "
+"műhelyébe és felfigyelsz egy karokkal és fogamtyúkkal ellátott készüléket. "
+"\"Ez az itt!\" - mondja izgatottan - \"A nyomdagép.\" Majd mielőtt "
+"megszólalhatnál, kezedbe nyom egy Varázskönyvet."
 
 msgid "Dummy 1"
 msgstr "Próba 1"
