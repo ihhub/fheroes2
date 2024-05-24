@@ -945,7 +945,8 @@ namespace fheroes2
 
         if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
             // Pointer is lower than the last text line.
-            return textSize;
+            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+            return textSize - 1;
         }
 
         size_t cursorPosition = 0;
@@ -980,7 +981,8 @@ namespace fheroes2
             }
         }
 
-        return textSize;
+        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+        return textSize - 1;
     }
 
     bool isFontAvailable( const std::string & text, const FontType fontType )

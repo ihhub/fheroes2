@@ -57,6 +57,7 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "mus.h"
+#include "players.h"
 #include "puzzle.h"
 #include "route.h"
 #include "screen.h"
@@ -131,8 +132,7 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
 {
     Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
-    const Heroes * currentHero = GetFocusHeroes();
-    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
+    if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
         return;
     }
     SetFocus( selectedHero, false );
