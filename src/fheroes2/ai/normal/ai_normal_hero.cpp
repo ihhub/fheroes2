@@ -311,8 +311,16 @@ namespace
             return doesTileContainValuableItems( tile );
 
         case MP2::OBJ_ARTIFACT: {
-            if ( hero.IsFullBagArtifacts() )
+            if ( hero.IsFullBagArtifacts() ) {
                 return false;
+            }
+
+            const Artifact art = getArtifactFromTile( tile );
+            assert( art.isValid() );
+
+            if ( art.GetID() == Artifact::MAGIC_BOOK && hero.HaveSpellBook() ) {
+                return false;
+            }
 
             const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
@@ -325,7 +333,6 @@ namespace
                 return hero.HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
             }
 
-            // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
             if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
