@@ -80,7 +80,9 @@ final class FileManagement
     }
 
     /**
-     * @return true if at least one file with the allowed extension was found and imported, otherwise returns false
+     * The directory structure will not be preserved when importing. All matching files will be imported directly into the target directory.
+     *
+     * @return true if at least one matching file was found and imported, otherwise returns false
      */
     static boolean importFilesFromZip( final File fileDir, final List<String> allowedFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         throws IOException
