@@ -901,10 +901,8 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            bool isNeedButtonsRedraw = false;
-
             for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                if ( i != _selectedInstrument && le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
+                if ( i != _selectedInstrument && ( _instrumentButtonsRect[i] & le.GetMousePressLeft() ) ) {
                     _selectedInstrument = static_cast<uint8_t>( i );
 
                     // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
@@ -919,16 +917,12 @@ namespace Interface
 
                     setRedraw();
 
-                    isNeedButtonsRedraw = true;
+                    // Redraw all instrument buttons.
+                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
+                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
+                    }
 
                     break;
-                }
-            }
-
-            if ( isNeedButtonsRedraw ) {
-                // Redraw all instrument buttons.
-                for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                    _instrumentButtons[i].drawOnState( i == _selectedInstrument );
                 }
             }
 
@@ -937,13 +931,15 @@ namespace Interface
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
-                    if ( _brushSizeButtons[i].drawOnPress() ) {
-                        _selectedBrushSize = static_cast<uint8_t>( i );
+                if ( i != _selectedBrushSize && le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
+                    _selectedBrushSize = static_cast<uint8_t>( i );
+
+                    // Redraw all brush size buttons.
+                    for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+                        _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
                     }
-                }
-                else if ( i != _selectedBrushSize ) {
-                    _brushSizeButtons[i].drawOnRelease();
+
+                    break;
                 }
             }
 
