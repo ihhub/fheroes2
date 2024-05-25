@@ -359,11 +359,12 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
         buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
         buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
+        // In this dialog we input text so we need to use hotkeys that cannot be use in text typing.
+        if ( ( !isMultiLine && le.KeyPress( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             return !result.empty();
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             result.clear();
             return false;
         }
@@ -384,11 +385,16 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             charInsertPos = result.size();
             redraw = true;
         }
-        else if ( le.KeyPress() ) {
-            if ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) {
-                charInsertPos = InsertKeySym( result, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                redraw = true;
+        else if ( le.KeyPress() && ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+            // Handel new line input for multi-line texts only.
+            if ( isMultiLine && le.KeyValue() == fheroes2::Key::KEY_ENTER ) {
+                result.insert( charInsertPos, 1, '\n' );
+                ++charInsertPos;
             }
+            else {
+                charInsertPos = InsertKeySym( result, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+            }
+            redraw = true;
         }
         else if ( le.MouseClickLeft( textInputArea ) ) {
             charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.GetMouseCursor(), textInputArea );
