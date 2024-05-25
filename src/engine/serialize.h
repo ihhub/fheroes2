@@ -192,7 +192,7 @@ public:
     StreamBase & operator>>( std::map<Type1, Type2> & v )
     {
         const uint32_t size = get32();
-        if ( sizeg() < size * 2 ) {
+        if ( sizeg() / 2 < size ) {
             // The stream has less bytes than the number of elements in this container.
             setfail( true );
             v = {};
