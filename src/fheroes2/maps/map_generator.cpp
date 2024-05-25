@@ -49,15 +49,16 @@
 #include "world.h"
 #include "world_object_uid.h"
 
-namespace Maps::Generator
+namespace
 {
     // ObjectInfo ObjctGroup based indicies do not match old objects
-    const int NEUTRAL_COLOR = 6;
-    const int RANDOM_CASTLE_INDEX = 12;
-    const std::vector<int> playerStartingTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND };
-    const std::vector<int> neutralTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND, Ground::BEACH, Ground::SWAMP, Ground::DESERT };
+    const int neutralCOLOR = 6;
+    const int randomCastleIndex = 12;
+    const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
+    const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
+                                              Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
-    std::vector<fheroes2::Point> directionOffsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
+    const std::vector<fheroes2::Point> directionOffsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
 
     enum class NodeType
     {
@@ -79,7 +80,9 @@ namespace Maps::Generator
         Node() = default;
         explicit Node( int index_ )
             : index( index_ )
-        {}
+        {
+            // Do nothing
+        }
     };
 
     class NodeCache
@@ -96,10 +99,10 @@ namespace Maps::Generator
         {
             outOfBounds.type = NodeType::BORDER;
 
-            for ( int y = 0; y < height; ++y ) {
-                const int rowIndex = y * width;
-                for ( int x = 0; x < width; ++x ) {
-                    const int index = rowIndex + x;
+            for ( int32_t y = 0; y < height; ++y ) {
+                const int32_t rowIndex = y * width;
+                for ( int32_t x = 0; x < width; ++x ) {
+                    const int32_t index = rowIndex + x;
                     Node & node = data[index];
 
                     node.index = index;
@@ -123,15 +126,14 @@ namespace Maps::Generator
 
     struct Region
     {
-    public:
         uint32_t _id{};
         int32_t _centerIndex = -1;
         std::set<uint32_t> _neighbours;
         std::vector<Node> _nodes;
         size_t _sizeLimit{};
         size_t _lastProcessedNode{};
-        int _colorIndex = NEUTRAL_COLOR;
-        int _groundType = Ground::GRASS;
+        int _colorIndex = neutralCOLOR;
+        int _groundType = Maps::Ground::GRASS;
 
         Region() = default;
 
@@ -200,7 +202,7 @@ namespace Maps::Generator
         }
     }
 
-    bool canFitObject( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction = false )
+    bool canFitObject( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction = false )
     {
         fheroes2::Rect objectRect;
 
@@ -246,7 +248,7 @@ namespace Maps::Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction = false )
+    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction = false )
     {
         // mark object placement
         fheroes2::Rect objectRect;
@@ -266,6 +268,11 @@ namespace Maps::Generator
             node.type = NodeType::OBSTACLE;
         }
 
+        for ( const auto & partInfo : objectInfo.topLevelParts ) {
+            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
+            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
+        }
+
         if ( isAction ) {
             for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
                 Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
@@ -275,7 +282,7 @@ namespace Maps::Generator
         }
     }
 
-    bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tiles & tile, const ObjectGroup groupType, const int32_t objectIndex )
+    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -294,7 +301,7 @@ namespace Maps::Generator
         return true;
     }
 
-    bool actionObjectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tiles & tile, ObjectGroup groupType, int32_t type )
+    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
@@ -305,7 +312,7 @@ namespace Maps::Generator
         return false;
     }
 
-    bool placeCastle( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, int targetX, int targetY )
+    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, int targetX, int targetY )
     {
         const int regionX = region._centerIndex % mapFormat.size;
         const int regionY = region._centerIndex / mapFormat.size;
@@ -318,7 +325,7 @@ namespace Maps::Generator
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
 
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
 
         if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos, true ) ) {
             putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
@@ -328,7 +335,7 @@ namespace Maps::Generator
             const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
             Maps::setLastObjectUID( objectId );
-            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
             markObjectPlacement( data, castleInfo, tilePos, true );
 
             const uint8_t color = Color::IndexToColor( region._colorIndex );
@@ -351,24 +358,29 @@ namespace Maps::Generator
                 return false;
             }
 
-            world.addCastle( tile.GetIndex(), Race::IndexToRace( RANDOM_CASTLE_INDEX ), color );
+            world.addCastle( tile.GetIndex(), Race::IndexToRace( randomCastleIndex ), color );
 
             return true;
         }
         return false;
     }
 
-    bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
+    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
     {
         const auto & node = Rand::Get( region._nodes );
         Maps::Tiles & mineTile = world.GetTiles( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
+}
 
-    bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
+namespace Maps::Generator
+{
+
+    bool generateWorld( Map_Format::MapFormat & mapFormat, const Configuration & config )
     {
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
+            assert( config.playerCount <= 6 );
             return false;
         }
         if ( config.regionSizeLimit < 200 ) {
@@ -396,7 +408,7 @@ namespace Maps::Generator
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, NEUTRAL_COLOR, Ground::WATER, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, neutralCOLOR, Ground::WATER, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
         const int innerLayer = std::min( neutralRegionCount, playerCount );
@@ -424,7 +436,7 @@ namespace Maps::Generator
                 const bool isPlayerRegion = layer == 1 && ( i % factor ) == 0;
 
                 const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
-                const int regionColor = isPlayerRegion ? i / factor : NEUTRAL_COLOR;
+                const int regionColor = isPlayerRegion ? i / factor : neutralCOLOR;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
@@ -489,7 +501,7 @@ namespace Maps::Generator
                 }
             }
 
-            if ( region._colorIndex != NEUTRAL_COLOR && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+            if ( region._colorIndex != neutralCOLOR && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
                 // return early if we can't place a starting player castle
                 return false;
             }
@@ -521,6 +533,7 @@ namespace Maps::Generator
         //
         // make sure objects accessible before
         // make sure paths are accessible - delete obstacles
+
         // place treasures
         // place monsters
         return true;

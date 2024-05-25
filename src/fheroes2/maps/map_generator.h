@@ -19,6 +19,7 @@
  ***************************************************************************/
 #pragma once
 #include <cstdint>
+
 namespace Maps::Map_Format
 {
     struct MapFormat;
@@ -33,5 +34,5 @@ namespace Maps::Generator
         bool basicOnly = true;
     };
 
-    bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config );
+    bool generateWorld( Map_Format::MapFormat & mapFormat, const Configuration & config );
 }
