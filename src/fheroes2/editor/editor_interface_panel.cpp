@@ -901,29 +901,38 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
+            bool isNeedButtonsRedraw = false;
+
             for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
-                    if ( _instrumentButtons[i].drawOnPress() ) {
-                        _selectedInstrument = static_cast<uint8_t>( i );
+                if ( i != _selectedInstrument && le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
+                    _selectedInstrument = static_cast<uint8_t>( i );
 
-                        // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
-                        if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
-                            // Update panel image and then open the Select Monster dialog.
-                            _redraw();
-                            handleObjectMouseClick( Dialog::selectMonsterType );
-                        }
-
-                        // Reset cursor updater since this UI element was clicked.
-                        _setCursor();
-
-                        setRedraw();
-                        return res;
+                    // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
+                    if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
+                        // Update panel image and then open the Select Monster dialog.
+                        _redraw();
+                        handleObjectMouseClick( Dialog::selectMonsterType );
                     }
-                }
-                else {
-                    _instrumentButtons[i].drawOnRelease();
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+
+                    isNeedButtonsRedraw = true;
+
+                    break;
                 }
             }
+
+            if ( isNeedButtonsRedraw ) {
+                // Redraw all instrument buttons.
+                for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
+                    _instrumentButtons[i].drawOnState( i == _selectedInstrument );
+                }
+            }
+
+            return res;
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
