@@ -152,9 +152,19 @@ public:
     StreamBase & operator>>( std::vector<Type> & v )
     {
         const uint32_t size = get32();
+
+        if ( sizeg() < size ) {
+            // The stream has less bytes than the number of elements in this container.
+            setfail( true );
+            v = {};
+            return *this;
+        }
+
         v.resize( size );
-        for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        for ( auto & value : v ) {
+            *this >> value;
+        }
+
         return *this;
     }
 
@@ -162,9 +172,19 @@ public:
     StreamBase & operator>>( std::list<Type> & v )
     {
         const uint32_t size = get32();
+
+        if ( sizeg() < size ) {
+            // The stream has less bytes than the number of elements in this container.
+            setfail( true );
+            v = {};
+            return *this;
+        }
+
         v.resize( size );
-        for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        for ( auto & value : v ) {
+            *this >> value;
+        }
+
         return *this;
     }
 
@@ -172,6 +192,13 @@ public:
     StreamBase & operator>>( std::map<Type1, Type2> & v )
     {
         const uint32_t size = get32();
+        if ( sizeg() < size * 2 ) {
+            // The stream has less bytes than the number of elements in this container.
+            setfail( true );
+            v = {};
+            return *this;
+        }
+
         v.clear();
         for ( uint32_t ii = 0; ii < size; ++ii ) {
             std::pair<Type1, Type2> pr;
