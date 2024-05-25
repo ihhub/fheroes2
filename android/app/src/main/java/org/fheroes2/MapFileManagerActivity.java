@@ -21,6 +21,8 @@
 package org.fheroes2;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,8 +128,8 @@ public final class MapFileManagerActivity extends AppCompatActivity
                 boolean atLeastOneMapFileImported = false;
                 Exception caughtException = null;
 
-                try {
-                    atLeastOneMapFileImported = FileManagement.importFilesFromZip( mapFileDir, allowedMapFileExtensions, zipFileUri, contentResolver );
+                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
+                    atLeastOneMapFileImported = FileManagement.importFilesFromZip( mapFileDir, allowedMapFileExtensions, in );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to import map files.", ex );
@@ -170,8 +172,8 @@ public final class MapFileManagerActivity extends AppCompatActivity
             new Thread( () -> {
                 Exception caughtException = null;
 
-                try {
-                    FileManagement.exportFilesToZip( mapFileDir, mapFileNames, zipFileUri, contentResolver );
+                try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ) ) {
+                    FileManagement.exportFilesToZip( mapFileDir, mapFileNames, out );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to export map files.", ex );

@@ -34,9 +34,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import android.content.ContentResolver;
-import android.net.Uri;
-
 import org.apache.commons.io.IOUtils;
 
 final class FileManagement
@@ -84,8 +81,7 @@ final class FileManagement
      *
      * @return true if at least one matching file was found and imported, otherwise returns false
      */
-    static boolean importFilesFromZip( final File fileDir, final List<String> allowedFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
-        throws IOException
+    static boolean importFilesFromZip( final File fileDir, final List<String> allowedFileExtensions, final InputStream zipStream ) throws IOException
     {
         final Predicate<String> checkExtension = ( String name ) ->
         {
@@ -102,7 +98,7 @@ final class FileManagement
 
         boolean result = false;
 
-        try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
+        try ( final ZipInputStream zin = new ZipInputStream( zipStream ) ) {
             Files.createDirectories( fileDir.toPath() );
 
             for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
@@ -126,9 +122,9 @@ final class FileManagement
         return result;
     }
 
-    static void exportFilesToZip( final File fileDir, final List<String> fileNames, final Uri zipFileUri, final ContentResolver contentResolver ) throws IOException
+    static void exportFilesToZip( final File fileDir, final List<String> fileNames, final OutputStream zipStream ) throws IOException
     {
-        try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
+        try ( final ZipOutputStream zout = new ZipOutputStream( zipStream ) ) {
             for ( final String fileName : fileNames ) {
                 zout.putNextEntry( new ZipEntry( fileName ) );
 
