@@ -47,9 +47,6 @@
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
     <string name="activity_save_file_manager_suggested_zip_file_name" translatable="false">fheroes2_save_files.zip</string>
     <string name="activity_map_file_manager_label">fh2 Map File Manager</string>
-    <string name="activity_map_file_manager_filter_standard_btn_text">Standard</string>
-    <string name="activity_map_file_manager_filter_campaign_btn_text">Campaign</string>
-    <string name="activity_map_file_manager_filter_multiplayer_btn_text">Multi</string>
     <string name="activity_map_file_manager_map_file_list_empty_lbl_text">No map files available</string>
     <string name="activity_map_file_manager_select_all_btn_content_description">Select all map files</string>
     <string name="activity_map_file_manager_unselect_all_btn_content_description">Unselect all map files</string>
