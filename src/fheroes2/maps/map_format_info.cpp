@@ -284,7 +284,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < sizeof MapFormat ) {
+        if ( fileSize < sizeof( MapFormat ) ) {
             return false;
         }
 
@@ -311,7 +311,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < sizeof MapFormat ) {
+        if ( fileSize < sizeof( MapFormat ) ) {
             return false;
         }
 
