@@ -23,7 +23,6 @@
 
 #include "world.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <limits>
