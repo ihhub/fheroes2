@@ -1550,147 +1550,75 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const std::string title( MP2::StringObject( MP2::OBJ_ARTIFACT ) );
 
-        if ( hero.IsFullBagArtifacts() )
+        const Artifact art = getArtifactFromTile( tile );
+        if ( art.GetID() == Artifact::MAGIC_BOOK && hero.HaveSpellBook() ) {
+            fheroes2::showStandardTextMessage( title, _( "You cannot have multiple spell books." ), Dialog::OK );
+
+            return;
+        }
+
+        if ( hero.IsFullBagArtifacts() ) {
             fheroes2::showStandardTextMessage( title, _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
-        else {
-            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
-            const Artifact art = getArtifactFromTile( tile );
 
-            bool result = false;
-            std::string msg;
+            return;
+        }
 
-            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                const Funds payment = getArtifactResourceRequirement( tile );
+        const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-                if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD ) {
-                    msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold." );
-                    StringReplace( msg, "%{gold}", payment.gold );
-                }
-                else {
-                    msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold and %{count} %{res}." );
+        bool result = false;
+        std::string msg;
 
-                    StringReplace( msg, "%{gold}", payment.gold );
+        if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+             || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+            const Funds payment = getArtifactResourceRequirement( tile );
 
-                    for ( const int res : { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS } ) {
-                        const uint32_t count = payment.Get( res );
-                        if ( count > 0 ) {
-                            StringReplace( msg, "%{res}", Resource::String( res ) );
-                            StringReplace( msg, "%{count}", static_cast<int>( count ) );
-                            break;
-                        }
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD ) {
+                msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold." );
+                StringReplace( msg, "%{gold}", payment.gold );
+            }
+            else {
+                msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold and %{count} %{res}." );
+
+                StringReplace( msg, "%{gold}", payment.gold );
+
+                for ( const int res : { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS } ) {
+                    const uint32_t count = payment.Get( res );
+                    if ( count > 0 ) {
+                        StringReplace( msg, "%{res}", Resource::String( res ) );
+                        StringReplace( msg, "%{count}", static_cast<int>( count ) );
+                        break;
                     }
-                }
-                StringReplace( msg, "%{art}", art.GetName() );
-                msg += '\n';
-                msg.append( _( "Do you wish to buy this artifact?" ) );
-
-                AudioManager::PlaySound( M82::EXPERNCE );
-
-                const fheroes2::ArtifactDialogElement artifactUI( art );
-                const fheroes2::Text titleText( title, fheroes2::FontType::normalYellow() );
-                const fheroes2::Text bodyText( msg, fheroes2::FontType::normalWhite() );
-
-                if ( Dialog::YES == fheroes2::showMessage( titleText, bodyText, Dialog::YES | Dialog::NO, { &artifactUI } ) ) {
-                    if ( hero.GetKingdom().AllowPayment( payment ) ) {
-                        result = true;
-                        hero.GetKingdom().OddFundsResource( payment );
-                    }
-                    else {
-                        fheroes2::showStandardTextMessage(
-                            title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
-                            Dialog::OK );
-                    }
-                }
-                else {
-                    fheroes2::showStandardTextMessage( title, _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ),
-                                                       Dialog::OK );
                 }
             }
-            else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-                const Skill::Secondary & skill = getArtifactSecondarySkillRequirement( tile );
+            StringReplace( msg, "%{art}", art.GetName() );
+            msg += '\n';
+            msg.append( _( "Do you wish to buy this artifact?" ) );
 
-                if ( hero.HasSecondarySkill( skill.Skill() ) ) {
-                    const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
-                    if ( artifactDiscoveryDescription != nullptr ) {
-                        msg = artifactDiscoveryDescription;
-                    }
-                    else {
-                        msg = _( "You've found the artifact: " );
-                        msg += '\n';
-                        msg.append( art.GetName() );
-                    }
-                    AudioManager::PlaySound( M82::TREASURE );
+            AudioManager::PlaySound( M82::EXPERNCE );
 
-                    const fheroes2::ArtifactDialogElement artifactUI( art );
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+            const fheroes2::Text titleText( title, fheroes2::FontType::normalYellow() );
+            const fheroes2::Text bodyText( msg, fheroes2::FontType::normalWhite() );
 
-                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                           Dialog::OK, { &artifactUI } );
-
+            if ( Dialog::YES == fheroes2::showMessage( titleText, bodyText, Dialog::YES | Dialog::NO, { &artifactUI } ) ) {
+                if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
+                    hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                    if ( skill.Skill() == Skill::Secondary::WISDOM ) {
-                        msg = _(
-                            "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
-                    }
-                    else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
-                        msg = _(
-                            "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
-                    }
-                    else {
-                        // Did you add a new condition? If yes add a proper if-else branch.
-                        assert( 0 );
-                        msg = _(
-                            "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}." );
-                        StringReplace( msg, "%{skill}", skill.GetName() );
-                    }
-
-                    StringReplace( msg, "%{art}", art.GetName() );
-                    fheroes2::showStandardTextMessage( title, msg, Dialog::OK );
-                }
-            }
-            else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                bool battle = true;
-                Army army( tile );
-                const Troop * troop = army.GetFirstValid();
-
-                if ( troop ) {
-                    if ( Monster::ROGUE == troop->GetID() )
-                        fheroes2::showStandardTextMessage(
-                            title, _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
-                            Dialog::OK );
-                    else {
-                        msg = _(
-                            "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                        StringReplaceWithLowercase( msg, "%{monster}", troop->GetName() );
-                        battle = ( Dialog::YES == fheroes2::showStandardTextMessage( title, msg, Dialog::YES | Dialog::NO ) );
-                    }
-                }
-
-                if ( battle ) {
-                    Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                    if ( res.AttackerWins() ) {
-                        hero.IncreaseExperience( res.GetExperienceAttacker() );
-                        result = true;
-                        msg = _( "Victorious, you take your prize, the %{art}." );
-                        StringReplace( msg, "%{art}", art.GetName() );
-                        AudioManager::PlaySound( M82::TREASURE );
-
-                        const fheroes2::ArtifactDialogElement artifactUI( art );
-
-                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                               Dialog::OK, { &artifactUI } );
-                    }
-                    else {
-                        BattleLose( hero, res, true );
-                    }
-                }
-                else {
-                    fheroes2::showStandardTextMessage( title, _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Dialog::OK );
+                    fheroes2::showStandardTextMessage(
+                        title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ), Dialog::OK );
                 }
             }
             else {
+                fheroes2::showStandardTextMessage( title, _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ),
+                                                   Dialog::OK );
+            }
+        }
+        else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+            const Skill::Secondary & skill = getArtifactSecondarySkillRequirement( tile );
+
+            if ( hero.HasSecondarySkill( skill.Skill() ) ) {
                 const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
                 if ( artifactDiscoveryDescription != nullptr ) {
                     msg = artifactDiscoveryDescription;
@@ -1703,26 +1631,104 @@ namespace
                 AudioManager::PlaySound( M82::TREASURE );
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
+
                 fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                        { &artifactUI } );
+
                 result = true;
             }
+            else {
+                if ( skill.Skill() == Skill::Secondary::WISDOM ) {
+                    msg = _(
+                        "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
+                }
+                else if ( skill.Skill() == Skill::Secondary::LEADERSHIP ) {
+                    msg = _(
+                        "You've come across the spartan quarters of a retired soldier. The soldier tells you that he is willing to pass on the %{art} to the first true leader he meets." );
+                }
+                else {
+                    // Did you add a new condition? If yes add a proper if-else branch.
+                    assert( 0 );
+                    msg = _( "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}." );
+                    StringReplace( msg, "%{skill}", skill.GetName() );
+                }
 
-            if ( result && hero.PickupArtifact( art ) ) {
-                Game::PlayPickupSound();
-
-                Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
-                I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-                resetObjectInfoOnTile( tile );
-
-                const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
-
-                // Update the position of picked up artifact on radar to remove its mark.
-                I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
-                I.setRedraw( Interface::REDRAW_RADAR );
+                StringReplace( msg, "%{art}", art.GetName() );
+                fheroes2::showStandardTextMessage( title, msg, Dialog::OK );
             }
+        }
+        else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+            bool battle = true;
+            Army army( tile );
+            const Troop * troop = army.GetFirstValid();
+
+            if ( troop ) {
+                if ( Monster::ROGUE == troop->GetID() )
+                    fheroes2::showStandardTextMessage(
+                        title, _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
+                        Dialog::OK );
+                else {
+                    msg = _(
+                        "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
+                    StringReplaceWithLowercase( msg, "%{monster}", troop->GetName() );
+                    battle = ( Dialog::YES == fheroes2::showStandardTextMessage( title, msg, Dialog::YES | Dialog::NO ) );
+                }
+            }
+
+            if ( battle ) {
+                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+                if ( res.AttackerWins() ) {
+                    hero.IncreaseExperience( res.GetExperienceAttacker() );
+                    result = true;
+                    msg = _( "Victorious, you take your prize, the %{art}." );
+                    StringReplace( msg, "%{art}", art.GetName() );
+                    AudioManager::PlaySound( M82::TREASURE );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI } );
+                }
+                else {
+                    BattleLose( hero, res, true );
+                }
+            }
+            else {
+                fheroes2::showStandardTextMessage( title, _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Dialog::OK );
+            }
+        }
+        else {
+            const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
+            if ( artifactDiscoveryDescription != nullptr ) {
+                msg = artifactDiscoveryDescription;
+            }
+            else {
+                msg = _( "You've found the artifact: " );
+                msg += '\n';
+                msg.append( art.GetName() );
+            }
+            AudioManager::PlaySound( M82::TREASURE );
+
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
+            result = true;
+        }
+
+        if ( result && hero.PickupArtifact( art ) ) {
+            Game::PlayPickupSound();
+
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+            I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+
+            resetObjectInfoOnTile( tile );
+
+            const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
+
+            // Update the position of picked up artifact on radar to remove its mark.
+            I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
+            I.setRedraw( Interface::REDRAW_RADAR );
         }
     }
 

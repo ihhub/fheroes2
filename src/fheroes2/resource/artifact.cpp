@@ -835,8 +835,9 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-    if ( it == end() )
+    if ( it == end() ) {
         return false;
+    }
 
     *it = art;
 
