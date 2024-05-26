@@ -45,7 +45,7 @@ final class FileManagement
 
     static List<String> getFileList( final File fileDir, final List<String> allowedFileExtensions )
     {
-        final List<String> fileNames = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
 
         final File[] fileList = fileDir.listFiles( ( dir, name ) -> {
             if ( !dir.equals( fileDir ) ) {
@@ -66,14 +66,14 @@ final class FileManagement
         if ( fileList != null ) {
             for ( final File file : fileList ) {
                 if ( file.isFile() ) {
-                    fileNames.add( file.getName() );
+                    result.add( file.getName() );
                 }
             }
 
-            Collections.sort( fileNames );
+            Collections.sort( result );
         }
 
-        return fileNames;
+        return result;
     }
 
     /**
