@@ -1356,8 +1356,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
 
     ultimate_artifact.Set( pos, getUltimateArtifact() );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO,
-               "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }
 
 void World::addDebugHero()
