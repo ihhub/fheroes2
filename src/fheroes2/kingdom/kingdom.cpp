@@ -634,6 +634,9 @@ void Kingdom::ApplyPlayWithStartingHero()
         if ( nullptr == first )
             first = castles.front();
 
+        // If no heroes exist and at least one castle / town must be.
+        assert( first != nullptr );
+
         Heroes * hero = world.GetHeroForHire( first->GetRace() );
         if ( hero && AllowRecruitHero( false ) )
             hero->Recruit( *first );
