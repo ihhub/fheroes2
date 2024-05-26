@@ -1092,13 +1092,13 @@ bool World::loadResurrectionMap( const std::string & filename )
     // TODO: use MapFormat structure for this matter.
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
+    // Clear artifact flags to correctly generate random artifacts.
+    fheroes2::ResetArtifactStats();
+
     // do not let the player get a random artifact that allows him to win the game
     if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
         fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
     }
-
-    // Clear artifact flags to correctly generate random artifacts.
-    fheroes2::ResetArtifactStats();
 
     if ( !ProcessNewMP2Map( filename, false ) ) {
         return false;
