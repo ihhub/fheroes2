@@ -31,9 +31,6 @@ namespace
 {
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
 
-    // This value is set to avoid any corrupted files to be processed.
-    const size_t minFileSize{ 128 };
-
     const uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
@@ -189,11 +186,17 @@ namespace Maps::Map_Format
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
             >> map.lossConditionMetadata >> map.size;
 
+        if ( map.size <= 0 ) {
+            // This is not a correct map size.
+            return false;
+        }
+
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
         LanguageUnderlyingType language;
 
         msg >> language;
+
         map.language = static_cast<fheroes2::SupportedLanguage>( language );
 
         msg >> map.name >> map.description;
@@ -281,7 +284,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < minFileSize ) {
+        if ( fileSize < sizeof MapFormat ) {
             return false;
         }
 
@@ -308,7 +311,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < minFileSize ) {
+        if ( fileSize < sizeof MapFormat ) {
             return false;
         }
 

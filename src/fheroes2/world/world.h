@@ -140,7 +140,6 @@ StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
 using EventsDate = std::list<EventDate>;
-using MapsTiles = std::vector<Maps::Tiles>;
 
 class World : protected fheroes2::Size
 {
@@ -371,18 +370,24 @@ private:
     void Defaults();
     void Reset();
     void MonthOfMonstersAction( const Monster & );
-    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
+    bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
 
     bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
+    void setUltimateArtifact( const int32_t tileId, const int32_t radius );
+
+    void addDebugHero();
+
+    void setHeroIdsForMapConditions();
+
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );
 
-    MapsTiles vec_tiles;
+    std::vector<Maps::Tiles> vec_tiles;
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
@@ -398,8 +403,8 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    int heroes_cond_wins = Heroes::UNKNOWN;
-    int heroes_cond_loss = Heroes::UNKNOWN;
+    int heroIdAsWinCondition = Heroes::UNKNOWN;
+    int heroIdAsLossCondition = Heroes::UNKNOWN;
 
     MapObjects map_objects;
 
