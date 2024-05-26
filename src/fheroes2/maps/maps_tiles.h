@@ -435,7 +435,9 @@ namespace Maps
         uint32_t _region{ REGION_NODE_BLOCKED };
     };
 
+    StreamBase & operator<<( StreamBase & msg, const TilesAddon & ta );
     StreamBase & operator<<( StreamBase & msg, const Tiles & tile );
+    StreamBase & operator>>( StreamBase & msg, TilesAddon & ta );
     StreamBase & operator>>( StreamBase & msg, Tiles & tile );
 }
 

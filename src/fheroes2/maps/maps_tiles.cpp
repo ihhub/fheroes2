@@ -472,43 +472,6 @@ namespace
         getAddonInfo( addon, os );
         return os.str();
     }
-
-    StreamBase & operator<<( StreamBase & msg, const Maps::TilesAddon & ta )
-    {
-        using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
-
-        return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, Maps::TilesAddon & ta )
-    {
-        msg >> ta._layerType;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
-            ta._layerType = ( ta._layerType & 0x03 );
-        }
-
-        msg >> ta._uid;
-
-        using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
-        static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
-
-        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> objectIcnType;
-
-        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
-            bool temp;
-            msg >> temp >> temp;
-        }
-
-        msg >> ta._imageIndex;
-
-        return msg;
-    }
 }
 
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
@@ -1830,6 +1793,43 @@ bool Maps::Tiles::isDetachedObject() const
     }
 
     return false;
+}
+
+StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
+{
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
+
+    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
+}
+
+StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
+{
+    msg >> ta._layerType;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
+        ta._layerType = ( ta._layerType & 0x03 );
+    }
+
+    msg >> ta._uid;
+
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
+    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
+
+    ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+    msg >> objectIcnType;
+
+    ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
+        bool temp;
+        msg >> temp >> temp;
+    }
+
+    msg >> ta._imageIndex;
+
+    return msg;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
