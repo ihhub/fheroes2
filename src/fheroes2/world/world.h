@@ -23,7 +23,6 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <list>
