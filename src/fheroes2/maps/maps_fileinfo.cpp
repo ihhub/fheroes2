@@ -193,7 +193,7 @@ void Maps::FileInfo::Reset()
 
     timestamp = 0;
 
-    startWithHeroInEachCastle = false;
+    startWithHeroInFirstCastle = false;
 
     version = GameVersion::SUCCESSION_WARS;
 
@@ -289,8 +289,8 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     lossConditionType = fs.get();
     // Parameter of loss condition.
     lossConditionParams[0] = fs.getLE16();
-    // Does the game start with heroes in castles automatically?
-    startWithHeroInEachCastle = ( 0 == fs.get() );
+    // Does the game start with a hero in the first castle?
+    startWithHeroInFirstCastle = ( 0 == fs.get() );
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
 

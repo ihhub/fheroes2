@@ -193,7 +193,7 @@ namespace Maps
         uint32_t timestamp;
 
         // Only for maps made by the original Editor.
-        bool startWithHeroInEachCastle;
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 

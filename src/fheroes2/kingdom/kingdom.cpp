@@ -628,7 +628,7 @@ void Kingdom::ApplyPlayWithStartingHero()
         }
     }
 
-    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInEachCastle ) {
+    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInFirstCastle ) {
         // get first castle
         const Castle * first = castles.GetFirstCastle();
         if ( nullptr == first )
