@@ -117,6 +117,19 @@ namespace
             castleNames.emplace( castle->GetName() );
         }
     }
+
+    void updateArtifactStats()
+    {
+        // Clear artifact flags to correctly generate random artifacts.
+        fheroes2::ResetArtifactStats();
+
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+        // do not let the player get a random artifact that allows him to win the game
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
+            fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
+        }
+    }
 }
 
 bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2File )
@@ -652,15 +665,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     updateCastleNames( vec_castles );
 
-    // clear artifact flags to correctly generate random artifacts
-    fheroes2::ResetArtifactStats();
-
-    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-
-    // do not let the player get a random artifact that allows him to win the game
-    if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
-        fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
-    }
+    updateArtifactStats();
 
     if ( !ProcessNewMP2Map( filename, checkPoLObjects ) ) {
         return false;
@@ -1089,16 +1094,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     updateCastleNames( vec_castles );
 
-    // TODO: use MapFormat structure for this matter.
-    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-
-    // Clear artifact flags to correctly generate random artifacts.
-    fheroes2::ResetArtifactStats();
-
-    // do not let the player get a random artifact that allows him to win the game
-    if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
-        fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
-    }
+    updateArtifactStats();
 
     if ( !ProcessNewMP2Map( filename, false ) ) {
         return false;
