@@ -4052,7 +4052,7 @@ msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
 
 msgid "Select object type"
-msgstr "Objektum típus kiválasztása"
+msgstr "Objektum típusok"
 
 msgid ""
 "Click here to\n"
