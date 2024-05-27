@@ -385,7 +385,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             redraw = true;
         }
         else if ( le.KeyPress() && ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
-            // Handel new line input for multi-line texts only.
+            // Handle new line input for multi-line texts only.
             if ( isMultiLine && le.KeyValue() == fheroes2::Key::KEY_ENTER ) {
                 result.insert( charInsertPos, 1, '\n' );
                 ++charInsertPos;
