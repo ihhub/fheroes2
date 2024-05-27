@@ -5914,7 +5914,7 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
-"Alapértelmezett\n"
+"Alapért.\n"
 "érték"
 
 msgid "Set %{skill} Skill"
