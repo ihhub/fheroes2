@@ -4091,7 +4091,7 @@ msgid "Water Objects"
 msgstr "Vízi tárgyak"
 
 msgid "Miscellaneous"
-msgstr "Vegyes"
+msgstr "Vegyes tárgyak"
 
 msgid "Artifacts"
 msgstr "Varázstárgyak"
