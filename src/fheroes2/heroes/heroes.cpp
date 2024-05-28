@@ -1399,16 +1399,24 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            if ( art.GetID() == Artifact::MAGIC_BOOK && bag_artifacts.isPresentArtifact( Artifact::MAGIC_BOOK ) ) {
-                fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+            if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+                if ( HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    // In theory, there should be no other reason not to pick up the artifact
+                    assert( IsFullBagArtifacts() );
+
+                    fheroes2::showStandardTextMessage(
+                        art.GetName(),
+                        _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                        Dialog::OK );
+                }
             }
-            else if ( art.GetID() == Artifact::MAGIC_BOOK ) {
-                fheroes2::showStandardTextMessage(
-                    GetName(),
-                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                    Dialog::OK );
-            }
-            else if ( bag_artifacts.isFull() ) {
+            else {
+                // In theory, there should be no other reason not to pick up the artifact
+                assert( IsFullBagArtifacts() );
+
                 fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
             }
         }

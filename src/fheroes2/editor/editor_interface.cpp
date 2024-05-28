@@ -1551,6 +1551,11 @@ namespace Interface
             action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
+                _warningMessage.reset( std::move( errorMessage ) );
+                return;
+            }
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( !_setObjectOnTile( tile, groupType, objectType ) ) {

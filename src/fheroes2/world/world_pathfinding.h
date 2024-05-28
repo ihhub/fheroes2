@@ -232,6 +232,7 @@ private:
     uint32_t _maxMovePointsOnWater{ 0 };
     double _armyStrength{ -1 };
     bool _isArtifactsBagFull{ false };
+    bool _isEquippedWithSpellBook{ false };
     bool _isSummonBoatSpellAvailable{ false };
 
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
