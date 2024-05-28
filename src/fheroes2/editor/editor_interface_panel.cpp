@@ -902,39 +902,44 @@ namespace Interface
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
             for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
-                    if ( _instrumentButtons[i].drawOnPress() ) {
-                        _selectedInstrument = static_cast<uint8_t>( i );
+                if ( i != _selectedInstrument && ( _instrumentButtonsRect[i] & le.GetMousePressLeft() ) ) {
+                    _selectedInstrument = static_cast<uint8_t>( i );
 
-                        // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
-                        if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
-                            // Update panel image and then open the Select Monster dialog.
-                            _redraw();
-                            handleObjectMouseClick( Dialog::selectMonsterType );
-                        }
-
-                        // Reset cursor updater since this UI element was clicked.
-                        _setCursor();
-
-                        setRedraw();
-                        return res;
+                    // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
+                    if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
+                        // Update panel image and then open the Select Monster dialog.
+                        _redraw();
+                        handleObjectMouseClick( Dialog::selectMonsterType );
                     }
-                }
-                else {
-                    _instrumentButtons[i].drawOnRelease();
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+
+                    // Redraw all instrument buttons.
+                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
+                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
+                    }
+
+                    break;
                 }
             }
+
+            return res;
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
-                    if ( _brushSizeButtons[i].drawOnPress() ) {
-                        _selectedBrushSize = static_cast<uint8_t>( i );
+                if ( i != _selectedBrushSize && le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
+                    _selectedBrushSize = static_cast<uint8_t>( i );
+
+                    // Redraw all brush size buttons.
+                    for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+                        _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
                     }
-                }
-                else if ( i != _selectedBrushSize ) {
-                    _brushSizeButtons[i].drawOnRelease();
+
+                    break;
                 }
             }
 
