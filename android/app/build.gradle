@@ -85,9 +85,9 @@ dependencies {
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
 
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
 
 tasks.register('copyH2D', Copy) {
