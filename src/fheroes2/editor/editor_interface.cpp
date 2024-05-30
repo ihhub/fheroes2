@@ -1145,8 +1145,8 @@ namespace Interface
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;
-                    hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
                     hero.SetColor( color );
+                    hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     hero.OpenDialog( false, false, true, true, true, true );
