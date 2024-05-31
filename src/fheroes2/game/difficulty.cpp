@@ -124,11 +124,11 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
 
     switch ( difficulty ) {
     case Difficulty::HARD:
-        return getIncomeFromSetsOfResourceMines( Resource::ORE | Resource::WOOD | Resource::GOLD, 1 );
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 );
     case Difficulty::EXPERT:
-        return getIncomeFromSetsOfResourceMines( Resource::ORE | Resource::WOOD | Resource::GOLD, 1 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) + getBonusForCastles();
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromSetsOfResourceMines( Resource::ALL, 1 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 2 ) + getBonusForCastles();
     default:
         break;
     }
