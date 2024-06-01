@@ -170,7 +170,6 @@ namespace Dialog
     {
     public:
         explicit FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
 
         int BorderWidth() const
         {

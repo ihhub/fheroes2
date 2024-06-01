@@ -199,11 +199,6 @@ namespace Interface
             return items.end();
         }
 
-        virtual ItemsIterator GetTopItemIter()
-        {
-            return items.begin();
-        }
-
         virtual ItemsIterator GetCurItemIter()
         {
             return items.end();
@@ -462,11 +457,6 @@ namespace Interface
 
         ItemsIterator topItem;
         ItemIterPos curItemPos;
-
-        ItemsIterator GetTopItemIter() override
-        {
-            return topItem;
-        }
 
         ItemsIterator GetCurItemIter() override
         {
