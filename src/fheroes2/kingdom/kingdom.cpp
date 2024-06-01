@@ -718,7 +718,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
     if ( isControlAI() ) {
         const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty(), *this );
         if ( incomeBonus.GetValidItemsCount() != 0 ) {
-            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() );
+            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() )
 
             totalIncome += incomeBonus;
         }
@@ -727,7 +727,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         if ( goldBonus != 0 ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE,
                        "AI bonus to the gold income has been applied to " << Color::String( color ) << ", original income: " << totalIncome.gold
-                                                                          << ", bonus income: " << goldBonus );
+                                                                          << ", bonus income: " << goldBonus )
 
             totalIncome.gold += goldBonus;
         }
