@@ -11815,9 +11815,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Væsener kan ikke placeres på vand."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Artefakter kan ikke placeres på vand."
