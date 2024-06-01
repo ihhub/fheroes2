@@ -200,7 +200,6 @@ namespace Maps::Map_Format
         LanguageUnderlyingType language;
 
         msg >> language;
-
         map.language = static_cast<fheroes2::SupportedLanguage>( language );
 
         msg >> map.name >> map.description;
