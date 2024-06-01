@@ -25,7 +25,6 @@
 
 #include "agg_image.h"
 #include "dialog.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
