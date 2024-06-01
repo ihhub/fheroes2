@@ -195,11 +195,6 @@ namespace fheroes2
         ButtonBase & button( size_t id );
         const ButtonBase & button( size_t id ) const;
 
-        size_t size() const
-        {
-            return _button.size();
-        }
-
         int processEvents();
 
     private:

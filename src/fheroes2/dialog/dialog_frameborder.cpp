@@ -37,16 +37,6 @@ Dialog::FrameBorder::FrameBorder( int v )
     , border( v )
 {}
 
-Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz, const fheroes2::Image & sf )
-    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , border( BORDERWIDTH )
-{
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
-
-    RenderOther( sf, rect );
-}
-
 void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench )
 {
     restorer.restore();
