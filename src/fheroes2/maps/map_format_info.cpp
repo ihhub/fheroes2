@@ -31,6 +31,10 @@ namespace
 {
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
 
+    // This value is set to avoid any corrupted files to be processed.
+    // It is impossible to have a map with smaller than this size.
+    const size_t minFileSize{ 512 };
+
     const uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
@@ -284,7 +288,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < sizeof( MapFormat ) ) {
+        if ( fileSize < minFileSize ) {
             return false;
         }
 
@@ -311,7 +315,7 @@ namespace Maps::Map_Format
         }
 
         const size_t fileSize = fileStream.size();
-        if ( fileSize < sizeof( MapFormat ) ) {
+        if ( fileSize < minFileSize ) {
             return false;
         }
 
