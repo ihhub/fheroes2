@@ -751,10 +751,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
-        // This prevents human players from abusing AI bonuses.
-        bool applyAIBonuses = true;
-
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
@@ -829,12 +825,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
-
-                    if ( applyAIBonuses ) {
-                        world.NewDayAI();
-
-                        applyAIBonuses = false;
-                    }
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
