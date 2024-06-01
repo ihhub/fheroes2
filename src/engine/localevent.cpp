@@ -1516,24 +1516,9 @@ void LocalEvent::setEventProcessingStates()
 
     // Full list of events and their requirements can be found at https://wiki.libsdl.org/SDL_EventType
     setEventProcessingState( SDL_QUIT, true );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_TERMINATING, false );
     // This is a very serious situation and we should handle it.
     setEventProcessingState( SDL_APP_LOWMEMORY, true );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_WILLENTERBACKGROUND, false );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_DIDENTERBACKGROUND, false );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_WILLENTERFOREGROUND, false );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
-    // SDL_LOCALECHANGED is supported from SDL 2.0.14
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_DISPLAYEVENT, false );
     setEventProcessingState( SDL_WINDOWEVENT, true );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_SYSWMEVENT, false );
     setEventProcessingState( SDL_KEYDOWN, true );
     setEventProcessingState( SDL_KEYUP, true );
     // SDL_TEXTINPUT and SDL_TEXTEDITING are enabled and disabled by SDL_StartTextInput() and SDL_StopTextInput() functions.
@@ -1541,7 +1526,6 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_TEXTEDITING, false );
     setEventProcessingState( SDL_TEXTINPUT, false );
     setEventProcessingState( SDL_KEYMAPCHANGED, false ); // supported from SDL 2.0.4
-    // SDL_TEXTEDITING_EXT is supported only from SDL 2.0.22
     setEventProcessingState( SDL_MOUSEMOTION, true );
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
@@ -1559,19 +1543,9 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_CONTROLLERDEVICEADDED, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, true );
-    // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
-    // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
-    // SDL_CONTROLLERTOUCHPADUP is supported from SDL 2.0.14
-    // SDL_CONTROLLERSENSORUPDATE is supported from SDL 2.0.14
     setEventProcessingState( SDL_FINGERDOWN, true );
     setEventProcessingState( SDL_FINGERUP, true );
     setEventProcessingState( SDL_FINGERMOTION, true );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_DOLLARGESTURE, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_DOLLARRECORD, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_MULTIGESTURE, false );
     // We do not support clipboard within the engine.
     setEventProcessingState( SDL_CLIPBOARDUPDATE, false );
     // We do not support drag and drop capability for the application.
@@ -1579,15 +1553,33 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_DROPTEXT, false );
     setEventProcessingState( SDL_DROPBEGIN, false ); // supported from SDL 2.0.5
     setEventProcessingState( SDL_DROPCOMPLETE, false ); // supported from SDL 2.0.5
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_AUDIODEVICEADDED, false ); // supported from SDL 2.0.4
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_AUDIODEVICEREMOVED, false ); // supported from SDL 2.0.4
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_SENSORUPDATE, false );
     setEventProcessingState( SDL_RENDER_TARGETS_RESET, true ); // supported from SDL 2.0.2
     setEventProcessingState( SDL_RENDER_DEVICE_RESET, true ); // supported from SDL 2.0.4
-    // SDL_POLLSENTINEL is supported from SDL 2.0.?
     // We do not support custom user events as of now.
     setEventProcessingState( SDL_USEREVENT, false );
+
+    // TODO: verify why we disabled processing of these events.
+    setEventProcessingState( SDL_SYSWMEVENT, false );
+    setEventProcessingState( SDL_DOLLARGESTURE, false );
+    setEventProcessingState( SDL_DOLLARRECORD, false );
+    setEventProcessingState( SDL_MULTIGESTURE, false );
+    setEventProcessingState( SDL_AUDIODEVICEADDED, false ); // supported from SDL 2.0.4
+    setEventProcessingState( SDL_AUDIODEVICEREMOVED, false ); // supported from SDL 2.0.4
+    setEventProcessingState( SDL_SENSORUPDATE, false );
+
+    // TODO: we don't process these events. Add the logic.
+    setEventProcessingState( SDL_APP_TERMINATING, false );
+    setEventProcessingState( SDL_APP_WILLENTERBACKGROUND, false );
+    setEventProcessingState( SDL_APP_DIDENTERBACKGROUND, false );
+    setEventProcessingState( SDL_APP_WILLENTERFOREGROUND, false );
+    setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
+    setEventProcessingState( SDL_DISPLAYEVENT, false );
+
+    // SDL_LOCALECHANGED is supported from SDL 2.0.14
+    // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
+    // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
+    // SDL_CONTROLLERTOUCHPADUP is supported from SDL 2.0.14
+    // SDL_CONTROLLERSENSORUPDATE is supported from SDL 2.0.14
+    // SDL_TEXTEDITING_EXT is supported only from SDL 2.0.22
+    // SDL_POLLSENTINEL is supported from SDL 2.0.?
 }
