@@ -29,6 +29,8 @@
 #include "castle.h"
 #include "resource.h"
 
+class Kingdom;
+
 namespace Difficulty
 {
     // !!! IMPORTANT !!!
@@ -47,7 +49,7 @@ namespace Difficulty
     int GetScoutingBonusForAI( int difficulty );
 
     // Returns an extra resource bonus for AI based on difficulty level.
-    Funds getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles );
+    Funds getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom );
 
     // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );

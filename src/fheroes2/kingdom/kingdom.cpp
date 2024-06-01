@@ -178,25 +178,30 @@ bool Kingdom::isPlay() const
 
 void Kingdom::LossPostActions()
 {
-    if ( isPlay() ) {
-        Players::SetPlayerInGame( color, false );
-
-        // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
-        while ( !heroes.empty() ) {
-            Heroes * hero = heroes.back();
-
-            assert( hero->GetColor() == GetColor() );
-
-            hero->Dismiss( static_cast<int>( Battle::RESULT_LOSS ) );
-        }
-
-        if ( !castles.empty() ) {
-            castles.ChangeColors( GetColor(), Color::NONE );
-            castles.clear();
-        }
-
-        world.ResetCapturedObjects( GetColor() );
+    if ( !isPlay() ) {
+        return;
     }
+
+    Players::SetPlayerInGame( color, false );
+
+    // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
+    while ( !heroes.empty() ) {
+        Heroes * hero = heroes.back();
+
+        assert( hero->GetColor() == GetColor() );
+
+        hero->Dismiss( static_cast<int>( Battle::RESULT_LOSS ) );
+    }
+
+    for ( Castle * castle : castles ) {
+        assert( castle != nullptr && castle->GetColor() == GetColor() );
+
+        castle->ChangeColor( Color::NONE );
+    }
+
+    castles.clear();
+
+    world.ResetCapturedObjects( GetColor() );
 }
 
 void Kingdom::ActionBeforeTurn()
@@ -598,20 +603,22 @@ bool Kingdom::AllowRecruitHero( bool check_payment ) const
 
 void Kingdom::ApplyPlayWithStartingHero()
 {
-    if ( !isPlay() || castles.empty() )
+    if ( !isPlay() || castles.empty() ) {
         return;
+    }
 
     bool foundHeroes = false;
 
     for ( const Castle * castle : castles ) {
-        if ( castle == nullptr )
+        if ( castle == nullptr ) {
             continue;
+        }
 
-        // check manual set hero (castle position + point(0, 1))?
+        // Check if there is a hero placed by the map creator near the castle entrance (castle position + point(0, 1))
         const fheroes2::Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
 
-        // and move manual set hero to castle
+        // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {
             const bool patrol = hero->Modes( Heroes::PATROL );
             if ( hero->isValid() ) {
@@ -626,19 +633,21 @@ void Kingdom::ApplyPlayWithStartingHero()
                 hero->SetModes( Heroes::PATROL );
                 hero->SetPatrolCenter( cp );
             }
+
             foundHeroes = true;
         }
     }
 
     if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInEachCastle ) {
-        // get first castle
         const Castle * first = castles.GetFirstCastle();
-        if ( nullptr == first )
+        if ( first == nullptr ) {
             first = castles.front();
+        }
 
         Heroes * hero = world.GetHeroForHire( first->GetRace() );
-        if ( hero && AllowRecruitHero( false ) )
+        if ( hero && AllowRecruitHero( false ) ) {
             hero->Recruit( *first );
+        }
     }
 }
 
@@ -707,7 +716,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty(), GetCastles() );
+        const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty(), *this );
         if ( incomeBonus.GetValidItemsCount() != 0 ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() );
 

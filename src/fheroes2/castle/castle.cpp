@@ -2414,15 +2414,12 @@ void Castle::ActionAfterBattle( bool attacker_wins )
 
 Castle * VecCastles::GetFirstCastle() const
 {
-    const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
-    return end() != it ? *it : nullptr;
-}
+    const_iterator iter = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
+    if ( iter == end() ) {
+        return nullptr;
+    }
 
-void VecCastles::ChangeColors( int col1, int col2 )
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->GetColor() == col1 )
-            ( *it )->ChangeColor( col2 );
+    return *iter;
 }
 
 AllCastles::AllCastles()

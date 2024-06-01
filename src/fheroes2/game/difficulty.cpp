@@ -23,12 +23,15 @@
 
 #include "difficulty.h"
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
+#include "kingdom.h"
 #include "profit.h"
 #include "race.h"
 #include "translations.h"
+#include "world.h"
 
 std::string Difficulty::String( int difficulty )
 {
@@ -68,8 +71,10 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     return 0;
 }
 
-Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles )
+Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom )
 {
+    assert( kingdom.isControlAI() );
+
     const auto getIncomeFromSetsOfResourceMines = []( const int resourceTypes, const uint32_t numOfSets ) {
         Funds result;
 
@@ -78,16 +83,28 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
         return result * numOfSets;
     };
 
-    const auto getBonusForCastles = [&castles]() {
+    const auto getBonusForCastles = [kingdomColor = kingdom.GetColor(), &kingdomCastles = kingdom.GetCastles()]() {
         Funds result;
 
-        for ( const Castle * castle : castles ) {
+        const bool kingdomHasMarketplace = std::any_of( kingdomCastles.begin(), kingdomCastles.end(), []( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            return castle->isBuild( BUILD_MARKETPLACE );
+        } );
+
+        // Additional rare resources for hiring units from higher-level dwellings can only be provided if the kingdom already has some source of those resources - either
+        // through trade or through mining
+        const auto doesKingdomHaveResourceSource = [kingdomColor, kingdomHasMarketplace]( const int resourceType ) {
+            return ( kingdomHasMarketplace || world.CountCapturedMines( resourceType, kingdomColor ) > 0 );
+        };
+
+        for ( const Castle * castle : kingdomCastles ) {
             assert( castle != nullptr );
 
             // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles
             result += ProfitConditions::FromMine( Resource::GOLD );
 
-            // Offer additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
+            // Provide additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
             if ( !castle->isBuild( DWELLING_MONSTER6 ) ) {
                 continue;
             }
@@ -98,18 +115,26 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
                 // Rare resources are not required to hire maximum-level units in these castles
                 break;
             case Race::BARB:
-                result += ProfitConditions::FromMine( Resource::CRYSTAL );
+                if ( doesKingdomHaveResourceSource( Resource::CRYSTAL ) ) {
+                    result += ProfitConditions::FromMine( Resource::CRYSTAL );
+                }
                 break;
             case Race::SORC:
-                result += ProfitConditions::FromMine( Resource::MERCURY );
+                if ( doesKingdomHaveResourceSource( Resource::MERCURY ) ) {
+                    result += ProfitConditions::FromMine( Resource::MERCURY );
+                }
                 break;
             case Race::WRLK:
-                result += ProfitConditions::FromMine( Resource::SULFUR );
+                if ( doesKingdomHaveResourceSource( Resource::SULFUR ) ) {
+                    result += ProfitConditions::FromMine( Resource::SULFUR );
+                }
                 // The maximum level units in this castle are more expensive than in others
                 result += ProfitConditions::FromMine( Resource::GOLD );
                 break;
             case Race::WZRD:
-                result += ProfitConditions::FromMine( Resource::GEMS );
+                if ( doesKingdomHaveResourceSource( Resource::GEMS ) ) {
+                    result += ProfitConditions::FromMine( Resource::GEMS );
+                }
                 // The maximum level units in this castle are more expensive than in others
                 result += ProfitConditions::FromMine( Resource::GOLD );
                 break;

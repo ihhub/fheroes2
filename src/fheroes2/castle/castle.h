@@ -413,9 +413,14 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * GetFirstCastle() const;
+    VecCastles() = default;
+    VecCastles( const VecCastles & ) = delete;
 
-    void ChangeColors( int, int );
+    ~VecCastles() = default;
+
+    VecCastles & operator=( const VecCastles & ) = delete;
+
+    Castle * GetFirstCastle() const;
 };
 
 class AllCastles
