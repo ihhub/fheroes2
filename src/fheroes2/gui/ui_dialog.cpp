@@ -89,7 +89,7 @@ namespace fheroes2
 
         const bool isProperDialog = ( buttons != 0 );
 
-        const int cusorTheme = isProperDialog ? ( ::Cursor::POINTER ) : ( ::Cursor::Get().Themes() );
+        const int cusorTheme = isProperDialog ? ::Cursor::POINTER : ::Cursor::Get().Themes();
 
         // setup cursor
         const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
