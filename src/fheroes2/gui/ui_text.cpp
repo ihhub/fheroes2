@@ -985,7 +985,7 @@ namespace fheroes2
         return textSize - 1;
     }
 
-    bool isFontAvailable( const std::string & text, const FontType fontType )
+    bool isFontAvailable( const std::string_view text, const FontType fontType )
     {
         if ( text.empty() ) {
             return true;

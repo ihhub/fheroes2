@@ -260,5 +260,5 @@ namespace fheroes2
     size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
-    bool isFontAvailable( const std::string & text, const FontType fontType );
+    bool isFontAvailable( const std::string_view text, const FontType fontType );
 }
