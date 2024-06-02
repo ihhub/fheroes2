@@ -115,8 +115,7 @@ namespace
             LocalEvent::Get().OpenController();
         }
 
-        LocalEvent::OpenTouchpad();
-        LocalEvent::setEventProcessingStates();
+        LocalEvent::initEventEngine();
 
         return true;
     }
