@@ -1519,8 +1519,8 @@ void LocalEvent::ProcessControllerAxisMotion()
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
         SetModes( MOUSE_MOTION );
 
-        const int32_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
-        const int32_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
+        const int32_t xSign = ( _controllerLeftXAxis < 0 ) ? -1 : 1;
+        const int32_t ySign = ( _controllerLeftYAxis < 0 ) ? -1 : 1;
 
         _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), _controllerAxisSpeedup ) * xSign * deltaTime * _controllerPointerSpeed;
         _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), _controllerAxisSpeedup ) * ySign * deltaTime * _controllerPointerSpeed;
