@@ -27,6 +27,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <map>
+#include <ostream>
 #include <set>
 #include <utility>
 
@@ -37,6 +38,7 @@
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
 #include <SDL_mouse.h>
+#include <SDL_stdinc.h>
 #include <SDL_timer.h>
 #include <SDL_touch.h>
 #include <SDL_version.h>
