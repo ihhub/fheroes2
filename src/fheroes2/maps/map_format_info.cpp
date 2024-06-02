@@ -34,10 +34,60 @@ namespace
     // This value is set to avoid any corrupted files to be processed.
     const size_t minFileSize{ 128 };
 
-    const uint16_t minimumSupportedVersion{ 2 };
+    constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    const uint16_t currentSupportedVersion{ 2 };
+    constexpr uint16_t currentSupportedVersion{ 3 };
+
+    void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 2, "Remove this function." );
+
+        if ( map.version > 2 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
+                    switch ( objInfo.index ) {
+                    case 17: // Graveyard, grass terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 62;
+                        break;
+                    case 18: // Graveyard, snow terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 63;
+                        break;
+                    case 19: // Graveyard, desert terrain(?), ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 64;
+                        break;
+                    case 20: // Graveyard, generic terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 0;
+                        break;
+                    case 21: // Graveyard, snow terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 1;
+                        break;
+                    default: // Shift the rest of the objects in the Dwellings group by 5 positions "up"
+                        if ( objInfo.index > 21 ) {
+                            objInfo.index -= 5;
+                        }
+                        break;
+                    }
+
+                    continue;
+                }
+
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    // Shift the objects in the Miscellaneous group by 2 positions "down", since non-ugly Graveyard versions were added to the beginning of this group
+                    objInfo.index += 2;
+                }
+            }
+        }
+    }
 }
 
 namespace Maps::Map_Format
@@ -263,6 +313,9 @@ namespace Maps::Map_Format
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
             >> map.adventureMapEventMetadata >> map.shrineMetadata;
+
+        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
+        convertFromV2ToV3( map );
 
         return !msg.fail();
     }
