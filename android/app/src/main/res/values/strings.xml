@@ -9,6 +9,7 @@
     <string name="activity_toolset_extract_homm2_assets_btn_text">Extract HoMM2 assets</string>
     <string name="activity_toolset_download_homm2_demo_btn_text">Download HoMM2 demo</string>
     <string name="activity_toolset_save_file_manager_btn_text">Save file manager</string>
+    <string name="activity_toolset_map_file_manager_btn_text">FH2M map file manager</string>
     <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Operation completed successfully.</string>
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Operation completed successfully, but no HoMM2 assets were found.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">An error occurred during the operation: %s</string>
@@ -45,4 +46,30 @@
     <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Yes</string>
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
     <string name="activity_save_file_manager_suggested_zip_file_name" translatable="false">fheroes2_save_files.zip</string>
+    <string name="activity_map_file_manager_label">fh2 Map File Manager</string>
+    <string name="activity_map_file_manager_map_file_list_empty_lbl_text">No map files available</string>
+    <string name="activity_map_file_manager_select_all_btn_content_description">Select all map files</string>
+    <string name="activity_map_file_manager_unselect_all_btn_content_description">Unselect all map files</string>
+    <string name="activity_map_file_manager_import_btn_content_description">Import map files</string>
+    <string name="activity_map_file_manager_export_btn_content_description">Export selected map files</string>
+    <string name="activity_map_file_manager_delete_btn_content_description">Delete selected map files</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_no_map_files_found">Operation completed successfully, but no map files were found.</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_failed">An error occurred during the operation: %s</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_title">No files selected for export</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_message">Please select the map files to export.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_title">No files selected for deletion</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_message">Please select the map files to delete.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_positive_btn_text">OK</string>
+    <plurals name="activity_map_file_manager_delete_confirmation_title">
+        <item quantity="one">Delete map file</item>
+        <item quantity="other">Delete map files</item>
+    </plurals>
+    <plurals name="activity_map_file_manager_delete_confirmation_message">
+        <item quantity="one">Are you sure you want to delete the selected file?</item>
+        <item quantity="other">Are you sure you want to delete %d selected files?</item>
+    </plurals>
+    <string name="activity_map_file_manager_delete_confirmation_positive_btn_text">Yes</string>
+    <string name="activity_map_file_manager_delete_confirmation_negative_btn_text">No</string>
+    <string name="activity_map_file_manager_suggested_zip_file_name" translatable="false">fheroes2_map_files.zip</string>
 </resources>

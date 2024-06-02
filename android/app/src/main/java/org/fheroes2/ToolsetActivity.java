@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -195,12 +195,19 @@ public final class ToolsetActivity extends AppCompatActivity
         startActivity( new Intent( this, SaveFileManagerActivity.class ) );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void mapFileManagerButtonClicked( final View view )
+    {
+        startActivity( new Intent( this, MapFileManagerActivity.class ) );
+    }
+
     private void updateUI( final ToolsetActivityViewModel.Status modelStatus )
     {
         final Button startGameButton = findViewById( R.id.activity_toolset_start_game_btn );
         final Button extractHoMM2AssetsButton = findViewById( R.id.activity_toolset_extract_homm2_assets_btn );
         final Button downloadHoMM2DemoButton = findViewById( R.id.activity_toolset_download_homm2_demo_btn );
         final Button saveFileManagerButton = findViewById( R.id.activity_toolset_save_file_manager_btn );
+        final Button mapFileManagerButton = findViewById( R.id.activity_toolset_map_file_manager_btn );
 
         final TextView gameStatusTextView = findViewById( R.id.activity_toolset_game_status_lbl );
         final TextView lastTaskStatusTextView = findViewById( R.id.activity_toolset_last_task_status_lbl );
@@ -211,6 +218,7 @@ public final class ToolsetActivity extends AppCompatActivity
         extractHoMM2AssetsButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         downloadHoMM2DemoButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         saveFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        mapFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
         switch ( modelStatus.backgroundTaskResult ) {
         case RESULT_NONE:

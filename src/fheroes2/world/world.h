@@ -312,7 +312,6 @@ public:
     std::string DateString() const;
 
     void NewDay();
-    void NewDayAI();
     void NewWeek();
     void NewMonth();
 

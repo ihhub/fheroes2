@@ -86,11 +86,6 @@ namespace Interface
                    || _selectedInstrument == Instrument::KINGDOM_OBJECTS || _selectedInstrument == Instrument::MONSTERS;
         }
 
-        uint32_t getEraseTypes() const
-        {
-            return _eraseTypes;
-        }
-
         std::set<Maps::ObjectGroup> getEraseObjectGroups() const;
 
         bool showAreaSelectRect() const

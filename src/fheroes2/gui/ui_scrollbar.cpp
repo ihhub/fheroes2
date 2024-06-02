@@ -24,6 +24,11 @@
 #include <cassert>
 #include <cmath>
 
+namespace
+{
+    const int32_t minimumSliderLength = 15;
+}
+
 namespace fheroes2
 {
     void Scrollbar::setImage( const Image & image )
@@ -207,10 +212,10 @@ namespace fheroes2
         int32_t height = originalSlider.height();
 
         if ( horizontalSlider ) {
-            width = std::max( width + middleLength, startSliderArea.width * 2 );
+            width = std::max( minimumSliderLength, std::max( width + middleLength, startSliderArea.width * 2 ) );
         }
         else {
-            height = std::max( height + middleLength, startSliderArea.height * 2 );
+            height = std::max( minimumSliderLength, std::max( height + middleLength, startSliderArea.height * 2 ) );
         }
 
         Image output( width, height );

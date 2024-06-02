@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -41,7 +42,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -50,15 +50,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public final class SaveFileManagerActivity extends AppCompatActivity
+public final class MapFileManagerActivity extends AppCompatActivity
 {
-    public static final class SaveFileManagerActivityViewModel extends ViewModel
+    public static final class MapFileManagerActivityViewModel extends ViewModel
     {
         private enum BackgroundTaskResult
         {
             RESULT_NONE,
             RESULT_SUCCESS,
-            RESULT_NO_SAVE_FILES,
+            RESULT_NO_MAP_FILES,
             RESULT_ERROR
         }
 
@@ -67,15 +67,15 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             private boolean isBackgroundTaskExecuting;
             private final BackgroundTaskResult backgroundTaskResult;
             private final String backgroundTaskError;
-            private final List<String> saveFileNames;
+            private final List<String> mapFileNames;
 
             private Status( final boolean isBackgroundTaskExecuting, final BackgroundTaskResult backgroundTaskResult, final String backgroundTaskError,
-                            final List<String> saveFileNames )
+                            final List<String> mapFileNames )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
                 this.backgroundTaskResult = backgroundTaskResult;
                 this.backgroundTaskError = backgroundTaskError;
-                this.saveFileNames = saveFileNames;
+                this.mapFileNames = mapFileNames;
             }
 
             @SuppressWarnings( "SameParameterValue" )
@@ -92,7 +92,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         /**
          * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
-        private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
+        @SuppressWarnings( "SameParameterValue" )
+        private void updateMapFileList( final File mapFileDir, final List<String> allowedMapFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
             assert !status.isBackgroundTaskExecuting;
@@ -101,12 +102,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try {
-                    // Reading the list of save files should not by itself change the visible status of the last background task, unless an error occurred while reading
-                    liveStatus.postValue(
-                        new Status( false, BackgroundTaskResult.RESULT_NONE, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    // Reading the list of map files should not by itself change the visible status of the last background task, unless an error occurred while reading
+                    liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_NONE, "", FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+                    Log.e( "fheroes2", "Failed to get a list of map files.", ex );
 
                     liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                 }
@@ -116,7 +116,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         /**
          * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
-        private void importSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
+        @SuppressWarnings( "SameParameterValue" )
+        private void importMapFiles( final File mapFileDir, final List<String> allowedMapFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
             assert !status.isBackgroundTaskExecuting;
@@ -124,14 +125,14 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
-                boolean atLeastOneSaveFileImported = false;
+                boolean atLeastOneMapFileImported = false;
                 Exception caughtException = null;
 
                 try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
-                    atLeastOneSaveFileImported = FileManagement.importFilesFromZip( saveFileDir, allowedSaveFileExtensions, in );
+                    atLeastOneMapFileImported = FileManagement.importFilesFromZip( mapFileDir, allowedMapFileExtensions, in );
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to import save files.", ex );
+                    Log.e( "fheroes2", "Failed to import map files.", ex );
 
                     caughtException = ex;
                 }
@@ -139,16 +140,16 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                         else {
-                            liveStatus.postValue(
-                                new Status( false, atLeastOneSaveFileImported ? BackgroundTaskResult.RESULT_SUCCESS : BackgroundTaskResult.RESULT_NO_SAVE_FILES, "",
-                                            FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                            liveStatus.postValue( new Status( false,
+                                                              atLeastOneMapFileImported ? BackgroundTaskResult.RESULT_SUCCESS : BackgroundTaskResult.RESULT_NO_MAP_FILES,
+                                                              "", FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
-                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+                        Log.e( "fheroes2", "Failed to get a list of map files.", ex );
 
                         liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
@@ -159,8 +160,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         /**
          * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
-        private void exportSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames, final Uri zipFileUri,
-                                      final ContentResolver contentResolver )
+        @SuppressWarnings( "SameParameterValue" )
+        private void exportMapFiles( final File mapFileDir, final List<String> allowedMapFileExtensions, final List<String> mapFileNames, final Uri zipFileUri,
+                                     final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
             assert !status.isBackgroundTaskExecuting;
@@ -171,10 +173,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 Exception caughtException = null;
 
                 try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ) ) {
-                    FileManagement.exportFilesToZip( saveFileDir, saveFileNames, out );
+                    FileManagement.exportFilesToZip( mapFileDir, mapFileNames, out );
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to export save files.", ex );
+                    Log.e( "fheroes2", "Failed to export map files.", ex );
 
                     caughtException = ex;
                 }
@@ -182,15 +184,15 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                         else {
                             liveStatus.postValue(
-                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
-                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+                        Log.e( "fheroes2", "Failed to get a list of map files.", ex );
 
                         liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
@@ -201,7 +203,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         /**
          * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
-        private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
+        @SuppressWarnings( "SameParameterValue" )
+        private void deleteMapFiles( final File mapFileDir, final List<String> allowedMapFileExtensions, final List<String> mapFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
             assert !status.isBackgroundTaskExecuting;
@@ -212,10 +215,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 Exception caughtException = null;
 
                 try {
-                    FileManagement.deleteFiles( saveFileDir, saveFileNames );
+                    FileManagement.deleteFiles( mapFileDir, mapFileNames );
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to delete save files.", ex );
+                    Log.e( "fheroes2", "Failed to delete map files.", ex );
 
                     caughtException = ex;
                 }
@@ -223,15 +226,15 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                         else {
                             liveStatus.postValue(
-                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( mapFileDir, allowedMapFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
-                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+                        Log.e( "fheroes2", "Failed to get a list of map files.", ex );
 
                         liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
@@ -240,16 +243,14 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
     }
 
-    private File saveFileDir = null;
+    private static final List<String> allowedMapFileExtensions = new ArrayList<>( Collections.singletonList( ".fh2m" ) );
 
-    private ToggleButton filterStandardToggleButton = null;
-    private ToggleButton filterCampaignToggleButton = null;
-    private ToggleButton filterMultiplayerToggleButton = null;
+    private File mapFileDir = null;
 
-    private ListView saveFileListView = null;
-    private ArrayAdapter<String> saveFileListViewAdapter = null;
+    private ListView mapFileListView = null;
+    private ArrayAdapter<String> mapFileListViewAdapter = null;
 
-    private SaveFileManagerActivityViewModel viewModel = null;
+    private MapFileManagerActivityViewModel viewModel = null;
 
     private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
         // No ZIP file was selected
@@ -257,11 +258,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             return;
         }
 
-        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-            saveFileListView.setItemChecked( i, false );
+        for ( int i = 0; i < mapFileListView.getCount(); ++i ) {
+            mapFileListView.setItemChecked( i, false );
         }
 
-        enqueueBackgroundTask( () -> viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() ) );
+        enqueueBackgroundTask( () -> viewModel.importMapFiles( mapFileDir, allowedMapFileExtensions, result, getContentResolver() ) );
     } );
 
     private final ActivityResultLauncher<String> zipFileLocationChooserLauncher
@@ -271,15 +272,15 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                   return;
               }
 
-              final List<String> saveFileNames = new ArrayList<>();
+              final List<String> mapFileNames = new ArrayList<>();
 
-              for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-                  if ( saveFileListView.isItemChecked( i ) ) {
-                      saveFileNames.add( saveFileListViewAdapter.getItem( i ) );
+              for ( int i = 0; i < mapFileListView.getCount(); ++i ) {
+                  if ( mapFileListView.isItemChecked( i ) ) {
+                      mapFileNames.add( mapFileListViewAdapter.getItem( i ) );
                   }
               }
 
-              enqueueBackgroundTask( () -> viewModel.exportSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames, result, getContentResolver() ) );
+              enqueueBackgroundTask( () -> viewModel.exportMapFiles( mapFileDir, allowedMapFileExtensions, mapFileNames, result, getContentResolver() ) );
           } );
 
     private final Queue<Runnable> backgroundTaskQueue = new ArrayDeque<>();
@@ -289,21 +290,17 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onCreate( savedInstanceState );
 
-        setContentView( R.layout.activity_save_file_manager );
+        setContentView( R.layout.activity_map_file_manager );
 
-        saveFileDir = new File( getExternalFilesDir( null ), "files" + File.separator + "save" );
+        mapFileDir = new File( getExternalFilesDir( null ), "maps" );
 
-        filterStandardToggleButton = findViewById( R.id.activity_save_file_manager_filter_standard_btn );
-        filterCampaignToggleButton = findViewById( R.id.activity_save_file_manager_filter_campaign_btn );
-        filterMultiplayerToggleButton = findViewById( R.id.activity_save_file_manager_filter_multiplayer_btn );
+        mapFileListView = findViewById( R.id.activity_map_file_manager_map_file_list );
+        mapFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
 
-        saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
-        saveFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
+        mapFileListView.setAdapter( mapFileListViewAdapter );
+        mapFileListView.setEmptyView( findViewById( R.id.activity_map_file_manager_map_file_list_empty_lbl ) );
 
-        saveFileListView.setAdapter( saveFileListViewAdapter );
-        saveFileListView.setEmptyView( findViewById( R.id.activity_save_file_manager_save_file_list_empty_lbl ) );
-
-        viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
+        viewModel = new ViewModelProvider( this ).get( MapFileManagerActivityViewModel.class );
         viewModel.liveStatus.observe( this, this::runNextBackgroundTask );
         viewModel.liveStatus.observe( this, this::updateUI );
     }
@@ -313,45 +310,22 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onResume();
 
-        enqueueBackgroundTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
-    }
-
-    public void filterButtonClicked( final View view )
-    {
-        final ToggleButton filterToggleButton = (ToggleButton)view;
-
-        int activeFiltersCount = 0;
-
-        activeFiltersCount += filterStandardToggleButton.isChecked() ? 1 : 0;
-        activeFiltersCount += filterCampaignToggleButton.isChecked() ? 1 : 0;
-        activeFiltersCount += filterMultiplayerToggleButton.isChecked() ? 1 : 0;
-
-        // Do not allow all filters to be turned off at the same time.
-        // TODO: Try disabling the button instead and changing its style so that it doesn't look disabled.
-        if ( activeFiltersCount < 1 && !filterToggleButton.isChecked() ) {
-            filterToggleButton.setChecked( true );
-        }
-
-        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-            saveFileListView.setItemChecked( i, false );
-        }
-
-        enqueueBackgroundTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
+        enqueueBackgroundTask( () -> viewModel.updateMapFileList( mapFileDir, allowedMapFileExtensions ) );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void selectAllButtonClicked( final View view )
     {
-        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-            saveFileListView.setItemChecked( i, true );
+        for ( int i = 0; i < mapFileListView.getCount(); ++i ) {
+            mapFileListView.setItemChecked( i, true );
         }
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void unselectAllButtonClicked( final View view )
     {
-        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-            saveFileListView.setItemChecked( i, false );
+        for ( int i = 0; i < mapFileListView.getCount(); ++i ) {
+            mapFileListView.setItemChecked( i, false );
         }
     }
 
@@ -364,30 +338,30 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void exportButtonClicked( final View view )
     {
-        if ( saveFileListView.getCheckedItemCount() == 0 ) {
+        if ( mapFileListView.getCheckedItemCount() == 0 ) {
             ( new AlertDialog.Builder( this ) )
-                .setTitle( R.string.activity_save_file_manager_no_files_selected_for_export_title )
-                .setMessage( R.string.activity_save_file_manager_no_files_selected_for_export_message )
-                .setPositiveButton( R.string.activity_save_file_manager_no_files_selected_for_export_positive_btn_text, ( dialog, which ) -> {} )
+                .setTitle( R.string.activity_map_file_manager_no_files_selected_for_export_title )
+                .setMessage( R.string.activity_map_file_manager_no_files_selected_for_export_message )
+                .setPositiveButton( R.string.activity_map_file_manager_no_files_selected_for_export_positive_btn_text, ( dialog, which ) -> {} )
                 .create()
                 .show();
 
             return;
         }
 
-        zipFileLocationChooserLauncher.launch( getString( R.string.activity_save_file_manager_suggested_zip_file_name ) );
+        zipFileLocationChooserLauncher.launch( getString( R.string.activity_map_file_manager_suggested_zip_file_name ) );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void deleteButtonClicked( final View view )
     {
-        final int selectedSaveFilesCount = saveFileListView.getCheckedItemCount();
+        final int selectedMapFilesCount = mapFileListView.getCheckedItemCount();
 
-        if ( selectedSaveFilesCount == 0 ) {
+        if ( selectedMapFilesCount == 0 ) {
             ( new AlertDialog.Builder( this ) )
-                .setTitle( R.string.activity_save_file_manager_no_files_selected_for_deletion_title )
-                .setMessage( R.string.activity_save_file_manager_no_files_selected_for_deletion_message )
-                .setPositiveButton( R.string.activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text, ( dialog, which ) -> {} )
+                .setTitle( R.string.activity_map_file_manager_no_files_selected_for_deletion_title )
+                .setMessage( R.string.activity_map_file_manager_no_files_selected_for_deletion_message )
+                .setPositiveButton( R.string.activity_map_file_manager_no_files_selected_for_deletion_positive_btn_text, ( dialog, which ) -> {} )
                 .create()
                 .show();
 
@@ -397,47 +371,30 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         final Resources res = getResources();
 
         ( new AlertDialog.Builder( this ) )
-            .setTitle( res.getQuantityString( R.plurals.activity_save_file_manager_delete_confirmation_title, selectedSaveFilesCount ) )
-            .setMessage( res.getQuantityString( R.plurals.activity_save_file_manager_delete_confirmation_message, selectedSaveFilesCount, selectedSaveFilesCount ) )
-            .setPositiveButton( R.string.activity_save_file_manager_delete_confirmation_positive_btn_text,
+            .setTitle( res.getQuantityString( R.plurals.activity_map_file_manager_delete_confirmation_title, selectedMapFilesCount ) )
+            .setMessage( res.getQuantityString( R.plurals.activity_map_file_manager_delete_confirmation_message, selectedMapFilesCount, selectedMapFilesCount ) )
+            .setPositiveButton( R.string.activity_map_file_manager_delete_confirmation_positive_btn_text,
                                 ( dialog, which ) -> {
-                                    final List<String> saveFileNames = new ArrayList<>();
+                                    final List<String> mapFileNames = new ArrayList<>();
 
-                                    for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
-                                        if ( saveFileListView.isItemChecked( i ) ) {
-                                            saveFileListView.setItemChecked( i, false );
+                                    for ( int i = 0; i < mapFileListView.getCount(); ++i ) {
+                                        if ( mapFileListView.isItemChecked( i ) ) {
+                                            mapFileListView.setItemChecked( i, false );
 
-                                            saveFileNames.add( saveFileListViewAdapter.getItem( i ) );
+                                            mapFileNames.add( mapFileListViewAdapter.getItem( i ) );
                                         }
                                     }
 
-                                    enqueueBackgroundTask( () -> viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames ) );
+                                    enqueueBackgroundTask( () -> viewModel.deleteMapFiles( mapFileDir, allowedMapFileExtensions, mapFileNames ) );
                                 } )
-            .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
+            .setNegativeButton( R.string.activity_map_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
             .show();
     }
 
-    private List<String> getAllowedSaveFileExtensions()
-    {
-        final List<String> allowedSaveFileExtensions = new ArrayList<>();
-
-        if ( filterStandardToggleButton.isChecked() ) {
-            allowedSaveFileExtensions.add( ".sav" );
-        }
-        if ( filterCampaignToggleButton.isChecked() ) {
-            allowedSaveFileExtensions.add( ".savc" );
-        }
-        if ( filterMultiplayerToggleButton.isChecked() ) {
-            allowedSaveFileExtensions.add( ".savh" );
-        }
-
-        return allowedSaveFileExtensions;
-    }
-
     private void enqueueBackgroundTask( final Runnable task )
     {
-        final SaveFileManagerActivityViewModel.Status modelStatus = Objects.requireNonNull( viewModel.liveStatus.getValue() );
+        final MapFileManagerActivityViewModel.Status modelStatus = Objects.requireNonNull( viewModel.liveStatus.getValue() );
 
         if ( modelStatus.isBackgroundTaskExecuting ) {
             backgroundTaskQueue.add( task );
@@ -447,7 +404,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
     }
 
-    private void runNextBackgroundTask( final SaveFileManagerActivityViewModel.Status modelStatus )
+    private void runNextBackgroundTask( final MapFileManagerActivityViewModel.Status modelStatus )
     {
         if ( modelStatus.isBackgroundTaskExecuting ) {
             return;
@@ -460,22 +417,19 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
     }
 
-    private void updateUI( final SaveFileManagerActivityViewModel.Status modelStatus )
+    private void updateUI( final MapFileManagerActivityViewModel.Status modelStatus )
     {
-        final ImageButton selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
-        final ImageButton unselectAllButton = findViewById( R.id.activity_save_file_manager_unselect_all_btn );
-        final ImageButton importButton = findViewById( R.id.activity_save_file_manager_import_btn );
-        final ImageButton exportButton = findViewById( R.id.activity_save_file_manager_export_btn );
-        final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
+        final ImageButton selectAllButton = findViewById( R.id.activity_map_file_manager_select_all_btn );
+        final ImageButton unselectAllButton = findViewById( R.id.activity_map_file_manager_unselect_all_btn );
+        final ImageButton importButton = findViewById( R.id.activity_map_file_manager_import_btn );
+        final ImageButton exportButton = findViewById( R.id.activity_map_file_manager_export_btn );
+        final ImageButton deleteButton = findViewById( R.id.activity_map_file_manager_delete_btn );
 
-        final TextView lastTaskStatusTextView = findViewById( R.id.activity_save_file_manager_last_task_status_lbl );
+        final TextView lastTaskStatusTextView = findViewById( R.id.activity_map_file_manager_last_task_status_lbl );
 
-        final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_save_file_manager_background_task_pb );
+        final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_map_file_manager_background_task_pb );
 
-        filterStandardToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
-        filterCampaignToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
-        filterMultiplayerToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
-        saveFileListView.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        mapFileListView.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         selectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         unselectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         importButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
@@ -488,12 +442,12 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         case RESULT_SUCCESS:
             lastTaskStatusTextView.setText( "" );
             break;
-        case RESULT_NO_SAVE_FILES:
-            lastTaskStatusTextView.setText( getString( R.string.activity_save_file_manager_last_task_status_lbl_text_no_save_files_found ) );
+        case RESULT_NO_MAP_FILES:
+            lastTaskStatusTextView.setText( getString( R.string.activity_map_file_manager_last_task_status_lbl_text_no_map_files_found ) );
             break;
         case RESULT_ERROR:
             lastTaskStatusTextView.setText(
-                String.format( getString( R.string.activity_save_file_manager_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
+                String.format( getString( R.string.activity_map_file_manager_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
             break;
         default:
             assert false;
@@ -503,8 +457,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         lastTaskStatusTextView.setVisibility( lastTaskStatusTextView.getText().length() > 0 ? View.VISIBLE : View.GONE );
         backgroundTaskProgressBar.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.VISIBLE : View.GONE );
 
-        saveFileListViewAdapter.clear();
-        saveFileListViewAdapter.addAll( modelStatus.saveFileNames );
-        saveFileListViewAdapter.notifyDataSetChanged();
+        mapFileListViewAdapter.clear();
+        mapFileListViewAdapter.addAll( modelStatus.mapFileNames );
+        mapFileListViewAdapter.notifyDataSetChanged();
     }
 }
