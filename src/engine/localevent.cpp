@@ -1170,19 +1170,15 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-LocalEvent & LocalEvent::GetClean()
+void LocalEvent::reset()
 {
-    LocalEvent & le = Get();
-
-    le.ResetModes( KEY_PRESSED );
-    le.ResetModes( MOUSE_MOTION );
-    le.ResetModes( MOUSE_PRESSED );
-    le.ResetModes( MOUSE_RELEASED );
-    le.ResetModes( MOUSE_WHEEL );
-    le.ResetModes( MOUSE_TOUCH );
-    le.ResetModes( KEY_HOLD );
-
-    return le;
+    ResetModes( KEY_PRESSED );
+    ResetModes( MOUSE_MOTION );
+    ResetModes( MOUSE_PRESSED );
+    ResetModes( MOUSE_RELEASED );
+    ResetModes( MOUSE_WHEEL );
+    ResetModes( MOUSE_TOUCH );
+    ResetModes( KEY_HOLD );
 }
 
 bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )

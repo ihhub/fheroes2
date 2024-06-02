@@ -186,11 +186,13 @@ public:
     friend class EventProcessing::EventEngine;
 
     static LocalEvent & Get();
-    static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
     static void initEventEngine();
 
     static int32_t getCurrentKeyModifiers();
+
+    // Reset all previous event statuses.
+    void reset();
 
     void setGlobalMouseMotionEventHook( std::function<fheroes2::Rect( const int32_t, const int32_t )> hook )
     {
