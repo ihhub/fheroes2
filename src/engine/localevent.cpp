@@ -256,15 +256,15 @@ namespace EventProcessing
 #define SDL_CONTROLLER_BUTTON_DPAD_UP 11
 #define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
 
-enum SwitchJoyconKeys
-{
-    SWITCH_BUTTON_Y = 2,
-    SWITCH_BUTTON_X = 3,
-    SWITCH_BUTTON_MINUS = 4,
-    SWITCH_BUTTON_PLUS = 6,
-    SWITCH_BUTTON_L = 9,
-    SWITCH_BUTTON_R = 10
-};
+    enum SwitchJoyconKeys
+    {
+        SWITCH_BUTTON_Y = 2,
+        SWITCH_BUTTON_X = 3,
+        SWITCH_BUTTON_MINUS = 4,
+        SWITCH_BUTTON_PLUS = 6,
+        SWITCH_BUTTON_L = 9,
+        SWITCH_BUTTON_R = 10
+    };
 
 #endif
 
@@ -1311,7 +1311,8 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
 
         _emulatedPointerPosX = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
-        _emulatedPointerPosY = static_cast<double>( screenResolution.height * position.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
+        _emulatedPointerPosY
+            = static_cast<double>( screenResolution.height * position.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
 #else
         _emulatedPointerPosX = static_cast<double>( position.x ) * display.width();
         _emulatedPointerPosY = static_cast<double>( position.y ) * display.height();
