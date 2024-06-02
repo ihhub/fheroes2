@@ -350,7 +350,7 @@ namespace EventProcessing
 
         static int32_t getCurrentKeyModifiers()
         {
-            return getKeyModifierFromSDL( SDL_GetModState() );;
+            return getKeyModifierFromSDL( SDL_GetModState() );
         }
 
         static void initTouchpad()
