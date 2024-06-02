@@ -328,8 +328,8 @@ namespace AI
 
             OptimizeTroopsOrder( garrison );
 
-            // Avoid building monster dwellings when defensive as they might fall into enemy's hands, unless we have a lot of resources. Instead, try to build defensive
-            // structures if there is at least some kind of garrison in the castle.
+            // Avoid building monster dwellings when defensive as they might fall into enemy's hands. Instead, try to build defensive structures if there is at least some
+            // kind of garrison in the castle.
             if ( castle.GetActualArmy().getTotalCount() > 0 ) {
                 Build( castle, defensiveStructures );
                 Build( castle, supportingDefensiveStructures );
