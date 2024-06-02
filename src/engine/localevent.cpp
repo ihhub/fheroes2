@@ -1475,7 +1475,7 @@ void LocalEvent::onControllerButtonEvent( const bool isPressed, const int button
     }
     else if ( modes & KEY_PRESSED ) {
         if ( buttonType == CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
-            _controllerPointerSpeed *= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
+            _controllerPointerSpeed *= _controllerTriggerCursorSpeedup;
             key_value = fheroes2::Key::NONE;
         }
         else if ( buttonType == CONTROLLER_BUTTON_DPAD_UP ) {
@@ -1507,7 +1507,7 @@ void LocalEvent::onControllerButtonEvent( const bool isPressed, const int button
         }
     }
     else if ( buttonType == CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
-        _controllerPointerSpeed /= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
+        _controllerPointerSpeed /= _controllerTriggerCursorSpeedup;
     }
 }
 
@@ -1522,8 +1522,8 @@ void LocalEvent::ProcessControllerAxisMotion()
         const int32_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
         const int32_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
-        _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
-        _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), _controllerAxisSpeedup ) * xSign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), _controllerAxisSpeedup ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
