@@ -1308,16 +1308,17 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
 
-        _emulatedPointerPosX = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
-        _emulatedPointerPosY
+        _emulatedPointerPos.x
+            = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
+        _emulatedPointerPos.y
             = static_cast<double>( screenResolution.height * position.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
 #else
-        _emulatedPointerPosX = static_cast<double>( position.x ) * display.width();
-        _emulatedPointerPosY = static_cast<double>( position.y ) * display.height();
+        _emulatedPointerPos.x = static_cast<double>( position.x ) * display.width();
+        _emulatedPointerPos.y = static_cast<double>( position.y ) * display.height();
 #endif
 
-        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
-        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
+        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPos.x );
+        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPos.y );
 
         SetModes( MOUSE_MOTION );
         SetModes( MOUSE_TOUCH );
@@ -1522,23 +1523,23 @@ void LocalEvent::ProcessControllerAxisMotion()
         const int32_t xSign = ( _controllerLeftXAxis < 0 ) ? -1 : 1;
         const int32_t ySign = ( _controllerLeftYAxis < 0 ) ? -1 : 1;
 
-        _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), _controllerAxisSpeedup ) * xSign * deltaTime * _controllerPointerSpeed;
-        _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), _controllerAxisSpeedup ) * ySign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPos.x += pow( std::abs( _controllerLeftXAxis ), _controllerAxisSpeedup ) * xSign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPos.y += pow( std::abs( _controllerLeftYAxis ), _controllerAxisSpeedup ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( _emulatedPointerPosX < 0 )
-            _emulatedPointerPosX = 0;
-        else if ( _emulatedPointerPosX >= display.width() )
-            _emulatedPointerPosX = display.width() - 1;
+        if ( _emulatedPointerPos.x < 0 )
+            _emulatedPointerPos.x = 0;
+        else if ( _emulatedPointerPos.x >= display.width() )
+            _emulatedPointerPos.x = display.width() - 1;
 
-        if ( _emulatedPointerPosY < 0 )
-            _emulatedPointerPosY = 0;
-        else if ( _emulatedPointerPosY >= display.height() )
-            _emulatedPointerPosY = display.height() - 1;
+        if ( _emulatedPointerPos.y < 0 )
+            _emulatedPointerPos.y = 0;
+        else if ( _emulatedPointerPos.y >= display.height() )
+            _emulatedPointerPos.y = display.height() - 1;
 
-        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
-        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
+        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPos.x );
+        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPos.y );
 
         if ( _globalMouseMotionEventHook ) {
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
@@ -1602,8 +1603,8 @@ void LocalEvent::onMouseMotionEvent( fheroes2::Point position )
 {
     SetModes( MOUSE_MOTION );
     mouse_cu = position;
-    _emulatedPointerPosX = mouse_cu.x;
-    _emulatedPointerPosY = mouse_cu.y;
+    _emulatedPointerPos.x = mouse_cu.x;
+    _emulatedPointerPos.y = mouse_cu.y;
 
     if ( _globalMouseMotionEventHook ) {
         _mouseCursorRenderArea = _globalMouseMotionEventHook( position.x, position.y );
@@ -1626,8 +1627,8 @@ void LocalEvent::onMouseButtonEvent( const bool isPressed, const int buttonType,
     mouse_button = buttonType;
 
     mouse_cu = position;
-    _emulatedPointerPosX = mouse_cu.x;
-    _emulatedPointerPosY = mouse_cu.y;
+    _emulatedPointerPos.x = mouse_cu.x;
+    _emulatedPointerPos.y = mouse_cu.y;
 
     if ( modes & MOUSE_PRESSED ) {
         switch ( buttonType ) {

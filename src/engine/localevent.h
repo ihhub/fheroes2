@@ -494,8 +494,7 @@ private:
     // used to convert user-friendly pointer speed values into more usable ones
     const double _constrollerSpeedModifier = 2000000.0;
     double _controllerPointerSpeed = 10.0 / _constrollerSpeedModifier;
-    double _emulatedPointerPosX = 0;
-    double _emulatedPointerPosY = 0;
+    fheroes2::PointBase2D<double> _emulatedPointerPos;
 
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values
     const double _controllerAxisSpeedup = 1.03;
