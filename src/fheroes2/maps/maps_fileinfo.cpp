@@ -193,7 +193,7 @@ void Maps::FileInfo::Reset()
 
     timestamp = 0;
 
-    startWithHeroInEachCastle = false;
+    startWithHeroInFirstCastle = false;
 
     version = GameVersion::SUCCESSION_WARS;
 
@@ -289,8 +289,8 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     lossConditionType = fs.get();
     // Parameter of loss condition.
     lossConditionParams[0] = fs.getLE16();
-    // Does the game start with heroes in castles automatically?
-    startWithHeroInEachCastle = ( 0 == fs.get() );
+    // Does the game start with a hero in the first castle?
+    startWithHeroInFirstCastle = ( 0 == fs.get() );
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
 
@@ -647,7 +647,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 
     return msg << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
-               << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInEachCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
+               << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
                << fi.worldWeek << fi.worldMonth;
 }
 
@@ -678,7 +678,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 
     msg >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
         >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
-        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInEachCastle;
+        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle;
 
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
     static_assert( std::is_same_v<VersionUnderlyingType, int>, "Type of version has been changed, check the logic below" );

@@ -32,7 +32,8 @@ namespace
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
 
     // This value is set to avoid any corrupted files to be processed.
-    const size_t minFileSize{ 128 };
+    // It is impossible to have a map with smaller than this size.
+    const size_t minFileSize{ 512 };
 
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
@@ -238,6 +239,11 @@ namespace Maps::Map_Format
         msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
             >> map.lossConditionMetadata >> map.size;
+
+        if ( map.size <= 0 ) {
+            // This is not a correct map size.
+            return false;
+        }
 
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );

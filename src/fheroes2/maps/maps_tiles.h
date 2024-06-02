@@ -366,7 +366,7 @@ namespace Maps
         }
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixTileObjectType( Tiles & tile );
+        static void fixMP2MapTileObjectType( Tiles & tile );
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 

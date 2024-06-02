@@ -638,11 +638,15 @@ void Kingdom::ApplyPlayWithStartingHero()
         }
     }
 
-    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInEachCastle ) {
+    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInFirstCastle ) {
+        // get first castle
         const Castle * first = castles.GetFirstCastle();
         if ( first == nullptr ) {
             first = castles.front();
         }
+
+        // If no heroes exist and at least one castle / town must be.
+        assert( first != nullptr );
 
         Heroes * hero = world.GetHeroForHire( first->GetRace() );
         if ( hero && AllowRecruitHero( false ) ) {

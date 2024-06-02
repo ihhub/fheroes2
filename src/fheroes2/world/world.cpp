@@ -68,7 +68,7 @@
 
 namespace
 {
-    bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
 
@@ -91,7 +91,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const MapsTiles & mapTiles, const int32_t tileId, const bool allDirections )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const bool allDirections )
     {
         std::vector<int32_t> suitableIds;
 
@@ -128,7 +128,7 @@ namespace
         return Rand::Get( suitableIds );
     }
 
-    int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
+    int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
 
@@ -347,8 +347,8 @@ void World::Reset()
     week = 0;
     month = 0;
 
-    heroes_cond_wins = Heroes::UNKNOWN;
-    heroes_cond_loss = Heroes::UNKNOWN;
+    heroIdAsWinCondition = Heroes::UNKNOWN;
+    heroIdAsLossCondition = Heroes::UNKNOWN;
 
     _seed = 0;
 }
@@ -1015,12 +1015,12 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 
 const Heroes * World::GetHeroesCondWins() const
 {
-    return ( ( Settings::Get().getCurrentMapInfo().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroIdAsWinCondition ) : nullptr;
 }
 
 const Heroes * World::GetHeroesCondLoss() const
 {
-    return ( ( Settings::Get().getCurrentMapInfo().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroIdAsLossCondition ) : nullptr;
 }
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
@@ -1054,7 +1054,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        if ( heroes_cond_wins == Heroes::UNKNOWN ) {
+        if ( heroIdAsWinCondition == Heroes::UNKNOWN ) {
             return false;
         }
 
@@ -1124,7 +1124,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
     }
 
     case GameOver::LOSS_HERO: {
-        if ( heroes_cond_loss == Heroes::UNKNOWN ) {
+        if ( heroIdAsLossCondition == Heroes::UNKNOWN ) {
             return false;
         }
 
@@ -1442,7 +1442,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
     return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1461,12 +1461,12 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     }
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+        >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-        ++w.heroes_cond_wins;
-        ++w.heroes_cond_loss;
+        ++w.heroIdAsWinCondition;
+        ++w.heroIdAsLossCondition;
     }
 
     msg >> w.map_objects >> w._seed;

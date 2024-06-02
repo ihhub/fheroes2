@@ -60,6 +60,9 @@ namespace
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
+    // TODO: this array is not used during gameplay but only during new map loading.
+    //       If we decide to add objects / events that generate a random artifact after a new game started
+    //       then we will have problems.
     std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = { 0 };
 
     enum
