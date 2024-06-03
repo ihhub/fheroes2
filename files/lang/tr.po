@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -398,8 +398,9 @@ msgstr "Son birlik hareket ettirilemiyor"
 msgid "Move the %{name}"
 msgstr "%{name} 'i hareket ettir"
 
-msgid "Set Count"
-msgstr "Sayıyı Ayarla"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "%{monster} vur"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2296,6 +2297,14 @@ msgid "Upg. Dwelling 4"
 msgstr ""
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Büyü hedefini seç"
 
@@ -3671,6 +3680,11 @@ msgstr ""
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr ""
+
 msgid "%{objects} must be placed on water."
 msgstr ""
 
@@ -3722,11 +3736,19 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr "%{monster} vur"
-
 msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+msgid "This artifact"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3783,12 +3805,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -3925,7 +3941,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -9529,6 +9545,14 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} büyüye direndi!"
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr ""
 
@@ -9699,19 +9723,19 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
+msgstr ""
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
 msgstr ""
 
 msgid "Sphere of Negation"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -43,6 +43,11 @@ enum class GameVersion : int
 
 namespace Maps
 {
+    namespace Map_Format
+    {
+        struct BaseMapFormat;
+    }
+
     struct FileInfo
     {
     public:
@@ -67,6 +72,8 @@ namespace Maps
         bool readMP2Map( std::string filePath, const bool isForEditor );
 
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
+
+        bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
         bool isAllowCountPlayers( int playerCount ) const;
 
@@ -172,20 +179,21 @@ namespace Maps
         uint8_t colorsAvailableForComp;
         uint8_t colorsOfRandomRaces;
 
-        // Refer to the VictoryCondition
+        // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
         std::array<uint16_t, 2> victoryConditionParams;
 
-        // Refer to the LossCondition
+        // Refer to the LossCondition enumeration.
         uint8_t lossConditionType;
         std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;
 
-        bool startWithHeroInEachCastle;
+        // Only for maps made by the original Editor.
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 

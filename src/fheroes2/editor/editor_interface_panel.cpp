@@ -824,7 +824,7 @@ namespace Interface
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
                 return;
             case AdventureObjectBrush::MINES:
-                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
                     int32_t type = -1;
                     int32_t color = -1;
                     getMineObjectProperties( type, color );
@@ -832,13 +832,6 @@ namespace Interface
                     if ( type == -1 || color == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
-                        // Mines cannot be placed on water.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
                         return;
                     }
 
@@ -909,39 +902,44 @@ namespace Interface
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
             for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
-                    if ( _instrumentButtons[i].drawOnPress() ) {
-                        _selectedInstrument = static_cast<uint8_t>( i );
+                if ( i != _selectedInstrument && ( _instrumentButtonsRect[i] & le.GetMousePressLeft() ) ) {
+                    _selectedInstrument = static_cast<uint8_t>( i );
 
-                        // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
-                        if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
-                            // Update panel image and then open the Select Monster dialog.
-                            _redraw();
-                            handleObjectMouseClick( Dialog::selectMonsterType );
-                        }
-
-                        // Reset cursor updater since this UI element was clicked.
-                        _setCursor();
-
-                        setRedraw();
-                        return res;
+                    // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
+                    if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
+                        // Update panel image and then open the Select Monster dialog.
+                        _redraw();
+                        handleObjectMouseClick( Dialog::selectMonsterType );
                     }
-                }
-                else {
-                    _instrumentButtons[i].drawOnRelease();
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+
+                    // Redraw all instrument buttons.
+                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
+                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
+                    }
+
+                    break;
                 }
             }
+
+            return res;
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
-                    if ( _brushSizeButtons[i].drawOnPress() ) {
-                        _selectedBrushSize = static_cast<uint8_t>( i );
+                if ( i != _selectedBrushSize && le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
+                    _selectedBrushSize = static_cast<uint8_t>( i );
+
+                    // Redraw all brush size buttons.
+                    for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+                        _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
                     }
-                }
-                else if ( i != _selectedBrushSize ) {
-                    _brushSizeButtons[i].drawOnRelease();
+
+                    break;
                 }
             }
 
@@ -1222,7 +1220,7 @@ namespace Interface
                                                Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
-            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of monsters, heroes and towns." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of action objects." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Adventure Objects Mode" ),

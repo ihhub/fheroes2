@@ -60,6 +60,9 @@ namespace
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
+    // TODO: this array is not used during gameplay but only during new map loading.
+    //       If we decide to add objects / events that generate a random artifact after a new game started
+    //       then we will have problems.
     std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = { 0 };
 
     enum
@@ -459,29 +462,38 @@ int Artifact::Rand( level_t lvl )
     return res;
 }
 
-Artifact Artifact::FromMP2IndexSprite( uint32_t index )
+Artifact Artifact::getArtifactFromMapSpriteIndex( const uint32_t index )
 {
     // Add 1 to all values to properly convert from the old map format.
-    if ( 0xA2 > index )
+    if ( ( index < 162 ) || ( Settings::Get().isPriceOfLoyaltySupported() && index > 171 && index < 206 ) ) {
         return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    }
 
-    if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
-        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    // The original game does not have the Magic Book adventure map sprite. But it uses the ID that is taken for "Dummy" sprite.
+    // The Resurrection map format allows to place a Magic Book and it has its own sprite that does not correlate with the original Magic Book artifact ID.
+    if ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION && index == 207 ) {
+        return { MAGIC_BOOK };
+    }
 
-    if ( 0xA3 == index )
+    if ( index == 163 ) {
         return { Rand( ART_LEVEL_ALL_NORMAL ) };
+    }
 
-    if ( 0xA4 == index )
+    if ( index == 164 ) {
         return { Rand( ART_ULTIMATE ) };
+    }
 
-    if ( 0xA7 == index )
+    if ( index == 167 ) {
         return { Rand( ART_LEVEL_TREASURE ) };
+    }
 
-    if ( 0xA9 == index )
+    if ( index == 169 ) {
         return { Rand( ART_LEVEL_MINOR ) };
+    }
 
-    if ( 0xAB == index )
-        return { ART_LEVEL_MAJOR };
+    if ( index == 171 ) {
+        return { Rand( ART_LEVEL_MAJOR ) };
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown Artifact object index: " << index )
 
@@ -826,8 +838,9 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-    if ( it == end() )
+    if ( it == end() ) {
         return false;
+    }
 
     *it = art;
 

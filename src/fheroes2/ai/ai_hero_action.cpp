@@ -1529,48 +1529,53 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
+        if ( hero.IsFullBagArtifacts() ) {
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( !hero.IsFullBagArtifacts() ) {
-            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
-            const Artifact art = getArtifactFromTile( tile );
+        const Artifact art = getArtifactFromTile( tile );
+        if ( art.GetID() == Artifact::MAGIC_BOOK && hero.HaveSpellBook() ) {
+            return;
+        }
 
-            bool result = false;
+        const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                const Funds payment = getArtifactResourceRequirement( tile );
+        bool result = false;
 
-                if ( hero.GetKingdom().AllowPayment( payment ) ) {
-                    result = true;
-                    hero.GetKingdom().OddFundsResource( payment );
-                }
-            }
-            else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-                // TODO: do we need to check this condition?
+        if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+             || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+            const Funds payment = getArtifactResourceRequirement( tile );
+
+            if ( hero.GetKingdom().AllowPayment( payment ) ) {
                 result = true;
+                hero.GetKingdom().OddFundsResource( payment );
             }
-            else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                Army army( tile );
+        }
+        else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+            // TODO: do we need to check this condition?
+            result = true;
+        }
+        else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+            Army army( tile );
 
-                // new battle
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    result = true;
-                }
-                else {
-                    AIBattleLose( hero, res, true );
-                }
+            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+                result = true;
             }
             else {
-                result = true;
+                AIBattleLose( hero, res, true );
             }
+        }
+        else {
+            result = true;
+        }
 
-            if ( result && hero.PickupArtifact( art ) ) {
-                removeObjectSprite( tile );
-                resetObjectInfoOnTile( tile );
-            }
+        if ( result && hero.PickupArtifact( art ) ) {
+            removeObjectSprite( tile );
+            resetObjectInfoOnTile( tile );
         }
     }
 

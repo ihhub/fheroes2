@@ -306,27 +306,3 @@ void Battle::Force::SyncArmyCount()
         troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
 }
-
-double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
-{
-    double result = 0.0;
-
-    // Consider only the state of the original army
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
-        }
-
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr ) {
-            continue;
-        }
-
-        // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
-        // non-true-resurrected units)
-        result += Troop{ unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() }.GetStrength();
-    }
-
-    return result;
-}

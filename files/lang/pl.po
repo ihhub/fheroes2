@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 14:46+0000\n"
+"POT-Creation-Date: 2024-05-20 15:03+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -438,8 +438,9 @@ msgstr "Nie można przenieść ostatniej jednostki"
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
-msgid "Set Count"
-msgstr "Podaj liczbę"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Strzelaj do %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2518,6 +2519,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Niziołki"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Niziołki"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Niziołki"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Niziołki"
 
@@ -4025,6 +4034,12 @@ msgid "%{objects} cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
 msgid "%{objects} must be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
@@ -4088,12 +4103,22 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Strzelaj do %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Losowy najpotężniejszy artefakt"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "z jednym artefaktem."
+
+#, fuzzy
+msgid "Roads"
+msgstr "Droga"
+
+msgid "Streams"
+msgstr ""
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4153,13 +4178,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-#, fuzzy
-msgid "Roads"
-msgstr "Droga"
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -4305,7 +4323,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr "Pokonaj wszystkich wrogów i miasta."
 
 #, fuzzy
@@ -10925,6 +10943,14 @@ msgstr "Księga Zaklęć"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} pozwala ci rzucać czary."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Artefakt 1"
 
@@ -11156,6 +11182,16 @@ msgstr ""
 "śmiechem, pytasz: \"Może pomóc?\" Rusałka spogląda na ciebie i odpowiada: "
 "\"Uważasz, że to śmieszne? Dobrze. Trzymaj, to dla ciebie.\""
 
+msgid "Masthead"
+msgstr "Top Masztowy"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr ""
+"%{name} zwiększa twoje szczęście i morale o %{count} podczas walki na morzu."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -11166,16 +11202,6 @@ msgstr ""
 "mobilizował swą załogę w przypadku niebezpieczeństwa. Następnie wręcza ci "
 "pożółkłą mapę, na której zaznaczył miejsce jego ukrycia. Po długich "
 "poszukiwaniach odnajdujesz go na pobliskiej przystani."
-
-msgid "Masthead"
-msgstr "Top Masztowy"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr ""
-"%{name} zwiększa twoje szczęście i morale o %{count} podczas walki na morzu."
 
 msgid "Sphere of Negation"
 msgstr "Kula Negacji"
@@ -11953,52 +11979,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid ""
-#~ "Create a new map, either from scratch or using the random map generator."
-#~ msgstr "Utwórz mapę albo od początku albo używając generatora losowych map."
-
-#~ msgid ""
-#~ "Create a new map either from scratch or using the random map generator."
-#~ msgstr "Utwórz mapę albo od początku albo używając generatora losowych map."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "To zaklęcie nie może być rzucone z łodzi."
