@@ -1126,7 +1126,7 @@ LocalEvent::LocalEvent()
     : _engine( std::make_unique<EventProcessing::EventEngine>() )
     , modes( 0 )
     , key_value( fheroes2::Key::NONE )
-    , mouse_button( 0 )
+    , mouse_button( MOUSE_BUTTON_UNKNOWN )
     , _mouseButtonLongPressDelay( mouseButtonLongPressTimeout )
 {
     // Do nothing.
