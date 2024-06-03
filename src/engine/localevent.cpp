@@ -58,8 +58,6 @@ namespace
     // If such or more ms has passed after pressing the mouse button, then this is a long press.
     const uint32_t mouseButtonLongPressTimeout{ 850 };
 
-    std::set<uint32_t> eventTypeStatus;
-
     char getCharacterFromPressedKey( const fheroes2::Key key, int32_t mod )
     {
         if ( ( mod & fheroes2::KeyModifier::KEY_MODIFIER_SHIFT ) && ( mod & fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) ) {
@@ -243,6 +241,8 @@ namespace
 
 namespace EventProcessing
 {
+    std::set<uint32_t> eventTypeStatus;
+
     class EventEngine
     {
     public:
