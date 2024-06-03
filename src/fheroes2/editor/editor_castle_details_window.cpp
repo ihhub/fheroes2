@@ -388,7 +388,7 @@ namespace Editor
         else {
             defaultArmySign.hide();
 
-            const fheroes2::Text armyText( _( "Castle Army" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text armyText( isTown ? _( "Town Army" ) : _( "Castle Army" ), fheroes2::FontType::normalWhite() );
             armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
         }
 
