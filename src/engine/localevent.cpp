@@ -951,9 +951,6 @@ namespace EventProcessing
             else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_START ) {
                 buttonType = LocalEvent::CONTROLLER_BUTTON_Y;
             }
-            else {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_UNKNOWN;
-            }
 #endif
 
             eventHandler.onControllerButtonEvent( button.state == SDL_PRESSED, buttonType );
