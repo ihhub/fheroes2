@@ -317,7 +317,7 @@ public:
         return key_value;
     }
 
-    void OpenController();
+    void initController();
     void CloseController();
 
     void SetControllerPointerSpeed( const int newSpeed )

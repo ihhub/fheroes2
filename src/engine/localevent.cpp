@@ -1132,7 +1132,7 @@ LocalEvent::LocalEvent()
     // Do nothing.
 }
 
-void LocalEvent::OpenController()
+void LocalEvent::initController()
 {
     _engine->initController();
 }

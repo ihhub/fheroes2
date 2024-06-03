@@ -112,7 +112,7 @@ namespace
         }
 
         if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 ) {
-            LocalEvent::Get().OpenController();
+            LocalEvent::Get().initController();
         }
 
         LocalEvent::initEventEngine();
