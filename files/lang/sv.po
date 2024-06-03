@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3828,6 +3828,10 @@ msgstr "Bästa Varelse:"
 msgid "Random Castle Name"
 msgstr "Slumpat Slottsnamn"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Slumpad Stad"
+
 msgid "Allow Castle build"
 msgstr "Tillåt Slottsbygge"
 
@@ -3839,6 +3843,10 @@ msgstr "Standardarmé"
 
 msgid "Castle Army"
 msgstr "Slottsarmé"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Stad"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
