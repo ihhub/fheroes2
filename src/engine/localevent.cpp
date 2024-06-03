@@ -243,33 +243,6 @@ namespace
 
 namespace EventProcessing
 {
-// Custom button mapping for Nintendo Switch
-#if defined( TARGET_NINTENDO_SWITCH )
-#undef SDL_CONTROLLER_BUTTON_A
-#undef SDL_CONTROLLER_BUTTON_B
-#undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
-#undef SDL_CONTROLLER_BUTTON_DPAD_RIGHT
-#undef SDL_CONTROLLER_BUTTON_DPAD_UP
-#undef SDL_CONTROLLER_BUTTON_DPAD_DOWN
-#define SDL_CONTROLLER_BUTTON_A 1
-#define SDL_CONTROLLER_BUTTON_B 0
-#define SDL_CONTROLLER_BUTTON_DPAD_LEFT 13
-#define SDL_CONTROLLER_BUTTON_DPAD_RIGHT 14
-#define SDL_CONTROLLER_BUTTON_DPAD_UP 11
-#define SDL_CONTROLLER_BUTTON_DPAD_DOWN 12
-
-    enum SwitchJoyconKeys
-    {
-        SWITCH_BUTTON_Y = 2,
-        SWITCH_BUTTON_X = 3,
-        SWITCH_BUTTON_MINUS = 4,
-        SWITCH_BUTTON_PLUS = 6,
-        SWITCH_BUTTON_L = 9,
-        SWITCH_BUTTON_R = 10
-    };
-
-#endif
-
     class EventEngine
     {
     public:
@@ -944,6 +917,9 @@ namespace EventProcessing
             case SDL_CONTROLLER_BUTTON_START:
                 buttonType = LocalEvent::CONTROLLER_BUTTON_START;
                 break;
+            case SDL_CONTROLLER_BUTTON_GUIDE:
+                buttonType = LocalEvent::CONTROLLER_BUTTON_GUIDE;
+                break;
             default:
                 // We don't handle other buttons for now.
                 break;
@@ -951,22 +927,28 @@ namespace EventProcessing
 
 #if defined( TARGET_NINTENDO_SWITCH )
             // Custom button mapping for Nintendo Switch
-            if ( buttonType == SWITCH_BUTTON_Y ) {
+            if ( buttonType == LocalEvent::CONTROLLER_BUTTON_A ) {
+                buttonType = LocalEvent::CONTROLLER_BUTTON_B;
+            }
+            if ( buttonType == LocalEvent::CONTROLLER_BUTTON_B ) {
+                buttonType = LocalEvent::CONTROLLER_BUTTON_A;
+            }
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_X ) {
                 buttonType = LocalEvent::CONTROLLER_BUTTON_START;
             }
-            else if ( buttonType == SWITCH_BUTTON_X ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_UP;
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_Y ) {
+                buttonType = LocalEvent::CONTROLLER_BUTTON_GUIDE;
             }
-            else if ( buttonType == SWITCH_BUTTON_R ) {
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
                 buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_RIGHT;
             }
-            else if ( buttonType == SWITCH_BUTTON_L ) {
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_LEFT_SHOULDER ) {
                 buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_LEFT;
             }
-            else if ( buttonType == SWITCH_BUTTON_MINUS ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_BACK;
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_BACK ) {
+                buttonType = LocalEvent::CONTROLLER_BUTTON_X;
             }
-            else if ( buttonType == SWITCH_BUTTON_PLUS ) {
+            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_START ) {
                 buttonType = LocalEvent::CONTROLLER_BUTTON_Y;
             }
             else {
@@ -1478,7 +1460,7 @@ void LocalEvent::onControllerButtonEvent( const bool isPressed, const int button
             _controllerPointerSpeed *= _controllerTriggerCursorSpeedup;
             key_value = fheroes2::Key::NONE;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_DPAD_UP ) {
+        else if ( buttonType == CONTROLLER_BUTTON_GUIDE ) {
             key_value = fheroes2::Key::KEY_ESCAPE;
         }
         else if ( buttonType == CONTROLLER_BUTTON_DPAD_DOWN ) {
