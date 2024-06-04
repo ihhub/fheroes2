@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3567,6 +3567,9 @@ msgstr ""
 msgid "Random Castle Name"
 msgstr ""
 
+msgid "Random Town Name"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3578,6 +3581,10 @@ msgstr ""
 
 msgid "Castle Army"
 msgstr ""
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Kahraman Ekranı"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""

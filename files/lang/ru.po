@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3851,6 +3851,10 @@ msgstr "Лучший отряд:"
 msgid "Random Castle Name"
 msgstr "Название случайного замка"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Случайный город"
+
 msgid "Allow Castle build"
 msgstr "Разрешить замок"
 
@@ -3862,6 +3866,10 @@ msgstr "Армия по умолч."
 
 msgid "Castle Army"
 msgstr "Армия замка"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Город"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr "Нажмите, чтобы изменить название замка. Правый клик - сбросить."

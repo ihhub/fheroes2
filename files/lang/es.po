@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3840,6 +3840,10 @@ msgid "Random Castle Name"
 msgstr "Cualquier castillo"
 
 #, fuzzy
+msgid "Random Town Name"
+msgstr "Cualquier torre"
+
+#, fuzzy
 msgid "Allow Castle build"
 msgstr "Castillo de las Nubes"
 
@@ -3853,6 +3857,10 @@ msgstr ""
 #, fuzzy
 msgid "Castle Army"
 msgstr "Castillo"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Pueblo"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""

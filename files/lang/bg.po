@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3925,6 +3925,10 @@ msgid "Random Castle Name"
 msgstr "Случаен замък"
 
 #, fuzzy
+msgid "Random Town Name"
+msgstr "Случаен град"
+
+#, fuzzy
 msgid "Allow Castle build"
 msgstr "Замък в облаците"
 
@@ -3939,6 +3943,10 @@ msgstr "действие по подразбиране"
 #, fuzzy
 msgid "Castle Army"
 msgstr "Замък"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Град"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
