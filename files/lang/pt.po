@@ -9082,10 +9082,10 @@ msgid "Archers"
 msgstr "Arqueiros"
 
 msgid "Ranger"
-msgstr "Guardião da Floresta"
+msgstr "Guardião"
 
 msgid "Rangers"
-msgstr "Guardiões da Floresta"
+msgstr "Guardiões"
 
 msgid "Pikeman"
 msgstr "Piqueiro"
