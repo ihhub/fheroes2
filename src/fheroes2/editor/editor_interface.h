@@ -148,6 +148,11 @@ namespace Interface
 
         void _validateObjectsOnTerrainUpdate();
 
+        // Returns true if an existing object was moved.
+        bool _moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+
+        void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
+
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };

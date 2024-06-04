@@ -613,6 +613,23 @@ namespace
 
         return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
     }
+
+    template <class _T>
+    bool replaceKey( std::map<uint32_t, _T> & data, const uint32_t oldKey, const uint32_t newKey )
+    {
+        auto iter = data.find( oldKey );
+        if ( iter == data.end() ) {
+            return false;
+        }
+
+        auto node = data.extract( iter );
+        assert( !node.empty() );
+
+        node.key() = newKey;
+
+        data.insert( std::move( node ) );
+        return true;
+    }
 }
 
 namespace Interface
@@ -1362,6 +1379,10 @@ namespace Interface
 
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
 
+        if ( _moveExistingObject( tile.GetIndex(), groupType, objectType ) ) {
+            return;
+        }
+
         std::string errorMessage;
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
@@ -1793,5 +1814,92 @@ namespace Interface
                 }
             }
         }
+    }
+
+    bool EditorInterface::_moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    {
+        assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
+        auto & objects = _mapFormat.tiles[tileIndex].objects;
+
+        for ( size_t i = 0; i < objects.size(); ++i ) {
+            auto & object = objects[i];
+
+            if ( object.group == groupType && object.index == static_cast<uint32_t>( objectIndex ) ) {
+                if ( object.id == Maps::getLastObjectUID() ) {
+                    // Just do nothing since this is the last object.
+                    return true;
+                }
+
+                const size_t objectCount = objects.size();
+                const uint32_t oldObjectUID = object.id;
+
+                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                const uint32_t newObjectUID = Maps::getNewObjectUID();
+
+                object.id = newObjectUID;
+
+                if ( i != objectCount - 1 ) {
+                    std::swap( object, objects[objectCount - 1] );
+                }
+
+                const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
+                assert( object.index <= objectGroupInfo.size() );
+
+                const auto & objectInfo = objectGroupInfo[object.index];
+                assert( !objectInfo.groundLevelParts.empty() );
+
+                const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
+
+                const bool isActionObject = MP2::isOffGameActionObject( objectType );
+                if ( isActionObject ) {
+                    _updateObjectUID( oldObjectUID, newObjectUID );
+                }
+
+                action.commit();
+
+                // TODO: so far this is the only way to update objects for rendering.
+                Maps::readMapInEditor( _mapFormat );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void EditorInterface::_updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID )
+    {
+        size_t objectsReplaced = 0;
+
+        // This logic is based on an assumption that only one action object can exist on one tile.
+        if ( replaceKey( _mapFormat.standardMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.castleMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.heroMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.sphinxMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.signMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.adventureMapEventMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.shrineMetadata, oldObjectUID, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        assert( objectsReplaced == 0 || objectsReplaced == 1 );
     }
 }
