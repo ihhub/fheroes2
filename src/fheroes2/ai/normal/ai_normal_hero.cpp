@@ -2455,15 +2455,13 @@ namespace AI
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
             if ( hero.GetIndex() != tileIndex ) {
+                // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. No task should be updated.
+                // If any of these assertions blow up, then this is not one of these cases.
 #ifndef NDEBUG
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 #endif
                 assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
                 assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
-
-                // If the castle was just captured, we must remove capturing it as a task and the enemy army too
-                _priorityTargets.erase( tileIndex );
-                _enemyArmies.erase( tileIndex );
 
                 return;
             }
