@@ -1819,7 +1819,6 @@ namespace Interface
     bool EditorInterface::_moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
     {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
-        auto & objects = _mapFormat.tiles[tileIndex].objects;
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             int32_t type = -1;
@@ -1847,7 +1846,7 @@ namespace Interface
             objectIndex = type;
         }
 
-        for ( auto & object : objects ) {
+        for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
             if ( object.group == groupType && object.index == static_cast<uint32_t>( objectIndex ) ) {
                 if ( object.id == Maps::getLastObjectUID() ) {
                     // Just do nothing since this is the last object.
