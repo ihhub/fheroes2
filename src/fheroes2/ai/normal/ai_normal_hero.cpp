@@ -2463,10 +2463,11 @@ namespace AI
                 assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
                 assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
-                // In case the castle has just been captured, we need to update the information related to the object on the corresponding tile...
+                // In case the castle has just been captured, we need to update the information related to the object on the corresponding tile.
                 updateTile();
 
-                // ... but the corresponding task is not considered completed and should not be removed yet.
+                // Since the hero has not yet reached the tile associated with the corresponding task, this task is not considered completed and should not be removed
+                // yet.
                 return;
             }
 
