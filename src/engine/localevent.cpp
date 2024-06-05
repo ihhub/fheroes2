@@ -31,6 +31,7 @@
 #include <set>
 #include <utility>
 
+#include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_hints.h>
@@ -357,9 +358,8 @@ namespace EventProcessing
                         fheroes2::cursor().enableSoftwareEmulation( true );
                         break;
                     }
-                    else {
-                        ERROR_LOG( "Failed to open a controller with ID " << i << ". Error description: " << SDL_GetError() )
-                    }
+
+                    ERROR_LOG( "Failed to open a controller with ID " << i << ". Error description: " << SDL_GetError() )
                 }
             }
         }
