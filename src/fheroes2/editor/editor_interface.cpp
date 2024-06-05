@@ -1816,10 +1816,36 @@ namespace Interface
         }
     }
 
-    bool EditorInterface::_moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::_moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
     {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
         auto & objects = _mapFormat.tiles[tileIndex].objects;
+
+        if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            int32_t type = -1;
+            int32_t color = -1;
+            _editorPanel.getTownObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return false;
+            }
+
+            objectIndex = type;
+        }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
+            int32_t type = -1;
+            int32_t color = -1;
+
+            _editorPanel.getMineObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return false;
+            }
+
+            objectIndex = type;
+        }
 
         for ( size_t i = 0; i < objects.size(); ++i ) {
             auto & object = objects[i];
@@ -1830,31 +1856,13 @@ namespace Interface
                     return true;
                 }
 
-                const size_t objectCount = objects.size();
                 const uint32_t oldObjectUID = object.id;
 
                 fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                 const uint32_t newObjectUID = Maps::getNewObjectUID();
-
-                object.id = newObjectUID;
-
-                if ( i != objectCount - 1 ) {
-                    std::swap( object, objects[objectCount - 1] );
-                }
-
-                const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
-                assert( object.index <= objectGroupInfo.size() );
-
-                const auto & objectInfo = objectGroupInfo[object.index];
-                assert( !objectInfo.groundLevelParts.empty() );
-
-                const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
-
-                const bool isActionObject = MP2::isOffGameActionObject( objectType );
-                if ( isActionObject ) {
-                    _updateObjectUID( oldObjectUID, newObjectUID );
-                }
+                _updateObjectMetadata( object, newObjectUID );
+                _updateObjectUID( oldObjectUID, newObjectUID );
 
                 action.commit();
 
@@ -1867,39 +1875,72 @@ namespace Interface
         return false;
     }
 
-    void EditorInterface::_updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID )
+    void EditorInterface::_updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID )
     {
+        const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
+        assert( object.index <= objectGroupInfo.size() );
+
+        const auto & objectInfo = objectGroupInfo[object.index];
+        assert( !objectInfo.groundLevelParts.empty() );
+
+        const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
+
+        const bool isActionObject = MP2::isOffGameActionObject( objectType );
+        if ( !isActionObject ) {
+            // Only action objects have metadata.
+            return;
+        }
+
         size_t objectsReplaced = 0;
 
         // This logic is based on an assumption that only one action object can exist on one tile.
-        if ( replaceKey( _mapFormat.standardMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.standardMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.castleMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.castleMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.heroMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.heroMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.sphinxMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.sphinxMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.signMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.signMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.adventureMapEventMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.adventureMapEventMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.shrineMetadata, oldObjectUID, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.shrineMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
         assert( objectsReplaced == 0 || objectsReplaced == 1 );
+    }
+
+    void EditorInterface::_updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID )
+    {
+        for ( auto & tile : _mapFormat.tiles ) {
+            for ( size_t i = 0; i < tile.objects.size(); ) {
+                if ( tile.objects[i].id == oldObjectUID ) {
+                    tile.objects[i].id = newObjectUID;
+
+                    if ( i != tile.objects.size() - 1 ) {
+                        // Put the object on top of others.
+                        std::swap( tile.objects[i], tile.objects[tile.objects.size() - 1] );
+                        continue;
+                    }
+                }
+
+                ++i;
+            }
+        }
     }
 }
