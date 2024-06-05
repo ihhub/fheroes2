@@ -1847,9 +1847,7 @@ namespace Interface
             objectIndex = type;
         }
 
-        for ( size_t i = 0; i < objects.size(); ++i ) {
-            auto & object = objects[i];
-
+        for ( auto & object : objects ) {
             if ( object.group == groupType && object.index == static_cast<uint32_t>( objectIndex ) ) {
                 if ( object.id == Maps::getLastObjectUID() ) {
                     // Just do nothing since this is the last object.
