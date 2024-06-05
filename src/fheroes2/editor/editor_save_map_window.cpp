@@ -399,7 +399,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( isListboxSelected && le.KeyPress( fheroes2::Key::KEY_DELETE ) ) {
+            else if ( isListboxSelected && le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -424,7 +424,8 @@ namespace Editor
 
                 needFileNameRedraw = true;
             }
-            else if ( !listboxEvent && le.KeyPress() && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
+            else if ( !listboxEvent && le.isAnyKeyPressed()
+                      && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
                       && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                 charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
 

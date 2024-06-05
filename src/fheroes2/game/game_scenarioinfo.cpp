@@ -377,7 +377,7 @@ namespace
                     display.render( roi );
                 }
             }
-            else if ( ( le.MouseWheelUp() || le.MouseWheelDn() ) && playersInfo.QueueEventProcessing() ) {
+            else if ( ( le.isMouseWheelUp() || le.isMouseWheelDown() ) && playersInfo.QueueEventProcessing() ) {
                 playersInfo.resetSelection();
                 opponentsArea.restore();
                 classArea.restore();

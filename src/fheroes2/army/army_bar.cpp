@@ -608,7 +608,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         return true;
     }
 
-    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().GetMousePressLeft() );
+    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().getMouseLeftButtonPressedPos() );
     if ( srcTroop == nullptr || !srcTroop->isValid() ) {
         return true;
     }

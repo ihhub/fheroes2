@@ -480,8 +480,8 @@ bool Interface::BorderWindow::QueueEventProcessing()
         moveIndicator.redraw();
         display.render();
 
-        while ( le.HandleEvents() && le.MousePressLeft() ) {
-            if ( le.MouseMotion() ) {
+        while ( le.HandleEvents() && le.isMouseLeftButtonPressed() ) {
+            if ( le.hasMouseMoved() ) {
                 moveIndicator.setPosition( mp.x - ox, mp.y - oy );
                 display.render();
             }

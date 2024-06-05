@@ -291,7 +291,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     Settings & conf = Settings::Get();
     const LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MousePressRight() ) {
+    if ( le.isMouseRightButtonPressed() ) {
         const Player * player = GetFromOpponentClick( le.GetMouseCursor() );
         if ( player != nullptr ) {
             fheroes2::showStandardTextMessage(
@@ -325,7 +325,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    if ( le.MouseWheelUp() ) {
+    if ( le.isMouseWheelUp() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getPreviousRace( player->GetRace() ) );
@@ -336,7 +336,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    if ( le.MouseWheelDn() ) {
+    if ( le.isMouseWheelDown() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getNextRace( player->GetRace() ) );
@@ -433,7 +433,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 bool Interface::PlayersInfo::readOnlyEventProcessing()
 {
     const LocalEvent & le = LocalEvent::Get();
-    if ( !le.MousePressRight() ) {
+    if ( !le.isMouseRightButtonPressed() ) {
         // Read only mode works only for right click events.
         return false;
     }

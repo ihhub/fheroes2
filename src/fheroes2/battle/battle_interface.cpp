@@ -2764,9 +2764,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
-    if ( le.KeyPress() ) {
+    if ( le.isAnyKeyPressed() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
             actions.emplace_back( Command::SKIP, unit.GetUID() );
@@ -2836,7 +2836,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 ballistaMessage.append( Battle::Board::GetMoatInfo() );
             }
 
-            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
     else if ( conf.BattleShowTurnOrder() && le.MouseCursor( turnOrderRect ) ) {
@@ -2848,7 +2848,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         msg = _( "Enable auto combat" );
         ButtonAutoAction( unit, actions );
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
@@ -2857,7 +2857,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         msg = _( "Customize system options" );
         ButtonSettingsAction();
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
@@ -2866,7 +2866,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         msg = _( "Skip this unit" );
         ButtonSkipAction( actions );
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Skip" ),
                                                _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
                                                Dialog::ZERO );
@@ -2995,7 +2995,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                 MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
-            else if ( le.MousePressRight() ) {
+            else if ( le.isMouseRightButtonPressed() ) {
                 MousePressRightBoardAction( *cell );
             }
             else if ( le.MousePressLeft( battleFieldRect ) ) {
@@ -3010,7 +3010,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         else {
             le.MouseClickLeft();
-            le.MousePressRight();
+            le.MouseClickRight();
         }
     }
     else if ( le.MouseCursor( status ) ) {
@@ -3032,7 +3032,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         cursor.SetThemes( Cursor::WAR_NONE );
 
         le.MouseClickLeft();
-        le.MousePressRight();
+        le.MouseClickRight();
     }
 }
 
@@ -3041,10 +3041,10 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
     // Cancel the spellcast
-    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+    if ( le.isMouseRightButtonPressed() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
 
         _teleportSpellSrcIdx = -1;

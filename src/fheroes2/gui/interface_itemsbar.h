@@ -444,7 +444,7 @@ namespace Interface
                 return false;
             }
 
-            if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) ) {
+            if ( other.GetItem( le.getMouseLeftButtonPressedPos() ) && ActionCrossItemBarDrag( cursor, other ) ) {
                 return true;
             }
 
@@ -477,7 +477,7 @@ namespace Interface
         {
             const LocalEvent & le = LocalEvent::Get();
 
-            Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
+            Item * otherItemPress = other.GetItem( le.getMouseLeftButtonPressedPos() );
             assert( otherItemPress != nullptr );
 
             const ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
@@ -571,7 +571,7 @@ namespace Interface
                 return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
-            // Let the ActionCrossItemBarDrag() handle the case of MouseReleaseLeft()
+            // Let the ActionCrossItemBarDrag() handle the case of isMouseLeftButtonReleased()
 
             if ( le.MouseClickRight( iterPos1.second ) ) {
                 ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );

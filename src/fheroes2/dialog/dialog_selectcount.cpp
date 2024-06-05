@@ -144,12 +144,12 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
+        if ( ( le.isMouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
             vcur += ( ( vcur + step ) <= vmax ) ? step : ( vmax - vcur );
             return true;
         }
 
-        if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
+        if ( ( le.isMouseWheelDown() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
             vcur -= ( ( vmin + vcur ) >= step ) ? step : ( vcur - vmin );
             return true;
         }
@@ -359,11 +359,11 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
         buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
 
         // In this dialog we input text so we need to use hotkeys that cannot be use in text typing.
-        if ( ( !isMultiLine && le.KeyPress( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
+        if ( ( !isMultiLine && le.isKeyPressed( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             return !result.empty();
         }
 
-        if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             result.clear();
             return false;
         }
@@ -384,7 +384,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             charInsertPos = result.size();
             redraw = true;
         }
-        else if ( le.KeyPress() && ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+        else if ( le.isAnyKeyPressed() && ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
             // Handle new line input for multi-line texts only.
             if ( isMultiLine && le.KeyValue() == fheroes2::Key::KEY_ENTER ) {
                 result.insert( charInsertPos, 1, '\n' );

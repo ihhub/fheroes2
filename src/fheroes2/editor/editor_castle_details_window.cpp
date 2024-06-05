@@ -160,7 +160,7 @@ namespace
                 return true;
             }
 
-            if ( le.MousePressRight() ) {
+            if ( le.isMouseRightButtonPressed() ) {
                 const building_t building = _getBuildindTypeForRender();
                 std::string description = BuildingInfo::getBuildingDescription( _race, building );
                 const std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
@@ -515,7 +515,7 @@ namespace Editor
                     allowCastleSign.isHidden() ? allowCastleSign.show() : allowCastleSign.hide();
                     display.render( allowCastleSign.getArea() );
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Allow Castle build" ), message, Dialog::ZERO );
                 }
             }
@@ -543,7 +543,7 @@ namespace Editor
                         display.render( dialogRoi );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Default Buildings" ), message, Dialog::ZERO );
                 }
             }
@@ -552,7 +552,7 @@ namespace Editor
             else if ( le.MouseCursor( buttonRestrictBuildingArea ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
@@ -573,7 +573,7 @@ namespace Editor
                         display.render( defaultArmySign.getArea() );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
                 }
             }
@@ -592,7 +592,7 @@ namespace Editor
             else if ( le.MouseCursor( buttonExitArea ) ) {
                 message = _( "Exit Castle Options" );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Exit" ), message, Dialog::ZERO );
                 }
             }

@@ -644,7 +644,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             }
         }
         else if ( buttonPatrol.isVisible() && le.MouseCursor( buttonPatrol.area() ) ) {
-            if ( le.MousePressLeft() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
+            if ( le.isMouseLeftButtonPressed() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
                 buttonPatrol.drawOnPress();
                 uint32_t value = _patrolDistance;
                 if ( Dialog::SelectCount( _( "Set patrol radius in tiles" ), 0, 255, value ) ) {
@@ -680,11 +680,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             else if ( le.MouseCursor( raceRect ) ) {
                 assert( !needRedraw );
                 message = _( "Click to change race." );
-                if ( le.MouseClickLeft() || le.MouseWheelDn() ) {
+                if ( le.MouseClickLeft() || le.isMouseWheelDown() ) {
                     _race = Race::getNextRace( _race );
                     needRedraw = true;
                 }
-                else if ( le.MouseClickRight() || le.MouseWheelUp() ) {
+                else if ( le.MouseClickRight() || le.isMouseWheelUp() ) {
                     _race = Race::getPreviousRace( _race );
                     needRedraw = true;
                 }

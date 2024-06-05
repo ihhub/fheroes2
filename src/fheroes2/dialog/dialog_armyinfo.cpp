@@ -557,7 +557,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
         if ( !( flags & BUTTONS ) ) {
-            if ( !le.MousePressRight() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 

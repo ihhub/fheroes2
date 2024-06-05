@@ -226,14 +226,14 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowScrollSpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowScrollSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
                 refreshWindow();
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowScrollSpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowScrollSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
                 refreshWindow();

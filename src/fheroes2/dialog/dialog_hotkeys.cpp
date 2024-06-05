@@ -80,7 +80,7 @@ namespace
         void processEvents( const fheroes2::Point & /*offset*/ ) const override
         {
             const LocalEvent & le = LocalEvent::Get();
-            if ( le.KeyPress() ) {
+            if ( le.isAnyKeyPressed() ) {
                 _key = le.KeyValue();
                 _keyChanged = true;
             }

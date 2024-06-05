@@ -1028,7 +1028,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         _statusWindow.TimerEventProcessing();
 
         // hotkeys
-        if ( le.KeyPress() ) {
+        if ( le.isAnyKeyPressed() ) {
             // if the hero is currently moving, pressing any key should stop him
             if ( isMovingHero ) {
                 stopHero = true;
@@ -1174,7 +1174,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             cursor.SetThemes( Cursor::WAIT );
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            if ( le.MouseClickLeft() || le.MousePressRight() ) {
+            if ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) {
                 stopHero = true;
             }
         }
@@ -1225,7 +1225,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !_radar.isDragRadar() )
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.MousePressLeft() )
+            else if ( !le.isMouseLeftButtonPressed() )
                 _radar.QueueEventProcessing();
         }
 

@@ -538,7 +538,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        if ( !buttons && !le.MousePressRight() ) {
+        if ( !buttons && !le.isMouseRightButtonPressed() ) {
             break;
         }
 

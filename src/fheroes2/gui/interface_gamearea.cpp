@@ -1014,7 +1014,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.GetMouseCursor();
 
-    if ( !le.MousePressLeft() ) {
+    if ( !le.isMouseLeftButtonPressed() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;

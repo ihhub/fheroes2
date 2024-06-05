@@ -768,7 +768,7 @@ namespace Interface
             }
 
             // Process hot-keys.
-            if ( le.KeyPress() ) {
+            if ( le.isAnyKeyPressed() ) {
                 // adventure map control
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();
@@ -889,7 +889,7 @@ namespace Interface
                 if ( !_radar.isDragRadar() ) {
                     _gameArea.QueueEventProcessing( isCursorOverGamearea );
                 }
-                else if ( !le.MousePressLeft() ) {
+                else if ( !le.isMouseLeftButtonPressed() ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -908,7 +908,7 @@ namespace Interface
                     }
                 }
 
-                if ( _selectedTile == -1 && tileIndex != -1 && brushSize.width == 0 && le.MousePressLeft() ) {
+                if ( _selectedTile == -1 && tileIndex != -1 && brushSize.width == 0 && le.isMouseLeftButtonPressed() ) {
                     _selectedTile = tileIndex;
                     _redraw |= REDRAW_GAMEAREA;
                 }
@@ -918,7 +918,7 @@ namespace Interface
                 _redraw |= REDRAW_GAMEAREA;
             }
 
-            if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
+            if ( _selectedTile > -1 && le.isMouseLeftButtonReleased() ) {
                 if ( isCursorOverGamearea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.

@@ -431,7 +431,7 @@ namespace
 
             bool needRedraw = listId != listbox.getCurrentId();
 
-            if ( le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+            if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -497,7 +497,7 @@ namespace
                     isListboxSelected = false;
                     needRedraw = true;
                 }
-                else if ( !listboxEvent && le.KeyPress()
+                else if ( !listboxEvent && le.isAnyKeyPressed()
                           && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
                           && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );

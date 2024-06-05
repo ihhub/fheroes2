@@ -71,7 +71,7 @@ namespace Interface
 
         display.render( restorer.rect() );
 
-        while ( le.HandleEvents() && le.MousePressRight() ) {
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() ) {
             // Do nothing and wait till the user releases the button.
         }
 

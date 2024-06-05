@@ -312,7 +312,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false } );
     }
 
-    for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
+    for ( size_t i = 0; le.hasMouseMoved() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
     }
