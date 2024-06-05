@@ -614,8 +614,8 @@ namespace
         return verifyTerrainPlacement( tilePos, groupType, objectType, errorMessage );
     }
 
-    template <class _T>
-    bool replaceKey( std::map<uint32_t, _T> & data, const uint32_t oldKey, const uint32_t newKey )
+    template <class T>
+    bool replaceKey( std::map<uint32_t, T> & data, const uint32_t oldKey, const uint32_t newKey )
     {
         auto iter = data.find( oldKey );
         if ( iter == data.end() ) {
