@@ -943,7 +943,7 @@ namespace EventProcessing
             if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B;
             }
-            if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B ) {
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A;
             }
             else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_X ) {
