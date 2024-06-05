@@ -2476,9 +2476,6 @@ namespace AI
             // How is it even possible that a hero died while simply moving into a castle?
             assert( hero.isActive() );
 
-            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
-            // TODO: but also have enough army to defend the castle.
-
             hero.SetModes( Heroes::SLEEPER );
             _priorityTargets.erase( tileIndex );
 
