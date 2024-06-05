@@ -566,7 +566,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN ) || timedButtonDn.isDelayPassed() )
+        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
+                    || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
             paymentCosts -= paymentMonster;
