@@ -179,20 +179,21 @@ namespace Maps
         uint8_t colorsAvailableForComp;
         uint8_t colorsOfRandomRaces;
 
-        // Refer to the VictoryCondition
+        // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
         std::array<uint16_t, 2> victoryConditionParams;
 
-        // Refer to the LossCondition
+        // Refer to the LossCondition enumeration.
         uint8_t lossConditionType;
         std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;
 
-        bool startWithHeroInEachCastle;
+        // Only for maps made by the original Editor.
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 03:46+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3887,6 +3887,10 @@ msgstr "Bedste væsen:"
 msgid "Random Castle Name"
 msgstr "Tilfældigt borgnavn"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Tilfældig by"
+
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
@@ -3900,6 +3904,10 @@ msgstr ""
 
 msgid "Castle Army"
 msgstr "Borghær"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "By"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
@@ -11815,9 +11823,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Væsener kan ikke placeres på vand."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Artefakter kan ikke placeres på vand."

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
-"PO-Revision-Date: 2024-04-08 22:19-0300\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -2471,13 +2471,11 @@ msgstr "Moradia 4"
 msgid "Upg. Dwelling 4"
 msgstr "Moradia 4 Nv.2"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Moradia 1"
+msgstr "Moradia 5"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Moradia 2 Nv.2"
+msgstr "Moradia 5 Nv.2"
 
 msgid "Dwelling 6"
 msgstr "Moradia 6"
@@ -3848,6 +3846,10 @@ msgstr "Melhor Criatura:"
 msgid "Random Castle Name"
 msgstr "Nome Aleatório do Castelo"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Cidade Aleatória"
+
 msgid "Allow Castle build"
 msgstr "Permitir construção do Castelo"
 
@@ -3859,6 +3861,10 @@ msgstr "Exército Padrão"
 
 msgid "Castle Army"
 msgstr "Exército do Castelo"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Cidade"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""

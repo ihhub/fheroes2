@@ -121,16 +121,6 @@ namespace fheroes2
             return result;
         }
 
-        bool isUndoAvailable() const
-        {
-            return ( _lastActionId > 0 );
-        }
-
-        bool isRedoAvailable() const
-        {
-            return ( _lastActionId < _actions.size() );
-        }
-
     private:
         // We shouldn't store too many actions. It is extremely rare when there is a need to revert so many changes.
         static const size_t maxActions{ 500 };

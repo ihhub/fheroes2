@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -112,11 +112,10 @@ namespace
         }
 
         if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 ) {
-            LocalEvent::Get().OpenController();
+            LocalEvent::Get().initController();
         }
 
-        LocalEvent::OpenTouchpad();
-        LocalEvent::setEventProcessingStates();
+        LocalEvent::initEventEngine();
 
         return true;
     }

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 03:46+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3823,6 +3823,10 @@ msgstr "Legerősebb lény:"
 msgid "Random Castle Name"
 msgstr "Véletlenszerű vár név"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Véletlenszerű város"
+
 msgid "Allow Castle build"
 msgstr "Vár építhetőség"
 
@@ -3834,6 +3838,10 @@ msgstr "Alapért. sereg"
 
 msgid "Castle Army"
 msgstr "Várvédők"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Város"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
-"PO-Revision-Date: 2024-05-20 10:12+0200\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -2474,13 +2474,11 @@ msgstr "Boning 4"
 msgid "Upg. Dwelling 4"
 msgstr "Uppg. Boning 4"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Boning 1"
+msgstr "Boning 5"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Uppg. Boning 2"
+msgstr "Uppg. Boning 5"
 
 msgid "Dwelling 6"
 msgstr "Boning 6"
@@ -2541,7 +2539,7 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Benhögen ökar produktionen av Skelett med %{count} per vecka."
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
-msgstr ""
+msgstr "Särskilda byggnaden ger en särskild bonus till den valda slottstypen."
 
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
@@ -3830,6 +3828,10 @@ msgstr "Bästa Varelse:"
 msgid "Random Castle Name"
 msgstr "Slumpat Slottsnamn"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Slumpad Stad"
+
 msgid "Allow Castle build"
 msgstr "Tillåt Slottsbygge"
 
@@ -3842,26 +3844,34 @@ msgstr "Standardarmé"
 msgid "Castle Army"
 msgstr "Slottsarmé"
 
+#, fuzzy
+msgid "Town Army"
+msgstr "Stad"
+
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
+"Klicka för att ändra Slottsnamn. Högerklicka för att återställa till "
+"standard."
 
 msgid "Enter Castle name"
 msgstr "Skriv Slottsnamn"
 
 msgid "Allow to build a castle in this town."
-msgstr ""
+msgstr "Tillåt att slott byggs i denna stad."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
+"Aktivera för att använda standardbyggnader. Anpassade byggnader kommer att "
+"återställas!"
 
 msgid "Toggle building construction restriction mode."
-msgstr ""
+msgstr "Aktivera begränsat byggnationsläge."
 
 msgid "Restrict Building Construction"
-msgstr ""
+msgstr "Begränsa Byggnadskonstruktion"
 
 msgid "Use default defenders army."
-msgstr ""
+msgstr "Använd försvararnas standardarmé."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr "Ange anpassad Slottsarmé. Högerklicka för att återställa enheten."
@@ -3870,7 +3880,7 @@ msgid "Message Text:"
 msgstr "Meddelandetext:"
 
 msgid "Cancel event after first visit"
-msgstr ""
+msgstr "Avbryt händelse efter första besök"
 
 msgid "Player colors allowed to get event:"
 msgstr "Spelarfärger som kan få händelsen:"
@@ -3888,6 +3898,8 @@ msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a human."
 msgstr ""
+"Om denna checkruta är ifylld så kommer händelsen bara aktiveras för %{color} "
+"spelare om de är styrda av en mänsklig spelare."
 
 msgid "Allow %{color} computer player to get event"
 msgstr "Tillåt %{color} datorspelare att få händelsen"
@@ -3896,6 +3908,8 @@ msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a computer."
 msgstr ""
+"Om denna checkruta är ifylld så kommer händelsen bara aktiveras för %{color} "
+"spelare om de är styrda av datorn."
 
 msgid "Message:"
 msgstr "Meddelande:"
@@ -3929,6 +3943,9 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+"Om denna checkruta är ifylld så kommer händelsen bara aktiveras en gång. Om "
+"den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
+"kliver i rutan."
 
 msgid "Click here to change the event message."
 msgstr "Klicka för att ändra händelsemeddelandet."
@@ -3953,13 +3970,12 @@ msgstr "Föremål kan inte placeras utanför kartan."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseobjekt måste placeras på fria rutor."
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
 msgstr ""
-"Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
-"nuvarande karta kommer försvinna.)"
+"Är du säker på att du vill återvända till Huvudmenyn? Osparade ändringar "
+"kommer att försvinna."
 
 msgid "Editor"
 msgstr "Redigerare"
@@ -4000,7 +4016,7 @@ msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
 msgid "Input %{object} text"
-msgstr ""
+msgstr "Skriv in %{object} text"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ange slumpad radie för Främsta artefakt"
@@ -4008,9 +4024,8 @@ msgstr "Ange slumpad radie för Främsta artefakt"
 msgid "%{object} has no properties to change."
 msgstr "%{object} har inga ändringsbara egenskaper."
 
-#, fuzzy
 msgid "This artifact"
-msgstr "med 1 artefakt."
+msgstr "Denna artefakten"
 
 msgid "Roads"
 msgstr "Vägar"
@@ -4032,7 +4047,7 @@ msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
 
 msgid "Unable to locate data directory to save the map."
-msgstr ""
+msgstr "Kunde inte hitta sökvägen för att spara kartan."
 
 msgid "Unable to create a directory to save the map."
 msgstr "Kunde inte skapa en sökväg för att spara kartan."
@@ -4223,9 +4238,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detaljläge"
 
-#, fuzzy
 msgid "Used for special editing of action objects."
-msgstr "Används för att redigera varelser, hjältar och städer."
+msgstr "Används för särskild redigering av händelseföremål."
 
 msgid "Adventure Objects Mode"
 msgstr "Äventyrsobjektsläge"
@@ -4364,6 +4378,8 @@ msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
+"Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen kommer "
+"att nedkortas för att få plats i beskrivningsfältet."
 
 msgid "Click to accept the changes made."
 msgstr "Klicka för att acceptera ändringarna."
@@ -4383,15 +4399,14 @@ msgstr "Visar spelartyperna i scenariot. Tryck för att ändra."
 msgid "Player Type"
 msgstr "Spelartyp"
 
-#, fuzzy
 msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
-"Svårighetsgraden för den valda kartan. Kartans svårighet bestäms av kartans "
-"kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
-"färre resurser eller andra specialvillkor som gör det svårare för spelaren."
+"Klicka för att ange kartsvårighet. Svårare kartor kan inkludera fler och "
+"svårare fiender, färre resurser eller andra särskilda villkor som gör det "
+"svårare för en mänsklig spelare."
 
 msgid "Animation"
 msgstr "Animering"
@@ -10653,6 +10668,11 @@ msgid ""
 "here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
 "say a word, he hands you a Magic Book."
 msgstr ""
+"En ung man närmar sig dig: \"Min Herre tillåt mig att visa er min senaste "
+"uppfinning för spridandet av kunskap!\" Du följer efter mannen i hans "
+"verkstad och ser en stor manick med vevhjul och spakar. \"Här är den\" säger "
+"han ivrigt, \"Tryckpressen\". Innan du hinner säga ett ord så ger han dig en "
+"Besvärjelsebok."
 
 msgid "Dummy 1"
 msgstr "Atrapp 1"

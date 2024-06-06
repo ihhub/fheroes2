@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3909,6 +3909,10 @@ msgid "Random Castle Name"
 msgstr "Château aléatoire"
 
 #, fuzzy
+msgid "Random Town Name"
+msgstr "Village aléatoire"
+
+#, fuzzy
 msgid "Allow Castle build"
 msgstr "Château céleste"
 
@@ -3923,6 +3927,10 @@ msgstr "Actions par défaut"
 #, fuzzy
 msgid "Castle Army"
 msgstr "Château"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Village"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""

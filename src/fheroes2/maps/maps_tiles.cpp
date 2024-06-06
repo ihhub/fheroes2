@@ -1309,7 +1309,7 @@ void Maps::Tiles::_updateRoadFlag()
     }
 }
 
-void Maps::Tiles::fixTileObjectType( Tiles & tile )
+void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
 {
     const MP2::MapObjectType originalObjectType = tile.GetObject( false );
 

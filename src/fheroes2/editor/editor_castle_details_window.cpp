@@ -325,15 +325,19 @@ namespace Editor
         const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartSizeX, statusBarSprite.height() - 2 );
         fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarSprite.height() );
 
+        const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
+
         // Castle name text.
-        auto drawCastleName = [&castleMetadata, &display, &nameArea]() {
-            fheroes2::Text text( castleMetadata.customName.empty() ? _( "Random Castle Name" ) : castleMetadata.customName, fheroes2::FontType::normalWhite() );
+        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
+            fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
+            if ( castleMetadata.customName.empty() ) {
+                text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
+            }
+
             text.fitToOneRow( nameArea.width );
             text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, display, nameArea );
         };
         drawCastleName();
-
-        const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Allow castle building checkbox.
         fheroes2::Point dstPt( dialogRoi.x + rightPartOffsetX + 10, dialogRoi.y + 130 );
@@ -384,7 +388,7 @@ namespace Editor
         else {
             defaultArmySign.hide();
 
-            const fheroes2::Text armyText( _( "Castle Army" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text armyText( isTown ? _( "Town Army" ) : _( "Castle Army" ), fheroes2::FontType::normalWhite() );
             armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
         }
 

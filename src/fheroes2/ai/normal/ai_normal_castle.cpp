@@ -28,8 +28,6 @@
 #include "ai.h"
 #include "ai_normal.h"
 #include "army.h"
-#include "army_troop.h"
-#include "battle_tower.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
@@ -314,31 +312,26 @@ namespace AI
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            // Avoid building monster dwellings when defensive as they might fall into enemy's hands, unless we have a lot of resources.
-            const Kingdom & kingdom = castle.GetKingdom();
+            const Funds & kingdomFunds = castle.GetKingdom().GetFunds();
 
-            // TODO: check if we can upgrade monsters. It is much cheaper (except Giants into Titans) to upgrade monsters than buy new ones.
+            // If the castle is potentially under threat, then it makes sense to try to hire the maximum number of troops so that the enemy cannot hire them even if he
+            // captures the castle, therefore, it is worth starting with hiring.
+            castle.recruitBestAvailable( kingdomFunds );
 
-            Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
-            double possibleReinforcementStrength = possibleReinforcement.GetStrength();
+            Army & garrison = castle.GetArmy();
 
-            // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
-            const Battle::Tower tower( castle, Battle::TowerType::TWR_RIGHT, 0 );
-            const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
-            const double towerStrength = towerMonster.GetStrength();
-            if ( possibleReinforcementStrength > towerStrength ) {
-                castle.recruitBestAvailable( kingdom.GetFunds() );
-                OptimizeTroopsOrder( castle.GetArmy() );
-            }
+            // Then we try to upgrade the existing units in the castle garrison...
+            garrison.UpgradeTroops( castle );
 
+            // ... and then we try to hire troops again, because after upgrading the existing troops, there could be a place for new units.
+            castle.recruitBestAvailable( kingdomFunds );
+
+            OptimizeTroopsOrder( garrison );
+
+            // Avoid building monster dwellings when defensive as they might fall into enemy's hands. Instead, try to build defensive structures if there is at least some
+            // kind of garrison in the castle.
             if ( castle.GetActualArmy().getTotalCount() > 0 ) {
                 Build( castle, defensiveStructures );
-            }
-
-            castle.recruitBestAvailable( kingdom.GetFunds() );
-            OptimizeTroopsOrder( castle.GetArmy() );
-
-            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
                 Build( castle, supportingDefensiveStructures );
             }
         }
