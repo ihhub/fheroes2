@@ -3823,9 +3823,8 @@ msgstr "Legerősebb lény:"
 msgid "Random Castle Name"
 msgstr "Véletlenszerű vár név"
 
-#, fuzzy
 msgid "Random Town Name"
-msgstr "Véletlenszerű város"
+msgstr "Véletlenszerű város neve"
 
 msgid "Allow Castle build"
 msgstr "Vár építhetőség"
@@ -3839,9 +3838,8 @@ msgstr "Alapért. sereg"
 msgid "Castle Army"
 msgstr "Várvédők"
 
-#, fuzzy
 msgid "Town Army"
-msgstr "Város"
+msgstr "Városvédők"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
