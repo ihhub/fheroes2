@@ -2463,8 +2463,6 @@ namespace AI
                 assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
                 assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
-                _enemyArmies.erase( tileIndex );
-
                 return;
             }
 
