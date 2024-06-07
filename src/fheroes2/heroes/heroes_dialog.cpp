@@ -109,7 +109,7 @@ namespace
             preparePortrait( ICN::CMBTHRON, 9, false );
             break;
         case Race::RAND:
-            preparePortrait( ICN::CMBTHROW, 7, true );
+            preparePortrait( ICN::CMBTHROW, 10, true );
             break;
         default:
             // Have you added a new race? Correct the logic above!
