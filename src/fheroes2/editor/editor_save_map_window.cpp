@@ -375,7 +375,8 @@ namespace Editor
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
 
-                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x, fileNameRoi.x );
+                charInsertPos
+                    = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x, fileNameRoi.x );
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;

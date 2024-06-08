@@ -327,7 +327,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                     needRedrawOpponentsStats = true;
                 }
             }
-            else if ( firstUI.secondarySkill != nullptr && le.isMouseCursorPosInArea( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
+            else if ( firstUI.secondarySkill != nullptr && le.isMouseCursorPosInArea( firstUI.secondarySkill->GetArea() )
+                      && firstUI.secondarySkill->QueueEventProcessing() ) {
                 armyInfo[firstId].needRedraw = true;
             }
         }
