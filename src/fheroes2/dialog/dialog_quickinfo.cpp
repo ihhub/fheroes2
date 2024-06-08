@@ -686,7 +686,7 @@ namespace
         display.render();
 
         // quick info loop
-        while ( le.HandleEvents() && le.MousePressRight() )
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() )
             ;
 
         // restore background
@@ -914,7 +914,7 @@ namespace
         display.render();
 
         // quick info loop
-        while ( le.HandleEvents() && le.MousePressRight() )
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() )
             ;
 
         // restore background

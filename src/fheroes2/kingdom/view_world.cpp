@@ -701,10 +701,10 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
                 initRoiCenter = currentROI.getCenter();
             }
         }
-        else if ( le.MouseWheelUp() ) {
+        else if ( le.isMouseWheelUp() ) {
             changed = currentROI.zoomIn( false );
         }
-        else if ( le.MouseWheelDn() ) {
+        else if ( le.isMouseWheelDown() ) {
             changed = currentROI.zoomOut( false );
         }
 

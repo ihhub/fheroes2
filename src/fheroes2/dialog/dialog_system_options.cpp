@@ -287,7 +287,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowHeroSpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowHeroSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() + 1 );
                 Game::UpdateGameSpeed();
@@ -295,7 +295,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowHeroSpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowHeroSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() - 1 );
                 Game::UpdateGameSpeed();
@@ -312,7 +312,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowEnemySpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowEnemySpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetAIMoveSpeed( conf.AIMoveSpeed() + 1 );
                 Game::UpdateGameSpeed();
@@ -320,7 +320,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowEnemySpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowEnemySpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetAIMoveSpeed( conf.AIMoveSpeed() - 1 );
                 Game::UpdateGameSpeed();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -138,11 +138,11 @@ bool RowSpells::QueueEventProcessing()
 
     const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
 
-    if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
+    if ( 0 <= index && ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) ) {
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
+            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
 

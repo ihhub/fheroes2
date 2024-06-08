@@ -470,7 +470,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 buttonReleaseRestore( monsterSwitchRight );
             }
 
-            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( fheroes2::Key::KEY_LEFT ) ) {
+            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.isKeyPressed( fheroes2::Key::KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i < upgrades.size() - 1 ) {
@@ -484,7 +484,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 }
                 updateMonsterInfo = true;
             }
-            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( fheroes2::Key::KEY_RIGHT ) ) {
+            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.isKeyPressed( fheroes2::Key::KEY_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i > 0 ) {
@@ -552,7 +552,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
+        if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
              && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
@@ -566,7 +566,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( fheroes2::Key::KEY_DOWN ) || timedButtonDn.isDelayPassed() )
+        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
+                    || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
             paymentCosts -= paymentMonster;
@@ -667,7 +668,7 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() && le.MousePressRight() ) {
+    while ( le.HandleEvents() && le.isMouseRightButtonPressed() ) {
         // Do nothing.
     }
 }

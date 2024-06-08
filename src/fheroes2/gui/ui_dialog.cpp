@@ -220,7 +220,7 @@ namespace fheroes2
                     ++elementId;
                 }
             }
-            else if ( !le.MousePressRight() ) {
+            else if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 

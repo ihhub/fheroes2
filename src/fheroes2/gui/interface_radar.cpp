@@ -525,10 +525,10 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
         else if ( le.MousePressRight( GetRect() ) ) {
             fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
-        else if ( le.MouseWheelUp() ) {
+        else if ( le.isMouseWheelUp() ) {
             return roi.zoomIn( false );
         }
-        else if ( le.MouseWheelDn() ) {
+        if ( le.isMouseWheelDown() ) {
             return roi.zoomOut( false );
         }
     }

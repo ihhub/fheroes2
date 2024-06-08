@@ -682,15 +682,15 @@ uint32_t Game::SelectCountPlayers()
 
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( button2Players.area() ) || le.KeyPress( fheroes2::Key::KEY_2 ) )
+        if ( le.MouseClickLeft( button2Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_2 ) )
             return 2;
-        if ( le.MouseClickLeft( button3Players.area() ) || le.KeyPress( fheroes2::Key::KEY_3 ) )
+        if ( le.MouseClickLeft( button3Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_3 ) )
             return 3;
-        if ( le.MouseClickLeft( button4Players.area() ) || le.KeyPress( fheroes2::Key::KEY_4 ) )
+        if ( le.MouseClickLeft( button4Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_4 ) )
             return 4;
-        if ( le.MouseClickLeft( button5Players.area() ) || le.KeyPress( fheroes2::Key::KEY_5 ) )
+        if ( le.MouseClickLeft( button5Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_5 ) )
             return 5;
-        if ( le.MouseClickLeft( button6Players.area() ) || le.KeyPress( fheroes2::Key::KEY_6 ) )
+        if ( le.MouseClickLeft( button6Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_6 ) )
             return 6;
 
         if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) )

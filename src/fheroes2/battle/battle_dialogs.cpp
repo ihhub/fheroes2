@@ -296,12 +296,12 @@ namespace
 
             bool redrawScreen = false;
 
-            if ( le.MouseWheelUp( optionAreas[0] ) ) {
+            if ( le.isMouseWheelUpInArea( optionAreas[0] ) ) {
                 conf.SetBattleSpeed( conf.BattleSpeed() + 1 );
                 Game::UpdateGameSpeed();
                 redrawScreen = true;
             }
-            else if ( le.MouseWheelDn( optionAreas[0] ) ) {
+            else if ( le.isMouseWheelDownInArea( optionAreas[0] ) ) {
                 conf.SetBattleSpeed( conf.BattleSpeed() - 1 );
                 Game::UpdateGameSpeed();
                 redrawScreen = true;
@@ -1044,7 +1044,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             }
         }
         else {
-            if ( !le.MousePressRight() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 

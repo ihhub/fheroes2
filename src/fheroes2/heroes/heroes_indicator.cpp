@@ -215,7 +215,7 @@ void ExperienceIndicator::QueueEventProcessing() const
 
         StringReplace( message, "%{level}", _hero->GetLevel() );
 
-        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
 
@@ -251,6 +251,6 @@ void SpellPointsIndicator::QueueEventProcessing() const
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
-        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }

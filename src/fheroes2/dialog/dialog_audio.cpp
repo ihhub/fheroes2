@@ -169,11 +169,11 @@ namespace Dialog
                     conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
                     saveMusicVolume = true;
                 }
-                else if ( le.MouseWheelUp( musicVolumeRoi ) ) {
+                else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
                     conf.SetMusicVolume( conf.MusicVolume() + 1 );
                     saveMusicVolume = true;
                 }
-                else if ( le.MouseWheelDn( musicVolumeRoi ) ) {
+                else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
                     conf.SetMusicVolume( conf.MusicVolume() - 1 );
                     saveMusicVolume = true;
                 }
@@ -186,11 +186,11 @@ namespace Dialog
                     conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
                     saveSoundVolume = true;
                 }
-                else if ( le.MouseWheelUp( soundVolumeRoi ) ) {
+                else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
                     conf.SetSoundVolume( conf.SoundVolume() + 1 );
                     saveSoundVolume = true;
                 }
-                else if ( le.MouseWheelDn( soundVolumeRoi ) ) {
+                else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
                     conf.SetSoundVolume( conf.SoundVolume() - 1 );
                     saveSoundVolume = true;
                 }

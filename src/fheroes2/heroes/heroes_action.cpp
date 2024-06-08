@@ -3341,7 +3341,7 @@ namespace
                     size_t delay = 0;
 
                     while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-                        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                             skipAnimation = true;
                             break;
                         }
