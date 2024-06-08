@@ -358,13 +358,13 @@ bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
         // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
         Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
     }
-    return le.isAnyKeyPressed() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    return le.isAnyKeyPressed() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    return le.isKeyBeingHold() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 fheroes2::Key Game::getHotKeyForEvent( const HotKeyEvent eventID )

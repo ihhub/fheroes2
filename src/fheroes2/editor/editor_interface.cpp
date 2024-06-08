@@ -828,13 +828,13 @@ namespace Interface
             if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
                 int scrollPosition = SCROLL_NONE;
 
-                if ( isScrollLeft( le.GetMouseCursor() ) )
+                if ( isScrollLeft( le.getMouseCursorPos() ) )
                     scrollPosition |= SCROLL_LEFT;
-                else if ( isScrollRight( le.GetMouseCursor() ) )
+                else if ( isScrollRight( le.getMouseCursorPos() ) )
                     scrollPosition |= SCROLL_RIGHT;
-                if ( isScrollTop( le.GetMouseCursor() ) )
+                if ( isScrollTop( le.getMouseCursorPos() ) )
                     scrollPosition |= SCROLL_TOP;
-                else if ( isScrollBottom( le.GetMouseCursor() ) )
+                else if ( isScrollBottom( le.getMouseCursorPos() ) )
                     scrollPosition |= SCROLL_BOTTOM;
 
                 if ( scrollPosition != SCROLL_NONE ) {
@@ -857,7 +857,7 @@ namespace Interface
             isCursorOverGamearea = false;
 
             // cursor is over the radar
-            if ( le.MouseCursor( _radar.GetRect() ) ) {
+            if ( le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
@@ -866,11 +866,11 @@ namespace Interface
                 }
             }
             // cursor is over the game area
-            else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
+            else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
                 isCursorOverGamearea = true;
             }
             // cursor is over the buttons area
-            else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
+            else if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
                 cursor.SetThemes( Cursor::POINTER );
 
                 if ( !_gameArea.NeedScroll() ) {
@@ -896,7 +896,7 @@ namespace Interface
 
             if ( isCursorOverGamearea ) {
                 // Get tile index under the cursor.
-                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() );
                 const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
 
                 if ( _tileUnderCursor != tileIndex ) {
@@ -957,8 +957,8 @@ namespace Interface
 
             // fast scroll
             if ( ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && _gameArea.NeedScroll() ) || _gameArea.needDragScrollRedraw() ) {
-                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                       || isScrollBottom( le.GetMouseCursor() ) )
+                if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
+                       || isScrollBottom( le.getMouseCursorPos() ) )
                      && !_gameArea.isDragScroll() ) {
                     cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
@@ -1050,11 +1050,11 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonNew.area() ) ? buttonNew.drawOnPress() : buttonNew.drawOnRelease();
-            le.MousePressLeft( buttonLoad.area() ) ? buttonLoad.drawOnPress() : buttonLoad.drawOnRelease();
-            le.MousePressLeft( buttonSave.area() ) ? buttonSave.drawOnPress() : buttonSave.drawOnRelease();
-            le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonNew.area() ) ? buttonNew.drawOnPress() : buttonNew.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) ? buttonLoad.drawOnPress() : buttonLoad.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonSave.area() ) ? buttonSave.drawOnPress() : buttonSave.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
@@ -1084,21 +1084,21 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
-            else if ( le.MousePressRight( buttonNew.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonLoad.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonSave.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Map" ), _( "Save the current map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonQuit.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }

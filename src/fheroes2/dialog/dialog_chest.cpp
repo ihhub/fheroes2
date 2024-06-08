@@ -113,8 +113,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
-        le.MousePressLeft( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button_yes.area() ) ) {
             result = true;

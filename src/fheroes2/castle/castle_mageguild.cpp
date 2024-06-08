@@ -136,7 +136,7 @@ bool RowSpells::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+    const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
     if ( 0 <= index && ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) ) {
         const Spell & spell = spells[index];
@@ -249,7 +249,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
@@ -257,7 +257,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
         spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
             || spells5.QueueEventProcessing();
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::Text header( _( "Exit" ), fheroes2::FontType::normalYellow() );
             fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 

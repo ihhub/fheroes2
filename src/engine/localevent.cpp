@@ -1058,7 +1058,7 @@ namespace fheroes2
             return false;
         }
 
-        if ( le.KeyValue() >= fheroes2::Key::KEY_0 && le.KeyValue() <= fheroes2::Key::KEY_9 ) {
+        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
             if ( max <= result ) {
                 // We reached the maximum.
                 return true;
@@ -1066,7 +1066,7 @@ namespace fheroes2
 
             result *= 10;
 
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
+            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
 
             if ( result > max ) {
                 result = max;
@@ -1075,7 +1075,7 @@ namespace fheroes2
             return true;
         }
 
-        if ( le.KeyValue() >= fheroes2::Key::KEY_KP_0 && le.KeyValue() <= fheroes2::Key::KEY_KP_9 ) {
+        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
             if ( max <= result ) {
                 // We reached the maximum.
                 return true;
@@ -1083,7 +1083,7 @@ namespace fheroes2
 
             result *= 10;
 
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
+            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
 
             if ( result > max ) {
                 result = max;

@@ -247,12 +247,12 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     int32_t returnValue = -1;
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-        const fheroes2::Point & mp = le.GetMouseCursor();
+        const fheroes2::Point & mp = le.getMouseCursorPos();
 
         if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

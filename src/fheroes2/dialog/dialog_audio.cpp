@@ -155,7 +155,7 @@ namespace Dialog
         // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -220,20 +220,20 @@ namespace Dialog
                 saveMusicType = true;
             }
 
-            if ( le.MousePressRight( musicVolumeRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( musicVolumeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Music" ), _( "Toggle ambient music level." ), 0 );
             }
 
-            else if ( le.MousePressRight( soundVolumeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( soundVolumeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Effects" ), _( "Toggle foreground sounds level." ), 0 );
             }
-            else if ( le.MousePressRight( musicTypeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( musicTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Music Type" ), _( "Change the type of music." ), 0 );
             }
-            else if ( le.MousePressRight( audio3D ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( audio3D ) ) {
                 fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
-            else if ( le.MousePressRight( buttonOkay.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 

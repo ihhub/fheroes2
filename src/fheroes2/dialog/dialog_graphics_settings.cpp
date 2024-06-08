@@ -165,7 +165,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
                 okayButton.drawOnPress();
             }
             else {
@@ -188,19 +188,19 @@ namespace
                 return SelectedWindow::SystemInfo;
             }
 
-            if ( le.MousePressRight( windowResolutionRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowResolutionRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Resolution" ), _( "Change the resolution of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowModeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "window|Mode" ), _( "Toggle between fullscreen and windowed modes." ), 0 );
             }
-            else if ( le.MousePressRight( windowVSyncRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
-            if ( le.MousePressRight( windowSystemInfoRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 

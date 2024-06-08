@@ -373,8 +373,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-        le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
             if ( isAfterGameCompletion || isDefaultScreenSize ) {
@@ -391,11 +391,11 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
         }
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOtherHighScore.area() ) ) {
             if ( isCampaign ) {
                 fheroes2::showMessage( fheroes2::Text( _( "Standard" ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( "View High Scores for Standard Maps." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );

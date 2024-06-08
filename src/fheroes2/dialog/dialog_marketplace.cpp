@@ -367,15 +367,15 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonGift.isEnabled() )
-            le.MousePressLeft( buttonGift.area() ) ? buttonGift.drawOnPress() : buttonGift.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonGift.area() ) ? buttonGift.drawOnPress() : buttonGift.drawOnRelease();
         if ( buttonTrade.isEnabled() )
-            le.MousePressLeft( buttonTrade.area() ) ? buttonTrade.drawOnPress() : buttonTrade.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) ? buttonTrade.drawOnPress() : buttonTrade.drawOnRelease();
         if ( buttonLeft.isEnabled() )
-            le.MousePressLeft( buttonLeft.area() ) ? buttonLeft.drawOnPress() : buttonLeft.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) ? buttonLeft.drawOnPress() : buttonLeft.drawOnRelease();
         if ( buttonRight.isEnabled() )
-            le.MousePressLeft( buttonRight.area() ) ? buttonRight.drawOnPress() : buttonRight.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonRight.area() ) ? buttonRight.drawOnPress() : buttonRight.drawOnRelease();
 
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
@@ -428,7 +428,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
                 display.render();
             }
-            else if ( le.MousePressRight( rect_from ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( rect_from ) ) {
                 fheroes2::showKingdomIncome( kingdom, 0 );
             }
         }
@@ -463,8 +463,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // Scrollbar
-        if ( buttonLeft.isEnabled() && buttonRight.isEnabled() && max_buy && le.MousePressLeft( scrollbar.getArea() ) ) {
-            const fheroes2::Point & mousePos = le.GetMouseCursor();
+        if ( buttonLeft.isEnabled() && buttonRight.isEnabled() && max_buy && le.isMouseLeftButtonPressedInArea( scrollbar.getArea() ) ) {
+            const fheroes2::Point & mousePos = le.getMouseCursorPos();
             scrollbar.moveToPos( mousePos );
             const int32_t seek = scrollbar.currentIndex();
 

@@ -262,9 +262,9 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonDeleteArtifact.drawOnState( le.MousePressLeft( buttonDeleteArtifact.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -289,7 +289,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( checkboxRect ) ) {
+                if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} human player to get event" );
                     std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a human." );
 
@@ -318,7 +318,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( checkboxRect ) ) {
+                if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} computer player to get event" );
                     std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a computer." );
 
@@ -406,13 +406,13 @@ namespace Editor
 
                 display.render( artifactRoi );
             }
-            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the Event properties." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( artifactRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( artifactRoi ) ) {
                 // Since Artifact class does not allow to set a random spell (for obvious reasons),
                 // we have to use special UI code to render the popup window with all needed information.
                 const Artifact artifact( eventMetadata.artifact );
@@ -429,10 +429,10 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
                 }
             }
-            else if ( le.MousePressRight( buttonDeleteArtifact.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteArtifact.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( resourceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
                 if ( eventMetadata.resources.GetValidItemsCount() == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
                 }
@@ -442,13 +442,13 @@ namespace Editor
                                                    eventMetadata.resources );
                 }
             }
-            else if ( le.MousePressRight( recurringEventArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( recurringEventArea ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Cancel event after first visit" ),
                     _( "If this checkbox is checked, the event will trigger only once. If not checked, the event will trigger every time one of the specified players crosses the event tile." ),
                     Dialog::ZERO );
             }
-            else if ( le.MousePressRight( messageRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( messageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );
             }
 

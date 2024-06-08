@@ -59,7 +59,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point & pos = le.GetMouseCursor();
+    const fheroes2::Point & pos = le.getMouseCursorPos();
     const fheroes2::Point position( pos.x, pos.y );
 
     for ( size_t i = 0; i < rects.size(); ++i ) {

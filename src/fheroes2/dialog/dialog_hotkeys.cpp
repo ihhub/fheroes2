@@ -81,7 +81,7 @@ namespace
         {
             const LocalEvent & le = LocalEvent::Get();
             if ( le.isAnyKeyPressed() ) {
-                _key = le.KeyValue();
+                _key = le.getPressedKeyValue();
                 _keyChanged = true;
             }
         }
@@ -298,7 +298,7 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
             listbox.QueueEventProcessing();
 
@@ -306,7 +306,7 @@ namespace fheroes2
                 return;
             }
 
-            if ( le.MousePressRight( buttonOk.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
                 const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
