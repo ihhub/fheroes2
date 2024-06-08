@@ -534,17 +534,17 @@ namespace
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
-                                                                               Spell::LIGHTNINGBOLT );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::CHAINLIGHTNING );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::ELEMENTALSTORM );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::LIGHTNINGBOLT );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR );
         monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                  Spell::METEORSHOWER );

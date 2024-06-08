@@ -1390,9 +1390,9 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     case Monster::AIR_ELEMENT:
         switch ( spell.GetID() ) {
             // 200% damage
+        case Spell::CHAINLIGHTNING:
         case Spell::ELEMENTALSTORM:
         case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
             dmg *= 2;
             break;
         default:
@@ -1401,15 +1401,11 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         break;
 
     case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
+        if ( spell.isCold() ) {
             // 200% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
             dmg *= 2;
-            break;
-        default:
-            break;
         }
+
         break;
 
     default:
