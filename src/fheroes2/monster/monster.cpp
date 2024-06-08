@@ -226,9 +226,12 @@ uint32_t Monster::GetRNDSize() const
 
 bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
 {
-    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    return fheroes2::isAbilityPresent( fheroes2::getMonsterData( id ).battleStats.abilities, abilityType );
+}
 
-    return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+bool Monster::isWeaknessPresent( const fheroes2::MonsterWeaknessType weaknessType ) const
+{
+    return fheroes2::isWeaknessPresent( fheroes2::getMonsterData( id ).battleStats.weaknesses, weaknessType );
 }
 
 Monster Monster::GetDowngrade() const

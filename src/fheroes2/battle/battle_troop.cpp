@@ -570,34 +570,26 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         dmg /= 2;
     }
 
-    switch ( GetID() ) {
-    case Monster::CRUSADER:
-        if ( enemy.isUndead() ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    default:
-        break;
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY ) &&
+         enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY ) &&
+         enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_AIR ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH ) ) {
+        dmg *= 2;
     }
 
     int r = GetAttack() - enemy.GetDefense();
