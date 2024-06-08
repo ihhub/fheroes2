@@ -463,10 +463,10 @@ bool Interface::BorderWindow::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    if ( conf.isHideInterfaceEnabled() && le.MousePressLeft( border.GetTop() ) ) {
+    if ( conf.isHideInterfaceEnabled() && le.isMouseLeftButtonPressedInArea( border.GetTop() ) ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Point & mp = le.GetMouseCursor();
+        const fheroes2::Point & mp = le.getMouseCursorPos();
         const fheroes2::Rect & pos = GetRect();
 
         fheroes2::MovableSprite moveIndicator( pos.width, pos.height, pos.x, pos.y );

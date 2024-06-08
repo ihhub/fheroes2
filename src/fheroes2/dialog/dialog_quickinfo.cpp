@@ -440,7 +440,8 @@ namespace
             return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
         }
 
-        return Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::AdventureMap::Get().getGameArea().GetROI(), { imageBox.width(), imageBox.height() } );
+        return Interface::getPopupWindowPosition( le.getMouseCursorPos(), Interface::AdventureMap::Get().getGameArea().GetROI(),
+                                                  { imageBox.width(), imageBox.height() } );
     }
 
     std::string getQuickInfoText( const Maps::Tiles & tile )

@@ -79,11 +79,11 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
-            le.MousePressLeft( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
-            le.MousePressLeft( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
-            le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                 result = Dialog::WORLD;
@@ -107,15 +107,15 @@ namespace
             }
 
             // right info
-            if ( le.MousePressRight( buttonWorld.area() ) )
+            if ( le.isMouseRightButtonPressedInArea( buttonWorld.area() ) )
                 fheroes2::showStandardTextMessage( _( "View World" ), _( "View the entire world." ), Dialog::ZERO );
-            else if ( le.MousePressRight( buttonPuzzle.area() ) )
+            else if ( le.isMouseRightButtonPressedInArea( buttonPuzzle.area() ) )
                 fheroes2::showStandardTextMessage( _( "Puzzle" ), _( "View the obelisk puzzle." ), Dialog::ZERO );
-            else if ( le.MousePressRight( buttonInfo.area() ) )
+            else if ( le.isMouseRightButtonPressedInArea( buttonInfo.area() ) )
                 fheroes2::showStandardTextMessage( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Dialog::ZERO );
-            else if ( le.MousePressRight( buttonDig.area() ) )
+            else if ( le.isMouseRightButtonPressedInArea( buttonDig.area() ) )
                 fheroes2::showStandardTextMessage( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Dialog::ZERO );
-            else if ( le.MousePressRight( buttonCancel.area() ) )
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) )
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
 

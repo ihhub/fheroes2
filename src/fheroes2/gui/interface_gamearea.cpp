@@ -1012,7 +1012,7 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
 void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Point & mousePosition = le.GetMouseCursor();
+    const fheroes2::Point & mousePosition = le.getMouseCursorPos();
 
     if ( !le.isMouseLeftButtonPressed() ) {
         _mouseDraggingInitiated = false;
@@ -1029,7 +1029,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = true;
     }
 
-    if ( _mouseDraggingMovement && le.MousePressLeft( GetROI() ) ) {
+    if ( _mouseDraggingMovement && le.isMouseLeftButtonPressedInArea( GetROI() ) ) {
         if ( _lastMouseDragPosition == mousePosition ) {
             _needRedrawByMouseDragging = false;
         }
@@ -1061,7 +1061,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
 
@@ -1074,7 +1074,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
     }
-    else if ( le.MousePressRight( tileROI ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
     }
     else if ( le.MouseLongPressLeft( tileROI ) ) {
@@ -1082,7 +1082,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     // The cursor may have moved after mouse click events.
-    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+    index = GetValidTileIdFromPoint( le.getMouseCursorPos() );
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {

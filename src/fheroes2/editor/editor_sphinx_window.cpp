@@ -258,12 +258,12 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonAdd.drawOnState( le.MousePressLeft( buttonAdd.area() ) );
-            buttonEdit.drawOnState( le.MousePressLeft( buttonEdit.area() ) );
-            buttonDelete.drawOnState( le.MousePressLeft( buttonDelete.area() ) );
-            buttonDeleteArtifact.drawOnState( le.MousePressLeft( buttonDeleteArtifact.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonAdd.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAdd.area() ) );
+            buttonEdit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEdit.area() ) );
+            buttonDelete.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDelete.area() ) );
+            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 break;
@@ -393,22 +393,22 @@ namespace Editor
 
                 display.render( artifactRoi );
             }
-            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the Sphinx properties." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonAdd.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonAdd.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Add Answer" ), _( "Add an additional answer for the question." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonEdit.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonEdit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Edit Answer" ), _( "Edit an existing answer for the question." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonDelete.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonDelete.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Answer" ), _( "Delete an existing answer for the question." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( artifactRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( artifactRoi ) ) {
                 // Since Artifact class does not allow to set a random spell (for obvious reasons),
                 // we have to use special UI code to render the popup window with all needed information.
                 const Artifact artifact( metadata.artifact );
@@ -425,10 +425,10 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
                 }
             }
-            else if ( le.MousePressRight( buttonDeleteArtifact.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteArtifact.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( resourceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
                 if ( metadata.resources.GetValidItemsCount() == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
                 }

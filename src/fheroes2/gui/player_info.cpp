@@ -292,7 +292,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     const LocalEvent & le = LocalEvent::Get();
 
     if ( le.isMouseRightButtonPressed() ) {
-        const Player * player = GetFromOpponentClick( le.GetMouseCursor() );
+        const Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
             fheroes2::showStandardTextMessage(
                 _( "Opponents" ),
@@ -301,7 +301,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             return true;
         }
 
-        player = GetFromClassClick( le.GetMouseCursor() );
+        player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
             fheroes2::showStandardTextMessage(
                 _( "Class" ),
@@ -310,7 +310,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             return true;
         }
 
-        player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+        player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
         if ( player != nullptr ) {
             fheroes2::
                 showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
@@ -326,7 +326,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     }
 
     if ( le.isMouseWheelUp() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getPreviousRace( player->GetRace() ) );
 
@@ -337,7 +337,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     }
 
     if ( le.isMouseWheelDown() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getNextRace( player->GetRace() ) );
 
@@ -346,7 +346,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    Player * player = GetFromOpponentClick( le.GetMouseCursor() );
+    Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
@@ -385,7 +385,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return true;
     }
 
-    player = GetFromOpponentNameClick( le.GetMouseCursor() );
+    player = GetFromOpponentNameClick( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         std::string str = _( "%{color} player" );
         StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
@@ -398,14 +398,14 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return true;
     }
 
-    player = GetFromClassClick( le.GetMouseCursor() );
+    player = GetFromClassClick( le.getMouseCursorPos() );
     if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
         player->SetRace( Race::getNextRace( player->GetRace() ) );
 
         return true;
     }
 
-    player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+    player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         if ( !( player->GetControl() & CONTROL_AI ) ) {
             switch ( player->getHandicapStatus() ) {
@@ -438,7 +438,7 @@ bool Interface::PlayersInfo::readOnlyEventProcessing()
         return false;
     }
 
-    const Player * player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+    const Player * player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
