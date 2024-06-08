@@ -1376,18 +1376,15 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         if ( spell.isElementalSpell() || spell.GetID() == Spell::ARMAGEDDON ) {
             dmg /= 2;
         }
+
         break;
 
     case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
+        if ( spell.isFire() ) {
             // 200% damage
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
             dmg *= 2;
-            break;
-        default:
-            break;
         }
+
         break;
 
     case Monster::AIR_ELEMENT:
