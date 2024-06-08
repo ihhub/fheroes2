@@ -924,8 +924,7 @@ namespace fheroes2
             }
         }
 
-        if ( spell == Spell::COLDRAY || spell == Spell::COLDRING || spell == Spell::FIREBALL || spell == Spell::FIREBLAST || spell == Spell::LIGHTNINGBOLT
-             || spell == Spell::CHAINLIGHTNING || spell == Spell::ELEMENTALSTORM ) {
+        if ( spell.isElementalSpell() ) {
             foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;

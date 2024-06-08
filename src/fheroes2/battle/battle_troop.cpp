@@ -1373,20 +1373,8 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
     case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
-            // 50% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::ARMAGEDDON:
+        if ( spell.isElementalSpell() || spell.GetID() == Spell::ARMAGEDDON ) {
             dmg /= 2;
-            break;
-        default:
-            break;
         }
         break;
 
