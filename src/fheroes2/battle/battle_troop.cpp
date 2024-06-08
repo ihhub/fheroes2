@@ -1349,11 +1349,11 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
-    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, applyingHero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPower, applyingHero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1362,13 +1362,13 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
     }
 }
 
-uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                              const bool ignoreDefendingHero ) const
 {
     assert( spell.isDamage() );
 
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spellPoints;
+    uint32_t dmg = spell.Damage() * spellPower;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
