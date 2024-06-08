@@ -574,13 +574,11 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY ) &&
-         enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE ) ) {
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY ) &&
-         enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD ) ) {
         dmg *= 2;
     }
 
