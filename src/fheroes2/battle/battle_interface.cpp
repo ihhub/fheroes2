@@ -1314,7 +1314,7 @@ void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & un
     _turnOrder.Set( GetArea(), units, arena.GetArmy2Color() );
 }
 
-fheroes2::Point Battle::Interface::getMouseCursorPos() const
+fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
 {
     return LocalEvent::Get().getMouseCursorPos() - _interfacePosition.getPosition();
 }
@@ -2570,7 +2570,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
 
             if ( !availableAttackDirection.empty() ) {
-                int currentDirection = cell->GetTriangleDirection( getMouseCursorPos() );
+                int currentDirection = cell->GetTriangleDirection( getRelativeMouseCursorPos() );
                 if ( currentDirection == UNKNOWN ) {
                     // This could happen when another window has popped up and the user moved the mouse.
                     currentDirection = CENTER;
@@ -2716,7 +2716,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
         // move cursor
         int32_t indexNew = -1;
         if ( le.isMouseCursorPosInArea( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
-            indexNew = board->GetIndexAbsPosition( getMouseCursorPos() );
+            indexNew = board->GetIndexAbsPosition( getRelativeMouseCursorPos() );
         }
         if ( index_pos != indexNew ) {
             index_pos = indexNew;
