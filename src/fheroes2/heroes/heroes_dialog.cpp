@@ -74,35 +74,42 @@ namespace
     {
         fheroes2::Image racePortrait( portPos.width, portPos.height );
 
-        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex ) {
+        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
             fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
             const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
-            fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
-                            std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+            if ( applyRandomPalette ) {
+                fheroes2::Sprite tmp = heroSprite;
+                fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                fheroes2::Blit( tmp, 0, std::max( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
+                                std::max( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
+            }
+            else {
+                fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
+                                std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+            }
         };
 
         switch ( race ) {
         case Race::KNGT:
-            preparePortrait( ICN::CMBTHROK, 4 );
+            preparePortrait( ICN::CMBTHROK, 4, false );
             break;
         case Race::BARB:
-            preparePortrait( ICN::CMBTHROB, 5 );
+            preparePortrait( ICN::CMBTHROB, 5, false );
             break;
         case Race::SORC:
-            preparePortrait( ICN::CMBTHROS, 6 );
+            preparePortrait( ICN::CMBTHROS, 6, false );
             break;
         case Race::WRLK:
-            preparePortrait( ICN::CMBTHROW, 7 );
+            preparePortrait( ICN::CMBTHROW, 7, false );
             break;
         case Race::WZRD:
-            preparePortrait( ICN::CMBTHROZ, 8 );
+            preparePortrait( ICN::CMBTHROZ, 8, false );
             break;
         case Race::NECR:
-            preparePortrait( ICN::CMBTHRON, 9 );
+            preparePortrait( ICN::CMBTHRON, 9, false );
             break;
         case Race::RAND:
-            // TODO: Make a portrait for the random hero.
-            preparePortrait( ICN::NOMAD, 10 );
+            preparePortrait( ICN::CMBTHROW, 10, true );
             break;
         default:
             // Have you added a new race? Correct the logic above!
