@@ -89,6 +89,23 @@ namespace fheroes2
         }
     };
 
+    struct TextLineInfo
+    {
+        TextLineInfo() = default;
+
+        TextLineInfo( const int32_t lineWidth_, const int32_t offsetY_, const int32_t count )
+            : lineWidth( lineWidth_ )
+            , offsetY( offsetY_ )
+            , characterCount( count )
+        {
+            // Do nothing.
+        }
+
+        int32_t lineWidth{ 0 };
+        int32_t offsetY{ 0 };
+        int32_t characterCount{ 0 };
+    };
+
     int32_t getFontHeight( const FontSize fontSize );
 
     class TextBase
@@ -97,25 +114,40 @@ namespace fheroes2
         TextBase() = default;
         virtual ~TextBase();
 
-        // Returns width of a text as a single-line text only.
-        virtual int32_t width() const = 0;
+        int32_t width() const
+        {
+            return width( 0 );
+        }
 
-        // Returns height of a text as a single-line text only.
-        virtual int32_t height() const = 0;
+        int32_t height() const
+        {
+            return height( 0 );
+        }
 
-        // Returns width of a text as a multi-line text limited by maximum width of a line.
-        virtual int32_t width( const int32_t maxWidth ) const = 0;
+        int32_t width( const int32_t maxWidth ) const
+        {
+            const_cast<TextBase *>( this )->setMaxWidth( maxWidth );
+            return _width;
+        }
 
-        // Returns height of a text as a multi-line text limited by width of a line.
-        virtual int32_t height( const int32_t maxWidth ) const = 0;
+        int32_t height( const int32_t maxWidth ) const
+        {
+            const_cast<TextBase *>( this )->setMaxWidth( maxWidth );
+            return _height;
+        }
 
         // Returns number of multi-line text rows limited by width of a line. It can be 0 if the text is empty.
-        virtual int32_t rows( const int32_t maxWidth ) const = 0;
+        int32_t rows( const int32_t maxWidth ) const
+        {
+            const_cast<TextBase *>( this )->setMaxWidth( maxWidth );
+
+            return static_cast<int32_t>( _textLineInfos.size() );
+        }
 
         // Draw text as a single line text.
         void draw( const int32_t x, const int32_t y, Image & output ) const
         {
-            drawInRoi( x, y, output, { 0, 0, output.width(), output.height() } );
+            drawInRoi( x, y, 0, output, { 0, 0, output.width(), output.height() } );
         }
 
         // Draw text as a multi-line limited by width of a line. The text will be centered according to the provided maximum width.
@@ -124,14 +156,14 @@ namespace fheroes2
             drawInRoi( x, y, maxWidth, output, { 0, 0, output.width(), output.height() } );
         }
 
-        // Draw text as a single line text within a given image ROI.
-        virtual void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const = 0;
-
-        // Draw text as a multi-line within a given image ROI and limited by width of a line. The text will be centered according to the provided maximum width.
+        // Draw text within a given image ROI. If maximum width is more than 0 then the text will be limited by width of a line
+        // and centered according to the provided maximum width value.
         virtual void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const = 0;
 
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
+
+        virtual void setMaxWidth( const int32_t maxWidth ) = 0;
 
         // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
@@ -141,8 +173,25 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
+        void setFirstLineOffsetX( const int32_t firstLineOffsetX )
+        {
+            _firstLineOffsetX = firstLineOffsetX;
+        }
+
+        const std::vector<TextLineInfo> & getTextLineInfos() const
+        {
+            return _textLineInfos;
+        }
+
     protected:
         bool _isUniformedVerticalAlignment{ true };
+
+        int32_t _maxWidth{ -1 };
+        int32_t _width{ 0 };
+        int32_t _height{ 0 };
+        int32_t _firstLineOffsetX{ 0 };
+
+        std::vector<TextLineInfo> _textLineInfos;
     };
 
     class Text : public TextBase
@@ -160,43 +209,47 @@ namespace fheroes2
         }
 
         Text( const Text & text ) = default;
-        Text( Text && text ) = default;
+        Text( Text && text ) noexcept = default;
         Text & operator=( const Text & text ) = default;
-        Text & operator=( Text && text ) = default;
+        Text & operator=( Text && text ) noexcept = default;
 
-        ~Text() override;
+        ~Text() final = default;
 
-        int32_t width() const override;
-        int32_t height() const override;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const final;
 
-        int32_t width( const int32_t maxWidth ) const override;
-        int32_t height( const int32_t maxWidth ) const override;
-
-        int32_t rows( const int32_t maxWidth ) const override;
-
-        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
-        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
-
-        bool empty() const override;
+        bool empty() const final
+        {
+            return _text.empty();
+        }
 
         void set( std::string text, const FontType fontType )
         {
             _text = std::move( text );
             _fontType = fontType;
+
+            _updateWidthAndHeight();
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         // By default it ignores spaces at the end of the text phrase.
         void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        std::string text() const override;
+        std::string text() const final
+        {
+            return _text;
+        }
 
         FontType getFontType() const
         {
             return _fontType;
         }
 
+        void setMaxWidth( const int32_t maxWidth ) final;
+
     private:
+        void _updateTextLineInfo();
+        void _updateWidthAndHeight();
+
         std::string _text;
 
         FontType _fontType;
@@ -206,24 +259,26 @@ namespace fheroes2
     {
     public:
         MultiFontText() = default;
-        ~MultiFontText() override;
+        ~MultiFontText() final = default;
 
-        void add( Text text );
+        void add( Text text )
+        {
+            if ( !text.empty() ) {
+                _texts.emplace_back( std::move( text ) );
+            }
+        }
 
-        int32_t width() const override;
-        int32_t height() const override;
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const final;
 
-        int32_t width( const int32_t maxWidth ) const override;
-        int32_t height( const int32_t maxWidth ) const override;
+        bool empty() const final
+        {
+            return _texts.empty();
+        }
 
-        int32_t rows( const int32_t maxWidth ) const override;
+        std::string text() const final;
 
-        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
-        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
-
-        bool empty() const override;
-
-        std::string text() const override;
+        void setMaxWidth( const int32_t maxWidth ) final;
 
     private:
         std::vector<Text> _texts;
@@ -256,9 +311,6 @@ namespace fheroes2
         const uint32_t _charLimit;
         const int32_t _spaceCharWidth;
     };
-
-    // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );

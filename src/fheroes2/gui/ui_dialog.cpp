@@ -701,11 +701,11 @@ namespace fheroes2
 
         Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
         skillName.fitToOneRow( icnRect.width );
-        skillName.drawInRoi( offset.x + ( background.width() - skillName.width() ) / 2 - 1, offset.y + 8, output, icnRect );
+        skillName.drawInRoi( offset.x + ( background.width() - skillName.width() ) / 2 - 1, offset.y + 8, 0, output, icnRect );
 
         Text skillDescription( Skill::Level::StringWithBonus( _hero, _skill ), FontType::smallWhite() );
         skillDescription.fitToOneRow( icnRect.width );
-        skillDescription.drawInRoi( offset.x + ( background.width() - skillDescription.width() ) / 2 - 1, offset.y + 56, output, icnRect );
+        skillDescription.drawInRoi( offset.x + ( background.width() - skillDescription.width() ) / 2 - 1, offset.y + 56, 0, output, icnRect );
     }
 
     void SecondarySkillDialogElement::processEvents( const Point & offset ) const

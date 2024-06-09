@@ -227,6 +227,10 @@ namespace Video
         assert( maxWidth > 0 );
         const int32_t textWidth = subtitleText.width( maxWidth );
 
+        if ( textWidth == 0 ) {
+            return;
+        }
+
         // We add extra 1 to have space for contour.
         _subtitleImage.resize( textWidth + 1, subtitleText.height( textWidth ) + 1 );
 

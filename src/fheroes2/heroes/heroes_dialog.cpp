@@ -196,7 +196,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         StringReplace( titleText, "%{level}", GetLevel() );
 
         const fheroes2::Text title( std::move( titleText ), fheroes2::FontType::normalWhite() );
-        title.drawInRoi( titleRoi.x + ( titleRoi.width - title.width() ) / 2, titleRoi.y + 2, display, titleRoi );
+        title.drawInRoi( titleRoi.x + ( titleRoi.width - title.width() ) / 2, titleRoi.y + 2, 0, display, titleRoi );
     };
 
     drawTitleText( name, _race, false );

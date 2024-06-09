@@ -24,6 +24,7 @@
 #include <cassert>
 #include <deque>
 #include <memory>
+#include <numeric>
 
 #include "agg_image.h"
 
@@ -45,14 +46,7 @@ namespace
         return ( character == ' ' );
     }
 
-    struct TextLineInfo
-    {
-        fheroes2::Point offset;
-
-        int32_t characterCount{ 0 };
-    };
-
-    int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
+    int32_t calculateLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
     {
         assert( data != nullptr && size > 0 );
 
@@ -106,7 +100,7 @@ namespace
             if ( isSpaceChar( *data ) ) {
                 spaceWidth += spaceCharWidth;
             }
-            else {
+            else if ( !isLineSeparator( *data ) ) {
                 width += spaceWidth + charHandler.getWidth( *data );
 
                 spaceWidth = 0;
@@ -116,125 +110,6 @@ namespace
         }
 
         return width;
-    }
-
-    // Returns text lines parameters (in pixels) in 'offsets': x - line widths, y - vertical line shift. And in 'charsInLine' - the number of characters on the line.
-    void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType fontType, const int32_t rowHeight,
-                          std::deque<TextLineInfo> & textLineInfo )
-    {
-        assert( data != nullptr && size > 0 && maxWidth > 0 );
-
-        if ( textLineInfo.empty() ) {
-            textLineInfo.emplace_back();
-        }
-
-        TextLineInfo * lineInfo = &textLineInfo.back();
-
-        const fheroes2::FontCharHandler charHandler( fontType );
-
-        // We need to cut sentences not in the middle of a word but by a space or invalid characters.
-        const uint8_t * dataEnd = data + size;
-
-        int32_t lineLength = lineInfo->characterCount;
-        int32_t lastWordLength = 0;
-        int32_t lineWidth = lineInfo->offset.x;
-
-        while ( data != dataEnd ) {
-            if ( isLineSeparator( *data ) ) {
-                if ( lineLength > 0 ) {
-                    lineInfo->offset.x = lineWidth;
-                    lineInfo->characterCount = lineLength;
-                    lineLength = 0;
-                    lastWordLength = 0;
-                    lineWidth = 0;
-                }
-
-                const int32_t prevY = textLineInfo.back().offset.y;
-
-                textLineInfo.emplace_back();
-                lineInfo = &textLineInfo.back();
-                lineInfo->offset.y = prevY + rowHeight;
-
-                ++data;
-            }
-            else {
-                // This is another character in the line. Get its width.
-
-                const int32_t charWidth = charHandler.getWidth( *data );
-
-                if ( lineWidth + charWidth > maxWidth ) {
-                    // Current character has exceeded the maximum line width.
-
-                    if ( lineLength == lastWordLength ) {
-                        // This is the only word in the line.
-                        // Search for '-' symbol to avoid truncating the word in the middle.
-                        const uint8_t * hyphenPos = data - lineLength;
-                        for ( ; hyphenPos != data; ++hyphenPos ) {
-                            if ( *hyphenPos == hyphenChar ) {
-                                break;
-                            }
-                        }
-
-                        if ( hyphenPos != data ) {
-                            // The '-' symbol has been found. In this case we consider everything after it as a separate word.
-                            lineInfo->characterCount = lineLength - static_cast<int32_t>( data - hyphenPos ) + 1;
-                            lineInfo->offset.x = getLineWidth( data - lineLength, lineInfo->characterCount, fontType );
-                            data = hyphenPos;
-                            ++data;
-                        }
-                        else if ( lineInfo->characterCount == 0 ) {
-                            lineInfo->characterCount = lineLength;
-                            lineInfo->offset.x = lineWidth;
-                        }
-                        else {
-                            // This word was not the first in the line so we can move it to the next line.
-                            // It can happen in the case of the multi-font text.
-                            data -= lastWordLength;
-                        }
-                    }
-                    else if ( isSpaceChar( *data ) ) {
-                        // Current character could be a space character then current line is over.
-                        // For the characters count we take this space into the account.
-                        lineInfo->characterCount = lineLength + 1;
-                        lineInfo->offset.x = lineWidth;
-
-                        // We skip this space character.
-                        ++data;
-                    }
-                    else if ( lastWordLength > 0 ) {
-                        // Exclude last word from this line.
-                        data -= lastWordLength;
-
-                        lineInfo->characterCount = lineLength - lastWordLength;
-                        lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
-                    }
-                    else {
-                        lineInfo->characterCount = lineLength;
-                        lineInfo->offset.x = lineWidth;
-                    }
-
-                    lineLength = 0;
-                    lastWordLength = 0;
-                    lineWidth = 0;
-
-                    const int32_t prevY = textLineInfo.back().offset.y;
-
-                    textLineInfo.emplace_back();
-                    lineInfo = &textLineInfo.back();
-                    lineInfo->offset.y = prevY + rowHeight;
-                }
-                else {
-                    lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
-
-                    ++data;
-                    ++lineLength;
-                    lineWidth += charWidth;
-                }
-            }
-        }
-
-        lineInfo->characterCount = lineLength;
-        lineInfo->offset.x = lineWidth;
     }
 
     int32_t renderSingleLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
@@ -278,167 +153,18 @@ namespace
         return offsetX;
     }
 
-    void renderLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                     const fheroes2::Rect & imageRoi, const fheroes2::FontType fontType, const bool align )
+    void renderCenterAlignedLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
+                                  const fheroes2::Rect & imageRoi, const fheroes2::FontType fontType )
     {
-        if ( align ) {
-            const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
+        const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
 
-            assert( correctedLineWidth <= maxWidth );
-            // For button font single letters in a row we add 1 extra pixel to the width to more properly center odd-width letters.
-            const int32_t extraOffsetX = ( size == 1 && ( maxWidth % 2 == 0 )
-                                           && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
-                                             ? 1
-                                             : 0;
-            renderSingleLine( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, imageRoi, fontType );
-        }
-        else {
-            renderSingleLine( data, size, x, y, output, imageRoi, fontType );
-        }
-    }
-
-    void renderMultiLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                          const fheroes2::Rect & imageRoi, const fheroes2::FontType fontType, const int32_t rowHeight, const bool align,
-                          std::deque<TextLineInfo> & lineInfos )
-    {
-        assert( data != nullptr && size > 0 && !output.empty() && maxWidth > 0 );
-
-        const fheroes2::FontCharHandler charHandler( fontType );
-
-        // We need to cut sentences not in the middle of a word but by a space or invalid characters.
-        const uint8_t * dataEnd = data + size;
-
-        int32_t lineLength = 0;
-        int32_t lastWordLength = 0;
-        int32_t lineWidth = 0;
-
-        TextLineInfo staticLineInfo;
-        TextLineInfo * lineInfo;
-        const bool hasInputOffsets = !lineInfos.empty();
-
-        if ( hasInputOffsets ) {
-            lineInfo = &lineInfos.front();
-        }
-        else {
-            lineInfo = &staticLineInfo;
-        }
-
-        const int32_t fontHeight = fheroes2::getFontHeight( fontType.size );
-        const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
-
-        while ( data != dataEnd ) {
-            if ( isLineSeparator( *data ) ) {
-                // End of line. Render the current line.
-                if ( lineLength > 0 ) {
-                    renderLine( data - lineLength, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-                    lineLength = 0;
-                    lastWordLength = 0;
-                    lineWidth = 0;
-                }
-
-                if ( hasInputOffsets ) {
-                    lineInfos.pop_front();
-                    assert( !lineInfos.empty() );
-
-                    lineInfo = &lineInfos.front();
-                }
-                else {
-                    lineInfo->offset.x = 0;
-                    lineInfo->offset.y += rowHeight;
-                }
-
-                ++data;
-            }
-            else {
-                const int32_t charWidth = charHandler.getWidth( *data );
-
-                if ( lineInfo->offset.x + lineWidth + charWidth > maxWidth ) {
-                    // Current character has exceeded the maximum line width.
-                    const uint8_t * line = data - lineLength;
-
-                    if ( lineLength == 0 && lastWordLength == 0 ) {
-                        // No new characters can be added.
-                        // This can happen when a new text in a multi-font text being appended just at the end of the line.
-                        assert( lineWidth == 0 );
-                    }
-                    else if ( lineLength == lastWordLength ) {
-                        // This is the only word in the line.
-                        // Search for '-' symbol to avoid truncating the word in the middle.
-                        const uint8_t * hyphenPos = data - lineLength;
-                        for ( ; hyphenPos != data; ++hyphenPos ) {
-                            if ( *hyphenPos == hyphenChar ) {
-                                break;
-                            }
-                        }
-
-                        if ( hyphenPos != data ) {
-                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth,
-                                        output, imageRoi, fontType, align );
-                            data = hyphenPos;
-                            ++data;
-                        }
-                        else if ( lineInfo->offset.x < maxWidth / 2 ) {
-                            // TODO: this is a wrong way to do as renderer should not care about special cases
-                            //       but rather just follow 'instructions'.
-                            //       This check is done to fix possible crashes while rendering multi-font text.
-                            renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-                        }
-                        else {
-                            // This first word starts from the end of the line so we can move it to the next line.
-                            // It can happen in the case of the multi-font text.
-                            data -= lastWordLength;
-                        }
-                    }
-                    else if ( isSpaceChar( *data ) ) {
-                        // Current character could be a space character then current line is over.
-                        renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-
-                        // We skip this space character.
-                        ++data;
-                    }
-                    else {
-                        // Exclude last word from this line.
-                        renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-
-                        // Go back to the start of the word.
-                        data -= lastWordLength;
-                    }
-
-                    lineLength = 0;
-                    lastWordLength = 0;
-                    lineWidth = 0;
-
-                    if ( hasInputOffsets ) {
-                        lineInfos.pop_front();
-                        assert( !lineInfos.empty() );
-
-                        lineInfo = &lineInfos.front();
-                    }
-                    else {
-                        lineInfo->offset.x = 0;
-                        lineInfo->offset.y += rowHeight;
-                    }
-
-                    // This is a new line. getMultiRowInfo() function does estimations while ignoring whitespace characters at the start and end of lines.
-                    // If the next line starts from a whitespace character it is important to skip it.
-                    while ( isSpaceChar( *data ) && data != dataEnd ) {
-                        ++data;
-                    }
-                }
-                else {
-                    lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
-
-                    ++data;
-                    ++lineLength;
-                    lineWidth += charWidth;
-                }
-            }
-        }
-
-        if ( lineLength > 0 ) {
-            renderLine( data - lineLength, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
-            lineInfo->offset.x += lineWidth;
-        }
+        assert( correctedLineWidth <= maxWidth );
+        // For button font single letters in a row we add 1 extra pixel to the width to more properly center odd-width letters.
+        const int32_t extraOffsetX
+            = ( size == 1 && ( maxWidth % 2 == 0 ) && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
+                  ? 1
+                  : 0;
+        renderSingleLine( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, imageRoi, fontType );
     }
 
     int32_t getMaxWordWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType fontType )
@@ -499,101 +225,6 @@ namespace fheroes2
 
     TextBase::~TextBase() = default;
 
-    Text::~Text() = default;
-
-    // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
-    int32_t Text::width() const
-    {
-        return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
-    }
-
-    // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
-    int32_t Text::height() const
-    {
-        return getFontHeight( _fontType.size );
-    }
-
-    int32_t Text::width( const int32_t maxWidth ) const
-    {
-        if ( _text.empty() ) {
-            return 0;
-        }
-
-        const int32_t fontHeight = height();
-
-        std::deque<TextLineInfo> lineInfos;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
-
-        if ( lineInfos.size() == 1 ) {
-            // This is a single-line message.
-            return lineInfos.front().offset.x;
-        }
-
-        if ( !_isUniformedVerticalAlignment ) {
-            // This is a multi-lined message and we try to fit as many words on every line as possible.
-            return std::max_element( lineInfos.begin(), lineInfos.end(), []( const TextLineInfo & a, const TextLineInfo & b ) { return a.offset.x < b.offset.x; } )
-                ->offset.x;
-        }
-
-        // This is a multi-line message. Optimize it to fit the text evenly to the same number of lines.
-        int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
-        int32_t endWidth = maxWidth;
-
-        while ( startWidth + 1 < endWidth ) {
-            const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-            std::deque<TextLineInfo> tempLineInfos;
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight,
-                             tempLineInfos );
-
-            if ( tempLineInfos.size() > lineInfos.size() ) {
-                startWidth = currentWidth;
-                continue;
-            }
-
-            endWidth = currentWidth;
-        }
-
-        return endWidth;
-    }
-
-    int32_t Text::height( const int32_t maxWidth ) const
-    {
-        if ( _text.empty() ) {
-            return 0;
-        }
-
-        const int32_t fontHeight = height();
-
-        std::deque<TextLineInfo> lineInfos;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
-
-        return lineInfos.back().offset.y + fontHeight;
-    }
-
-    int32_t Text::rows( const int32_t maxWidth ) const
-    {
-        if ( _text.empty() ) {
-            return 0;
-        }
-
-        const int32_t fontHeight = height();
-
-        std::deque<TextLineInfo> lineInfos;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
-
-        return static_cast<int32_t>( lineInfos.size() );
-    }
-
-    void Text::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
-    {
-        if ( output.empty() || _text.empty() ) {
-            // No use to render something on an empty image or if something is empty.
-            return;
-        }
-
-        renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, _fontType );
-    }
-
     void Text::drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _text.empty() ) {
@@ -601,29 +232,26 @@ namespace fheroes2
             return;
         }
 
-        assert( maxWidth > 0 ); // Why is the limit less than 1?
-        if ( maxWidth <= 0 ) {
-            drawInRoi( x, y, output, imageRoi );
-            return;
+        const_cast<Text *>( this )->setMaxWidth( maxWidth );
+
+        const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
+
+        bool isFirstLine = true;
+
+        for ( const TextLineInfo & info : _textLineInfos ) {
+            if ( info.characterCount > 0 ) {
+                if ( maxWidth > 0 ) {
+                    renderCenterAlignedLine( data, info.characterCount, isFirstLine ? x + _firstLineOffsetX : x, y + info.offsetY, _maxWidth, output, imageRoi,
+                                             _fontType );
+                }
+                else {
+                    renderSingleLine( data, info.characterCount, x, y, output, imageRoi, _fontType );
+                }
+            }
+
+            data += info.characterCount;
+            isFirstLine = false;
         }
-
-        const int32_t correctedWidth = width( maxWidth );
-
-        assert( correctedWidth <= maxWidth );
-
-        // Center text according to the maximum width.
-        const int32_t xOffset = ( maxWidth - correctedWidth ) / 2;
-
-        const int32_t fontHeight = getFontHeight( _fontType.size );
-
-        std::deque<TextLineInfo> lineInfos;
-        renderMultiLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, imageRoi,
-                         _fontType, fontHeight, true, lineInfos );
-    }
-
-    bool Text::empty() const
-    {
-        return _text.empty();
     }
 
     void Text::fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd /* = true */ )
@@ -640,7 +268,7 @@ namespace fheroes2
 
         const int32_t originalTextWidth
             = ignoreSpacesAtTextEnd ? getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType )
-                                    : getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+                                    : calculateLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is not longer than the provided maximum width.
             return;
@@ -648,106 +276,202 @@ namespace fheroes2
 
         const std::string truncatedEnding( "..." );
         const int32_t truncationSymbolWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), _fontType );
+            = calculateLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), _fontType );
 
         const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType,
                                                                 maxWidth - truncationSymbolWidth );
 
         _text.resize( maxCharacterCount );
         _text += truncatedEnding;
+
+        _maxWidth = maxWidth;
+
+        _updateWidthAndHeight();
     }
 
-    std::string Text::text() const
+    void Text::setMaxWidth( const int32_t maxWidth )
     {
-        return _text;
-    }
-
-    MultiFontText::~MultiFontText() = default;
-
-    void MultiFontText::add( Text text )
-    {
-        if ( !text._text.empty() ) {
-            _texts.emplace_back( std::move( text ) );
-        }
-    }
-
-    int32_t MultiFontText::width() const
-    {
-        int32_t totalWidth = 0;
-        for ( const Text & text : _texts ) {
-            totalWidth += text.width();
+        if ( maxWidth == _maxWidth ) {
+            return;
         }
 
-        return totalWidth;
+        _maxWidth = maxWidth;
+
+        _updateWidthAndHeight();
     }
 
-    int32_t MultiFontText::height() const
+    void Text::_updateWidthAndHeight()
     {
-        int32_t maxHeight = 0;
+        if ( _text.empty() ) {
+            _textLineInfos.clear();
+            _width = 0;
+            _height = 0;
 
-        for ( const Text & text : _texts ) {
-            const int32_t height = text.height();
-            if ( maxHeight < height ) {
-                maxHeight = height;
+            return;
+        }
+
+        _updateTextLineInfo();
+
+        assert( !_textLineInfos.empty() );
+
+        if ( _textLineInfos.size() == 1 ) {
+            // This is a single-line message.
+
+            _width = _textLineInfos.front().lineWidth;
+            _height = getFontHeight( _fontType.size );
+
+            return;
+        }
+
+        assert( _maxWidth > 0 );
+
+        if ( _isUniformedVerticalAlignment ) {
+            // This is a multi-lined message and we try to fit as many words on every line as possible.
+
+            const int32_t maxWidth = _maxWidth;
+
+            int32_t endWidth = maxWidth;
+            int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+            const size_t rows = _textLineInfos.size();
+
+            // Backup the text info data.
+            std::vector<TextLineInfo> backupInfo = std::move( _textLineInfos );
+
+            while ( startWidth + 1 < endWidth ) {
+                _maxWidth = ( endWidth + startWidth ) / 2;
+                _updateTextLineInfo();
+
+                if ( _textLineInfos.size() > rows ) {
+                    startWidth = _maxWidth;
+                    continue;
+                }
+
+                endWidth = _maxWidth;
+            }
+
+            // Restore the maximum width value.
+            _maxWidth = maxWidth;
+
+            if ( _textLineInfos.size() != rows ) {
+                _textLineInfos = std::move( backupInfo );
             }
         }
 
-        return maxHeight;
+        _width = std::max_element( _textLineInfos.begin(), _textLineInfos.end(), []( const TextLineInfo & lhs, const TextLineInfo & rhs ) {
+                     return lhs.lineWidth < rhs.lineWidth;
+                 } )->lineWidth;
+        _height = _textLineInfos.back().offsetY + getFontHeight( _fontType.size );
     }
 
-    int32_t MultiFontText::width( const int32_t maxWidth ) const
+    void Text::_updateTextLineInfo()
     {
-        const int32_t maxFontHeight = height();
+        _textLineInfos.clear();
 
-        std::deque<TextLineInfo> lineInfos;
-        for ( const Text & text : _texts ) {
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             lineInfos );
+        const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
+
+        if ( _maxWidth < 1 ) {
+            // The text will be displayed in a single line.
+            _maxWidth = 0;
+
+            // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
+
+            const int32_t lineCharCount = static_cast<int32_t>( _text.size() );
+            _textLineInfos.emplace_back( ( lineCharCount == 0 ) ? 0 : calculateLineWidth( data, lineCharCount, _fontType ), 0, lineCharCount );
+
+            return;
         }
 
-        int32_t maxRowWidth = lineInfos.front().offset.x;
-        for ( const TextLineInfo & lineInfo : lineInfos ) {
-            maxRowWidth = std::max( maxRowWidth, lineInfo.offset.x );
-        }
+        const fheroes2::FontCharHandler charHandler( _fontType );
 
-        return maxRowWidth;
-    }
+        int32_t lineCharCount = 0;
+        int32_t lastWordCharCount = 0;
+        int32_t lineWidth = ( _firstLineOffsetX > 0 ) ? _firstLineOffsetX : 0;
+        int32_t offsetY = 0;
 
-    int32_t MultiFontText::height( const int32_t maxWidth ) const
-    {
-        const int32_t maxFontHeight = height();
+        const int32_t rowHeight = getFontHeight( _fontType.size );
 
-        std::deque<TextLineInfo> lineInfos;
-        for ( const Text & text : _texts ) {
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             lineInfos );
-        }
-        return lineInfos.back().offset.y + maxFontHeight;
-    }
+        const uint8_t * dataEnd = data + _text.size();
 
-    int32_t MultiFontText::rows( const int32_t maxWidth ) const
-    {
-        if ( _texts.empty() ) {
-            return 0;
-        }
+        while ( data != dataEnd ) {
+            if ( isLineSeparator( *data ) ) {
+                _textLineInfos.emplace_back( lineWidth, offsetY, lineCharCount + 1 );
 
-        const int32_t maxFontHeight = height();
+                offsetY += rowHeight;
+                lineCharCount = 0;
+                lastWordCharCount = 0;
+                lineWidth = 0;
 
-        std::deque<TextLineInfo> lineInfos;
-        for ( const Text & text : _texts ) {
-            if ( text._text.empty() ) {
-                continue;
+                ++data;
             }
+            else {
+                // This is another character in the line. Get its width.
 
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             lineInfos );
+                const int32_t charWidth = charHandler.getWidth( *data );
+
+                if ( lineWidth + charWidth > _maxWidth ) {
+                    // Current character has exceeded the maximum line width.
+
+                    if ( isSpaceChar( *data ) ) {
+                        // Current character could be a space character then current line is over.
+                        // For the characters count we take this space into the account.
+                        ++lineCharCount;
+
+                        // Skip this space character.
+                        ++data;
+                    }
+                    else if ( lineCharCount == lastWordCharCount ) {
+                        // This is the only word in the line.
+                        // Search for '-' symbol to avoid truncating the word in the middle.
+                        const uint8_t * hyphenPos = data - lineCharCount;
+                        for ( ; hyphenPos != data; ++hyphenPos ) {
+                            if ( *hyphenPos == hyphenChar ) {
+                                break;
+                            }
+                        }
+
+                        if ( hyphenPos != data ) {
+                            // The '-' symbol has been found. In this case we consider everything after it as a separate word.
+                            lineCharCount -= static_cast<int32_t>( data - hyphenPos ) - 1;
+                            lineWidth = calculateLineWidth( data - lineCharCount, lineCharCount, _fontType );
+
+                            data = hyphenPos;
+                            ++data;
+                        }
+                        else if ( _firstLineOffsetX > 0 && _textLineInfos.empty() ) {
+                            // This word was not the first in the line so we can move it to the next line.
+                            // It can happen in the case of the multi-font text.
+                            data -= lastWordCharCount;
+
+                            lineCharCount = 0;
+                            lineWidth = _firstLineOffsetX;
+                        }
+                    }
+                    else if ( lastWordCharCount > 0 ) {
+                        // Exclude last word from this line.
+                        data -= lastWordCharCount;
+
+                        lineCharCount -= lastWordCharCount;
+                        lineWidth -= calculateLineWidth( data, lastWordCharCount, _fontType );
+                    }
+
+                    _textLineInfos.emplace_back( lineWidth, offsetY, lineCharCount );
+
+                    offsetY += rowHeight;
+                    lineCharCount = 0;
+                    lastWordCharCount = 0;
+                    lineWidth = 0;
+                }
+                else {
+                    lastWordCharCount = isSpaceChar( *data ) ? 0 : ( lastWordCharCount + 1 );
+
+                    ++data;
+                    ++lineCharCount;
+                    lineWidth += charWidth;
+                }
+            }
         }
 
-        if ( lineInfos.empty() ) {
-            return 0;
-        }
-
-        return static_cast<int32_t>( lineInfos.size() );
+        _textLineInfos.emplace_back( lineWidth, offsetY, lineCharCount );
     }
 
     void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
@@ -761,9 +485,9 @@ namespace fheroes2
 
         int32_t offsetX = x;
         for ( const Text & text : _texts ) {
-            const int32_t fontHeight = getFontHeight( text._fontType.size );
-            offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), offsetX,
-                                        y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, text._fontType );
+            const int32_t fontHeight = getFontHeight( text.getFontType().size );
+            offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( text.text().data() ), static_cast<int32_t>( text.text().size() ), offsetX,
+                                        y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, text.getFontType() );
         }
     }
 
@@ -780,74 +504,35 @@ namespace fheroes2
             return;
         }
 
-        const int32_t maxFontHeight = height();
+        const_cast<MultiFontText *>( this )->setMaxWidth( maxWidth );
 
-        std::deque<TextLineInfo> lineInfos;
-        for ( const Text & text : _texts ) {
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             lineInfos );
-        }
+        int32_t offsetY = y;
 
-        int32_t xOffset = 0;
-        int32_t correctedWidth = maxWidth;
-        if ( lineInfos.size() > 1 ) {
-            if ( _isUniformedVerticalAlignment ) {
-                // This is a multi-line message. Optimize it to fit the text evenly.
-                int32_t startWidth = 1;
-                for ( const Text & text : _texts ) {
-                    const int32_t maxWordWidth
-                        = getMaxWordWidth( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), text._fontType );
-                    if ( startWidth < maxWordWidth ) {
-                        startWidth = maxWordWidth;
-                    }
+        auto infoIter = _textLineInfos.begin();
+
+        for ( const Text & singleText : _texts ) {
+            const uint8_t * data = reinterpret_cast<const uint8_t *>( singleText._text.data() );
+
+            bool isFirstLine = true;
+
+            for ( const TextLineInfo & info : singleText.getTextLineInfos() ) {
+                if ( info.characterCount > 0 ) {
+                    const int32_t offsetX = x + ( maxWidth - infoIter->lineWidth ) / 2;
+
+                    renderSingleLine( data, info.characterCount, isFirstLine ? offsetX + singleText._firstLineOffsetX : offsetX, offsetY + +info.offsetY, output,
+                                      imageRoi, singleText.getFontType() );
                 }
 
-                int32_t endWidth = maxWidth;
-                while ( startWidth + 1 < endWidth ) {
-                    const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-                    std::deque<TextLineInfo> tempLineInfos;
-                    for ( const Text & text : _texts ) {
-                        getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), currentWidth, text._fontType,
-                                         maxFontHeight, tempLineInfos );
-                    }
+                data += info.characterCount;
+                isFirstLine = false;
 
-                    if ( tempLineInfos.size() > lineInfos.size() ) {
-                        startWidth = currentWidth;
-                        continue;
-                    }
-
-                    correctedWidth = currentWidth;
-                    endWidth = currentWidth;
-                    std::swap( lineInfos, tempLineInfos );
-                }
-
-                xOffset = ( maxWidth - correctedWidth ) / 2;
+                ++infoIter;
             }
-            else {
-                // This is a multi-lined message and we try to fit as many words on every line as possible.
-                correctedWidth = width( maxWidth );
-            }
-        }
-        else {
-            // This is a single-line message. Find its length and center it according to the maximum width.
-            correctedWidth = width();
-            assert( correctedWidth <= maxWidth );
-            xOffset = ( maxWidth - correctedWidth ) / 2;
-        }
 
-        for ( TextLineInfo & lineInfo : lineInfos ) {
-            lineInfo.offset.x = ( correctedWidth - lineInfo.offset.x ) / 2;
-        }
+            --infoIter;
 
-        for ( const Text & text : _texts ) {
-            renderMultiLine( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), x + xOffset, y, correctedWidth, output,
-                             imageRoi, text._fontType, maxFontHeight, false, lineInfos );
+            offsetY += singleText.getTextLineInfos().back().offsetY;
         }
-    }
-
-    bool MultiFontText::empty() const
-    {
-        return _texts.empty();
     }
 
     std::string MultiFontText::text() const
@@ -859,6 +544,42 @@ namespace fheroes2
         }
 
         return output;
+    }
+
+    void MultiFontText::setMaxWidth( const int32_t maxWidth )
+    {
+        if ( maxWidth == _maxWidth ) {
+            return;
+        }
+
+        _textLineInfos.clear();
+
+        _maxWidth = maxWidth;
+
+        _textLineInfos.emplace_back( _firstLineOffsetX, 0, 0 );
+
+        for ( Text & singleText : _texts ) {
+            singleText.setFirstLineOffsetX( _textLineInfos.back().lineWidth );
+            singleText.setMaxWidth( maxWidth );
+
+            const std::vector<TextLineInfo> & info = singleText.getTextLineInfos();
+
+            assert( !info.empty() );
+
+            _textLineInfos.back().characterCount += info.front().characterCount;
+            _textLineInfos.back().lineWidth = info.front().lineWidth;
+
+            const int32_t offsetY = _textLineInfos.back().offsetY;
+
+            for ( size_t i = 1; i < info.size(); ++i ) {
+                _textLineInfos.emplace_back( info[i].lineWidth, offsetY + info[i].offsetY, info[i].characterCount );
+            }
+        }
+
+        _width = std::max_element( _textLineInfos.begin(), _textLineInfos.end(), []( const TextLineInfo & lhs, const TextLineInfo & rhs ) {
+                     return lhs.lineWidth < rhs.lineWidth;
+                 } )->lineWidth;
+        _height = _textLineInfos.back().offsetY + getFontHeight( _texts.back().getFontType().size );
     }
 
     FontCharHandler::FontCharHandler( const FontType fontType )
@@ -916,73 +637,6 @@ namespace fheroes2
         }
 
         return 0;
-    }
-
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
-    {
-        // TODO: expose `Text` helper functions used in this method and convert it to a function in 'ui_tools.cpp'
-
-        if ( text.empty() ) {
-            // The text is empty.
-            return 0;
-        }
-
-        const FontType fontType = text.getFontType();
-        const int32_t fontHeight = getFontHeight( fontType.size );
-        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
-
-        if ( pointerLine < 0 ) {
-            // Pointer is upper than the first text line.
-            return 0;
-        }
-
-        const int32_t textWidth = text.width( textRoi.width );
-        const std::string & textString = text.text();
-        const size_t textSize = textString.size();
-
-        std::deque<TextLineInfo> lineInfos;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( textString.data() ), static_cast<int32_t>( textSize ), textWidth, fontType, fontHeight, lineInfos );
-
-        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
-            // Pointer is lower than the last text line.
-            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-            return textSize - 1;
-        }
-
-        size_t cursorPosition = 0;
-        for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += lineInfos[i].characterCount;
-        }
-
-        int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].offset.x ) / 2;
-
-        if ( maxOffsetX <= 0 ) {
-            // Pointer is to the left of the text line.
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        if ( maxOffsetX > lineInfos[pointerLine].offset.x ) {
-            // Pointer is to the right of the text line.
-            cursorPosition += lineInfos[pointerLine].characterCount;
-
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        const FontCharHandler charHandler( fontType );
-
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
-            positionOffsetX += charWidth;
-
-            if ( positionOffsetX > maxOffsetX ) {
-                // Take into account that the cursor character ('_') was added to the line.
-                return ( i > currentTextCursorPosition ) ? i - 1 : i;
-            }
-        }
-
-        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-        return textSize - 1;
     }
 
     bool isFontAvailable( const std::string_view text, const FontType fontType )

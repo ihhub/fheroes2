@@ -434,7 +434,7 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
     }
 
     fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
-    text.drawInRoi( top.x + 320 - text.width() / 2, top.y + 29, display, textRoi );
+    text.drawInRoi( top.x + 320 - text.width() / 2, top.y + 29, 0, display, textRoi );
 
     for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
