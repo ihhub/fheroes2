@@ -133,25 +133,25 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
         return false;
     }
 
-    StreamBuf compressed;
-    compressed.setbigendian( true );
+    StreamBuf dataStream;
+    dataStream.setbigendian( true );
 
-    compressed << World::Get() << Settings::Get() << GameOver::Result::Get();
-    if ( compressed.fail() ) {
+    dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
+    if ( dataStream.fail() ) {
         return false;
     }
 
     if ( conf.isCampaignGameType() ) {
-        compressed << Campaign::CampaignSaveData::Get();
+        dataStream << Campaign::CampaignSaveData::Get();
     }
 
     // End-of-data marker
-    compressed << SAV2ID3;
-    if ( compressed.fail() ) {
+    dataStream << SAV2ID3;
+    if ( dataStream.fail() ) {
         return false;
     }
 
-    if ( !Compression::writeIntoFileStream( fileStream, compressed ) ) {
+    if ( !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
         return false;
     }
 
@@ -229,10 +229,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    StreamBuf decompressed;
-    decompressed.setbigendian( true );
+    StreamBuf dataStream;
+    dataStream.setbigendian( true );
 
-    if ( !Compression::readFromFileStream( fileStream, decompressed ) ) {
+    if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
@@ -245,8 +245,8 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    decompressed >> World::Get() >> conf >> GameOver::Result::Get();
-    if ( decompressed.fail() ) {
+    dataStream >> World::Get() >> conf >> GameOver::Result::Get();
+    if ( dataStream.fail() ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
@@ -255,7 +255,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        decompressed >> saveData;
+        dataStream >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
@@ -264,8 +264,8 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t endOfDataMarker = 0;
-    decompressed >> endOfDataMarker;
-    if ( decompressed.fail() ) {
+    dataStream >> endOfDataMarker;
+    if ( dataStream.fail() ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
