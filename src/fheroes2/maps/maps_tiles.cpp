@@ -151,11 +151,6 @@ namespace
         return false;
     }
 
-    bool isShadowSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-    {
-        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( objectIcnType ), icnIndex );
-    }
-
     bool isValidReefsSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
     {
         return objectIcnType == MP2::OBJ_ICN_TYPE_X_LOC2 && ObjXlc2::isReefs( icnIndex );
@@ -354,7 +349,7 @@ namespace
 
     bool isAddonShadow( const Maps::TilesAddon & ta )
     {
-        return isShadowSprite( ta._objectIcnType, ta._imageIndex );
+        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
     }
 
     bool isAddonResource( const Maps::TilesAddon & ta )
