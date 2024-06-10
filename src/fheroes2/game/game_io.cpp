@@ -114,10 +114,10 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     const Settings & conf = Settings::Get();
 
-    StreamFile fs;
-    fs.setbigendian( true );
+    StreamFile fileStream;
+    fileStream.setbigendian( true );
 
-    if ( !fs.open( filePath, "wb" ) ) {
+    if ( !fileStream.open( filePath, "wb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
         return false;
     }
@@ -127,24 +127,31 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     uint16_t saveFileVersion = CURRENT_FORMAT_VERSION;
 
     // Header
-    fs << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
-       << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
-    fs.close();
+    fileStream << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
+               << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
+    if ( fileStream.fail() ) {
+        return false;
+    }
 
-    StreamBuf sb;
-    sb.setbigendian( true );
+    StreamBuf compressed;
+    compressed.setbigendian( true );
 
-    // Game data in ZIP format
-    sb << World::Get() << Settings::Get() << GameOver::Result::Get();
+    compressed << World::Get() << Settings::Get() << GameOver::Result::Get();
+    if ( compressed.fail() ) {
+        return false;
+    }
 
     if ( conf.isCampaignGameType() ) {
-        sb << Campaign::CampaignSaveData::Get();
+        compressed << Campaign::CampaignSaveData::Get();
     }
 
     // End-of-data marker
-    sb << SAV2ID3;
+    compressed << SAV2ID3;
+    if ( compressed.fail() ) {
+        return false;
+    }
 
-    if ( sb.fail() || !Compression::writeFile( sb, filePath, true ) ) {
+    if ( !Compression::writeIntoFileStream( fileStream, compressed ) ) {
         return false;
     }
 
@@ -161,10 +168,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
-    StreamFile fs;
-    fs.setbigendian( true );
+    StreamFile fileStream;
+    fileStream.setbigendian( true );
 
-    if ( !fs.open( filePath, "rb" ) ) {
+    if ( !fileStream.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
 
         showGenericErrorMessage();
@@ -173,7 +180,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t savId = 0;
-    fs >> savId;
+    fileStream >> savId;
 
     if ( savId != SAV2ID3 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
@@ -186,7 +193,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     std::string saveFileVersionStr;
     uint16_t saveFileVersion = 0;
 
-    fs >> saveFileVersionStr >> saveFileVersion;
+    fileStream >> saveFileVersionStr >> saveFileVersion;
+    if ( fileStream.fail() ) {
+        showGenericErrorMessage();
+        return fheroes2::GameMode::CANCEL;
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "Version of the file " << filePath << ": " << saveFileVersion )
 
@@ -209,10 +220,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     SetVersionOfCurrentSaveFile( saveFileVersion );
 
     HeaderSAV header;
-    fs >> header;
-
-    size_t offset = fs.tell();
-    fs.close();
+    fileStream >> header;
 
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & header.gameType ) == 0 ) {
@@ -221,14 +229,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    StreamBuf sb;
-    sb.setbigendian( true );
+    StreamBuf decompressed;
+    decompressed.setbigendian( true );
 
-    if ( !Compression::readFile( sb, filePath, offset ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Error uncompressing the file " << filePath )
-
+    if ( !Compression::readFromFileStream( fileStream, decompressed ) ) {
         showGenericErrorMessage();
-
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -240,13 +245,17 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    sb >> World::Get() >> conf >> GameOver::Result::Get();
+    decompressed >> World::Get() >> conf >> GameOver::Result::Get();
+    if ( decompressed.fail() ) {
+        showGenericErrorMessage();
+        return fheroes2::GameMode::CANCEL;
+    }
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        sb >> saveData;
+        decompressed >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
@@ -255,11 +264,13 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t endOfDataMarker = 0;
-    sb >> endOfDataMarker;
+    decompressed >> endOfDataMarker;
+    if ( decompressed.fail() ) {
+        showGenericErrorMessage();
+        return fheroes2::GameMode::CANCEL;
+    }
 
-    if ( sb.fail() || endOfDataMarker != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << " is corrupted" )
-
+    if ( endOfDataMarker != SAV2ID3 ) {
         showGenericErrorMessage();
 
         return fheroes2::GameMode::CANCEL;
