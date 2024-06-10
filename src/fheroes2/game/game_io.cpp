@@ -338,7 +338,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     fileInfo = std::move( header.info );
     fileInfo.filename = std::move( filePath );
 
-    return true;
+    return !fs.fail();
 }
 
 void Game::SetVersionOfCurrentSaveFile( const uint16_t version )
