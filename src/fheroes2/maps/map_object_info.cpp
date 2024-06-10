@@ -4803,7 +4803,7 @@ namespace
             }
         }
 
-        // Check that the same image part is set to the same layer type for all objects.
+        // Check that an image part is set to the same layer type for all objects.
         std::map<std::pair<MP2::ObjectIcnType, uint32_t>, Maps::ObjectLayerType> groundObjectInfoVsLayerType;
         std::set<std::pair<MP2::ObjectIcnType, uint32_t>> topObjectInfo;
 
