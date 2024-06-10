@@ -266,7 +266,7 @@ private:
     uint32_t _flags{ 0 };
 };
 
-class StreamBuf : public StreamBase
+class StreamBuf final : public StreamBase
 {
 public:
     explicit StreamBuf( const size_t sz = 0 );
@@ -283,17 +283,6 @@ public:
     const uint8_t * data() const
     {
         return itget;
-    }
-
-    // If you use this method to write data update the cursor by calling advance() method.
-    uint8_t * data()
-    {
-        return itget;
-    }
-
-    void advance( const size_t size )
-    {
-        itput += size;
     }
 
     size_t size()
@@ -347,9 +336,23 @@ protected:
     uint8_t * itget{ nullptr };
     uint8_t * itput{ nullptr };
     uint8_t * itend{ nullptr };
+
+private:
+    friend class StreamFile;
+
+    // If you use this method to write data update the cursor by calling advance() method.
+    uint8_t * dataForWriting()
+    {
+        return itput;
+    }
+
+    void advance( const size_t size )
+    {
+        itput += size;
+    }
 };
 
-class StreamFile : public StreamBase
+class StreamFile final : public StreamBase
 {
 public:
     StreamFile() = default;

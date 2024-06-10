@@ -708,7 +708,7 @@ StreamBuf StreamFile::toStreamBuf( const size_t size )
 
     StreamBuf buffer( chunkSize );
 
-    if ( std::fread( buffer.data(), chunkSize, 1, _file.get() ) != 1 ) {
+    if ( std::fread( buffer.dataForWriting(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
 
         return StreamBuf{};
