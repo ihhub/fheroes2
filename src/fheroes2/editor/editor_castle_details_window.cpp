@@ -160,7 +160,7 @@ namespace
                 return true;
             }
 
-            if ( le.MousePressRight() ) {
+            if ( le.isMouseRightButtonPressed() ) {
                 const building_t building = _getBuildindTypeForRender();
                 std::string description = BuildingInfo::getBuildingDescription( _race, building );
                 const std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
@@ -471,7 +471,7 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.MousePressLeft( buttonExitArea ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
             if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -482,10 +482,10 @@ namespace Editor
                 buildingRestriction = !buildingRestriction;
             }
 
-            buttonRestrictBuilding.drawOnState( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) );
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuildingArea ) );
 #endif
 
-            if ( le.MouseCursor( nameArea ) ) {
+            if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
 
                 bool redrawName = false;
@@ -508,18 +508,18 @@ namespace Editor
                     display.render( nameArea );
                 }
             }
-            else if ( isTown && le.MouseCursor( allowCastleArea ) ) {
+            else if ( isTown && le.isMouseCursorPosInArea( allowCastleArea ) ) {
                 message = _( "Allow to build a castle in this town." );
 
                 if ( le.MouseClickLeft() ) {
                     allowCastleSign.isHidden() ? allowCastleSign.show() : allowCastleSign.hide();
                     display.render( allowCastleSign.getArea() );
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Allow Castle build" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.MouseCursor( defaultBuildingsArea ) ) {
+            else if ( le.isMouseCursorPosInArea( defaultBuildingsArea ) ) {
                 message = _( "Toggle the use of default buildings. Custom buildings will be reset!" );
 
                 if ( le.MouseClickLeft() ) {
@@ -543,22 +543,22 @@ namespace Editor
                         display.render( dialogRoi );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Default Buildings" ), message, Dialog::ZERO );
                 }
             }
 
 #if defined( RESTRICT_FEATURE )
-            else if ( le.MouseCursor( buttonRestrictBuildingArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonRestrictBuildingArea ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
 #endif
 
-            else if ( isNeutral && le.MouseCursor( defaultArmyArea ) ) {
+            else if ( isNeutral && le.isMouseCursorPosInArea( defaultArmyArea ) ) {
                 message = _( "Use default defenders army." );
 
                 if ( le.MouseClickLeft() ) {
@@ -573,11 +573,11 @@ namespace Editor
                         display.render( defaultArmySign.getArea() );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.MouseCursor( armyBar.GetArea() ) ) {
+            else if ( le.isMouseCursorPosInArea( armyBar.GetArea() ) ) {
                 if ( armyBar.QueueEventProcessing( &message ) ) {
                     armyBar.Redraw( display );
 
@@ -589,16 +589,16 @@ namespace Editor
                     message = _( "Set custom Castle Army. Right-click to reset unit." );
                 }
             }
-            else if ( le.MouseCursor( buttonExitArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonExitArea ) ) {
                 message = _( "Exit Castle Options" );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressed() ) {
                     fheroes2::showStandardTextMessage( _( "Exit" ), message, Dialog::ZERO );
                 }
             }
             else {
                 for ( size_t i = 0; i < buildingsSize; ++i ) {
-                    if ( le.MouseCursor( buildings[i].getArea() ) ) {
+                    if ( le.isMouseCursorPosInArea( buildings[i].getArea() ) ) {
                         message = buildings[i].getSetStatusMessage();
 
                         if ( buildings[i].queueEventProcessing( buildingRestriction ) ) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -59,7 +59,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point & pos = le.GetMouseCursor();
+    const fheroes2::Point & pos = le.getMouseCursorPos();
     const fheroes2::Point position( pos.x, pos.y );
 
     for ( size_t i = 0; i < rects.size(); ++i ) {

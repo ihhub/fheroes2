@@ -334,9 +334,9 @@ namespace Editor
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -375,7 +375,8 @@ namespace Editor
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
 
-                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, fileNameRoi.x );
+                charInsertPos
+                    = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x, fileNameRoi.x );
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;
@@ -399,7 +400,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( isListboxSelected && le.KeyPress( fheroes2::Key::KEY_DELETE ) ) {
+            else if ( isListboxSelected && le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -424,9 +425,10 @@ namespace Editor
 
                 needFileNameRedraw = true;
             }
-            else if ( !listboxEvent && le.KeyPress() && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
-                      && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
-                charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+            else if ( !listboxEvent && le.isAnyKeyPressed()
+                      && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue() || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
+                      && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
+                charInsertPos = InsertKeySym( fileName, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
                 buttonOkDisabler();
 
@@ -435,16 +437,16 @@ namespace Editor
                 isListboxSelected = false;
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the current map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( mapNameRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
             }
 

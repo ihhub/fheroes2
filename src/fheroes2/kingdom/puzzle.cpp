@@ -120,7 +120,7 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
@@ -190,7 +190,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -268,7 +268,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

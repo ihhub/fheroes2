@@ -308,9 +308,9 @@ namespace
             }
 
             // press button
-            le.MousePressLeft( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
@@ -355,7 +355,7 @@ namespace
                 break;
             }
             else if ( le.MouseClickLeft( roi ) ) {
-                const int32_t index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
+                const int32_t index = GetRectIndex( coordDifficulty, le.getMouseCursorPos() );
 
                 // select difficulty
                 if ( 0 <= index ) {
@@ -377,7 +377,7 @@ namespace
                     display.render( roi );
                 }
             }
-            else if ( ( le.MouseWheelUp() || le.MouseWheelDn() ) && playersInfo.QueueEventProcessing() ) {
+            else if ( ( le.isMouseWheelUp() || le.isMouseWheelDown() ) && playersInfo.QueueEventProcessing() ) {
                 playersInfo.resetSelection();
                 opponentsArea.restore();
                 classArea.restore();
@@ -387,26 +387,26 @@ namespace
                 display.render( roi );
             }
 
-            if ( le.MousePressRight( roi ) ) {
-                if ( le.MousePressRight( buttonSelectMaps.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( roi ) ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonSelectMaps.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
                 }
-                else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) ) {
+                else if ( 0 <= GetRectIndex( coordDifficulty, le.getMouseCursorPos() ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you off with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( ratingRoi ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( ratingRoi ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Difficulty Rating" ),
                         _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                         Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( buttonOk.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( buttonCancel.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Click to return to the main menu." ), Dialog::ZERO );
                 }
                 else {

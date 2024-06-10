@@ -593,11 +593,11 @@ namespace Editor
         display.render( background.totalArea() );
 
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOkRoi ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancelRoi ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkRoi ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
 #ifndef HIDE_VICTORY_LOSS_CONDITIONS
-            victoryDroplistButton.drawOnState( le.MousePressLeft( victoryDroplistButtonRoi ) );
-            lossDroplistButton.drawOnState( le.MousePressLeft( lossDroplistButtonRoi ) );
+            victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
+            lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
 #endif // HIDE_VICTORY_LOSS_CONDITIONS
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelRoi ) ) {
@@ -673,16 +673,16 @@ namespace Editor
                 }
             }
 #endif // HIDE_VICTORY_LOSS_CONDITIONS
-            else if ( le.MousePressRight( buttonCancelRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOkRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOkRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( mapNameRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( descriptionTextRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
             }
 
@@ -723,7 +723,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( playerRects[i] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
                     fheroes2::showStandardTextMessage( _( "Player Type" ), _( "Indicates the player types in the scenario. Click to change." ), Dialog::ZERO );
                 }
             }
@@ -748,7 +748,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( difficultyRects[i] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( difficultyRects[i] ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Map Difficulty" ),
                         _( "Click to set map difficulty. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ),

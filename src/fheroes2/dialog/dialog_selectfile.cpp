@@ -413,10 +413,10 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
             if ( isEditing ) {
-                buttonVirtualKB->drawOnState( le.MousePressLeft( buttonVirtualKB->area() ) );
+                buttonVirtualKB->drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB->area() ) );
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -431,7 +431,7 @@ namespace
 
             bool needRedraw = listId != listbox.getCurrentId();
 
-            if ( le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+            if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -490,17 +490,17 @@ namespace
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
                     const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
                     const int32_t textStartOffsetX = isTextLimit ? 8 : ( textInputRoi.width - text.width() ) / 2;
-                    charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+                    charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x,
                                                                           textInputRoi.x + textStartOffsetX );
 
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;
                 }
-                else if ( !listboxEvent && le.KeyPress()
-                          && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
-                          && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
-                    charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                else if ( !listboxEvent && le.isAnyKeyPressed()
+                          && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue() || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
+                          && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
+                    charInsertPos = InsertKeySym( filename, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
                     buttonOkDisabler();
 
@@ -510,10 +510,10 @@ namespace
                 }
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 if ( isEditing ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the current game." ), Dialog::ZERO );
                 }
@@ -521,7 +521,7 @@ namespace
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to load a previously saved game." ), Dialog::ZERO );
                 }
             }
-            else if ( isEditing && le.MousePressRight( buttonVirtualKB->area() ) ) {
+            else if ( isEditing && le.isMouseRightButtonPressedInArea( buttonVirtualKB->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
 

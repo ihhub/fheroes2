@@ -63,7 +63,7 @@ void fheroes2::showTeamInfo()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && alpha > 20 ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
             break;
 
         // Subsequent frames must update only the area within the text.

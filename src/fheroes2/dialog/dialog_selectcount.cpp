@@ -141,15 +141,15 @@ public:
     {
         LocalEvent & le = LocalEvent::Get();
 
-        le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
-        le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
+        if ( ( le.isMouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
             vcur += ( ( vcur + step ) <= vmax ) ? step : ( vmax - vcur );
             return true;
         }
 
-        if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
+        if ( ( le.isMouseWheelDown() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
             vcur -= ( ( vmin + vcur ) >= step ) ? step : ( vcur - vmin );
             return true;
         }
@@ -354,16 +354,16 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
         bool redraw = false;
 
-        buttonOk.drawOnState( buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-        buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
+        buttonOk.drawOnState( buttonOk.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
         // In this dialog we input text so we need to use hotkeys that cannot be use in text typing.
-        if ( ( !isMultiLine && le.KeyPress( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
+        if ( ( !isMultiLine && le.isKeyPressed( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             return !result.empty();
         }
 
-        if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             result.clear();
             return false;
         }
@@ -384,29 +384,29 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             charInsertPos = result.size();
             redraw = true;
         }
-        else if ( le.KeyPress() && ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+        else if ( le.isAnyKeyPressed() && ( charLimit == 0 || charLimit > result.size() || le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
             // Handle new line input for multi-line texts only.
-            if ( isMultiLine && le.KeyValue() == fheroes2::Key::KEY_ENTER ) {
+            if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_ENTER ) {
                 result.insert( charInsertPos, 1, '\n' );
                 ++charInsertPos;
             }
             else {
-                charInsertPos = InsertKeySym( result, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
             }
             redraw = true;
         }
         else if ( le.MouseClickLeft( textInputArea ) ) {
-            charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.GetMouseCursor(), textInputArea );
+            charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
 
             redraw = true;
         }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered text." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
         }
 
@@ -545,11 +545,11 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         bool redraw_count = false;
 
         if ( buttonMax.isVisible() ) {
-            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         }
 
         if ( buttonMin.isVisible() ) {
-            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
         }
 
         if ( fheroes2::PressIntKey( redistributeMax, redistributeCount ) ) {
@@ -557,13 +557,13 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             redraw_count = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
-            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
             redistributeCount = redistributeMax;
             sel.setValue( redistributeMax );
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
-            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
             redistributeCount = min;
             sel.setValue( min );
             redraw_count = true;
