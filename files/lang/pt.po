@@ -2043,7 +2043,7 @@ msgid "Greywind"
 msgstr "Vento Cinzento"
 
 msgid "Portsmith"
-msgstr "Ferraria do Poto"
+msgstr "Ferraria do Porto"
 
 msgid "Atlantium"
 msgstr "Atlantium"
