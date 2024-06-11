@@ -317,7 +317,9 @@ public:
 
     std::string toString( const size_t size = 0 );
 
-protected:
+private:
+    friend class StreamFile;
+
     void reset();
 
     size_t tellg() override;
@@ -330,26 +332,22 @@ protected:
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
-    friend class ZStreamBuf;
-
-    uint8_t * itbeg{ nullptr };
-    uint8_t * itget{ nullptr };
-    uint8_t * itput{ nullptr };
-    uint8_t * itend{ nullptr };
-
-private:
-    friend class StreamFile;
-
-    // If you use this method to write data update the cursor by calling advance() method.
+    // After using this method to write data, update the cursor by calling the advance() method.
     uint8_t * dataForWriting()
     {
         return itput;
     }
 
+    // Advances the cursor intended for writing data forward by a specified number of bytes.
     void advance( const size_t size )
     {
         itput += size;
     }
+
+    uint8_t * itbeg{ nullptr };
+    uint8_t * itget{ nullptr };
+    uint8_t * itput{ nullptr };
+    uint8_t * itend{ nullptr };
 };
 
 class StreamFile final : public StreamBase
@@ -392,7 +390,7 @@ public:
 
     std::string toString( const size_t size = 0 );
 
-protected:
+private:
     size_t sizeg() override;
     size_t sizep() override;
     size_t tellg() override;
@@ -400,9 +398,6 @@ protected:
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
-
-private:
-    std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> _file{ nullptr, std::fclose };
 
     template <typename T>
     T getUint()
@@ -433,6 +428,8 @@ private:
             setfail( true );
         }
     }
+
+    std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> _file{ nullptr, std::fclose };
 };
 
 namespace fheroes2
