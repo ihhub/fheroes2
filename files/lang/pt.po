@@ -3847,7 +3847,7 @@ msgid "Random Castle Name"
 msgstr "Nome Aleat. (Castelo)"
 
 msgid "Random Town Name"
-msgstr "Nome Aleatório"
+msgstr "Nome Aleat. (Cidade)"
 
 msgid "Allow Castle build"
 msgstr "Permitir construção do Castelo"
