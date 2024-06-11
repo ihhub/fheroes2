@@ -3844,7 +3844,7 @@ msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
 msgid "Random Castle Name"
-msgstr "Nome Aleatório"
+msgstr "Nome Aleat. (Castelo)"
 
 msgid "Random Town Name"
 msgstr "Nome Aleatório"
