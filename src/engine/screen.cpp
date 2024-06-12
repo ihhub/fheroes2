@@ -1225,13 +1225,14 @@ namespace
             }
         }
 
-        void _retrieveWindowInfo()
+        bool _retrieveWindowInfo()
         {
             assert( _window != nullptr );
 
             const int displayIndex = SDL_GetWindowDisplayIndex( _window );
             if ( displayIndex < 0 ) {
                 ERROR_LOG( "Failed to get window display index. The error value: " << displayIndex << ", description: " << SDL_GetError() )
+                return false;
             }
 
             SDL_DisplayMode displayMode;
@@ -1239,6 +1240,7 @@ namespace
             const int returnCode = SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to retrieve current display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return false;
             }
 
             _currentScreenResolution.width = displayMode.w;
@@ -1251,6 +1253,8 @@ namespace
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
+
+            return true;
         }
 
         void _toggleMouseCaptureMode()
@@ -1312,7 +1316,10 @@ namespace
                 return false;
             }
 
-            _retrieveWindowInfo();
+            if ( !_retrieveWindowInfo() ) {
+                clear();
+                return false;
+            }
 
             _toggleMouseCaptureMode();
 
