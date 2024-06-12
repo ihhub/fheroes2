@@ -21,16 +21,27 @@
 #include "editor_rumor_window.h"
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_window.h"
 
 namespace
