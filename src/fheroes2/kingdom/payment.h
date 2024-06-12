@@ -35,6 +35,8 @@ namespace PaymentConditions
     Funds BuySpellBook();
     Funds RecruitHero();
     Funds ForAlchemist();
+
+    Funds getMagellansMapsPurchasePrice();
 }
 
 #endif

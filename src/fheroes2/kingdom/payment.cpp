@@ -48,3 +48,8 @@ Funds PaymentConditions::ForAlchemist()
 {
     return Funds( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
 }
+
+Funds PaymentConditions::getMagellansMapsPurchasePrice()
+{
+    return Funds( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
+}
