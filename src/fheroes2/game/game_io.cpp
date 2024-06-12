@@ -147,11 +147,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // End-of-data marker
     dataStream << SAV2ID3;
-    if ( dataStream.fail() ) {
-        return false;
-    }
-
-    if ( !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
+    if ( dataStream.fail() || !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
         return false;
     }
 
@@ -265,14 +261,8 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     uint16_t endOfDataMarker = 0;
     dataStream >> endOfDataMarker;
-    if ( dataStream.fail() ) {
+    if ( dataStream.fail() || endOfDataMarker != SAV2ID3 ) {
         showGenericErrorMessage();
-        return fheroes2::GameMode::CANCEL;
-    }
-
-    if ( endOfDataMarker != SAV2ID3 ) {
-        showGenericErrorMessage();
-
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -331,6 +321,10 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     HeaderSAV header;
     fs >> header;
 
+    if ( fs.fail() ) {
+        return false;
+    }
+
     if ( ( Settings::Get().GameType() & header.gameType ) == 0 ) {
         return false;
     }
@@ -338,7 +332,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     fileInfo = std::move( header.info );
     fileInfo.filename = std::move( filePath );
 
-    return !fs.fail();
+    return true;
 }
 
 void Game::SetVersionOfCurrentSaveFile( const uint16_t version )
