@@ -3182,7 +3182,7 @@ namespace Maps
             }
             return true;
         case MP2::OBJ_MAGIC_GARDEN:
-            // Magic Garden uses the metadata to indicate whether it empty or not.
+            // Magic Garden uses the metadata to indicate whether it is empty or not.
             // The Editor does not allow to edit this object but it is important to show it non-empty.
             if ( !placeObjectOnTile( tile, info ) ) {
                 return false;
