@@ -1293,6 +1293,7 @@ void LocalEvent::onTouchFingerEvent( const TouchFingerEventType eventType, const
         // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+        assert( windowRect.width > 0 );
 
         _emulatedPointerPos.x = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
         _emulatedPointerPos.y
