@@ -30,8 +30,8 @@
 #include "interface_list.h"
 #include "settings.h"
 #include "translations.h"
-#include "ui_window.h"
 #include "ui_dialog.h"
+#include "ui_window.h"
 
 namespace
 {
