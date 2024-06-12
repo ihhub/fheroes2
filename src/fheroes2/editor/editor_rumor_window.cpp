@@ -258,13 +258,13 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save rumors." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAdd.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Add Rumor" ), _( "Add an additional rumor for the question." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Add Rumor" ), _( "Add an additional rumor." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonEdit.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Edit Rumor" ), _( "Edit an existing rumor for the question." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Edit Rumor" ), _( "Edit an existing rumor." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDelete.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Rumor" ), _( "Delete an existing rumor for the question." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Rumor" ), _( "Delete an existing rumor." ), Dialog::ZERO );
             }
 
             if ( isRedrawNeeded ) {
