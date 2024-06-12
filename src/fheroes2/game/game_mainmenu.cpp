@@ -93,7 +93,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
 
-        if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_MAIN_MENU ) << " to open Editor." )
         }
 
@@ -302,7 +302,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     uint32_t lantern_frame = 0;
 
-    const bool isPOLPresent = Game::isPriceOfLoyaltyCampaignPresent();
+    const bool isPOLPresent = conf.isPriceOfLoyaltySupported();
 
     std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false }, ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
                                      ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
