@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "editor_rumor_window.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -588,6 +589,11 @@ namespace Editor
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancelRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
         const fheroes2::Rect buttonOkRoi( buttonOk.area() );
 
+        fheroes2::Button buttonRumors;
+        const int buttonRumorsIcn = isEvilInterface ? ICN::BUTTON_RUMORS_EVIL : ICN::BUTTON_RUMORS_GOOD;
+        background.renderButton( buttonRumors, buttonRumorsIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        const fheroes2::Rect buttonRumorsRoi( buttonRumors.area() );
+
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
@@ -595,6 +601,7 @@ namespace Editor
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkRoi ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
+            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
 #ifndef HIDE_VICTORY_LOSS_CONDITIONS
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
@@ -608,7 +615,13 @@ namespace Editor
                 break;
             }
 
-            if ( le.MouseClickLeft( mapNameRoi ) ) {
+            if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
+                auto temp = mapFormat.rumors;
+                if ( openRumorWindow( temp ) ) {
+                    mapFormat.rumors = std::move( temp );
+                }
+            }
+            else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
 
                 std::string editableMapName = mapFormat.name;
@@ -678,6 +691,9 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOkRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonRumorsRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Rumors" ), _( "Click to edit custom rumors." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
