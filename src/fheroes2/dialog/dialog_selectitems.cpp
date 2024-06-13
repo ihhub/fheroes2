@@ -1108,8 +1108,7 @@ int Dialog::selectHeroType( const int heroType )
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( colorRect[i] ) ) {
-                    fheroes2::showStandardTextMessage( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ),
-                                                       _( "Click to select this color." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ), _( "Click to select this color." ), Dialog::ZERO );
                 }
             }
         }
