@@ -497,34 +497,6 @@ namespace
         const int32_t _offsetY{ 0 };
     };
 
-    class HeroTypeSelection : public ObjectTypeSelection
-    {
-    public:
-        HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
-            : ObjectTypeSelection( objectInfo, size, std::move( title ), 21, 47, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
-        {
-            // Do nothing.
-        }
-
-    private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
-        {
-            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
-        }
-
-        std::string getObjectName( const Maps::ObjectInfo & info ) override
-        {
-            const int color = static_cast<int>( info.metadata[0] );
-            const int race = static_cast<int>( info.metadata[1] );
-
-            std::string name( _( "%{color} %{race} hero" ) );
-            StringReplace( name, "%{color}", Color::String( Color::IndexToColor( color ) ) );
-            StringReplace( name, "%{race}", Race::String( Race::IndexToRace( race ) ) );
-
-            return name;
-        }
-    };
-
     class MonsterTypeSelection : public ObjectTypeSelection
     {
     public:
@@ -1000,10 +972,173 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-    HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::StandardWindow background( 520, 280, true, display );
 
-    return selectObjectType( heroType, objectInfo.size(), listbox );
+    const fheroes2::Rect & area = background.activeArea();
+
+    fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
+    text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
+
+    // Render color and race selection sprites.
+    const int32_t stepX = 70;
+    const int32_t raceOffsetY = 80;
+    fheroes2::Point pos( area.x + 20, area.y + 30 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+    fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
+
+    const std::vector<uint8_t> darkGrayPalette = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+    fheroes2::ApplyPalette( colorSpriteBorder, darkGrayPalette );
+
+    // Make race selection borders.
+    const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
+    const int32_t raceBorderWidth = randomRaceSprite.width();
+    const int32_t raceBorderHeight = randomRaceSprite.height();
+    fheroes2::Image raceSpriteBorder( raceBorderWidth, raceBorderHeight );
+    raceSpriteBorder.reset();
+    const int32_t raceImageWidth = raceBorderWidth - 8;
+    const int32_t raceImageHeight = raceBorderHeight - 8;
+    fheroes2::Copy( randomRaceSprite, 0, 0, raceSpriteBorder, 0, 0, raceBorderWidth, 4 );
+    fheroes2::Copy( randomRaceSprite, 0, 4, raceSpriteBorder, 0, 4, 4, raceImageHeight );
+    int32_t imageCopyOffset = raceBorderWidth - 4;
+    fheroes2::Copy( randomRaceSprite, imageCopyOffset, 4, raceSpriteBorder, imageCopyOffset, 4, 4, raceImageHeight );
+    imageCopyOffset = raceBorderHeight - 4;
+    fheroes2::Copy( randomRaceSprite, 0, imageCopyOffset, raceSpriteBorder, 0, imageCopyOffset, raceBorderWidth, 4 );
+    fheroes2::Image raceSpriteBorderSelected( raceSpriteBorder );
+    fheroes2::ApplyPalette( raceSpriteBorder, darkGrayPalette );
+    fheroes2::ApplyPalette( raceSpriteBorderSelected, PAL::GetPalette( PAL::PaletteType::RED ) );
+
+    std::array<fheroes2::Rect, 6> colorRect;
+    std::array<fheroes2::Rect, 7> raceRect;
+
+    // Random race.
+    raceRect.back() = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+    fheroes2::Copy( randomRaceSprite, 4, 4, display, raceRect.back().x + 4, raceRect.back().y + 4, raceImageWidth, raceImageHeight );
+    fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+    text.set( _( "race|Random" ), fheroes2::FontType::smallWhite() );
+    text.draw( raceRect.back().x, raceRect.back().y + raceRect.back().height + 4, raceBorderWidth, display );
+
+    pos.x += stepX;
+    for ( uint32_t i = 0; i < 6; ++i ) {
+        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+
+        fheroes2::addGradientShadow( colorSpriteBorder, display, { pos.x - stepX / 2, pos.y }, { -5, 5 } );
+        colorRect[i] = { pos.x - stepX / 2, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+        fheroes2::Copy( colorSprite, 0, 0, display, colorRect[i].x + 4, colorRect[i].y + 4, colorSprite.width(), colorSprite.height() );
+        text.set( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
+        text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 4, display );
+
+        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
+        raceRect[i] = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+        fheroes2::Copy( raceSprite, 4, 4, display, raceRect[i].x + 4, raceRect[i].y + 4, raceImageWidth, raceImageHeight );
+        fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+        text.set( Race::DoubleLinedString( Race::IndexToRace( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
+        text.draw( raceRect[i].x, raceRect[i].y + raceRect[i].height + 4, raceBorderWidth, display );
+
+        pos.x += stepX;
+    }
+
+    pos.x = area.x + area.width / 2;
+    pos.y += 170;
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    // Render dialog buttons.
+    fheroes2::Button buttonOk;
+    fheroes2::Button buttonCancel;
+    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+
+    fheroes2::ImageRestorer heroBackground( display, pos.x - 2 * TILEWIDTH + TILEWIDTH / 2, pos.y - 2 * TILEWIDTH + TILEWIDTH / 2, 2 * TILEWIDTH, 2 * TILEWIDTH );
+
+    LocalEvent & le = LocalEvent::Get();
+    bool needRedraw = true;
+    int heroRace = 0;
+    int heroColor = 0;
+
+    if ( heroType > -1 ) {
+        heroRace = heroType % 7;
+        heroColor = heroType / 7;
+    }
+
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+    while ( le.HandleEvents() ) {
+        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            return heroColor * 7 + heroRace;
+        }
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            break;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected hero." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( heroBackground.rect() ) ) {
+            std::string name( _( "%{color} %{race}" ) );
+            StringReplace( name, "%{color}", Color::String( Color::IndexToColor( heroColor ) ) );
+            StringReplace( name, "%{race}", ( heroRace < 6 ) ? Race::String( Race::IndexToRace( heroRace ) ) : _( "race|Random" ) );
+            fheroes2::showStandardTextMessage( _( "You will place" ), std::move( name ), Dialog::ZERO );
+        }
+        else {
+            for ( size_t i = 0; i < 7; ++i ) {
+                if ( le.MouseClickLeft( raceRect[i] ) ) {
+                    heroRace = static_cast<int>( i );
+                    needRedraw = true;
+                    break;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( raceRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( Race::String( Race::IndexToRace( static_cast<int>( i == 6 ? 7 : i ) ) ), _( "Click to select this class." ),
+                                                       Dialog::ZERO );
+                }
+            }
+
+            for ( size_t i = 0; i < 6; ++i ) {
+                if ( le.MouseClickLeft( colorRect[i] ) ) {
+                    heroColor = static_cast<int>( i );
+                    needRedraw = true;
+                    break;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( colorRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ),
+                                                       _( "Click to select this color." ), Dialog::ZERO );
+                }
+            }
+        }
+
+        if ( !needRedraw ) {
+            continue;
+        }
+
+        heroBackground.restore();
+
+        // Update hero image.
+        const fheroes2::Sprite heroImage = fheroes2::generateMapObjectImage( objectInfo[heroColor * 7 + heroRace] );
+        fheroes2::Blit( heroImage, display, pos.x + heroImage.x(), pos.y + heroImage.y() );
+
+        // Update color and race borders.
+        for ( int i = 0; i < 6; ++i ) {
+            fheroes2::Blit( ( i == heroColor ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x, colorRect[i].y );
+        }
+
+        for ( int i = 0; i < 7; ++i ) {
+            fheroes2::Blit( ( i == heroRace ) ? raceSpriteBorderSelected : raceSpriteBorder, display, raceRect[i].x, raceRect[i].y );
+        }
+
+        display.render( background.totalArea() );
+
+        needRedraw = false;
+    }
+
+    return Heroes::UNKNOWN;
 }
 
 int Dialog::selectMonsterType( const int monsterType )
