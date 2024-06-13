@@ -962,6 +962,8 @@ namespace Interface
 
                             // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
                             Maps::readMapInEditor( _mapFormat );
+
+                            updateWorldCastlesHeroes( _mapFormat );
                         }
                     }
                 }
@@ -1354,6 +1356,8 @@ namespace Interface
 
                 // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
                 Maps::readMapInEditor( _mapFormat );
+
+                updateWorldCastlesHeroes( _mapFormat );
             }
 
             if ( brushSize.width == 0 ) {
@@ -1615,6 +1619,24 @@ namespace Interface
         // Do nothing.
     }
 
+    void EditorInterface::undoAction()
+    {
+        if ( _historyManager.undo() ) {
+            _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+
+            updateWorldCastlesHeroes( _mapFormat );
+        }
+    }
+
+    void EditorInterface::redoAction()
+    {
+        if ( _historyManager.redo() ) {
+            _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+
+            updateWorldCastlesHeroes( _mapFormat );
+        }
+    }
+
     void EditorInterface::updateCursor( const int32_t tileIndex )
     {
         if ( _cursorUpdater && tileIndex >= 0 ) {
@@ -1864,8 +1886,7 @@ namespace Interface
                 action.commit();
 
                 // TODO: so far this is the only way to update objects for rendering.
-                Maps::readMapInEditor( _mapFormat );
-                return true;
+                return Maps::readMapInEditor( _mapFormat );
             }
         }
 

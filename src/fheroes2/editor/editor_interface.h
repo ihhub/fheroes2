@@ -68,19 +68,8 @@ namespace Interface
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
         void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override;
 
-        void undoAction()
-        {
-            if ( _historyManager.undo() ) {
-                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-            }
-        }
-
-        void redoAction()
-        {
-            if ( _historyManager.redo() ) {
-                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-            }
-        }
+        void undoAction();
+        void redoAction();
 
         void updateCursor( const int32_t tileIndex ) override;
 
