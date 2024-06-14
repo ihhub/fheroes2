@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -238,6 +238,7 @@ public:
     static Spell Rand( const int level, const bool isAdventure );
     static Spell RandCombat( const int level );
     static Spell RandAdventure( const int level );
+    bool canCastCombatSpell() const;
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
