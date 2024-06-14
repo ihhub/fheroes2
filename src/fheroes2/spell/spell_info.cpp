@@ -325,17 +325,17 @@ namespace fheroes2
             return -1;
         }
 
-        const int32_t center = hero.GetIndex();
-        const int tilePassability = world.GetTiles( center ).GetPassable();
+        const int32_t heroTileIdx = hero.GetIndex();
+        const int heroTilePassability = world.GetTiles( heroTileIdx ).GetPassable();
 
         std::vector<int32_t> possibleBoatPositions;
         possibleBoatPositions.reserve( 8 );
 
-        for ( const int32_t tileIdx : Maps::getAroundIndexes( center ) ) {
-            const int direction = Maps::GetDirection( center, tileIdx );
+        for ( const int32_t tileIdx : Maps::getAroundIndexes( heroTileIdx ) ) {
+            const int direction = Maps::GetDirection( heroTileIdx, tileIdx );
             assert( direction != Direction::UNKNOWN && direction != Direction::CENTER );
 
-            if ( ( tilePassability & direction ) == 0 ) {
+            if ( ( heroTilePassability & direction ) == 0 ) {
                 continue;
             }
 
@@ -356,14 +356,14 @@ namespace fheroes2
             return -1;
         }
 
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [centerPoint = Maps::GetPoint( center )]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point & rightPoint = Maps::GetPoint( right );
+        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
+            const fheroes2::Point leftPoint = Maps::GetPoint( left );
+            const fheroes2::Point rightPoint = Maps::GetPoint( right );
 
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+            const int32_t leftDiffX = leftPoint.x - heroPoint.x;
+            const int32_t leftDiffY = leftPoint.y - heroPoint.y;
+            const int32_t rightDiffX = rightPoint.x - heroPoint.x;
+            const int32_t rightDiffY = rightPoint.y - heroPoint.y;
 
             return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
         } );
