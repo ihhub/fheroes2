@@ -327,21 +327,39 @@ namespace fheroes2
 
         const int32_t center = hero.GetIndex();
         const int tilePassability = world.GetTiles( center ).GetPassable();
-        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
-        std::vector<int32_t> possibleBoatPositions;
-        for ( const int32_t tileId : tilesAround ) {
-            const int direction = Maps::GetDirection( center, tileId );
-            assert( direction != Direction::UNKNOWN );
 
-            if ( ( tilePassability & direction ) != 0 ) {
-                possibleBoatPositions.emplace_back( tileId );
+        std::vector<int32_t> possibleBoatPositions;
+        possibleBoatPositions.reserve( 8 );
+
+        for ( const int32_t tileIdx : Maps::getAroundIndexes( center ) ) {
+            const int direction = Maps::GetDirection( center, tileIdx );
+            assert( direction != Direction::UNKNOWN && direction != Direction::CENTER );
+
+            if ( ( tilePassability & direction ) == 0 ) {
+                continue;
             }
+
+            const Maps::Tiles & tile = world.GetTiles( tileIdx );
+
+            if ( !tile.isWater() ) {
+                continue;
+            }
+
+            if ( tile.GetObject() != MP2::OBJ_NONE ) {
+                continue;
+            }
+
+            possibleBoatPositions.emplace_back( tileIdx );
         }
 
-        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+        if ( possibleBoatPositions.empty() ) {
+            return -1;
+        }
+
+        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [centerPoint = Maps::GetPoint( center )]( const int32_t left, const int32_t right ) {
             const fheroes2::Point & leftPoint = Maps::GetPoint( left );
             const fheroes2::Point & rightPoint = Maps::GetPoint( right );
+
             const int32_t leftDiffX = leftPoint.x - centerPoint.x;
             const int32_t leftDiffY = leftPoint.y - centerPoint.y;
             const int32_t rightDiffX = rightPoint.x - centerPoint.x;
@@ -350,14 +368,7 @@ namespace fheroes2
             return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
         } );
 
-        for ( const int32_t tileId : possibleBoatPositions ) {
-            const Maps::Tiles & tile = world.GetTiles( tileId );
-            if ( tile.isWater() ) {
-                return tileId;
-            }
-        }
-
-        return -1;
+        return possibleBoatPositions.front();
     }
 
     int32_t getSummonableBoat( const Heroes & hero )

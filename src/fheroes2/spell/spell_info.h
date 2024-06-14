@@ -47,6 +47,8 @@ namespace fheroes2
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 
+    // Returns the index of the tile that the boat would have been summoned to when using the Summon Boat spell by the given hero, or -1 if there is no suitable tile
+    // nearby.
     int32_t getPossibleBoatPosition( const Heroes & hero );
 
     int32_t getSummonableBoat( const Heroes & hero );
