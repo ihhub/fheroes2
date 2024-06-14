@@ -352,23 +352,23 @@ namespace fheroes2
             possibleBoatPositions.emplace_back( tileIdx );
         }
 
-        if ( possibleBoatPositions.empty() ) {
+        const auto iter = std::min_element( possibleBoatPositions.begin(), possibleBoatPositions.end(),
+                                            [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
+                                                const fheroes2::Point leftPoint = Maps::GetPoint( left );
+                                                const fheroes2::Point rightPoint = Maps::GetPoint( right );
+
+                                                const int32_t leftDiffX = leftPoint.x - heroPoint.x;
+                                                const int32_t leftDiffY = leftPoint.y - heroPoint.y;
+                                                const int32_t rightDiffX = rightPoint.x - heroPoint.x;
+                                                const int32_t rightDiffY = rightPoint.y - heroPoint.y;
+
+                                                return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+                                            } );
+        if ( iter == possibleBoatPositions.end() ) {
             return -1;
         }
 
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point rightPoint = Maps::GetPoint( right );
-
-            const int32_t leftDiffX = leftPoint.x - heroPoint.x;
-            const int32_t leftDiffY = leftPoint.y - heroPoint.y;
-            const int32_t rightDiffX = rightPoint.x - heroPoint.x;
-            const int32_t rightDiffY = rightPoint.y - heroPoint.y;
-
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
-
-        return possibleBoatPositions.front();
+        return *iter;
     }
 
     int32_t getSummonableBoat( const Heroes & hero )
