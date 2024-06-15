@@ -21,6 +21,7 @@
 #include "editor_rumor_window.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
