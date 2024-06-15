@@ -1456,7 +1456,8 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                     dmg = dmg * ( 100 - value ) / 100;
                 }
 
-                const std::vector<int32_t> extraDamagePercent = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT );
+                const std::vector<int32_t> extraDamagePercent
+                    = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT );
                 for ( const int32_t value : extraDamagePercent ) {
                     dmg = dmg * ( 100 + value ) / 100;
                 }
@@ -1473,7 +1474,8 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                     dmg = dmg * ( 100 - value ) / 100;
                 }
 
-                const std::vector<int32_t> extraDamagePercent = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
+                const std::vector<int32_t> extraDamagePercent
+                    = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
                 for ( const int32_t value : extraDamagePercent ) {
                     dmg = dmg * ( 100 + value ) / 100;
                 }
