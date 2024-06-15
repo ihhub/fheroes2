@@ -340,12 +340,7 @@ namespace fheroes2
             }
 
             const Maps::Tiles & tile = world.GetTiles( tileIdx );
-
-            if ( !tile.isWater() ) {
-                continue;
-            }
-
-            if ( tile.GetObject() != MP2::OBJ_NONE ) {
+            if ( !tile.isWater() || tile.GetObject() != MP2::OBJ_NONE ) {
                 continue;
             }
 
