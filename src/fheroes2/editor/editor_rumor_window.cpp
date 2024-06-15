@@ -48,11 +48,11 @@ namespace
 {
     const int32_t elementOffset{ 9 };
 
-    const fheroes2::Size rumorArea{ 400, 200 };
+    const fheroes2::Size rumorArea{ 550, 300 };
 
     const int32_t listAreaHeightDeduction{ 8 };
 
-    const size_t longestRumor{ 300 };
+    const size_t longestRumor{ 200 };
 
     class RumorListBox final : public Interface::ListBox<std::string>
     {
@@ -129,6 +129,8 @@ namespace Editor
     bool openRumorWindow( std::vector<std::string> & rumors )
     {
         // Remove all empty rumors.
+        assert( std::all_of( rumors.begin(), rumors.end(), []( const auto & rumor ) { return !rumor.empty(); } ) );
+
         rumors.erase( std::remove_if( rumors.begin(), rumors.end(), []( const auto & rumor ) { return rumor.empty(); } ), rumors.end() );
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -222,7 +224,7 @@ namespace Editor
                 std::string newRumor;
                 if ( Dialog::inputString( _( "Rumor:" ), newRumor, {}, longestRumor, false, true ) ) {
                     if ( std::any_of( rumors.begin(), rumors.end(), [&newRumor]( const auto & rumor ) { return rumor == newRumor; } ) ) {
-                        fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor exists in the list." ), Dialog::OK );
+                        fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );
                         continue;
                     }
 
@@ -242,7 +244,7 @@ namespace Editor
                 if ( Dialog::inputString( _( "Rumor:" ), temp, {}, longestRumor, false, true ) ) {
                     const auto count = std::count_if( rumors.begin(), rumors.end(), [&temp]( const auto & rumor ) { return rumor == temp; } );
                     if ( rumorList.GetCurrent() != temp && count > 0 ) {
-                        fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor exists in the list." ), Dialog::OK );
+                        fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );
                         continue;
                     }
 
@@ -266,7 +268,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save rumors." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the rumors." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAdd.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Add Rumor" ), _( "Add an additional rumor." ), Dialog::ZERO );
