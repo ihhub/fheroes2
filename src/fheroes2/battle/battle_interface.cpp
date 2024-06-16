@@ -5372,7 +5372,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     const uint32_t bloodlustDelay = 1800 / 20;
     // duration is 1900ms
-    AudioManager::PlaySound( M82::BLOODLUS );
+    const int channelId = AudioManager::PlaySound( M82::BLOODLUS );
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
@@ -5381,6 +5381,10 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
     Game::passCustomAnimationDelay( bloodlustDelay );
     // Make sure that the first run is passed immediately.
     assert( !Game::isCustomDelayNeeded( bloodlustDelay ) );
+
+    // As reported by some players on macOS they are facing deadlock while making this spell.
+    // The deadlock comes from SDL_mixer which reports the sound being played.
+    fheroes2::Time timer;
 
     while ( le.HandleEvents( Game::isCustomDelayNeeded( bloodlustDelay ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
@@ -5392,6 +5396,13 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
             alpha += ( frame < 10 ) ? 20 : -20;
             ++frame;
+        }
+
+        if ( frame >= 20 && timer.getS() > 20 ) {
+            // This is an extreme case of any sound being played.
+            // 20 seconds are good enough to make sure that any reasonable sound finishes playing.
+            ERROR_LOG( "Blood lust sound hasn't been detected as completed after 20 seconds for channel " << channelId )
+            break;
         }
     }
 
