@@ -1377,68 +1377,32 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
 {
     assert( spell.isDamage() );
 
-    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     uint32_t dmg = fheroes2::getSpellDamage( spell, spellPoints, applyingHero );
-
-    switch ( GetID() ) {
-    case Monster::IRON_GOLEM:
-    case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
-            // 50% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::ARMAGEDDON:
-            dmg /= 2;
-            break;
-        default:
-            break;
+    for ( const fheroes2::MonsterAbility & targetAbility : fheroes2::getMonsterData( GetID() ).battleStats.abilities ) {
+        if ( targetAbility.type == fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION ) {
+            switch ( spell.GetID() ) {
+                // Reduced elemental spell damage
+            case Spell::COLDRAY:
+            case Spell::COLDRING:
+            case Spell::FIREBALL:
+            case Spell::FIREBLAST:
+            case Spell::LIGHTNINGBOLT:
+            case Spell::CHAINLIGHTNING:
+            case Spell::ELEMENTALSTORM:
+            case Spell::ARMAGEDDON:
+                dmg -= dmg * targetAbility.percentage / 100;
+                break;
+            default:
+                break;
+            }
         }
-        break;
-
-    case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-            dmg *= 2;
-            break;
-        default:
-            break;
+    }
+    for ( const fheroes2::MonsterWeakness & targetWeakness : fheroes2::getMonsterData( GetID() ).battleStats.weaknesses ) {
+        if ( targetWeakness.type == fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
+            if ( spell.GetID() == (int)targetWeakness.value ) {
+                dmg += dmg * targetWeakness.percentage / 100;
+            }
         }
-        break;
-
-    case Monster::AIR_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::ELEMENTALSTORM:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
     }
 
     // check artifact
