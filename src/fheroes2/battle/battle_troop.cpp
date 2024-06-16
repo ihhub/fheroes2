@@ -1377,8 +1377,6 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
 {
     assert( spell.isDamage() );
 
-    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    
     uint32_t dmg = fheroes2::getSpellDamage( spell, spellPoints, applyingHero );
     for ( fheroes2::MonsterAbility & targetAbility: fheroes2::getMonsterData().battleStats.abilities ) {
         if ( targetAbility.type == fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION ) {
