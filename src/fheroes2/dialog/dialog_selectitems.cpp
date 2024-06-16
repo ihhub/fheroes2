@@ -973,7 +973,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 int Dialog::selectHeroType( const int heroType )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( 520, 280, true, display );
+    fheroes2::StandardWindow background( 520, 250, true, display );
 
     const fheroes2::Rect & area = background.activeArea();
 
@@ -1040,7 +1040,7 @@ int Dialog::selectHeroType( const int heroType )
     }
 
     pos.x = area.x + area.width / 2;
-    pos.y += 170;
+    pos.y += 175;
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -1049,7 +1049,17 @@ int Dialog::selectHeroType( const int heroType )
     fheroes2::Button buttonCancel;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-    fheroes2::ImageRestorer heroBackground( display, pos.x - 2 * TILEWIDTH + TILEWIDTH / 2, pos.y - 2 * TILEWIDTH + TILEWIDTH / 2, 2 * TILEWIDTH, 2 * TILEWIDTH );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+    fheroes2::Rect heroRoi;
+
+    {
+        // We are doing this is a code block to reduce variable scope.
+        // This calculation is done with an assumption that all hero images are the same.
+        const fheroes2::Sprite heroImage = fheroes2::generateMapObjectImage( objectInfo[0] );
+        heroRoi = { heroImage.x(), heroImage.y(), heroImage.width(), heroImage.height() };
+    }
+
+    fheroes2::ImageRestorer heroBackground( display, pos.x + heroRoi.x, pos.y + heroRoi.y, heroRoi.width, heroRoi.height );
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
@@ -1060,8 +1070,6 @@ int Dialog::selectHeroType( const int heroType )
         heroRace = heroType % 7;
         heroColor = heroType / 7;
     }
-
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
     while ( le.HandleEvents() ) {
         le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
