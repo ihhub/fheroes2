@@ -620,6 +620,8 @@ namespace Editor
                 if ( openRumorWindow( temp ) ) {
                     mapFormat.rumors = std::move( temp );
                 }
+
+                display.render( background.totalArea() );
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
