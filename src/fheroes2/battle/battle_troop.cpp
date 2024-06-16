@@ -1378,7 +1378,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     assert( spell.isDamage() );
 
     uint32_t dmg = fheroes2::getSpellDamage( spell, spellPoints, applyingHero );
-    for ( fheroes2::MonsterAbility & targetAbility : fheroes2::getMonsterData().battleStats.abilities ) {
+    for ( fheroes2::MonsterAbility & targetAbility : fheroes2::getMonsterData( GetID() ).battleStats.abilities ) {
         if ( targetAbility.type == fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION ) {
             switch ( spell.GetID() ) {
                 // Reduced elemental spell damage
