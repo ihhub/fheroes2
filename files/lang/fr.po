@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -311,6 +311,9 @@ msgstr ""
 "R\n"
 "I\n"
 "O"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -3535,9 +3538,6 @@ msgstr "Fichier à charger :"
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-msgid "%{color} %{race} hero"
-msgstr "Héros %{race} %{color}"
-
 msgid "Terrain object"
 msgstr "Objets généraux"
 
@@ -3556,6 +3556,26 @@ msgstr "Choisir créature :"
 msgid "Select Hero:"
 msgstr "Choisir héros :"
 
+msgid "race|Random"
+msgstr "Aléatoire"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Cliquez pour commencer le placement du village/château sélectionné."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "Héros %{race} %{color}"
+
+msgid "You will place"
+msgstr "Vous avez choisi de placer"
+
+msgid "Click to select this class."
+msgstr "Cliquez ici pour sélectionner cet alignement."
+
+msgid "Click to select this color."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
 msgid "Select Treasure:"
 msgstr "Choix du trésor :"
 
@@ -3567,9 +3587,6 @@ msgstr "Choix du village à placer"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutre"
-
-msgid "race|Random"
-msgstr "Aléatoire"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Cliquez pour commencer le placement du village/château sélectionné."
@@ -3585,15 +3602,6 @@ msgstr "%{townOrCastle} %{race} %{color}"
 
 msgid "race|Neutral"
 msgstr "Neutre"
-
-msgid "You will place"
-msgstr "Vous avez choisi de placer"
-
-msgid "Click to select this class."
-msgstr "Cliquez ici pour sélectionner cet alignement."
-
-msgid "Click to select this color."
-msgstr "Cliquez ici pour sélectionner cette couleur."
 
 msgid "Select Dwelling:"
 msgstr "Séléctionner demeure :"
@@ -4507,6 +4515,13 @@ msgid "Click to accept the changes made."
 msgstr "Cliquez pour afficher le village suivant."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Cliquez pour afficher le village suivant."
 
@@ -4551,6 +4566,41 @@ msgstr "Effacement %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Programmation supplémentaire"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Éditeur"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Charger une carte existante."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Charger une carte existante."
 
 msgid ""
 "\n"
