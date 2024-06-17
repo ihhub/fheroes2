@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 10:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-05-08 13:33+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -308,6 +308,9 @@ msgstr ""
 "Ờ\n"
 "N\n"
 "G"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Chiến binh"
@@ -3478,9 +3481,6 @@ msgstr "Tệp để Tải:"
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} tướng"
-
 msgid "Terrain object"
 msgstr "Đối tượng địa hình"
 
@@ -3499,6 +3499,26 @@ msgstr "Chọn Quái vật:"
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
 
+msgid "race|Random"
+msgstr "Ngẫu nhiên"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} tướng"
+
+msgid "You will place"
+msgstr "Ngươi sẽ đặt"
+
+msgid "Click to select this class."
+msgstr "Nhấp để chọn chủng tộc."
+
+msgid "Click to select this color."
+msgstr "Nhấp để chọn màu này."
+
 msgid "Select Treasure:"
 msgstr "Chọn Kho báu:"
 
@@ -3510,9 +3530,6 @@ msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Trung lập"
-
-msgid "race|Random"
-msgstr "Ngẫu nhiên"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
@@ -3528,15 +3545,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Trung lập"
-
-msgid "You will place"
-msgstr "Ngươi sẽ đặt"
-
-msgid "Click to select this class."
-msgstr "Nhấp để chọn chủng tộc."
-
-msgid "Click to select this color."
-msgstr "Nhấp để chọn màu này."
 
 msgid "Select Dwelling:"
 msgstr "Chọn Nhà lính:"
@@ -4458,6 +4466,13 @@ msgid "Click to accept the changes made."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Nhấp để xem thị trấn sau."
 
@@ -4501,6 +4516,41 @@ msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Lập trình Bổ sung"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Biên tập"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Tải một bản đồ đã có."
 
 msgid ""
 "\n"

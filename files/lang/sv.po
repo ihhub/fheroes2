@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -314,6 +314,9 @@ msgstr ""
 "P\n"
 "E\n"
 "L"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -3458,9 +3461,6 @@ msgstr "Fil att Ladda:"
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race}hjälte"
-
 msgid "Terrain object"
 msgstr "Terrängföremål"
 
@@ -3479,6 +3479,26 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+msgid "race|Random"
+msgstr "Slumpad"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Klicka här för att placera det valda slottet/staden."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race}hjälte"
+
+msgid "You will place"
+msgstr "Du kommer placera"
+
+msgid "Click to select this class."
+msgstr "Klicka här för att välja denna klass."
+
+msgid "Click to select this color."
+msgstr "Klicka här för att välja denna färgen."
+
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
 
@@ -3490,9 +3510,6 @@ msgstr "Slott/stadsplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
-
-msgid "race|Random"
-msgstr "Slumpad"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Klicka här för att placera det valda slottet/staden."
@@ -3508,15 +3525,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
-
-msgid "You will place"
-msgstr "Du kommer placera"
-
-msgid "Click to select this class."
-msgstr "Klicka här för att välja denna klass."
-
-msgid "Click to select this color."
-msgstr "Klicka här för att välja denna färgen."
 
 msgid "Select Dwelling:"
 msgstr "Välj Bostad:"
@@ -4384,6 +4392,13 @@ msgstr ""
 msgid "Click to accept the changes made."
 msgstr "Klicka för att acceptera ändringarna."
 
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Rumors"
+msgstr ""
+
 msgid "Click to change your map name."
 msgstr "Klicka för att ändra kartans namn."
 
@@ -4419,6 +4434,43 @@ msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
 msgstr "Visa objektens framkomlighet."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Detta svar finns i listan."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Lägg till ett ytterligare svar för gåtan."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Redigerare"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Laddar en karta."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Radera Svar"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Radera ett redan existerande svar till frågan."
 
 msgid ""
 "\n"

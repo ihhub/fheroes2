@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -318,6 +318,9 @@ msgstr ""
 "Н\n"
 "А\n"
 "Я"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Воин"
@@ -3482,9 +3485,6 @@ msgstr "Загрузить файл:"
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} герой - %{race}"
-
 msgid "Terrain object"
 msgstr "Объект ландшафта"
 
@@ -3503,6 +3503,26 @@ msgstr "Выберите существо:"
 msgid "Select Hero:"
 msgstr "Выберите героя:"
 
+msgid "race|Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Нажмите, чтобы расположить выбранный замок или город."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} герой - %{race}"
+
+msgid "You will place"
+msgstr "Вы будете размещать"
+
+msgid "Click to select this class."
+msgstr "Нажмите сюда чтобы выбрать эту фракцию."
+
+msgid "Click to select this color."
+msgstr "Нажмите сюда чтобы выбрать этот цвет."
+
 msgid "Select Treasure:"
 msgstr "Выберите сокровище:"
 
@@ -3514,9 +3534,6 @@ msgstr "Размещение замка или города"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральный"
-
-msgid "race|Random"
-msgstr "Случайно"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Нажмите, чтобы расположить выбранный замок или город."
@@ -3532,15 +3549,6 @@ msgstr "%{color} %{townOrCastle} (%{race} )"
 
 msgid "race|Neutral"
 msgstr "Нейтральный"
-
-msgid "You will place"
-msgstr "Вы будете размещать"
-
-msgid "Click to select this class."
-msgstr "Нажмите сюда чтобы выбрать эту фракцию."
-
-msgid "Click to select this color."
-msgstr "Нажмите сюда чтобы выбрать этот цвет."
 
 msgid "Select Dwelling:"
 msgstr "Выберите жилище:"
@@ -4403,6 +4411,13 @@ msgstr ""
 msgid "Click to accept the changes made."
 msgstr "Нажмите, чтобы применить внесённые изменения."
 
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Нажмите, чтобы сохранить текущую карту."
+
+msgid "Rumors"
+msgstr ""
+
 msgid "Click to change your map name."
 msgstr "Нажмите, чтобы изменить название Вашей карты."
 
@@ -4439,6 +4454,43 @@ msgstr "Включить или выключить анимацию объект
 
 msgid "Toggle display of objects' passability."
 msgstr "Включить или выключить отображение проходимости объектов."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Такой ответ уже есть в списке."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Нажмите, чтобы сохранить параметры события."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Добавить дополнительные ответ на вопрос загадки."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Редактор"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Загрузить существующую карту."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Удалить ответ"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Удалить имеющийся ответ на вопрос."
 
 msgid ""
 "\n"
