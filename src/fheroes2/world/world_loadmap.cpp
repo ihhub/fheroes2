@@ -647,8 +647,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 std::string rumor( reinterpret_cast<const char *>( pblock.data() ) + 8 );
 
                 if ( !rumor.empty() ) {
-                    _rumors.emplace_back( std::move( rumor ) );
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "MP2 format: add rumor " << _rumors.back() )
+                    _customRumors.emplace_back( std::move( rumor ) );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "MP2 format: add rumor " << _customRumors.back() )
                 }
             }
             else {
@@ -1057,7 +1057,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     // Load rumors.
     for ( auto & rumor : map.rumors ) {
         if ( !rumor.empty() ) {
-            _rumors.emplace_back( std::move( rumor ) );
+            _customRumors.emplace_back( std::move( rumor ) );
         }
     }
 
