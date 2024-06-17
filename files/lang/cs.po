@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -313,6 +313,9 @@ msgstr ""
 "A\n"
 "R\n"
 "D"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -3497,10 +3500,6 @@ msgstr "Soubor k načtení:"
 msgid "Accept the choice made."
 msgstr ""
 
-#, fuzzy
-msgid "%{color} %{race} hero"
-msgstr "%{color} hráč"
-
 msgid "Terrain object"
 msgstr ""
 
@@ -3523,6 +3522,28 @@ msgstr "Vybrat %{name}"
 msgid "Select Hero:"
 msgstr "Nejlepší hrdina:"
 
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} hráč"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknout sem pro výběr scénáře."
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Nejlepší hrdina:"
@@ -3536,9 +3557,6 @@ msgid "Castle/town placing"
 msgstr "Možnosti Hradu"
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
-
-msgid "race|Random"
 msgstr ""
 
 #, fuzzy
@@ -3559,17 +3577,6 @@ msgstr "%{color} hráč"
 
 msgid "race|Neutral"
 msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Kliknout sem pro výběr scénáře."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Kliknout sem pro výběr scénáře."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -4464,6 +4471,13 @@ msgid "Click to accept the changes made."
 msgstr "Klikni pro zobrazení následujícího města."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Klikni pro zobrazení následujícího města."
 
@@ -4502,6 +4516,37 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Add Rumor"
+msgstr ""
+
+msgid "Add an additional rumor."
+msgstr ""
+
+msgid "Edit Rumor"
+msgstr ""
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""
