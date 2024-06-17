@@ -419,13 +419,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MousePressLeft( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.MousePressLeft( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
@@ -434,11 +434,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero2.drawOnRelease();
         }
 
-        if ( le.MousePressLeft( moveArtifactsToHero2.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
             moveArtifactsToHero2.drawOnPress();
             moveArtifactsToHero1.drawOnRelease();
         }
-        else if ( le.MousePressLeft( moveArtifactsToHero1.area() ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero1.area() ) ) {
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
@@ -451,8 +451,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             break;
 
         // selector troops event
-        if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
-             || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
+        if ( ( le.isMouseCursorPosInArea( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
+             || ( le.isMouseCursorPosInArea( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -473,8 +473,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
 
         // selector artifacts event
-        if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
-             || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
+        if ( ( le.isMouseCursorPosInArea( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
+             || ( le.isMouseCursorPosInArea( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
@@ -501,23 +501,23 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
 
-        if ( ( le.MouseCursor( primskill_bar1.GetArea() ) && primskill_bar1.QueueEventProcessing() )
-             || ( le.MouseCursor( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
-             || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
-             || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
+        if ( ( le.isMouseCursorPosInArea( primskill_bar1.GetArea() ) && primskill_bar1.QueueEventProcessing() )
+             || ( le.isMouseCursorPosInArea( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
+             || ( le.isMouseCursorPosInArea( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
+             || ( le.isMouseCursorPosInArea( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
             display.render();
         }
 
-        if ( le.MouseCursor( moraleIndicator1.GetArea() ) ) {
+        if ( le.isMouseCursorPosInArea( moraleIndicator1.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator1 );
         }
-        else if ( le.MouseCursor( moraleIndicator2.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( moraleIndicator2.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator2 );
         }
-        else if ( le.MouseCursor( luckIndicator1.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( luckIndicator1.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator1 );
         }
-        else if ( le.MouseCursor( luckIndicator2.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( luckIndicator2.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
         }
 
@@ -651,10 +651,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
 
-        if ( le.MousePressRight( hero1Area ) ) {
+        if ( le.isMouseRightButtonPressedInArea( hero1Area ) ) {
             Dialog::QuickInfo( *this );
         }
-        else if ( le.MousePressRight( hero2Area ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( hero2Area ) ) {
             Dialog::QuickInfo( otherHero );
         }
     }

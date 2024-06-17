@@ -33,6 +33,7 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -48,6 +49,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -212,14 +214,17 @@ namespace Editor
 
         // If we don't have many map files, we reduce the maximum dialog height,
         // but not less than enough for 11 elements. We also limit the maximum list height to 22 lines.
-        const int32_t listItems = std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 );
-        const int32_t maxDialogHeight
-            = ( 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) * listItems + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
+        const int32_t listLineHeight = 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL );
+        const int32_t estraDialogHeight = listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
+        const int32_t maxDialogHeight = listLineHeight * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 ) + estraDialogHeight;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        const int32_t listItems = ( std::min( display.height() - 100, maxDialogHeight ) - estraDialogHeight ) / listLineHeight;
+        const int32_t dialogHeight = listLineHeight * listItems + estraDialogHeight;
+
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( listWidth + 75, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( listWidth + 75, dialogHeight, true, display );
 
         const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37 + 17, listWidth, area.height - listHeightDeduction );
@@ -329,9 +334,9 @@ namespace Editor
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -351,7 +356,11 @@ namespace Editor
             bool needFileNameRedraw = listId != listbox.getCurrentId();
 
             if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( fileNameRoi ) ) ) {
-                fheroes2::openVirtualKeyboard( fileName );
+                {
+                    // TODO: allow to use other languages once we add support of filesystem language support.
+                    const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
+                    fheroes2::openVirtualKeyboard( fileName );
+                }
 
                 charInsertPos = fileName.size();
                 listbox.Unselect();
@@ -366,7 +375,8 @@ namespace Editor
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
 
-                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, fileNameRoi.x );
+                charInsertPos
+                    = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x, fileNameRoi.x );
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;
@@ -374,7 +384,7 @@ namespace Editor
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false ) ) {
+                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
@@ -390,7 +400,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( isListboxSelected && le.KeyPress( fheroes2::Key::KEY_DELETE ) ) {
+            else if ( isListboxSelected && le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -415,9 +425,10 @@ namespace Editor
 
                 needFileNameRedraw = true;
             }
-            else if ( !listboxEvent && le.KeyPress() && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
-                      && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
-                charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+            else if ( !listboxEvent && le.isAnyKeyPressed()
+                      && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue() || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
+                      && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
+                charInsertPos = InsertKeySym( fileName, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
                 buttonOkDisabler();
 
@@ -426,16 +437,16 @@ namespace Editor
                 isListboxSelected = false;
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the current map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( mapNameRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
             }
 
@@ -447,10 +458,6 @@ namespace Editor
 
             if ( !needFileNameRedraw && !listbox.IsNeedRedraw() ) {
                 continue;
-            }
-
-            if ( listbox.IsNeedRedraw() ) {
-                listbox.Redraw();
             }
 
             if ( needFileNameRedraw ) {
@@ -473,7 +480,13 @@ namespace Editor
                 isTextLimit = redrawSaveFileName( insertCharToString( fileName, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fileNameRoi );
             }
 
-            display.render( area );
+            if ( listbox.IsNeedRedraw() ) {
+                listbox.Redraw();
+                display.render( area );
+            }
+            else {
+                display.render( fileNameRoi );
+            }
         }
 
         return false;

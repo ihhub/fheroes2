@@ -129,12 +129,19 @@ namespace fheroes2
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        StreamBuf hdata;
-        if ( !Compression::readFile( hdata, fileName ) ) {
+        StreamFile fileStream;
+        fileStream.setbigendian( true );
+        if ( !fileStream.open( fileName, "rb" ) ) {
             return false;
         }
 
+        StreamBuf hdata;
         hdata.setbigendian( true );
+
+        if ( !Compression::readFromFileStream( fileStream, hdata ) ) {
+            return false;
+        }
+
         uint32_t magicValue = 0;
 
         hdata >> magicValue;
@@ -194,11 +201,18 @@ namespace fheroes2
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
+        StreamFile fileStream;
+        fileStream.setbigendian( true );
+
+        if ( !fileStream.open( fileName, "wb" ) ) {
+            return false;
+        }
+
         StreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
-        return !hdata.fail() && Compression::writeFile( hdata, fileName );
+        return !hdata.fail() && Compression::writeIntoFileStream( fileStream, hdata );
     }
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )

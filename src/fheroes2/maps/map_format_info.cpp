@@ -32,19 +32,75 @@ namespace
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
 
     // This value is set to avoid any corrupted files to be processed.
-    const size_t minFileSize{ 128 };
+    // It is impossible to have a map with smaller than this size.
+    const size_t minFileSize{ 512 };
+
+    constexpr uint16_t minimumSupportedVersion{ 2 };
+
+    // Change the version when there is a need to expand map format functionality.
+    constexpr uint16_t currentSupportedVersion{ 3 };
+
+    void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 2, "Remove this function." );
+
+        if ( map.version > 2 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
+                    switch ( objInfo.index ) {
+                    case 17: // Graveyard, grass terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 62;
+                        break;
+                    case 18: // Graveyard, snow terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 63;
+                        break;
+                    case 19: // Graveyard, desert terrain(?), ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 64;
+                        break;
+                    case 20: // Graveyard, generic terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 0;
+                        break;
+                    case 21: // Graveyard, snow terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 1;
+                        break;
+                    default: // Shift the rest of the objects in the Dwellings group by 5 positions "up"
+                        if ( objInfo.index > 21 ) {
+                            objInfo.index -= 5;
+                        }
+                        break;
+                    }
+
+                    continue;
+                }
+
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    // Shift the objects in the Miscellaneous group by 2 positions "down", since non-ugly Graveyard versions were added to the beginning of this group
+                    objInfo.index += 2;
+                }
+            }
+        }
+    }
 }
 
 namespace Maps::Map_Format
 {
-    StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object )
+    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object )
     {
         using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
 
         return msg << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
     }
 
-    StreamBase & operator>>( StreamBase & msg, ObjectInfo & object )
+    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object )
     {
         msg >> object.id;
 
@@ -119,12 +175,12 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
     {
-        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
     {
-        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
@@ -140,31 +196,54 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
         return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources;
+                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.resources;
+               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
+               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata )
+    {
+        return msg << metadata.allowedSpells;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata )
+    {
+        return msg >> metadata.allowedSpells;
     }
 
     bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
     {
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
 
-        msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
-            << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
-            << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name << map.description;
+        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
+            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
+            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
+            << map.name << map.description;
 
         return !msg.fail();
     }
 
     bool loadFromStream( StreamBase & msg, BaseMapFormat & map )
     {
-        msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
-            >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
-            >> map.lossConditionType >> map.lossConditionMetadata >> map.size;
+        msg >> map.version;
+        if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
+            return false;
+        }
+
+        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
+            >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
+            >> map.lossConditionMetadata >> map.size;
+
+        if ( map.size <= 0 ) {
+            // This is not a correct map size.
+            return false;
+        }
 
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
@@ -189,8 +268,8 @@ namespace Maps::Map_Format
         StreamBuf compressed;
         compressed.setbigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -203,6 +282,7 @@ namespace Maps::Map_Format
     {
         // TODO: verify the correctness of metadata.
         if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
+            map = {};
             return false;
         }
 
@@ -233,11 +313,15 @@ namespace Maps::Map_Format
         decompressed >> map.additionalInfo >> map.tiles;
 
         if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+            map = {};
             return false;
         }
 
-        decompressed >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.rumors;
+        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
+            >> map.adventureMapEventMetadata >> map.shrineMetadata;
+
+        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
+        convertFromV2ToV3( map );
 
         return !msg.fail();
     }

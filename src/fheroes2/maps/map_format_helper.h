@@ -34,12 +34,12 @@ namespace Maps
     {
         struct MapFormat;
         struct TileInfo;
-        struct ObjectInfo;
+        struct TileObjectInfo;
         struct CastleMetadata;
         struct HeroMetadata;
     }
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );
@@ -47,7 +47,7 @@ namespace Maps
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
     void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
+    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object );
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 

@@ -470,10 +470,21 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
+                std::string str = _( "Set %{monster} Count" );
+                StringReplace( str, "%{monster}", mons.GetName() );
+
+                fheroes2::Sprite surface;
+
+                if ( mons.isValid() ) {
+                    surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+                    fheroes2::renderMonsterFrame( mons, surface, { 6, 6 } );
+                }
+
                 uint32_t count = 1;
 
-                if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
+                if ( Dialog::SelectCount( str, 1, 500000, count, 1, surface ) ) {
                     troop.Set( mons, count );
+                }
             }
         }
 
@@ -597,7 +608,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         return true;
     }
 
-    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().GetMousePressLeft() );
+    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().getMouseLeftButtonPressedPos() );
     if ( srcTroop == nullptr || !srcTroop->isValid() ) {
         return true;
     }

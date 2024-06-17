@@ -33,11 +33,11 @@
 
 namespace Maps::Map_Format
 {
-    struct ObjectInfo
+    struct TileObjectInfo
     {
         uint32_t id{ 0 };
 
-        ObjectGroup group{ ObjectGroup::LANDSCAPE_MOUNTAINS };
+        ObjectGroup group{ ObjectGroup::NONE };
 
         uint32_t index{ 0 };
     };
@@ -47,7 +47,7 @@ namespace Maps::Map_Format
         uint16_t terrainIndex{ 0 };
         uint8_t terrainFlag{ 0 };
 
-        std::vector<ObjectInfo> objects;
+        std::vector<TileObjectInfo> objects;
     };
 
     // This structure should be used for any object that require simple data to be saved into map.
@@ -114,7 +114,7 @@ namespace Maps::Map_Format
         uint8_t patrolRadius{ 0 };
 
         // Secondary skills. Type 0 means not set.
-        std::array<int32_t, 8> secondarySkill{ 0 };
+        std::array<int8_t, 8> secondarySkill{ 0 };
         std::array<uint8_t, 8> secondarySkillLevel{ 0 };
 
         // Mutually exclusive settings: either a hero has a custom level or custom experience.
@@ -156,7 +156,7 @@ namespace Maps::Map_Format
 
     struct SphinxMetadata
     {
-        std::string question;
+        std::string riddle;
 
         std::vector<std::string> answers;
 
@@ -182,7 +182,7 @@ namespace Maps::Map_Format
 
         uint8_t computerPlayerColors{ 0 };
 
-        // Does this event occur only once?
+        // Does this event occur more than once?
         bool isRecurringEvent{ false };
 
         // An artifact to be given as a reward.
@@ -192,6 +192,24 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        int16_t attack{ 0 };
+        int16_t defense{ 0 };
+        int16_t knowledge{ 0 };
+        int16_t spellPower{ 0 };
+
+        int32_t experience{ 0 };
+
+        int8_t secondarySkill{ 0 };
+        uint8_t secondarySkillLevel{ 0 };
+
+        int32_t monsterType{ 0 };
+        int32_t monsterCount{ 0 };
+    };
+
+    struct ShrineMetadata
+    {
+        std::vector<int32_t> allowedSpells;
     };
 
     struct DailyEvent
@@ -204,6 +222,7 @@ namespace Maps::Map_Format
 
         uint32_t firstOccurrenceDay{ 0 };
 
+        // Repeat period for the event. 0 value means no repetition.
         uint32_t repeatPeriodInDays{ 0 };
 
         // Resources to be given as a reward.
@@ -212,11 +231,12 @@ namespace Maps::Map_Format
 
     struct BaseMapFormat
     {
-        // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
         uint16_t version{ 1 };
+
         bool isCampaign{ false };
 
-        uint8_t difficulty{ 0 };
+        // Normal difficulty.
+        uint8_t difficulty{ 1 };
 
         uint8_t availablePlayerColors{ 0 };
         uint8_t humanPlayerColors{ 0 };
@@ -251,6 +271,8 @@ namespace Maps::Map_Format
 
         std::vector<DailyEvent> dailyEvents;
 
+        std::vector<std::string> rumors;
+
         // These are metadata maps in relation to object UID.
         std::map<uint32_t, StandardObjectMetadata> standardMetadata;
 
@@ -264,7 +286,7 @@ namespace Maps::Map_Format
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
-        std::vector<std::string> rumors;
+        std::map<uint32_t, ShrineMetadata> shrineMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

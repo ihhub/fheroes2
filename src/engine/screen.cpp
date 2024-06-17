@@ -426,7 +426,10 @@ namespace
             fheroes2::Cursor::show( enable );
 
             if ( !_emulation ) {
-                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+                const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to set cursor. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
             }
         }
 
@@ -669,6 +672,9 @@ namespace
 
             _window = SDL_CreateWindow( "", 0, 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 0 );
             if ( _window == nullptr ) {
+                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                        << " size. The error: " << SDL_GetError() )
+
                 clear();
                 return false;
             }
@@ -676,6 +682,8 @@ namespace
             _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 
             if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
+                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
+
                 clear();
                 return false;
             }
@@ -856,18 +864,26 @@ namespace
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
-                if ( displayCount > 0 ) {
+                if ( displayCount >= 1 ) {
                     const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-                    for ( int i = 0; i < displayModeCount; ++i ) {
-                        SDL_DisplayMode videoMode;
-                        const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
-                        if ( returnCode < 0 ) {
-                            ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        }
-                        else {
-                            resolutionSet.emplace( videoMode.w, videoMode.h );
+                    if ( displayModeCount >= 1 ) {
+                        for ( int i = 0; i < displayModeCount; ++i ) {
+                            SDL_DisplayMode videoMode;
+                            const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                            if ( returnCode != 0 ) {
+                                ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                            }
+                            else {
+                                resolutionSet.emplace( videoMode.w, videoMode.h );
+                            }
                         }
                     }
+                    else {
+                        ERROR_LOG( "Failed to get the number of display modes. The error value: " << displayModeCount << ", description: " << SDL_GetError() )
+                    }
+                }
+                else {
+                    ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
                 }
 
 #if defined( TARGET_NINTENDO_SWITCH )
@@ -1091,33 +1107,38 @@ namespace
             const uint32_t renderingFlags = renderFlags();
 
             const int driverCount = SDL_GetNumRenderDrivers();
-            for ( int driverId = 0; driverId < driverCount; ++driverId ) {
-                int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
-                if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    continue;
-                }
+            if ( driverCount >= 0 ) {
+                for ( int driverId = 0; driverId < driverCount; ++driverId ) {
+                    int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                    if ( returnCode < 0 ) {
+                        ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                        continue;
+                    }
 
-                if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                    continue;
-                }
+                    if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                        continue;
+                    }
 
-                for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
-                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
-                        // Bingo! This is the best driver and format.
-                        isPaletteModeSupported = true;
-                        _driverIndex = driverId;
+                    for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
+                        if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                            // Bingo! This is the best driver and format.
+                            isPaletteModeSupported = true;
+                            _driverIndex = driverId;
+                            break;
+                        }
+                    }
+
+                    if ( isPaletteModeSupported ) {
                         break;
                     }
-                }
 
-                if ( isPaletteModeSupported ) {
-                    break;
+                    if ( _driverIndex < 0 ) {
+                        _driverIndex = driverId;
+                    }
                 }
-
-                if ( _driverIndex < 0 ) {
-                    _driverIndex = driverId;
-                }
+            }
+            else {
+                ERROR_LOG( "Failed to get the number of render drivers. The error value: " << driverCount << ", description: " << SDL_GetError() )
             }
 
             _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
@@ -1204,14 +1225,22 @@ namespace
             }
         }
 
-        void _retrieveWindowInfo()
+        bool _retrieveWindowInfo()
         {
-            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            assert( _window != nullptr );
+
+            const int displayIndex = SDL_GetWindowDisplayIndex( _window );
+            if ( displayIndex < 0 ) {
+                ERROR_LOG( "Failed to get window display index. The error value: " << displayIndex << ", description: " << SDL_GetError() )
+                return false;
+            }
+
             SDL_DisplayMode displayMode;
 
             const int returnCode = SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to retrieve current display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return false;
             }
 
             _currentScreenResolution.width = displayMode.w;
@@ -1224,6 +1253,8 @@ namespace
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
+
+            return true;
         }
 
         void _toggleMouseCaptureMode()
@@ -1285,7 +1316,10 @@ namespace
                 return false;
             }
 
-            _retrieveWindowInfo();
+            if ( !_retrieveWindowInfo() ) {
+                clear();
+                return false;
+            }
 
             _toggleMouseCaptureMode();
 

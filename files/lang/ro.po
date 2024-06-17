@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -51,6 +51,30 @@ msgstr "INFO"
 
 msgid "QUIT"
 msgstr "ÎNCHIDE"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"JOC\n"
+"NOU"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SALVEAZĂ\n"
+"JOCUL"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ÎNCARCĂ\n"
+"JOCUL"
 
 msgid "CANCEL"
 msgstr "RENUNȚĂ"
@@ -428,8 +452,9 @@ msgstr "Nu poți muta ultima trupă"
 msgid "Move the %{name}"
 msgstr "Mută %{name}"
 
-msgid "Set Count"
-msgstr "Setează număratoarea"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Trage în %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2393,6 +2418,14 @@ msgid "Upg. Dwelling 4"
 msgstr ""
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Selectați ținta vrăjii"
 
@@ -3656,6 +3689,9 @@ msgstr ""
 msgid "Random Castle Name"
 msgstr ""
 
+msgid "Random Town Name"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3667,6 +3703,10 @@ msgstr ""
 
 msgid "Castle Army"
 msgstr ""
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Oraș"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
@@ -3692,7 +3732,88 @@ msgstr ""
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
+#, fuzzy
+msgid "Message Text:"
+msgstr "Bara de mesaje"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Bara de mesaje"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Artifact"
+msgstr "Artifact"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Artifact"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resursă"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Event Message Text"
+msgstr ""
+
 msgid "%{objects} cannot be placed on water."
+msgstr ""
+
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
 msgstr ""
 
 msgid "%{objects} must be placed on water."
@@ -3722,8 +3843,7 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 msgid "New Map"
@@ -3747,11 +3867,20 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
-#, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Trage în %{monster}"
-
 msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "Artifact"
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3808,12 +3937,6 @@ msgid ""
 msgstr ""
 
 msgid "Erase"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid "Mountains"
@@ -3950,7 +4073,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4004,9 +4127,6 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4055,6 +4175,72 @@ msgid "Warning"
 msgstr "Atenție"
 
 #, fuzzy
+msgid "None."
+msgstr "Nimic"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Te rog selectează un alt erou."
+
+msgid "Accumulate gold."
+msgstr ""
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr "Dificultatea hărții:"
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Designeri de hărți"
+
+msgid "Special Victory Condition"
+msgstr ""
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Mulțumiri speciale către"
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+msgid "Player Type"
+msgstr ""
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexare"
 
@@ -4083,17 +4269,45 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Salvează harta"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
-msgid "Click to change your map name."
+msgid "Riddle:"
 msgstr ""
 
-msgid "Map Name"
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -5693,6 +5907,9 @@ msgid " gives you maximum morale"
 msgstr ""
 
 msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot have multiple spell books."
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -7783,9 +8000,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Artifact"
-msgstr "Artifact"
-
 msgid "Mermaid"
 msgstr ""
 
@@ -9493,6 +9707,14 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} rezistă la vrajă!"
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr ""
 
@@ -9663,19 +9885,19 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
+msgstr ""
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
 msgstr ""
 
 msgid "Sphere of Negation"

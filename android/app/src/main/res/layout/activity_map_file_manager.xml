@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/activity_map_file_manager_map_file_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="multipleChoice" />
+
+            <TextView
+                android:id="@+id/activity_map_file_manager_map_file_list_empty_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/activity_map_file_manager_map_file_list_empty_lbl_text"
+                android:textAllCaps="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/activity_map_file_manager_last_task_status_lbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:freezesText="true"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text=""
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp">
+
+            <ImageButton
+                android:id="@+id/activity_map_file_manager_select_all_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_select_all"
+                android:contentDescription="@string/activity_map_file_manager_select_all_btn_content_description"
+                android:onClick="selectAllButtonClicked" />
+
+            <ImageButton
+                android:id="@+id/activity_map_file_manager_unselect_all_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_unselect_all"
+                android:contentDescription="@string/activity_map_file_manager_unselect_all_btn_content_description"
+                android:onClick="unselectAllButtonClicked" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/activity_map_file_manager_import_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_import"
+                android:contentDescription="@string/activity_map_file_manager_import_btn_content_description"
+                android:onClick="importButtonClicked" />
+
+            <ImageButton
+                android:id="@+id/activity_map_file_manager_export_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_export"
+                android:contentDescription="@string/activity_map_file_manager_export_btn_content_description"
+                android:onClick="exportButtonClicked" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/activity_map_file_manager_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_delete"
+                android:contentDescription="@string/activity_map_file_manager_delete_btn_content_description"
+                android:onClick="deleteButtonClicked" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/activity_map_file_manager_background_task_pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

@@ -291,12 +291,20 @@ namespace
     int getStreamDirecton( const Maps::Tiles & tile )
     {
         const int32_t centerTileIndex = tile.GetIndex();
-        int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
+        // Stream includes also the Deltas. Here we need to check only streams excluding Deltas.
+        int streamDirection = ( tile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } ) ) ? Direction::CENTER : 0;
 
         // For streams we can check only the next four directions.
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-            if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
-                streamDirection |= direction;
+            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
+                const Maps::Tiles & currectTile = world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) );
+
+                // Check also for Deltas connection.
+                if ( currectTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
+                     || ( direction == Direction::TOP && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
+                     || ( direction == Direction::BOTTOM && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) ) ) {
+                    streamDirection |= direction;
+                }
             }
         }
 
@@ -1315,7 +1323,7 @@ namespace Maps
 
     bool updateRoadOnTile( Tiles & tile, const bool setRoad )
     {
-        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER && setRoad ) ) {
+        if ( setRoad == tile.isRoad() || ( tile.isWater() && setRoad ) ) {
             // We cannot place roads on the water or above already placed roads.
             return false;
         }
@@ -1351,7 +1359,7 @@ namespace Maps
 
     bool updateStreamOnTile( Tiles & tile, const bool setStream )
     {
-        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER && setStream ) ) {
+        if ( setStream == tile.isStream() || ( tile.isWater() && setStream ) ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }
@@ -1382,6 +1390,15 @@ namespace Maps
         }
 
         return true;
+    }
+
+    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection )
+    {
+        const int32_t tileIndex = tile.GetIndex();
+        const int direction = isDeltaBottomConnection ? Direction::BOTTOM : Direction::TOP;
+        if ( isValidDirection( tileIndex, direction ) ) {
+            updateStreamSpritesAround( world.GetTiles( GetDirectionIndex( tileIndex, direction ) ) );
+        }
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
@@ -2108,7 +2125,7 @@ namespace Maps
         case MP2::OBJ_ARTIFACT: {
             assert( isFirstLoad );
 
-            const int art = Artifact::FromMP2IndexSprite( tile.GetObjectSpriteIndex() ).GetID();
+            const int art = Artifact::getArtifactFromMapSpriteIndex( tile.GetObjectSpriteIndex() ).GetID();
             if ( Artifact::UNKNOWN == art ) {
                 // This is an unknown artifact. Did you add a new one?
                 assert( 0 );
@@ -3164,6 +3181,21 @@ namespace Maps
                 world.updatePassabilities();
             }
             return true;
+        case MP2::OBJ_MAGIC_GARDEN:
+            // Magic Garden uses the metadata to indicate whether it is empty or not.
+            // The Editor does not allow to edit this object but it is important to show it non-empty.
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            // These values will be replaced during map loading.
+            tile.metadata()[0] = 1;
+            tile.metadata()[1] = 1;
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
         default:
             break;
         }
@@ -3205,18 +3237,19 @@ namespace Maps
             for ( int32_t x = startX; x <= endX; ++x ) {
                 const Maps::Tiles & currentTile = world.GetTiles( x + tileOffset );
 
-                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() == OBJECT_LAYER || currentTile.getLayerType() == TERRAIN_LAYER ) ) {
+                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() != SHADOW_LAYER ) ) {
                     objectsUids.insert( currentTile.GetObjectUID() );
                 }
 
                 for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                    if ( addon._uid != 0 && ( addon._layerType != SHADOW_LAYER ) ) {
                         objectsUids.insert( addon._uid );
                     }
                 }
 
                 for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                    // Top layer addons don't have layer type.
+                    if ( addon._uid != 0 ) {
                         objectsUids.insert( addon._uid );
                     }
                 }

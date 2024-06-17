@@ -238,10 +238,7 @@ public:
     void ChangeColor( int );
 
     void ActionNewDay();
-
     void ActionNewWeek();
-    void ActionNewWeekAIBonuses();
-
     void ActionNewMonth() const;
 
     void ActionPreBattle();
@@ -416,9 +413,14 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * GetFirstCastle() const;
+    VecCastles() = default;
+    VecCastles( const VecCastles & ) = delete;
 
-    void ChangeColors( int, int );
+    ~VecCastles() = default;
+
+    VecCastles & operator=( const VecCastles & ) = delete;
+
+    Castle * GetFirstCastle() const;
 };
 
 class AllCastles
@@ -455,11 +457,6 @@ public:
     void NewWeek()
     {
         std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
-    }
-
-    void NewWeekAI()
-    {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeekAIBonuses(); } );
     }
 
     void NewMonth()

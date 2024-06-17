@@ -247,9 +247,9 @@ void Castle::OpenWell()
     Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
@@ -278,7 +278,7 @@ void Castle::OpenWell()
                     break;
                 }
 
-                if ( le.MousePressRight( rectMonster[dwellingId] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( rectMonster[dwellingId] ) ) {
                     Dialog::DwellingInfo( castleMonster[dwellingId], dwelling[dwellingId] );
 
                     break;
@@ -296,12 +296,12 @@ void Castle::OpenWell()
             display.render( roi );
         }
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
 
-        if ( le.MousePressRight( buttonMax.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Max" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Hire all creatures in the town." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }

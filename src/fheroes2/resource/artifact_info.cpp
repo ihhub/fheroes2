@@ -477,8 +477,13 @@ namespace
               {},
               {} },
 
-            // Magic Book cannot be located on a map.
-            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables the hero to cast spells." ), nullptr, {}, {} },
+            // Magic Book cannot be located on the original map. The Resurrection map format allows to place it on the map.
+            { gettext_noop( "Magic Book" ),
+              gettext_noop( "The %{name} enables the hero to cast spells." ),
+              gettext_noop(
+                  "A young man approaches you: \"My Lord, allow me to show you my latest invention for spreading knowledge!\" You follow the man into his workshop and immediately observe a large apparatus with levers and cranks. \"This here is it!\" he says eagerly, \"The Printing Press.\" And before you get to say a word, he hands you a Magic Book." ),
+              {},
+              {} },
 
             // These are artifacts used only for map editor (?).
             { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
@@ -541,19 +546,19 @@ namespace
                   "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." ),
               {},
               {} },
-            { gettext_noop( "Holy Hammer" ),
-              gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ),
-              gettext_noop(
-                  "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ),
-              {},
-              {} },
+            { gettext_noop( "Holy Hammer" ), gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ), gettext_noop( "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ), {}, {} },
             { gettext_noop( "Legendary Scepter" ),
               gettext_noop( "The %{name} adds %{count} points to all attributes." ),
               gettext_noop(
                   "Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and answers: \"You think this is funny? Fine. You can carry it. I much prefer flying anyway.\"" ),
               {},
               {} },
-            { gettext_noop( "Masthead" ), gettext_noop( "The %{name} boosts the hero's troops' luck and morale by %{count} each in sea combat." ), gettext_noop( "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ), {}, {} },
+            { gettext_noop( "Masthead" ),
+              gettext_noop( "The %{name} boosts the hero's troops' luck and morale by %{count} each in sea combat." ),
+              gettext_noop(
+                  "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ),
+              {},
+              {} },
             { gettext_noop( "Sphere of Negation" ),
               gettext_noop( "The %{name} disables all spell casting, for both sides, in combat." ),
               gettext_noop(

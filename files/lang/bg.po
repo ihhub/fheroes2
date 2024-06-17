@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 17:53+0000\n"
+"POT-Creation-Date: 2024-06-03 14:43+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -50,6 +50,30 @@ msgstr "ИНФО"
 
 msgid "QUIT"
 msgstr "ИЗХОД"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
 
 msgid "CANCEL"
 msgstr "ОТКАЗ"
@@ -438,8 +462,9 @@ msgstr "Не може да премести последния отряд"
 msgid "Move the %{name}"
 msgstr "Премести %{name}"
 
-msgid "Set Count"
-msgstr "Задаване на броя"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Застреляй %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -2494,6 +2519,14 @@ msgid "Upg. Dwelling 4"
 msgstr "Хобити"
 
 #, fuzzy
+msgid "Dwelling 5"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Хобити"
+
+#, fuzzy
 msgid "Dwelling 6"
 msgstr "Хобити"
 
@@ -3892,6 +3925,10 @@ msgid "Random Castle Name"
 msgstr "Случаен замък"
 
 #, fuzzy
+msgid "Random Town Name"
+msgstr "Случаен град"
+
+#, fuzzy
 msgid "Allow Castle build"
 msgstr "Замък в облаците"
 
@@ -3906,6 +3943,10 @@ msgstr "действие по подразбиране"
 #, fuzzy
 msgid "Castle Army"
 msgstr "Замък"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Град"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
@@ -3933,8 +3974,90 @@ msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
 
 #, fuzzy
+msgid "Message Text:"
+msgstr "Лента за съобщения"
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Лента за съобщения"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Избери артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Event Message Text"
+msgstr ""
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
 msgid "%{objects} must be placed on water."
@@ -3973,11 +4096,9 @@ msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Създай нова карта от нулата, или като използвате генератора на произволни "
-"карти."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "нова карта от начало"
 
 msgid "New Map"
 msgstr "Нова Карта"
@@ -4001,12 +4122,21 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
-msgid "Set %{monster} Count"
-msgstr "Застреляй %{monster}"
-
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Случаен върховен артефакт"
+
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "с 1 артефакт."
+
+msgid "Roads"
+msgstr "Пътища"
+
+msgid "Streams"
+msgstr "Потоци"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4069,12 +4199,6 @@ msgstr ""
 #, fuzzy
 msgid "Erase"
 msgstr "Режим на изтриване"
-
-msgid "Roads"
-msgstr "Пътища"
-
-msgid "Streams"
-msgstr "Потоци"
 
 msgid "Mountains"
 msgstr "Планини"
@@ -4233,7 +4357,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Подробен режим"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Използва се за специално редактиране на чудовища, герои и градове."
 
 #, fuzzy
@@ -4298,11 +4423,6 @@ msgstr "Отмяна"
 msgid "Undo your last action."
 msgstr "Отмени последното си действие."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Създай нова карта или от начало, или като използваш генератора на произволни "
-"карти."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Редактирай заглавието на картата, описанието и друга обща информация."
 
@@ -4355,6 +4475,89 @@ msgid "Warning"
 msgstr "Внимание"
 
 #, fuzzy
+msgid "None."
+msgstr "Без"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Моля, избери друг герой."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Натрупай %{count} злато."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Излез от редактора на карти."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Трудност\n"
+"на Карта"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условие за победа"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Състояние на загуба"
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Избрано описание"
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Размер на карта"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Описание на избраната в момента карта."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тип на карта"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Трудността на картата на текущо избраната карта. Трудността на картата се "
+"определя от дизайнера на сценария. По-трудните карти може да включват повече "
+"или по-силни врагове, по-малко ресурси или други специални условия, които "
+"правят нещата по-трудни за играча."
+
+#, fuzzy
 msgid "Animation"
 msgstr "Анексирам"
 
@@ -4389,20 +4592,46 @@ msgstr ""
 msgid "Save Map:"
 msgstr "Запазване на картата"
 
-msgid "Change Map Name"
-msgstr ""
-
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Кликни, за да запазиш текущата игра."
 
-#, fuzzy
-msgid "Click to change your map name."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
 
 #, fuzzy
-msgid "Map Name"
-msgstr "Размер на карта"
+msgid "Click to save the Sphinx properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Лесна"
@@ -6146,6 +6375,10 @@ msgstr " ти дава максимален морал"
 
 msgid " gives you maximum luck"
 msgstr " ти дава максимален късмет"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Не може да се премести книгата с магий"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Не можеш да вземеш този артефакт, вече нямаш място!"
@@ -8720,9 +8953,6 @@ msgid_plural "Windmills"
 msgstr[0] "Вятърна мелница"
 msgstr[1] "Вятърни мелници"
 
-msgid "Artifact"
-msgstr "Артефакт"
-
 msgid "Mermaid"
 msgstr "Русалка"
 
@@ -10712,6 +10942,14 @@ msgstr "Магическа книга"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} ти позволява да правиш магии."
 
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
+
 msgid "Dummy 1"
 msgstr "Манекен 1"
 
@@ -10943,6 +11181,15 @@ msgstr ""
 "ядосано и отговаря: \"Мислиш, че това е смешно? Добре. Може да го носиш. И "
 "без това предпочитам да летя.\""
 
+msgid "Masthead"
+msgstr "Мачтов връх"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10953,15 +11200,6 @@ msgstr ""
 "младостта си, за да събере екипажа си по време на проблеми. След това той ти "
 "дава избледняла карта, която показва къде я е скрил. След дълго проучване я "
 "намирате скрита под близкия док."
-
-msgid "Masthead"
-msgstr "Мачтов връх"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
 
 msgid "Sphere of Negation"
 msgstr "Сфера на отрицанието"
@@ -11716,49 +11954,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Treasures cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#~ msgid "Heroes cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."
-
-#, fuzzy
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#, fuzzy
-#~ msgid "Mountains cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Trees cannot be placed on water."
-#~ msgstr "Това заклинание не може да се направи на кораб."
-
-#, fuzzy
-#~ msgid "Landscape objects cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."
-
-#, fuzzy
-#~ msgid "Towns cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Mines cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Dwellings cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Power-ups cannot be placed on water."
-#~ msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-#~ msgid "Adventure objects cannot be placed on water."
-#~ msgstr "Героите не могат да бъдат поставени на вода."

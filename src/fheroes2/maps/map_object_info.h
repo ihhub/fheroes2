@@ -118,9 +118,11 @@ namespace Maps
     //
     // !!! IMPORTANT !!!
     // Do NOT change the order of the items as they are used for the map format.
-    enum class ObjectGroup : int32_t
+    enum class ObjectGroup : uint8_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.
+        NONE,
+
         ROADS,
         STREAMS,
 

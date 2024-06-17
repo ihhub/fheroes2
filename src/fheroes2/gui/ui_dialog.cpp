@@ -89,7 +89,7 @@ namespace fheroes2
 
         const bool isProperDialog = ( buttons != 0 );
 
-        const int cusorTheme = isProperDialog ? ( ::Cursor::POINTER ) : ( ::Cursor::Get().Themes() );
+        const int cusorTheme = isProperDialog ? ::Cursor::POINTER : ::Cursor::Get().Themes();
 
         // setup cursor
         const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
@@ -220,7 +220,7 @@ namespace fheroes2
                     ++elementId;
                 }
             }
-            else if ( !le.MousePressRight() ) {
+            else if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 
@@ -319,7 +319,7 @@ namespace fheroes2
 
     void ArtifactDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -358,7 +358,7 @@ namespace fheroes2
 
     void ResourceDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -452,7 +452,7 @@ namespace fheroes2
 
     void SpellDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -481,7 +481,7 @@ namespace fheroes2
 
     void LuckDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -512,7 +512,7 @@ namespace fheroes2
 
     void MoraleDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -560,7 +560,7 @@ namespace fheroes2
 
     void ExperienceDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -626,7 +626,7 @@ namespace fheroes2
 
     void PrimarySkillDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -710,7 +710,7 @@ namespace fheroes2
 
     void SecondarySkillDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }

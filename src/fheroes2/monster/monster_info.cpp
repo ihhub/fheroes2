@@ -59,9 +59,15 @@ namespace
 
         double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
+            // How can it be that this ability is assigned not to a shooter?
+            assert( isArchers );
+
+            damagePotential *= 2;
+        }
+        else if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) ) {
             // Melee attacker will lose potential on second attack after retaliation
-            damagePotential *= ( isArchers || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ) ? 2 : 1.75;
+            damagePotential *= isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 2 : 1.75;
         }
 
         if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {

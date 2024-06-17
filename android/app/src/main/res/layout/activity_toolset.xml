@@ -73,12 +73,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:enabled="false"
             android:minWidth="256dp"
             android:onClick="saveFileManagerButtonClicked"
             android:padding="8dp"
             android:text="@string/activity_toolset_save_file_manager_btn_text" />
+
+        <Button
+            android:id="@+id/activity_toolset_map_file_manager_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="mapFileManagerButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_map_file_manager_btn_text" />
 
         <ProgressBar
             android:id="@+id/activity_toolset_background_task_pb"

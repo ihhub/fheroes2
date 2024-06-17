@@ -285,7 +285,7 @@ namespace
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
-            return { "1234567890", "-:;()_+=", "[].,!'" };
+            return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
             // Did you add a new layout type? Add the logic above!
             assert( 0 );
@@ -599,10 +599,10 @@ namespace
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
                 if ( buttonInfo.isInvertedRenderingLogic ) {
-                    le.MousePressLeft( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
+                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
                 }
                 else {
-                    le.MousePressLeft( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
+                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
                 }
             }
         }
@@ -673,7 +673,7 @@ namespace
 
             updateButtonStates( buttons, le );
 
-            if ( le.MousePressLeft( okayButton.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
                 okayButton.drawOnPress();
             }
             else {
@@ -681,7 +681,7 @@ namespace
             }
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.GetMouseCursor().x, textRoi.x );
+                renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );
             }
 
             // Text input cursor blink.
