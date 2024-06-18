@@ -4938,6 +4938,32 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::OBJNGRAS: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 151 ) {
+                    _icnVsSprite[id].resize( 153 );
+
+                    loadICN( ICN::OBJNSNOW );
+
+                    if ( _icnVsSprite[ICN::OBJNSNOW].size() > 210 ) {
+                        fheroes2::Sprite temp;
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-01.image", temp );
+                        _icnVsSprite[id][151] = _icnVsSprite[ICN::OBJNSNOW][2];
+                        Blit( temp, _icnVsSprite[id][151] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][151], 255, 1 );
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-02.image", temp );
+                        _icnVsSprite[id][152] = _icnVsSprite[ICN::OBJNSNOW][3];
+                        Blit( temp, _icnVsSprite[id][152] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+                    }
+                }
+
+                return true;
+            }
             default:
                 break;
             }
