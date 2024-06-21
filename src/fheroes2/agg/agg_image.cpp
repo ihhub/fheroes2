@@ -2579,6 +2579,88 @@ namespace fheroes2
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
+            case ICN::GOLDEN_GRADIENT_FONT: {
+                GetICN( ICN::FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() + 6, in.height() + 6 );
+                    out.reset();
+                    Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+                    out.setPosition( in.x() - 2, in.y() - 2 );
+
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourGray = CreateContour( out, 62 );
+                    Blit( contourGray, out );
+                }
+                return true;
+            }
+            case ICN::GOLDEN_GRADIENT_LARGE_FONT: {
+                GetICN( ICN::WHITE_LARGE_FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() + 6, in.height() + 6 );
+                    out.reset();
+                    Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+                    out.setPosition( in.x() - 2, in.y() - 2 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourGray = CreateContour( out, 62 );
+                    Blit( contourGray, out );
+                }
+                return true;
+            }
+            case ICN::SILVER_GRADIENT_FONT: {
+                GetICN( ICN::FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() + 6, in.height() + 6 );
+                    out.reset();
+                    Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+                    out.setPosition( in.x() - 2, in.y() - 2 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourBlack2 = CreateContour( out, 0 );
+                    Blit( contourBlack2, out );
+                }
+                return true;
+            }
+            case ICN::SILVER_GRADIENT_LARGE_FONT: {
+                GetICN( ICN::WHITE_LARGE_FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() + 6, in.height() + 6 );
+                    out.reset();
+                    Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+                    out.setPosition( in.x() - 2, in.y() - 2 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourBlack2 = CreateContour( out, 0 );
+                    Blit( contourBlack2, out );
+                }
+                return true;
+            }
+
             case ICN::SPELLS:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() != 60 ) {
@@ -5212,6 +5294,10 @@ namespace fheroes2
                     return GetICN( ICN::GRAY_FONT, character - 0x20 );
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                case FontColor::GOLDEN_GRADIENT:
+                    return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
+                case FontColor::SILVER_GRADIENT:
+                    return GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );
@@ -5222,6 +5308,10 @@ namespace fheroes2
                 switch ( fontType.color ) {
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                case FontColor::GOLDEN_GRADIENT:
+                    return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
+                case FontColor::SILVER_GRADIENT:
+                    return GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );
