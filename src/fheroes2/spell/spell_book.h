@@ -44,7 +44,7 @@ public:
     };
 
     Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
-                const std::function<void( const std::string & )> * statusCallback ) const;
+                const std::function<void( const std::string & )> & statusCallback ) const;
 
     void Edit( const HeroBase & hero );
 

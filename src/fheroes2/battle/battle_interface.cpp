@@ -6440,7 +6440,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         status.Redraw( fheroes2::Display::instance() );
                     };
 
-                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, statusCallback );
 
                     // Reset battlefield grid cursor position after closing the spell book.
                     index_pos = -1;
