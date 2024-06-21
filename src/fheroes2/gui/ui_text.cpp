@@ -474,33 +474,10 @@ namespace fheroes2
         _textLineInfos.emplace_back( lineWidth, offsetY, lineCharCount );
     }
 
-    void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
-    {
-        if ( output.empty() || _texts.empty() ) {
-            // No use to render something on an empty image or if something is empty.
-            return;
-        }
-
-        const int32_t maxFontHeight = height();
-
-        int32_t offsetX = x;
-        for ( const Text & text : _texts ) {
-            const int32_t fontHeight = getFontHeight( text.getFontType().size );
-            offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( text.text().data() ), static_cast<int32_t>( text.text().size() ), offsetX,
-                                        y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, text.getFontType() );
-        }
-    }
-
     void MultiFontText::drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _texts.empty() ) {
             // No use to render something on an empty image or if something is empty.
-            return;
-        }
-
-        assert( maxWidth > 0 ); // Why is the limit less than 1?
-        if ( maxWidth <= 0 ) {
-            drawInRoi( x, y, output, imageRoi );
             return;
         }
 

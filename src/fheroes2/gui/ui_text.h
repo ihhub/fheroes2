@@ -194,7 +194,7 @@ namespace fheroes2
         std::vector<TextLineInfo> _textLineInfos;
     };
 
-    class Text : public TextBase
+    class Text final : public TextBase
     {
     public:
         friend class MultiFontText;
@@ -213,11 +213,11 @@ namespace fheroes2
         Text & operator=( const Text & text ) = default;
         Text & operator=( Text && text ) noexcept = default;
 
-        ~Text() final = default;
+        ~Text() override = default;
 
-        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const final;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const final
+        bool empty() const override
         {
             return _text.empty();
         }
@@ -234,7 +234,7 @@ namespace fheroes2
         // By default it ignores spaces at the end of the text phrase.
         void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        std::string text() const final
+        std::string text() const override
         {
             return _text;
         }
@@ -244,7 +244,7 @@ namespace fheroes2
             return _fontType;
         }
 
-        void setMaxWidth( const int32_t maxWidth ) final;
+        void setMaxWidth( const int32_t maxWidth ) override;
 
     private:
         void _updateTextLineInfo();
@@ -255,11 +255,11 @@ namespace fheroes2
         FontType _fontType;
     };
 
-    class MultiFontText : public TextBase
+    class MultiFontText final : public TextBase
     {
     public:
         MultiFontText() = default;
-        ~MultiFontText() final = default;
+        ~MultiFontText() override = default;
 
         void add( Text text )
         {
@@ -268,17 +268,16 @@ namespace fheroes2
             }
         }
 
-        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
-        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const final;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const final
+        bool empty() const override
         {
             return _texts.empty();
         }
 
-        std::string text() const final;
+        std::string text() const override;
 
-        void setMaxWidth( const int32_t maxWidth ) final;
+        void setMaxWidth( const int32_t maxWidth ) override;
 
     private:
         std::vector<Text> _texts;
