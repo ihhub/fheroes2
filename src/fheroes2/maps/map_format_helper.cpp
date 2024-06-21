@@ -37,6 +37,7 @@
 #include "castle.h"
 #include "color.h"
 #include "gamedefs.h"
+#include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
