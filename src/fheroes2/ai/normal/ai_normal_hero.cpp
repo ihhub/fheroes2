@@ -283,8 +283,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGELLANS_MAPS:
-            // TODO: avoid hardcoded resource values for objects.
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-05-25 12:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -317,6 +317,9 @@ msgstr ""
 "А\n"
 "Р\n"
 "Т"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -3470,9 +3473,6 @@ msgstr "Завантажити файли:"
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} герой"
-
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
@@ -3491,6 +3491,26 @@ msgstr "Оберіть монстра:"
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
 
+msgid "race|Random"
+msgstr "Випадково"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Тицьніть для розміщення вибраного замку/міста"
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} герой"
+
+msgid "You will place"
+msgstr "Розмістити"
+
+msgid "Click to select this class."
+msgstr "Тицьніть щоб обрати цей клас."
+
+msgid "Click to select this color."
+msgstr "Тицьніть щоб обрати цей колір."
+
 msgid "Select Treasure:"
 msgstr "Оберіть скарб:"
 
@@ -3502,9 +3522,6 @@ msgstr "Розміщення замку/міста"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральний"
-
-msgid "race|Random"
-msgstr "Випадково"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Тицьніть для розміщення вибраного замку/міста"
@@ -3520,15 +3537,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Нейтральний"
-
-msgid "You will place"
-msgstr "Розмістити"
-
-msgid "Click to select this class."
-msgstr "Тицьніть щоб обрати цей клас."
-
-msgid "Click to select this color."
-msgstr "Тицьніть щоб обрати цей колір."
 
 msgid "Select Dwelling:"
 msgstr "Оберіть помешкання:"
@@ -4417,6 +4425,13 @@ msgid "Click to accept the changes made."
 msgstr "Натисніть для зміни раси."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Натисніть, щоб зберегти поточну гру."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Натисніть для зміни раси."
 
@@ -4455,6 +4470,43 @@ msgstr "Анімації об'єктів умівк/вимк."
 
 msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Ця відповідь є у списку."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Натисніть, щоб зберегти властивості події."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Додати додаткову відповідь на запитання."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Редактор"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Завантажити існуючу мапу."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Видалити відповідь"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Видалити існуючу відповідь на запитання."
 
 msgid ""
 "\n"

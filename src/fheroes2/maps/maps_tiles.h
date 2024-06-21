@@ -214,7 +214,6 @@ namespace Maps
         }
 
         bool isStream() const;
-        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * getBottomLayerAddon( const uint32_t uid );
@@ -379,6 +378,8 @@ namespace Maps
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
     private:
+        bool isShadow() const;
+
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.

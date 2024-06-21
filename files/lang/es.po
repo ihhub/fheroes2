@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -319,6 +319,9 @@ msgstr ""
 "D\n"
 "A\n"
 "R"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerrero"
@@ -3447,9 +3450,6 @@ msgstr "Archivo a Cargar:"
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
-msgid "%{color} %{race} hero"
-msgstr "Héroe %{race} %{color}"
-
 msgid "Terrain object"
 msgstr ""
 
@@ -3473,6 +3473,28 @@ msgstr "Mejor monstruo:"
 msgid "Select Hero:"
 msgstr "Mejor héroe:"
 
+msgid "race|Random"
+msgstr "Aleatorio"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "Héroe %{race} %{color}"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Mejor héroe:"
@@ -3487,9 +3509,6 @@ msgstr "Opciones del Castillo"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
-
-msgid "race|Random"
-msgstr "Aleatorio"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3509,17 +3528,6 @@ msgstr "Héroe %{race} %{color}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -4426,6 +4434,13 @@ msgid "Click to accept the changes made."
 msgstr "Haga clic para ver la siguiente ciudad."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Haga clic para ver la siguiente ciudad."
 
@@ -4470,6 +4485,37 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Add Rumor"
+msgstr ""
+
+msgid "Add an additional rumor."
+msgstr ""
+
+msgid "Edit Rumor"
+msgstr ""
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""

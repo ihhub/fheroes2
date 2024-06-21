@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-17 02:43+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -307,6 +307,9 @@ msgstr ""
 "E\n"
 "L\n"
 "T"
+
+msgid "RUMORS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -3518,9 +3521,6 @@ msgstr "Fil som skal indlæses:"
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} helt"
-
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
@@ -3539,6 +3539,26 @@ msgstr "Vælg væsen:"
 msgid "Select Hero:"
 msgstr "Vælg helt:"
 
+msgid "race|Random"
+msgstr "Tilfældig"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Klik for at godkende placering af valgte borg/by."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} helt"
+
+msgid "You will place"
+msgstr "Du vil placere"
+
+msgid "Click to select this class."
+msgstr "Klik for at vælge denne klasse."
+
+msgid "Click to select this color."
+msgstr "Klik for at vælge denne farve."
+
 msgid "Select Treasure:"
 msgstr "Vælg skat:"
 
@@ -3550,9 +3570,6 @@ msgstr "Borg/by-vindue"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
-
-msgid "race|Random"
-msgstr "Tilfældig"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Klik for at godkende placering af valgte borg/by."
@@ -3568,15 +3585,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
-
-msgid "You will place"
-msgstr "Du vil placere"
-
-msgid "Click to select this class."
-msgstr "Klik for at vælge denne klasse."
-
-msgid "Click to select this color."
-msgstr "Klik for at vælge denne farve."
 
 msgid "Select Dwelling:"
 msgstr "Vælg Bosted:"
@@ -4455,6 +4463,13 @@ msgid "Click to accept the changes made."
 msgstr "Klik for at se næste by."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klik for at gemme det aktuelle kort."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Klik for at se næste by."
 
@@ -4495,6 +4510,41 @@ msgstr "Slå animation af objekterne til eller fra."
 
 msgid "Toggle display of objects' passability."
 msgstr "Slå visning af objekters fremkommelighed til eller fra."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klik for at gemme begivenhedens egenskaber."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Ekstra programmering"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Editor"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "indlæs et eksisterende kort."
 
 msgid ""
 "\n"

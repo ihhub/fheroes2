@@ -285,7 +285,7 @@ namespace
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
-            return { "1234567890", "-:;()_+=", "[].,!'" };
+            return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
             // Did you add a new layout type? Add the logic above!
             assert( 0 );

@@ -25,7 +25,9 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <map>
 #include <memory>
+#include <set>
 #include <utility>
 
 #include "artifact.h"
@@ -3030,6 +3032,15 @@ namespace
         // Cave (for Centaurs).
         {
             Maps::ObjectInfo object{ MP2::OBJ_CAVE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 152U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAVE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 151U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CAVE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Snow Cave (for Centaurs).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CAVE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 3U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAVE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 2U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CAVE, Maps::OBJECT_LAYER );
 
@@ -4798,6 +4809,29 @@ namespace
 
             for ( const auto & objectInfo : objects ) {
                 assert( MP2::isOffGameActionObject( objectInfo.objectType ) );
+            }
+        }
+
+        // Check that an image part is set to the same layer type for all objects.
+        std::map<std::pair<MP2::ObjectIcnType, uint32_t>, Maps::ObjectLayerType> groundObjectInfoVsLayerType;
+        std::set<std::pair<MP2::ObjectIcnType, uint32_t>> topObjectInfo;
+
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    const auto [iter, inserted] = groundObjectInfoVsLayerType.emplace( std::make_pair( info.icnType, info.icnIndex ), info.layerType );
+                    if ( !inserted ) {
+                        assert( iter->second == info.layerType );
+                    }
+
+                    assert( topObjectInfo.find( std::make_pair( info.icnType, info.icnIndex ) ) == topObjectInfo.end() );
+                }
+
+                for ( const auto & info : objectInfo.topLevelParts ) {
+                    topObjectInfo.emplace( info.icnType, info.icnIndex );
+
+                    assert( groundObjectInfoVsLayerType.find( std::make_pair( info.icnType, info.icnIndex ) ) == groundObjectInfoVsLayerType.end() );
+                }
             }
         }
 #endif

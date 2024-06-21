@@ -135,33 +135,22 @@ namespace Compression
         return res;
     }
 
-    bool readFile( StreamBuf & output, const std::string & fn, const size_t offset /* = 0 */ )
+    bool readFromFileStream( StreamFile & fileStream, StreamBuf & output )
     {
-        StreamFile sf;
-        sf.setbigendian( true );
-
-        if ( !sf.open( fn, "rb" ) ) {
-            return false;
-        }
-
-        if ( offset ) {
-            sf.seek( offset );
-        }
-
-        const uint32_t rawSize = sf.get32();
-        const uint32_t zipSize = sf.get32();
+        const uint32_t rawSize = fileStream.get32();
+        const uint32_t zipSize = fileStream.get32();
         if ( zipSize == 0 ) {
             return false;
         }
 
-        const uint16_t version = sf.get16();
+        const uint16_t version = fileStream.get16();
         if ( version != FORMAT_VERSION_0 ) {
             return false;
         }
 
-        sf.skip( 2 ); // Unused bytes
+        fileStream.skip( 2 ); // Unused bytes
 
-        const std::vector<uint8_t> zip = sf.getRaw( zipSize );
+        const std::vector<uint8_t> zip = fileStream.getRaw( zipSize );
         const std::vector<uint8_t> raw = decompressData( zip.data(), zip.size(), rawSize );
         if ( raw.size() != rawSize ) {
             return false;
@@ -172,27 +161,20 @@ namespace Compression
         return !output.fail();
     }
 
-    bool writeFile( StreamBuf & input, const std::string & fn, const bool append /* = false */ )
+    bool writeIntoFileStream( StreamFile & fileStream, StreamBuf & data )
     {
-        StreamFile sf;
-        sf.setbigendian( true );
-
-        if ( !sf.open( fn, append ? "ab" : "wb" ) ) {
-            return false;
-        }
-
-        const std::vector<uint8_t> zip = compressData( input.data(), input.size() );
+        const std::vector<uint8_t> zip = compressData( data.data(), data.size() );
         if ( zip.empty() ) {
             return false;
         }
 
-        sf.put32( static_cast<uint32_t>( input.size() ) );
-        sf.put32( static_cast<uint32_t>( zip.size() ) );
-        sf.put16( FORMAT_VERSION_0 );
-        sf.put16( 0 ); // Unused bytes
-        sf.putRaw( zip.data(), zip.size() );
+        fileStream.put32( static_cast<uint32_t>( data.size() ) );
+        fileStream.put32( static_cast<uint32_t>( zip.size() ) );
+        fileStream.put16( FORMAT_VERSION_0 );
+        fileStream.put16( 0 ); // Unused bytes
+        fileStream.putRaw( zip.data(), zip.size() );
 
-        return !sf.fail();
+        return !fileStream.fail();
     }
 
     fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
