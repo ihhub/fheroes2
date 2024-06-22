@@ -368,14 +368,15 @@ namespace fheroes2
 
         const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
 
+        int32_t lineWidth = ( _firstLineOffsetX > 0 ) ? _firstLineOffsetX : 0;
+
         if ( _maxWidth < 1 ) {
             // The text will be displayed in a single line.
             _maxWidth = 0;
 
-            // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
-
             const int32_t lineCharCount = static_cast<int32_t>( _text.size() );
-            _textLineInfos.emplace_back( ( lineCharCount == 0 ) ? 0 : calculateLineWidth( data, lineCharCount, _fontType ), 0, lineCharCount );
+            lineWidth += ( lineCharCount == 0 ) ? 0 : calculateLineWidth( data, lineCharCount, _fontType );
+            _textLineInfos.emplace_back( lineWidth, 0, lineCharCount );
 
             return;
         }
@@ -384,7 +385,6 @@ namespace fheroes2
 
         int32_t lineCharCount = 0;
         int32_t lastWordCharCount = 0;
-        int32_t lineWidth = ( _firstLineOffsetX > 0 ) ? _firstLineOffsetX : 0;
         int32_t offsetY = 0;
 
         const int32_t rowHeight = getFontHeight( _fontType.size );
@@ -493,7 +493,7 @@ namespace fheroes2
 
             for ( const TextLineInfo & info : singleText.getTextLineInfos() ) {
                 if ( info.characterCount > 0 ) {
-                    const int32_t offsetX = x + ( maxWidth - infoIter->lineWidth ) / 2;
+                    const int32_t offsetX = x + ( maxWidth > 0 ? ( maxWidth - infoIter->lineWidth ) / 2 : 0 );
 
                     renderSingleLine( data, info.characterCount, isFirstLine ? offsetX + singleText._firstLineOffsetX : offsetX, offsetY + +info.offsetY, output,
                                       imageRoi, singleText.getFontType() );
@@ -581,6 +581,10 @@ namespace fheroes2
     {
         if ( isSpaceChar( character ) ) {
             return _spaceCharWidth;
+        }
+
+        if ( isLineSeparator( character ) ) {
+            return 0;
         }
 
         const Sprite & image = getSprite( character );
