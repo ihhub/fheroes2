@@ -90,9 +90,8 @@ namespace
             int32_t redistributeCount = isSameTroopType ? 1 : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
-            const int32_t slots
-                = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ), maxCount,
-                                          redistributeCount, useFastSplit, troopFrom.GetName() );
+            const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),
+                                                          maxCount, redistributeCount, useFastSplit, troopFrom.GetName() );
 
             if ( slots < 2 || slots > 6 ) {
                 return;
