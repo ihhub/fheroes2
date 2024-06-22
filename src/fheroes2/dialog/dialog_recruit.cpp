@@ -540,7 +540,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         int32_t temp = static_cast<int32_t>( result );
-        if ( fheroes2::processIntegerValueTyping( 0, max, temp ) ) {
+        if ( fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
             result = temp;
             paymentCosts = paymentMonster * result;
             redraw = true;
