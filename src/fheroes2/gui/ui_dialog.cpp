@@ -246,9 +246,9 @@ namespace fheroes2
 
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
     {
-        fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
-        fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
-        return fheroes2::showMessage( header, body, buttons );
+        Text header( std::move( headerText ), FontType::normalYellow() );
+        Text body( std::move( messageBody ), FontType::normalWhite() );
+        return showMessage( header, body, buttons );
     }
 
     TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
@@ -406,9 +406,9 @@ namespace fheroes2
     {
         const std::vector<ResourceDialogElement> elements = getResourceDialogElements( funds );
 
-        std::vector<const fheroes2::DialogElement *> uiElements;
+        std::vector<const DialogElement *> uiElements;
         uiElements.reserve( elements.size() );
-        for ( const fheroes2::ResourceDialogElement & element : elements ) {
+        for ( const ResourceDialogElement & element : elements ) {
             uiElements.emplace_back( &element );
         }
 
@@ -470,13 +470,13 @@ namespace fheroes2
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
         : _goodLuck( goodLuck )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void LuckDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -501,13 +501,13 @@ namespace fheroes2
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
         : _goodMorale( goodMorale )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void MoraleDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -696,8 +696,7 @@ namespace fheroes2
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
-        const fheroes2::Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(),
-                                      icn.height() );
+        const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
         Copy( icn, 0, 0, output, icnRect );
 
         Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
@@ -850,8 +849,8 @@ namespace fheroes2
         _buttonUp.subscribe( &_timedButtonUp );
         _buttonDown.subscribe( &_timedButtonDown );
 
-        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
-        const fheroes2::Sprite & arrowImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 5 );
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
 
         _area = { offset.x, offset.y, editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
 
@@ -863,12 +862,12 @@ namespace fheroes2
 
     void ValueSelectionDialogElement::draw( Image & output ) const
     {
-        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
         assert( _editBox.width == editBoxImage.width() && _editBox.height == editBoxImage.height() );
 
         Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
 
-        const fheroes2::Text text( std::to_string( _value ), fheroes2::FontType::normalWhite() );
+        const Text text( std::to_string( _value ), FontType::normalWhite() );
         text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 13 ) / 2, output );
 
         _buttonUp.draw( output );
@@ -920,8 +919,8 @@ namespace fheroes2
 
     Size ValueSelectionDialogElement::getArea()
     {
-        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
-        const fheroes2::Sprite & arrowImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 5 );
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
 
         return { editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
     }
