@@ -35,33 +35,33 @@
 namespace Editor
 {
     Checkbox::Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output )
-        : color( boxColor )
-        , checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
+        : _color( boxColor )
+        , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
     {
-        const int32_t icnIndex = Color::GetIndex( color ) + 43;
+        const int32_t icnIndex = Color::GetIndex( _color ) + 43;
         const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
 
-        rect = { x, y, playerIcon.width(), playerIcon.height() };
+        _area = { x, y, playerIcon.width(), playerIcon.height() };
 
-        fheroes2::Copy( playerIcon, 0, 0, output, rect.x, rect.y, rect.width, rect.height );
+        fheroes2::Copy( playerIcon, 0, 0, output, _area.x, _area.y, _area.width, _area.height );
 
-        checkmark.setPosition( rect.x + 2, rect.y + 2 );
+        _checkmark.setPosition( _area.x + 2, _area.y + 2 );
 
         if ( checked ) {
-            checkmark.show();
+            _checkmark.show();
         }
         else {
-            checkmark.hide();
+            _checkmark.hide();
         }
     }
 
     bool Checkbox::toggle()
     {
-        checkmark.isHidden() ? checkmark.show() : checkmark.hide();
+        _checkmark.isHidden() ? _checkmark.show() : _checkmark.hide();
 
-        fheroes2::Display::instance().render( rect );
+        fheroes2::Display::instance().render( _area );
 
-        return !checkmark.isHidden();
+        return !_checkmark.isHidden();
     }
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,

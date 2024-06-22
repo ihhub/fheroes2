@@ -48,20 +48,20 @@ namespace Editor
 
         const fheroes2::Rect & getRect() const
         {
-            return rect;
+            return _area;
         }
 
         int getColor() const
         {
-            return color;
+            return _color;
         }
 
         bool toggle();
 
     private:
-        int color{ 0 };
-        fheroes2::Rect rect;
-        fheroes2::MovableSprite checkmark;
+        const int _color{ 0 };
+        fheroes2::Rect _area;
+        fheroes2::MovableSprite _checkmark;
     };
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
