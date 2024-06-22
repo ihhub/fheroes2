@@ -66,8 +66,6 @@ namespace
 
         void RedrawItem( const Maps::Map_Format::DailyEvent & event, int32_t posX, int32_t posY, bool current ) override
         {
-            // !!! ATTENTION !!!
-            // We count days from 0 while users should see days starting from 1.
             std::string message = _( "Day: %{day}" );
             StringReplace( message, "%{day}", std::to_string( event.firstOccurrenceDay ) );
 
