@@ -30,6 +30,7 @@
 #include "math_base.h"
 #include "skill.h"
 #include "spell.h"
+#include "ui_button.h"
 
 struct Funds;
 class HeroBase;
@@ -337,5 +338,39 @@ namespace fheroes2
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
+    };
+
+    class ValueSelectionDialogElement
+    {
+    public:
+        explicit ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const Point & offset );
+
+        ~ValueSelectionDialogElement() = default;
+
+        void draw( Image & output ) const;
+
+        bool processEvents();
+
+        int32_t getValue() const
+        {
+            return _value;
+        }
+
+        static Size getArea();
+
+    private:
+        const int32_t _maximum{ 0 };
+        const int32_t _minimum{ 0 };
+        int32_t _value{ 0 };
+
+        Button _buttonUp;
+        Button _buttonDown;
+
+        TimedEventValidator _timedButtonUp;
+        TimedEventValidator _timedButtonDown;
+
+        Rect _editBox;
+
+        Rect _area;
     };
 }

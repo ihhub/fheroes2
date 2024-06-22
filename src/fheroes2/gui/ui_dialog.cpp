@@ -829,4 +829,73 @@ namespace fheroes2
 
         return false;
     }
+
+    ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const Point & offset )
+        : _maximum( std::max( maximum, minimum ) )
+        , _minimum( std::min( maximum, minimum ) )
+        , _value( current )
+        , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
+        , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )
+    {
+        assert( maximum >= minimum );
+        assert( current >= minimum && current <= maximum );
+
+        _buttonUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
+        _buttonDown.setICNInfo( ICN::TOWNWIND, 7, 8 );
+
+        _buttonUp.subscribe( &_timedButtonUp );
+        _buttonDown.subscribe( &_timedButtonDown );
+
+        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
+        const fheroes2::Sprite & arrowImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        _area = { offset.x, offset.y, editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
+
+        _editBox = { offset.x, offset.y + ( _area.height - editBoxImage.height() ) / 2, editBoxImage.width(), editBoxImage.height() };
+
+        _buttonUp.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() );
+        _buttonDown.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() + _buttonUp.area().height + 5 );
+    }
+
+    void ValueSelectionDialogElement::draw( Image & output ) const
+    {
+        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
+        assert( _editBox.width == editBoxImage.width() && _editBox.height == editBoxImage.height() );
+
+        Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
+
+        const fheroes2::Text text( std::to_string( _value ), fheroes2::FontType::normalWhite() );
+        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height  - 11 ) / 2, output );
+
+        _buttonUp.draw( output );
+        _buttonDown.draw( output );
+    }
+
+    bool ValueSelectionDialogElement::processEvents()
+    {
+        LocalEvent & le = LocalEvent::Get();
+
+        _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
+        _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
+
+        if ( _value < _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || le.isMouseWheelUpInArea( _editBox ) || _timedButtonUp.isDelayPassed() ) ) {
+            ++_value;
+            return true;
+        }
+
+        if ( _value > _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || le.isMouseWheelDownInArea( _editBox ) || _timedButtonDown.isDelayPassed() ) ) {
+            --_value;
+            return true;
+        }
+
+        return false;
+    }
+
+    Size ValueSelectionDialogElement::getArea()
+    {
+        const fheroes2::Sprite & editBoxImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
+        const fheroes2::Sprite & arrowImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        return { editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
+    }
 }

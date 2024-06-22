@@ -220,7 +220,7 @@ namespace Maps::Map_Format
 
         uint8_t computerPlayerColors{ 0 };
 
-        uint32_t firstOccurrenceDay{ 0 };
+        uint32_t firstOccurrenceDay{ 1 };
 
         // Repeat period for the event. 0 value means no repetition.
         uint32_t repeatPeriodInDays{ 0 };

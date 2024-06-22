@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "editor_daily_events_window.h"
 #include "editor_rumor_window.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -594,6 +595,11 @@ namespace Editor
         background.renderButton( buttonRumors, buttonRumorsIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
         const fheroes2::Rect buttonRumorsRoi( buttonRumors.area() );
 
+        fheroes2::Button buttonEvents;
+        const int buttonEventsIcn = isEvilInterface ? ICN::BUTTON_EVENTS_EVIL : ICN::BUTTON_EVENTS_GOOD;
+        background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumorsRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        const fheroes2::Rect buttonEventsRoi( buttonEvents.area() );
+
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
@@ -602,6 +608,7 @@ namespace Editor
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkRoi ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
             buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
+            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEventsRoi ) );
 #ifndef HIDE_VICTORY_LOSS_CONDITIONS
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
@@ -619,6 +626,14 @@ namespace Editor
                 auto temp = mapFormat.rumors;
                 if ( openRumorWindow( temp ) ) {
                     mapFormat.rumors = std::move( temp );
+                }
+
+                display.render( background.totalArea() );
+            }
+            else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
+                auto temp = mapFormat.dailyEvents;
+                if ( !openDailyEventsWindow( mapFormat ) ) {
+                    mapFormat.dailyEvents = std::move( temp );
                 }
 
                 display.render( background.totalArea() );
@@ -696,6 +711,9 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonRumorsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Rumors" ), _( "Click to edit custom rumors." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonEventsRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Events" ), _( "Click to edit daily events." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );

@@ -20,52 +20,14 @@
 
 #pragma once
 
-#include <array>
 #include <cstdint>
-#include <string>
 
-#include "math_base.h"
-#include "ui_tool.h"
-
-struct Funds;
-
-namespace fheroes2
+namespace Maps::Map_Format
 {
-    class Image;
+    struct DailyEvent;
 }
 
 namespace Editor
 {
-    class Checkbox
-    {
-    public:
-        Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output );
-
-        Checkbox( Checkbox && other ) = delete;
-        ~Checkbox() = default;
-        Checkbox( Checkbox & ) = delete;
-        Checkbox & operator=( const Checkbox & ) = delete;
-
-        const fheroes2::Rect & getRect() const
-        {
-            return rect;
-        }
-
-        int getColor() const
-        {
-            return color;
-        }
-
-        bool toggle();
-
-    private:
-        int color{ 0 };
-        fheroes2::Rect rect;
-        fheroes2::MovableSprite checkmark;
-    };
-
-    fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
-                                         const bool isEvil );
-
-    void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors );
 }
