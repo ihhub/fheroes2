@@ -237,8 +237,6 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     display.render();
 
-    LocalEvent & le = LocalEvent::Get();
-
     const auto getHeroSpellPointsInfo = [&hero]() {
         std::string result = _( "Your hero has %{sp} spell points remaining out of %{max}." );
 
@@ -247,6 +245,8 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
         return result;
     };
+
+    LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
         if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && _startSpellIndex > 0 ) {
