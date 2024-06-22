@@ -190,8 +190,8 @@ struct ResourceBar
             int rs = Resource::getResourceTypeFromIconIndex( index );
             uint32_t step = rs == Resource::GOLD ? 100 : 1;
 
-            uint32_t cur = resource.Get( rs );
-            uint32_t sel = cur;
+            int32_t cur = resource.Get( rs );
+            int32_t sel = cur;
             uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
                 fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );

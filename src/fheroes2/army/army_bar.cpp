@@ -480,10 +480,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                     fheroes2::renderMonsterFrame( mons, surface, { 6, 6 } );
                 }
 
-                uint32_t count = 1;
+                int32_t count = 1;
 
                 if ( Dialog::SelectCount( str, 1, 500000, count, 1, surface ) ) {
-                    troop.Set( mons, count );
+                    troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }
         }

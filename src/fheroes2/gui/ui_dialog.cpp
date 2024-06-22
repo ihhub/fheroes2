@@ -831,13 +831,16 @@ namespace fheroes2
         return false;
     }
 
-    ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const Point & offset )
-        : _maximum( std::max( maximum, minimum ) )
-        , _minimum( std::min( maximum, minimum ) )
+    ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step,
+                                                              const Point & offset )
+        : _minimum( std::min( maximum, minimum ) )
+        , _maximum( std::max( maximum, minimum ) )
+        , _step( std::max( step, 1 ) )
         , _value( current )
         , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
         , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )
     {
+        assert( step > 0 );
         assert( maximum >= minimum );
         assert( current >= minimum && current <= maximum );
 
@@ -866,7 +869,7 @@ namespace fheroes2
         Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
 
         const fheroes2::Text text( std::to_string( _value ), fheroes2::FontType::normalWhite() );
-        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 11 ) / 2, output );
+        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 13 ) / 2, output );
 
         _buttonUp.draw( output );
         _buttonDown.draw( output );
@@ -879,17 +882,40 @@ namespace fheroes2
         _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
         _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
 
-        if ( _value < _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || le.isMouseWheelUpInArea( _editBox ) || _timedButtonUp.isDelayPassed() ) ) {
-            ++_value;
+        if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isMouseWheelUpEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
+            _value += _step;
             return true;
         }
 
-        if ( _value > _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || le.isMouseWheelDownInArea( _editBox ) || _timedButtonDown.isDelayPassed() ) ) {
-            --_value;
+        if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
+            _value -= _step;
             return true;
         }
 
         return false;
+    }
+
+    void ValueSelectionDialogElement::setValue( const int32_t value )
+    {
+        _value = std::clamp( value, _minimum, _maximum );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelUp();
+        }
+
+        return eventHandler.isMouseWheelUpInArea( _editBox );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelDown();
+        }
+
+        return eventHandler.isMouseWheelDownInArea( _editBox );
     }
 
     Size ValueSelectionDialogElement::getArea()
