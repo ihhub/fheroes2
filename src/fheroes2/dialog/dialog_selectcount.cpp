@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -351,8 +350,9 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     return !result.empty();
 }
 
-int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName )
+int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName )
 {
+    assert( redistributeCount >= 0 );
     assert( freeSlots > 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -360,7 +360,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const uint32_t redistributeMin = std::min( 1U, redistributeMax );
+    const int32_t redistributeMin = std::min( 1, redistributeMax );
     const int spacer = 10;
     const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
     const int32_t headerHeight = header.height() + 6;
@@ -390,8 +390,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
     const fheroes2::Rect selectionBoxArea{ pos.x + 70, pos.y + textTopOffset + titleHeight, valueSelectionSize.width, valueSelectionSize.height };
 
-    fheroes2::ValueSelectionDialogElement valueSelectionElement( static_cast<int32_t>( redistributeMin ), static_cast<int32_t>( redistributeMax ),
-                                                                 static_cast<int32_t>( redistributeCount ), 1, selectionBoxArea.getPosition() );
+    fheroes2::ValueSelectionDialogElement valueSelectionElement( redistributeMin, redistributeMax, redistributeCount, 1, selectionBoxArea.getPosition() );
     valueSelectionElement.ignoreMouseWheelEventRoiCheck();
     valueSelectionElement.draw( display );
 
@@ -403,21 +402,20 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
         int spriteIconIdx = 21;
         const int deltaX = 10;
-        const int deltaXStart = static_cast<int>( freeSlots - 2 ) * -5;
+        const int deltaXStart = ( freeSlots - 2 ) * -5;
 
-        for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+        for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
             sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx );
             ++spriteIconIdx;
 
             const int spriteWidth = sprites[i].width();
-            const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
-            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + static_cast<int>( i ) * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth,
-                                      sprites[i].height() );
+            const int offset = spriteWidth * ( 2 * i + 1 - freeSlots ) / 2;
+            vrts[i] = { center + offset + deltaXStart + i * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() };
         }
 
         slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
 
-        for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+        for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
         }
 
@@ -460,9 +458,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
         }
 
-        int32_t temp = static_cast<int32_t>( redistributeCount );
-        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, temp ) ) {
-            redistributeCount = temp;
+        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
             valueSelectionElement.setValue( redistributeCount );
             redraw_count = true;
         }
@@ -522,7 +518,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
 
-            for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+            for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
                 if ( rt == vrts[i] ) {
                     result = i + 2;
                     break;
