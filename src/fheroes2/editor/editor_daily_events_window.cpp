@@ -128,8 +128,8 @@ namespace
 
     void sortEvents( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents )
     {
-        std::sort(
-            dailyEvents.begin(), dailyEvents.end(), []( const auto & first, const auto & second ){ return first.firstOccurrenceDay < second.firstOccurrenceDay; } );
+        std::sort( dailyEvents.begin(), dailyEvents.end(),
+                   []( const auto & first, const auto & second ) { return first.firstOccurrenceDay < second.firstOccurrenceDay; } );
     }
 }
 
@@ -235,7 +235,6 @@ namespace Editor
                     eventList.Redraw();
                     isRedrawNeeded = true;
                 }
-
             }
             else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( eventList.getCurrentId() < 0 ) {

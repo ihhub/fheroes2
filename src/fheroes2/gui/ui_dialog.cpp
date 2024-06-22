@@ -865,7 +865,7 @@ namespace fheroes2
         Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
 
         const fheroes2::Text text( std::to_string( _value ), fheroes2::FontType::normalWhite() );
-        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height  - 11 ) / 2, output );
+        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 11 ) / 2, output );
 
         _buttonUp.draw( output );
         _buttonDown.draw( output );

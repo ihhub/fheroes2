@@ -169,8 +169,8 @@ namespace Editor
 
         const fheroes2::Point firstDayOccurrencePos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
 
-        fheroes2::ValueSelectionDialogElement firstDaySelection( 1, static_cast<int32_t>( lastDayForEvents ),
-                                                                 static_cast<int32_t>( eventMetadata.firstOccurrenceDay ), firstDayOccurrencePos );
+        fheroes2::ValueSelectionDialogElement firstDaySelection( 1, static_cast<int32_t>( lastDayForEvents ), static_cast<int32_t>( eventMetadata.firstOccurrenceDay ),
+                                                                 firstDayOccurrencePos );
 
         firstDaySelection.draw( display );
 
@@ -189,7 +189,6 @@ namespace Editor
         offsetY += 3 + text.height( textWidth );
 
         const fheroes2::Point repeatPeriodPos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
-
 
         fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, static_cast<int32_t>( daysInYear ), static_cast<int32_t>( eventMetadata.repeatPeriodInDays ),
                                                                      repeatPeriodPos );
@@ -312,7 +311,6 @@ namespace Editor
                     break;
                 }
             }
-
 
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
