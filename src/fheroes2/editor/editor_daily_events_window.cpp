@@ -159,26 +159,26 @@ namespace Editor
 
         offsetY += title.height() + elementOffset;
 
-        const fheroes2::Rect rumorsRoi{ windowArea.x + elementOffset, offsetY, eventsArea.width, eventsArea.height };
-        background.applyTextBackgroundShading( rumorsRoi );
+        const fheroes2::Rect eventsRoi{ windowArea.x + elementOffset, offsetY, eventsArea.width, eventsArea.height };
+        background.applyTextBackgroundShading( eventsRoi );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        EventListBox eventList( rumorsRoi.getPosition() );
-        eventList.initListBackgroundRestorer( rumorsRoi );
+        EventListBox eventList( eventsRoi.getPosition() );
+        eventList.initListBackgroundRestorer( eventsRoi );
 
-        eventList.SetAreaItems( { rumorsRoi.x, rumorsRoi.y, rumorsRoi.width, rumorsRoi.height - listAreaHeightDeduction } );
+        eventList.SetAreaItems( { eventsRoi.x, eventsRoi.y, eventsRoi.width, eventsRoi.height - listAreaHeightDeduction } );
 
-        int32_t scrollbarOffsetX = rumorsRoi.x + rumorsRoi.width + 5;
-        background.renderScrollbarBackground( { scrollbarOffsetX, rumorsRoi.y, rumorsRoi.width, rumorsRoi.height }, isEvilInterface );
+        int32_t scrollbarOffsetX = eventsRoi.x + eventsRoi.width + 5;
+        background.renderScrollbarBackground( { scrollbarOffsetX, eventsRoi.y, eventsRoi.width, eventsRoi.height }, isEvilInterface );
 
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
         const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
 
-        eventList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, rumorsRoi.y + 1 } );
-        eventList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, rumorsRoi.y + rumorsRoi.height - 15 } );
-        eventList.setScrollBarArea( { scrollbarOffsetX + 2, rumorsRoi.y + topPartHeight, 10, rumorsRoi.height - 2 * topPartHeight } );
+        eventList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, eventsRoi.y + 1 } );
+        eventList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, eventsRoi.y + eventsRoi.height - 15 } );
+        eventList.setScrollBarArea( { scrollbarOffsetX + 2, eventsRoi.y + topPartHeight, 10, eventsRoi.height - 2 * topPartHeight } );
         eventList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
         eventList.SetAreaMaxItems( 10 );
         eventList.SetListContent( dailyEvents );
@@ -190,13 +190,13 @@ namespace Editor
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( eventsArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
-        fheroes2::Button buttonAdd( rumorsRoi.x, rumorsRoi.y + rumorsRoi.height + 5, ICN::CELLWIN, 13, 14 );
+        fheroes2::Button buttonAdd( eventsRoi.x, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 13, 14 );
         buttonAdd.draw();
 
-        fheroes2::Button buttonEdit( rumorsRoi.x + buttonOffset, rumorsRoi.y + rumorsRoi.height + 5, ICN::CELLWIN, 15, 16 );
+        fheroes2::Button buttonEdit( eventsRoi.x + buttonOffset, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 15, 16 );
         buttonEdit.draw();
 
-        fheroes2::Button buttonDelete( rumorsRoi.x + eventsArea.width - buttonWidth, rumorsRoi.y + rumorsRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDelete( eventsRoi.x + eventsArea.width - buttonWidth, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 17, 18 );
         buttonDelete.draw();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
@@ -241,8 +241,9 @@ namespace Editor
 
                     eventList.updateScrollBarImage();
                     eventList.Redraw();
-                    isRedrawNeeded = true;
                 }
+
+                isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( eventList.getCurrentId() < 0 ) {
@@ -255,8 +256,9 @@ namespace Editor
 
                     sortEvents( dailyEvents );
                     eventList.Redraw();
-                    isRedrawNeeded = true;
                 }
+
+                isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( buttonDelete.area() ) ) {
                 if ( eventList.getCurrentId() < 0 ) {
