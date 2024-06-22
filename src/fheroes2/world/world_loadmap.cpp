@@ -844,6 +844,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
+                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+
+                    if ( humanColors == 0 && computerColors == 0 ) {
+                        // This event is not being executed for anyone. Skip it.
+                        break;
+                    }
+
                     // TODO: change MapEvent to support map format functionality.
                     MapEvent * eventObject = new MapEvent();
                     eventObject->resources = eventInfo.resources;
@@ -851,9 +859,6 @@ bool World::loadResurrectionMap( const std::string & filename )
                     if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
                         eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
                     }
-
-                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
                     eventObject->computer = ( computerColors != 0 );
                     eventObject->colors = humanColors | computerColors;
