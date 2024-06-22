@@ -20,9 +20,13 @@
 
 #pragma once
 
+#include <cstdint>
 #include <vector>
 
-#include "map_format_info.h"
+namespace Maps::Map_Format
+{
+    struct DailyEvent;
+}
 
 namespace Editor
 {

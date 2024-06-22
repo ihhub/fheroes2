@@ -35,6 +35,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "map_format_info.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
