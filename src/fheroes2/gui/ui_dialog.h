@@ -31,6 +31,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 
 struct Funds;
 class HeroBase;

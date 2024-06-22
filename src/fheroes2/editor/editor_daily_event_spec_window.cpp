@@ -20,20 +20,34 @@
 
 #include "editor_daily_event_spec_window.h"
 
-#include "agg_image.h"
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
-#include "icn.h"
+#include "gamedefs.h"
+#include "image.h"
+#include "localevent.h"
 #include "map_format_info.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_window.h"
 
 namespace
