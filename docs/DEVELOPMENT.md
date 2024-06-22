@@ -7,6 +7,7 @@ Please follow the instructions below to be able to build the project from source
 <a name="windows"></a>
 ### Windows
 
+* You will need to clone the `fheroes2` project.
 * Go to the directory `script/windows` and run the file `install_packages.bat`. This script will install all the
   required packages to build the project using Microsoft Visual Studio.
 * If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
