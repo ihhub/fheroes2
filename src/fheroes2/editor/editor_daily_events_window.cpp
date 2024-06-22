@@ -279,13 +279,13 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the events." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAdd.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Add Rumor" ), _( "Add an additional event." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Add Event" ), _( "Add an additional event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonEdit.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Edit Rumor" ), _( "Edit an existing event." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Edit Event" ), _( "Edit an existing event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDelete.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Rumor" ), _( "Delete an existing event." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Event" ), _( "Delete an existing event." ), Dialog::ZERO );
             }
 
             if ( isRedrawNeeded ) {
