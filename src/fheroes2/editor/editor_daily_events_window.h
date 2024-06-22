@@ -20,12 +20,11 @@
 
 #pragma once
 
-namespace Maps::Map_Format
-{
-    struct MapFormat;
-}
+#include <vector>
+
+#include "map_format_info.h"
 
 namespace Editor
 {
-    bool openDailyEventsWindow( Maps::Map_Format::MapFormat & map );
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors );
 }

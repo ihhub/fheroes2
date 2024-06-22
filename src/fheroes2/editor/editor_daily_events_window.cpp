@@ -25,7 +25,6 @@
 #include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -36,7 +35,6 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
-#include "map_format_info.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
@@ -146,7 +144,7 @@ namespace
 
 namespace Editor
 {
-    bool openDailyEventsWindow( Maps::Map_Format::MapFormat & map )
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -184,7 +182,7 @@ namespace Editor
         eventList.setScrollBarArea( { scrollbarOffsetX + 2, rumorsRoi.y + topPartHeight, 10, rumorsRoi.height - 2 * topPartHeight } );
         eventList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
         eventList.SetAreaMaxItems( 10 );
-        eventList.SetListContent( map.dailyEvents );
+        eventList.SetListContent( dailyEvents );
         eventList.updateScrollBarImage();
 
         eventList.Redraw();
@@ -237,10 +235,10 @@ namespace Editor
 
             if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 Maps::Map_Format::DailyEvent temp;
-                if ( editDailyEvent( temp, map.humanPlayerColors, map.computerPlayerColors ) ) {
-                    map.dailyEvents.emplace_back( std::move( temp ) );
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
+                    dailyEvents.emplace_back( std::move( temp ) );
 
-                    sortEvents( map.dailyEvents );
+                    sortEvents( dailyEvents );
 
                     eventList.updateScrollBarImage();
                     eventList.Redraw();
@@ -253,10 +251,10 @@ namespace Editor
                 }
 
                 Maps::Map_Format::DailyEvent temp = eventList.GetCurrent();
-                if ( editDailyEvent( temp, map.humanPlayerColors, map.computerPlayerColors ) ) {
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
                     eventList.GetCurrent() = std::move( temp );
 
-                    sortEvents( map.dailyEvents );
+                    sortEvents( dailyEvents );
                     eventList.Redraw();
                     isRedrawNeeded = true;
                 }
@@ -267,7 +265,7 @@ namespace Editor
                 }
 
                 eventList.RemoveSelected();
-                sortEvents( map.dailyEvents );
+                sortEvents( dailyEvents );
 
                 eventList.updateScrollBarImage();
                 eventList.Redraw();

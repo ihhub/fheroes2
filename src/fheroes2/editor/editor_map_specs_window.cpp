@@ -632,7 +632,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
                 auto temp = mapFormat.dailyEvents;
-                if ( !openDailyEventsWindow( mapFormat ) ) {
+                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors ) ) {
                     mapFormat.dailyEvents = std::move( temp );
                 }
 
