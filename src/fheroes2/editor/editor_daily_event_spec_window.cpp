@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
-
 #include "editor_daily_event_spec_window.h"
 
 #include "agg_image.h"
@@ -94,7 +92,6 @@ namespace Editor
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY + messageArea.height + 2 * elementOffset, display );
 
-        const int32_t resourceOffsetX = 0;
         const fheroes2::Rect resourceRoi{ messageRoi.x, text.height() + offsetY + messageArea.height + 2 * elementOffset, messageRoi.width, 99 };
         background.applyTextBackgroundShading( resourceRoi );
 
