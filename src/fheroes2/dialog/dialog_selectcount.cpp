@@ -98,8 +98,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     }
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{
-        windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + imageHeight, valueSelectionSize.width, valueSelectionSize.height };
+    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + imageHeight, valueSelectionSize.width,
+                                           valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
     valueSelectionElement.ignoreMouseWheelEventRoiCheck();
@@ -388,8 +388,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     titleText.draw( pos.x, pos.y + 2 + headerHeight, BOXAREA_WIDTH, display );
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{
-        pos.x + 70, pos.y + textTopOffset + titleHeight, valueSelectionSize.width, valueSelectionSize.height };
+    const fheroes2::Rect selectionBoxArea{ pos.x + 70, pos.y + textTopOffset + titleHeight, valueSelectionSize.width, valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( static_cast<int32_t>( redistributeMin ), static_cast<int32_t>( redistributeMax ),
                                                                  static_cast<int32_t>( redistributeCount ), 1, selectionBoxArea.getPosition() );

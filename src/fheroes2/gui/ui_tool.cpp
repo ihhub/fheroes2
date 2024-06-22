@@ -737,7 +737,7 @@ namespace fheroes2
             return true;
         }
 
-        if ( minimum < 0 && value != 0 && le.isKeyPressed( fheroes2::Key::KEY_MINUS )  ) {
+        if ( minimum < 0 && value != 0 && le.isKeyPressed( fheroes2::Key::KEY_MINUS ) ) {
             value = std::clamp( -value, minimum, maximum );
 
             return true;
