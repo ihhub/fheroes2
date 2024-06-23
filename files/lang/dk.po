@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 11:28+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -5000,6 +5000,10 @@ msgstr "Gentag forrige handling"
 
 msgid "hotkey|open game main menu"
 msgstr "Åben spillets hovedmenu"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Status (til/fra)"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
