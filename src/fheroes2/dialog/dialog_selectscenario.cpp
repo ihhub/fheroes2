@@ -645,7 +645,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( mapTypes ) || le.isMouseRightButtonPressedInArea( curMapType ) ) {
-            // TODO: update this tooltip once the Editor is out for public.
             ShowToolTip( _( "Map Type" ),
                          _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
         }
