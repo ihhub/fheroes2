@@ -384,7 +384,7 @@ namespace fheroes2
 
         bool _isIgnoreMouseWheelEventRoiCheck{ false };
 
-        bool _isMouseWheelUpEvent( LocalEvent & eventHandler ) const;
-        bool _isMouseWheelDownEvent( LocalEvent & eventHandler ) const;
+        bool _isMouseWheelUpEvent( const LocalEvent & eventHandler ) const;
+        bool _isMouseWheelDownEvent( const LocalEvent & eventHandler ) const;
     };
 }

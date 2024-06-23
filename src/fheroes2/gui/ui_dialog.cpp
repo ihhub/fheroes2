@@ -899,7 +899,7 @@ namespace fheroes2
         _value = std::clamp( value, _minimum, _maximum );
     }
 
-    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( LocalEvent & eventHandler ) const
+    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( const LocalEvent & eventHandler ) const
     {
         if ( _isIgnoreMouseWheelEventRoiCheck ) {
             return eventHandler.isMouseWheelUp();
@@ -908,7 +908,7 @@ namespace fheroes2
         return eventHandler.isMouseWheelUpInArea( _editBox );
     }
 
-    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( LocalEvent & eventHandler ) const
+    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( const LocalEvent & eventHandler ) const
     {
         if ( _isIgnoreMouseWheelEventRoiCheck ) {
             return eventHandler.isMouseWheelDown();
