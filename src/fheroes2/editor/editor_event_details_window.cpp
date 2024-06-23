@@ -286,7 +286,7 @@ namespace Editor
 
                     int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), -999999, 999999, temp, 1 ) ) {
+                    if ( Dialog::SelectCount( Resource::String( resourceType ), -99999, 999999, temp, 1 ) ) {
                         *resourcePtr = temp;
                     }
 
