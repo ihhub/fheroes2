@@ -705,7 +705,7 @@ namespace Interface
         // First, we disable it to make sure to enable it back while exiting this function.
         const fheroes2::ScreenPaletteRestorer restorer;
 
-        const Settings & conf = Settings::Get();
+        Settings & conf = Settings::Get();
 
         if ( conf.isEditorAnimationEnabled() ) {
             fheroes2::RenderProcessor::instance().startColorCycling();
@@ -808,6 +808,14 @@ namespace Interface
                     if ( returnValue == Dialog::YES ) {
                         return fheroes2::GameMode::MAIN_MENU;
                     }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY ) ) {
+                    conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
+                    // This is not an ideal solution as we should save the whole configuration while tweaking one option.
+                    // However, we can improve it later if it leads to slowdowns while using the Editor.
+                    conf.Save( Settings::configFileName );
+
+                    setRedraw( REDRAW_GAMEAREA );
                 }
             }
 
