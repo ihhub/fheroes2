@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,23 +17,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
-
 #include <cstdint>
 
-#include "image.h"
-
-namespace Maps
+namespace Maps::Map_Format
 {
-    struct ObjectInfo;
+    struct MapFormat;
 }
 
-namespace fheroes2
+namespace Maps::Generator
 {
-    Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
-    Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
+    struct Configuration
+    {
+        uint32_t playerCount = 2;
+        uint32_t regionSizeLimit = 300;
+        bool basicOnly = true;
+    };
 
-    int32_t getTownBasementId( const int groundType );
-    int32_t getMineObjectInfoId( const int resource, const int groundType );
+    bool generateWorld( Map_Format::MapFormat & mapFormat, const Configuration & config );
 }

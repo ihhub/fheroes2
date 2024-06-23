@@ -75,6 +75,12 @@ namespace Game
         EDITOR_REDO_LAST_ACTION,
         EDITOR_TO_GAME_MAIN_MENU,
 
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode as of now.
+        EDITOR_RANDOM_MAP_GENERATION,
+        EDITOR_RANDOM_MAP_CONFIGURATION,
+#endif
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,
