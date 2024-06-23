@@ -755,7 +755,7 @@ namespace fheroes2
         }
 
         value *= 10;
-        value += newDigit;
+        value += ( value >= 0 ) ? newDigit : ( -newDigit );
 
         value = std::clamp( value, minimum, maximum );
 
