@@ -164,7 +164,6 @@ namespace Skill
     class Primary
     {
     public:
-        Primary();
         virtual ~Primary() = default;
 
         enum
@@ -203,10 +202,10 @@ namespace Skill
         friend StreamBase & operator<<( StreamBase &, const Primary & );
         friend StreamBase & operator>>( StreamBase &, Primary & );
 
-        int attack;
-        int defense;
-        int power;
-        int knowledge;
+        int attack{ 0 };
+        int defense{ 0 };
+        int power{ 0 };
+        int knowledge{ 0 };
     };
 
     StreamBase & operator<<( StreamBase &, const Primary & );
