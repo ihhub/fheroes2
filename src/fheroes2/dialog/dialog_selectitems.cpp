@@ -675,13 +675,13 @@ namespace
             // Barriers and Traveller's Tents use the same name while we need to show their color as well.
             if ( info.objectType == MP2::OBJ_BARRIER ) {
                 std::string str = _( "%{color} Barrier" );
-                StringReplace( str, "%{color}", fheroes2::getBarrierColorName( info.metadata[0] ) );
+                StringReplace( str, "%{color}", fheroes2::getBarrierColorName( static_cast<int32_t>( info.metadata[0] ) ) );
                 return str;
             }
 
             if ( info.objectType == MP2::OBJ_TRAVELLER_TENT ) {
                 std::string str = _( "%{color} Tent" );
-                StringReplace( str, "%{color}", fheroes2::getTentColorName( info.metadata[0] ) );
+                StringReplace( str, "%{color}", fheroes2::getTentColorName( static_cast<int32_t>( info.metadata[0] ) ) );
                 return str;
             }
 

@@ -4520,7 +4520,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             // Barrier colors start from 1.
-            object.metadata[0] = static_cast<int32_t>( count + 1 );
+            object.metadata[0] = count + 1;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4537,7 +4537,7 @@ namespace
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_TRAVELLER_TENT );
 
             // Traveller's Tent colors start from 1.
-            object.metadata[0] = static_cast<int32_t>( count + 1 );
+            object.metadata[0] = count + 1;
 
             objects.emplace_back( std::move( object ) );
         }
