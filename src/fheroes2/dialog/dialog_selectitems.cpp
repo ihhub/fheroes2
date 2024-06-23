@@ -1286,7 +1286,9 @@ void Dialog::selectTownType( int & type, int & color )
     background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    fheroes2::ImageRestorer castleBackground( display, pos.x - 7 * TILEWIDTH + TILEWIDTH / 2, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 9 * TILEWIDTH, 5 * TILEWIDTH );
+    const fheroes2::Rect castleRoi{ pos.x - 2 * TILEWIDTH - TILEWIDTH / 2, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 5 * TILEWIDTH, 5 * TILEWIDTH };
+
+    fheroes2::ImageRestorer castleBackground( display, pos.x - 5 * TILEWIDTH, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 8 * TILEWIDTH, 5 * TILEWIDTH );
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
@@ -1355,7 +1357,7 @@ void Dialog::selectTownType( int & type, int & color )
         else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Castle" ), _( "Click to select castle placing." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( castleBackground.rect() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( castleRoi ) ) {
             std::string name( _( "%{color} %{race} %{townOrCastle}" ) );
             StringReplace( name, "%{color}", ( townColor < 6 ) ? Color::String( Color::IndexToColor( townColor ) ) : _( "race|Neutral" ) );
             StringReplace( name, "%{race}", ( townRace < 6 ) ? Race::String( Race::IndexToRace( townRace ) ) : _( "race|Random" ) );
