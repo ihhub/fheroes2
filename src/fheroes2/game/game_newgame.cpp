@@ -530,7 +530,6 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
                                                fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
-    fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_LARGE_CONFIG, 0, 1 );
     fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     if ( !isSuccessionWarsCampaignPresent() ) {
@@ -541,7 +540,6 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
     buttonCampaignGame.draw();
     buttonMultiGame.draw();
     buttonBattleGame.draw();
-    buttonSettings.draw();
     buttonCancelGame.draw();
 
     fheroes2::validateFadeInAndRender();
@@ -564,7 +562,6 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
         }
         le.isMouseLeftButtonPressedInArea( buttonMultiGame.area() ) ? buttonMultiGame.drawOnPress() : buttonMultiGame.drawOnRelease();
         le.isMouseLeftButtonPressedInArea( buttonBattleGame.area() ) ? buttonBattleGame.drawOnPress() : buttonBattleGame.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonSettings.area() ) ? buttonSettings.drawOnPress() : buttonSettings.drawOnRelease();
         le.isMouseLeftButtonPressedInArea( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) || le.MouseClickLeft( buttonStandardGame.area() ) )
@@ -573,10 +570,6 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
             return fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return fheroes2::GameMode::NEW_MULTI;
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
-            fheroes2::openGameSettings();
-            return fheroes2::GameMode::MAIN_MENU;
-        }
         if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
@@ -592,8 +585,6 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
                                                _( "A multi-player game, with several human players competing against each other on a single map." ), Dialog::ZERO );
         else if ( le.isMouseRightButtonPressedInArea( buttonBattleGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonSettings.area() ) )
-            fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
         else if ( le.isMouseRightButtonPressedInArea( buttonCancelGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
