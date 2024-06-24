@@ -253,7 +253,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         fheroes2::MultiFontText body;
         body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of the Main Menu. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( " on the left side of the Main Menu.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
