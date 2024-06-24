@@ -445,10 +445,11 @@ namespace
     {
         assert( data != nullptr && size > 0 );
 
-        int32_t maxWidth = 1;
-
         const fheroes2::FontCharHandler charHandler( fontType );
 
+        // There might be multi-line text strings that contains only space characters
+        // so we limit the minimum word width to the space character width.
+        int32_t maxWidth = charHandler.getSpaceCharWidth();
         int32_t width = 0;
 
         const uint8_t * dataEnd = data + size;
