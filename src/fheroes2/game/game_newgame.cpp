@@ -40,7 +40,6 @@
 #include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_game_settings.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
