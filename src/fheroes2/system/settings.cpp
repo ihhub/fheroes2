@@ -1100,6 +1100,6 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
         int temp;
         msg >> temp;
     }
-        
+
     return msg >> conf.players;
 }
