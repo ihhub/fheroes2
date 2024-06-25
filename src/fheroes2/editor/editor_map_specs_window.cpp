@@ -67,6 +67,9 @@ namespace
     const int32_t playerStepX = 80;
     const int32_t difficultyStepX = 77;
 
+    const int32_t daysInMonth{ 7 * 4 };
+    const int32_t daysInYear{ daysInMonth * 12 };
+
     // TODO: expand these conditions by adding missing ones.
     const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_OUT_OF_TIME };
@@ -338,7 +341,7 @@ namespace
             }
         }
 
-        void getConditionMetadata( std::vector<uint32_t> & conditionMetadata )
+        void getConditionMetadata( std::vector<uint32_t> & conditionMetadata ) const
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
@@ -415,7 +418,7 @@ namespace
     public:
         LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
             : _restorer( output, roi.x, roi.y, roi.width, roi.height )
-            , _outOfTimeValue( 1, 7 * 4 * 12 * 10, 7 * 4, 1, {} )
+            , _outOfTimeValue( 1, 10 * daysInYear, daysInMonth, 1, {} )
         {
             // Do nothing.
         }
@@ -432,7 +435,7 @@ namespace
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 if ( conditionMetadata.size() != 1 ) {
                     conditionMetadata.resize( 1 );
-                    conditionMetadata[0] = 7 * 4;
+                    conditionMetadata[0] = static_cast<uint32_t>( daysInMonth );
                 }
 
                 _outOfTimeValue.setValue( static_cast<int32_t>( conditionMetadata[0] ) );
@@ -444,7 +447,7 @@ namespace
             }
         }
 
-        void getConditionMetadata( std::vector<uint32_t> & conditionMetadata )
+        void getConditionMetadata( std::vector<uint32_t> & conditionMetadata ) const
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_EVERYTHING:
@@ -628,7 +631,7 @@ namespace Editor
 {
     bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat )
     {
-        // Verify victory and loss conditions.
+        // Verify victory and loss condition types.
         if ( std::find( supportedVictoryConditions.begin(), supportedVictoryConditions.end(), mapFormat.victoryConditionType ) == supportedVictoryConditions.end() ) {
             assert( 0 );
             mapFormat.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
