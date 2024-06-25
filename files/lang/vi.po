@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-06-25 10:45+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -310,6 +310,9 @@ msgstr ""
 "G"
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3959,7 +3962,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Thanh Tin nhắn"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3968,7 +3971,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3995,6 +4001,59 @@ msgstr "Thanh Tin nhắn"
 msgid "Click to save the Event properties."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Tài nguyên"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ngày: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Sự kiện"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Lập trình Bổ sung"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Sự kiện"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Bảo vật"
 
@@ -4008,27 +4067,10 @@ msgstr "Chọn Bảo vật:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Tài nguyên"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Nhấp để lưu trò chơi hiện tại."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4505,6 +4547,14 @@ msgstr "Nhấp để lưu trò chơi hiện tại."
 
 msgid "Rumors"
 msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Events"
+msgstr "Sự kiện"
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -6009,9 +6059,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Tháng: %{month} Tuần: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Ngày: %{day}"
 
 msgid ""
 "You find a small\n"

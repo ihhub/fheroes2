@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-06-25 10:45+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -309,6 +309,9 @@ msgstr ""
 "T"
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3947,7 +3950,7 @@ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 msgid "Message Text:"
 msgstr "Tekstbesked:"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3956,7 +3959,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3981,6 +3987,57 @@ msgstr "Besked:"
 msgid "Click to save the Event properties."
 msgstr "Klik for at gemme begivenhedens egenskaber."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid "Click here to change the event message."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Dag: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klik for at gemme begivenhedens egenskaber."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Begivenhed"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Ekstra programmering"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Begivenhed"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -3993,25 +4050,10 @@ msgstr "Slet artefakt:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr "Resurser"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-msgid "Click here to change the event message."
-msgstr "Klik her for at gemme begivenhedsbeskeden."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -4469,6 +4511,14 @@ msgstr "Klik for at gemme det aktuelle kort."
 
 msgid "Rumors"
 msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Klik for at godkende kampresultaterne."
+
+#, fuzzy
+msgid "Events"
+msgstr "Begivenhed"
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5968,9 +6018,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Måned: %{month} Uge: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Dag: %{day}"
 
 msgid ""
 "You find a small\n"

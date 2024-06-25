@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-06-25 10:45+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -255,6 +255,9 @@ msgid ""
 msgstr ""
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3726,7 +3729,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr ""
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3735,7 +3738,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3761,6 +3767,54 @@ msgstr ""
 msgid "Click to save the Event properties."
 msgstr "Rodyti kitą miestą"
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ištekliai"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Rodyti kitą miestą"
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr ""
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Rodyti kitą miestą"
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Magiškas artefaktas"
 
@@ -3774,27 +3828,10 @@ msgstr "Magiškas artefaktas"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Ištekliai"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Rodyti kitą miestą"
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -4236,6 +4273,13 @@ msgid "Click to edit custom rumors."
 msgstr "Rodyti kitą miestą"
 
 msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Rodyti kitą miestą"
+
+msgid "Events"
 msgstr ""
 
 #, fuzzy
@@ -5659,9 +5703,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mėnuo: %{month} Savaitė: %{week}"
-
-msgid "Day: %{day}"
-msgstr ""
 
 msgid ""
 "You find a small\n"
