@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3671,15 +3671,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikon méret"
 
+msgid "Map Type"
+msgstr "Térkép típusa"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Azt jelzi, hogy a térkép az \"Örökösödési háborúk\" vagy a \"Hűség "
 "ára\"verzióhoz készült-e."
-
-msgid "Map Type"
-msgstr "Térkép típusa"
 
 msgid "Selected Name"
 msgstr "Kiválasztott név"
@@ -4925,6 +4926,10 @@ msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
 msgid "hotkey|open game main menu"
 msgstr "főmenü megnyitása"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "státusz kapcsoló"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"

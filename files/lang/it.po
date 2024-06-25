@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3586,16 +3586,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Icona del Dimensione"
 
+msgid "Map Type"
+msgstr "Tipo di mappa"
+
 #, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Indica se la mappa è stata creata per la versione del gioco Guerre di "
 "Successione o The Price of Loyalty."
-
-msgid "Map Type"
-msgstr "Tipo di mappa"
 
 msgid "Selected Name"
 msgstr "Nome della Mappa"
@@ -4874,6 +4874,9 @@ msgstr "Va alla città pross."
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Mostra eroe successivo"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""

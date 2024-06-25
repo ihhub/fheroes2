@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3770,15 +3770,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Размер на карта"
 
+msgid "Map Type"
+msgstr "Тип на карта"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Показва дали картата е направена за версията на играта \"Наследените войни\" "
 "или за \"Цената на лоялността\"."
-
-msgid "Map Type"
-msgstr "Тип на карта"
 
 msgid "Selected Name"
 msgstr "Избрано име"
@@ -5088,6 +5089,10 @@ msgstr "повтори последното действие"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "ново меню на карта"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "превключи състояние"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"

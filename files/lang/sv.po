@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3671,15 +3671,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikonstorlek"
 
+msgid "Map Type"
+msgstr "Karttyp"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Visar om kartan är gjord för \"The Succession Wars\" eller \n"
 "expansionen \"The Price of Loyalty\"."
-
-msgid "Map Type"
-msgstr "Karttyp"
 
 msgid "Selected Name"
 msgstr "Valt Namn"
@@ -4928,6 +4929,10 @@ msgstr "Gör om senaste åtgärden"
 
 msgid "hotkey|open game main menu"
 msgstr "öppna spelets huvudmeny"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Aktivera status"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3694,15 +3694,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Tamanho do Ícone"
 
+msgid "Map Type"
+msgstr "Tipo de Mapa"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Indica se o mapa é feito para a versão \"As Guerras de Sucessão\" ou \"O "
 "Preço da Lealdade\" do jogo."
-
-msgid "Map Type"
-msgstr "Tipo de Mapa"
 
 msgid "Selected Name"
 msgstr "Nome Escolhido"
@@ -4955,6 +4956,10 @@ msgstr "refazer última ação"
 
 msgid "hotkey|open game main menu"
 msgstr "abrir menu principal do jogo"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "alternar status"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"

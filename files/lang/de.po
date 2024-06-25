@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3779,15 +3779,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Kartengröße"
 
+msgid "Map Type"
+msgstr "Kartenart"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Zeigt an, ob die Karte für die Version \"The Succession Wars\" oder \"The "
 "Price of Loyalty\" des Spiels erstellt wurde."
-
-msgid "Map Type"
-msgstr "Kartenart"
 
 msgid "Selected Name"
 msgstr "Ausgewählter Name"
@@ -5107,6 +5108,10 @@ msgstr "Standardaktion"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Neue Karte Menü"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Status umschalten"
 
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"

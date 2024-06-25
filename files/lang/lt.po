@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3516,14 +3516,14 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Map Type"
 msgstr "Pasaulio dydis"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
 
 msgid "Selected Name"
 msgstr ""
@@ -4758,6 +4758,9 @@ msgstr "Rodyti kitą miestą"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Rodyti kitą miestą"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3735,15 +3735,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
+msgid "Map Type"
+msgstr "Korttype"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Angiver om kortet er lavet til \"Arvefølgekrigene\"- eller \"Prisen for "
 "Loyalitet\"-versionen af spillet."
-
-msgid "Map Type"
-msgstr "Korttype"
 
 msgid "Selected Name"
 msgstr "Valgte navn"
@@ -4999,6 +5000,10 @@ msgstr "Gentag forrige handling"
 
 msgid "hotkey|open game main menu"
 msgstr "Åben spillets hovedmenu"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Status (til/fra)"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"

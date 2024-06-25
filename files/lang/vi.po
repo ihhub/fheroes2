@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-06-23 13:03+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3743,15 +3743,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Cỡ Biểu tượng"
 
+msgid "Map Type"
+msgstr "Kiểu Bản đồ"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
 "của lòng trung thành\" của trò chơi."
-
-msgid "Map Type"
-msgstr "Kiểu Bản đồ"
 
 msgid "Selected Name"
 msgstr "Chọn Tên"
@@ -5049,6 +5050,10 @@ msgstr "thực hiện lại tác vụ cuối"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "trình đơn bản đồ mới"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "chuyển đổi trạng thái"
 
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
