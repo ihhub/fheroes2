@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-06-25 10:45+0000\n"
 "PO-Revision-Date: 2024-05-25 12:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -319,6 +319,9 @@ msgstr ""
 "Т"
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3899,8 +3902,8 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Текст повідомлення:"
 
-msgid "Cancel event after first visit"
-msgstr "Скасувати подію після першого відвідування"
+msgid "Reward:"
+msgstr "Нагорода:"
 
 msgid "Player colors allowed to get event:"
 msgstr "Кольори гравців, яким дозволено отримати подію:"
@@ -3908,8 +3911,11 @@ msgstr "Кольори гравців, яким дозволено отрима�
 msgid "Computer colors allowed to get event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
-msgid "Reward:"
-msgstr "Нагорода:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
 
 msgid "Allow %{color} human player to get event"
 msgstr "Дозволити %{color} гравцю-людині отримати подію"
@@ -3937,6 +3943,58 @@ msgstr "Повідомлення:"
 msgid "Click to save the Event properties."
 msgstr "Натисніть, щоб зберегти властивості події."
 
+msgid "No resources will be given as a reward."
+msgstr "Жодних ресурсів не буде надано в якості винагороди."
+
+msgid "Resources"
+msgstr "Ресурси"
+
+msgid "Resources will be given as a reward."
+msgstr "Ресурси будуть надані в якості нагороди."
+
+msgid "Click here to change the event message."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+
+msgid "Event Message Text"
+msgstr "Текст повідомлення події"
+
+msgid "Day: %{day}"
+msgstr "День: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Натисніть, щоб зберегти властивості події."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Подія"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Додати додаткову відповідь на запитання."
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Подія"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Завантажити існуючу мапу."
+
+#, fuzzy
+msgid "Delete Event"
+msgstr "Видалити відповідь"
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Видалити існуючу відповідь на запитання."
+
+msgid "Cancel event after first visit"
+msgstr "Скасувати подію після першого відвідування"
+
 msgid "Artifact"
 msgstr "Артефакт"
 
@@ -3949,15 +4007,6 @@ msgstr "Видалити артефакт:"
 msgid "Delete an artifact from the reward."
 msgstr "Видалити артефакт з винагороди."
 
-msgid "No resources will be given as a reward."
-msgstr "Жодних ресурсів не буде надано в якості винагороди."
-
-msgid "Resources"
-msgstr "Ресурси"
-
-msgid "Resources will be given as a reward."
-msgstr "Ресурси будуть надані в якості нагороди."
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
@@ -3966,12 +4015,6 @@ msgstr ""
 "Якщо цей прапорець встановлено, подія спрацює лише один раз. Якщо прапорець "
 "не встановлено, подія спрацьовуватиме щоразу, коли один із зазначених "
 "гравців перетинатиме мітку події."
-
-msgid "Click here to change the event message."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
-
-msgid "Event Message Text"
-msgstr "Текст повідомлення події"
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4431,6 +4474,14 @@ msgstr "Натисніть, щоб зберегти поточну гру."
 
 msgid "Rumors"
 msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Тицьніть щоб вийти з результатів битви."
+
+#, fuzzy
+msgid "Events"
+msgstr "Подія"
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5936,9 +5987,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Місяць: %{month} Тиждень: %{week}"
-
-msgid "Day: %{day}"
-msgstr "День: %{day}"
 
 msgid ""
 "You find a small\n"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-06-25 10:45+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -314,6 +314,9 @@ msgstr ""
 "L"
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3884,8 +3887,8 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Üzenet szövege:"
 
-msgid "Cancel event after first visit"
-msgstr "Esemény törlése az első látogatás után"
+msgid "Reward:"
+msgstr "Jutalom:"
 
 msgid "Player colors allowed to get event:"
 msgstr "Játékosok, akiknek megengedett az esemény:"
@@ -3893,8 +3896,11 @@ msgstr "Játékosok, akiknek megengedett az esemény:"
 msgid "Computer colors allowed to get event:"
 msgstr "Gépi játékosok, akiknek megengedett az esemény:"
 
-msgid "Reward:"
-msgstr "Jutalom:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
 
 msgid "Allow %{color} human player to get event"
 msgstr "Esemény engedélyzése %{color} játékos számára"
@@ -3922,6 +3928,58 @@ msgstr "Üzenet:"
 msgid "Click to save the Event properties."
 msgstr "Kattints az esemény beállítások mentéséhez."
 
+msgid "No resources will be given as a reward."
+msgstr "Nincs erőforrás jutalom."
+
+msgid "Resources"
+msgstr "Erőforrások"
+
+msgid "Resources will be given as a reward."
+msgstr "A jutalom erőforrás lesz."
+
+msgid "Click here to change the event message."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
+
+msgid "Event Message Text"
+msgstr "Esemény üzenet szöveg"
+
+msgid "Day: %{day}"
+msgstr "Nap: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Kattints az esemény beállítások mentéséhez."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Esemény"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "További válasz hozzáadása a kérdéshez."
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Esemény"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Létező térkép betöltése."
+
+#, fuzzy
+msgid "Delete Event"
+msgstr "Válasz törlése"
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Meglévő válasz törlése."
+
+msgid "Cancel event after first visit"
+msgstr "Esemény törlése az első látogatás után"
+
 msgid "Artifact"
 msgstr "Varázstárgy"
 
@@ -3934,15 +3992,6 @@ msgstr "Varázstárgy törlése"
 msgid "Delete an artifact from the reward."
 msgstr "Varázstárgy törlése a jutalmak közül."
 
-msgid "No resources will be given as a reward."
-msgstr "Nincs erőforrás jutalom."
-
-msgid "Resources"
-msgstr "Erőforrások"
-
-msgid "Resources will be given as a reward."
-msgstr "A jutalom erőforrás lesz."
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
@@ -3951,12 +4000,6 @@ msgstr ""
 "Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény csak egyszer "
 "váltódik ki. Ha nincs bejelölve, akkor mindahányszor a megadott játékos "
 "rálép területre."
-
-msgid "Click here to change the event message."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
-
-msgid "Event Message Text"
-msgstr "Esemény üzenet szöveg"
 
 msgid "%{objects} cannot be placed on water."
 msgstr "Vízen nem helyezhetők el %{objects}."
@@ -4395,6 +4438,14 @@ msgstr "Kattints az aktuális térkép mentéséhez."
 
 msgid "Rumors"
 msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Kattints a csata eredményeiből való kilépéshez."
+
+#, fuzzy
+msgid "Events"
+msgstr "Esemény"
 
 msgid "Click to change your map name."
 msgstr "Kattints a térképed nevének megváltoztatásához."
@@ -5884,9 +5935,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Hónap: %{month} Hét: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Nap: %{day}"
 
 msgid ""
 "You find a small\n"
