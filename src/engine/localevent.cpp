@@ -1044,57 +1044,6 @@ namespace fheroes2
         return EventProcessing::EventEngine::getKeyName( key );
     }
 
-    bool PressIntKey( const uint32_t max, uint32_t & result )
-    {
-        const LocalEvent & le = LocalEvent::Get();
-
-        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
-            result /= 10;
-            return true;
-        }
-
-        if ( !le.isAnyKeyPressed() ) {
-            // No key is pressed.
-            return false;
-        }
-
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
         switch ( key ) {

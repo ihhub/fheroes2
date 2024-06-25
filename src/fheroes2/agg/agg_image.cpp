@@ -184,7 +184,9 @@ namespace
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
                                                 ICN::BUTTON_RUMORS_GOOD,
-                                                ICN::BUTTON_RUMORS_EVIL };
+                                                ICN::BUTTON_RUMORS_EVIL,
+                                                ICN::BUTTON_EVENTS_GOOD,
+                                                ICN::BUTTON_EVENTS_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -2118,6 +2120,17 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EVENTS_EVIL );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EVENTS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2780,6 +2793,8 @@ namespace fheroes2
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
             case ICN::BUTTON_RUMORS_GOOD:
             case ICN::BUTTON_RUMORS_EVIL:
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:

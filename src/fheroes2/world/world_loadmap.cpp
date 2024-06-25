@@ -844,6 +844,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
+                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+
+                    if ( humanColors == 0 && computerColors == 0 ) {
+                        // This event is not being executed for anyone. Skip it.
+                        break;
+                    }
+
                     // TODO: change MapEvent to support map format functionality.
                     MapEvent * eventObject = new MapEvent();
                     eventObject->resources = eventInfo.resources;
@@ -851,9 +859,6 @@ bool World::loadResurrectionMap( const std::string & filename )
                     if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
                         eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
                     }
-
-                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
                     eventObject->computer = ( computerColors != 0 );
                     eventObject->colors = humanColors | computerColors;
@@ -1036,14 +1041,24 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     // Load daily events.
     for ( auto & event : map.dailyEvents ) {
+        if ( event.firstOccurrenceDay == 0 ) {
+            // This event will never be executed. Skip it.
+            continue;
+        }
+
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        // TODO: modify EventDate structure to have more flexibility.
-        auto & newEvent = vec_eventsday.emplace_back();
-
         const int humanColors = Players::HumanColors() & event.humanPlayerColors;
         const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+
+        if ( humanColors == 0 && computerColors == 0 ) {
+            // This event is not being executed for anyone. Skip it.
+            continue;
+        }
+
+        // TODO: modify EventDate structure to have more flexibility.
+        auto & newEvent = vec_eventsday.emplace_back();
 
         newEvent.message = std::move( event.message );
         newEvent.colors = ( humanColors | computerColors );

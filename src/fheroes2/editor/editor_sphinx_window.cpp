@@ -286,10 +286,10 @@ namespace Editor
                     int32_t * resourcePtr = metadata.resources.GetPtr( resourceType );
                     assert( resourcePtr != nullptr );
 
-                    uint32_t temp = *resourcePtr;
+                    int32_t temp = *resourcePtr;
 
                     if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
-                        *resourcePtr = static_cast<int32_t>( temp );
+                        *resourcePtr = temp;
                     }
 
                     resourceRoiRestorer.restore();

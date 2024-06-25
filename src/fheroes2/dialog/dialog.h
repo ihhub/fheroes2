@@ -112,7 +112,7 @@ namespace Dialog
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
-    bool SelectCount( std::string header, const uint32_t min, const uint32_t max, uint32_t & selectedValue, const uint32_t step = 1,
+    bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
                       const fheroes2::Image & backgroundImage = {} );
     bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
                       const bool englishOnlyVirtualKeyboard );
@@ -121,7 +121,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
+    int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );

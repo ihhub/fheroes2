@@ -547,10 +547,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                                                : _( "Change Experience value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
-                    uint32_t value = experience;
+                    int32_t value = static_cast<int32_t>( experience );
                     if ( Dialog::SelectCount( _( "Set Experience value" ), 0, experienceMaxValue, value ) ) {
                         useDefaultExperience = false;
-                        experience = value;
+                        experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );
                         experienceInfo.Redraw();
                         drawTitleText( name, _race, true );
@@ -577,10 +577,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                                                 : _( "Change Spell Points value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
-                    uint32_t value = GetSpellPoints();
+                    int32_t value = static_cast<int32_t>( GetSpellPoints() );
                     if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, spellPointsMaxValue, value ) ) {
                         useDefaultSpellPoints = false;
-                        SetSpellPoints( value );
+                        SetSpellPoints( static_cast<uint32_t>( value ) );
                         spellPointsInfo.setDefaultState( useDefaultSpellPoints );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
@@ -653,10 +653,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( buttonPatrol.isVisible() && le.isMouseCursorPosInArea( buttonPatrol.area() ) ) {
             if ( le.isMouseLeftButtonPressed() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
                 buttonPatrol.drawOnPress();
-                uint32_t value = _patrolDistance;
+                int32_t value = static_cast<int32_t>( _patrolDistance );
                 if ( Dialog::SelectCount( _( "Set patrol radius in tiles" ), 0, 255, value ) ) {
                     SetModes( PATROL );
-                    _patrolDistance = static_cast<int>( value );
+                    _patrolDistance = static_cast<uint32_t>( value );
                 }
                 else {
                     buttonPatrol.drawOnRelease();
