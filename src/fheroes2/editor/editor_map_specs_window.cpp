@@ -307,7 +307,7 @@ namespace
     class VictoryConditionUI final
     {
     public:
-        const VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
+        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
             : _restorer( output, roi.x, roi.y, roi.width, roi.height )
             , _goldAccumulationValue( 10000, 1000000, 10000, 1000, {} )
         {
@@ -329,7 +329,7 @@ namespace
                     conditionMetadata[0] = 10000;
                 }
 
-                _goldAccumulationValue.setValue( conditionMetadata[0] );
+                _goldAccumulationValue.setValue( static_cast<int32_t>( conditionMetadata[0] ) );
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
@@ -349,7 +349,7 @@ namespace
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
                 assert( conditionMetadata.size() == 1 );
 
-                conditionMetadata[0] = _goldAccumulationValue.getValue();
+                conditionMetadata[0] = static_cast<uint32_t>( _goldAccumulationValue.getValue() );
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
@@ -410,7 +410,7 @@ namespace
     class LossConditionUI final
     {
     public:
-        const LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
+        LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
             : _restorer( output, roi.x, roi.y, roi.width, roi.height )
             , _outOfTimeValue( 1, 7 * 4 * 12 * 10, 7 * 4, 1, {} )
         {
@@ -432,7 +432,7 @@ namespace
                     conditionMetadata[0] = 7 * 4;
                 }
 
-                _outOfTimeValue.setValue( conditionMetadata[0] );
+                _outOfTimeValue.setValue( static_cast<int32_t>( conditionMetadata[0] ) );
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
@@ -450,7 +450,7 @@ namespace
                 break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 assert( conditionMetadata.size() == 1 );
-                conditionMetadata[0] = _outOfTimeValue.getValue();
+                conditionMetadata[0] = static_cast<uint32_t>( _outOfTimeValue.getValue() );
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
