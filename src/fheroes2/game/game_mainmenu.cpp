@@ -172,9 +172,10 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
         case fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS:
         case fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS:
         case fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS: {
-            const uint8_t humanPlayCount = static_cast<uint8_t>( static_cast<int>( result ) - static_cast<int>( fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER ) );
+            const uint8_t humanPlayerCount =
+                static_cast<uint8_t>( static_cast<int>( result ) - static_cast<int>( fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER ) );
             // Add +1 since we don't have zero human player option.
-            result = Game::SelectScenario( humanPlayCount + 1 );
+            result = Game::SelectScenario( humanPlayerCount + 1 );
             break;
         }
         case fheroes2::GameMode::START_GAME:
