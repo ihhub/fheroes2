@@ -373,6 +373,9 @@ namespace
 
                 _goldAccumulationValue.setOffset( uiOffset );
                 _goldAccumulationValue.draw( output );
+
+                const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
+                text.draw( uiOffset.x - text.width() - 5, roi.y + ( fheroes2::ValueSelectionDialogElement::getArea().height - text.height() ) / 2 + 2, output );
                 break;
             }
             default:
@@ -474,6 +477,9 @@ namespace
 
                 _outOfTimeValue.setOffset( uiOffset );
                 _outOfTimeValue.draw( output );
+
+                const fheroes2::Text text( _( "Days:" ), fheroes2::FontType::normalWhite() );
+                text.draw( uiOffset.x - text.width() - 5, roi.y + ( fheroes2::ValueSelectionDialogElement::getArea().height - text.height() ) / 2 + 2, output );
                 break;
             }
             default:
