@@ -365,6 +365,8 @@ namespace fheroes2
             _isIgnoreMouseWheelEventRoiCheck = true;
         }
 
+        void setOffset( const fheroes2::Point & offset );
+
         static Size getArea();
 
     private:

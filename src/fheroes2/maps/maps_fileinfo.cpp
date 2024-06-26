@@ -453,14 +453,16 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         // - X position of the object
         // - Y position of the object
         // - color of the object (the color is needed to modify the game for multi-player)
-        assert( map.victoryConditionMetadata.size() == 3 );
-        lossConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
-        lossConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[1] );
-        assert( ( map.victoryConditionMetadata[2] & map.humanPlayerColors ) == map.victoryConditionMetadata[2] );
+        assert( map.lossConditionMetadata.size() == 3 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] );
+        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[1] );
+        assert( ( map.lossConditionMetadata[2] & map.humanPlayerColors ) == map.lossConditionMetadata[2] );
         break;
     case LOSS_OUT_OF_TIME:
-        assert( map.victoryConditionMetadata.size() == 1 );
-        lossConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        assert( map.lossConditionMetadata.size() == 1 );
+        assert( map.lossConditionMetadata[0] > 0 );
+
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] );
         break;
     default:
         // Did you add a new loss condition? Add the logic above!
@@ -490,7 +492,11 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     case VICTORY_OBTAIN_ARTIFACT:
     case VICTORY_COLLECT_ENOUGH_GOLD:
         assert( map.victoryConditionMetadata.size() == 1 );
-        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        // 10,000 gold is the minimum value can be set since Easy difficulty gives a player this amount of gold.
+        assert( map.victoryConditionMetadata[0] >= 10000 );
+
+        // Divide by 1000 since the old format supports only this.
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] ) / 1000;
         break;
     case VICTORY_DEFEAT_OTHER_SIDE:
         // As of now only 2 alliances are supported.

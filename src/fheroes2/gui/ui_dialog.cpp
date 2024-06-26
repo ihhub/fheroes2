@@ -849,6 +849,11 @@ namespace fheroes2
         _buttonUp.subscribe( &_timedButtonUp );
         _buttonDown.subscribe( &_timedButtonDown );
 
+        setOffset( offset );
+    }
+
+    void ValueSelectionDialogElement::setOffset( const fheroes2::Point & offset )
+    {
         const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
         const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
 
