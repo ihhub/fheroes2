@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 11:29+0000\n"
+"POT-Creation-Date: 2024-06-26 15:46+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -11706,7 +11706,8 @@ msgstr "У Вас нет Волшебной Книги, поэтому Вы не
 msgid "No spell to cast."
 msgstr "Нет заклинаний для применения."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "У Вашего героя осталось %{point} очков магии."
 
 msgid "View Adventure Spells"

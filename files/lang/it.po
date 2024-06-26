@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 11:29+0000\n"
+"POT-Creation-Date: 2024-06-26 15:46+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -10938,7 +10938,8 @@ msgstr ""
 msgid "No spell to cast."
 msgstr "Nessuna magia disponibile."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Sono rimasti %{point} punti magia al tuo eroe."
 
 msgid "View Adventure Spells"

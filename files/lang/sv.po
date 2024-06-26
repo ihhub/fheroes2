@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 11:29+0000\n"
+"POT-Creation-Date: 2024-06-26 15:46+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -11691,7 +11691,8 @@ msgstr ""
 msgid "No spell to cast."
 msgstr "Inga besvärjelser att kasta."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Hjälten har %{point} besvärjelsepoäng kvar."
 
 msgid "View Adventure Spells"
