@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-25 10:45+0000\n"
+"POT-Creation-Date: 2024-06-26 11:29+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4430,6 +4430,13 @@ msgstr "Acumular ouro."
 
 msgid "Run out of time."
 msgstr "Ficar sem tempo."
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Ouro"
+
+msgid "Days:"
+msgstr ""
 
 msgid "Map Difficulty"
 msgstr "Dificuldade do Mapa"
