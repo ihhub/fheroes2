@@ -447,18 +447,22 @@ namespace
 
         const fheroes2::FontCharHandler charHandler( fontType );
 
-        // There might be multi-line text strings that contains only space characters
-        // so we limit the minimum word width to the space character width.
-        int32_t maxWidth = charHandler.getSpaceCharWidth();
+        int32_t maxWidth = 1;
         int32_t width = 0;
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( isSpaceChar( *data ) || isLineSeparator( *data ) ) {
                 // If it is the end of line ("\n") or a space (" "), then the word has ended.
+                if ( width == 0 && isSpaceChar( *data ) ) {
+                    // No words exist on this till now. Let's put maximum width as space width.
+                    width = charHandler.getWidth( *data );
+                }
+
                 if ( maxWidth < width ) {
                     maxWidth = width;
                 }
+
                 width = 0;
             }
             else {
