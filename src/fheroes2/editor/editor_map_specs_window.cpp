@@ -389,7 +389,7 @@ namespace
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
                 const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
-                const fheroes2::Point uiOffset{ roi.x + ( roi.width - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, roi.y };
+                const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
 
                 _goldAccumulationValue.setOffset( uiOffset );
                 _goldAccumulationValue.draw( output );
