@@ -598,12 +598,7 @@ namespace
                 return false;
             }
 
-            if ( !isActionObjectAllowed( townObjectInfo, tilePos ) ) {
-                errorMessage = _( "Action objects must be placed on clear tiles." );
-                return false;
-            }
-
-            if ( !isActionObjectAllowed( basementObjectInfo, tilePos ) ) {
+            if ( !isActionObjectAllowed( townObjectInfo, tilePos ) || !isActionObjectAllowed( basementObjectInfo, tilePos ) ) {
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
