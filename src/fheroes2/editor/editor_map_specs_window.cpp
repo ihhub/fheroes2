@@ -322,8 +322,6 @@ namespace
         {
             _conditionType = mapFormat.victoryConditionType;
 
-            _isNormalVictoryAllowed = false;
-
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // This condition has no metadata.
