@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4411,6 +4411,9 @@ msgstr "Få slut på tid."
 #, fuzzy
 msgid "Gold:"
 msgstr "Guld"
+
+msgid "Also allow normal victory"
+msgstr ""
 
 msgid "Days:"
 msgstr ""
