@@ -490,6 +490,10 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         assert( ( map.victoryConditionMetadata[2] & map.availablePlayerColors ) == map.victoryConditionMetadata[2] );
         break;
     case VICTORY_OBTAIN_ARTIFACT:
+        assert( map.victoryConditionMetadata.size() == 1 );
+
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        break;
     case VICTORY_COLLECT_ENOUGH_GOLD:
         assert( map.victoryConditionMetadata.size() == 1 );
         // 10,000 gold is the minimum value can be set since Easy difficulty gives a player this amount of gold.
