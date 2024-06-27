@@ -602,7 +602,6 @@ namespace
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
-
             break;
         }
         default: {
