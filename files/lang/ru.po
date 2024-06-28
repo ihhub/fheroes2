@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4430,6 +4430,9 @@ msgstr "Не успеть вовремя."
 #, fuzzy
 msgid "Gold:"
 msgstr "Золото"
+
+msgid "Also allow normal victory"
+msgstr ""
 
 msgid "Days:"
 msgstr ""
