@@ -532,7 +532,7 @@ namespace
                 fheroes2::Text text( _( "Days:" ), fheroes2::FontType::normalWhite() );
                 text.draw( uiOffset.x - text.width() - 5, roi.y + ( fheroes2::ValueSelectionDialogElement::getArea().height - text.height() ) / 2 + 2, output );
 
-                const int32_t offsetY = roi.y + fheroes2::ValueSelectionDialogElement::getArea().height + text.height() + 5;
+                const int32_t offsetY = roi.y + fheroes2::ValueSelectionDialogElement::getArea().height + 14;
 
                 std::string message = _( "Day: %{day} Week: %{week} Month: %{month}" );
                 int32_t days = _outOfTimeValue.getValue();
