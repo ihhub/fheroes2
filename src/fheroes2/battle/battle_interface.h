@@ -292,7 +292,7 @@ namespace Battle
             return _interfacePosition;
         }
 
-        fheroes2::Point GetMouseCursor() const;
+        fheroes2::Point getRelativeMouseCursorPos() const;
 
         void SetStatus( const std::string & message, const bool top = false );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );

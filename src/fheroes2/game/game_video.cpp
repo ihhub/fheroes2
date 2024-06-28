@@ -165,7 +165,7 @@ namespace Video
                 break;
             }
 
-            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 Mixer::Stop();
                 break;
             }

@@ -220,7 +220,7 @@ namespace Maps::Map_Format
 
         uint8_t computerPlayerColors{ 0 };
 
-        uint32_t firstOccurrenceDay{ 0 };
+        uint32_t firstOccurrenceDay{ 1 };
 
         // Repeat period for the event. 0 value means no repetition.
         uint32_t repeatPeriodInDays{ 0 };
@@ -248,7 +248,7 @@ namespace Maps::Map_Format
 
         uint8_t victoryConditionType{ 0 };
         bool isVictoryConditionApplicableForAI{ false };
-        bool allowNormalVictory{ true };
+        bool allowNormalVictory{ false };
         std::vector<uint32_t> victoryConditionMetadata;
 
         uint8_t lossConditionType{ 0 };

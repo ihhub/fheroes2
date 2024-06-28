@@ -38,7 +38,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 3 };
+    constexpr uint16_t currentSupportedVersion{ 4 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -85,6 +85,24 @@ namespace
                 if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
                     // Shift the objects in the Miscellaneous group by 2 positions "down", since non-ugly Graveyard versions were added to the beginning of this group
                     objInfo.index += 2;
+                }
+            }
+        }
+    }
+
+    void convertFromV3ToV4( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 3, "Remove this function." );
+
+        if ( map.version > 3 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS && objInfo.index >= 18 ) {
+                    // Shift the objects in the Dwellings group by 1 position "down" to add a new Cave object.
+                    objInfo.index += 1;
                 }
             }
         }
@@ -322,6 +340,7 @@ namespace Maps::Map_Format
 
         static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
         convertFromV2ToV3( map );
+        convertFromV3ToV4( map );
 
         return !msg.fail();
     }

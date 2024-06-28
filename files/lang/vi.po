@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -308,6 +308,12 @@ msgstr ""
 "Ờ\n"
 "N\n"
 "G"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Chiến binh"
@@ -3516,9 +3522,6 @@ msgstr "Tệp để Tải:"
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} tướng"
-
 msgid "Terrain object"
 msgstr "Đối tượng địa hình"
 
@@ -3537,6 +3540,26 @@ msgstr "Chọn Quái vật:"
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
 
+msgid "race|Random"
+msgstr "Ngẫu nhiên"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} tướng"
+
+msgid "You will place"
+msgstr "Ngươi sẽ đặt"
+
+msgid "Click to select this class."
+msgstr "Nhấp để chọn chủng tộc."
+
+msgid "Click to select this color."
+msgstr "Nhấp để chọn màu này."
+
 msgid "Select Treasure:"
 msgstr "Chọn Kho báu:"
 
@@ -3548,9 +3571,6 @@ msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Trung lập"
-
-msgid "race|Random"
-msgstr "Ngẫu nhiên"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
@@ -3566,15 +3586,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Trung lập"
-
-msgid "You will place"
-msgstr "Ngươi sẽ đặt"
-
-msgid "Click to select this class."
-msgstr "Nhấp để chọn chủng tộc."
-
-msgid "Click to select this color."
-msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3735,15 +3746,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Cỡ Biểu tượng"
 
+msgid "Map Type"
+msgstr "Kiểu Bản đồ"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
 "của lòng trung thành\" của trò chơi."
-
-msgid "Map Type"
-msgstr "Kiểu Bản đồ"
 
 msgid "Selected Name"
 msgstr "Chọn Tên"
@@ -3950,7 +3962,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Thanh Tin nhắn"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3959,7 +3971,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3986,6 +4001,59 @@ msgstr "Thanh Tin nhắn"
 msgid "Click to save the Event properties."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Tài nguyên"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ngày: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Sự kiện"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Lập trình Bổ sung"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Sự kiện"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Bảo vật"
 
@@ -3999,27 +4067,10 @@ msgstr "Chọn Bảo vật:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Tài nguyên"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Nhấp để lưu trò chơi hiện tại."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4454,6 +4505,16 @@ msgid "Run out of time."
 msgstr "Thoát khỏi biên tập bản đồ."
 
 #, fuzzy
+msgid "Gold:"
+msgstr "Vàng"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Độ khó\n"
@@ -4489,6 +4550,21 @@ msgstr ""
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Events"
+msgstr "Sự kiện"
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4534,6 +4610,41 @@ msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Lập trình Bổ sung"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Biên tập"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Tải một bản đồ đã có."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Tải một bản đồ đã có."
 
 msgid ""
 "\n"
@@ -4999,6 +5110,10 @@ msgstr "thực hiện lại tác vụ cuối"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "trình đơn bản đồ mới"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "chuyển đổi trạng thái"
 
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
@@ -5954,9 +6069,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Tháng: %{month} Tuần: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Ngày: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -11868,7 +11980,8 @@ msgstr "Ngươi không có Sách Phép, nên ngươi không thể niệm chú m�
 msgid "No spell to cast."
 msgstr "Không có phép để niệm."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Tướng của ngươi còn có %{point} điểm phép."
 
 msgid "View Adventure Spells"

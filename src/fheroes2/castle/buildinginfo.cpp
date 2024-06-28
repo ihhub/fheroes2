@@ -419,7 +419,7 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) con
             return DialogBuyBuilding( true );
         }
     }
-    else if ( le.MousePressRight( area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( area ) ) {
         DialogBuyBuilding( false );
     }
     return false;
@@ -538,12 +538,12 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        if ( !buttons && !le.MousePressRight() ) {
+        if ( !buttons && !le.isMouseRightButtonPressed() ) {
             break;
         }
 
-        le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return true;
@@ -553,10 +553,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
             break;
         }
 
-        if ( buttonOkay.isVisible() && le.MousePressRight( buttonOkay.area() ) ) {
+        if ( buttonOkay.isVisible() && le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), GetConditionDescription(), Dialog::ZERO );
         }
-        else if ( buttonCancel.isVisible() && le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( buttonCancel.isVisible() && le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }

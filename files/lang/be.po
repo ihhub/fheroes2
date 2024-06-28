@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -275,6 +275,12 @@ msgid ""
 "A\n"
 "R\n"
 "D"
+msgstr ""
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -3280,10 +3286,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Ухваліць выбар."
 
-#, fuzzy
-msgid "%{color} %{race} hero"
-msgstr "%{color} гулец"
-
 msgid "Terrain object"
 msgstr ""
 
@@ -3302,6 +3304,30 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "race|Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} гулец"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Мова"
@@ -3316,11 +3342,6 @@ msgstr "Наладкі замка"
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
-
-msgid "race|Random"
-msgstr ""
-"Выпад-\n"
-"ковы"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3340,17 +3361,6 @@ msgstr "%{color} гулец"
 
 msgid "race|Neutral"
 msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3511,15 +3521,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Іконка памеру"
 
+msgid "Map Type"
+msgstr "Тып мапы"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Паказвае, для якой версіі гульні зроблена мапа: для \"The Succession Wars\" "
 "альбо \"The Price of Loyalty\""
-
-msgid "Map Type"
-msgstr "Тып мапы"
 
 msgid "Selected Name"
 msgstr "Назва мапы"
@@ -3720,7 +3731,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr ""
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3729,7 +3740,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3755,6 +3769,53 @@ msgstr ""
 msgid "Click to save the Event properties."
 msgstr "Назва абранай мапы."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Назва абранай мапы."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Дзень: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Назва абранай мапы."
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr ""
 
@@ -3767,26 +3828,10 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Назва абранай мапы."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -4185,6 +4230,15 @@ msgstr "Назапасіць вялікую колькасць золата."
 msgid "Run out of time."
 msgstr ""
 
+msgid "Gold:"
+msgstr ""
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
 #, fuzzy
 msgid "Map Difficulty"
 msgstr "Складанасць мапы:"
@@ -4216,6 +4270,20 @@ msgstr ""
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Назва абранай мапы."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+msgid "Events"
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4256,6 +4324,37 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Назва абранай мапы."
+
+msgid "Add Rumor"
+msgstr ""
+
+msgid "Add an additional rumor."
+msgstr ""
+
+msgid "Edit Rumor"
+msgstr ""
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""
@@ -4707,6 +4806,9 @@ msgstr "Наладкі замка"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Звычайная гульня"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5599,9 +5701,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месяц: %{month} Тыдзень: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Дзень: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -10519,7 +10618,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr ""
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

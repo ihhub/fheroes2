@@ -283,8 +283,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGELLANS_MAPS:
-            // TODO: avoid hardcoded resource values for objects.
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
@@ -2455,14 +2454,19 @@ namespace AI
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
             if ( hero.GetIndex() != tileIndex ) {
-                // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. No task should be updated.
-                // If any of these assertions blow up, then this is not one of these cases.
+                // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
+                // one of these cases.
 #ifndef NDEBUG
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 #endif
                 assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
                 assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
+                // In case the castle has just been captured, we need to update the information related to the object on the corresponding tile.
+                updateTile();
+
+                // Since the hero has not yet reached the tile associated with the corresponding task, this task is not considered completed and should not be removed
+                // yet.
                 return;
             }
 
@@ -2471,9 +2475,6 @@ namespace AI
 
             // How is it even possible that a hero died while simply moving into a castle?
             assert( hero.isActive() );
-
-            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
-            // TODO: but also have enough army to defend the castle.
 
             hero.SetModes( Heroes::SLEEPER );
             _priorityTargets.erase( tileIndex );

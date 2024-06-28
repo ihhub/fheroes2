@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -307,6 +307,12 @@ msgstr ""
 "A\n"
 "R\n"
 "D"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Războinic"
@@ -3325,9 +3331,6 @@ msgstr "Încarcă fișierul:"
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "%{color} %{race} hero"
-msgstr ""
-
 msgid "Terrain object"
 msgstr ""
 
@@ -3346,6 +3349,25 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "race|Random"
+msgstr "Aleatorie"
+
+msgid "Click to start placing the selected hero."
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{name} cel %{race}"
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Selectați ținta vrăjii"
@@ -3360,9 +3382,6 @@ msgstr ""
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
-msgid "race|Random"
-msgstr "Aleatorie"
-
 msgid "Click to start placing the selected castle/town."
 msgstr ""
 
@@ -3376,15 +3395,6 @@ msgid "%{color} %{race} %{townOrCastle}"
 msgstr ""
 
 msgid "race|Neutral"
-msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-msgid "Click to select this class."
-msgstr ""
-
-msgid "Click to select this color."
 msgstr ""
 
 #, fuzzy
@@ -3537,12 +3547,12 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+msgid "Map Type"
 msgstr ""
 
-msgid "Map Type"
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 
 msgid "Selected Name"
@@ -3736,7 +3746,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Bara de mesaje"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3745,7 +3755,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3772,6 +3785,55 @@ msgstr "Bara de mesaje"
 msgid "Click to save the Event properties."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resursă"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ziua: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Add Event"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Programare suplimentară"
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artifact"
 
@@ -3785,27 +3847,10 @@ msgstr "Artifact"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Resursă"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -4189,6 +4234,16 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Gold:"
+msgstr "Aur"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr "Dificultatea hărții:"
 
@@ -4217,6 +4272,20 @@ msgstr ""
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Events"
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr ""
@@ -4251,6 +4320,39 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Programare suplimentară"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Editor"
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""
@@ -4690,6 +4792,9 @@ msgstr "Personalizează opțiunile sistemului"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Personalizează opțiunile sistemului"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5569,9 +5674,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Luna: %{month} Săptămâna: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Ziua: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -10466,7 +10568,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr "Nicio vrajă disponibilă."
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

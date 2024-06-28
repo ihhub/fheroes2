@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-27 16:04+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -313,6 +313,12 @@ msgstr ""
 "A\n"
 "R\n"
 "D"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -3497,10 +3503,6 @@ msgstr "Soubor k načtení:"
 msgid "Accept the choice made."
 msgstr ""
 
-#, fuzzy
-msgid "%{color} %{race} hero"
-msgstr "%{color} hráč"
-
 msgid "Terrain object"
 msgstr ""
 
@@ -3523,6 +3525,28 @@ msgstr "Vybrat %{name}"
 msgid "Select Hero:"
 msgstr "Nejlepší hrdina:"
 
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} hráč"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknout sem pro výběr scénáře."
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Nejlepší hrdina:"
@@ -3536,9 +3560,6 @@ msgid "Castle/town placing"
 msgstr "Možnosti Hradu"
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
-
-msgid "race|Random"
 msgstr ""
 
 #, fuzzy
@@ -3559,17 +3580,6 @@ msgstr "%{color} hráč"
 
 msgid "race|Neutral"
 msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Kliknout sem pro výběr scénáře."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Kliknout sem pro výběr scénáře."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3727,14 +3737,14 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Map Type"
 msgstr "Velikost mapy"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
 
 msgid "Selected Name"
 msgstr ""
@@ -3935,7 +3945,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Pruh správ"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3944,7 +3954,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3971,6 +3984,56 @@ msgstr "Pruh správ"
 msgid "Click to save the Event properties."
 msgstr "Klikni pro uložení aktuální hry."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Zdroje"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Den: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Událost"
+
+msgid "Add an additional event."
+msgstr ""
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Událost"
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -3984,27 +4047,10 @@ msgstr "Artefakt"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Zdroje"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Klikni pro uložení aktuální hry."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4424,6 +4470,16 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Gold:"
+msgstr "Zlato"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Mapa\n"
@@ -4464,6 +4520,21 @@ msgid "Click to accept the changes made."
 msgstr "Klikni pro zobrazení následujícího města."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "Events"
+msgstr "Událost"
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Klikni pro zobrazení následujícího města."
 
@@ -4502,6 +4573,37 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Add Rumor"
+msgstr ""
+
+msgid "Add an additional rumor."
+msgstr ""
+
+msgid "Edit Rumor"
+msgstr ""
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""
@@ -4969,6 +5071,9 @@ msgstr "Zobrazit následující město"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Zobrazit následující město"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5917,9 +6022,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Měsíc: %{month} Týden: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Den: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -11021,7 +11123,8 @@ msgstr "Nemáš Knihu kouzel, bez ní nemůžeš kouzlit."
 msgid "No spell to cast."
 msgstr "Žádné kouzlo k seslání."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Tvému hrdinovi zbývá %{point} bodů kouzla."
 
 msgid "View Adventure Spells"

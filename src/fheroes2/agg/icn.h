@@ -1116,6 +1116,11 @@ namespace ICN
         BUTTON_LOAD_MAP_EVIL,
         BUTTON_LOAD_MAP_GOOD,
 
+        BUTTON_RUMORS_GOOD,
+        BUTTON_RUMORS_EVIL,
+        BUTTON_EVENTS_GOOD,
+        BUTTON_EVENTS_EVIL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

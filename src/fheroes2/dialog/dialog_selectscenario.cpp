@@ -538,7 +538,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     display.render();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         listbox.QueueEventProcessing();
 
@@ -616,74 +616,74 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
 
         // The currentPressedButton must be set correctly before the following button redrawing code block, otherwise, the map size selection button that has just been
         // clicked will be redrawn in the released state for a short time.
-        buttonSelectSmall.drawOnState( le.MousePressLeft( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
-        buttonSelectMedium.drawOnState( le.MousePressLeft( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
-        buttonSelectLarge.drawOnState( le.MousePressLeft( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
-        buttonSelectXLarge.drawOnState( le.MousePressLeft( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
-        buttonSelectAll.drawOnState( le.MousePressLeft( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
+        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
+        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
+        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
+        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
+        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
 
-        if ( le.MousePressRight( buttonSelectSmall.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonSelectSmall.area() ) ) {
             ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectMedium.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectMedium.area() ) ) {
             ShowToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectLarge.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectLarge.area() ) ) {
             ShowToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectXLarge.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectXLarge.area() ) ) {
             ShowToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectAll.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectAll.area() ) ) {
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         }
-        else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( countPlayers ) || le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
             ShowToolTip( _( "Players Icon" ),
                          _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
         }
-        else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) || le.isMouseRightButtonPressedInArea( curMapSize ) ) {
             ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         }
-        else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) ) {
-            // TODO: update this tooltip once the Editor is out for public.
-            ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
+        else if ( le.isMouseRightButtonPressedInArea( mapTypes ) || le.isMouseRightButtonPressedInArea( curMapType ) ) {
+            ShowToolTip( _( "Map Type" ),
+                         _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
         }
-        else if ( le.MousePressRight( mapNames ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
+        else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
+            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
             if ( item ) {
                 mapInfo( *item );
             }
         }
-        else if ( le.MousePressRight( curMapName ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curMapName ) ) {
             ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         }
-        else if ( le.MousePressRight( victoryConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
+        else if ( le.isMouseRightButtonPressedInArea( victoryConds ) ) {
+            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
             if ( item ) {
                 VictoryConditionInfo( *item );
             }
         }
-        else if ( le.MousePressRight( lossConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
+        else if ( le.isMouseRightButtonPressedInArea( lossConds ) ) {
+            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
             if ( item ) {
                 LossConditionInfo( *item );
             }
         }
-        else if ( le.MousePressRight( curVictoryCond ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curVictoryCond ) ) {
             VictoryConditionInfo( listbox.GetCurrent() );
         }
-        else if ( le.MousePressRight( curLossCond ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curLossCond ) ) {
             LossConditionInfo( listbox.GetCurrent() );
         }
-        else if ( le.MousePressRight( curDifficulty ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curDifficulty ) ) {
             ShowToolTip(
                 _( "Selected Map Difficulty" ),
                 _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         }
-        else if ( le.MousePressRight( curDescription ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curDescription ) ) {
             ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
         }
 
