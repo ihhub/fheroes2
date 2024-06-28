@@ -335,7 +335,7 @@ namespace Editor
             }
 
             text.fitToOneRow( nameArea.width );
-            text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, display, nameArea );
+            text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, 0, display, nameArea );
         };
         drawCastleName();
 
@@ -389,7 +389,7 @@ namespace Editor
             defaultArmySign.hide();
 
             const fheroes2::Text armyText( isTown ? _( "Town Army" ) : _( "Castle Army" ), fheroes2::FontType::normalWhite() );
-            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
+            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, 0, display, dialogRoi );
         }
 
         Army castleArmy;
