@@ -529,8 +529,23 @@ namespace
                 _outOfTimeValue.setOffset( uiOffset );
                 _outOfTimeValue.draw( output );
 
-                const fheroes2::Text text( _( "Days:" ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text text( _( "Days:" ), fheroes2::FontType::normalWhite() );
                 text.draw( uiOffset.x - text.width() - 5, roi.y + ( fheroes2::ValueSelectionDialogElement::getArea().height - text.height() ) / 2 + 2, output );
+
+                const int32_t offsetY = roi.y + fheroes2::ValueSelectionDialogElement::getArea().height + text.height() + 5;
+
+                std::string message = _( "Day: %{day} Week: %{week} Month: %{month}" );
+                int32_t days = _outOfTimeValue.getValue();
+                const int32_t month = ( days - 1 ) / daysInMonth;
+                days -= month * daysInMonth;
+
+                StringReplace( message, "%{day}", ( ( days - 1 ) % 7 ) + 1 );
+                StringReplace( message, "%{week}", ( ( days - 1 ) / 7 ) + 1 );
+                StringReplace( message, "%{month}", month + 1 );
+
+                text.set( std::move( message ), fheroes2::FontType::normalWhite() );
+                text.draw( roi.x, offsetY, roi.width, output );
+
                 break;
             }
             default:
