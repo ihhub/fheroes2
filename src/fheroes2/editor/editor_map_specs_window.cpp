@@ -73,6 +73,8 @@ namespace
     const int32_t daysInMonth{ 7 * 4 };
     const int32_t daysInYear{ daysInMonth * 12 };
 
+    const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::RANDOM_ULTIMATE_ARTIFACT );
+
     // TODO: expand these conditions by adding missing ones.
     const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
                                                            Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
@@ -329,7 +331,7 @@ namespace
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     // In original game's map format '0' stands for the Ultimate Artifact.
-                    _victoryArtifactId = ( mapFormat.victoryConditionMetadata[0] == 0 ) ? Artifact::RANDOM_ULTIMATE_ARTIFACT : mapFormat.victoryConditionMetadata[0];
+                    _victoryArtifactId = ( mapFormat.victoryConditionMetadata[0] == 0 ) ? ultimateArtifactId : mapFormat.victoryConditionMetadata[0];
                 }
 
                 break;
@@ -374,7 +376,7 @@ namespace
                 mapFormat.isVictoryConditionApplicableForAI = false;
 
                 // In original game's map format '0' stands for the Ultimate Artifact. Set it also to '0' for the compatibility.
-                mapFormat.victoryConditionMetadata[0] = ( _victoryArtifactId == Artifact::RANDOM_ULTIMATE_ARTIFACT ) ? 0 : _victoryArtifactId;
+                mapFormat.victoryConditionMetadata[0] = ( _victoryArtifactId == ultimateArtifactId ) ? 0 : _victoryArtifactId;
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
 
                 return;
@@ -551,7 +553,7 @@ namespace
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
-        uint32_t _victoryArtifactId{ Artifact::RANDOM_ULTIMATE_ARTIFACT };
+        uint32_t _victoryArtifactId{ ultimateArtifactId };
 
         fheroes2::ImageRestorer _restorer;
 
