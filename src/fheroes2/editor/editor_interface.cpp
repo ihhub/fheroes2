@@ -67,6 +67,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
 #include "screen.h"
@@ -1575,6 +1576,45 @@ namespace Interface
             } );
 
             action.commit();
+        }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
+
+            if ( objectInfo.objectType == MP2::OBJ_OBELISK ) {
+                const auto & objects = Maps::getObjectsByGroup( groupType );
+
+                std::set<size_t> obeliskIndex;
+                for ( size_t i = 0; i < objects.size(); ++i ) {
+                    if ( objects[i].objectType == MP2::OBJ_OBELISK ) {
+                        obeliskIndex.emplace( i );
+                    }
+                }
+
+                size_t obeliskCount = 0;
+                for ( const auto & mapTile : _mapFormat.tiles ) {
+                    for ( const auto & object : mapTile.objects ) {
+                        if ( object.group == groupType && obeliskIndex.count( object.index ) > 0 ) {
+                            assert( object.index < objects.size() );
+
+                            ++obeliskCount;
+                        }
+                    }
+                }
+
+                if ( obeliskCount >= PUZZLETILES ) {
+                    std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
+                    StringReplace( warning, "%{count}", PUZZLETILES );
+                    _warningMessage.reset( std::move( warning ) );
+                    return;
+                }
+            }
+
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
+                _warningMessage.reset( std::move( errorMessage ) );
+                return;
+            }
+
+            _setObjectOnTileAsAction( tile, groupType, objectType );
         }
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
