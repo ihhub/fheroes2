@@ -582,8 +582,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
 std::string BuildingInfo::GetConditionDescription() const
 {
-    std::string res;
-
     switch ( _status ) {
     case BuildingStatus::NOT_TODAY:
     case BuildingStatus::NEED_CASTLE:
@@ -591,39 +589,42 @@ std::string BuildingInfo::GetConditionDescription() const
 
     case BuildingStatus::BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
-            res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
+            std::string res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
+            return res;
         }
-        else {
-            res = _( "This building has been disabled." );
-        }
-        break;
 
-    case BuildingStatus::LACK_RESOURCES:
-        res = _( "Cannot afford the %{name}." );
-        StringReplace( res, "%{name}", GetName() );
-        break;
+        return _( "This building has been disabled." );
 
-    case BuildingStatus::ALREADY_BUILT:
-        res = _( "The %{name} is already built." );
+    case BuildingStatus::LACK_RESOURCES: {
+        std::string res = _( "Cannot afford the %{name}." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
-    case BuildingStatus::REQUIRES_BUILD:
-        res = _( "Cannot build the %{name}." );
+    case BuildingStatus::ALREADY_BUILT: {
+        std::string res = _( "The %{name} is already built." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
-    case BuildingStatus::ALLOW_BUILD:
-        res = _( "Build %{name}." );
+    case BuildingStatus::REQUIRES_BUILD: {
+        std::string res = _( "Cannot build the %{name}." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
+
+    case BuildingStatus::ALLOW_BUILD: {
+        std::string res = _( "Build %{name}." );
+        StringReplace( res, "%{name}", GetName() );
+        return res;
+    }
 
     default:
         break;
     }
 
-    return res;
+    return {};
 }
 
 void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
