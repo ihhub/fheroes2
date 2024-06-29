@@ -550,7 +550,8 @@ void Castle::PostLoad()
 
     // end
     DEBUG_LOG( DBG_GAME, DBG_INFO,
-               ( _constructedBuildings & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
+               ( _constructedBuildings & BUILD_CASTLE ? "castle" : "town" )
+                   << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
 }
 
 void Castle::_setDefaultBuildings()
