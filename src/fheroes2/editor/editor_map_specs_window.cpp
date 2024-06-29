@@ -401,7 +401,48 @@ namespace
             mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
-        void render( fheroes2::Image & output, const bool isEvilInterface )
+        void renderCahgableParts( fheroes2::Image & output )
+        {
+            switch ( _conditionType ) {
+            case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
+                // No special UI is needed.
+
+                break;
+            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
+                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
+
+                fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+
+                if ( _isNormalVictoryAllowed ) {
+                    _allowNormalVictory.show();
+                }
+                else {
+                    _allowNormalVictory.hide();
+                }
+
+                break;
+            }
+            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
+                _goldAccumulationValue.draw( output );
+
+                if ( _isNormalVictoryAllowed ) {
+                    _allowNormalVictory.show();
+                }
+                else {
+                    _allowNormalVictory.hide();
+                }
+
+                break;
+            }
+            default:
+                // Did you add more conditions? Add the logic for them!
+                assert( 0 );
+
+                break;
+            }
+        }
+
+        void renderStaticParts( fheroes2::Image & output, const bool isEvilInterface )
         {
             // Restore background to make sure that other UI elements aren't being rendered.
             _restorer.restore();
@@ -441,13 +482,6 @@ namespace
 
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
                                                                        roi.y + valueSectionUiSize.height + 10, isEvilInterface );
-
-                if ( _isNormalVictoryAllowed ) {
-                    _allowNormalVictory.show();
-                }
-                else {
-                    _allowNormalVictory.hide();
-                }
 
                 break;
             }
@@ -904,7 +938,8 @@ namespace Editor
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
         VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
 
-        victoryConditionUI.render( display, isEvilInterface );
+        victoryConditionUI.renderStaticParts( display, isEvilInterface );
+        victoryConditionUI.renderCahgableParts( display );
 
         // Loss conditions.
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
@@ -973,7 +1008,7 @@ namespace Editor
             }
 
             if ( victoryConditionUI.processEvents() ) {
-                victoryConditionUI.render( display, isEvilInterface );
+                victoryConditionUI.renderCahgableParts( display );
                 display.render( victoryConditionUIRoi );
             }
             else if ( lossConditionUI.processEvents() ) {
@@ -1044,7 +1079,8 @@ namespace Editor
                     mapFormat.victoryConditionType = result;
 
                     victoryConditionUI.setCondition( mapFormat.victoryConditionType );
-                    victoryConditionUI.render( display, isEvilInterface );
+                    victoryConditionUI.renderStaticParts( display, isEvilInterface );
+                    victoryConditionUI.renderCahgableParts( display );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
