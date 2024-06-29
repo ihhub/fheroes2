@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4189,6 +4189,12 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
 #, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+"Un maximum de %{count} héros de la même couleur peuvent être placés sur la "
+"carte."
+
+#, fuzzy
 msgid "The map is corrupted."
 msgstr "Le fichier de sauvegarde est corrompu."
 
@@ -4528,6 +4534,9 @@ msgid "Also allow normal victory"
 msgstr ""
 
 msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 #, fuzzy
