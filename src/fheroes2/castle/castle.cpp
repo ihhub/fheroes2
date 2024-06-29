@@ -41,6 +41,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
@@ -63,6 +64,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -100,6 +102,7 @@ namespace
 Castle::Castle()
     : race( Race::NONE )
     , _constructedBuildings( 0 )
+    , _disabledBuildings( 0 )
     , captain( *this )
     , army( nullptr )
 {
@@ -111,6 +114,7 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
     : MapPosition( fheroes2::Point( cx, cy ) )
     , race( rc )
     , _constructedBuildings( 0 )
+    , _disabledBuildings( 0 )
     , captain( *this )
     , army( nullptr )
 {
@@ -398,12 +402,11 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         _constructedBuildings |= BUILD_TENT;
     }
 
+    _disabledBuildings = 0;
+
     const bool allowToBuildCastle = ( dataStream.get() != 0 );
-    if ( allowToBuildCastle ) {
-        ResetModes( ALLOW_CASTLE_CONSTRUCTION );
-    }
-    else {
-        SetModes( ALLOW_CASTLE_CONSTRUCTION );
+    if ( !allowToBuildCastle ) {
+        _disabledBuildings |= BUILD_CASTLE;
     }
 
     // Skip the rest of 29 bytes.
@@ -421,8 +424,10 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
         _setDefaultBuildings();
     }
 
-    if ( std::find( metadata.bannedBuildings.begin(), metadata.bannedBuildings.end(), BUILD_CASTLE ) == metadata.bannedBuildings.end() ) {
-        SetModes( ALLOW_CASTLE_CONSTRUCTION );
+    _disabledBuildings = 0;
+
+    for ( const uint32_t building : metadata.bannedBuildings ) {
+        _disabledBuildings |= building;
     }
 
     // Check the default Army state for the Neutral player.
@@ -1226,12 +1231,12 @@ BuildingStatus Castle::CheckBuyBuilding( const uint32_t build ) const
         return BuildingStatus::ALREADY_BUILT;
     }
 
+    if ( _disabledBuildings & build ) {
+        return BuildingStatus::BUILD_DISABLE;
+    }
+
+    // TODO: remove these conditions and do calculation once per game.
     switch ( build ) {
-    case BUILD_CASTLE:
-        if ( !Modes( ALLOW_CASTLE_CONSTRUCTION ) ) {
-            return BuildingStatus::BUILD_DISABLE;
-        }
-        break;
     case BUILD_SHIPYARD:
         if ( !HasSeaAccess() ) {
             return BuildingStatus::BUILD_DISABLE;
@@ -2500,25 +2505,38 @@ StreamBase & operator<<( StreamBase & msg, const Castle & castle )
 {
     const ColorBase & color = castle;
 
-    msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle.captain << color << castle.name << castle.mageguild
-        << static_cast<uint32_t>( CASTLEMAXMONSTER );
+    msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
+        << color << castle.name << castle.mageguild << static_cast<uint32_t>( CASTLEMAXMONSTER );
 
-    for ( uint32_t ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-        msg << castle.dwelling[ii];
+    for ( uint32_t i = 0; i < CASTLEMAXMONSTER; ++i ) {
+        msg << castle.dwelling[i];
+    }
 
     return msg << castle.army;
 }
 
 StreamBase & operator>>( StreamBase & msg, Castle & castle )
 {
+    msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1101_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1101_RELEASE ) {
+        if ( !castle.Modes( Castle::UNUSED_ALLOW_CASTLE_CONSTRUCTION ) ) {
+            castle._disabledBuildings = BUILD_CASTLE;
+        }
+    }
+    else {
+        msg >> castle._disabledBuildings;
+    }
+
     ColorBase & color = castle;
+    msg >> castle.captain >> color >> castle.name >> castle.mageguild;
+
     uint32_t dwellingcount;
-
-    msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings >> castle.captain >> color >> castle.name >> castle.mageguild;
-
     msg >> dwellingcount;
-    for ( uint32_t ii = 0; ii < dwellingcount; ++ii )
-        msg >> castle.dwelling[ii];
+    for ( uint32_t i = 0; i < dwellingcount; ++i ) {
+        msg >> castle.dwelling[i];
+    }
 
     msg >> castle.army;
     castle.army.SetCommander( &castle.captain );

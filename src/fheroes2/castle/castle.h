@@ -120,7 +120,7 @@ class Castle : public MapPosition, public BitModes, public ColorBase, public Con
 public:
     enum : uint32_t
     {
-        ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
+        UNUSED_ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
         CUSTOM_ARMY = ( 1 << 2 ),
         ALLOW_TO_BUILD_TODAY = ( 1 << 3 )
     };
@@ -297,6 +297,11 @@ public:
 
     Troops getAvailableArmy( Funds potentialBudget ) const;
 
+    bool isBuildingDisabled( const uint32_t buildingType ) const
+    {
+        return ( _disabledBuildings & buildingType ) != 0;
+    }
+
 private:
     enum class ConstructionDialogResult : int
     {
@@ -337,6 +342,8 @@ private:
 
     int race;
     uint32_t _constructedBuildings;
+    uint32_t _disabledBuildings;
+
     Captain captain;
 
     std::string name;

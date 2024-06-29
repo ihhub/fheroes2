@@ -595,8 +595,6 @@ std::string BuildingInfo::GetConditionDescription() const
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            // TODO: Add future disabled buildings here when it is made possible in the Editor.
-            assert( 0 );
             res = _( "This building has been disabled." );
         }
         break;
