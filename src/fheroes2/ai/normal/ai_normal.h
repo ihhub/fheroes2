@@ -34,6 +34,7 @@
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
+#include "skill.h"
 #include "world_pathfinding.h"
 
 class Castle;
@@ -303,6 +304,7 @@ namespace AI
         void battleBegins() override;
 
         void tradingPostVisitEvent( Kingdom & kingdom ) override;
+        Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right ) override;
 
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
 
