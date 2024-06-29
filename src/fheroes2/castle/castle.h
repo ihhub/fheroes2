@@ -120,9 +120,9 @@ class Castle : public MapPosition, public BitModes, public ColorBase, public Con
 public:
     enum : uint32_t
     {
-        ALLOWCASTLE = 0x00000002,
-        CUSTOMARMY = 0x00000004,
-        ALLOWBUILD = 0x00000008
+        ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
+        CUSTOM_ARMY = ( 1 << 2 ),
+        ALLOW_TO_BUILD_TODAY = ( 1 << 3 )
     };
 
     enum class CastleDialogReturnValue : int
@@ -158,7 +158,7 @@ public:
 
     bool isCastle() const
     {
-        return ( building & BUILD_CASTLE ) != 0;
+        return ( _constructedBuildings & BUILD_CASTLE ) != 0;
     }
 
     bool HasSeaAccess() const;
@@ -259,7 +259,7 @@ public:
 
     bool isBuild( uint32_t bd ) const
     {
-        return ( building & bd ) != 0;
+        return ( _constructedBuildings & bd ) != 0;
     }
 
     bool BuyBuilding( uint32_t );
@@ -336,7 +336,7 @@ private:
     friend StreamBase & operator>>( StreamBase &, Castle & );
 
     int race;
-    uint32_t building;
+    uint32_t _constructedBuildings;
     Captain captain;
 
     std::string name;
