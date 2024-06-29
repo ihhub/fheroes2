@@ -67,6 +67,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
 #include "screen.h"
