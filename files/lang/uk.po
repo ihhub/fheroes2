@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-05-25 12:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4114,6 +4114,10 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакт не можна розмістити на воді."
 
 #, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "На мапі можна розмістити максимум %{count} героя однакового кольору."
+
+#, fuzzy
 msgid "The map is corrupted."
 msgstr "Файл збереження пошкоджений."
 
@@ -4441,7 +4445,13 @@ msgstr "Вийти з редактора мап."
 msgid "Gold:"
 msgstr "Золото"
 
+msgid "Also allow normal victory"
+msgstr ""
+
 msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "Map Difficulty"

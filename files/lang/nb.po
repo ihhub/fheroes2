@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4247,6 +4247,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Lagringsfilen er korrupt."
@@ -4586,7 +4589,13 @@ msgstr "Forlat karttegneren"
 msgid "Gold:"
 msgstr "Gull"
 
+msgid "Also allow normal victory"
+msgstr ""
+
 msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 #, fuzzy

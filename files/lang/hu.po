@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4090,6 +4090,10 @@ msgstr "A játékos adatainak frissítése nem sikerült."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen."
 
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
+
 msgid "The map is corrupted."
 msgstr "A térkép fájl sérült."
 
@@ -4407,7 +4411,13 @@ msgstr "Kifutás az időből."
 msgid "Gold:"
 msgstr "Arany"
 
+msgid "Also allow normal victory"
+msgstr ""
+
 msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "Map Difficulty"

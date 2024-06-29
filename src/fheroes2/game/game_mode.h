@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,8 +43,13 @@ namespace fheroes2
         LOAD_CAMPAIGN,
         LOAD_MULTI,
         LOAD_HOT_SEAT,
-        SCENARIO_INFO,
-        SELECT_SCENARIO,
+        // Do NOT change the order of the below 6 entries!
+        SELECT_SCENARIO_ONE_HUMAN_PLAYER,
+        SELECT_SCENARIO_TWO_HUMAN_PLAYERS,
+        SELECT_SCENARIO_THREE_HUMAN_PLAYERS,
+        SELECT_SCENARIO_FOUR_HUMAN_PLAYERS,
+        SELECT_SCENARIO_FIVE_HUMAN_PLAYERS,
+        SELECT_SCENARIO_SIX_HUMAN_PLAYERS,
         START_GAME,
         SAVE_GAME,
         END_TURN,

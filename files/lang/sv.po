@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-26 14:49+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4095,6 +4095,10 @@ msgstr "Misslyckades att uppdatera spelarinformation."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
+
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
 
@@ -4412,7 +4416,13 @@ msgstr "Få slut på tid."
 msgid "Gold:"
 msgstr "Guld"
 
+msgid "Also allow normal victory"
+msgstr ""
+
 msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "Map Difficulty"
