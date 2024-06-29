@@ -106,7 +106,7 @@ Castle::Castle()
     , captain( *this )
     , army( nullptr )
 {
-    std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
+    dwelling = { 0 };
     army.SetCommander( &captain );
 }
 
@@ -118,7 +118,7 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
     , captain( *this )
     , army( nullptr )
 {
-    std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
+    dwelling = { 0 };
     army.SetCommander( &captain );
 }
 
@@ -2507,10 +2507,10 @@ StreamBase & operator<<( StreamBase & msg, const Castle & castle )
     const ColorBase & color = castle;
 
     msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
-        << color << castle.name << castle.mageguild << static_cast<uint32_t>( CASTLEMAXMONSTER );
+        << color << castle.name << castle.mageguild << static_cast<uint32_t>( castle.dwelling.size() );
 
-    for ( uint32_t i = 0; i < CASTLEMAXMONSTER; ++i ) {
-        msg << castle.dwelling[i];
+    for ( const uint32_t dwelling : castle.dwelling ) {
+        msg << dwelling;
     }
 
     return msg << castle.army;
@@ -2535,8 +2535,17 @@ StreamBase & operator>>( StreamBase & msg, Castle & castle )
 
     uint32_t dwellingcount;
     msg >> dwellingcount;
-    for ( uint32_t i = 0; i < dwellingcount; ++i ) {
-        msg >> castle.dwelling[i];
+
+    if ( dwellingcount != castle.dwelling.size() ) {
+        // Is it a corrupted save?
+        assert( 0 );
+
+        castle.dwelling = { 0 };
+    }
+    else {
+        for ( uint32_t & dwelling : castle.dwelling ) {
+            msg >> dwelling;
+        }
     }
 
     msg >> castle.army;

@@ -349,7 +349,7 @@ private:
     std::string name;
 
     MageGuild mageguild;
-    uint32_t dwelling[CASTLEMAXMONSTER];
+    std::array<uint32_t, CASTLEMAXMONSTER> dwelling;
     Army army;
 };
 
