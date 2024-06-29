@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "artifact.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -320,26 +321,30 @@ namespace
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             // Set the initial state for all victory conditions.
-            if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
-                switch ( _conditionType ) {
-                case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
-                    // This condition has no extra options.
-                    break;
-                case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
+            switch ( _conditionType ) {
+            case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
+                // This condition has no extra options.
+
+                break;
+            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
+                if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     // In original game's map format '0' stands for the Ultimate Artifact.
                     _victoryArtifactId = ( mapFormat.victoryConditionMetadata[0] == 0 ) ? Artifact::RANDOM_ULTIMATE_ARTIFACT : mapFormat.victoryConditionMetadata[0];
-
-                    break;
-                case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
-                    _goldAccumulationValue.setValue( mapFormat.victoryConditionMetadata[0] );
-
-                    break;
                 }
-                default:
-                    // Did you add more conditions? Add the logic for them!
-                    assert( 0 );
-                    break;
+
+                break;
+            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
+                if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
+                    _goldAccumulationValue.setValue( static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] ) );
                 }
+
+                break;
+            }
+            default:
+                // Did you add more conditions? Add the logic for them!
+                assert( 0 );
+
+                break;
             }
         }
 
@@ -384,10 +389,12 @@ namespace
 
                 mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( _goldAccumulationValue.getValue() );
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
+
                 return;
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
 
@@ -402,6 +409,7 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No special UI is needed.
+
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 const fheroes2::Rect roi{ _restorer.rect() };
@@ -411,28 +419,12 @@ namespace
 
                 fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
 
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( _victoryArtifactId ).IndexSprite64() );
+                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
 
                 fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
-                if ( _victoryArtifactId == 0 ) {
-                    // This is a case for the Ultimate Artifact.
-                    // There is no image for it in game assets - use the Adventure map sprite for now.
-                    const fheroes2::Sprite & ultimateArtifactImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, 164 );
-                    fheroes2::Blit( ultimateArtifactImage, 0, 0, output, _artifactRoi.x + 6 + ( artifactImage.width() - ultimateArtifactImage.width() ) / 2,
-                                    _artifactRoi.y + 6 + ( artifactImage.height() - ultimateArtifactImage.height() ) / 2, ultimateArtifactImage.width(),
-                                    ultimateArtifactImage.height() );
-                }
-
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
                                                                        roi.y + _artifactRoi.height + 10, isEvilInterface );
-
-                if ( _isNormalVictoryAllowed ) {
-                    _allowNormalVictory.show();
-                }
-                else {
-                    _allowNormalVictory.hide();
-                }
 
                 break;
             }
@@ -462,6 +454,7 @@ namespace
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
         }
@@ -471,12 +464,13 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No events to process.
+
                 return false;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 LocalEvent & le = LocalEvent::Get();
 
                 if ( le.MouseClickLeft( _artifactRoi ) ) {
-                    const Artifact artifact = Dialog::selectArtifact( _victoryArtifactId, true );
+                    const Artifact artifact = Dialog::selectArtifact( static_cast<int>( _victoryArtifactId ), true );
 
                     if ( artifact.isValid() || artifact.GetID() == Artifact::RANDOM_ULTIMATE_ARTIFACT ) {
                         _victoryArtifactId = artifact.GetID();
@@ -484,12 +478,14 @@ namespace
 
                     return true;
                 }
+
                 if ( le.isMouseRightButtonPressedInArea( _artifactRoi ) ) {
-                    fheroes2::ArtifactDialogElement( Artifact( _victoryArtifactId ) ).showPopup( Dialog::ZERO );
+                    fheroes2::ArtifactDialogElement( Artifact( static_cast<int>( _victoryArtifactId ) ) ).showPopup( Dialog::ZERO );
 
                     return false;
                 }
-                else if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
+
+                if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
                     _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
 
                     return true;
@@ -512,6 +508,7 @@ namespace
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
 
@@ -522,7 +519,7 @@ namespace
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
-        int32_t _victoryArtifactId{ Artifact::RANDOM_ULTIMATE_ARTIFACT };
+        uint32_t _victoryArtifactId{ Artifact::RANDOM_ULTIMATE_ARTIFACT };
 
         fheroes2::ImageRestorer _restorer;
 
@@ -536,34 +533,32 @@ namespace
     class LossConditionUI final
     {
     public:
-        LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
-            : _restorer( output, roi.x, roi.y, roi.width, roi.height )
+        LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat )
+            : _conditionType( mapFormat.lossConditionType )
+            , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
-            // Do nothing.
-        }
-
-        void setCondition( Maps::Map_Format::MapFormat & mapFormat )
-        {
-            _conditionType = mapFormat.lossConditionType;
-
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_EVERYTHING:
                 // This condition has no metadata.
-                mapFormat.lossConditionMetadata.clear();
+
                 break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
-                if ( mapFormat.lossConditionMetadata.size() != 1 ) {
-                    mapFormat.lossConditionMetadata.resize( 1 );
-                    mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( daysInMonth );
+                if ( mapFormat.lossConditionMetadata.size() == 1 ) {
+                    _outOfTimeValue.setValue( static_cast<int32_t>( mapFormat.lossConditionMetadata[0] ) );
                 }
 
-                _outOfTimeValue.setValue( static_cast<int32_t>( mapFormat.lossConditionMetadata[0] ) );
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
+        }
+
+        void setCondition( const uint8_t lossConditionType )
+        {
+            _conditionType = lossConditionType;
         }
 
         void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
@@ -573,15 +568,21 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_EVERYTHING:
                 // This condition has no metadata.
-                assert( mapFormat.lossConditionMetadata.empty() );
+                mapFormat.lossConditionMetadata.clear();
+
                 break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
-                assert( mapFormat.lossConditionMetadata.size() == 1 );
+                if ( mapFormat.lossConditionMetadata.size() != 1 ) {
+                    mapFormat.lossConditionMetadata.resize( 1 );
+                }
+
                 mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( _outOfTimeValue.getValue() );
+
                 break;
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
         }
@@ -594,6 +595,7 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_EVERYTHING:
                 // No special UI is needed.
+
                 break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME: {
                 const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
@@ -604,11 +606,13 @@ namespace
 
                 const fheroes2::Text text( _( "Days:" ), fheroes2::FontType::normalWhite() );
                 text.draw( uiOffset.x - text.width() - 5, roi.y + ( fheroes2::ValueSelectionDialogElement::getArea().height - text.height() ) / 2 + 2, output );
+
                 break;
             }
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
         }
@@ -618,12 +622,14 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_EVERYTHING:
                 // No events to process.
+
                 return false;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 return _outOfTimeValue.processEvents();
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
                 break;
             }
 
@@ -921,9 +927,8 @@ namespace Editor
         offsetY += 30;
 
         const fheroes2::Rect lossConditionUIRoi{ offsetX, offsetY, lossDroplistButtonRoi.width, 150 };
-        LossConditionUI lossConditionUI( display, lossConditionUIRoi );
+        LossConditionUI lossConditionUI( display, lossConditionUIRoi, mapFormat );
 
-        lossConditionUI.setCondition( mapFormat );
         lossConditionUI.render( display );
 
         // Buttons.
@@ -1052,7 +1057,7 @@ namespace Editor
                 if ( result != mapFormat.lossConditionType ) {
                     mapFormat.lossConditionType = result;
 
-                    lossConditionUI.setCondition( mapFormat );
+                    lossConditionUI.setCondition( mapFormat.lossConditionType );
                     lossConditionUI.render( display );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
