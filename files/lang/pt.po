@@ -667,7 +667,7 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Praticando as artes negras da necromancia, você é capaz de ressuscitar "
+"Praticando as artes negras da necromancia, você foi capaz de ressuscitar "
 "%{count} dos inimigos mortos para retornar sob seu serviço como %{monster}."
 
 msgid "%{name} the %{race}"
