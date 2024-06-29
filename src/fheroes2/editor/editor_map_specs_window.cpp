@@ -34,6 +34,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
 #include "editor_rumor_window.h"
@@ -72,7 +73,8 @@ namespace
     const int32_t daysInYear{ daysInMonth * 12 };
 
     // TODO: expand these conditions by adding missing ones.
-    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
+    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
+                                                           Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_OUT_OF_TIME };
 
     const char * getVictoryConditionText( const uint8_t victoryConditionType )
@@ -203,7 +205,7 @@ namespace
             const int32_t listWidth = image.width();
             const int32_t middlePartHeight = topPartHeight - 2;
             const int32_t bottomPartHeight = topPartHeight;
-            const int32_t listHeight = itemsCount * ( _itemHeight + 2 ) + 10;
+            const int32_t listHeight = itemsCount * ( _itemHeight + 2 ) + 6;
 
             _itemWidth = listWidth - 6;
 
@@ -235,7 +237,7 @@ namespace
 
             _background = std::make_unique<fheroes2::ImageRestorer>( display, pt.x + 2, pt.y + 2, listWidth - 3, listHeight - 4 );
 
-            SetAreaItems( { pt.x + 5, pt.y + 5, listWidth - 10, listHeight - 10 } );
+            SetAreaItems( { pt.x + 2, pt.y + 5, listWidth - 4, listHeight - 6 } );
         }
 
         ~DropBoxList() override
@@ -311,16 +313,44 @@ namespace
     class VictoryConditionUI final
     {
     public:
-        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
-            : _restorer( output, roi.x, roi.y, roi.width, roi.height )
-            , _goldAccumulationValue( 10000, 1000000, 10000, 1000, {} )
+        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat )
+            : _conditionType( mapFormat.victoryConditionType )
+            , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
+            , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
+            , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
-            // Do nothing.
+            // Set the initial state for all victory conditions.
+            if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
+                switch ( _conditionType ) {
+                case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
+                    // This condition has no extra options.
+                    break;
+                case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
+                    // In original game's map format '0' stands for the Ultimate Artifact.
+                    _victoryArtifactId = ( mapFormat.victoryConditionMetadata[0] == 0 ) ? Artifact::RANDOM_ULTIMATE_ARTIFACT : mapFormat.victoryConditionMetadata[0];
+
+                    break;
+                case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
+                    _goldAccumulationValue.setValue( mapFormat.victoryConditionMetadata[0] );
+
+                    break;
+                }
+                default:
+                    // Did you add more conditions? Add the logic for them!
+                    assert( 0 );
+                    break;
+                }
+            }
         }
 
-        void setCondition( Maps::Map_Format::MapFormat & mapFormat )
+        void setCondition( const uint8_t victoryConditionType )
         {
-            _conditionType = mapFormat.victoryConditionType;
+            _conditionType = victoryConditionType;
+        }
+
+        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
+        {
+            assert( mapFormat.victoryConditionType == _conditionType );
 
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
@@ -329,50 +359,39 @@ namespace
 
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
-                break;
-            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
+
+                return;
+            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
+                assert( _victoryArtifactId != -1 );
+
                 if ( mapFormat.victoryConditionMetadata.size() != 1 ) {
                     mapFormat.victoryConditionMetadata.resize( 1 );
-                    mapFormat.victoryConditionMetadata[0] = 10000;
                 }
 
                 mapFormat.isVictoryConditionApplicableForAI = false;
 
-                _goldAccumulationValue.setValue( static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] ) );
+                // In original game's map format '0' stands for the Ultimate Artifact. Set it also to '0' for the compatibility.
+                mapFormat.victoryConditionMetadata[0] = ( _victoryArtifactId == Artifact::RANDOM_ULTIMATE_ARTIFACT ) ? 0 : _victoryArtifactId;
+                mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
 
-                _isNormalVictoryAllowed = mapFormat.allowNormalVictory;
-                break;
-            default:
-                // Did you add more conditions? Add the logic for them!
-                assert( 0 );
-                break;
-            }
-        }
-
-        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
-        {
-            assert( mapFormat.victoryConditionType == _conditionType );
-
-            mapFormat.allowNormalVictory = false;
-            mapFormat.isVictoryConditionApplicableForAI = false;
-
-            switch ( _conditionType ) {
-            case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
-                // This condition has no metadata.
-                assert( mapFormat.victoryConditionMetadata.empty() );
-
-                break;
+                return;
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
-                assert( mapFormat.victoryConditionMetadata.size() == 1 );
+                if ( mapFormat.victoryConditionMetadata.size() != 1 ) {
+                    mapFormat.victoryConditionMetadata.resize( 1 );
+                }
+
+                mapFormat.isVictoryConditionApplicableForAI = false;
 
                 mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( _goldAccumulationValue.getValue() );
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
-                break;
+                return;
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
                 break;
             }
+
+            mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
         void render( fheroes2::Image & output, const bool isEvilInterface )
@@ -384,9 +403,42 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No special UI is needed.
                 break;
+            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
+                const fheroes2::Rect roi{ _restorer.rect() };
+
+                const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                _artifactRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
+
+                fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
+
+                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( _victoryArtifactId ).IndexSprite64() );
+
+                fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+
+                if ( _victoryArtifactId == 0 ) {
+                    // This is a case for the Ultimate Artifact.
+                    // There is no image for it in game assets - use the Adventure map sprite for now.
+                    const fheroes2::Sprite & ultimateArtifactImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, 164 );
+                    fheroes2::Blit( ultimateArtifactImage, 0, 0, output, _artifactRoi.x + 6 + ( artifactImage.width() - ultimateArtifactImage.width() ) / 2,
+                                    _artifactRoi.y + 6 + ( artifactImage.height() - ultimateArtifactImage.height() ) / 2, ultimateArtifactImage.width(),
+                                    ultimateArtifactImage.height() );
+                }
+
+                _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
+                                                                       roi.y + _artifactRoi.height + 10, isEvilInterface );
+
+                if ( _isNormalVictoryAllowed ) {
+                    _allowNormalVictory.show();
+                }
+                else {
+                    _allowNormalVictory.hide();
+                }
+
+                break;
+            }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
-                const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
+                const fheroes2::Rect roi{ _restorer.rect() };
                 const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
 
                 _goldAccumulationValue.setOffset( uiOffset );
@@ -420,6 +472,31 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No events to process.
                 return false;
+            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
+                LocalEvent & le = LocalEvent::Get();
+
+                if ( le.MouseClickLeft( _artifactRoi ) ) {
+                    const Artifact artifact = Dialog::selectArtifact( _victoryArtifactId, true );
+
+                    if ( artifact.isValid() || artifact.GetID() == Artifact::RANDOM_ULTIMATE_ARTIFACT ) {
+                        _victoryArtifactId = artifact.GetID();
+                    }
+
+                    return true;
+                }
+                if ( le.isMouseRightButtonPressedInArea( _artifactRoi ) ) {
+                    fheroes2::ArtifactDialogElement( Artifact( _victoryArtifactId ) ).showPopup( Dialog::ZERO );
+
+                    return false;
+                }
+                else if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
+                    _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
+
+                    return true;
+                }
+
+                break;
+            }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
                 if ( _goldAccumulationValue.processEvents() ) {
                     return true;
@@ -427,12 +504,6 @@ namespace
 
                 if ( LocalEvent::Get().MouseClickLeft( _allowNormalVictoryRoi ) ) {
                     _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
-                    if ( _isNormalVictoryAllowed ) {
-                        _allowNormalVictory.show();
-                    }
-                    else {
-                        _allowNormalVictory.hide();
-                    }
 
                     return true;
                 }
@@ -450,13 +521,16 @@ namespace
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
         bool _isNormalVictoryAllowed{ false };
+        bool _isVictoryConditionApplicableForAI{ false };
+        int32_t _victoryArtifactId{ Artifact::RANDOM_ULTIMATE_ARTIFACT };
 
         fheroes2::ImageRestorer _restorer;
 
-        fheroes2::ValueSelectionDialogElement _goldAccumulationValue;
+        fheroes2::ValueSelectionDialogElement _goldAccumulationValue{ 10000, 1000000, 10000, 1000, {} };
 
         fheroes2::MovableSprite _allowNormalVictory;
         fheroes2::Rect _allowNormalVictoryRoi;
+        fheroes2::Rect _artifactRoi;
     };
 
     class LossConditionUI final
@@ -464,7 +538,6 @@ namespace
     public:
         LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi )
             : _restorer( output, roi.x, roi.y, roi.width, roi.height )
-            , _outOfTimeValue( 1, 10 * daysInYear, daysInMonth, 1, {} )
         {
             // Do nothing.
         }
@@ -562,7 +635,7 @@ namespace
 
         fheroes2::ImageRestorer _restorer;
 
-        fheroes2::ValueSelectionDialogElement _outOfTimeValue;
+        fheroes2::ValueSelectionDialogElement _outOfTimeValue{ 1, 10 * daysInYear, daysInMonth, 1, {} };
     };
 
     uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList )
@@ -823,9 +896,8 @@ namespace Editor
         offsetY += 30;
 
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
-        VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi );
+        VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
 
-        victoryConditionUI.setCondition( mapFormat );
         victoryConditionUI.render( display, isEvilInterface );
 
         // Loss conditions.
@@ -966,7 +1038,7 @@ namespace Editor
                 if ( result != mapFormat.victoryConditionType ) {
                     mapFormat.victoryConditionType = result;
 
-                    victoryConditionUI.setCondition( mapFormat );
+                    victoryConditionUI.setCondition( mapFormat.victoryConditionType );
                     victoryConditionUI.render( display, isEvilInterface );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
