@@ -874,7 +874,7 @@ namespace
     {
         const int type = skill.Skill();
         const int level = skill.Level();
-        if ( hero.GetLevelSkill( skill.first ) >= level ) {
+        if ( hero.GetLevelSkill( type ) >= level ) {
             return 0;
         }
 
@@ -2582,8 +2582,10 @@ namespace AI
             if ( leftValue < 300.0 ) {
                 return left.Level() == Skill::Level::BASIC ? right : left;
             }
+
             return left.Level() == Skill::Level::BASIC ? left : right;
         }
+
         return leftValue > rightValue ? left : right;
     }
 
