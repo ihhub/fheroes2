@@ -192,7 +192,7 @@ namespace
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
 
-        explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList )
+        explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const bool isEvilInterface )
             : Interface::ListBox<uint8_t>( pt )
             , _isLossList( isLossList )
         {
@@ -200,7 +200,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::DROPLISL, 0 );
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL, 0 );
 
             const int32_t topPartHeight = image.height() - 2;
             const int32_t listWidth = image.width();
@@ -692,12 +692,12 @@ namespace
         fheroes2::ValueSelectionDialogElement _outOfTimeValue{ 1, 10 * daysInYear, daysInMonth, 1, {} };
     };
 
-    uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList )
+    uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList, const bool isEvilInterface )
     {
         std::vector<uint8_t> conditions = isLossList ? supportedLossConditions : supportedVictoryConditions;
         assert( std::find( conditions.begin(), conditions.end(), selectedCondition ) != conditions.end() );
 
-        DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList );
+        DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, isEvilInterface );
         conditionList.SetListContent( conditions );
         conditionList.SetCurrent( selectedCondition );
         conditionList.Redraw();
@@ -931,7 +931,9 @@ namespace Editor
         text.draw( activeArea.x + activeArea.width / 4 - text.width() / 2, offsetY, display );
 
         offsetY += 20;
-        const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( ICN::DROPLISL, 0 );
+
+        const int dropListIcn = isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL;
+        const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( dropListIcn, 0 );
         const int32_t itemBackgroundWidth = itemBackground.width();
         const int32_t itemBackgroundHeight = itemBackground.height();
         const int32_t itemBackgroundOffsetX = activeArea.width / 4 - itemBackgroundWidth / 2 - 11;
@@ -942,8 +944,10 @@ namespace Editor
 
         redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
 
-        fheroes2::ButtonSprite victoryDroplistButton( offsetX + itemBackgroundWidth, offsetY, fheroes2::AGG::GetICN( ICN::DROPLISL, 1 ),
-                                                      fheroes2::AGG::GetICN( ICN::DROPLISL, 2 ) );
+        const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
+        const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
+
+        fheroes2::ButtonSprite victoryDroplistButton( offsetX + itemBackgroundWidth, offsetY, dropListButtonSprite, dropListButtonPressedSprite );
         const fheroes2::Rect victoryDroplistButtonRoi( fheroes2::getBoundaryRect( victoryDroplistButton.area(), victoryTextRoi ) );
         victoryDroplistButton.draw();
 
@@ -968,8 +972,7 @@ namespace Editor
 
         redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
 
-        fheroes2::ButtonSprite lossDroplistButton( offsetX + itemBackgroundWidth, offsetY, fheroes2::AGG::GetICN( ICN::DROPLISL, 1 ),
-                                                   fheroes2::AGG::GetICN( ICN::DROPLISL, 2 ) );
+        fheroes2::ButtonSprite lossDroplistButton( offsetX + itemBackgroundWidth, offsetY, dropListButtonSprite, dropListButtonPressedSprite );
         const fheroes2::Rect lossDroplistButtonRoi( fheroes2::getBoundaryRect( lossDroplistButton.area(), lossTextRoi ) );
         lossDroplistButton.draw();
 
@@ -1087,7 +1090,8 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) ) {
-                const uint8_t result = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false );
+                const uint8_t result
+                    = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false, isEvilInterface );
 
                 if ( result != mapFormat.victoryConditionType ) {
                     mapFormat.victoryConditionType = result;
@@ -1102,7 +1106,7 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
-                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true );
+                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true, isEvilInterface );
 
                 if ( result != mapFormat.lossConditionType ) {
                     mapFormat.lossConditionType = result;
