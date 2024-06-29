@@ -199,10 +199,10 @@ namespace fheroes2
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
-        case NOT_TODAY:
+        case BuildingStatus::NOT_TODAY:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;
-        case REQUIRES_BUILD:
+        case BuildingStatus::REQUIRES_BUILD:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
         default:

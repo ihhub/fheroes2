@@ -998,7 +998,7 @@ void Castle::MageGuildEducateHero( HeroBase & hero ) const
     mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
 }
 
-bool Castle::isFortificationBuild() const
+bool Castle::isFortificationBuilt() const
 {
     return race == Race::KNGT && isBuild( BUILD_SPEC );
 }
@@ -1220,31 +1220,31 @@ uint32_t Castle::getMonstersInDwelling( uint32_t dw ) const
     return 0;
 }
 
-int Castle::CheckBuyBuilding( const uint32_t build ) const
+BuildingStatus Castle::CheckBuyBuilding( const uint32_t build ) const
 {
     if ( build & _constructedBuildings ) {
-        return ALREADY_BUILT;
+        return BuildingStatus::ALREADY_BUILT;
     }
 
     switch ( build ) {
     case BUILD_CASTLE:
         if ( !Modes( ALLOW_CASTLE_CONSTRUCTION ) ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     case BUILD_SHIPYARD:
         if ( !HasSeaAccess() ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     case BUILD_SHRINE:
         if ( Race::NECR != GetRace() || ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS ) ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     case BUILD_TAVERN:
         if ( Race::NECR == GetRace() ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     default:
@@ -1255,49 +1255,49 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         const uint32_t prevMageGuild = build >> 1;
 
         if ( !( _constructedBuildings & prevMageGuild ) ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
     }
 
     if ( !Modes( ALLOW_TO_BUILD_TODAY ) ) {
-        return NOT_TODAY;
+        return BuildingStatus::NOT_TODAY;
     }
 
     if ( isCastle() ) {
         if ( build == BUILD_TENT ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
     }
     else {
         if ( build != BUILD_CASTLE ) {
-            return NEED_CASTLE;
+            return BuildingStatus::NEED_CASTLE;
         }
     }
 
     switch ( build ) {
     case DWELLING_UPGRADE2:
         if ( ( Race::WRLK | Race::WZRD ) & race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE3:
         if ( ( Race::BARB | Race::WRLK ) & race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE4:
         if ( Race::WZRD & race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE5:
         if ( ( Race::SORC | Race::WRLK ) & race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE6:
         if ( ( Race::BARB | Race::SORC | Race::NECR ) & race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE7:
         if ( Race::WRLK != race )
-            return UNKNOWN_UPGRADE;
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
 
     default:
@@ -1308,44 +1308,44 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
         if ( ( requirement & itr ) && !( _constructedBuildings & itr ) ) {
-            return REQUIRES_BUILD;
+            return BuildingStatus::REQUIRES_BUILD;
         }
     }
 
     if ( !GetKingdom().AllowPayment( PaymentConditions::BuyBuilding( race, build ) ) ) {
-        return LACK_RESOURCES;
+        return BuildingStatus::LACK_RESOURCES;
     }
 
-    return ALLOW_BUILD;
+    return BuildingStatus::ALLOW_BUILD;
 }
 
-int Castle::GetAllBuildingStatus( const Castle & castle )
+BuildingStatus Castle::GetAllBuildingStatus( const Castle & castle )
 {
     if ( !castle.Modes( ALLOW_TO_BUILD_TODAY ) )
-        return NOT_TODAY;
+        return BuildingStatus::NOT_TODAY;
     if ( !castle.isCastle() )
-        return NEED_CASTLE;
+        return BuildingStatus::NEED_CASTLE;
 
     const uint32_t rest = ~castle._constructedBuildings;
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( ALLOW_BUILD == castle.CheckBuyBuilding( itr ) ) )
-            return ALLOW_BUILD;
+        if ( ( rest & itr ) && ( BuildingStatus::ALLOW_BUILD == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::ALLOW_BUILD;
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( LACK_RESOURCES == castle.CheckBuyBuilding( itr ) ) )
-            return LACK_RESOURCES;
+        if ( ( rest & itr ) && ( BuildingStatus::LACK_RESOURCES == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::LACK_RESOURCES;
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( REQUIRES_BUILD == castle.CheckBuyBuilding( itr ) ) )
-            return REQUIRES_BUILD;
+        if ( ( rest & itr ) && ( BuildingStatus::REQUIRES_BUILD == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::REQUIRES_BUILD;
 
-    return UNKNOWN_COND;
+    return BuildingStatus::UNKNOWN_COND;
 }
 
 bool Castle::AllowBuyBuilding( uint32_t build ) const
 {
-    return ALLOW_BUILD == CheckBuyBuilding( build );
+    return BuildingStatus::ALLOW_BUILD == CheckBuyBuilding( build );
 }
 
 bool Castle::BuyBuilding( uint32_t build )

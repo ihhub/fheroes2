@@ -102,17 +102,17 @@ enum building_t : uint32_t
     DWELLING_UPGRADES = DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE4 | DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7
 };
 
-enum buildcond_t
+enum class BuildingStatus : int32_t
 {
-    NOT_TODAY = -1,
-    ALREADY_BUILT = -2,
-    NEED_CASTLE = -3,
-    BUILD_DISABLE = -4,
-    UNKNOWN_UPGRADE = -5,
-    REQUIRES_BUILD = -6,
-    LACK_RESOURCES = -7,
-    UNKNOWN_COND = 0,
-    ALLOW_BUILD = 1
+    UNKNOWN_COND,
+    ALLOW_BUILD,
+    NOT_TODAY,
+    ALREADY_BUILT,
+    NEED_CASTLE,
+    BUILD_DISABLE,
+    UNKNOWN_UPGRADE,
+    REQUIRES_BUILD,
+    LACK_RESOURCES
 };
 
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
@@ -202,7 +202,7 @@ public:
     bool isLibraryBuild() const;
     void MageGuildEducateHero( HeroBase & ) const;
 
-    bool isFortificationBuild() const;
+    bool isFortificationBuilt() const;
 
     const Army & GetArmy() const;
     Army & GetArmy();
@@ -264,8 +264,8 @@ public:
 
     bool BuyBuilding( uint32_t );
 
-    int CheckBuyBuilding( const uint32_t build ) const;
-    static int GetAllBuildingStatus( const Castle & );
+    BuildingStatus CheckBuyBuilding( const uint32_t build ) const;
+    static BuildingStatus GetAllBuildingStatus( const Castle & );
 
     bool AllowBuyBoat( const bool checkPayment ) const;
     bool BuyBoat() const;

@@ -282,8 +282,8 @@ namespace AI
             const int race = castle->GetRace();
             const std::vector<BuildOrder> & buildOrder = GetBuildOrder( race );
             for ( const BuildOrder & order : buildOrder ) {
-                const int status = castle->CheckBuyBuilding( order.building );
-                if ( status == LACK_RESOURCES ) {
+                const BuildingStatus status = castle->CheckBuyBuilding( order.building );
+                if ( status == BuildingStatus::LACK_RESOURCES ) {
                     Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
 
                     requirements = requirements.max( missing );

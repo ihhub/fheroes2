@@ -76,7 +76,7 @@ private:
     uint32_t building;
     std::string description;
     fheroes2::Rect area;
-    int bcond;
+    BuildingStatus _status;
 };
 
 struct DwellingItem
