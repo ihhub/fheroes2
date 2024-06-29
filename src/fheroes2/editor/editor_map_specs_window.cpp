@@ -367,8 +367,6 @@ namespace
 
                 return;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
-                assert( _victoryArtifactId != -1 );
-
                 if ( mapFormat.victoryConditionMetadata.size() != 1 ) {
                     mapFormat.victoryConditionMetadata.resize( 1 );
                 }
