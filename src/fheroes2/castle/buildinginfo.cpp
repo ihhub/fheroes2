@@ -226,32 +226,32 @@ Funds BuildingInfo::GetCost( uint32_t build, int race )
 
 BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     : castle( c )
-    , building( b )
+    , _buildingType( b )
     , area( 0, 0, 135, 70 )
     , _status( BuildingStatus::ALLOW_BUILD )
 {
-    if ( isDwelling( building ) )
-        building = castle.GetActualDwelling( b );
+    if ( isDwelling( _buildingType ) )
+        _buildingType = castle.GetActualDwelling( b );
 
-    building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
+    _buildingType = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
 
-    if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() ) {
+    if ( BUILD_TAVERN == _buildingType && Race::NECR == castle.GetRace() ) {
         const GameVersion version = Settings::Get().getCurrentMapInfo().version;
-        building = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? BUILD_SHRINE : BUILD_NOTHING;
+        _buildingType = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? BUILD_SHRINE : BUILD_NOTHING;
     }
 
-    _status = castle.CheckBuyBuilding( building );
+    _status = castle.CheckBuyBuilding( _buildingType );
 
     // generate description
     if ( BuildingStatus::BUILD_DISABLE == _status )
         description = GetConditionDescription();
     else {
-        description = getBuildingDescription( castle.GetRace(), building );
+        description = getBuildingDescription( castle.GetRace(), _buildingType );
     }
 
     // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();
         area.height = sprite.height();
     }
@@ -358,13 +358,13 @@ void BuildingInfo::RedrawCaptain() const
 
 void BuildingInfo::Redraw() const
 {
-    if ( BUILD_CAPTAIN == building ) {
+    if ( BUILD_CAPTAIN == _buildingType ) {
         RedrawCaptain();
         return;
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int index = fheroes2::getIndexBuildingSprite( static_cast<building_t>( building ) );
+    const int index = fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
@@ -377,7 +377,7 @@ void BuildingInfo::Redraw() const
     }
 
     // build image
-    if ( BUILD_NOTHING == building ) {
+    if ( BUILD_NOTHING == _buildingType ) {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const fheroes2::Sprite & buildBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 );
         fheroes2::Copy( buildBackground, 0, 0, display, area.x, area.y, buildBackground.width(), buildBackground.height() );
@@ -416,13 +416,13 @@ void BuildingInfo::Redraw() const
         fheroes2::Copy( textBackground, 0, 0, display, area.x, area.y + 58, textBackground.width(), textBackground.height() );
     }
 
-    const fheroes2::Text buildingName( Castle::GetStringBuilding( building, castle.GetRace() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text buildingName( Castle::GetStringBuilding( _buildingType, castle.GetRace() ), fheroes2::FontType::smallWhite() );
     buildingName.draw( area.x + 68 - buildingName.width() / 2, area.y + 61, display );
 }
 
 const char * BuildingInfo::GetName() const
 {
-    return Castle::GetStringBuilding( building, castle.GetRace() );
+    return Castle::GetStringBuilding( _buildingType, castle.GetRace() );
 }
 
 bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const
@@ -443,7 +443,7 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) con
 
 bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 {
-    if ( building == BUILD_NOTHING ) {
+    if ( _buildingType == BUILD_NOTHING ) {
         return false;
     }
 
@@ -462,7 +462,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const fheroes2::Text descriptionText( std::move( extendedDescription ), fheroes2::FontType::normalWhite() );
 
     // prepare requirement build string
-    std::string requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( building ) );
+    std::string requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( _buildingType ) );
 
     const bool requirementsPresent = !requirement.empty();
 
@@ -476,7 +476,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         requirementHeight = requirementTitle.height() + requirementText.height( BOXAREA_WIDTH ) + elementOffset;
     }
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), building ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), BOXAREA_WIDTH );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
@@ -505,7 +505,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
     const fheroes2::Sprite & buildingImage
-        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<building_t>( building ) ) );
+        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
@@ -535,7 +535,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     rbs.Redraw();
 
     if ( buttons ) {
-        if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( building ) ) {
+        if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
             buttonOkay.disable();
         }
 
@@ -588,7 +588,7 @@ std::string BuildingInfo::GetConditionDescription() const
         return GetBuildConditionDescription( _status );
 
     case BuildingStatus::BUILD_DISABLE:
-        if ( building == BUILD_SHIPYARD ) {
+        if ( _buildingType == BUILD_SHIPYARD ) {
             std::string res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
             return res;
@@ -629,7 +629,7 @@ std::string BuildingInfo::GetConditionDescription() const
 
 void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
 {
-    if ( building == BUILD_NOTHING ) {
+    if ( _buildingType == BUILD_NOTHING ) {
         return;
     }
 
