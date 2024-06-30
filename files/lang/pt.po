@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -312,6 +312,12 @@ msgstr ""
 "R\n"
 "Ã\n"
 "O"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -3475,9 +3481,6 @@ msgstr "Arquivo à ser carregado:"
 msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
-msgid "%{color} %{race} hero"
-msgstr "Herói %{race} %{color}"
-
 msgid "Terrain object"
 msgstr "Objeto do terreno"
 
@@ -3496,6 +3499,26 @@ msgstr "Selecionar Monstro:"
 msgid "Select Hero:"
 msgstr "Selecionar Herói:"
 
+msgid "race|Random"
+msgstr "Aleatório"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Clique para começar a colocar o castelo/cidade selecionado."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "Herói %{race} %{color}"
+
+msgid "You will place"
+msgstr "Você irá colocar"
+
+msgid "Click to select this class."
+msgstr "Clique para selecionar esta classe."
+
+msgid "Click to select this color."
+msgstr "Clique para selecionar esta cor."
+
 msgid "Select Treasure:"
 msgstr "Selecionar Tesouro:"
 
@@ -3507,9 +3530,6 @@ msgstr "Colocação de Castelo/Cidade"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutra"
-
-msgid "race|Random"
-msgstr "Aleatório"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Clique para começar a colocar o castelo/cidade selecionado."
@@ -3525,15 +3545,6 @@ msgstr "%{townOrCastle} %{race} %{color}"
 
 msgid "race|Neutral"
 msgstr "Neutra"
-
-msgid "You will place"
-msgstr "Você irá colocar"
-
-msgid "Click to select this class."
-msgstr "Clique para selecionar esta classe."
-
-msgid "Click to select this color."
-msgstr "Clique para selecionar esta cor."
 
 msgid "Select Dwelling:"
 msgstr "Selecionar Moradia:"
@@ -3686,15 +3697,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Tamanho do Ícone"
 
+msgid "Map Type"
+msgstr "Tipo de Mapa"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Indica se o mapa é feito para a versão \"As Guerras de Sucessão\" ou \"O "
 "Preço da Lealdade\" do jogo."
-
-msgid "Map Type"
-msgstr "Tipo de Mapa"
 
 msgid "Selected Name"
 msgstr "Nome Escolhido"
@@ -3897,8 +3909,8 @@ msgstr "Definir Exército personalizado. Botão direito para redefinir."
 msgid "Message Text:"
 msgstr "Texto da Mensagem:"
 
-msgid "Cancel event after first visit"
-msgstr "Cancelar evento após a primeira visita"
+msgid "Reward:"
+msgstr "Recompensa:"
 
 msgid "Player colors allowed to get event:"
 msgstr "As cores dos jogadores podem receber o evento:"
@@ -3906,8 +3918,11 @@ msgstr "As cores dos jogadores podem receber o evento:"
 msgid "Computer colors allowed to get event:"
 msgstr "As cores do computador podem ser usadas em eventos:"
 
-msgid "Reward:"
-msgstr "Recompensa:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
 
 msgid "Allow %{color} human player to get event"
 msgstr "Permitir que jogador humano %{color}  obtenha o evento"
@@ -3935,6 +3950,58 @@ msgstr "Mensagem:"
 msgid "Click to save the Event properties."
 msgstr "Clique para salvar as propriedades do Evento."
 
+msgid "No resources will be given as a reward."
+msgstr "Nenhum recurso será dado como recompensa."
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Resources will be given as a reward."
+msgstr "Recursos serão dados como recompensa."
+
+msgid "Click here to change the event message."
+msgstr "Clique aqui para alterar a mensagem do evento."
+
+msgid "Event Message Text"
+msgstr "Texto da Mensagem do Evento"
+
+msgid "Day: %{day}"
+msgstr "Dia: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Clique para salvar as propriedades do Evento."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Evento"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Adicione uma resposta adicional para a pergunta."
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Evento"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Carregar um mapa existente."
+
+#, fuzzy
+msgid "Delete Event"
+msgstr "Apagar Resposta"
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Apagar uma resposta existente para a pergunta."
+
+msgid "Cancel event after first visit"
+msgstr "Cancelar evento após a primeira visita"
+
 msgid "Artifact"
 msgstr "Artefato"
 
@@ -3947,15 +4014,6 @@ msgstr "Apagar Artefato"
 msgid "Delete an artifact from the reward."
 msgstr "Apagar um artefato da recompensa."
 
-msgid "No resources will be given as a reward."
-msgstr "Nenhum recurso será dado como recompensa."
-
-msgid "Resources"
-msgstr "Recursos"
-
-msgid "Resources will be given as a reward."
-msgstr "Recursos serão dados como recompensa."
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
@@ -3964,12 +4022,6 @@ msgstr ""
 "Se essa caixa de seleção estiver marcada, o evento será acionado apenas uma "
 "vez. Se não estiver marcada, o evento será acionado toda vez que um dos "
 "jogadores especificados cruzar o bloco do evento."
-
-msgid "Click here to change the event message."
-msgstr "Clique aqui para alterar a mensagem do evento."
-
-msgid "Event Message Text"
-msgstr "Texto da Mensagem do Evento"
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} não podem ser colocados na água."
@@ -4062,6 +4114,10 @@ msgstr "Falha ao atualizar informações do jogador."
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
+
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -4379,6 +4435,19 @@ msgstr "Acumular ouro."
 msgid "Run out of time."
 msgstr "Ficar sem tempo."
 
+#, fuzzy
+msgid "Gold:"
+msgstr "Ouro"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Map Difficulty"
 msgstr "Dificuldade do Mapa"
 
@@ -4406,6 +4475,21 @@ msgstr ""
 
 msgid "Click to accept the changes made."
 msgstr "Clique para aceitar as alterações feitas."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Clique para salvar o mapa atual."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Clique para sair dos resultados da batalha."
+
+#, fuzzy
+msgid "Events"
+msgstr "Evento"
 
 msgid "Click to change your map name."
 msgstr "Clique para alterar o nome do mapa."
@@ -4442,6 +4526,43 @@ msgstr "Alternar animação dos objetos."
 
 msgid "Toggle display of objects' passability."
 msgstr "Alternar exibição da transitabilidade dos objetos."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Essa resposta existe na lista."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Clique para salvar as propriedades do Evento."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Adicione uma resposta adicional para a pergunta."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Editor"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Carregar um mapa existente."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Apagar Resposta"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Apagar uma resposta existente para a pergunta."
 
 msgid ""
 "\n"
@@ -4903,6 +5024,10 @@ msgstr "refazer última ação"
 
 msgid "hotkey|open game main menu"
 msgstr "abrir menu principal do jogo"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "alternar status"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
@@ -5871,9 +5996,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mês: %{month} Semana: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Dia: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -11690,7 +11812,8 @@ msgstr "Você não tem um Grimório, então não pode lançar um feitiço."
 msgid "No spell to cast."
 msgstr "Sem feitiço para lançar."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Seu herói tem %{point} de mana restante."
 
 msgid "View Adventure Spells"

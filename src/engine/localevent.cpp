@@ -1044,57 +1044,6 @@ namespace fheroes2
         return EventProcessing::EventEngine::getKeyName( key );
     }
 
-    bool PressIntKey( const uint32_t max, uint32_t & result )
-    {
-        const LocalEvent & le = LocalEvent::Get();
-
-        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
-            result /= 10;
-            return true;
-        }
-
-        if ( !le.isAnyKeyPressed() ) {
-            // No key is pressed.
-            return false;
-        }
-
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
         switch ( key ) {
@@ -1293,6 +1242,7 @@ void LocalEvent::onTouchFingerEvent( const TouchFingerEventType eventType, const
         // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+        assert( windowRect.width > 0 );
 
         _emulatedPointerPos.x = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
         _emulatedPointerPos.y

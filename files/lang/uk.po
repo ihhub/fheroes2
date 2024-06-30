@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-05-25 12:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -317,6 +317,12 @@ msgstr ""
 "А\n"
 "Р\n"
 "Т"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -3470,9 +3476,6 @@ msgstr "Завантажити файли:"
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} герой"
-
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
@@ -3491,6 +3494,26 @@ msgstr "Оберіть монстра:"
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
 
+msgid "race|Random"
+msgstr "Випадково"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Тицьніть для розміщення вибраного замку/міста"
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} герой"
+
+msgid "You will place"
+msgstr "Розмістити"
+
+msgid "Click to select this class."
+msgstr "Тицьніть щоб обрати цей клас."
+
+msgid "Click to select this color."
+msgstr "Тицьніть щоб обрати цей колір."
+
 msgid "Select Treasure:"
 msgstr "Оберіть скарб:"
 
@@ -3502,9 +3525,6 @@ msgstr "Розміщення замку/міста"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральний"
-
-msgid "race|Random"
-msgstr "Випадково"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Тицьніть для розміщення вибраного замку/міста"
@@ -3520,15 +3540,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Нейтральний"
-
-msgid "You will place"
-msgstr "Розмістити"
-
-msgid "Click to select this class."
-msgstr "Тицьніть щоб обрати цей клас."
-
-msgid "Click to select this color."
-msgstr "Тицьніть щоб обрати цей колір."
 
 msgid "Select Dwelling:"
 msgstr "Оберіть помешкання:"
@@ -3676,15 +3687,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Іконка розміру"
 
+msgid "Map Type"
+msgstr "Тип мапи"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Визначає створена для версії \"Війни за Спадщину\" або для версії \"Ціна "
 "Вірності\"."
-
-msgid "Map Type"
-msgstr "Тип мапи"
 
 msgid "Selected Name"
 msgstr "Назва"
@@ -3890,8 +3902,8 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Текст повідомлення:"
 
-msgid "Cancel event after first visit"
-msgstr "Скасувати подію після першого відвідування"
+msgid "Reward:"
+msgstr "Нагорода:"
 
 msgid "Player colors allowed to get event:"
 msgstr "Кольори гравців, яким дозволено отримати подію:"
@@ -3899,8 +3911,11 @@ msgstr "Кольори гравців, яким дозволено отрима�
 msgid "Computer colors allowed to get event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
-msgid "Reward:"
-msgstr "Нагорода:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
 
 msgid "Allow %{color} human player to get event"
 msgstr "Дозволити %{color} гравцю-людині отримати подію"
@@ -3928,6 +3943,58 @@ msgstr "Повідомлення:"
 msgid "Click to save the Event properties."
 msgstr "Натисніть, щоб зберегти властивості події."
 
+msgid "No resources will be given as a reward."
+msgstr "Жодних ресурсів не буде надано в якості винагороди."
+
+msgid "Resources"
+msgstr "Ресурси"
+
+msgid "Resources will be given as a reward."
+msgstr "Ресурси будуть надані в якості нагороди."
+
+msgid "Click here to change the event message."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+
+msgid "Event Message Text"
+msgstr "Текст повідомлення події"
+
+msgid "Day: %{day}"
+msgstr "День: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Натисніть, щоб зберегти властивості події."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Подія"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Додати додаткову відповідь на запитання."
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Подія"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Завантажити існуючу мапу."
+
+#, fuzzy
+msgid "Delete Event"
+msgstr "Видалити відповідь"
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Видалити існуючу відповідь на запитання."
+
+msgid "Cancel event after first visit"
+msgstr "Скасувати подію після першого відвідування"
+
 msgid "Artifact"
 msgstr "Артефакт"
 
@@ -3940,15 +4007,6 @@ msgstr "Видалити артефакт:"
 msgid "Delete an artifact from the reward."
 msgstr "Видалити артефакт з винагороди."
 
-msgid "No resources will be given as a reward."
-msgstr "Жодних ресурсів не буде надано в якості винагороди."
-
-msgid "Resources"
-msgstr "Ресурси"
-
-msgid "Resources will be given as a reward."
-msgstr "Ресурси будуть надані в якості нагороди."
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
@@ -3957,12 +4015,6 @@ msgstr ""
 "Якщо цей прапорець встановлено, подія спрацює лише один раз. Якщо прапорець "
 "не встановлено, подія спрацьовуватиме щоразу, коли один із зазначених "
 "гравців перетинатиме мітку події."
-
-msgid "Click here to change the event message."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
-
-msgid "Event Message Text"
-msgstr "Текст повідомлення події"
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4060,6 +4112,10 @@ msgstr "Не вдалося оновити інформацію по гравц�
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакт не можна розмістити на воді."
+
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "На мапі можна розмістити максимум %{count} героя однакового кольору."
 
 #, fuzzy
 msgid "The map is corrupted."
@@ -4385,6 +4441,19 @@ msgstr "Накопичити %{count} золота."
 msgid "Run out of time."
 msgstr "Вийти з редактора мап."
 
+#, fuzzy
+msgid "Gold:"
+msgstr "Золото"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Map Difficulty"
 msgstr ""
 "Складність\n"
@@ -4415,6 +4484,21 @@ msgstr ""
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Натисніть для зміни раси."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Натисніть, щоб зберегти поточну гру."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Тицьніть щоб вийти з результатів битви."
+
+#, fuzzy
+msgid "Events"
+msgstr "Подія"
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4455,6 +4539,43 @@ msgstr "Анімації об'єктів умівк/вимк."
 
 msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Ця відповідь є у списку."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Натисніть, щоб зберегти властивості події."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Додати додаткову відповідь на запитання."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Редактор"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Завантажити існуючу мапу."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Видалити відповідь"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Видалити існуючу відповідь на запитання."
 
 msgid ""
 "\n"
@@ -4918,6 +5039,10 @@ msgstr "повторити останню дію"
 
 msgid "hotkey|open game main menu"
 msgstr "відкрити головне меню гри"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "відобразити статус"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"
@@ -5879,9 +6004,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Місяць: %{month} Тиждень: %{week}"
-
-msgid "Day: %{day}"
-msgstr "День: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -11634,7 +11756,8 @@ msgstr "У вас немає Книги Магії, то ж ви не может
 msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "У вашого героя залишилось %{point} оч. мани."
 
 msgid "View Adventure Spells"

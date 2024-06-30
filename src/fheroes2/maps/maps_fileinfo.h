@@ -75,8 +75,6 @@ namespace Maps
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
-        bool isAllowCountPlayers( int playerCount ) const;
-
         int AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
@@ -215,10 +213,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For all map files.
-    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
     // Only for RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
 
 #endif

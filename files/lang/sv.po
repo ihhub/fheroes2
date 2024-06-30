@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-06-29 02:48+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -314,6 +314,12 @@ msgstr ""
 "P\n"
 "E\n"
 "L"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -3458,9 +3464,6 @@ msgstr "Fil att Ladda:"
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race}hjälte"
-
 msgid "Terrain object"
 msgstr "Terrängföremål"
 
@@ -3479,6 +3482,26 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+msgid "race|Random"
+msgstr "Slumpad"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Klicka här för att placera det valda slottet/staden."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race}hjälte"
+
+msgid "You will place"
+msgstr "Du kommer placera"
+
+msgid "Click to select this class."
+msgstr "Klicka här för att välja denna klass."
+
+msgid "Click to select this color."
+msgstr "Klicka här för att välja denna färgen."
+
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
 
@@ -3490,9 +3513,6 @@ msgstr "Slott/stadsplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
-
-msgid "race|Random"
-msgstr "Slumpad"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Klicka här för att placera det valda slottet/staden."
@@ -3508,15 +3528,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
-
-msgid "You will place"
-msgstr "Du kommer placera"
-
-msgid "Click to select this class."
-msgstr "Klicka här för att välja denna klass."
-
-msgid "Click to select this color."
-msgstr "Klicka här för att välja denna färgen."
 
 msgid "Select Dwelling:"
 msgstr "Välj Bostad:"
@@ -3663,15 +3674,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikonstorlek"
 
+msgid "Map Type"
+msgstr "Karttyp"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Visar om kartan är gjord för \"The Succession Wars\" eller \n"
 "expansionen \"The Price of Loyalty\"."
-
-msgid "Map Type"
-msgstr "Karttyp"
 
 msgid "Selected Name"
 msgstr "Valt Namn"
@@ -3879,8 +3891,8 @@ msgstr "Ange anpassad Slottsarmé. Högerklicka för att återställa enheten."
 msgid "Message Text:"
 msgstr "Meddelandetext:"
 
-msgid "Cancel event after first visit"
-msgstr "Avbryt händelse efter första besök"
+msgid "Reward:"
+msgstr "Belöning:"
 
 msgid "Player colors allowed to get event:"
 msgstr "Spelarfärger som kan få händelsen:"
@@ -3888,8 +3900,11 @@ msgstr "Spelarfärger som kan få händelsen:"
 msgid "Computer colors allowed to get event:"
 msgstr "Datorfärger som kan få händelsen:"
 
-msgid "Reward:"
-msgstr "Belöning:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
 
 msgid "Allow %{color} human player to get event"
 msgstr "Tillåt %{color} spelare att få händelsen"
@@ -3917,6 +3932,58 @@ msgstr "Meddelande:"
 msgid "Click to save the Event properties."
 msgstr "Klicka för att spara Händelseegenskaperna."
 
+msgid "No resources will be given as a reward."
+msgstr "Inga resurser kommer att ges som belöning."
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Resources will be given as a reward."
+msgstr "Resurser kommer att ges som belöning."
+
+msgid "Click here to change the event message."
+msgstr "Klicka för att ändra händelsemeddelandet."
+
+msgid "Event Message Text"
+msgstr "Händelsetext"
+
+msgid "Day: %{day}"
+msgstr "Dag: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Händelse"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Lägg till ett ytterligare svar för gåtan."
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Händelse"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Laddar en karta."
+
+#, fuzzy
+msgid "Delete Event"
+msgstr "Radera Svar"
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Radera ett redan existerande svar till frågan."
+
+msgid "Cancel event after first visit"
+msgstr "Avbryt händelse efter första besök"
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -3929,15 +3996,6 @@ msgstr "Radera Artefakt"
 msgid "Delete an artifact from the reward."
 msgstr "Ta bort en artefakt från belöningen."
 
-msgid "No resources will be given as a reward."
-msgstr "Inga resurser kommer att ges som belöning."
-
-msgid "Resources"
-msgstr "Resurser"
-
-msgid "Resources will be given as a reward."
-msgstr "Resurser kommer att ges som belöning."
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
@@ -3946,12 +4004,6 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras en gång. Om "
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
-
-msgid "Click here to change the event message."
-msgstr "Klicka för att ändra händelsemeddelandet."
-
-msgid "Event Message Text"
-msgstr "Händelsetext"
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."
@@ -4042,6 +4094,10 @@ msgstr "Misslyckades att uppdatera spelarinformation."
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
+
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
@@ -4356,6 +4412,19 @@ msgstr "Samla ihop guld."
 msgid "Run out of time."
 msgstr "Få slut på tid."
 
+#, fuzzy
+msgid "Gold:"
+msgstr "Guld"
+
+msgid "Also allow normal victory"
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Map Difficulty"
 msgstr "Kartsvårighet"
 
@@ -4383,6 +4452,21 @@ msgstr ""
 
 msgid "Click to accept the changes made."
 msgstr "Klicka för att acceptera ändringarna."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Klicka här för att lämna stridsresultaten."
+
+#, fuzzy
+msgid "Events"
+msgstr "Händelse"
 
 msgid "Click to change your map name."
 msgstr "Klicka för att ändra kartans namn."
@@ -4419,6 +4503,43 @@ msgstr "Aktivera animationen för objekten."
 
 msgid "Toggle display of objects' passability."
 msgstr "Visa objektens framkomlighet."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "This rumor already exists in the list."
+msgstr "Detta svar finns i listan."
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Lägg till ett ytterligare svar för gåtan."
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Redigerare"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Laddar en karta."
+
+#, fuzzy
+msgid "Delete Rumor"
+msgstr "Radera Svar"
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Radera ett redan existerande svar till frågan."
 
 msgid ""
 "\n"
@@ -4876,6 +4997,10 @@ msgstr "Gör om senaste åtgärden"
 
 msgid "hotkey|open game main menu"
 msgstr "öppna spelets huvudmeny"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Aktivera status"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -5833,9 +5958,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Månad: %{month} Vecka: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Dag: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -11579,7 +11701,8 @@ msgstr ""
 msgid "No spell to cast."
 msgstr "Inga besvärjelser att kasta."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Hjälten har %{point} besvärjelsepoäng kvar."
 
 msgid "View Adventure Spells"

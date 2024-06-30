@@ -389,7 +389,7 @@ private:
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    std::vector<std::string> _rumors;
+    std::vector<std::string> _customRumors;
     EventsDate vec_eventsday;
 
     // index, object, color

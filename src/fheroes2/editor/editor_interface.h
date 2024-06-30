@@ -66,7 +66,11 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
-        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override;
+
+        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override
+        {
+            // Do nothing.
+        }
 
         void undoAction()
         {
