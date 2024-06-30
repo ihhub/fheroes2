@@ -3895,10 +3895,10 @@ msgid "Computer colors allowed to get event:"
 msgstr "Gépi játékosok, akiknek megengedett az esemény:"
 
 msgid "First day of occurrence:"
-msgstr ""
+msgstr "Első előfordulás napja:"
 
 msgid "Repeat period (days):"
-msgstr ""
+msgstr "Ismétlődési periódus (nap):"
 
 msgid "Allow %{color} human player to get event"
 msgstr "Esemény engedélyzése %{color} játékos számára"
@@ -3945,35 +3945,28 @@ msgid "Day: %{day}"
 msgstr "Nap: %{day}"
 
 msgid "Daily Events"
-msgstr ""
+msgstr "Napi események"
 
-#, fuzzy
 msgid "Click to save the events."
-msgstr "Kattints az esemény beállítások mentéséhez."
+msgstr "Kattints az események mentéséhez."
 
-#, fuzzy
 msgid "Add Event"
-msgstr "Esemény"
+msgstr "Esemény hozzáadása"
 
-#, fuzzy
 msgid "Add an additional event."
-msgstr "További válasz hozzáadása a kérdéshez."
+msgstr "További esemény hozzáadása."
 
-#, fuzzy
 msgid "Edit Event"
-msgstr "Esemény"
+msgstr "Esemény szerkesztése"
 
-#, fuzzy
 msgid "Edit an existing event."
-msgstr "Létező térkép betöltése."
+msgstr "Meglévő esemény szerkesztése."
 
-#, fuzzy
 msgid "Delete Event"
-msgstr "Válasz törlése"
+msgstr "Esemény törlése"
 
-#, fuzzy
 msgid "Delete an existing event."
-msgstr "Meglévő válasz törlése."
+msgstr "Meglévő esemény törlése."
 
 msgid "Cancel event after first visit"
 msgstr "Esemény törlése az első látogatás után"
@@ -4405,18 +4398,17 @@ msgstr "Arany összegyűjtése."
 msgid "Run out of time."
 msgstr "Kifutás az időből."
 
-#, fuzzy
 msgid "Gold:"
-msgstr "Arany"
+msgstr "Arany:"
 
 msgid "Also allow normal victory"
-msgstr ""
+msgstr "Normál győzelmet tesz lehetővé"
 
 msgid "Days:"
-msgstr ""
+msgstr "Napok:"
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "Nap: %{day} hét: %{week} hónap: %{month}"
 
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
