@@ -280,9 +280,14 @@ namespace
             _isClicked = true;
         }
 
-        void ActionListPressRight( uint8_t & /* item */ ) override
+        void ActionListPressRight( uint8_t & condition ) override
         {
-            // Do nothing.
+            if ( _isLossList ) {
+                fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), getLossConditionText( condition ), Dialog::ZERO );
+            }
+            else {
+                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), getVictoryConditionText( condition ), Dialog::ZERO );
+            }
         }
 
         fheroes2::Rect getArea() const
@@ -1020,6 +1025,12 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( victoryDroplistButtonRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click to change the victory condition of the current map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( lossDroplistButtonRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), _( "Click to change the loss condition of the current map." ), Dialog::ZERO );
             }
 
             for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
