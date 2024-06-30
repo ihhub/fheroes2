@@ -486,7 +486,7 @@ namespace
               {} },
 
             // This artifact is only used in Editor for the special victory conditions.
-            { gettext_noop( "Ultimate Artifact" ), gettext_noop( "It can be any of the Ultimate Artifacts." ), nullptr, {}, {} },
+            { gettext_noop( "Ultimate Artifact" ), gettext_noop( "Victory can be achieved by finding any Ultimate Artifact." ), nullptr, {}, {} },
 
             // These are artifacts used only for original map editor (?).
             { gettext_noop( "Dummy 2" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },

@@ -424,7 +424,7 @@ namespace
 
                     fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
 
-                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
+                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
                                                                            roi.y + _artifactRoi.height + 10, isEvilInterface );
                 }
 
@@ -453,7 +453,7 @@ namespace
                     const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
                     text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
 
-                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
+                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
                                                                            roi.y + valueSectionUiSize.height + 10, isEvilInterface );
                 }
 
