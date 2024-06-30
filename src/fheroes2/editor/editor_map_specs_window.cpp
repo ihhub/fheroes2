@@ -401,7 +401,7 @@ namespace
             mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
-        void renderCahgableParts( fheroes2::Image & output )
+        void renderChangableItems( fheroes2::Image & output )
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
@@ -442,7 +442,7 @@ namespace
             }
         }
 
-        void renderStaticParts( fheroes2::Image & output, const bool isEvilInterface )
+        void renderStaticItems( fheroes2::Image & output, const bool isEvilInterface )
         {
             // Restore background to make sure that other UI elements aren't being rendered.
             _restorer.restore();
@@ -459,10 +459,6 @@ namespace
                 _artifactRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
 
                 fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
-
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
-
-                fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
                                                                        roi.y + _artifactRoi.height + 10, isEvilInterface );
@@ -956,8 +952,8 @@ namespace Editor
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
         VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
 
-        victoryConditionUI.renderStaticParts( display, isEvilInterface );
-        victoryConditionUI.renderCahgableParts( display );
+        victoryConditionUI.renderStaticItems( display, isEvilInterface );
+        victoryConditionUI.renderChangableItems( display );
 
         // Loss conditions.
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
@@ -1025,7 +1021,7 @@ namespace Editor
             }
 
             if ( victoryConditionUI.processEvents() ) {
-                victoryConditionUI.renderCahgableParts( display );
+                victoryConditionUI.renderChangableItems( display );
                 display.render( victoryConditionUIRoi );
             }
             else if ( lossConditionUI.processEvents() ) {
@@ -1097,8 +1093,8 @@ namespace Editor
                     mapFormat.victoryConditionType = result;
 
                     victoryConditionUI.setCondition( mapFormat.victoryConditionType );
-                    victoryConditionUI.renderStaticParts( display, isEvilInterface );
-                    victoryConditionUI.renderCahgableParts( display );
+                    victoryConditionUI.renderStaticItems( display, isEvilInterface );
+                    victoryConditionUI.renderChangableItems( display );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
