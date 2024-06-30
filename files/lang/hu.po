@@ -314,10 +314,10 @@ msgstr ""
 "L"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "SZÓBESZÉDEK"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ESEMÉNYEK"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -4447,20 +4447,17 @@ msgstr ""
 msgid "Click to accept the changes made."
 msgstr "Kattints a változtatások elfogadásához."
 
-#, fuzzy
 msgid "Click to edit custom rumors."
-msgstr "Kattints az aktuális térkép mentéséhez."
+msgstr "Kattints egyéni szóbeszéd szerkesztéséhez."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Szóbeszédek"
 
-#, fuzzy
 msgid "Click to edit daily events."
-msgstr "Kattints a csata eredményeiből való kilépéshez."
+msgstr "Kattints a napi események szerkesztéséhez."
 
-#, fuzzy
 msgid "Events"
-msgstr "Esemény"
+msgstr "Események"
 
 msgid "Click to change your map name."
 msgstr "Kattints a térképed nevének megváltoztatásához."
@@ -4499,41 +4496,34 @@ msgid "Toggle display of objects' passability."
 msgstr "Kattints az objektumok átjárhatóságának megjelenítéséhez."
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Szóbeszéd:"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Szóbeszéd"
 
-#, fuzzy
 msgid "This rumor already exists in the list."
-msgstr "A válasz megtalálható a listában."
+msgstr "Ez a szóbeszéd már megtalálható a listában."
 
-#, fuzzy
 msgid "Click to save the rumors."
-msgstr "Kattints az esemény beállítások mentéséhez."
+msgstr "Kattints a szóbeszédek mentéséhez."
 
 msgid "Add Rumor"
-msgstr ""
+msgstr "Szóbeszéd hozzáadása"
 
-#, fuzzy
 msgid "Add an additional rumor."
-msgstr "További válasz hozzáadása a kérdéshez."
+msgstr "További szóbeszéd hozzáadása."
 
-#, fuzzy
 msgid "Edit Rumor"
-msgstr "Szerkesztő"
+msgstr "Szóbeszéd szerkesztés"
 
-#, fuzzy
 msgid "Edit an existing rumor."
-msgstr "Létező térkép betöltése."
+msgstr "Meglévő szóbeszéd szerkesztése."
 
-#, fuzzy
 msgid "Delete Rumor"
-msgstr "Válasz törlése"
+msgstr "Szóbeszéd törlése"
 
-#, fuzzy
 msgid "Delete an existing rumor."
-msgstr "Meglévő válasz törlése."
+msgstr "Meglévő szóbeszéd törlése."
 
 msgid ""
 "\n"
