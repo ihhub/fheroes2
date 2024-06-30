@@ -943,7 +943,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
             continue;
         }
 
-        if ( !isPriceofLoyaltyArtifactAllowed && !fheroes2::isPriceOfLoyaltyArtifact( id ) ) {
+        if ( isPriceofLoyaltyArtifactAllowed && !fheroes2::isPriceOfLoyaltyArtifact( id ) ) {
             continue;
         }
 
