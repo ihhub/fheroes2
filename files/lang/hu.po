@@ -3483,13 +3483,11 @@ msgstr "Hős kiválasztása:"
 msgid "race|Random"
 msgstr "Véletlen"
 
-#, fuzzy
 msgid "Click to start placing the selected hero."
-msgstr "Kattints a kiválasztott vár/város elhelyezéséhez."
+msgstr "Kattints a kiválasztott hős elhelyezéséhez."
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "%{color} %{race} hős"
+msgstr "%{color} %{race}"
 
 msgid "You will place"
 msgstr "El fogod helyezni"
@@ -3677,13 +3675,12 @@ msgstr "Ikon méret"
 msgid "Map Type"
 msgstr "Térkép típusa"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Azt jelzi, hogy a térkép az \"Örökösödési háborúk\" vagy a \"Hűség "
-"ára\"verzióhoz készült-e."
+"ára\" vagy pedig a \"Feltámadás\" verzióhoz készült-e."
 
 msgid "Selected Name"
 msgstr "Kiválasztott név"
@@ -4081,9 +4078,8 @@ msgstr "A játékos adatainak frissítése nem sikerült."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen."
 
-#, fuzzy
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
+msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
 
 msgid "The map is corrupted."
 msgstr "A térkép fájl sérült."
@@ -4975,9 +4971,8 @@ msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 msgid "hotkey|open game main menu"
 msgstr "főmenü megnyitása"
 
-#, fuzzy
 msgid "hotkey|toggle passability"
-msgstr "státusz kapcsoló"
+msgstr "átjárhatóság kapcsoló"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
@@ -11654,9 +11649,8 @@ msgstr "Nincs varázskönyved, így nem tudsz varázsolni."
 msgid "No spell to cast."
 msgstr "Nincs idézhető varázslat."
 
-#, fuzzy
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr "A hősödnek van még %{point} varázspontja."
+msgstr "A hősödnek van még %{sp} varázspontja (Maximum: %{max})."
 
 msgid "View Adventure Spells"
 msgstr "Kaland varázslatok mutatása"
