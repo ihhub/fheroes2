@@ -407,9 +407,9 @@ namespace
             mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
-        void render( fheroes2::Image & output, const bool isEvilInterface, const bool redrawStaticItemsForCurrentContion )
+        void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
         {
-            if ( redrawStaticItemsForCurrentContion ) {
+            if ( renderEverything ) {
                 // Restore background to make sure that other UI elements aren't being rendered.
                 _restorer.restore();
             }
@@ -420,7 +420,7 @@ namespace
 
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
-                if ( redrawStaticItemsForCurrentContion ) {
+                if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
                     const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
@@ -446,7 +446,7 @@ namespace
                 break;
             }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
-                if ( redrawStaticItemsForCurrentContion ) {
+                if ( renderEverything ) {
                     const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
                     const fheroes2::Rect roi{ _restorer.rect() };
                     const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
