@@ -243,7 +243,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     _status = castle.CheckBuyBuilding( _buildingType );
 
     // generate description
-    if ( BuildingStatus::BUILD_DISABLE == _status )
+    if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED )
         description = GetConditionDescription();
     else {
         description = getBuildingDescription( castle.GetRace(), _buildingType );
@@ -368,7 +368,7 @@ void BuildingInfo::Redraw() const
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
-    if ( BuildingStatus::BUILD_DISABLE == _status ) {
+    if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
         const fheroes2::Point offset( 6, 59 );
         fheroes2::Sprite grayedOut = fheroes2::Crop( buildingFrame, offset.x, offset.y, 125, 12 );
         fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -391,7 +391,7 @@ void BuildingInfo::Redraw() const
         const fheroes2::Sprite & spriteAllow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
         fheroes2::Blit( spriteAllow, display, area.x + buildingFrame.width() - 5 - spriteAllow.width(), area.y + 58 - 2 - spriteAllow.height() );
     }
-    else if ( _status == BuildingStatus::BUILD_DISABLE ) {
+    else if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
         const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
         fheroes2::Sprite disabledSprite( spriteDeny );
         fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -587,13 +587,14 @@ std::string BuildingInfo::GetConditionDescription() const
     case BuildingStatus::NEED_CASTLE:
         return GetBuildConditionDescription( _status );
 
-    case BuildingStatus::BUILD_DISABLE:
-        if ( _buildingType == BUILD_SHIPYARD ) {
-            std::string res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
-            StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
-            return res;
-        }
+    case BuildingStatus::SHIPYARD_NOT_ALLOWED: {
+        assert( _buildingType == BUILD_SHIPYARD );
+        std::string res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
+        StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
+        return res;
+    }
 
+    case BuildingStatus::BUILD_DISABLE:
         return _( "This building has been disabled." );
 
     case BuildingStatus::LACK_RESOURCES: {
@@ -638,6 +639,7 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     case BuildingStatus::ALREADY_BUILT:
     case BuildingStatus::NEED_CASTLE:
     case BuildingStatus::BUILD_DISABLE:
+    case BuildingStatus::SHIPYARD_NOT_ALLOWED:
     case BuildingStatus::LACK_RESOURCES:
     case BuildingStatus::REQUIRES_BUILD:
     case BuildingStatus::ALLOW_BUILD:

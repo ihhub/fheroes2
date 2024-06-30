@@ -1240,7 +1240,7 @@ BuildingStatus Castle::CheckBuyBuilding( const uint32_t build ) const
     switch ( build ) {
     case BUILD_SHIPYARD:
         if ( !HasSeaAccess() ) {
-            return BuildingStatus::BUILD_DISABLE;
+            return BuildingStatus::SHIPYARD_NOT_ALLOWED;
         }
         break;
     case BUILD_SHRINE:
