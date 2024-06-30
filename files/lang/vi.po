@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4508,6 +4508,14 @@ msgid "Run out of time."
 msgstr "Thoát khỏi biên tập bản đồ."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Điều kiện Thua"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Điều kiện Thắng"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Vàng"
 
@@ -4532,14 +4540,6 @@ msgstr ""
 "\n"
 "\n"
 "Vị trí: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Điều kiện Thắng"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Điều kiện Thua"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4582,6 +4582,14 @@ msgstr "Tệp bản đồ"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Mô tả của bản đồ hiện được chọn."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Mô tả của bản đồ hiện được chọn."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Mô tả của bản đồ hiện được chọn."
 
 msgid "Indicates the player types in the scenario. Click to change."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4412,6 +4412,12 @@ msgstr "Samla ihop guld."
 msgid "Run out of time."
 msgstr "Få slut på tid."
 
+msgid "Special Loss Condition"
+msgstr "Särskilt Förlustvillkor"
+
+msgid "Special Victory Condition"
+msgstr "Särskilt Segervillkor"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Guld"
@@ -4430,12 +4436,6 @@ msgstr "Kartsvårighet"
 
 msgid "Map Description"
 msgstr "Kartbeskrivning"
-
-msgid "Special Victory Condition"
-msgstr "Särskilt Segervillkor"
-
-msgid "Special Loss Condition"
-msgstr "Särskilt Förlustvillkor"
 
 msgid "Change Map Name"
 msgstr "Ändra Kartnamn"
@@ -4475,6 +4475,14 @@ msgid "Map Name"
 msgstr "Kartnamn"
 
 msgid "Click to change the description of the current map."
+msgstr "Klicka för att ändra nuvarande kartans beskrivning."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Klicka för att ändra nuvarande kartans beskrivning."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Klicka för att ändra nuvarande kartans beskrivning."
 
 msgid "Indicates the player types in the scenario. Click to change."

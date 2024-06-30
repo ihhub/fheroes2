@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4473,6 +4473,14 @@ msgid "Run out of time."
 msgstr "Forlad korteditoren."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "guld"
 
@@ -4497,14 +4505,6 @@ msgstr ""
 "\n"
 "\n"
 "Placering: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Vindervilkår"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Tabsvilkår"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4547,6 +4547,14 @@ msgstr "Kort-filnavn"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Indicates the player types in the scenario. Click to change."

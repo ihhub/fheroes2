@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4237,6 +4237,13 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Mulțumiri speciale către"
+
+msgid "Special Victory Condition"
+msgstr ""
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Aur"
 
@@ -4256,13 +4263,6 @@ msgstr "Dificultatea hărții:"
 #, fuzzy
 msgid "Map Description"
 msgstr "Designeri de hărți"
-
-msgid "Special Victory Condition"
-msgstr ""
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Mulțumiri speciale către"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4301,6 +4301,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Indicates the player types in the scenario. Click to change."
