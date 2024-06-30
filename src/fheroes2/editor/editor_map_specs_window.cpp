@@ -1027,7 +1027,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( victoryDroplistButtonRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click to change victory condition of the current map." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click to change the victory condition of the current map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( lossDroplistButtonRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), _( "Click to change loss condition of the current map." ), Dialog::ZERO );
