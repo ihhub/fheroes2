@@ -485,7 +485,7 @@ namespace
               {},
               {} },
 
-            // This artifact is used in Editor for the special victory conditions.
+            // This artifact is only used in Editor for the special victory conditions.
             { gettext_noop( "Ultimate Artifact" ), gettext_noop( "It can be any of the Ultimate Artifacts." ), nullptr, {}, {} },
 
             // These are artifacts used only for original map editor (?).
@@ -771,7 +771,7 @@ namespace
         artifactData[Artifact::BLACK_PEARL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 2 );
 
         artifactData[Artifact::MAGIC_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::RANDOM_ULTIMATE_ARTIFACT].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_84].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_85].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_86].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );

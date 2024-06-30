@@ -147,7 +147,7 @@ public:
         MAGIC_BOOK,
 
         // This entry is used in Editor for the special victory conditions.
-        RANDOM_ULTIMATE_ARTIFACT,
+        EDITOR_ANY_ULTIMATE_ARTIFACT,
 
         // These four artifacts are used in original editor for the Ultimate and Random artifacts.
         // They should not exist and used on the adventure map after the game is properly started.
@@ -212,7 +212,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < RANDOM_ULTIMATE_ARTIFACT || id > UNUSED_86 );
+        return id != UNKNOWN && id != EDITOR_ANY_ULTIMATE_ARTIFACT && id < ARTIFACT_COUNT && ( id < UNUSED_84 || id > UNUSED_86 );
     }
 
     void Reset()
