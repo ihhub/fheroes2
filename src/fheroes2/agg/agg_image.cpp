@@ -4154,7 +4154,7 @@ namespace fheroes2
                         originalImage = std::move( temp );
                     }
 
-                    // Make a sprite for the Random Ultimate Artifact used in Editor for the special victory condition.
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
                     // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
                     Sprite & targetImage = _icnVsSprite[id][83];
                     targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );

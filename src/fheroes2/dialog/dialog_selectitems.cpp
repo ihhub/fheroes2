@@ -927,14 +927,27 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
     }
     else {
         // We show the Ultimate Artifact at the first place.
-        artifacts.emplace_back( Artifact::RANDOM_ULTIMATE_ARTIFACT );
+        artifacts.emplace_back( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
     }
 
     for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( id != Artifact::MAGIC_BOOK && !( isForVictoryConditions && id == Artifact::SPELL_SCROLL ) && Artifact( id ).isValid()
-             && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
-            artifacts.emplace_back( id );
+        if ( id == Artifact::MAGIC_BOOK ) {
+            continue;
         }
+
+        if ( isForVictoryConditions && id == Artifact::SPELL_SCROLL ) {
+            continue;
+        }
+
+        if ( !Artifact( id ).isValid() ) {
+            continue;
+        }
+
+        if ( isPriceofLoyaltyArtifactAllowed && !fheroes2::isPriceOfLoyaltyArtifact( id ) ) {
+            continue;
+        }
+
+        artifacts.emplace_back( id );
     }
 
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );

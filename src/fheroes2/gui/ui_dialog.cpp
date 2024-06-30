@@ -303,7 +303,7 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        assert( artifact.GetID() == Artifact::RANDOM_ULTIMATE_ARTIFACT || artifact.isValid() );
+        assert( artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || artifact.isValid() );
 
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };

@@ -73,7 +73,7 @@ namespace
     const int32_t daysInMonth{ 7 * 4 };
     const int32_t daysInYear{ daysInMonth * 12 };
 
-    const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::RANDOM_ULTIMATE_ARTIFACT );
+    const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
 
     // TODO: expand these conditions by adding missing ones.
     const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
@@ -195,7 +195,7 @@ namespace
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
 
-        explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const bool isEvilInterface )
+        explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const int dropBoxIcn )
             : Interface::ListBox<uint8_t>( pt )
             , _isLossList( isLossList )
         {
@@ -203,7 +203,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL, 0 );
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( dropBoxIcn, 0 );
 
             const int32_t topPartHeight = image.height() - 2;
             const int32_t listWidth = image.width();
@@ -343,7 +343,7 @@ namespace
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
-                    // In original game's map format '0' stands for the Ultimate Artifact.
+                    // In original game's map format '0' stands for any Ultimate Artifact.
                     _victoryArtifactId = ( mapFormat.victoryConditionMetadata[0] == 0 ) ? ultimateArtifactId : mapFormat.victoryConditionMetadata[0];
                 }
 
@@ -359,178 +359,25 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
+                // Reset the unknown condition to the default condition type.
+                _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+
                 break;
             }
 
             // Make the heroes and towns vectors.
             for ( const Maps::Map_Format::TileInfo & mapTile : mapFormat.tiles ) {
-                for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
-                    // LANDSCAPE_FLAGS and LANDSCAPE_TOWN_BASEMENTS are special objects that should be erased only when erasing the main object.
-                    if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_FLAGS || objectIter->group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS
-                         || objectsUids.find( objectIter->id ) == objectsUids.end() ) {
-                        // No main object UID was found.
-                        ++objectIter;
-                        continue;
+                for ( const Maps::Map_Format::TileObjectInfo & object : mapTile.objects ) {
+                    // List the towns.
+                    if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
                     }
-
-                    // The object with this UID is found, remove UID not to search for it more.
-                    objectsUids.erase( objectIter->id );
-
-                    if ( std::none_of( objectGroups.begin(), objectGroups.end(),
-                                       [&objectIter]( const Maps::ObjectGroup group ) { return group == objectIter->group; } ) ) {
-                        // This object is not in the selected to erase groups.
-                        if ( objectsUids.empty() ) {
-                            break;
-                        }
-
-                        ++objectIter;
-                        continue;
-                    }
-
-                    if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                        // Towns and castles consist of four objects. We need to search them all and remove from map.
-                        const uint32_t objectId = objectIter->id;
-
-                        auto findTownPart = [objectId]( const Maps::Map_Format::TileInfo & tileToSearch, const Maps::ObjectGroup group ) {
-                            auto foundObjectIter = std::find_if( tileToSearch.objects.begin(), tileToSearch.objects.end(),
-                                                                 [objectId, group]( const Maps::Map_Format::TileObjectInfo & mapObject ) {
-                                                                     return mapObject.group == group && mapObject.id == objectId;
-                                                                 } );
-
-                            // The town part should exist on the map. If no then there might be issues in towns placing.
-                            assert( foundObjectIter != tileToSearch.objects.end() );
-
-                            return foundObjectIter;
-                        };
-
-                        // Remove the town object.
-                        mapTile.objects.erase( objectIter );
-
-                        // Town basement is also located at this tile. Find and remove it.
-                        mapTile.objects.erase( findTownPart( mapTile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) );
-
-                        // Remove flags.
-                        assert( mapTileIndex > 0 );
-                        Maps::Map_Format::TileInfo & previousMapTile = mapFormat.tiles[mapTileIndex - 1];
-                        previousMapTile.objects.erase( findTownPart( previousMapTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
-
-                        assert( mapTileIndex < mapFormat.tiles.size() - 1 );
-                        Maps::Map_Format::TileInfo & nextMapTile = mapFormat.tiles[mapTileIndex + 1];
-                        nextMapTile.objects.erase( findTownPart( nextMapTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
-
-                        // Two objects have been removed from this tile. Start search from the beginning.
-                        objectIter = mapTile.objects.begin();
-
-                        // Remove this town metadata.
-                        assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
-                        mapFormat.castleMetadata.erase( objectId );
-
-                        // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
-                        const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
-                        assert( bottomTileIndex < mapFormat.tiles.size() );
-                        auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
-                        const bool isRoadAtBottom
-                            = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
-                                            []( const Maps::Map_Format::TileObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
-                              != bottomTileObjects.end();
-                        if ( isRoadAtBottom ) {
-                            // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format'
-                            // tiles.
-                            Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( bottomTileIndex ) ), false );
-                        }
-
-                        needRedraw = true;
-                        updateMapPlayerInformation = true;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
-                        assert( mapTileIndex < world.getSize() );
-
-                        needRedraw |= Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
-
-                        ++objectIter;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
-                        assert( mapTileIndex < world.getSize() );
-
-                        needRedraw |= Maps::updateStreamOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
-
-                        ++objectIter;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::KINGDOM_HEROES || Maps::isJailObject( objectIter->group, objectIter->index ) ) {
-                        // Remove this hero metadata.
-                        assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
-                        mapFormat.heroMetadata.erase( objectIter->id );
-
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-
-                        updateMapPlayerInformation = true;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::MONSTERS ) {
-                        assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
-                        mapFormat.standardMetadata.erase( objectIter->id );
-
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                        const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                        assert( objectIter->index < objects.size() );
-                        const auto objectType = objects[objectIter->index].objectType;
-                        switch ( objectType ) {
-                        case MP2::OBJ_EVENT:
-                            assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
-                            mapFormat.adventureMapEventMetadata.erase( objectIter->id );
-                            break;
-                        case MP2::OBJ_SIGN:
-                            assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
-                            mapFormat.signMetadata.erase( objectIter->id );
-                            break;
-                        case MP2::OBJ_SPHINX:
-                            assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
-                            mapFormat.sphinxMetadata.erase( objectIter->id );
-                            break;
-                        default:
-                            break;
-                        }
-
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-                        const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                        assert( objectIter->index < objects.size() );
-                        const auto objectType = objects[objectIter->index].objectType;
-                        if ( objectType == MP2::OBJ_BOTTLE ) {
-                            assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
-                            mapFormat.signMetadata.erase( objectIter->id );
-                        }
-
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-                    }
-                    else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-                        assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
-                        mapFormat.standardMetadata.erase( objectIter->id );
-
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-                    }
-                    else {
-                        objectIter = mapTile.objects.erase( objectIter );
-                        needRedraw = true;
-                    }
-
-                    if ( objectsUids.empty() ) {
-                        break;
+                    else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES /*|| Maps::isJailObject( objectIter->group, objectIter->index )*/ ) {
                     }
                 }
             }
         }
 
-        void setCondition( const uint8_t victoryConditionType )
+        void setConditionType( const uint8_t victoryConditionType )
         {
             _conditionType = victoryConditionType;
         }
@@ -573,7 +420,7 @@ namespace
 
                 mapFormat.isVictoryConditionApplicableForAI = false;
 
-                // In original game's map format '0' stands for the Ultimate Artifact. Set it also to '0' for the compatibility.
+                // In original game's map format '0' stands for any Ultimate Artifact. Set it also to '0' for the compatibility.
                 mapFormat.victoryConditionMetadata[0] = ( _victoryArtifactId == ultimateArtifactId ) ? 0 : _victoryArtifactId;
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
 
@@ -597,14 +444,29 @@ namespace
             }
         }
 
-        void renderChangableItems( fheroes2::Image & output )
+        void render( fheroes2::Image & output, const bool isEvilInterface, const bool redrawStaticItemsForCurrentContion )
         {
+            if ( redrawStaticItemsForCurrentContion ) {
+                _restorer.restore();
+                // Restore background to make sure that other UI elements aren't being rendered.
+                _restorer.restore();
+            }
+
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No special UI is needed.
 
                 break;
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                if ( redrawStaticItemsForCurrentContion ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
+                                                                                   roi.x + 5, roi.y + 10, isEvilInterface );
+                    _allowNormalVictoryRoi
+                        = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5, roi.y + 35, isEvilInterface );
+                }
+
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
                 }
@@ -623,6 +485,18 @@ namespace
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
+                if ( redrawStaticItemsForCurrentContion ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                    _artifactRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
+
+                    fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
+
+                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
+                                                                           roi.y + _artifactRoi.height + 10, isEvilInterface );
+                }
+
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
 
                 fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
@@ -637,73 +511,28 @@ namespace
                 break;
             }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
-                _goldAccumulationValue.draw( output );
+                if ( redrawStaticItemsForCurrentContion ) {
+                    const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
+                    const fheroes2::Rect roi{ _restorer.rect() };
+                    const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
 
+                    _goldAccumulationValue.setOffset( uiOffset );
+                    _goldAccumulationValue.draw( output );
+
+                    const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
+                    text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
+
+                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
+                                                                           roi.y + valueSectionUiSize.height + 10, isEvilInterface );
+                }
+
+                _goldAccumulationValue.draw( output );
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
                 }
                 else {
                     _allowNormalVictory.hide();
                 }
-
-                break;
-            }
-            default:
-                // Did you add more conditions? Add the logic for them!
-                assert( 0 );
-
-                break;
-            }
-        }
-
-        void renderStaticItems( fheroes2::Image & output, const bool isEvilInterface )
-        {
-            // Restore background to make sure that other UI elements aren't being rendered.
-            _restorer.restore();
-
-            switch ( _conditionType ) {
-            case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
-                // No special UI is needed.
-
-                break;
-            case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
-                const fheroes2::Rect roi{ _restorer.rect() };
-
-                _allowNormalVictoryRoi
-                    = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5, roi.y + 10, isEvilInterface );
-                _allowVictoryConditionForAIRoi
-                    = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "AI also wins by this condition" ), output, roi.x + 5, roi.y + 35, isEvilInterface );
-
-                break;
-            }
-            case Maps::FileInfo::VICTORY_KILL_HERO:
-                break;
-            case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
-                const fheroes2::Rect roi{ _restorer.rect() };
-
-                const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-                _artifactRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
-
-                fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
-
-                _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
-                                                                       roi.y + _artifactRoi.height + 10, isEvilInterface );
-
-                break;
-            }
-            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
-                const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
-                const fheroes2::Rect roi{ _restorer.rect() };
-                const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
-
-                _goldAccumulationValue.setOffset( uiOffset );
-                _goldAccumulationValue.draw( output );
-
-                const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
-                text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
-
-                _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Also allow normal victory" ), output, roi.x + 5,
-                                                                       roi.y + valueSectionUiSize.height + 10, isEvilInterface );
 
                 break;
             }
@@ -747,7 +576,7 @@ namespace
                 if ( le.MouseClickLeft( _artifactRoi ) ) {
                     const Artifact artifact = Dialog::selectArtifact( static_cast<int>( _victoryArtifactId ), true );
 
-                    if ( artifact.isValid() || artifact.GetID() == Artifact::RANDOM_ULTIMATE_ARTIFACT ) {
+                    if ( artifact.isValid() || artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT ) {
                         _victoryArtifactId = artifact.GetID();
                     }
 
@@ -832,11 +661,13 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
+                // Reset the unknown condition to the default condition type.
+                _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                 break;
             }
         }
 
-        void setCondition( const uint8_t lossConditionType )
+        void setConditionType( const uint8_t lossConditionType )
         {
             _conditionType = lossConditionType;
         }
@@ -938,12 +769,12 @@ namespace
         fheroes2::ValueSelectionDialogElement _outOfTimeValue{ 1, 10 * daysInYear, daysInMonth, 1, {} };
     };
 
-    uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList, const bool isEvilInterface )
+    uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList, const int dropBoxIcn )
     {
         std::vector<uint8_t> conditions = isLossList ? supportedLossConditions : supportedVictoryConditions;
         assert( std::find( conditions.begin(), conditions.end(), selectedCondition ) != conditions.end() );
 
-        DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, isEvilInterface );
+        DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, dropBoxIcn );
         conditionList.SetListContent( conditions );
         conditionList.SetCurrent( selectedCondition );
         conditionList.Redraw();
@@ -1202,8 +1033,7 @@ namespace Editor
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
         VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
 
-        victoryConditionUI.renderStaticItems( display, isEvilInterface );
-        victoryConditionUI.renderChangableItems( display );
+        victoryConditionUI.render( display, isEvilInterface, true );
 
         // Loss conditions.
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
@@ -1271,7 +1101,7 @@ namespace Editor
             }
 
             if ( victoryConditionUI.processEvents() ) {
-                victoryConditionUI.renderChangableItems( display );
+                victoryConditionUI.render( display, isEvilInterface, false );
                 display.render( victoryConditionUIRoi );
             }
             else if ( lossConditionUI.processEvents() ) {
@@ -1337,14 +1167,13 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) ) {
                 const uint8_t result
-                    = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false, isEvilInterface );
+                    = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false, dropListIcn );
 
                 if ( result != mapFormat.victoryConditionType ) {
                     mapFormat.victoryConditionType = result;
 
-                    victoryConditionUI.setCondition( mapFormat.victoryConditionType );
-                    victoryConditionUI.renderStaticItems( display, isEvilInterface );
-                    victoryConditionUI.renderChangableItems( display );
+                    victoryConditionUI.setConditionType( mapFormat.victoryConditionType );
+                    victoryConditionUI.render( display, isEvilInterface, true );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
@@ -1352,12 +1181,12 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
-                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true, isEvilInterface );
+                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true, dropListIcn );
 
                 if ( result != mapFormat.lossConditionType ) {
                     mapFormat.lossConditionType = result;
 
-                    lossConditionUI.setCondition( mapFormat.lossConditionType );
+                    lossConditionUI.setConditionType( mapFormat.lossConditionType );
                     lossConditionUI.render( display );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
