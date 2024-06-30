@@ -3221,9 +3221,10 @@ namespace fheroes2
                 loadICN( ICN::DROPLISL );
                 _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
                 for ( auto & image : _icnVsSprite[id] ) {
-                    // To convert the yellow borders of the drop list the combination of gray and darkening palettes is used here.
+                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
                     fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
-                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
+                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
                 }
                 return true;
             }
