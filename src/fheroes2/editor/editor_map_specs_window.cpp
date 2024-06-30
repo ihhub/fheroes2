@@ -346,8 +346,6 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
-                // Reset the unknown condition to the default condition type.
-                _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                 break;
             }
         }
@@ -396,6 +394,12 @@ namespace
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
+                // Reset the unknown condition to the default condition type.
+                mapFormat.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+
+                mapFormat.allowNormalVictory = false;
+                mapFormat.isVictoryConditionApplicableForAI = false;
 
                 break;
             }
@@ -569,8 +573,6 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
-                // Reset the unknown condition to the default condition type.
-                _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                 break;
             }
         }
@@ -601,6 +603,9 @@ namespace
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
+                // Reset the unknown condition to the default condition type.
+                mapFormat.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
 
                 break;
             }
