@@ -41,6 +41,22 @@ namespace Maps
 
     enum class ObjectGroup : uint8_t;
 
+    struct MapHeroInfo
+    {
+        int32_t x;
+        int32_t y;
+        int color;
+        const Map_Format::HeroMetadata * heroMetadata;
+    };
+
+    struct MapTownInfo
+    {
+        int32_t x;
+        int32_t y;
+        int color;
+        const Map_Format::CastleMetadata * castleMetadata;
+    };
+
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );
 
@@ -54,6 +70,10 @@ namespace Maps
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
+
+    std::vector<MapHeroInfo> getMapHeroes( const Map_Format::MapFormat & map, const int playerColors );
+
+    std::vector<MapTownInfo> getMapTpwns( const Map_Format::MapFormat & map, const int playerColors );
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
 

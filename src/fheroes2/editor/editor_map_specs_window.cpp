@@ -359,9 +359,6 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
-                // Reset the unknown condition to the default condition type.
-                _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
-
                 break;
             }
 
@@ -440,14 +437,19 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
+                // Reset the unknown condition to the default condition type.
+                mapFormat.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+
+                mapFormat.allowNormalVictory = false;
+                mapFormat.isVictoryConditionApplicableForAI = false;
+
                 break;
             }
         }
 
-        void render( fheroes2::Image & output, const bool isEvilInterface, const bool redrawStaticItemsForCurrentContion )
+        void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
         {
-            if ( redrawStaticItemsForCurrentContion ) {
-                _restorer.restore();
+            if ( renderEverything ) {
                 // Restore background to make sure that other UI elements aren't being rendered.
                 _restorer.restore();
             }
@@ -458,7 +460,7 @@ namespace
 
                 break;
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( redrawStaticItemsForCurrentContion ) {
+                if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
@@ -485,7 +487,7 @@ namespace
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
-                if ( redrawStaticItemsForCurrentContion ) {
+                if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
                     const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
@@ -511,7 +513,7 @@ namespace
                 break;
             }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
-                if ( redrawStaticItemsForCurrentContion ) {
+                if ( renderEverything ) {
                     const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
                     const fheroes2::Rect roi{ _restorer.rect() };
                     const fheroes2::Point uiOffset{ roi.x + ( roi.width - valueSectionUiSize.width ) / 2, roi.y };
@@ -661,8 +663,6 @@ namespace
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
 
-                // Reset the unknown condition to the default condition type.
-                _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                 break;
             }
         }
@@ -693,6 +693,9 @@ namespace
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
+
+                // Reset the unknown condition to the default condition type.
+                mapFormat.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
 
                 break;
             }

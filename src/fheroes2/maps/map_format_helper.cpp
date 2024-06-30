@@ -596,6 +596,80 @@ namespace Maps
         return true;
     }
 
+    std::vector<MapHeroInfo> getMapHeroes( const Map_Format::MapFormat & map, const int /*playerColors*/ )
+    {
+        const auto & heroObjects = getObjectsByGroup( ObjectGroup::KINGDOM_HEROES );
+
+        std::vector<MapHeroInfo> mapHeroInfos;
+
+        for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != ObjectGroup::KINGDOM_HEROES ) {
+                    continue;
+                }
+
+                if ( object.index >= heroObjects.size() ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                mapHeroInfos.emplace_back();
+                MapHeroInfo & mapHeroInfo = mapHeroInfos.back();
+
+                mapHeroInfo.x = static_cast<int32_t>( tileIndex ) % world.w();
+                mapHeroInfo.y = static_cast<int32_t>( tileIndex ) / world.w();
+
+                const auto & metadata = heroObjects[object.index].metadata;
+
+                mapHeroInfo.color = static_cast<int>( 1 << metadata[0] );
+
+                auto heroMetadataIter = map.heroMetadata.find( object.index );
+
+                assert( heroMetadataIter != map.heroMetadata.end() );
+
+                mapHeroInfo.heroMetadata = &heroMetadataIter->second;
+            }
+        }
+
+        return mapHeroInfos;
+    }
+
+    std::vector<MapTownInfo> getMapTpwns( const Map_Format::MapFormat & map, const int /*playerColors*/ )
+    {
+        const auto & townObjects = getObjectsByGroup( ObjectGroup::KINGDOM_TOWNS );
+
+        std::vector<MapTownInfo> mapTownInfos;
+
+        for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != ObjectGroup::KINGDOM_TOWNS ) {
+                    continue;
+                }
+
+                if ( object.index >= townObjects.size() ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                mapTownInfos.emplace_back();
+                MapTownInfo & mapTownInfo = mapTownInfos.back();
+
+                mapTownInfo.x = static_cast<int32_t>( tileIndex ) % world.w();
+                mapTownInfo.y = static_cast<int32_t>( tileIndex ) / world.w();
+
+                mapTownInfo.color = static_cast<int>( getTownColorIndex( map, tileIndex, object.id ) );
+
+                const auto castleMetadataIter = map.castleMetadata.find( object.index );
+
+                assert( castleMetadataIter != map.castleMetadata.end() );
+
+                mapTownInfo.castleMetadata = &castleMetadataIter->second;
+            }
+        }
+
+        return mapTownInfos;
+    }
+
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id )
     {
         if ( map.tiles.empty() ) {

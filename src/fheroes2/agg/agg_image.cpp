@@ -4134,7 +4134,7 @@ namespace fheroes2
             case ICN::ARTFX:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 82 ) {
-                    // Make a sprite for the Random Ultimate Artifact used in Editor for the special victory condition.
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
                     // A temporary solution is below.
                     const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
                     SubpixelResize( originalImage, _icnVsSprite[id][82] );
