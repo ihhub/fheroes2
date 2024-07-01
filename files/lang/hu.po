@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4414,11 +4414,12 @@ msgid "Special Victory Condition"
 msgstr "Speciális győzelmi feltétel"
 
 #, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Győzelmi feltétel"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Arany"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -10804,14 +10805,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Próba 1"
-
-msgid "The reserved artifact."
-msgstr "A félretett varázstárgy."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Próba 2"
+
+msgid "The reserved artifact."
+msgstr "A félretett varázstárgy."
 
 msgid "Dummy 3"
 msgstr "Próba 3"
@@ -11790,3 +11791,6 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Próba 1"

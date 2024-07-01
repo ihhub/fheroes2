@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4516,11 +4516,12 @@ msgid "Special Victory Condition"
 msgstr "Điều kiện Thắng"
 
 #, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Điều kiện Thắng"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Vàng"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -11082,14 +11083,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Bù nhìn 1"
-
-msgid "The reserved artifact."
-msgstr "Hiện vật được bảo lưu."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Bù nhìn 2"
+
+msgid "The reserved artifact."
+msgstr "Hiện vật được bảo lưu."
 
 msgid "Dummy 3"
 msgstr "Bù nhìn 3"
@@ -12108,3 +12109,6 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Bù nhìn 1"

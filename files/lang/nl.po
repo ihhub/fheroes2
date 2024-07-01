@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4308,10 +4308,10 @@ msgstr ""
 msgid "Special Victory Condition"
 msgstr ""
 
-msgid "Gold:"
+msgid "Allow standard victory conditions"
 msgstr ""
 
-msgid "Also allow normal victory"
+msgid "Gold:"
 msgstr ""
 
 msgid "Days:"
@@ -9877,13 +9877,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
