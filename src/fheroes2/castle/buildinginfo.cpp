@@ -462,7 +462,11 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const fheroes2::Text descriptionText( std::move( extendedDescription ), fheroes2::FontType::normalWhite() );
 
     // prepare requirement build string
-    std::string requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( _buildingType ) );
+    std::string requirement;
+    
+    if ( _status != BuildingStatus::BUILD_DISABLE ) {
+    requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( _buildingType ) );
+    }
 
     const bool requirementsPresent = !requirement.empty();
 
