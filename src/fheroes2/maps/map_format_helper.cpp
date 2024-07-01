@@ -596,7 +596,7 @@ namespace Maps
         return true;
     }
 
-    std::vector<MapHeroInfo> getMapHeroes( const Map_Format::MapFormat & map, const int /*playerColors*/ )
+    std::vector<MapHeroInfo> getMapHeroes( const Map_Format::MapFormat & map, const int playerColors )
     {
         const auto & heroObjects = getObjectsByGroup( ObjectGroup::KINGDOM_HEROES );
 
@@ -613,17 +613,22 @@ namespace Maps
                     continue;
                 }
 
+                const auto & metadata = heroObjects[object.index].metadata;
+                const int color = static_cast<int>( 1 << metadata[0] );
+
+                if ( !( color & playerColors ) ) {
+                    // Current hero color is not one of the playerColors.
+                    continue;
+                }
+
                 mapHeroInfos.emplace_back();
                 MapHeroInfo & mapHeroInfo = mapHeroInfos.back();
 
                 mapHeroInfo.x = static_cast<int32_t>( tileIndex ) % world.w();
                 mapHeroInfo.y = static_cast<int32_t>( tileIndex ) / world.w();
+                mapHeroInfo.color = color;
 
-                const auto & metadata = heroObjects[object.index].metadata;
-
-                mapHeroInfo.color = static_cast<int>( 1 << metadata[0] );
-
-                auto heroMetadataIter = map.heroMetadata.find( object.index );
+                auto heroMetadataIter = map.heroMetadata.find( object.id );
 
                 assert( heroMetadataIter != map.heroMetadata.end() );
 
@@ -634,7 +639,7 @@ namespace Maps
         return mapHeroInfos;
     }
 
-    std::vector<MapTownInfo> getMapTpwns( const Map_Format::MapFormat & map, const int /*playerColors*/ )
+    std::vector<MapTownInfo> getMapTowns( const Map_Format::MapFormat & map, const int /*playerColors*/ )
     {
         const auto & townObjects = getObjectsByGroup( ObjectGroup::KINGDOM_TOWNS );
 
@@ -659,7 +664,7 @@ namespace Maps
 
                 mapTownInfo.color = static_cast<int>( getTownColorIndex( map, tileIndex, object.id ) );
 
-                const auto castleMetadataIter = map.castleMetadata.find( object.index );
+                const auto castleMetadataIter = map.castleMetadata.find( object.id );
 
                 assert( castleMetadataIter != map.castleMetadata.end() );
 

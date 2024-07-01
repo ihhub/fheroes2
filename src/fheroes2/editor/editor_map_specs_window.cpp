@@ -46,6 +46,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -365,16 +366,9 @@ namespace
                 break;
             }
 
-            // Make the heroes and towns vectors.
-            for ( const Maps::Map_Format::TileInfo & mapTile : mapFormat.tiles ) {
-                for ( const Maps::Map_Format::TileObjectInfo & object : mapTile.objects ) {
-                    // List the towns.
-                    if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    }
-                    else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    }
-                }
-            }
+            // Make the heroes and towns vectors for only AI controlled players.
+            _mapHeroInfos = Maps::getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+            _mapTownInfos = Maps::getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
         }
 
         void setConditionType( const uint8_t victoryConditionType )
@@ -534,6 +528,7 @@ namespace
                 }
 
                 _goldAccumulationValue.draw( output );
+
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
                 }
@@ -634,6 +629,8 @@ namespace
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 3> _heroToKill{ 0 };
         std::array<uint32_t, 3> _townToCapture{ 0 };
+        std::vector<Maps::MapHeroInfo> _mapHeroInfos;
+        std::vector<Maps::MapTownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 

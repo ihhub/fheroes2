@@ -73,7 +73,7 @@ namespace Maps
 
     std::vector<MapHeroInfo> getMapHeroes( const Map_Format::MapFormat & map, const int playerColors );
 
-    std::vector<MapTownInfo> getMapTpwns( const Map_Format::MapFormat & map, const int playerColors );
+    std::vector<MapTownInfo> getMapTowns( const Map_Format::MapFormat & map, const int playerColors );
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
 
