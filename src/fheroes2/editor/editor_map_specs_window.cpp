@@ -286,9 +286,14 @@ namespace
             _isClicked = true;
         }
 
-        void ActionListPressRight( uint8_t & /* item */ ) override
+        void ActionListPressRight( uint8_t & condition ) override
         {
-            // Do nothing.
+            if ( _isLossList ) {
+                fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), getLossConditionText( condition ), Dialog::ZERO );
+            }
+            else {
+                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), getVictoryConditionText( condition ), Dialog::ZERO );
+            }
         }
 
         fheroes2::Rect getArea() const
@@ -339,8 +344,6 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
                 }
-
-                break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     // In original game's map format '0' stands for any Ultimate Artifact.
@@ -368,7 +371,7 @@ namespace
                     // List the towns.
                     if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
                     }
-                    else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES /*|| Maps::isJailObject( objectIter->group, objectIter->index )*/ ) {
+                    else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
                     }
                 }
             }
@@ -400,7 +403,7 @@ namespace
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
                 mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
 
-                break;
+                return;
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
                     mapFormat.victoryConditionMetadata.resize( 3 );
@@ -409,7 +412,7 @@ namespace
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
 
-                break;
+                return;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() != 1 ) {
                     mapFormat.victoryConditionMetadata.resize( 1 );
@@ -445,6 +448,8 @@ namespace
 
                 break;
             }
+
+            mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
         void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
@@ -1214,6 +1219,12 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( victoryDroplistButtonRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click to change the victory condition of the current map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( lossDroplistButtonRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), _( "Click to change the loss condition of the current map." ), Dialog::ZERO );
             }
 
             for ( int32_t i = 0; i < availablePlayersCount; ++i ) {

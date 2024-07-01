@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -4473,11 +4473,23 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr ""
+"Podmínky\n"
+"pro prohru"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr ""
+"Podmínky\n"
+"pro výhru"
+
+msgid "Allow standard victory conditions"
+msgstr ""
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4497,18 +4509,6 @@ msgstr ""
 "\n"
 "\n"
 "Cesta: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr ""
-"Podmínky\n"
-"pro výhru"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr ""
-"Podmínky\n"
-"pro prohru"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4552,6 +4552,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Klikni pro uložení aktuální hry."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -10325,13 +10333,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"

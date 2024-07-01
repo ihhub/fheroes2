@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4407,12 +4407,19 @@ msgstr "Arany összegyűjtése."
 msgid "Run out of time."
 msgstr "Kifutás az időből."
 
+msgid "Special Loss Condition"
+msgstr "Speciális vesztési feltétel"
+
+msgid "Special Victory Condition"
+msgstr "Speciális győzelmi feltétel"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Győzelmi feltétel"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Arany"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4425,12 +4432,6 @@ msgstr "Térkép nehézség"
 
 msgid "Map Description"
 msgstr "Térkép leírása"
-
-msgid "Special Victory Condition"
-msgstr "Speciális győzelmi feltétel"
-
-msgid "Special Loss Condition"
-msgstr "Speciális vesztési feltétel"
 
 msgid "Change Map Name"
 msgstr "Térkép nevének megváltoztatása"
@@ -4471,6 +4472,14 @@ msgid "Map Name"
 msgstr "Térkép neve"
 
 msgid "Click to change the description of the current map."
+msgstr "Kattints az aktuális térkép leírásának megváltoztatásához."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Kattints az aktuális térkép leírásának megváltoztatásához."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Kattints az aktuális térkép leírásának megváltoztatásához."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -10796,14 +10805,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Próba 1"
-
-msgid "The reserved artifact."
-msgstr "A félretett varázstárgy."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Próba 2"
+
+msgid "The reserved artifact."
+msgstr "A félretett varázstárgy."
 
 msgid "Dummy 3"
 msgstr "Próba 3"
@@ -11782,3 +11791,6 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Próba 1"

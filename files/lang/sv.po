@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2024-05-31 20:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4412,12 +4412,19 @@ msgstr "Samla ihop guld."
 msgid "Run out of time."
 msgstr "Få slut på tid."
 
+msgid "Special Loss Condition"
+msgstr "Särskilt Förlustvillkor"
+
+msgid "Special Victory Condition"
+msgstr "Särskilt Segervillkor"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Segervillkor"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Guld"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4430,12 +4437,6 @@ msgstr "Kartsvårighet"
 
 msgid "Map Description"
 msgstr "Kartbeskrivning"
-
-msgid "Special Victory Condition"
-msgstr "Särskilt Segervillkor"
-
-msgid "Special Loss Condition"
-msgstr "Särskilt Förlustvillkor"
 
 msgid "Change Map Name"
 msgstr "Ändra Kartnamn"
@@ -4475,6 +4476,14 @@ msgid "Map Name"
 msgstr "Kartnamn"
 
 msgid "Click to change the description of the current map."
+msgstr "Klicka för att ändra nuvarande kartans beskrivning."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Klicka för att ändra nuvarande kartans beskrivning."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Klicka för att ändra nuvarande kartans beskrivning."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -10796,14 +10805,14 @@ msgstr ""
 "han ivrigt, \"Tryckpressen\". Innan du hinner säga ett ord så ger han dig en "
 "Besvärjelsebok."
 
-msgid "Dummy 1"
-msgstr "Atrapp 1"
-
-msgid "The reserved artifact."
-msgstr "Reseverad artefakt."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Atrapp 2"
+
+msgid "The reserved artifact."
+msgstr "Reseverad artefakt."
 
 msgid "Dummy 3"
 msgstr "Atrapp 3"
@@ -11814,3 +11823,6 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Atrapp 1"
