@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4442,11 +4442,12 @@ msgid "Special Victory Condition"
 msgstr "Condição Especial de Vitória"
 
 #, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Condição de Vitória"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Ouro"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -10912,14 +10913,14 @@ msgstr ""
 "Impressão\". E antes que você possa dizer uma palavra, ele lhe entrega um "
 "Grimório."
 
-msgid "Dummy 1"
-msgstr "Fantoche 1"
-
-msgid "The reserved artifact."
-msgstr "O artefato reservado."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Fantoche 2"
+
+msgid "The reserved artifact."
+msgstr "O artefato reservado."
 
 msgid "Dummy 3"
 msgstr "Fantoche 3"
@@ -11935,3 +11936,6 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Fantoche 1"

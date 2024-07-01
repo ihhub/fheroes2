@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4519,11 +4519,12 @@ msgid "Special Victory Condition"
 msgstr "Podmienka výhry"
 
 #, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Podmienka výhry"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -10982,14 +10983,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Atrapa 1"
-
-msgid "The reserved artifact."
-msgstr "Vyhradený artefakt."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Atrapa 2"
+
+msgid "The reserved artifact."
+msgstr "Vyhradený artefakt."
 
 msgid "Dummy 3"
 msgstr "Atrapa 3"
@@ -11981,3 +11982,6 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Atrapa 1"

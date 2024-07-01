@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 09:49+0000\n"
+"POT-Creation-Date: 2024-07-01 13:34+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4535,11 +4535,12 @@ msgid "Special Victory Condition"
 msgstr "Conditions de victoire"
 
 #, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Conditions de victoire"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Or"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -11066,14 +11067,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Emplacement 1"
-
-msgid "The reserved artifact."
-msgstr "L'artéfact réservé."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Emplacement 2"
+
+msgid "The reserved artifact."
+msgstr "L'artéfact réservé."
 
 msgid "Dummy 3"
 msgstr "Emplacement 3"
@@ -12096,3 +12097,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Emplacement 1"
