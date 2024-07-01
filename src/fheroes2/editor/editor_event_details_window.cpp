@@ -316,7 +316,7 @@ namespace Editor
                 display.render( recurringEventCheckbox.getArea() );
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( eventMetadata.artifact );
+                const Artifact artifact = Dialog::selectArtifact( eventMetadata.artifact, false );
                 if ( artifact.isValid() ) {
                     int32_t artifactMetadata = eventMetadata.artifactMetadata;
 

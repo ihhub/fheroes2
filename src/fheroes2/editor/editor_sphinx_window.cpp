@@ -357,7 +357,7 @@ namespace Editor
                 isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( metadata.artifact );
+                const Artifact artifact = Dialog::selectArtifact( metadata.artifact, false );
                 if ( artifact.isValid() ) {
                     int32_t artifactMetadata = metadata.artifactMetadata;
 
