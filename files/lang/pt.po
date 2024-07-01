@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4435,6 +4435,12 @@ msgstr "Acumular ouro."
 msgid "Run out of time."
 msgstr "Ficar sem tempo."
 
+msgid "Special Loss Condition"
+msgstr "Condição Especial de Derrota"
+
+msgid "Special Victory Condition"
+msgstr "Condição Especial de Vitória"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Ouro"
@@ -4453,12 +4459,6 @@ msgstr "Dificuldade do Mapa"
 
 msgid "Map Description"
 msgstr "Descrição do Mapa"
-
-msgid "Special Victory Condition"
-msgstr "Condição Especial de Vitória"
-
-msgid "Special Loss Condition"
-msgstr "Condição Especial de Derrota"
 
 msgid "Change Map Name"
 msgstr "Alterar o Nome do Mapa"
@@ -4498,6 +4498,14 @@ msgid "Map Name"
 msgstr "Nome do Mapa"
 
 msgid "Click to change the description of the current map."
+msgstr "Clique para alterar a descrição do mapa atual."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Clique para alterar a descrição do mapa atual."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Clique para alterar a descrição do mapa atual."
 
 msgid "Indicates the player types in the scenario. Click to change."

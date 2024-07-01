@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4431,6 +4431,12 @@ msgstr "Накопить золото."
 msgid "Run out of time."
 msgstr "Не успеть вовремя."
 
+msgid "Special Loss Condition"
+msgstr "Особое условие поражения"
+
+msgid "Special Victory Condition"
+msgstr "Особое условие победы"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Золото"
@@ -4449,12 +4455,6 @@ msgstr "Сложность карты"
 
 msgid "Map Description"
 msgstr "Описание карты"
-
-msgid "Special Victory Condition"
-msgstr "Особое условие победы"
-
-msgid "Special Loss Condition"
-msgstr "Особое условие поражения"
 
 msgid "Change Map Name"
 msgstr "Изменить название карты"
@@ -4494,6 +4494,14 @@ msgid "Map Name"
 msgstr "Название карты"
 
 msgid "Click to change the description of the current map."
+msgstr "Нажмите, чтобы изменить описание текущей карты."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Нажмите, чтобы изменить описание текущей карты."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Нажмите, чтобы изменить описание текущей карты."
 
 msgid "Indicates the player types in the scenario. Click to change."

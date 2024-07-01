@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4527,6 +4527,14 @@ msgid "Run out of time."
 msgstr "Quitter l'éditeur de carte."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Conditions de défaite"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Conditions de victoire"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Or"
 
@@ -4551,14 +4559,6 @@ msgstr ""
 "\n"
 "\n"
 "Emplacement : "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Conditions de victoire"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Conditions de défaite"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4601,6 +4601,14 @@ msgstr "Nom du fichier pour la carte"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "La description de la carte actuellement sélectionnée."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "La description de la carte actuellement sélectionnée."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "La description de la carte actuellement sélectionnée."
 
 msgid "Indicates the player types in the scenario. Click to change."

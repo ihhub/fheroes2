@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4233,6 +4233,14 @@ msgstr "Назапасіць вялікую колькасць золата."
 msgid "Run out of time."
 msgstr ""
 
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Умова паразы"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Умова перамогі"
+
 msgid "Gold:"
 msgstr ""
 
@@ -4252,14 +4260,6 @@ msgstr "Складанасць мапы:"
 #, fuzzy
 msgid "Map Description"
 msgstr "Апісанне"
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Умова перамогі"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Умова паразы"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4301,6 +4301,14 @@ msgstr "Тып мапы"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Апісанне абранай мапы."
 
 msgid "Indicates the player types in the scenario. Click to change."

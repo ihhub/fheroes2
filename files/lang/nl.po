@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-06-30 09:49+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4302,6 +4302,12 @@ msgstr ""
 msgid "Run out of time."
 msgstr ""
 
+msgid "Special Loss Condition"
+msgstr ""
+
+msgid "Special Victory Condition"
+msgstr ""
+
 msgid "Gold:"
 msgstr ""
 
@@ -4318,12 +4324,6 @@ msgid "Map Difficulty"
 msgstr ""
 
 msgid "Map Description"
-msgstr ""
-
-msgid "Special Victory Condition"
-msgstr ""
-
-msgid "Special Loss Condition"
 msgstr ""
 
 msgid "Change Map Name"
@@ -4366,6 +4366,16 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
