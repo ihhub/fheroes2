@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-02 06:43+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -1991,6 +1991,12 @@ msgstr "Tovenaarseiland"
 msgid "Descendants"
 msgstr "Afstammelingen"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Kan niet bouwen. Je hebt hier vandaag al gebouwd."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Voor deze actie moet je eerst een kasteel bouwen."
+
 msgid "The %{building} produces %{monster}."
 msgstr "Het %{building} produceert %{monster}."
 
@@ -1999,12 +2005,6 @@ msgstr "Vereist:"
 
 msgid "Exit this menu without doing anything."
 msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr "Kan niet bouwen. Je hebt hier vandaag al gebouwd."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Voor deze actie moet je eerst een kasteel bouwen."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
