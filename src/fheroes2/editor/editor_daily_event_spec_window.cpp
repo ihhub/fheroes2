@@ -58,8 +58,8 @@ namespace
     const int32_t elementOffset{ 9 };
     const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
 
-    const uint32_t daysInYear{ 7 * 4 * 12 };
-    const uint32_t lastDayForEvents{ daysInYear * 100 };
+    const int32_t daysInYear{ 7 * 4 * 12 };
+    const int32_t lastDayForEvents{ daysInYear * 100 };
 }
 
 namespace Editor
@@ -71,9 +71,9 @@ namespace Editor
         eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
 
         // First occurrence day logically has no limits but we still have to check it for some human logical value.
-        eventMetadata.firstOccurrenceDay = std::clamp( eventMetadata.firstOccurrenceDay, 1U, lastDayForEvents );
+        eventMetadata.firstOccurrenceDay = std::clamp( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
 
-        eventMetadata.repeatPeriodInDays = std::min( eventMetadata.repeatPeriodInDays, daysInYear );
+        eventMetadata.repeatPeriodInDays = std::min( eventMetadata.repeatPeriodInDays, static_cast<uint32_t>( daysInYear ) );
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -180,10 +180,17 @@ namespace Editor
 
         const fheroes2::Point firstDayOccurrencePos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
 
-        fheroes2::ValueSelectionDialogElement firstDaySelection( 1, static_cast<int32_t>( lastDayForEvents ), static_cast<int32_t>( eventMetadata.firstOccurrenceDay ), 1,
+        fheroes2::ValueSelectionDialogElement firstDaySelection( 1, lastDayForEvents, static_cast<int32_t>( eventMetadata.firstOccurrenceDay ), 1,
                                                                  firstDayOccurrencePos );
 
         firstDaySelection.draw( display );
+
+        offsetY += 10 + fheroes2::ValueSelectionDialogElement::getArea().height;
+
+        fheroes2::ImageRestorer firstDateDescription( display, playerAreaOffsetX, offsetY, playerAreaWidth, 35 );
+
+        text.set( getDateDescription( firstDaySelection.getValue() ) , fheroes2::FontType::normalWhite() );
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, text.width(), display );
 
         offsetY += 35;
 
@@ -201,7 +208,7 @@ namespace Editor
 
         const fheroes2::Point repeatPeriodPos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
 
-        fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, static_cast<int32_t>( daysInYear ), static_cast<int32_t>( eventMetadata.repeatPeriodInDays ), 1,
+        fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, daysInYear, static_cast<int32_t>( eventMetadata.repeatPeriodInDays ), 1,
                                                                      repeatPeriodPos );
 
         repeatPeriodSelection.draw( display );
@@ -225,6 +232,11 @@ namespace Editor
                 firstDaySelection.draw( display );
 
                 eventMetadata.firstOccurrenceDay = static_cast<uint32_t>( firstDaySelection.getValue() );
+
+                firstDateDescription.restore();
+
+                text.set( getDateDescription( firstDaySelection.getValue() ) , fheroes2::FontType::normalWhite() );
+                text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, firstDateDescription.y(), text.width(), display );
 
                 isRedrawNeeded = true;
             }

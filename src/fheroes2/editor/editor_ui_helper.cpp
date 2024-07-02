@@ -29,6 +29,8 @@
 #include "pal.h"
 #include "resource.h"
 #include "screen.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -152,5 +154,19 @@ namespace Editor
 
         text.set( std::to_string( resources.gold ), fontType );
         text.draw( thirdColumnOffset + ( maxWidth * 2 + midElementOffsetX - text.width() ) / 2, offsetY[1] + 1, output );
+    }
+
+    std::string getDateDescription( const int32_t day )
+    {
+        std::string message = _( "Day: %{day} Week: %{week} Month: %{month}" );
+        int32_t days = day;
+        const int32_t month = ( days - 1 ) / ( 7 * 4 );
+        days -= month * ( 7 * 4 );
+
+        StringReplace( message, "%{day}", ( ( days - 1 ) % 7 ) + 1 );
+        StringReplace( message, "%{week}", ( ( days - 1 ) / 7 ) + 1 );
+        StringReplace( message, "%{month}", month + 1 );
+
+        return message;
     }
 }
