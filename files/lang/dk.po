@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-02 06:43+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2029,6 +2029,12 @@ msgstr "Troldmandsøen"
 msgid "Descendants"
 msgstr "Efterkommere"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Til denne handling er det nødvendigt først at bygge en borg."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} frembringer %{monster}."
 
@@ -2037,12 +2043,6 @@ msgstr "Kræver:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Forlad denne menu, uden at gøre noget."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Til denne handling er det nødvendigt først at bygge en borg."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name}et kan ikke bygges, da borgen er for langt fra vand."

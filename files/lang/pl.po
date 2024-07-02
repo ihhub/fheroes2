@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-02 06:43+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -2022,6 +2022,12 @@ msgstr "Wyspa Czarodzieja"
 msgid "Descendants"
 msgstr "Potomkowie"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nie można budować. Już to robiono w tej turze."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Najpierw trzeba zbudować zamek."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - tu rekrutuje się: %{monster}."
 
@@ -2030,12 +2036,6 @@ msgstr "Wymagania:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nie można budować. Już to robiono w tej turze."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Najpierw trzeba zbudować zamek."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
