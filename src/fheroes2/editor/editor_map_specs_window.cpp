@@ -46,6 +46,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -76,7 +77,8 @@ namespace
     const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
 
     // TODO: expand these conditions by adding missing ones.
-    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
+    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
+                                                           Maps::FileInfo::VICTORY_KILL_HERO, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
                                                            Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_OUT_OF_TIME };
 
@@ -333,6 +335,16 @@ namespace
                 // This condition has no extra options.
 
                 break;
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
+                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
+                }
+
+                break;
+            case Maps::FileInfo::VICTORY_KILL_HERO:
+                if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
+                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
+                }
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     // In original game's map format '0' stands for any Ultimate Artifact.
@@ -353,6 +365,10 @@ namespace
 
                 break;
             }
+
+            // Make the heroes and towns vectors for only AI controlled players.
+            _mapHeroInfos = Maps::getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+            _mapTownInfos = Maps::getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
         }
 
         void setConditionType( const uint8_t victoryConditionType )
@@ -368,6 +384,24 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // This condition has no metadata.
                 mapFormat.victoryConditionMetadata.clear();
+
+                mapFormat.allowNormalVictory = false;
+                mapFormat.isVictoryConditionApplicableForAI = false;
+
+                return;
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
+                    mapFormat.victoryConditionMetadata.resize( 3 );
+                }
+
+                mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
+                mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
+
+                return;
+            case Maps::FileInfo::VICTORY_KILL_HERO:
+                if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
+                    mapFormat.victoryConditionMetadata.resize( 3 );
+                }
 
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
@@ -423,6 +457,33 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
                 // No special UI is needed.
 
+                break;
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                if ( renderEverything ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
+                                                                                   roi.x + 5, roi.y + 10, isEvilInterface );
+                    _allowNormalVictoryRoi
+                        = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5, roi.y + 35, isEvilInterface );
+                }
+
+                if ( _isNormalVictoryAllowed ) {
+                    _allowNormalVictory.show();
+                }
+                else {
+                    _allowNormalVictory.hide();
+                }
+
+                if ( _isVictoryConditionApplicableForAI ) {
+                    _allowVictoryConditionForAI.show();
+                }
+                else {
+                    _allowVictoryConditionForAI.hide();
+                }
+
+                break;
+            case Maps::FileInfo::VICTORY_KILL_HERO:
                 break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 if ( renderEverything ) {
@@ -492,6 +553,25 @@ namespace
                 // No events to process.
 
                 return false;
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
+                LocalEvent & le = LocalEvent::Get();
+
+                if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
+                    _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
+
+                    return true;
+                }
+
+                if ( le.MouseClickLeft( _allowVictoryConditionForAIRoi ) ) {
+                    _isVictoryConditionApplicableForAI = !_isVictoryConditionApplicableForAI;
+
+                    return true;
+                }
+
+                break;
+            }
+            case Maps::FileInfo::VICTORY_KILL_HERO:
+                break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 LocalEvent & le = LocalEvent::Get();
 
@@ -546,13 +626,20 @@ namespace
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
+        // Town or hero loss metadata include: X position, Y position, color.
+        std::array<uint32_t, 3> _heroToKill{ 0 };
+        std::array<uint32_t, 3> _townToCapture{ 0 };
+        std::vector<Maps::MapHeroInfo> _mapHeroInfos;
+        std::vector<Maps::MapTownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 
         fheroes2::ValueSelectionDialogElement _goldAccumulationValue{ 10000, 1000000, 10000, 1000, {} };
 
         fheroes2::MovableSprite _allowNormalVictory;
+        fheroes2::MovableSprite _allowVictoryConditionForAI;
         fheroes2::Rect _allowNormalVictoryRoi;
+        fheroes2::Rect _allowVictoryConditionForAIRoi;
         fheroes2::Rect _artifactRoi;
     };
 
