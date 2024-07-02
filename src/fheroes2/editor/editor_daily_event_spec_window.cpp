@@ -189,7 +189,7 @@ namespace Editor
 
         fheroes2::ImageRestorer firstDateDescription( display, playerAreaOffsetX, offsetY, playerAreaWidth, 35 );
 
-        text.set( getDateDescription( firstDaySelection.getValue() ) , fheroes2::FontType::normalWhite() );
+        text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
         text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, text.width(), display );
 
         offsetY += 35;
@@ -208,8 +208,7 @@ namespace Editor
 
         const fheroes2::Point repeatPeriodPos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
 
-        fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, daysInYear, static_cast<int32_t>( eventMetadata.repeatPeriodInDays ), 1,
-                                                                     repeatPeriodPos );
+        fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, daysInYear, static_cast<int32_t>( eventMetadata.repeatPeriodInDays ), 1, repeatPeriodPos );
 
         repeatPeriodSelection.draw( display );
 
@@ -235,7 +234,7 @@ namespace Editor
 
                 firstDateDescription.restore();
 
-                text.set( getDateDescription( firstDaySelection.getValue() ) , fheroes2::FontType::normalWhite() );
+                text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
                 text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, firstDateDescription.y(), text.width(), display );
 
                 isRedrawNeeded = true;
