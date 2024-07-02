@@ -345,6 +345,8 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
                 }
+
+                break;
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     // In original game's map format '0' stands for any Ultimate Artifact.
@@ -394,6 +396,8 @@ namespace
                     mapFormat.victoryConditionMetadata.resize( 3 );
                 }
 
+                std::copy( _townToCapture.begin(), _townToCapture.end(), mapFormat.victoryConditionMetadata.begin() );
+
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
                 mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
 
@@ -402,6 +406,8 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
                     mapFormat.victoryConditionMetadata.resize( 3 );
                 }
+
+                std::copy( _heroToKill.begin(), _heroToKill.end(), mapFormat.victoryConditionMetadata.begin() );
 
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
@@ -442,8 +448,6 @@ namespace
 
                 break;
             }
-
-            mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
         }
 
         void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
@@ -462,10 +466,16 @@ namespace
                 if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
+                    const fheroes2::Sprite & townFrame = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 23 );
+
+                    _selectConditionRoi = { roi.x + ( roi.width - townFrame.width() ) / 2, roi.y + 4, townFrame.width(), townFrame.height() };
+
+                    fheroes2::Blit( townFrame, 0, 0, output, _selectConditionRoi.x, _selectConditionRoi.y, _selectConditionRoi.width, _selectConditionRoi.height );
+
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + 10, isEvilInterface );
-                    _allowNormalVictoryRoi
-                        = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5, roi.y + 35, isEvilInterface );
+                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, isEvilInterface );
+                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
+                                                                           roi.y + _selectConditionRoi.height + 35, isEvilInterface );
                 }
 
                 if ( _isNormalVictoryAllowed ) {
@@ -483,24 +493,36 @@ namespace
                 }
 
                 break;
-            case Maps::FileInfo::VICTORY_KILL_HERO:
+            case Maps::FileInfo::VICTORY_KILL_HERO: {
+                const fheroes2::Rect roi{ _restorer.rect() };
+
+                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+
+                const int32_t heroFrameWidth = 107;
+                const int32_t heroFrameHeight = 99;
+
+                _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
+
+                fheroes2::Blit( heroFrame, 46, 28, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+
                 break;
+            }
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
                     const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-                    _artifactRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
+                    _selectConditionRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
 
-                    fheroes2::Blit( artifactFrame, output, _artifactRoi.x, _artifactRoi.y );
+                    fheroes2::Blit( artifactFrame, output, _selectConditionRoi.x, _selectConditionRoi.y );
 
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _artifactRoi.height + 10, isEvilInterface );
+                                                                           roi.y + _selectConditionRoi.height + 10, isEvilInterface );
                 }
 
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
 
-                fheroes2::Copy( artifactImage, 0, 0, output, _artifactRoi.x + 6, _artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
+                fheroes2::Copy( artifactImage, 0, 0, output, _selectConditionRoi.x + 6, _selectConditionRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
@@ -575,7 +597,7 @@ namespace
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( le.MouseClickLeft( _artifactRoi ) ) {
+                if ( le.MouseClickLeft( _selectConditionRoi ) ) {
                     const Artifact artifact = Dialog::selectArtifact( static_cast<int>( _victoryArtifactId ), true );
 
                     if ( artifact.isValid() || artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT ) {
@@ -585,7 +607,7 @@ namespace
                     return true;
                 }
 
-                if ( le.isMouseRightButtonPressedInArea( _artifactRoi ) ) {
+                if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
                     fheroes2::ArtifactDialogElement( Artifact( static_cast<int>( _victoryArtifactId ) ) ).showPopup( Dialog::ZERO );
 
                     return false;
@@ -640,7 +662,7 @@ namespace
         fheroes2::MovableSprite _allowVictoryConditionForAI;
         fheroes2::Rect _allowNormalVictoryRoi;
         fheroes2::Rect _allowVictoryConditionForAIRoi;
-        fheroes2::Rect _artifactRoi;
+        fheroes2::Rect _selectConditionRoi;
     };
 
     class LossConditionUI final
