@@ -2212,7 +2212,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Castle top wall.
     if ( castle != nullptr ) {
-        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
+        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
 }
@@ -2276,7 +2276,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
             break;
         }
 
-        if ( castle.isFortificationBuild() ) {
+        if ( castle.isFortificationBuilt() ) {
             switch ( Board::GetCell( cellId )->GetObject() ) {
             case 0:
                 index += 31;

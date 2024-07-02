@@ -54,7 +54,7 @@ namespace AI
     bool BuildIfPossible( Castle & castle, const building_t building )
     {
         switch ( castle.CheckBuyBuilding( building ) ) {
-        case LACK_RESOURCES: {
+        case BuildingStatus::LACK_RESOURCES: {
             const Funds payment = PaymentConditions::BuyBuilding( castle.GetRace(), building );
 
             if ( !tradeAtMarketplace( castle.GetKingdom(), payment ) ) {
@@ -63,7 +63,7 @@ namespace AI
 
             break;
         }
-        case ALLOW_BUILD:
+        case BuildingStatus::ALLOW_BUILD:
             break;
         default:
             return false;

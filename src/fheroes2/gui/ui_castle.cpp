@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -199,10 +199,10 @@ namespace fheroes2
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
-        case NOT_TODAY:
+        case BuildingStatus::NOT_TODAY:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;
-        case REQUIRES_BUILD:
+        case BuildingStatus::REQUIRES_BUILD:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
         default:
