@@ -68,4 +68,6 @@ namespace Editor
                                          const bool isEvil );
 
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
+
+    std::string getDateDescription( const int32_t day );
 }
