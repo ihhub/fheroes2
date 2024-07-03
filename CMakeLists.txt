@@ -135,12 +135,14 @@ if(NOT MACOS_APP_BUNDLE)
 		FILES_MATCHING
 		PATTERN *.h2d
 		)
-if(INSTALL_DOCS)
-	install(
-		FILES docs/README.txt LICENSE changelog.txt
-		DESTINATION ${CMAKE_INSTALL_DOCDIR}
-		)
-endif(INSTALL_DOCS)
+
+	if(INSTALL_DOCS)
+		install(
+			FILES docs/README.txt LICENSE changelog.txt
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}
+			)
+	endif(INSTALL_DOCS)
+
 	if(GET_HOMM2_DEMO)
 		include(FetchContent)
 
