@@ -81,6 +81,100 @@ namespace
                                                            Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_OUT_OF_TIME };
 
+    struct HeroInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        const Maps::Map_Format::HeroMetadata * heroMetadata{ nullptr };
+    };
+
+    struct TownInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        const Maps::Map_Format::CastleMetadata * castleMetadata;
+    };
+
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    {
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        std::vector<HeroInfo> heroInfos;
+
+        for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    continue;
+                }
+
+                if ( object.index >= heroObjects.size() ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                const auto & metadata = heroObjects[object.index].metadata;
+                const int32_t color = static_cast<int32_t>( 1 << metadata[0] );
+
+                if ( !( color & allowedColors ) ) {
+                    // Current hero color is not allowed.
+                    continue;
+                }
+
+                heroInfos.emplace_back();
+                HeroInfo & heroInfo = heroInfos.back();
+
+                heroInfo.tileIndex = static_cast<int32_t>( tileIndex );
+                heroInfo.color = color;
+
+                auto heroMetadataIter = map.heroMetadata.find( object.id );
+                assert( heroMetadataIter != map.heroMetadata.end() );
+
+                heroInfo.heroMetadata = &heroMetadataIter->second;
+            }
+        }
+
+        return heroInfos;
+    }
+
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+
+        std::vector<TownInfo> townInfos;
+
+        for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    continue;
+                }
+
+                if ( object.index >= townObjects.size() ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                const int32_t color = static_cast<int>( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                if ( !( color & allowedColors ) ) {
+                    // Current town color is not allowed.
+                    continue;
+                }
+
+                townInfos.emplace_back();
+                TownInfo & townInfo = townInfos.back();
+
+                townInfo.tileIndex = static_cast<int32_t>( tileIndex );
+                townInfo.color = color;
+
+                const auto castleMetadataIter = map.castleMetadata.find( object.id );
+                assert( castleMetadataIter != map.castleMetadata.end() );
+
+                townInfo.castleMetadata = &castleMetadataIter->second;
+            }
+        }
+
+        return townInfos;
+    }
+
     const char * getVictoryConditionText( const uint8_t victoryConditionType )
     {
         switch ( victoryConditionType ) {
@@ -368,8 +462,8 @@ namespace
             }
 
             // Make the heroes and towns vectors for only AI controlled players.
-            _mapHeroInfos = Maps::getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-            _mapTownInfos = Maps::getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+            _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+            _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
         }
 
         void setConditionType( const uint8_t victoryConditionType )
@@ -650,8 +744,8 @@ namespace
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 3> _heroToKill{ 0 };
         std::array<uint32_t, 3> _townToCapture{ 0 };
-        std::vector<Maps::MapHeroInfo> _mapHeroInfos;
-        std::vector<Maps::MapTownInfo> _mapTownInfos;
+        std::vector<HeroInfo> _mapHeroInfos;
+        std::vector<TownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 
