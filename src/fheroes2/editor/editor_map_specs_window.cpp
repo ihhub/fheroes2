@@ -937,6 +937,7 @@ namespace
         assert( std::find( conditions.begin(), conditions.end(), selectedCondition ) != conditions.end() );
 
         if ( !isLossList ) {
+            // Remove the conditions that have no selection among objects.
             if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ),
