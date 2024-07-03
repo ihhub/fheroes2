@@ -32,6 +32,7 @@
 #include "heroes.h"
 #include "image.h"
 #include "interface_list.h"
+#include "math_base.h"
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
@@ -96,11 +97,7 @@ namespace Dialog
 
         int32_t selectItemsEventProcessing();
 
-        fheroes2::Rect getBackgroundArea() const
-        {
-            assert( _window );
-            return _window->totalArea();
-        }
+        fheroes2::Rect getBackgroundArea() const;
 
     private:
         bool _isDoubleClicked{ false };

@@ -48,7 +48,6 @@
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "pal.h"
 #include "race.h"
@@ -810,6 +809,12 @@ namespace Dialog
         }
 
         return Dialog::ZERO;
+    }
+
+    fheroes2::Rect ItemSelectionWindow::getBackgroundArea() const
+    {
+        assert( _window );
+        return _window->totalArea();
     }
 }
 
