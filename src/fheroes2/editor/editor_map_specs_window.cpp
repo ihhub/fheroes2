@@ -116,7 +116,7 @@ namespace
                 }
 
                 const auto & metadata = heroObjects[object.index].metadata;
-                const int32_t color = Color::IndexToColor( 1 << metadata[0] );
+                const int32_t color = 1 << metadata[0];
 
                 if ( !( color & allowedColors ) ) {
                     // Current hero color is not allowed.
