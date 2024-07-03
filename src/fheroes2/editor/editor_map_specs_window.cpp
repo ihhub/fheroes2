@@ -566,10 +566,9 @@ namespace
                     mapFormat.victoryConditionMetadata.resize( 1 );
                 }
 
-                mapFormat.isVictoryConditionApplicableForAI = false;
-
                 mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( _goldAccumulationValue.getValue() );
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
+                mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
 
                 return;
             default:
@@ -632,14 +631,14 @@ namespace
             case Maps::FileInfo::VICTORY_KILL_HERO: {
                 const fheroes2::Rect roi{ _restorer.rect() };
 
-                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
 
-                const int32_t heroFrameWidth = 107;
-                const int32_t heroFrameHeight = 99;
+                const int32_t heroFrameWidth = 111;
+                const int32_t heroFrameHeight = 105;
 
                 _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
 
-                fheroes2::Blit( heroFrame, 46, 28, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+                fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
 
                 break;
             }
@@ -681,8 +680,10 @@ namespace
                     const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
                     text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
 
+                    _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
+                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, isEvilInterface );
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + valueSectionUiSize.height + 10, isEvilInterface );
+                                                                           roi.y + valueSectionUiSize.height + 35, isEvilInterface );
                 }
 
                 _goldAccumulationValue.draw( output );
@@ -692,6 +693,13 @@ namespace
                 }
                 else {
                     _allowNormalVictory.hide();
+                }
+
+                if ( _isVictoryConditionApplicableForAI ) {
+                    _allowVictoryConditionForAI.show();
+                }
+                else {
+                    _allowVictoryConditionForAI.hide();
                 }
 
                 break;
@@ -757,18 +765,27 @@ namespace
 
                 break;
             }
-            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
+            case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( _goldAccumulationValue.processEvents() ) {
                     return true;
                 }
 
-                if ( LocalEvent::Get().MouseClickLeft( _allowNormalVictoryRoi ) ) {
+                LocalEvent & le = LocalEvent::Get();
+
+                if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
                     _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
 
                     return true;
                 }
 
+                if ( le.MouseClickLeft( _allowVictoryConditionForAIRoi ) ) {
+                    _isVictoryConditionApplicableForAI = !_isVictoryConditionApplicableForAI;
+
+                    return true;
+                }
+
                 break;
+            }
             default:
                 // Did you add more conditions? Add the logic for them!
                 assert( 0 );
