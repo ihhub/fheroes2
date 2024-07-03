@@ -387,99 +387,101 @@ namespace EventProcessing
             updateDisplay = false;
 
             SDL_Event event;
+            if ( !SDL_PollEvent( &event ) ) {
+                // There are no new events, just carry on
+                return true;
+            }
 
-            while ( SDL_PollEvent( &event ) ) {
-                switch ( event.type ) {
-                case SDL_WINDOWEVENT:
-                    if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-                        // A special case since we need to exit the loop.
-                        if ( allowExit ) {
-                            // Try to perform clear exit to catch all memory leaks, for example.
-                            return false;
-                        }
-                        break;
-                    }
-                    if ( onWindowEvent( event.window ) ) {
-                        updateDisplay = true;
-                    }
-                    break;
-                case SDL_KEYDOWN:
-                case SDL_KEYUP:
-                    onKeyboardEvent( eventHandler, event.key );
-                    break;
-                case SDL_MOUSEMOTION:
-                    onMouseMotionEvent( eventHandler, event.motion );
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP:
-                    onMouseButtonEvent( eventHandler, event.button );
-                    break;
-                case SDL_MOUSEWHEEL:
-                    onMouseWheelEvent( eventHandler, event.wheel );
-                    break;
-                case SDL_CONTROLLERDEVICEREMOVED:
-                    onControllerRemovedEvent( event.jdevice );
-                    break;
-                case SDL_CONTROLLERDEVICEADDED:
-                    onControllerAddedEvent( event.jdevice );
-                    break;
-                case SDL_JOYAXISMOTION:
-                case SDL_JOYBALLMOTION:
-                case SDL_JOYHATMOTION:
-                case SDL_JOYBUTTONDOWN:
-                case SDL_JOYBUTTONUP:
-                case SDL_JOYDEVICEADDED:
-                case SDL_JOYDEVICEREMOVED:
-                case SDL_CONTROLLERDEVICEREMAPPED:
-                    // SDL requires joystick events to be enabled in order to handle controller events.
-                    // This is because the controller related code depends on the joystick related code.
-                    // See SDL_gamecontroller.c within SDL source code for implementation details.
-                    break;
-                case SDL_CONTROLLERAXISMOTION:
-                    onControllerAxisEvent( eventHandler, event.caxis );
-                    break;
-                case SDL_CONTROLLERBUTTONDOWN:
-                case SDL_CONTROLLERBUTTONUP:
-                    onControllerButtonEvent( eventHandler, event.cbutton );
-                    break;
-                case SDL_FINGERDOWN:
-                case SDL_FINGERUP:
-                case SDL_FINGERMOTION:
-                    onTouchEvent( eventHandler, event.tfinger );
-                    break;
-                case SDL_RENDER_TARGETS_RESET:
-                    // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
-                    updateDisplay = true;
-                    break;
-                case SDL_RENDER_DEVICE_RESET:
-                    onRenderDeviceResetEvent();
-                    updateDisplay = true;
-                    break;
-                case SDL_TEXTINPUT:
-                    // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
-                    break;
-                case SDL_TEXTEDITING:
-                    // An event when a user pressed a button on a keyboard. Not all buttons are supported. This event should be used mainly on Android devices.
-                    break;
-                case SDL_QUIT:
+            // Each new event should be processed separately in turn
+            switch ( event.type ) {
+            case SDL_WINDOWEVENT:
+                if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
                     if ( allowExit ) {
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
                     }
                     break;
-                case SDL_APP_LOWMEMORY:
-                    // According to SDL this event can only happen on Android or iOS.
-                    // We need to deallocate some memory but we need to be careful not to deallocate images that are in use at the moment.
-                    // As of now we have no logic for this so we at least log this event.
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OS indicates low memory. Release some resources." )
-                    break;
-                default:
-                    // If this assertion blows up then we included an event type but we didn't add logic for it.
-                    assert( eventTypeStatus.count( event.type ) == 0 );
-
-                    // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
-                    break;
                 }
+                if ( onWindowEvent( event.window ) ) {
+                    updateDisplay = true;
+                }
+                break;
+            case SDL_KEYDOWN:
+            case SDL_KEYUP:
+                onKeyboardEvent( eventHandler, event.key );
+                break;
+            case SDL_MOUSEMOTION:
+                onMouseMotionEvent( eventHandler, event.motion );
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+            case SDL_MOUSEBUTTONUP:
+                onMouseButtonEvent( eventHandler, event.button );
+                break;
+            case SDL_MOUSEWHEEL:
+                onMouseWheelEvent( eventHandler, event.wheel );
+                break;
+            case SDL_CONTROLLERDEVICEREMOVED:
+                onControllerRemovedEvent( event.jdevice );
+                break;
+            case SDL_CONTROLLERDEVICEADDED:
+                onControllerAddedEvent( event.jdevice );
+                break;
+            case SDL_JOYAXISMOTION:
+            case SDL_JOYBALLMOTION:
+            case SDL_JOYHATMOTION:
+            case SDL_JOYBUTTONDOWN:
+            case SDL_JOYBUTTONUP:
+            case SDL_JOYDEVICEADDED:
+            case SDL_JOYDEVICEREMOVED:
+            case SDL_CONTROLLERDEVICEREMAPPED:
+                // SDL requires joystick events to be enabled in order to handle controller events.
+                // This is because the controller related code depends on the joystick related code.
+                // See SDL_gamecontroller.c within SDL source code for implementation details.
+                break;
+            case SDL_CONTROLLERAXISMOTION:
+                onControllerAxisEvent( eventHandler, event.caxis );
+                break;
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+                onControllerButtonEvent( eventHandler, event.cbutton );
+                break;
+            case SDL_FINGERDOWN:
+            case SDL_FINGERUP:
+            case SDL_FINGERMOTION:
+                onTouchEvent( eventHandler, event.tfinger );
+                break;
+            case SDL_RENDER_TARGETS_RESET:
+                // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
+                updateDisplay = true;
+                break;
+            case SDL_RENDER_DEVICE_RESET:
+                onRenderDeviceResetEvent();
+                updateDisplay = true;
+                break;
+            case SDL_TEXTINPUT:
+                // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
+                break;
+            case SDL_TEXTEDITING:
+                // An event when a user pressed a button on a keyboard. Not all buttons are supported. This event should be used mainly on Android devices.
+                break;
+            case SDL_QUIT:
+                if ( allowExit ) {
+                    // Try to perform clear exit to catch all memory leaks, for example.
+                    return false;
+                }
+                break;
+            case SDL_APP_LOWMEMORY:
+                // According to SDL this event can only happen on Android or iOS.
+                // We need to deallocate some memory but we need to be careful not to deallocate images that are in use at the moment.
+                // As of now we have no logic for this so we at least log this event.
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OS indicates low memory. Release some resources." )
+                break;
+            default:
+                // If this assertion blows up then we included an event type but we didn't add logic for it.
+                assert( eventTypeStatus.count( event.type ) == 0 );
+
+                // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
+                break;
             }
 
             return true;
