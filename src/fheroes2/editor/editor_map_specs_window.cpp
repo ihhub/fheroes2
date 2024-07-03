@@ -113,7 +113,7 @@ namespace
                 }
 
                 const auto & metadata = heroObjects[object.index].metadata;
-                const int32_t color = static_cast<int32_t>( 1 << metadata[0] );
+                const int32_t color = Color::IndexToColor( 1 << metadata[0] );
 
                 if ( !( color & allowedColors ) ) {
                     // Current hero color is not allowed.
@@ -153,7 +153,7 @@ namespace
                     continue;
                 }
 
-                const int32_t color = static_cast<int>( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                const int32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
                 if ( !( color & allowedColors ) ) {
                     // Current town color is not allowed.
                     continue;
@@ -928,10 +928,23 @@ namespace
         fheroes2::ValueSelectionDialogElement _outOfTimeValue{ 1, 10 * daysInYear, daysInMonth, 1, {} };
     };
 
-    uint8_t showWinLoseList( const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList, const int dropBoxIcn )
+    uint8_t showWinLoseList( const Maps::Map_Format::MapFormat & mapFormat, const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList,
+                             const int dropBoxIcn )
     {
         std::vector<uint8_t> conditions = isLossList ? supportedLossConditions : supportedVictoryConditions;
         assert( std::find( conditions.begin(), conditions.end(), selectedCondition ) != conditions.end() );
+
+        if ( !isLossList ) {
+            if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                conditions.erase(
+                    std::remove_if( conditions.begin(), conditions.end(), []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ) );
+            }
+
+            if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                conditions.erase(
+                    std::remove_if( conditions.begin(), conditions.end(), []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ) );
+            }
+        }
 
         DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, dropBoxIcn );
         conditionList.SetListContent( conditions );
@@ -1325,8 +1338,8 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( victoryDroplistButtonRoi ) ) {
-                const uint8_t result
-                    = showWinLoseList( { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType, false, dropListIcn );
+                const uint8_t result = showWinLoseList( mapFormat, { victoryTextRoi.x - 2, victoryTextRoi.y + victoryTextRoi.height }, mapFormat.victoryConditionType,
+                                                        false, dropListIcn );
 
                 if ( result != mapFormat.victoryConditionType ) {
                     mapFormat.victoryConditionType = result;
@@ -1340,7 +1353,8 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
-                const uint8_t result = showWinLoseList( { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true, dropListIcn );
+                const uint8_t result
+                    = showWinLoseList( mapFormat, { lossTextRoi.x - 2, lossTextRoi.y + lossTextRoi.height }, mapFormat.lossConditionType, true, dropListIcn );
 
                 if ( result != mapFormat.lossConditionType ) {
                     mapFormat.lossConditionType = result;
