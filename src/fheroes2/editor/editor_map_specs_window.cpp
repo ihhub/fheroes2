@@ -972,7 +972,7 @@ namespace
                 }
 
                 break;
-            case Maps::FileInfo::VICTORY_KILL_HERO: {
+            case Maps::FileInfo::LOSS_HERO: {
                 const fheroes2::Rect roi{ _restorer.rect() };
 
                 const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
@@ -1027,9 +1027,9 @@ namespace
                 // No events to process.
 
                 return false;
-            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+            case Maps::FileInfo::LOSS_TOWN:
                 break;
-            case Maps::FileInfo::VICTORY_KILL_HERO:
+            case Maps::FileInfo::LOSS_HERO:
                 break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 return _outOfTimeValue.processEvents();
