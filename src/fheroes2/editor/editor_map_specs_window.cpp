@@ -475,7 +475,6 @@ namespace
                     if ( !heroFound ) {
                         _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     }
-
                 }
                 else {
                     // Since the metadata in invalid we have 2 options:
