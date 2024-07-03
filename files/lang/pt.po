@@ -3844,7 +3844,7 @@ msgid "Best Hero:"
 msgstr "Melhor Herói:"
 
 msgid "Best Hero Stats:"
-msgstr "Estatísticas (melhor herói):"
+msgstr "Estatíst. do Melhor Herói:"
 
 msgid "Personality:"
 msgstr "Personalidade:"
