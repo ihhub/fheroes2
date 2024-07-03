@@ -76,7 +76,6 @@ namespace
 
     const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
 
-    // TODO: expand these conditions by adding missing ones.
     const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
                                                            Maps::FileInfo::VICTORY_KILL_HERO, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
                                                            Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
