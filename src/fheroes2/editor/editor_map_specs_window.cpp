@@ -939,12 +939,14 @@ namespace
         if ( !isLossList ) {
             if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
-                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ), conditions.end() );
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ),
+                                  conditions.end() );
             }
 
             if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
-                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ), conditions.end() );
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ),
+                                  conditions.end() );
             }
         }
 
