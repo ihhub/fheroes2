@@ -480,8 +480,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         // - tile index of the object
         // - color of the object (the color is needed to modify the game for multi-player mode)
         assert( map.victoryConditionMetadata.size() == 2 );
-        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.size );
-        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.size );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.size );
+        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.size );
         assert( ( map.victoryConditionMetadata[1] & map.availablePlayerColors ) == map.victoryConditionMetadata[1] );
         break;
     case VICTORY_OBTAIN_ARTIFACT:
