@@ -59,7 +59,6 @@
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
-#include "world.h"
 
 namespace
 {
@@ -435,7 +434,7 @@ namespace
 
                     // Verify that this is a valid town.
                     const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-                    const int32_t townTileIndex = _townToCapture[0] + _townToCapture[1] * world.w();
+                    const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] + _townToCapture[1] * static_cast<uint32_t>( mapFormat.size ) );
 
                     bool townFound = false;
                     for ( const auto & town : towns ) {
@@ -464,7 +463,7 @@ namespace
 
                     // Verify that this is a valid hero.
                     const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-                    const int32_t heroTileIndex = _heroToKill[0] + _heroToKill[1] * world.w();
+                    const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] + _heroToKill[1] * static_cast<uint32_t>( mapFormat.size ) );
                     bool heroFound = false;
                     for ( const auto & hero : heroes ) {
                         if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[2] ) == hero.color ) {
