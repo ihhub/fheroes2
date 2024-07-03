@@ -242,7 +242,7 @@ namespace
             break;
         }
 
-        return {};
+        return nullptr;
     }
 
     uint32_t getLossIcnIndex( const uint8_t lossConditionType )
