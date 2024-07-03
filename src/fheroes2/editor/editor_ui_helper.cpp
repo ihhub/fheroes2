@@ -159,12 +159,12 @@ namespace Editor
     std::string getDateDescription( const int32_t day )
     {
         std::string message = _( "Day: %{day} Week: %{week} Month: %{month}" );
-        int32_t days = day;
-        const int32_t month = ( days - 1 ) / ( 7 * 4 );
+        int32_t days = day - 1;
+        const int32_t month = days / ( 7 * 4 );
         days -= month * ( 7 * 4 );
 
-        StringReplace( message, "%{day}", ( ( days - 1 ) % 7 ) + 1 );
-        StringReplace( message, "%{week}", ( ( days - 1 ) / 7 ) + 1 );
+        StringReplace( message, "%{day}", ( days % 7 ) + 1 );
+        StringReplace( message, "%{week}", ( days / 7 ) + 1 );
         StringReplace( message, "%{month}", month + 1 );
 
         return message;
