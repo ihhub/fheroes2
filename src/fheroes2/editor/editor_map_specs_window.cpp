@@ -81,7 +81,8 @@ namespace
     const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
                                                            Maps::FileInfo::VICTORY_KILL_HERO, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
                                                            Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
-    const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_OUT_OF_TIME };
+    const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO,
+                                                        Maps::FileInfo::LOSS_OUT_OF_TIME };
 
     struct HeroInfo
     {
@@ -828,6 +829,63 @@ namespace
                 // This condition has no metadata.
 
                 break;
+            case Maps::FileInfo::LOSS_TOWN:
+                if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
+                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToLose.begin() );
+
+                    // Verify that this is a valid town.
+                    const auto & towns = getMapTowns( mapFormat, mapFormat.humanPlayerColors );
+                    const int32_t townTileIndex = static_cast<int32_t>( _townToLose[0] );
+
+                    bool townFound = false;
+                    for ( const auto & town : towns ) {
+                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToLose[1] ) == town.color ) {
+                            townFound = true;
+                            break;
+                        }
+                    }
+
+                    if ( !townFound ) {
+                        _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    }
+                }
+                else {
+                    // Since the metadata in invalid we have 2 options:
+                    // - fall back to normal victory condition as no town was set
+                    // - generate a list of towns and pick the one
+                    // For the simplicity we are choosing the first option for now.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                }
+
+                break;
+            case Maps::FileInfo::LOSS_HERO:
+                if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
+                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToLose.begin() );
+
+                    // Verify that this is a valid hero.
+                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
+                    const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
+                    bool heroFound = false;
+                    for ( const auto & hero : heroes ) {
+                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
+                            heroFound = true;
+                            break;
+                        }
+                    }
+
+                    if ( !heroFound ) {
+                        _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    }
+                }
+                else {
+                    // Since the metadata in invalid we have 2 options:
+                    // - fall back to normal victory condition as no hero was set
+                    // - generate a list of heroes and pick the one
+                    // For the simplicity we are choosing the first option for now.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                }
+
+                break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 if ( mapFormat.lossConditionMetadata.size() == 1 ) {
                     _outOfTimeValue.setValue( static_cast<int32_t>( mapFormat.lossConditionMetadata[0] ) );
@@ -857,6 +915,22 @@ namespace
                 mapFormat.lossConditionMetadata.clear();
 
                 break;
+            case Maps::FileInfo::LOSS_TOWN:
+                if ( mapFormat.victoryConditionMetadata.size() != 2 ) {
+                    mapFormat.victoryConditionMetadata.resize( 2 );
+                }
+
+                std::copy( _townToLose.begin(), _townToLose.end(), mapFormat.victoryConditionMetadata.begin() );
+
+                return;
+            case Maps::FileInfo::LOSS_HERO:
+                if ( mapFormat.victoryConditionMetadata.size() != 2 ) {
+                    mapFormat.victoryConditionMetadata.resize( 2 );
+                }
+
+                std::copy( _heroToLose.begin(), _heroToLose.end(), mapFormat.victoryConditionMetadata.begin() );
+
+                return;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 if ( mapFormat.lossConditionMetadata.size() != 1 ) {
                     mapFormat.lossConditionMetadata.resize( 1 );
@@ -876,7 +950,7 @@ namespace
             }
         }
 
-        void render( fheroes2::Image & output )
+        void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
         {
             // Restore background to make sure that other UI elements aren't being rendered.
             _restorer.restore();
@@ -886,6 +960,32 @@ namespace
                 // No special UI is needed.
 
                 break;
+            case Maps::FileInfo::LOSS_TOWN:
+                if ( renderEverything ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    const fheroes2::Sprite & townFrame = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 23 );
+
+                    _selectConditionRoi = { roi.x + ( roi.width - townFrame.width() ) / 2, roi.y + 4, townFrame.width(), townFrame.height() };
+
+                    fheroes2::Blit( townFrame, 0, 0, output, _selectConditionRoi.x, _selectConditionRoi.y, _selectConditionRoi.width, _selectConditionRoi.height );
+                }
+
+                break;
+            case Maps::FileInfo::VICTORY_KILL_HERO: {
+                const fheroes2::Rect roi{ _restorer.rect() };
+
+                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+
+                const int32_t heroFrameWidth = 111;
+                const int32_t heroFrameHeight = 105;
+
+                _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
+
+                fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+
+                break;
+            }
             case Maps::FileInfo::LOSS_OUT_OF_TIME: {
                 const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
                 const fheroes2::Point uiOffset{ roi.x + ( roi.width - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, roi.y };
@@ -927,6 +1027,10 @@ namespace
                 // No events to process.
 
                 return false;
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                break;
+            case Maps::FileInfo::VICTORY_KILL_HERO:
+                break;
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 return _outOfTimeValue.processEvents();
             default:
@@ -941,10 +1045,14 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::LOSS_EVERYTHING };
+        std::array<uint32_t, 2> _heroToLose{ 0 };
+        std::array<uint32_t, 2> _townToLose{ 0 };
 
         fheroes2::ImageRestorer _restorer;
 
         fheroes2::ValueSelectionDialogElement _outOfTimeValue{ 1, 10 * daysInYear, daysInMonth, 1, {} };
+
+        fheroes2::Rect _selectConditionRoi;
     };
 
     uint8_t showWinLoseList( const Maps::Map_Format::MapFormat & mapFormat, const fheroes2::Point & offset, const uint8_t selectedCondition, const bool isLossList,
@@ -953,7 +1061,21 @@ namespace
         std::vector<uint8_t> conditions = isLossList ? supportedLossConditions : supportedVictoryConditions;
         assert( std::find( conditions.begin(), conditions.end(), selectedCondition ) != conditions.end() );
 
-        if ( !isLossList ) {
+        if ( isLossList ) {
+            // Remove the conditions that have no selection among objects.
+            if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::LOSS_HERO; } ),
+                                  conditions.end() );
+            }
+
+            if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::LOSS_TOWN; } ),
+                                  conditions.end() );
+            }
+        }
+        else {
             // Remove the conditions that have no selection among objects.
             if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
@@ -1251,7 +1373,7 @@ namespace Editor
         const fheroes2::Rect lossConditionUIRoi{ offsetX, offsetY, lossDroplistButtonRoi.width, 150 };
         LossConditionUI lossConditionUI( display, lossConditionUIRoi, mapFormat );
 
-        lossConditionUI.render( display );
+        lossConditionUI.render( display, isEvilInterface, true );
 
         // Buttons.
         fheroes2::Button buttonCancel;
@@ -1299,7 +1421,7 @@ namespace Editor
                 display.render( victoryConditionUIRoi );
             }
             else if ( lossConditionUI.processEvents() ) {
-                lossConditionUI.render( display );
+                lossConditionUI.render( display, isEvilInterface, false );
                 display.render( lossConditionUIRoi );
             }
             else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
@@ -1382,7 +1504,7 @@ namespace Editor
                     mapFormat.lossConditionType = result;
 
                     lossConditionUI.setConditionType( mapFormat.lossConditionType );
-                    lossConditionUI.render( display );
+                    lossConditionUI.render( display, isEvilInterface, true );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                     redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
