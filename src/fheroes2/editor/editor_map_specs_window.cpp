@@ -59,6 +59,7 @@
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
+#include "world.h"
 
 namespace
 {
@@ -431,6 +432,22 @@ namespace
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
                 if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
+
+                    // Verify that this is a valid town.
+                    const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+                    const int32_t townTileIndex = _townToCapture[0] + _townToCapture[1] * world.w();
+
+                    bool townFound = false;
+                    for ( const auto & town : towns ) {
+                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[2] ) == town.color ) {
+                            townFound = true;
+                            break;
+                        }
+                    }
+
+                    if ( !townFound ) {
+                        _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    }
                 }
                 else {
                     // Since the metadata in invalid we have 2 options:
@@ -444,6 +461,22 @@ namespace
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
+
+                    // Verify that this is a valid hero.
+                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+                    const int32_t heroTileIndex = _heroToKill[0] + _heroToKill[1] * world.w();
+                    bool heroFound = false;
+                    for ( const auto & hero : heroes ) {
+                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[2] ) == hero.color ) {
+                            heroFound = true;
+                            break;
+                        }
+                    }
+
+                    if ( !heroFound ) {
+                        _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    }
+
                 }
                 else {
                     // Since the metadata in invalid we have 2 options:
@@ -474,10 +507,6 @@ namespace
 
                 break;
             }
-
-            // Make the heroes and towns vectors for only AI controlled players.
-            _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-            _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
         }
 
         void setConditionType( const uint8_t victoryConditionType )
@@ -758,8 +787,6 @@ namespace
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 3> _heroToKill{ 0 };
         std::array<uint32_t, 3> _townToCapture{ 0 };
-        std::vector<HeroInfo> _mapHeroInfos;
-        std::vector<TownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 
