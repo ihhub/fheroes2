@@ -38,6 +38,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
 option(ENABLE_IMAGE "Enable the use of SDL_image (requires libpng)" OFF)
 option(ENABLE_TOOLS "Enable the build of additional tools" OFF)
+option(INSTALL_DOCS "Install docs to the standard docdir" ON)
 
 # Available only on macOS
 cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF "APPLE" OFF)
@@ -134,11 +135,12 @@ if(NOT MACOS_APP_BUNDLE)
 		FILES_MATCHING
 		PATTERN *.h2d
 		)
+if(INSTALL_DOCS)
 	install(
 		FILES docs/README.txt LICENSE changelog.txt
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
-
+endif(INSTALL_DOCS)
 	if(GET_HOMM2_DEMO)
 		include(FetchContent)
 
