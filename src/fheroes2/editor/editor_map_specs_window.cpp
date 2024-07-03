@@ -198,7 +198,7 @@ namespace
             break;
         }
 
-        return {};
+        return nullptr;
     }
 
     uint32_t getVictoryIcnIndex( const uint8_t victoryConditionType )
