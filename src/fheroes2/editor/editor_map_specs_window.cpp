@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <utility>
@@ -48,6 +49,7 @@
 #include "localevent.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "screen.h"
@@ -429,16 +431,16 @@ namespace
 
                 break;
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
+                if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
 
                     // Verify that this is a valid town.
                     const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-                    const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] + _townToCapture[1] * static_cast<uint32_t>( mapFormat.size ) );
+                    const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
                     bool townFound = false;
                     for ( const auto & town : towns ) {
-                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[2] ) == town.color ) {
+                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
                             townFound = true;
                             break;
                         }
@@ -458,15 +460,15 @@ namespace
 
                 break;
             case Maps::FileInfo::VICTORY_KILL_HERO:
-                if ( mapFormat.victoryConditionMetadata.size() == 3 ) {
+                if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
 
                     // Verify that this is a valid hero.
                     const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
-                    const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] + _heroToKill[1] * static_cast<uint32_t>( mapFormat.size ) );
+                    const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                     bool heroFound = false;
                     for ( const auto & hero : heroes ) {
-                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[2] ) == hero.color ) {
+                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
                             heroFound = true;
                             break;
                         }
@@ -526,8 +528,8 @@ namespace
 
                 return;
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
-                    mapFormat.victoryConditionMetadata.resize( 3 );
+                if ( mapFormat.victoryConditionMetadata.size() != 2 ) {
+                    mapFormat.victoryConditionMetadata.resize( 2 );
                 }
 
                 std::copy( _townToCapture.begin(), _townToCapture.end(), mapFormat.victoryConditionMetadata.begin() );
@@ -537,8 +539,8 @@ namespace
 
                 return;
             case Maps::FileInfo::VICTORY_KILL_HERO:
-                if ( mapFormat.victoryConditionMetadata.size() != 3 ) {
-                    mapFormat.victoryConditionMetadata.resize( 3 );
+                if ( mapFormat.victoryConditionMetadata.size() != 2 ) {
+                    mapFormat.victoryConditionMetadata.resize( 2 );
                 }
 
                 std::copy( _heroToKill.begin(), _heroToKill.end(), mapFormat.victoryConditionMetadata.begin() );
@@ -783,8 +785,8 @@ namespace
         bool _isVictoryConditionApplicableForAI{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         // Town or hero loss metadata include: X position, Y position, color.
-        std::array<uint32_t, 3> _heroToKill{ 0 };
-        std::array<uint32_t, 3> _townToCapture{ 0 };
+        std::array<uint32_t, 2> _heroToKill{ 0 };
+        std::array<uint32_t, 2> _townToCapture{ 0 };
 
         fheroes2::ImageRestorer _restorer;
 
@@ -936,13 +938,13 @@ namespace
 
         if ( !isLossList ) {
             if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
-                conditions.erase(
-                    std::remove_if( conditions.begin(), conditions.end(), []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ) );
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ), conditions.end() );
             }
 
             if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
-                conditions.erase(
-                    std::remove_if( conditions.begin(), conditions.end(), []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ) );
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ), conditions.end() );
             }
         }
 
