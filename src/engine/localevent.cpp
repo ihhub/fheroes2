@@ -331,16 +331,22 @@ namespace EventProcessing
 
         static void initTouchpad()
         {
-            const int touchNumber = SDL_GetNumTouchDevices();
-            if ( touchNumber > 0 ) {
-                fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
-                const SDL_bool value = SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
-                if ( value != SDL_TRUE ) {
-                    ERROR_LOG( "Failed to set SDL_HINT_TOUCH_MOUSE_EVENTS." )
-                }
-#endif
+            if ( SDL_SetHint( SDL_HINT_MOUSE_TOUCH_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set SDL_HINT_MOUSE_TOUCH_EVENTS." )
             }
+#endif
+#if SDL_VERSION_ATLEAST( 2, 0, 6 )
+            if ( SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set SDL_HINT_TOUCH_MOUSE_EVENTS." )
+            }
+#endif
+
+            if ( SDL_GetNumTouchDevices() <= 0 ) {
+                return;
+            }
+
+            fheroes2::cursor().enableSoftwareEmulation( true );
         }
 
         void initController()
