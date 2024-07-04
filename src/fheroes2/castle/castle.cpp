@@ -404,8 +404,8 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     _disabledBuildings = 0;
 
-    const bool allowToBuildCastle = ( dataStream.get() != 0 );
-    if ( !allowToBuildCastle ) {
+    const bool isCastleNotAllowed = ( dataStream.get() != 0 );
+    if ( isCastleNotAllowed ) {
         _disabledBuildings |= BUILD_CASTLE;
     }
 
