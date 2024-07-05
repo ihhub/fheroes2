@@ -1085,8 +1085,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         }
     }
     else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
-        const Castle * castle = vec_castles.Get(
-            { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
+        const Castle * castle
+            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
