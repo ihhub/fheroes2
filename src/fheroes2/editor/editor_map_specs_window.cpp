@@ -528,20 +528,58 @@ namespace
         bool updateCondition( Maps::Map_Format::MapFormat & mapFormat )
         {
             switch ( _conditionType ) {
-            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
+                const auto towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                if ( towns.empty() ) {
                     // No towns exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
-                return true;
-            case Maps::FileInfo::VICTORY_KILL_HERO:
-                if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
+
+                const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
+
+                bool townFound = false;
+                for ( const auto & town : towns ) {
+                    if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
+                        townFound = true;
+                        break;
+                    }
+                }
+
+                if ( !townFound ) {
+                    // The town doesn't exist in the list.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    mapFormat.lossConditionType = _conditionType;
+                    return true;
+                }
+
+                return false;
+            }
+            case Maps::FileInfo::VICTORY_KILL_HERO: {
+                const auto heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                if ( heroes.empty() ) {
                     // No heroes exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
-                return true;
+
+                const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
+                bool heroFound = false;
+                for ( const auto & hero : heroes ) {
+                    if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
+                        heroFound = true;
+                        break;
+                    }
+                }
+
+                if ( !heroFound ) {
+                    // The hero doesn't exist in the list.
+                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    mapFormat.victoryConditionType = _conditionType;
+                }
+
+                return false;
+            }
             default:
                 // No changes for other victory conditions.
                 break;
@@ -943,20 +981,59 @@ namespace
         bool updateCondition( Maps::Map_Format::MapFormat & mapFormat )
         {
             switch ( _conditionType ) {
-            case Maps::FileInfo::LOSS_TOWN:
-                if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+            case Maps::FileInfo::LOSS_TOWN: {
+                const auto towns = getMapTowns( mapFormat, mapFormat.humanPlayerColors );
+                if ( towns.empty() ) {
                     // No towns exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
+                    return true;
                 }
-                return true;
-            case Maps::FileInfo::LOSS_HERO:
-                if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+
+                const int32_t townTileIndex = static_cast<int32_t>( _townToLose[0] );
+
+                bool townFound = false;
+                for ( const auto & town : towns ) {
+                    if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToLose[1] ) == town.color ) {
+                        townFound = true;
+                        break;
+                    }
+                }
+
+                if ( !townFound ) {
+                    // The town doesn't exist in the list.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    mapFormat.lossConditionType = _conditionType;
+                    return true;
+                }
+
+                break;
+            }
+            case Maps::FileInfo::LOSS_HERO: {
+                const auto heroes = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
+                if ( heroes.empty() ) {
                     // No heroes exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
                 }
-                return true;
+
+                const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
+                bool heroFound = false;
+                for ( const auto & hero : heroes ) {
+                    if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
+                        heroFound = true;
+                        break;
+                    }
+                }
+
+                if ( !heroFound ) {
+                    // The hero doesn't exist in the list.
+                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    mapFormat.victoryConditionType = _conditionType;
+                }
+
+                return false;
+            }
             default:
                 // No changes for other loss conditions.
                 break;
