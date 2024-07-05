@@ -574,7 +574,7 @@ namespace
 
                 if ( !heroFound ) {
                     // The hero doesn't exist in the list.
-                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
 
@@ -1028,7 +1028,7 @@ namespace
 
                 if ( !heroFound ) {
                     // The hero doesn't exist in the list.
-                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
 
