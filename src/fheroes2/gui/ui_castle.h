@@ -30,6 +30,8 @@ namespace fheroes2
 {
     class Image;
 
+    uint32_t getCastleIcnIndex( const int race, const bool isCastle );
+
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
 
     Rect drawResourcePanel( const Funds & kingdomTreasures, Image & output, const Point & offset );
