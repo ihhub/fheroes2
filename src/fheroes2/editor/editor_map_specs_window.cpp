@@ -86,21 +86,6 @@ namespace
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO,
                                                         Maps::FileInfo::LOSS_OUT_OF_TIME };
 
-    struct HeroInfo
-    {
-        int32_t tileIndex{ -1 };
-        int32_t color{ Color::NONE };
-        const Maps::Map_Format::HeroMetadata * heroMetadata{ nullptr };
-    };
-
-    struct TownInfo
-    {
-        int32_t tileIndex{ -1 };
-        int32_t color{ Color::NONE };
-        int32_t race{ Race::NONE };
-        const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
-    };
-
     fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int townIcnId )
     {
         fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( townIcnId, 23 ) );
@@ -115,16 +100,49 @@ namespace
         return castleIcon;
     }
 
-    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    class SelectMapCastle final : public Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>
     {
-        if ( allowedColors == 0 ) {
+    public:
+        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description )
+            : Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>( rt, std::move( title ), std::move( description ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
+        }
+
+        using Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>::ActionListPressRight;
+
+        void RedrawItem( const Maps::Map_Format::TownInfo & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            assert( index.castleMetadata != nullptr );
+
+            std::string castleName = index.castleMetadata->customName.empty() ? "Unnamed" : index.castleMetadata->customName;
+
+            renderItem( drawCastleIcon( index.castleMetadata->bannedBuildings, index.race, _townIcnId ), std::move( castleName ), { dstx, dsty }, 35, 75,
+                        itemsOffsetY / 2, current );
+        }
+
+        void ActionListPressRight( Maps::Map_Format::TownInfo & index ) override
+        {
+            (void)index;
+            // Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
+        }
+
+        static const int32_t itemsOffsetY{ 35 };
+
+    private:
+        const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+    };
+
+    std::vector<Maps::Map_Format::HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    {
+        if ( allowedColors == Color::NONE ) {
             // Nothing to do.
             return {};
         }
 
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
-        std::vector<HeroInfo> heroInfos;
+        std::vector<Maps::Map_Format::HeroInfo> heroInfos;
 
         // TODO: cache all heroes once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
@@ -147,7 +165,7 @@ namespace
                 }
 
                 heroInfos.emplace_back();
-                HeroInfo & heroInfo = heroInfos.back();
+                Maps::Map_Format::HeroInfo & heroInfo = heroInfos.back();
 
                 heroInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 heroInfo.color = color;
@@ -162,16 +180,16 @@ namespace
         return heroInfos;
     }
 
-    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    std::vector<Maps::Map_Format::TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
-        if ( allowedColors == 0 ) {
+        if ( allowedColors == Color::NONE ) {
             // Nothing to do.
             return {};
         }
 
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
-        std::vector<TownInfo> townInfos;
+        std::vector<Maps::Map_Format::TownInfo> townInfos;
 
         // TODO: cache all towns once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
@@ -192,7 +210,7 @@ namespace
                 }
 
                 townInfos.emplace_back();
-                TownInfo & townInfo = townInfos.back();
+                Maps::Map_Format::TownInfo & townInfo = townInfos.back();
 
                 townInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 townInfo.color = color;
@@ -466,11 +484,11 @@ namespace
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
 
                     // Verify that this is a valid computer-only town.
-                    const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                    _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
                     bool townFound = false;
-                    for ( const auto & town : towns ) {
+                    for ( const auto & town : _mapTownInfos ) {
                         if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
                             townFound = true;
                             break;
@@ -549,8 +567,8 @@ namespace
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
-                const auto towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
-                if ( towns.empty() ) {
+                _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                if ( _mapTownInfos.empty() ) {
                     // No towns exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
@@ -559,7 +577,7 @@ namespace
                 const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
                 bool townFound = false;
-                for ( const auto & town : towns ) {
+                for ( const auto & town : _mapTownInfos ) {
                     if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
                         townFound = true;
                         break;
@@ -816,6 +834,23 @@ namespace
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
                 LocalEvent & le = LocalEvent::Get();
 
+                if ( le.MouseClickLeft( _selectConditionRoi ) ) {
+                    assert( !_mapTownInfos.empty() );
+
+                    const int32_t maxHeight = std::min( 100 + SelectMapCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 200 );
+                    const int32_t itemsHeight
+                        = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
+                    const int32_t totalHeight = std::min( itemsHeight, maxHeight );
+
+                    SelectMapCastle listbox( { 350, totalHeight }, _( "Select Town to capture" ), {} );
+
+                    listbox.SetListContent( _mapTownInfos );
+
+                    const int32_t result = listbox.selectItemsEventProcessing();
+
+                    return ( result == Dialog::OK );
+                }
+
                 if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
                     _isNormalVictoryAllowed = !_isNormalVictoryAllowed;
 
@@ -898,6 +933,7 @@ namespace
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
+        std::vector<Maps::Map_Format::TownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 

@@ -20,9 +20,32 @@
 
 #pragma once
 
+#include <cstdint>
+
+#include "color.h"
+#include "race.h"
+
 namespace Maps::Map_Format
 {
     struct MapFormat;
+    struct HeroMetadata;
+    struct CastleMetadata;
+
+    struct HeroInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        const HeroMetadata * heroMetadata{ nullptr };
+    };
+
+    struct TownInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        int32_t race{ Race::NONE };
+        const CastleMetadata * castleMetadata{ nullptr };
+    };
+
 }
 
 namespace Editor
