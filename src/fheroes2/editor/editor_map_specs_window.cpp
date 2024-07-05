@@ -445,7 +445,7 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
 
-                    // Verify that this is a valid town.
+                    // Verify that this is a valid computer-only town.
                     const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
@@ -474,7 +474,7 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
 
-                    // Verify that this is a valid hero.
+                    // Verify that this is a valid computer-only hero.
                     const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                     bool heroFound = false;
@@ -530,14 +530,14 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
                 if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
-                    // No towns exist for only-computer players.
+                    // No towns exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
                 return true;
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
-                    // No heroes exist for only-computer players.
+                    // No heroes exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
@@ -868,7 +868,7 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToLose.begin() );
 
-                    // Verify that this is a valid town.
+                    // Verify that this is a valid human-only town.
                     const auto & towns = getMapTowns( mapFormat, mapFormat.humanPlayerColors );
                     const int32_t townTileIndex = static_cast<int32_t>( _townToLose[0] );
 
@@ -897,7 +897,7 @@ namespace
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToLose.begin() );
 
-                    // Verify that this is a valid hero.
+                    // Verify that this is a valid human-only hero.
                     const auto & heroes = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                     bool heroFound = false;
@@ -945,20 +945,20 @@ namespace
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_TOWN:
                 if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
-                    // No towns exist for only-human players.
+                    // No towns exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
                 }
                 return true;
             case Maps::FileInfo::LOSS_HERO:
                 if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
-                    // No heroes exist for only-human players.
+                    // No heroes exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
                 }
                 return true;
             default:
-                // No changes for other victory conditions.
+                // No changes for other loss conditions.
                 break;
             }
 
