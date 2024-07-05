@@ -45,7 +45,6 @@ namespace Maps::Map_Format
         int32_t race{ Race::NONE };
         const CastleMetadata * castleMetadata{ nullptr };
     };
-
 }
 
 namespace Editor
