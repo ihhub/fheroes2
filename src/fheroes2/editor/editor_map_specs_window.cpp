@@ -515,6 +515,31 @@ namespace
             _conditionType = victoryConditionType;
         }
 
+        bool updateCondition( Maps::Map_Format::MapFormat & mapFormat )
+        {
+            switch ( _conditionType ) {
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+                if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                    // No towns exist for only-computer players.
+                    _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    mapFormat.victoryConditionType = _conditionType;
+                }
+                return true;
+            case Maps::FileInfo::VICTORY_KILL_HERO:
+                if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                    // No heroes exist for only-computer players.
+                    _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+                    mapFormat.victoryConditionType = _conditionType;
+                }
+                return true;
+            default:
+                // No changes for other victory conditions.
+                break;
+            }
+
+            return false;
+        }
+
         void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
         {
             assert( mapFormat.victoryConditionType == _conditionType );
@@ -903,6 +928,31 @@ namespace
         void setConditionType( const uint8_t lossConditionType )
         {
             _conditionType = lossConditionType;
+        }
+
+        bool updateCondition( Maps::Map_Format::MapFormat & mapFormat )
+        {
+            switch ( _conditionType ) {
+            case Maps::FileInfo::LOSS_TOWN:
+                if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+                    // No towns exist for only-human players.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    mapFormat.lossConditionType = _conditionType;
+                }
+                return true;
+            case Maps::FileInfo::LOSS_HERO:
+                if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors ).empty() ) {
+                    // No heroes exist for only-human players.
+                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
+                    mapFormat.lossConditionType = _conditionType;
+                }
+                return true;
+            default:
+                // No changes for other victory conditions.
+                break;
+            }
+
+            return false;
         }
 
         void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
@@ -1564,11 +1614,35 @@ namespace Editor
                         mapFormat.humanPlayerColors |= availableColors[i];
                     }
 
+                    fheroes2::Rect renderRoi;
+                    if ( victoryConditionUI.updateCondition( mapFormat ) ) {
+                        victoryConditionUI.render( display, isEvilInterface, true );
+
+                        fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
+                        redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
+
+                        renderRoi = fheroes2::getBoundaryRect( renderRoi, victoryConditionUIRoi );
+                        renderRoi = fheroes2::getBoundaryRect( renderRoi, victoryTextRoi );
+                    }
+
+                    if ( lossConditionUI.updateCondition( mapFormat ) ) {
+                        lossConditionUI.render( display, isEvilInterface, true );
+
+                        fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
+                        redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
+
+                        renderRoi = fheroes2::getBoundaryRect( renderRoi, lossConditionUIRoi );
+                        renderRoi = fheroes2::getBoundaryRect( renderRoi, lossTextRoi );
+                    }
+
                     // Update player icon.
                     const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + getPlayerIcnIndex( mapFormat, availableColors[i] );
                     const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
                     fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
-                    display.render( playerRects[i] );
+
+                    renderRoi = fheroes2::getBoundaryRect( renderRoi, playerRects[i] );
+
+                    display.render( renderRoi );
 
                     break;
                 }
