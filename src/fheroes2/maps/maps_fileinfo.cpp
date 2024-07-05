@@ -446,13 +446,12 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     case LOSS_TOWN:
     case LOSS_HERO:
         // Town or hero loss metadata must include the following:
-        // - X position of the object
-        // - Y position of the object
+        // - tile index of the object
         // - color of the object (the color is needed to modify the game for multi-player)
-        assert( map.lossConditionMetadata.size() == 3 );
-        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] );
-        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[1] );
-        assert( ( map.lossConditionMetadata[2] & map.humanPlayerColors ) == map.lossConditionMetadata[2] );
+        assert( map.lossConditionMetadata.size() == 2 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] % map.size );
+        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[0] / map.size );
+        assert( ( map.lossConditionMetadata[1] & map.humanPlayerColors ) == map.lossConditionMetadata[1] );
         break;
     case LOSS_OUT_OF_TIME:
         assert( map.lossConditionMetadata.size() == 1 );
