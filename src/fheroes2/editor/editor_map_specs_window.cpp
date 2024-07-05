@@ -109,6 +109,7 @@ namespace
 
         std::vector<HeroInfo> heroInfos;
 
+        // TODO: cache all heroes once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
             for ( const auto & object : map.tiles[tileIndex].objects ) {
                 if ( object.group != Maps::ObjectGroup::KINGDOM_HEROES ) {
@@ -155,6 +156,7 @@ namespace
 
         std::vector<TownInfo> townInfos;
 
+        // TODO: cache all towns once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
             for ( const auto & object : map.tiles[tileIndex].objects ) {
                 if ( object.group != Maps::ObjectGroup::KINGDOM_TOWNS ) {
