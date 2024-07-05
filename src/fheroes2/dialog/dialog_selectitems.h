@@ -43,12 +43,13 @@ class Kingdom;
 
 namespace Dialog
 {
-    class ItemSelectionWindow : public Interface::ListBox<int>
+    template <class Item>
+    class ItemSelectionWindow : public Interface::ListBox<Item>
     {
     public:
-        using Interface::ListBox<int>::ActionListDoubleClick;
-        using Interface::ListBox<int>::ActionListSingleClick;
-        using Interface::ListBox<int>::ActionListPressRight;
+        using Interface::ListBox<Item>::ActionListDoubleClick;
+        using Interface::ListBox<Item>::ActionListSingleClick;
+        using Interface::ListBox<Item>::ActionListPressRight;
 
         ItemSelectionWindow() = delete;
 
@@ -59,12 +60,12 @@ namespace Dialog
             _backgroundRestorer->restore();
         }
 
-        void ActionListDoubleClick( int & /* unused */ ) override
+        void ActionListDoubleClick( Item & /* unused */ ) override
         {
             _isDoubleClicked = true;
         }
 
-        void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
+        void RedrawItem( const Item & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
         {
             // Do nothing.
         }
@@ -79,12 +80,12 @@ namespace Dialog
             // Do nothing.
         }
 
-        void ActionListSingleClick( int & /* unused */ ) override
+        void ActionListSingleClick( Item & /* unused */ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( int & /* unused */ ) override
+        void ActionListPressRight( Item & /* unused */ ) override
         {
             // Do nothing.
         }
@@ -92,7 +93,7 @@ namespace Dialog
         void updateScrollBarImage();
 
         // An image with text should have offset of 10 pixels from all left and right edges.
-        void renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
+        void renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
                          const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
 
         int32_t selectItemsEventProcessing();

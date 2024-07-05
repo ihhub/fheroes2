@@ -74,16 +74,16 @@ namespace
     }
 }
 
-class SelectEnumMonster final : public Dialog::ItemSelectionWindow
+class SelectEnumMonster final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -108,16 +108,16 @@ private:
     static const int32_t _offsetY{ 43 };
 };
 
-class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
+class SelectEnumHeroes final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -135,16 +135,16 @@ private:
     static const int32_t _offsetY{ 35 };
 };
 
-class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
+class SelectEnumArtifact final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -163,16 +163,16 @@ private:
     static const int32_t _offsetY{ 42 };
 };
 
-class SelectEnumSpell final : public Dialog::ItemSelectionWindow
+class SelectEnumSpell final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -191,7 +191,7 @@ private:
     static const int32_t _offsetY{ 55 };
 };
 
-class SelectEnumSecSkill final : public Dialog::ItemSelectionWindow
+class SelectEnumSecSkill final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     static int getSkillFromListIndex( int index )
@@ -205,12 +205,12 @@ public:
     }
 
     explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -229,17 +229,16 @@ private:
     static const int32_t _offsetY{ 42 };
 };
 
-class SelectKingdomCastle final : public Dialog::ItemSelectionWindow
+class SelectKingdomCastle final : public Dialog::ItemSelectionWindow<int>
 {
 public:
     explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
-        , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
+        : Dialog::ItemSelectionWindow<int>( rt, std::move( title ), std::move( description ) )
     {
         SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
     }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+    using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -261,18 +260,18 @@ public:
     static const int32_t itemsOffsetY{ 35 };
 
 private:
-    const int _townFrameIcnId;
+    const int _townFrameIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
 };
 
 namespace
 {
     // This is a base class for items used in the Editor and they rely on Maps::ObjectInfo structures.
-    class ObjectTypeSelection : public Dialog::ItemSelectionWindow
+    class ObjectTypeSelection : public Dialog::ItemSelectionWindow<int>
     {
     public:
         ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title, const int32_t imageOffsetX,
                              const int32_t textOffsetX, const int32_t offsetY )
-            : Dialog::ItemSelectionWindow( size, std::move( title ) )
+            : Dialog::ItemSelectionWindow<int>( size, std::move( title ) )
             , _objectInfo( objectInfo )
             , _imageOffsetX( imageOffsetX )
             , _textOffsetX( textOffsetX )
@@ -281,7 +280,7 @@ namespace
             SetAreaMaxItems( rtAreaItems.height / _offsetY );
         }
 
-        using Dialog::ItemSelectionWindow::ActionListPressRight;
+        using Dialog::ItemSelectionWindow<int>::ActionListPressRight;
 
         void RedrawItem( const int & objectId, int32_t posX, int32_t posY, bool isSelected ) override
         {
@@ -692,7 +691,8 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
 
 namespace Dialog
 {
-    ItemSelectionWindow::ItemSelectionWindow( const fheroes2::Size & dialogSize, std::string title, std::string description )
+    template <class Item>
+    ItemSelectionWindow<Item>::ItemSelectionWindow( const fheroes2::Size & dialogSize, std::string title, std::string description )
     {
         assert( !title.empty() );
 
@@ -719,7 +719,7 @@ namespace Dialog
 
         _backgroundRestorer = std::make_unique<fheroes2::ImageRestorer>( display, listRoi.x, listRoi.y, listRoi.width, listRoi.height );
 
-        SetAreaItems( { listRoi.x + 5, listRoi.y + 5, listRoi.width - 10, listRoi.height - 10 } );
+        ItemSelectionWindow<Item>::SetAreaItems( { listRoi.x + 5, listRoi.y + 5, listRoi.width - 10, listRoi.height - 10 } );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int32_t scrollbarOffsetX = area.x + area.width - 25;
@@ -729,38 +729,43 @@ namespace Dialog
         const int32_t topPartHeight = 19;
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
 
-        SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
-        SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
-        setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        ItemSelectionWindow<Item>::SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
+        ItemSelectionWindow<Item>::SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
+        ItemSelectionWindow<Item>::setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+        ItemSelectionWindow<Item>::setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
 
         // Render dialog buttons.
         _window->renderOkayCancelButtons( _buttonOk, _buttonCancel, isEvilInterface );
     }
 
-    void ItemSelectionWindow::updateScrollBarImage()
+    template <class Item>
+    void ItemSelectionWindow<Item>::updateScrollBarImage()
     {
-        const int32_t scrollBarWidth = _scrollbar.width();
+        const int32_t scrollBarWidth = ItemSelectionWindow<Item>::_scrollbar.width();
 
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                                              { 0, 7, scrollBarWidth, 8 } ) );
-        _scrollbar.moveToIndex( _topId );
+        ItemSelectionWindow<Item>::setScrollBarImage(
+            fheroes2::generateScrollbarSlider( ItemSelectionWindow<Item>::_scrollbar, false, ItemSelectionWindow<Item>::_scrollbar.getArea().height,
+                                               ItemSelectionWindow<Item>::VisibleItemCount(), ItemSelectionWindow<Item>::_size(), { 0, 0, scrollBarWidth, 8 },
+                                               { 0, 7, scrollBarWidth, 8 } ) );
+        ItemSelectionWindow<Item>::_scrollbar.moveToIndex( ItemSelectionWindow<Item>::_topId );
     }
 
     // An image with text should have offset of 10 pixels from all left and right edges.
-    void ItemSelectionWindow::renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination,
-                                          const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
+    template <class Item>
+    void ItemSelectionWindow<Item>::renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination,
+                                                const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
-        fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
         text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
     }
 
-    int32_t ItemSelectionWindow::selectItemsEventProcessing()
+    template <class Item>
+    int32_t ItemSelectionWindow<Item>::selectItemsEventProcessing()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -771,7 +776,7 @@ namespace Dialog
 
         updateScrollBarImage();
 
-        Redraw();
+        ItemSelectionWindow<Item>::Redraw();
         display.render( _window->totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
@@ -794,13 +799,13 @@ namespace Dialog
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
 
-            QueueEventProcessing();
+            ItemSelectionWindow<Item>::QueueEventProcessing();
 
-            if ( !IsNeedRedraw() ) {
+            if ( !ItemSelectionWindow<Item>::IsNeedRedraw() ) {
                 continue;
             }
 
-            Redraw();
+            ItemSelectionWindow<Item>::Redraw();
             display.render( roi );
         }
 
@@ -811,7 +816,8 @@ namespace Dialog
         return Dialog::ZERO;
     }
 
-    fheroes2::Rect ItemSelectionWindow::getBackgroundArea() const
+    template <class Item>
+    fheroes2::Rect ItemSelectionWindow<Item>::getBackgroundArea() const
     {
         assert( _window );
         return _window->totalArea();
