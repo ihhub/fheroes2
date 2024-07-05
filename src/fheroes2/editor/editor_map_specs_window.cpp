@@ -52,11 +52,13 @@
 #include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_castle.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -95,8 +97,23 @@ namespace
     {
         int32_t tileIndex{ -1 };
         int32_t color{ Color::NONE };
+        int32_t race{ Race::NONE };
         const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
     };
+
+    fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int townIcnId )
+    {
+        fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( townIcnId, 23 ) );
+
+        const bool isCastle = std::find( bannedBuildings.begin(), bannedBuildings.end(), BUILD_CASTLE ) == bannedBuildings.end();
+
+        const uint32_t icnIndex = fheroes2::getCastleIcnIndex( race, isCastle );
+
+        const fheroes2::Sprite & castleImage = fheroes2::AGG::GetICN( townIcnId, icnIndex );
+        Copy( castleImage, 0, 0, castleIcon, 4, 4, castleImage.width(), castleImage.height() );
+
+        return castleIcon;
+    }
 
     std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
@@ -179,6 +196,7 @@ namespace
 
                 townInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 townInfo.color = color;
+                townInfo.race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
 
                 const auto castleMetadataIter = map.castleMetadata.find( object.id );
                 assert( castleMetadataIter != map.castleMetadata.end() );
