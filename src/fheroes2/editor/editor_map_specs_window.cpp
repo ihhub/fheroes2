@@ -100,6 +100,11 @@ namespace
 
     std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
+        if ( allowedColors == 0 ) {
+            // Nothing to do.
+            return {};
+        }
+
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
         std::vector<HeroInfo> heroInfos;
@@ -141,6 +146,11 @@ namespace
 
     std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
+        if ( allowedColors == 0 ) {
+            // Nothing to do.
+            return {};
+        }
+
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
         std::vector<TownInfo> townInfos;
@@ -436,7 +446,7 @@ namespace
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
 
                     // Verify that this is a valid town.
-                    const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+                    const auto & towns = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
                     bool townFound = false;
@@ -465,7 +475,7 @@ namespace
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
 
                     // Verify that this is a valid hero.
-                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors );
+                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                     bool heroFound = false;
                     for ( const auto & hero : heroes ) {
@@ -519,14 +529,14 @@ namespace
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
                     // No towns exist for only-computer players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
                 }
                 return true;
             case Maps::FileInfo::VICTORY_KILL_HERO:
-                if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+                if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
                     // No heroes exist for only-computer players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
@@ -1127,13 +1137,13 @@ namespace
         }
         else {
             // Remove the conditions that have no selection among objects.
-            if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+            if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ),
                                   conditions.end() );
             }
 
-            if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors ^ mapFormat.humanPlayerColors ).empty() ) {
+            if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ),
                                   conditions.end() );
