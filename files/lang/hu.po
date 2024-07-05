@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1977,6 +1977,12 @@ msgstr "Varázsló-sziget"
 msgid "Descendants"
 msgstr "Utódok"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nem építhető. Már építettél ide ebben körben."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Ehhez a művelethez először a várat kell felépíteni."
+
 msgid "The %{building} produces %{monster}."
 msgstr "A(z) %{building} %{monster}-t hoz létre."
 
@@ -1985,12 +1991,6 @@ msgstr "Előfeltétel:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nem építhető. Már építettél ide ebben körben."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Ehhez a művelethez először a várat kell felépíteni."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr ""
@@ -4424,9 +4424,6 @@ msgstr "Arany"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
 
@@ -4605,6 +4602,9 @@ msgstr "Válasz törlése"
 
 msgid "Delete an existing answer for the question."
 msgstr "Meglévő válasz törlése."
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"

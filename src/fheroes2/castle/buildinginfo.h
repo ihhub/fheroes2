@@ -48,7 +48,7 @@ public:
 
     uint32_t getBuilding() const
     {
-        return building;
+        return _buildingType;
     }
 
     void SetPos( int32_t, int32_t );
@@ -73,10 +73,10 @@ private:
     std::string GetConditionDescription() const;
 
     const Castle & castle;
-    uint32_t building;
+    uint32_t _buildingType;
     std::string description;
     fheroes2::Rect area;
-    int bcond;
+    BuildingStatus _status;
 };
 
 struct DwellingItem

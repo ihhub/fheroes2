@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-05-25 12:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2013,6 +2013,12 @@ msgstr "Острів Мага"
 msgid "Descendants"
 msgstr "Нащадки"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Неможливо будувати. Ви вже будували тут сьогодні."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Для цієї дії треба спочатку побудувати замок."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - житло, в якому доступні для найму %{monster}."
 
@@ -2021,12 +2027,6 @@ msgstr "Потрібно:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Вийти з меню без змін."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Неможливо будувати. Ви вже будували тут сьогодні."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Для цієї дії треба спочатку побудувати замок."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Неможливо побудувати %{name}, бо замок далеко від води."
@@ -4458,9 +4458,6 @@ msgstr "Золото"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "Map Difficulty"
 msgstr ""
 "Складність\n"
@@ -4649,6 +4646,9 @@ msgstr "Видалити відповідь"
 
 msgid "Delete an existing answer for the question."
 msgstr "Видалити існуючу відповідь на запитання."
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Проста"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2020,6 +2020,12 @@ msgstr "Die Insel der Zauberer"
 msgid "Descendants"
 msgstr "Nachkommen"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Kann nicht gebaut werden. Ihr habt an diesem Tag hier bereits gebaut."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Für diese Aktion ist es notwendig, zuerst eine Burg zu bauen."
+
 msgid "The %{building} produces %{monster}."
 msgstr "Der %{building} produziert %{monster}."
 
@@ -2028,12 +2034,6 @@ msgstr "Erfordert:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Dieses Menü verlassen."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Kann nicht gebaut werden. Ihr habt an diesem Tag hier bereits gebaut."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Für diese Aktion ist es notwendig, zuerst eine Burg zu bauen."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4579,9 +4579,6 @@ msgstr "Gold"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 #, fuzzy
 msgid "Map Difficulty"
 msgstr ""
@@ -4773,6 +4770,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2014,6 +2014,12 @@ msgstr "Остров чародеев"
 msgid "Descendants"
 msgstr "Наследники"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Невозможно построить. Вы уже строили здесь сегодня."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Для этого Вам нужно сперва построить замок."
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 "%{building} - жилище, в котором %{monster} доступны для найма в Вашу армию."
@@ -2023,12 +2029,6 @@ msgstr "Требует:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Выход, без изменений."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Невозможно построить. Вы уже строили здесь сегодня."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Для этого Вам нужно сперва построить замок."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name} невозможно построить - замок слишком далеко от океана."
@@ -4448,9 +4448,6 @@ msgstr "Золото"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "Map Difficulty"
 msgstr "Сложность карты"
 
@@ -4629,6 +4626,9 @@ msgstr "Удалить ответ"
 
 msgid "Delete an existing answer for the question."
 msgstr "Удалить имеющийся ответ на вопрос."
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Простая"

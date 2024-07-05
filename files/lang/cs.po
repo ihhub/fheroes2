@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2011,6 +2011,12 @@ msgstr "Kouzelníkův ostrov"
 msgid "Descendants"
 msgstr "Potomci"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nelze postavit. Dnes si zde již stavěl."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produkuje %{monster}."
 
@@ -2019,12 +2025,6 @@ msgstr "Požadováno:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Odejít z menu bez provedení změm."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nelze postavit. Dnes si zde již stavěl."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4494,9 +4494,6 @@ msgstr "Zlato"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 #, fuzzy
 msgid "Map Difficulty"
 msgstr ""
@@ -4679,6 +4676,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"

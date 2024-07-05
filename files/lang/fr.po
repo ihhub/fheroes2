@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 13:34+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2022,6 +2022,12 @@ msgstr "L'archipel"
 msgid "Descendants"
 msgstr "Les héritiers"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pour effectuer cette action il faut d'abord construire un château."
+
 msgid "The %{building} produces %{monster}."
 msgstr "Le %{building} produit des %{monster}."
 
@@ -2030,12 +2036,6 @@ msgstr "Nécessite :"
 
 msgid "Exit this menu without doing anything."
 msgstr "Sortir de ce menu sans modification."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pour effectuer cette action il faut d'abord construire un château."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Impossible de construire %{name} - le château est trop loin de l'eau."
@@ -4545,9 +4545,6 @@ msgstr "Or"
 msgid "Days:"
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 #, fuzzy
 msgid "Map Difficulty"
 msgstr ""
@@ -4740,6 +4737,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
