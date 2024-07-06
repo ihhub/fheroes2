@@ -3896,7 +3896,7 @@ msgid "Computer colors allowed to get event:"
 msgstr "Datorfärger som kan få händelsen:"
 
 msgid "First day of occurrence:"
-msgstr "Inträffar första dag:"
+msgstr "Inträffar först dag:"
 
 msgid "Repeat period (days):"
 msgstr "Upprepa period (dagar):"
