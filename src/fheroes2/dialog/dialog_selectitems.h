@@ -43,13 +43,12 @@ class Kingdom;
 
 namespace Dialog
 {
-    template <class Item>
-    class ItemSelectionWindow : public Interface::ListBox<Item>
+    class ItemSelectionWindow : public Interface::ListBox<int>
     {
     public:
-        using Interface::ListBox<Item>::ActionListDoubleClick;
-        using Interface::ListBox<Item>::ActionListSingleClick;
-        using Interface::ListBox<Item>::ActionListPressRight;
+        using Interface::ListBox<int>::ActionListDoubleClick;
+        using Interface::ListBox<int>::ActionListSingleClick;
+        using Interface::ListBox<int>::ActionListPressRight;
 
         ItemSelectionWindow() = delete;
 
@@ -60,12 +59,12 @@ namespace Dialog
             _backgroundRestorer->restore();
         }
 
-        void ActionListDoubleClick( Item & /* unused */ ) override
+        void ActionListDoubleClick( int & /* unused */ ) override
         {
             _isDoubleClicked = true;
         }
 
-        void RedrawItem( const Item & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
+        void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
         {
             // Do nothing.
         }
@@ -80,12 +79,12 @@ namespace Dialog
             // Do nothing.
         }
 
-        void ActionListSingleClick( Item & /* unused */ ) override
+        void ActionListSingleClick( int & /* unused */ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( Item & /* unused */ ) override
+        void ActionListPressRight( int & /* unused */ ) override
         {
             // Do nothing.
         }

@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <utility>
 #include <vector>
@@ -100,28 +101,31 @@ namespace
         return castleIcon;
     }
 
-    class SelectMapCastle final : public Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>
+    class SelectMapCastle final : public Dialog::ItemSelectionWindow
     {
     public:
-        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description )
-            : Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>( rt, std::move( title ), std::move( description ) )
+        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const std::vector<Maps::Map_Format::TownInfo> & townInfos )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+            , _townInfos( townInfos )
         {
             SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
         }
 
-        using Dialog::ItemSelectionWindow<Maps::Map_Format::TownInfo>::ActionListPressRight;
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const Maps::Map_Format::TownInfo & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
         {
-            assert( index.castleMetadata != nullptr );
+            assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
-            std::string castleName = index.castleMetadata->customName.empty() ? "Unnamed" : index.castleMetadata->customName;
+            const auto & castleMetadata = _townInfos[index].castleMetadata;
 
-            renderItem( drawCastleIcon( index.castleMetadata->bannedBuildings, index.race, _townIcnId ), std::move( castleName ), { dstx, dsty }, 35, 75,
+            std::string castleName = castleMetadata->customName.empty() ? "Unnamed" : castleMetadata->customName;
+
+            renderItem( drawCastleIcon( castleMetadata->bannedBuildings, _townInfos[index].race, _townIcnId ), std::move( castleName ), { dstx, dsty }, 35, 75,
                         itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( Maps::Map_Format::TownInfo & index ) override
+        void ActionListPressRight( int & index ) override
         {
             (void)index;
             // Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
@@ -131,6 +135,7 @@ namespace
 
     private:
         const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+        const std::vector<Maps::Map_Format::TownInfo> & _townInfos;
     };
 
     std::vector<Maps::Map_Format::HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
@@ -842,9 +847,12 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 350, totalHeight }, _( "Select Town to capture" ), {} );
+                    SelectMapCastle listbox( { 350, totalHeight }, _( "Select Town to capture" ), {}, _mapTownInfos );
 
-                    listbox.SetListContent( _mapTownInfos );
+                    std::vector<int> townIndicies;
+                    std::iota( townIndicies.begin(), townIndicies.end(), 0 );
+
+                    listbox.SetListContent( townIndicies );
 
                     const int32_t result = listbox.selectItemsEventProcessing();
 
