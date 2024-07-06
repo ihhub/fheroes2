@@ -1019,7 +1019,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture for victory" ), {}, _mapWidth, _mapTownInfos );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1084,7 +1084,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Town to capture" ), {}, _mapWidth, _mapHeroInfos );
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to kill for victory" ), {}, _mapWidth, _mapHeroInfos );
 
                     std::vector<int> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
@@ -1254,10 +1254,10 @@ namespace
                     std::copy( mapFormat.lossConditionMetadata.begin(), mapFormat.lossConditionMetadata.end(), _heroToLose.begin() );
 
                     // Verify that this is a valid human-only hero.
-                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
+                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                     bool heroFound = false;
-                    for ( const auto & hero : heroes ) {
+                    for ( const auto & hero : _mapHeroInfos ) {
                         if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
                             heroFound = true;
                             break;
@@ -1329,8 +1329,8 @@ namespace
                 break;
             }
             case Maps::FileInfo::LOSS_HERO: {
-                const auto heroes = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
-                if ( heroes.empty() ) {
+                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors );
+                if ( _mapHeroInfos.empty() ) {
                     // No heroes exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
@@ -1340,7 +1340,7 @@ namespace
 
                 const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                 bool heroFound = false;
-                for ( const auto & hero : heroes ) {
+                for ( const auto & hero : _mapHeroInfos ) {
                     if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
                         heroFound = true;
                         break;
@@ -1348,9 +1348,9 @@ namespace
                 }
 
                 if ( !heroFound ) {
-                    // The hero doesn't exist in the list.
-                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
-                    mapFormat.lossConditionType = _conditionType;
+                    // The hero doesn't exist in the list. Select the first one.
+                    _heroToLose[0] = static_cast<uint32_t>( _mapHeroInfos[0].tileIndex );
+                    _heroToLose[1] = static_cast<uint32_t>( _mapHeroInfos[0].color );
                 }
 
                 return false;
@@ -1454,6 +1454,12 @@ namespace
                 break;
             }
             case Maps::FileInfo::LOSS_HERO: {
+                if ( !renderEverything ) {
+                    // To render this condition we always redraw the whole conditions UI.
+                    // TODO: optimize the rendering.
+                    _restorer.restore();
+                }
+
                 const fheroes2::Rect roi{ _restorer.rect() };
 
                 const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
@@ -1464,6 +1470,41 @@ namespace
                 _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
 
                 fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+
+                assert( !_mapHeroInfos.empty() );
+
+                int selectedHeroIndex = 0;
+                for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
+                    if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
+                        selectedHeroIndex = static_cast<int>( i );
+                        break;
+                    }
+                }
+
+                // To render hero icons we use castle flags and frame.
+                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<int>( _heroToLose[1] ) );
+                const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+                const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+                Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
+                Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
+                      castleRightFlag.height() );
+
+                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const int32_t heroPortraitId = heroMetadata->customPortrait;
+
+                if ( heroPortraitId > 0 ) {
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+
+                    fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
+                }
+                else {
+                    fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
+                }
+
+                fheroes2::Text extraText( getObjectNameAndPositionText( heroMetadata->customName, static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
+                                          fheroes2::FontType::normalWhite() );
+                extraText.fitToOneRow( roi.width );
+                extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
 
                 break;
             }
@@ -1510,7 +1551,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a loss condition Town" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose for defeat" ), {}, _mapWidth, _mapTownInfos );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1544,14 +1585,63 @@ namespace
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
-                    fheroes2::showStandardTextMessage( _( "Special Lose Condition" ), _( "Click here to change the town whose loss would mean defeat." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), _( "Click here to change the town whose loss would mean defeat." ), Dialog::ZERO );
                     return false;
                 }
 
                 break;
             }
-            case Maps::FileInfo::LOSS_HERO:
+            case Maps::FileInfo::LOSS_HERO: {
+                LocalEvent & le = LocalEvent::Get();
+
+                if ( le.MouseClickLeft( _selectConditionRoi ) ) {
+                    assert( !_mapHeroInfos.empty() );
+
+                    const int32_t maxHeight = std::min( 100 + SelectMapCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 100 );
+                    const int32_t itemsHeight
+                        = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
+                    const int32_t totalHeight = std::min( itemsHeight, maxHeight );
+
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose for defeat" ), {}, _mapWidth, _mapHeroInfos );
+
+                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
+
+                    listbox.SetListContent( heroIndicies );
+
+                    int initiallySelectedHeroIndex = 0;
+
+                    for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
+                        if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
+                            initiallySelectedHeroIndex = static_cast<int>( i );
+                            listbox.SetCurrent( initiallySelectedHeroIndex );
+                            break;
+                        }
+                    }
+
+                    const int32_t result = listbox.selectItemsEventProcessing();
+
+                    if ( result == Dialog::OK ) {
+                        const int heroIndex = listbox.GetCurrent();
+
+                        if ( heroIndex != initiallySelectedHeroIndex ) {
+                            _heroToLose[0] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].tileIndex );
+                            _heroToLose[1] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].color );
+
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
+                    fheroes2::showStandardTextMessage( _( "Special Loss Condition" ), _( "Click here to change the hero whose loss would mean defeat." ), Dialog::ZERO );
+                    return false;
+                }
+
                 break;
+            }
             case Maps::FileInfo::LOSS_OUT_OF_TIME:
                 return _outOfTimeValue.processEvents();
             default:
@@ -1571,6 +1661,7 @@ namespace
         std::array<uint32_t, 2> _heroToLose{ 0 };
         std::array<uint32_t, 2> _townToLose{ 0 };
         std::vector<TownInfo> _mapTownInfos;
+        std::vector<HeroInfo> _mapHeroInfos;
 
         fheroes2::ImageRestorer _restorer;
 
