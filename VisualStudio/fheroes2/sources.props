@@ -112,6 +112,8 @@
     <ClCompile Include="src\fheroes2\editor\editor_map_specs_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_object_popup_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_castle_details_window.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_daily_event_spec_window.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_daily_events_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_event_details_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_options.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_rumor_window.cpp" />
@@ -328,6 +330,8 @@
     <ClInclude Include="src\fheroes2\editor\editor_mainmenu.h" />
     <ClInclude Include="src\fheroes2\editor\editor_map_specs_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_object_popup_window.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_daily_event_spec_window.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_daily_events_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_castle_details_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_event_details_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_options.h" />

@@ -224,15 +224,17 @@ void Interface::AdventureMap::EventCastSpell()
     _gameArea.SetCenter( hero->GetCenter() );
     redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
-    if ( spell.isValid() ) {
-        hero->ActionSpellCast( spell );
-
-        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
-        // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES, true );
-        RedrawFocus();
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, {} );
+    if ( !spell.isValid() ) {
+        return;
     }
+
+    hero->ActionSpellCast( spell );
+
+    // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+    // hero to another location, so we may have to update the terrain music theme and environment sounds
+    ResetFocus( GameFocus::HEROES, true );
+    RedrawFocus();
 }
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const

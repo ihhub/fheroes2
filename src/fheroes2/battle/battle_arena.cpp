@@ -327,7 +327,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        const int wallObject = castle->isFortificationBuilt() ? 3 : 2;
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );

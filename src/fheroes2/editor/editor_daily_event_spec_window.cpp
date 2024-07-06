@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "editor_event_details_window.h"
+#include "editor_daily_event_spec_window.h"
 
 #include <algorithm>
 #include <array>
@@ -29,17 +29,12 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
-#include "artifact.h"
-#include "artifact_info.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
-#include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "map_format_info.h"
@@ -48,13 +43,11 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
-#include "ui_tool.h"
 #include "ui_window.h"
 
 namespace
@@ -64,22 +57,30 @@ namespace
     const fheroes2::Size messageArea{ 300, 210 };
     const int32_t elementOffset{ 9 };
     const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
+
+    const int32_t daysInYear{ 7 * 4 * 12 };
+    const int32_t lastDayForEvents{ daysInYear * 100 };
 }
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
     {
-        // First, make sure that the event has proper player colors according to the map specification.
+        // An event can be outdated in terms of players since we don't update players while placing or removing heroes and castles.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
         eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
+
+        // First occurrence day logically has no limits but we still have to check it for some human logical value.
+        eventMetadata.firstOccurrenceDay = std::clamp( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
+
+        eventMetadata.repeatPeriodInDays = std::min( eventMetadata.repeatPeriodInDays, static_cast<uint32_t>( daysInYear ) );
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 140, true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 220, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         int32_t offsetY = dialogRoi.y + elementOffset;
@@ -101,17 +102,17 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
-        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
+        // Resources
+        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
+        text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY + messageArea.height + 2 * elementOffset, display );
 
-        fheroes2::MovableSprite recurringEventCheckbox;
-        const fheroes2::Rect recurringEventArea
-            = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x, recurringEventPos.y, isEvilInterface );
-        if ( eventMetadata.isRecurringEvent ) {
-            recurringEventCheckbox.hide();
-        }
-        else {
-            recurringEventCheckbox.show();
-        }
+        const fheroes2::Rect resourceRoi{ messageRoi.x, text.height() + offsetY + messageArea.height + 2 * elementOffset, messageRoi.width, 99 };
+        background.applyTextBackgroundShading( resourceRoi );
+
+        fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
+
+        std::array<fheroes2::Rect, 7> individualResourceRoi;
+        renderResources( eventMetadata.resources, resourceRoi, display, individualResourceRoi );
 
         auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
                                                  const int32_t boxOffsetX, const int32_t boxOffsetY ) {
@@ -134,11 +135,11 @@ namespace Editor
         }
 
         text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+        offsetY += 3 + text.height( textWidth );
 
         const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
         const int32_t checkOffX = ( playerAreaWidth - availablePlayersCount * 32 ) / 2;
 
-        offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
         createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
 
@@ -156,8 +157,8 @@ namespace Editor
         }
 
         text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
-
         offsetY += 3 + text.height( textWidth );
+
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
         createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
 
@@ -165,36 +166,51 @@ namespace Editor
 
         offsetY += 35;
 
-        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
-        text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, display );
+        text.set( _( "First day of occurrence:" ), fheroes2::FontType::normalWhite() );
 
-        const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        const fheroes2::Rect artifactRoi{ playerAreaOffsetX, offsetY + text.height() + 4, artifactFrame.width(), artifactFrame.height() };
+        textWidth = playerAreaWidth;
 
-        fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
 
-        auto redrawArtifactImage = [&display, &artifactRoi]( const int32_t artifactId ) {
-            const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( artifactId ).IndexSprite64() );
-            fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
-        };
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+        offsetY += 3 + text.height( textWidth );
 
-        redrawArtifactImage( eventMetadata.artifact );
+        const fheroes2::Point firstDayOccurrencePos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 17 );
-        const int32_t buttonWidth = buttonImage.width();
+        fheroes2::ValueSelectionDialogElement firstDaySelection( 1, lastDayForEvents, static_cast<int32_t>( eventMetadata.firstOccurrenceDay ), 1,
+                                                                 firstDayOccurrencePos );
 
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
-        buttonDeleteArtifact.draw();
+        firstDaySelection.draw( display );
 
-        // Resources
-        const int32_t resourceOffsetX = artifactRoi.width + elementOffset;
-        const fheroes2::Rect resourceRoi{ playerAreaOffsetX + resourceOffsetX, artifactRoi.y, playerAreaWidth - resourceOffsetX, 99 };
-        background.applyTextBackgroundShading( resourceRoi );
+        offsetY += 10 + fheroes2::ValueSelectionDialogElement::getArea().height;
 
-        fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
+        fheroes2::ImageRestorer firstDateDescription( display, playerAreaOffsetX, offsetY, playerAreaWidth, 35 );
 
-        std::array<fheroes2::Rect, 7> individualResourceRoi;
-        renderResources( eventMetadata.resources, resourceRoi, display, individualResourceRoi );
+        text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, text.width(), display );
+
+        offsetY += 35;
+
+        text.set( _( "Repeat period (days):" ), fheroes2::FontType::normalWhite() );
+
+        textWidth = playerAreaWidth;
+
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
+
+        text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+        offsetY += 3 + text.height( textWidth );
+
+        const fheroes2::Point repeatPeriodPos{ playerAreaOffsetX + ( playerAreaWidth - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, offsetY };
+
+        fheroes2::ValueSelectionDialogElement repeatPeriodSelection( 0, daysInYear, static_cast<int32_t>( eventMetadata.repeatPeriodInDays ), 1, repeatPeriodPos );
+
+        repeatPeriodSelection.draw( display );
 
         // Window buttons
         fheroes2::Button buttonOk;
@@ -210,7 +226,27 @@ namespace Editor
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
+
+            if ( firstDaySelection.processEvents() ) {
+                firstDaySelection.draw( display );
+
+                eventMetadata.firstOccurrenceDay = static_cast<uint32_t>( firstDaySelection.getValue() );
+
+                firstDateDescription.restore();
+
+                text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+                text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, firstDateDescription.y(), text.width(), display );
+
+                isRedrawNeeded = true;
+            }
+
+            if ( repeatPeriodSelection.processEvents() ) {
+                repeatPeriodSelection.draw( display );
+
+                eventMetadata.repeatPeriodInDays = static_cast<uint32_t>( repeatPeriodSelection.getValue() );
+
+                isRedrawNeeded = true;
+            }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -310,73 +346,11 @@ namespace Editor
                     isRedrawNeeded = true;
                 }
             }
-            else if ( le.MouseClickLeft( recurringEventArea ) ) {
-                eventMetadata.isRecurringEvent = !eventMetadata.isRecurringEvent;
-                eventMetadata.isRecurringEvent ? recurringEventCheckbox.hide() : recurringEventCheckbox.show();
-                display.render( recurringEventCheckbox.getArea() );
-            }
-            else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( eventMetadata.artifact, false );
-                if ( artifact.isValid() ) {
-                    int32_t artifactMetadata = eventMetadata.artifactMetadata;
-
-                    if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
-                        artifactMetadata = Dialog::selectSpell( artifactMetadata, true ).GetID();
-
-                        if ( artifactMetadata == Spell::NONE ) {
-                            // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
-                            continue;
-                        }
-                    }
-                    else {
-                        artifactMetadata = 0;
-                    }
-
-                    eventMetadata.artifact = artifact.GetID();
-                    eventMetadata.artifactMetadata = artifactMetadata;
-
-                    redrawArtifactImage( eventMetadata.artifact );
-                }
-
-                // The opened selectArtifact() dialog might be bigger than this dialog so we render the whole screen.
-                display.render();
-
-                isRedrawNeeded = false;
-            }
-            else if ( le.MouseClickLeft( buttonDeleteArtifact.area() ) ) {
-                eventMetadata.artifact = 0;
-                eventMetadata.artifactMetadata = 0;
-
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() );
-                fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
-
-                display.render( artifactRoi );
-            }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the Event properties." ), Dialog::ZERO );
-            }
-            else if ( le.isMouseRightButtonPressedInArea( artifactRoi ) ) {
-                // Since Artifact class does not allow to set a random spell (for obvious reasons),
-                // we have to use special UI code to render the popup window with all needed information.
-                const Artifact artifact( eventMetadata.artifact );
-
-                if ( artifact.isValid() ) {
-                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
-                    const fheroes2::Text description( fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ),
-                                                      fheroes2::FontType::normalWhite() );
-
-                    fheroes2::ArtifactDialogElement artifactUI( artifact );
-                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
-                }
-                else {
-                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
-                }
-            }
-            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteArtifact.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
                 if ( eventMetadata.resources.GetValidItemsCount() == 0 ) {
@@ -387,12 +361,6 @@ namespace Editor
                                                    fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                    eventMetadata.resources );
                 }
-            }
-            else if ( le.isMouseRightButtonPressedInArea( recurringEventArea ) ) {
-                fheroes2::showStandardTextMessage(
-                    _( "Cancel event after first visit" ),
-                    _( "If this checkbox is checked, the event will trigger only once. If not checked, the event will trigger every time one of the specified players crosses the event tile." ),
-                    Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( messageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );

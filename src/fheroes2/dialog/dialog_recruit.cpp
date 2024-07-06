@@ -539,7 +539,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             continue;
         }
 
-        if ( fheroes2::PressIntKey( max, result ) ) {
+        int32_t temp = static_cast<int32_t>( result );
+        if ( fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
+            result = temp;
             paymentCosts = paymentMonster * result;
             redraw = true;
             maxmin.clear();

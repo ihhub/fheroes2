@@ -67,6 +67,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
 #include "screen.h"
@@ -401,33 +402,6 @@ namespace
         return needRedraw;
     }
 
-    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
-    {
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            for ( const auto & object : map.tiles[i].objects ) {
-                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
-                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
-
-                    world.addCastle( static_cast<int32_t>( i ), race, color );
-                }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    const auto & metadata = heroObjects[object.index].metadata;
-                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
-
-                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
-                    if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
-                        hero->SetColor( color );
-                    }
-                }
-            }
-        }
-    }
-
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
         switch ( groupType ) {
@@ -598,7 +572,7 @@ namespace
                 return false;
             }
 
-            if ( !isActionObjectAllowed( townObjectInfo, tilePos ) ) {
+            if ( !isActionObjectAllowed( townObjectInfo, tilePos ) || !isActionObjectAllowed( basementObjectInfo, tilePos ) ) {
                 errorMessage = _( "Action objects must be placed on clear tiles." );
                 return false;
             }
@@ -732,7 +706,7 @@ namespace Interface
         // First, we disable it to make sure to enable it back while exiting this function.
         const fheroes2::ScreenPaletteRestorer restorer;
 
-        const Settings & conf = Settings::Get();
+        Settings & conf = Settings::Get();
 
         if ( conf.isEditorAnimationEnabled() ) {
             fheroes2::RenderProcessor::instance().startColorCycling();
@@ -835,6 +809,14 @@ namespace Interface
                     if ( returnValue == Dialog::YES ) {
                         return fheroes2::GameMode::MAIN_MENU;
                     }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY ) ) {
+                    conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
+                    // This is not an ideal solution as we should save the whole configuration while tweaking one option.
+                    // However, we can improve it later if it leads to slowdowns while using the Editor.
+                    conf.Save( Settings::configFileName );
+
+                    setRedraw( REDRAW_GAMEAREA );
                 }
             }
 
@@ -962,8 +944,6 @@ namespace Interface
 
                             // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
                             Maps::readMapInEditor( _mapFormat );
-
-                            updateWorldCastlesHeroes( _mapFormat );
                         }
                     }
                 }
@@ -1203,7 +1183,7 @@ namespace Interface
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
-                    uint32_t monsterCount = 0;
+                    int32_t monsterCount = 0;
 
                     auto monsterMetadata = _mapFormat.standardMetadata.find( object.id );
                     if ( monsterMetadata != _mapFormat.standardMetadata.end() ) {
@@ -1224,7 +1204,7 @@ namespace Interface
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
-                        _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), 0, Monster::JOIN_CONDITION_UNSET };
+                        _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
                 }
@@ -1232,11 +1212,11 @@ namespace Interface
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                         assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
 
-                        uint32_t radius = static_cast<uint32_t>( _mapFormat.standardMetadata[object.id].metadata[0] );
+                        int32_t radius = _mapFormat.standardMetadata[object.id].metadata[0];
 
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius" ), 0, 100, radius ) ) {
-                            _mapFormat.standardMetadata[object.id].metadata[0] = static_cast<int32_t>( radius );
+                            _mapFormat.standardMetadata[object.id].metadata[0] = radius;
                             action.commit();
                         }
                     }
@@ -1356,8 +1336,6 @@ namespace Interface
 
                 // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
                 Maps::readMapInEditor( _mapFormat );
-
-                updateWorldCastlesHeroes( _mapFormat );
             }
 
             if ( brushSize.width == 0 ) {
@@ -1599,6 +1577,45 @@ namespace Interface
 
             action.commit();
         }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
+
+            if ( objectInfo.objectType == MP2::OBJ_OBELISK ) {
+                const auto & objects = Maps::getObjectsByGroup( groupType );
+
+                std::set<size_t> obeliskIndex;
+                for ( size_t i = 0; i < objects.size(); ++i ) {
+                    if ( objects[i].objectType == MP2::OBJ_OBELISK ) {
+                        obeliskIndex.emplace( i );
+                    }
+                }
+
+                size_t obeliskCount = 0;
+                for ( const auto & mapTile : _mapFormat.tiles ) {
+                    for ( const auto & object : mapTile.objects ) {
+                        if ( object.group == groupType && obeliskIndex.count( object.index ) > 0 ) {
+                            assert( object.index < objects.size() );
+
+                            ++obeliskCount;
+                        }
+                    }
+                }
+
+                if ( obeliskCount >= PUZZLETILES ) {
+                    std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
+                    StringReplace( warning, "%{count}", PUZZLETILES );
+                    _warningMessage.reset( std::move( warning ) );
+                    return;
+                }
+            }
+
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
+                _warningMessage.reset( std::move( errorMessage ) );
+                return;
+            }
+
+            _setObjectOnTileAsAction( tile, groupType, objectType );
+        }
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
@@ -1612,29 +1629,6 @@ namespace Interface
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         Editor::showPopupWindow( world.GetTiles( tileIndex ) );
-    }
-
-    void EditorInterface::mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ )
-    {
-        // Do nothing.
-    }
-
-    void EditorInterface::undoAction()
-    {
-        if ( _historyManager.undo() ) {
-            _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-
-            updateWorldCastlesHeroes( _mapFormat );
-        }
-    }
-
-    void EditorInterface::redoAction()
-    {
-        if ( _historyManager.redo() ) {
-            _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-
-            updateWorldCastlesHeroes( _mapFormat );
-        }
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
@@ -1690,8 +1684,6 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
             return false;
         }
-
-        updateWorldCastlesHeroes( _mapFormat );
 
         _loadedFileName = System::truncateFileExtensionAndPath( filePath );
 
@@ -1909,7 +1901,7 @@ namespace Interface
             return;
         }
 
-        size_t objectsReplaced = 0;
+        [[maybe_unused]] size_t objectsReplaced = 0;
 
         // This logic is based on an assumption that only one action object can exist on one tile.
         if ( replaceKey( _mapFormat.standardMetadata, object.id, newObjectUID ) ) {

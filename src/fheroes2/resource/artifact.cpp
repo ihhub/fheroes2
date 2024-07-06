@@ -1170,13 +1170,9 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
                 const_cast<Heroes *>( _hero )->EditSpellBook();
             }
             else if ( _allowOpeningMagicBook ) {
-                if ( _statusBar != nullptr ) {
-                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
-                }
-                else {
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, nullptr );
-                }
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false,
+                                      _statusBar ? [this]( const std::string & status ) { _statusBar->ShowMessage( status ); }
+                                                 : std::function<void( const std::string & )>{} );
             }
             else {
                 messageMagicBookAbortTrading();
@@ -1200,7 +1196,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            art = Dialog::selectArtifact( Artifact::UNKNOWN );
+            art = Dialog::selectArtifact( Artifact::UNKNOWN, false );
 
             if ( isMagicBook( art ) ) {
                 art.Reset();
