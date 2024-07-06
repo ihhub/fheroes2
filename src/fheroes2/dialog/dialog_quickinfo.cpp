@@ -774,36 +774,14 @@ namespace
 
         // color flags, except for neutral heroes
         if ( !isNeutralHero ) {
-            uint32_t index = 0;
+            // Use castle flags to show hero's color flags.
+            const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( hero.GetColor() );
 
-            switch ( hero.GetColor() ) {
-            case Color::BLUE:
-                index = 0;
-                break;
-            case Color::GREEN:
-                index = 2;
-                break;
-            case Color::RED:
-                index = 4;
-                break;
-            case Color::YELLOW:
-                index = 6;
-                break;
-            case Color::ORANGE:
-                index = 8;
-                break;
-            case Color::PURPLE:
-                index = 10;
-                break;
-            default:
-                break;
-            }
-
-            const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
+            const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
             dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
             fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
-            const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
+            const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
             dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
             fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
         }

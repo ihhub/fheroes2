@@ -103,6 +103,36 @@ namespace
         const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
     };
 
+    fheroes2::Sprite drawHeroIcon( const int32_t heroPortait, const int32_t race, const int32_t color, const int townIcnId )
+    {
+        // To render hero icons we use castle flags and frame.
+        const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
+
+        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleFrame = fheroes2::AGG::GetICN( townIcnId, 22 );
+        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+
+        fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
+        castleIcon.reset();
+
+        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
+
+        if ( heroPortait > 0 ) {
+            const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::MINIPORT, heroPortait - 1 );
+            Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
+        }
+        else {
+            // This is a hero with a random race dependent portrait. Render the default race portrait.
+            fheroes2::Image heroPortrait( 101, 93 );
+            fheroes2::renderHeroRacePortrait( race, { 0, 0, 101, 93 }, heroPortrait );
+            fheroes2::SubpixelResize( heroPortrait, 0, 0, 101, 93, castleIcon, castleLeftFlag.width() + 6, 4, 30, 22 );
+        }
+
+        return castleIcon;
+    }
+
     fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int32_t color, const int townIcnId )
     {
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
@@ -136,6 +166,44 @@ namespace
 
         return text;
     }
+
+    class SelectMapHero final : public Dialog::ItemSelectionWindow
+    {
+    public:
+        explicit SelectMapHero( const fheroes2::Size & rt, std::string title, std::string description, const int32_t mapWidth, const std::vector<HeroInfo> & heroInfos )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+            , _mapWidth( mapWidth )
+            , _heroInfos( heroInfos )
+        {
+            SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
+
+            const auto & heroMetadata = _heroInfos[index].heroMetadata;
+
+            renderItem( drawHeroIcon( heroMetadata->customPortrait, heroMetadata->race, _heroInfos[index].color, _townIcnId ),
+                        getObjectNameAndPositionText( heroMetadata->customName, _heroInfos[index].tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
+                        current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::showStandardTextMessage( {}, getObjectNameAndPositionText( _heroInfos[index].heroMetadata->customName, _heroInfos[index].tileIndex, _mapWidth ),
+                                               Dialog::ZERO );
+        }
+
+        static const int32_t itemsOffsetY{ 35 };
+
+    private:
+        const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+        const int32_t _mapWidth{ 0 };
+        const std::vector<HeroInfo> & _heroInfos;
+    };
 
     class SelectMapCastle final : public Dialog::ItemSelectionWindow
     {
@@ -555,10 +623,10 @@ namespace
                     std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
 
                     // Verify that this is a valid computer-only hero.
-                    const auto & heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                     bool heroFound = false;
-                    for ( const auto & hero : heroes ) {
+                    for ( const auto & hero : _mapHeroInfos ) {
                         if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
                             heroFound = true;
                             break;
@@ -614,6 +682,8 @@ namespace
                     // No towns exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
+
+                    return true;
                 }
 
                 bool townFound = false;
@@ -634,16 +704,18 @@ namespace
                 return false;
             }
             case Maps::FileInfo::VICTORY_KILL_HERO: {
-                const auto heroes = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
-                if ( heroes.empty() ) {
+                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                if ( _mapHeroInfos.empty() ) {
                     // No heroes exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                     mapFormat.victoryConditionType = _conditionType;
+
+                    return true;
                 }
 
                 const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                 bool heroFound = false;
-                for ( const auto & hero : heroes ) {
+                for ( const auto & hero : _mapHeroInfos ) {
                     if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
                         heroFound = true;
                         break;
@@ -651,9 +723,9 @@ namespace
                 }
 
                 if ( !heroFound ) {
-                    // The hero doesn't exist in the list.
-                    _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
-                    mapFormat.victoryConditionType = _conditionType;
+                    // The hero doesn't exist in the list. Select the first one.
+                    _heroToKill[0] = static_cast<uint32_t>( _mapHeroInfos[0].tileIndex );
+                    _heroToKill[1] = static_cast<uint32_t>( _mapHeroInfos[0].color );
                 }
 
                 return false;
@@ -779,7 +851,7 @@ namespace
                 fheroes2::Text text( getObjectNameAndPositionText( castleMetadata->customName, _mapTownInfos[selectedTownIndex].tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
                 text.fitToOneRow( roi.width - castleIcon.width() - 5 );
-                text.draw( roi.x + castleIcon.width() + 5, roi.y + 12, output );
+                text.drawInRoi( roi.x + castleIcon.width() + 5, roi.y + 12, output, roi );
 
                 _selectConditionRoi = { roi.x, roi.y + 4, castleIcon.width() + 5 + text.width(), castleIcon.height() };
 
@@ -805,6 +877,12 @@ namespace
                 break;
             }
             case Maps::FileInfo::VICTORY_KILL_HERO: {
+                if ( !renderEverything ) {
+                    // To render this condition we always redraw the whole conditions UI.
+                    // TODO: optimize the rendering.
+                    _restorer.restore();
+                }
+
                 const fheroes2::Rect roi{ _restorer.rect() };
 
                 const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
@@ -815,6 +893,40 @@ namespace
                 _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
 
                 fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+
+                assert( !_mapHeroInfos.empty() );
+
+                int selectedHeroIndex = 0;
+                for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
+                    if ( static_cast<int32_t>( _heroToKill[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToKill[1] ) == _mapHeroInfos[i].color ) {
+                        selectedHeroIndex = static_cast<int>( i );
+                        break;
+                    }
+                }
+
+                // To render hero icons we use castle flags and frame.
+                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( _heroToKill[1] );
+                const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+                const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+                Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
+                Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
+                      castleRightFlag.height() );
+
+                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const int32_t heroPortraitId = heroMetadata->customPortrait;
+
+                if ( heroPortraitId > 0 ) {
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+
+                    fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
+                }
+                else {
+                    fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
+                }
+
+                fheroes2::Text extraText( getObjectNameAndPositionText( heroMetadata->customName, _heroToKill[0], _mapWidth ), fheroes2::FontType::normalWhite() );
+                extraText.fitToOneRow( roi.width );
+                extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
 
                 break;
             }
@@ -906,7 +1018,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select Town to capture" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture" ), {}, _mapWidth, _mapTownInfos );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -941,7 +1053,8 @@ namespace
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
-                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the town needed for the victory." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the town needed to capture for the victory." ),
+                                                       Dialog::ZERO );
                     return false;
                 }
 
@@ -959,8 +1072,58 @@ namespace
 
                 break;
             }
-            case Maps::FileInfo::VICTORY_KILL_HERO:
+            case Maps::FileInfo::VICTORY_KILL_HERO: {
+                LocalEvent & le = LocalEvent::Get();
+
+                if ( le.MouseClickLeft( _selectConditionRoi ) ) {
+                    assert( !_mapHeroInfos.empty() );
+
+                    const int32_t maxHeight = std::min( 100 + SelectMapCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 100 );
+                    const int32_t itemsHeight
+                        = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
+                    const int32_t totalHeight = std::min( itemsHeight, maxHeight );
+
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Town to capture" ), {}, _mapWidth, _mapHeroInfos );
+
+                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
+
+                    listbox.SetListContent( heroIndicies );
+
+                    int initiallySelectedHeroIndex = 0;
+
+                    for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
+                        if ( static_cast<int32_t>( _heroToKill[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToKill[1] ) == _mapHeroInfos[i].color ) {
+                            initiallySelectedHeroIndex = static_cast<int>( i );
+                            listbox.SetCurrent( initiallySelectedHeroIndex );
+                            break;
+                        }
+                    }
+
+                    const int32_t result = listbox.selectItemsEventProcessing();
+
+                    if ( result == Dialog::OK ) {
+                        const int heroIndex = listbox.GetCurrent();
+
+                        if ( heroIndex != initiallySelectedHeroIndex ) {
+                            _heroToKill[0] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].tileIndex );
+                            _heroToKill[1] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].color );
+
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
+                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the hero needed to kill for the victory." ),
+                                                       Dialog::ZERO );
+                    return false;
+                }
+
                 break;
+            }
             case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT: {
                 LocalEvent & le = LocalEvent::Get();
 
@@ -1030,6 +1193,7 @@ namespace
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
         std::vector<TownInfo> _mapTownInfos;
+        std::vector<HeroInfo> _mapHeroInfos;
 
         fheroes2::ImageRestorer _restorer;
 
@@ -1140,6 +1304,7 @@ namespace
                     // No towns exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
+
                     return true;
                 }
 
@@ -1168,6 +1333,8 @@ namespace
                     // No heroes exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                     mapFormat.lossConditionType = _conditionType;
+
+                    return true;
                 }
 
                 const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
@@ -1342,7 +1509,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select Town to capture" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a loss condition Town" ), {}, _mapWidth, _mapTownInfos );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
