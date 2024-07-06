@@ -40,6 +40,7 @@
 #include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
@@ -591,6 +592,98 @@ namespace Maps
         for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
             eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
             eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
+        }
+
+        // Check and update the special victory and loss conditions that depends on player objects.
+
+        // Returns true if all is OK.
+        auto checkSpecialCondition = [&map, &heroObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
+            if ( conditionMetadata.size() == 2 ) {
+                // Verify that this is a valid town.
+                const int32_t tileIndex = conditionMetadata[0];
+
+                bool objectFound = false;
+                for ( const auto & object : map.tiles[tileIndex].objects ) {
+                    if ( object.group != objectGroup ) {
+                        continue;
+                    }
+
+                    switch ( objectGroup ) {
+                    case Maps::ObjectGroup::KINGDOM_TOWNS: {
+                        const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                        if ( color != conditionMetadata[1] ) {
+                            // Current town color is incorrect.
+                            continue;
+                        }
+
+                        break;
+                    }
+                    case Maps::ObjectGroup::KINGDOM_HEROES: {
+                        if ( object.index >= heroObjects.size() ) {
+                            assert( 0 );
+                            continue;
+                        }
+
+                        const uint32_t color = 1 << heroObjects[object.index].metadata[0];
+                        if ( color != map.victoryConditionMetadata[1] ) {
+                            // Current hero color is incorrect.
+                            continue;
+                        }
+
+                        break;
+                    }
+                    default:
+                        // Have you added a new object type for victory or loss conditions? Update the logic!
+                        assert( 0 );
+                        break;
+                    }
+
+                    objectFound = true;
+                    break;
+                }
+
+                return objectFound;
+            }
+
+            return false;
+        };
+
+        switch ( map.victoryConditionType ) {
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        case Maps::FileInfo::VICTORY_KILL_HERO:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        default:
+            break;
+        }
+
+        switch ( map.lossConditionType ) {
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        case Maps::FileInfo::VICTORY_KILL_HERO:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        default:
+            break;
         }
 
         return true;
