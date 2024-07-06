@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1853,6 +1853,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr "Вы ўжо будавалі сёння ў гэтым замку."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - пабудова, дзе штотыдзень падрыхтоўваюцца %{monster}."
 
@@ -1861,12 +1867,6 @@ msgstr "Неабходна:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Выйсці з меню, нічога не змяняючы."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Вы ўжо будавалі сёння ў гэтым замку."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr ""
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -3922,6 +3922,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 msgid "The map is corrupted."
 msgstr ""
 
@@ -4230,10 +4233,19 @@ msgstr "Назапасіць вялікую колькасць золата."
 msgid "Run out of time."
 msgstr ""
 
-msgid "Gold:"
-msgstr ""
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Умова паразы"
 
-msgid "Also allow normal victory"
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Умова перамогі"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Умова перамогі"
+
+msgid "Gold:"
 msgstr ""
 
 msgid "Days:"
@@ -4246,14 +4258,6 @@ msgstr "Складанасць мапы:"
 #, fuzzy
 msgid "Map Description"
 msgstr "Апісанне"
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Умова перамогі"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Умова паразы"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4295,6 +4299,14 @@ msgstr "Тып мапы"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Апісанне абранай мапы."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4413,6 +4425,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -9861,13 +9876,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"

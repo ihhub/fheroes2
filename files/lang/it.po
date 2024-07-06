@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1846,6 +1846,13 @@ msgstr "Mago"
 msgid "Descendants"
 msgstr "Burini"
 
+#, fuzzy
+msgid "Cannot build. You have already built here today."
+msgstr "Costruzione impossibile. Già costruito qua questo turno."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Per fare questo bisogna prima costruire il castello."
+
 msgid "The %{building} produces %{monster}."
 msgstr "Il/la %{building} produce %{monster}."
 
@@ -1854,13 +1861,6 @@ msgstr "Richiede:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Esci dal menù senza far nulla."
-
-#, fuzzy
-msgid "Cannot build. You have already built here today."
-msgstr "Costruzione impossibile. Già costruito qua questo turno."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Per fare questo bisogna prima costruire il castello."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4013,6 +4013,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Non esistono punti di salvataggio da caricare."
@@ -4332,11 +4335,20 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Condizione Sconfitta"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Condizione Vittoria"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Condizione Vittoria"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Oro"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4353,14 +4365,6 @@ msgstr ""
 "\n"
 "\n"
 "Percorso: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Condizione Vittoria"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Condizione Sconfitta"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4405,6 +4409,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "La descrizione della mappa scelta attualmente."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "La descrizione della mappa scelta attualmente."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "La descrizione della mappa scelta attualmente."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4529,6 +4541,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -10110,17 +10125,16 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
+
 #, fuzzy
-msgid "Dummy 1"
+msgid "Dummy 2"
 msgstr "Mummia"
 
 #, fuzzy
 msgid "The reserved artifact."
 msgstr "con 1 artefatto."
-
-#, fuzzy
-msgid "Dummy 2"
-msgstr "Mummia"
 
 #, fuzzy
 msgid "Dummy 3"
@@ -11058,3 +11072,7 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Dummy 1"
+#~ msgstr "Mummia"

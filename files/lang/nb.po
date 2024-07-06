@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2045,6 +2045,12 @@ msgstr "Magimestrenes øy"
 msgid "Descendants"
 msgstr "Etterkommerene"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "For å utføre denne handlingen må man bygge en borg først."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} gjør det mulig å verve %{monster}."
 
@@ -2053,12 +2059,6 @@ msgstr "Trenger:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Forlat menyen uten å gjøre endringer."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "For å utføre denne handlingen må man bygge en borg først."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4247,6 +4247,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Lagringsfilen er korrupt."
@@ -4583,11 +4586,20 @@ msgid "Run out of time."
 msgstr "Forlat karttegneren"
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tapsvilkår"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Seiersvilkår"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Seiersvilkår"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Gull"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4604,14 +4616,6 @@ msgstr ""
 "\n"
 "\n"
 "Plassering: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Seiersvilkår"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Tapsvilkår"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4656,6 +4660,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Beskrivelse av det utvalgte kartet."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Beskrivelse av det utvalgte kartet."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Beskrivelse av det utvalgte kartet."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4783,6 +4795,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -11215,14 +11230,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Plassholder 1"
-
-msgid "The reserved artifact."
-msgstr "Plassholderskatten."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Plassholder 2"
+
+msgid "The reserved artifact."
+msgstr "Plassholderskatten."
 
 msgid "Dummy 3"
 msgstr "Plassholder 3"
@@ -12281,3 +12296,6 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Plassholder 1"

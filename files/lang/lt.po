@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -1832,6 +1832,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr ""
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pradžioje būtina pastatyti pilį."
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 
@@ -1840,12 +1846,6 @@ msgstr "Reikalauja:"
 
 msgid "Exit this menu without doing anything."
 msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr ""
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pradžioje būtina pastatyti pilį."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -3931,6 +3931,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 msgid "The map is corrupted."
 msgstr ""
 
@@ -4237,11 +4240,20 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Pralaimėjimo sąlygos"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Pergalės salygos"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Pergalės salygos"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Auksas"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4254,14 +4266,6 @@ msgstr ""
 
 msgid "Map Description"
 msgstr ""
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Pergalės salygos"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Pralaimėjimo sąlygos"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4304,6 +4308,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Rodyti kitą miestą"
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4417,6 +4429,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -9926,15 +9941,15 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
+
+msgid "Dummy 2"
 msgstr ""
 
 #, fuzzy
 msgid "The reserved artifact."
 msgstr " su vienu artefaktu"
-
-msgid "Dummy 2"
-msgstr ""
 
 msgid "Dummy 3"
 msgstr ""

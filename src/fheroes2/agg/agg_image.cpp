@@ -57,6 +57,7 @@
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -3216,6 +3217,17 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::DROPLISL_EVIL: {
+                loadICN( ICN::DROPLISL );
+                _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+                for ( auto & image : _icnVsSprite[id] ) {
+                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
+                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
+                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
+                }
+                return true;
+            }
             case ICN::EDITPANL:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 6 ) {
@@ -4119,6 +4131,15 @@ namespace fheroes2
                     Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
                 }
                 return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 82 ) {
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution is below.
+                    const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
+                    SubpixelResize( originalImage, _icnVsSprite[id][82] );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -4132,6 +4153,12 @@ namespace fheroes2
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
                     }
+
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
+                    Sprite & targetImage = _icnVsSprite[id][83];
+                    targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );
+                    ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
                 }
                 return true;
             case ICN::OBJNARTI:

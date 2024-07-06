@@ -208,7 +208,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
     // hide captain options
-    if ( !( building & BUILD_CAPTAIN ) ) {
+    if ( !( _constructedBuildings & BUILD_CAPTAIN ) ) {
         dst_pt.x = 530;
         dst_pt.y = 163;
         const fheroes2::Rect rect( dst_pt.x, dst_pt.y, 110, 84 );

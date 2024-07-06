@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:04+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-05-22 06:06+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2014,6 +2014,12 @@ msgstr "Остров чародеев"
 msgid "Descendants"
 msgstr "Наследники"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Невозможно построить. Вы уже строили здесь сегодня."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Для этого Вам нужно сперва построить замок."
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 "%{building} - жилище, в котором %{monster} доступны для найма в Вашу армию."
@@ -2023,12 +2029,6 @@ msgstr "Требует:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Выход, без изменений."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Невозможно построить. Вы уже строили здесь сегодня."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Для этого Вам нужно сперва построить замок."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name} невозможно построить - замок слишком далеко от океана."
@@ -4115,6 +4115,10 @@ msgstr "Не удалось обновить информацию об игро�
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "На одной карте можно разместить только один великий артефакт."
 
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "На карте можно разместить максимум %{count} героев одного цвета."
+
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
 
@@ -4427,12 +4431,19 @@ msgstr "Накопить золото."
 msgid "Run out of time."
 msgstr "Не успеть вовремя."
 
+msgid "Special Loss Condition"
+msgstr "Особое условие поражения"
+
+msgid "Special Victory Condition"
+msgstr "Особое условие победы"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Условия победы"
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Золото"
-
-msgid "Also allow normal victory"
-msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4442,12 +4453,6 @@ msgstr "Сложность карты"
 
 msgid "Map Description"
 msgstr "Описание карты"
-
-msgid "Special Victory Condition"
-msgstr "Особое условие победы"
-
-msgid "Special Loss Condition"
-msgstr "Особое условие поражения"
 
 msgid "Change Map Name"
 msgstr "Изменить название карты"
@@ -4487,6 +4492,14 @@ msgid "Map Name"
 msgstr "Название карты"
 
 msgid "Click to change the description of the current map."
+msgstr "Нажмите, чтобы изменить описание текущей карты."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Нажмите, чтобы изменить описание текущей карты."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Нажмите, чтобы изменить описание текущей карты."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4613,6 +4626,9 @@ msgstr "Удалить ответ"
 
 msgid "Delete an existing answer for the question."
 msgstr "Удалить имеющийся ответ на вопрос."
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -10818,14 +10834,14 @@ msgstr ""
 "он, \"Печатный станок.\" Вы не успеваете ничего сказать, как он вручвет Вам "
 "волшебную книгу."
 
-msgid "Dummy 1"
-msgstr "Болванка 1"
-
-msgid "The reserved artifact."
-msgstr "Забронированный артефакт."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Болванка 2"
+
+msgid "The reserved artifact."
+msgstr "Забронированный артефакт."
 
 msgid "Dummy 3"
 msgstr "Болванка 3"
@@ -11823,3 +11839,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Болванка 1"

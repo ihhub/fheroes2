@@ -1196,7 +1196,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            art = Dialog::selectArtifact( Artifact::UNKNOWN );
+            art = Dialog::selectArtifact( Artifact::UNKNOWN, false );
 
             if ( isMagicBook( art ) ) {
                 art.Reset();
