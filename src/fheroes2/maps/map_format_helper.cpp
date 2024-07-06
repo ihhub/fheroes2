@@ -668,14 +668,14 @@ namespace Maps
         }
 
         switch ( map.lossConditionType ) {
-        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+        case Maps::FileInfo::LOSS_TOWN:
             if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
             }
 
             break;
-        case Maps::FileInfo::VICTORY_KILL_HERO:
+        case Maps::FileInfo::LOSS_HERO:
             if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
