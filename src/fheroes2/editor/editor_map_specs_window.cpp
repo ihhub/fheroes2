@@ -638,10 +638,10 @@ namespace
                     }
                 }
                 else {
-                    // Since the metadata in invalid we have 2 options:
+                    // Since the metadata is invalid we have 2 options:
                     // - fall back to normal victory condition as no town was set
-                    // - generate a list of towns and pick the one
-                    // For the simplicity we are choosing the first option for now.
+                    // - generate a list of towns and pick one
+                    // For simplicity we are choosing the first option for now.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                 }
 
@@ -666,10 +666,10 @@ namespace
                     }
                 }
                 else {
-                    // Since the metadata in invalid we have 2 options:
+                    // Since the metadata is invalid we have 2 options:
                     // - fall back to normal victory condition as no hero was set
-                    // - generate a list of heroes and pick the one
-                    // For the simplicity we are choosing the first option for now.
+                    // - generate a list of heroes and pick one
+                    // For simplicity we are choosing the first option for now.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
                 }
 
@@ -1269,10 +1269,10 @@ namespace
                     }
                 }
                 else {
-                    // Since the metadata in invalid we have 2 options:
+                    // Since the metadata is invalid we have 2 options:
                     // - fall back to normal loss condition as no town was set
-                    // - generate a list of towns and pick the one
-                    // For the simplicity we are choosing the first option for now.
+                    // - generate a list of towns and pick one
+                    // For simplicity we are choosing the first option for now.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                 }
 
@@ -1297,10 +1297,10 @@ namespace
                     }
                 }
                 else {
-                    // Since the metadata in invalid we have 2 options:
+                    // Since the metadata is invalid we have 2 options:
                     // - fall back to normal loss condition as no hero was set
-                    // - generate a list of heroes and pick the one
-                    // For the simplicity we are choosing the first option for now.
+                    // - generate a list of heroes and pick one
+                    // For simplicity we are choosing the first option for now.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
                 }
 

@@ -594,7 +594,7 @@ namespace Maps
             eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
         }
 
-        // Check and update the special victory and loss conditions that depends on player objects.
+        // Check and update the special victory and loss conditions that depend on player objects.
 
         // Returns true if all is OK.
         auto checkSpecialCondition = [&map, &heroObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
