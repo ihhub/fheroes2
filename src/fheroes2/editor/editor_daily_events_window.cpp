@@ -198,17 +198,19 @@ namespace Editor
 
         eventList.Redraw();
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 13 );
+        const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
+
+        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( eventsArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
-        fheroes2::Button buttonAdd( eventsRoi.x, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 13, 14 );
+        fheroes2::Button buttonAdd( eventsRoi.x, eventsRoi.y + eventsRoi.height + 5, minibuttonIcnId, 13, 14 );
         buttonAdd.draw();
 
-        fheroes2::Button buttonEdit( eventsRoi.x + buttonOffset, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 15, 16 );
+        fheroes2::Button buttonEdit( eventsRoi.x + buttonOffset, eventsRoi.y + eventsRoi.height + 5, minibuttonIcnId, 15, 16 );
         buttonEdit.draw();
 
-        fheroes2::Button buttonDelete( eventsRoi.x + eventsArea.width - buttonWidth, eventsRoi.y + eventsRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDelete( eventsRoi.x + eventsArea.width - buttonWidth, eventsRoi.y + eventsRoi.height + 5, minibuttonIcnId, 17, 18 );
         buttonDelete.draw();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
