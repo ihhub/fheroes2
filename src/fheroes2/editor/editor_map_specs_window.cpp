@@ -764,7 +764,7 @@ namespace
                 }
 
                 const auto & castleMetadata = _mapTownInfos[selectedTownIndex].castleMetadata;
-                const uint32_t townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
+                const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 fheroes2::Sprite castleIcon(
                     drawCastleIcon( castleMetadata->bannedBuildings, _mapTownInfos[selectedTownIndex].race, _mapTownInfos[selectedTownIndex].color, townIcnId ) );

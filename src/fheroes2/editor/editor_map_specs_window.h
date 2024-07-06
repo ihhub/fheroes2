@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <cstdint>
-
 namespace Maps::Map_Format
 {
     struct MapFormat;
