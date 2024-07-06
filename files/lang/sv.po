@@ -3946,7 +3946,7 @@ msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
 msgid "Daily Events"
-msgstr "Dagliga händelser"
+msgstr "Dagliga Händelser"
 
 msgid "Click to save the events."
 msgstr "Klicka för att spara händelserna."
