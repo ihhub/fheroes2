@@ -34,6 +34,7 @@
 
 #include "agg_image.h"
 #include "artifact.h"
+#include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
