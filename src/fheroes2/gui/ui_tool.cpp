@@ -814,5 +814,4 @@ namespace fheroes2
         }
         fheroes2::Copy( racePortrait, 0, 0, output, portPos );
     }
-
 }

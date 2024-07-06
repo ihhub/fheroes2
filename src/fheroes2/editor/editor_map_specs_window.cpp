@@ -842,7 +842,7 @@ namespace
                 const auto & castleMetadata = _mapTownInfos[selectedTownIndex].castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
-                fheroes2::Sprite castleIcon(
+                const fheroes2::Sprite castleIcon(
                     drawCastleIcon( castleMetadata->bannedBuildings, _mapTownInfos[selectedTownIndex].race, _mapTownInfos[selectedTownIndex].color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
@@ -905,7 +905,7 @@ namespace
                 }
 
                 // To render hero icons we use castle flags and frame.
-                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( _heroToKill[1] );
+                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<int>( _heroToKill[1] ) );
                 const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
                 const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
                 Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
@@ -924,7 +924,8 @@ namespace
                     fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
                 }
 
-                fheroes2::Text extraText( getObjectNameAndPositionText( heroMetadata->customName, _heroToKill[0], _mapWidth ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text extraText( getObjectNameAndPositionText( heroMetadata->customName, static_cast<int32_t>( _heroToKill[0] ), _mapWidth ),
+                                          fheroes2::FontType::normalWhite() );
                 extraText.fitToOneRow( roi.width );
                 extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
 
@@ -1437,7 +1438,7 @@ namespace
                 const auto & castleMetadata = _mapTownInfos[selectedTownIndex].castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
-                fheroes2::Sprite castleIcon(
+                const fheroes2::Sprite castleIcon(
                     drawCastleIcon( castleMetadata->bannedBuildings, _mapTownInfos[selectedTownIndex].race, _mapTownInfos[selectedTownIndex].color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
