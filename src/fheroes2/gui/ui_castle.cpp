@@ -182,12 +182,42 @@ namespace fheroes2
             return isCastle ? 13 : 19;
         case Race::NECR:
             return isCastle ? 14 : 20;
+        case Race::RAND:
+            // It is used in Editor to select random castle as a victory/loss special condition.
+            return isCastle ? 25 : 26;
         default:
             assert( 0 );
             DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
         }
 
         return 1;
+    }
+
+    uint32_t getCastleLeftFlagIcnIndex( const int color )
+    {
+        switch ( color ) {
+        case Color::BLUE:
+            return 0;
+        case Color::GREEN:
+            return 2;
+        case Color::RED:
+            return 4;
+            break;
+        case Color::YELLOW:
+            return 6;
+        case Color::ORANGE:
+            return 8;
+        case Color::PURPLE:
+            return 10;
+        case Color::NONE:
+            return 12;
+        default:
+            // Have you added a new player color? Update the logic above.
+            assert( 0 );
+            break;
+        }
+
+        return 0;
     }
 
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset )

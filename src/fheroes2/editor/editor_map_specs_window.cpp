@@ -103,25 +103,46 @@ namespace
         const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
     };
 
-    fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int townIcnId )
+    fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int32_t color, const int townIcnId )
     {
-        fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( townIcnId, 23 ) );
+        const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
+
+        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleFrame = fheroes2::AGG::GetICN( townIcnId, 23 );
+        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+
+        fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
+        castleIcon.reset();
+
+        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         const bool isCastle = std::find( bannedBuildings.begin(), bannedBuildings.end(), BUILD_CASTLE ) == bannedBuildings.end();
 
         const uint32_t icnIndex = fheroes2::getCastleIcnIndex( race, isCastle );
 
         const fheroes2::Sprite & castleImage = fheroes2::AGG::GetICN( townIcnId, icnIndex );
-        Copy( castleImage, 0, 0, castleIcon, 4, 4, castleImage.width(), castleImage.height() );
+        Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
 
         return castleIcon;
+    }
+
+    std::string getObjectNameAndPositionText( const std::string & name, const int32_t tileIndex, const int32_t mapWidth )
+    {
+        std::string text = "[%{pos}]: " + ( name.empty() ? _( "Unnamed" ) : name );
+
+        StringReplace( text, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
+
+        return text;
     }
 
     class SelectMapCastle final : public Dialog::ItemSelectionWindow
     {
     public:
-        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const std::vector<TownInfo> & townInfos )
+        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const int32_t mapWidth, const std::vector<TownInfo> & townInfos )
             : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+            , _mapWidth( mapWidth )
             , _townInfos( townInfos )
         {
             SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
@@ -135,22 +156,22 @@ namespace
 
             const auto & castleMetadata = _townInfos[index].castleMetadata;
 
-            std::string castleName = castleMetadata->customName.empty() ? "Unnamed" : castleMetadata->customName;
-
-            renderItem( drawCastleIcon( castleMetadata->bannedBuildings, _townInfos[index].race, _townIcnId ), std::move( castleName ), { dstx, dsty }, 35, 75,
-                        itemsOffsetY / 2, current );
+            renderItem( drawCastleIcon( castleMetadata->bannedBuildings, _townInfos[index].race, _townInfos[index].color, _townIcnId ),
+                        getObjectNameAndPositionText( castleMetadata->customName, _townInfos[index].tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
+                        current );
         }
 
         void ActionListPressRight( int & index ) override
         {
-            (void)index;
-            // Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
+            fheroes2::showStandardTextMessage( {}, getObjectNameAndPositionText( _townInfos[index].castleMetadata->customName, _townInfos[index].tileIndex, _mapWidth ),
+                                               Dialog::ZERO );
         }
 
         static const int32_t itemsOffsetY{ 35 };
 
     private:
         const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+        const int32_t _mapWidth{ 0 };
         const std::vector<TownInfo> & _townInfos;
     };
 
@@ -203,11 +224,6 @@ namespace
 
     std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
-        if ( allowedColors == Color::NONE ) {
-            // Nothing to do.
-            return {};
-        }
-
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
         std::vector<TownInfo> townInfos;
@@ -225,7 +241,7 @@ namespace
                 }
 
                 const int32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
-                if ( !( color & allowedColors ) ) {
+                if ( !( color & allowedColors ) && color != Color::NONE ) {
                     // Current town color is not allowed.
                     continue;
                 }
@@ -492,6 +508,7 @@ namespace
             : _conditionType( mapFormat.victoryConditionType )
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
+            , _mapWidth( mapFormat.size )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             // Set the initial state for all victory conditions.
@@ -595,20 +612,18 @@ namespace
                     mapFormat.victoryConditionType = _conditionType;
                 }
 
-                const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
-
                 bool townFound = false;
                 for ( const auto & town : _mapTownInfos ) {
-                    if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
+                    if ( static_cast<int32_t>( _townToCapture[0] ) == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
                         townFound = true;
                         break;
                     }
                 }
 
                 if ( !townFound ) {
-                    // The town doesn't exist in the list.
-                    _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
-                    mapFormat.lossConditionType = _conditionType;
+                    // The town doesn't exist in the list. Select the first one.
+                    _townToCapture[0] = static_cast<uint32_t>( _mapTownInfos[0].tileIndex );
+                    _townToCapture[1] = static_cast<uint32_t>( _mapTownInfos[0].color );
                     return true;
                 }
 
@@ -718,7 +733,7 @@ namespace
             }
         }
 
-        void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
+        void render( fheroes2::Image & output, const bool renderEverything )
         {
             if ( renderEverything ) {
                 // Restore background to make sure that other UI elements aren't being rendered.
@@ -730,21 +745,44 @@ namespace
                 // No special UI is needed.
 
                 break;
-            case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-                if ( renderEverything ) {
-                    const fheroes2::Rect roi{ _restorer.rect() };
-
-                    const fheroes2::Sprite & townFrame = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 23 );
-
-                    _selectConditionRoi = { roi.x + ( roi.width - townFrame.width() ) / 2, roi.y + 4, townFrame.width(), townFrame.height() };
-
-                    fheroes2::Blit( townFrame, 0, 0, output, _selectConditionRoi.x, _selectConditionRoi.y, _selectConditionRoi.width, _selectConditionRoi.height );
-
-                    _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, isEvilInterface );
-                    _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _selectConditionRoi.height + 35, isEvilInterface );
+            case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
+                if ( !renderEverything ) {
+                    // To render this condition we always redraw the whole conditions UI.
+                    // TODO: optimize the rendering.
+                    _restorer.restore();
                 }
+
+                assert( !_mapTownInfos.empty() );
+
+                int selectedTownIndex = 0;
+                for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
+                    if ( static_cast<int32_t>( _townToCapture[0] ) == _mapTownInfos[i].tileIndex
+                         && static_cast<int32_t>( _townToCapture[1] ) == _mapTownInfos[i].color ) {
+                        selectedTownIndex = static_cast<int>( i );
+                        break;
+                    }
+                }
+
+                const auto & castleMetadata = _mapTownInfos[selectedTownIndex].castleMetadata;
+                const uint32_t townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
+
+                fheroes2::Sprite castleIcon(
+                    drawCastleIcon( castleMetadata->bannedBuildings, _mapTownInfos[selectedTownIndex].race, _mapTownInfos[selectedTownIndex].color, townIcnId ) );
+
+                const fheroes2::Rect roi{ _restorer.rect() };
+                fheroes2::Blit( castleIcon, output, roi.x, roi.y + 4 );
+
+                fheroes2::Text text( getObjectNameAndPositionText( castleMetadata->customName, _mapTownInfos[selectedTownIndex].tileIndex, _mapWidth ),
+                                     fheroes2::FontType::normalWhite() );
+                text.fitToOneRow( roi.width - castleIcon.width() - 5 );
+                text.draw( roi.x + castleIcon.width() + 5, roi.y + 12, output );
+
+                _selectConditionRoi = { roi.x, roi.y + 4, castleIcon.width() + 5 + text.width(), castleIcon.height() };
+
+                _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output, roi.x + 5,
+                                                                               roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
+                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
@@ -761,6 +799,7 @@ namespace
                 }
 
                 break;
+            }
             case Maps::FileInfo::VICTORY_KILL_HERO: {
                 const fheroes2::Rect roi{ _restorer.rect() };
 
@@ -785,7 +824,7 @@ namespace
                     fheroes2::Blit( artifactFrame, output, _selectConditionRoi.x, _selectConditionRoi.y );
 
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _selectConditionRoi.height + 10, isEvilInterface );
+                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
                 }
 
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
@@ -814,9 +853,9 @@ namespace
                     text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, isEvilInterface );
+                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface );
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + valueSectionUiSize.height + 35, isEvilInterface );
+                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface );
                 }
 
                 _goldAccumulationValue.draw( output );
@@ -863,16 +902,43 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 350, totalHeight }, _( "Select Town to capture" ), {}, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select Town to capture" ), {}, _mapWidth, _mapTownInfos );
 
-                    std::vector<int> townIndicies;
+                    std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
 
                     listbox.SetListContent( townIndicies );
 
+                    int initiallySelectedTownIndex = 0;
+
+                    for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
+                        if ( static_cast<int32_t>( _townToCapture[0] ) == _mapTownInfos[i].tileIndex
+                             && static_cast<int32_t>( _townToCapture[1] ) == _mapTownInfos[i].color ) {
+                            initiallySelectedTownIndex = static_cast<int>( i );
+                            listbox.SetCurrent( initiallySelectedTownIndex );
+                            break;
+                        }
+                    }
+
                     const int32_t result = listbox.selectItemsEventProcessing();
 
-                    return ( result == Dialog::OK );
+                    if ( result == Dialog::OK ) {
+                        const int townIndex = listbox.GetCurrent();
+
+                        if ( townIndex != initiallySelectedTownIndex ) {
+                            _townToCapture[0] = static_cast<uint32_t>( _mapTownInfos[townIndex].tileIndex );
+                            _townToCapture[1] = static_cast<uint32_t>( _mapTownInfos[townIndex].color );
+
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
+                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the town needed for the victory." ), Dialog::ZERO );
+                    return false;
                 }
 
                 if ( le.MouseClickLeft( _allowNormalVictoryRoi ) ) {
@@ -953,7 +1019,9 @@ namespace
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
+        const bool _isEvilInterface{ Settings::Get().isEvilInterfaceEnabled() };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
+        const int32_t _mapWidth{ 0 };
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
@@ -1167,7 +1235,7 @@ namespace
             }
         }
 
-        void render( fheroes2::Image & output, const bool isEvilInterface, const bool renderEverything )
+        void render( fheroes2::Image & output, const bool renderEverything )
         {
             // Restore background to make sure that other UI elements aren't being rendered.
             _restorer.restore();
@@ -1181,7 +1249,7 @@ namespace
                 if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
-                    const fheroes2::Sprite & townFrame = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 23 );
+                    const fheroes2::Sprite & townFrame = fheroes2::AGG::GetICN( _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 23 );
 
                     _selectConditionRoi = { roi.x + ( roi.width - townFrame.width() ) / 2, roi.y + 4, townFrame.width(), townFrame.height() };
 
@@ -1253,6 +1321,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::LOSS_EVERYTHING };
+        const bool _isEvilInterface{ Settings::Get().isEvilInterfaceEnabled() };
         std::array<uint32_t, 2> _heroToLose{ 0 };
         std::array<uint32_t, 2> _townToLose{ 0 };
 
@@ -1557,7 +1626,7 @@ namespace Editor
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
         VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
 
-        victoryConditionUI.render( display, isEvilInterface, true );
+        victoryConditionUI.render( display, true );
 
         // Loss conditions.
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
@@ -1581,7 +1650,7 @@ namespace Editor
         const fheroes2::Rect lossConditionUIRoi{ offsetX, offsetY, lossDroplistButtonRoi.width, 150 };
         LossConditionUI lossConditionUI( display, lossConditionUIRoi, mapFormat );
 
-        lossConditionUI.render( display, isEvilInterface, true );
+        lossConditionUI.render( display, true );
 
         // Buttons.
         fheroes2::Button buttonCancel;
@@ -1625,11 +1694,11 @@ namespace Editor
             }
 
             if ( victoryConditionUI.processEvents() ) {
-                victoryConditionUI.render( display, isEvilInterface, false );
+                victoryConditionUI.render( display, false );
                 display.render( victoryConditionUIRoi );
             }
             else if ( lossConditionUI.processEvents() ) {
-                lossConditionUI.render( display, isEvilInterface, false );
+                lossConditionUI.render( display, false );
                 display.render( lossConditionUIRoi );
             }
             else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
@@ -1697,7 +1766,8 @@ namespace Editor
                     mapFormat.victoryConditionType = result;
 
                     victoryConditionUI.setConditionType( mapFormat.victoryConditionType );
-                    victoryConditionUI.render( display, isEvilInterface, true );
+                    victoryConditionUI.updateCondition( mapFormat );
+                    victoryConditionUI.render( display, true );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
@@ -1712,7 +1782,7 @@ namespace Editor
                     mapFormat.lossConditionType = result;
 
                     lossConditionUI.setConditionType( mapFormat.lossConditionType );
-                    lossConditionUI.render( display, isEvilInterface, true );
+                    lossConditionUI.render( display, true );
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                     redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
@@ -1774,7 +1844,7 @@ namespace Editor
 
                     fheroes2::Rect renderRoi;
                     if ( victoryConditionUI.updateCondition( mapFormat ) ) {
-                        victoryConditionUI.render( display, isEvilInterface, true );
+                        victoryConditionUI.render( display, true );
 
                         fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                         redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
@@ -1784,7 +1854,7 @@ namespace Editor
                     }
 
                     if ( lossConditionUI.updateCondition( mapFormat ) ) {
-                        lossConditionUI.render( display, isEvilInterface, true );
+                        lossConditionUI.render( display, true );
 
                         fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                         redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );

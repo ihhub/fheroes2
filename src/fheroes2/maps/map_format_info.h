@@ -254,6 +254,7 @@ namespace Maps::Map_Format
         uint8_t lossConditionType{ 0 };
         std::vector<uint32_t> lossConditionMetadata;
 
+        // The world width in tiles.
         int32_t size{ 0 };
 
         fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };

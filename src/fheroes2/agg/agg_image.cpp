@@ -2958,6 +2958,21 @@ namespace fheroes2
                         out = Crop( out, 0, 0, out.width() - 1, out.height() );
                     }
                 }
+
+                if ( _icnVsSprite[id].size() == 25 ) {
+                    // Add random town and castle icons for Editor.
+                    // A temporary solution: blurred Wizard castle/town in purple palette.
+                    _icnVsSprite[id].resize( 27 );
+                    _icnVsSprite[id][25] = CreateHolyShoutEffect( _icnVsSprite[id][13], 1, 0 );
+                    _icnVsSprite[id][26] = CreateHolyShoutEffect( _icnVsSprite[id][19], 1, 0 );
+                    ApplyPalette( _icnVsSprite[id][25], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                    ApplyPalette( _icnVsSprite[id][26], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+                    // Add the '?' mark above the image.
+                    const Text text( "? ? ?", FontType::normalWhite() );
+                    text.draw( ( _icnVsSprite[id][25].width() - text.width() ) / 2, 6, _icnVsSprite[id][25] );
+                    text.draw( ( _icnVsSprite[id][26].width() - text.width() ) / 2, 6, _icnVsSprite[id][26] );
+                }
                 return true;
             case ICN::TOWNBKG2:
                 LoadOriginalICN( id );
