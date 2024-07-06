@@ -88,6 +88,21 @@ namespace
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO,
                                                         Maps::FileInfo::LOSS_OUT_OF_TIME };
 
+    struct HeroInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        const Maps::Map_Format::HeroMetadata * heroMetadata{ nullptr };
+    };
+
+    struct TownInfo
+    {
+        int32_t tileIndex{ -1 };
+        int32_t color{ Color::NONE };
+        int32_t race{ Race::NONE };
+        const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
+    };
+
     fheroes2::Sprite drawCastleIcon( const std::vector<uint32_t> & bannedBuildings, const int32_t race, const int townIcnId )
     {
         fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( townIcnId, 23 ) );
@@ -105,7 +120,7 @@ namespace
     class SelectMapCastle final : public Dialog::ItemSelectionWindow
     {
     public:
-        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const std::vector<Maps::Map_Format::TownInfo> & townInfos )
+        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const std::vector<TownInfo> & townInfos )
             : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
             , _townInfos( townInfos )
         {
@@ -136,10 +151,10 @@ namespace
 
     private:
         const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
-        const std::vector<Maps::Map_Format::TownInfo> & _townInfos;
+        const std::vector<TownInfo> & _townInfos;
     };
 
-    std::vector<Maps::Map_Format::HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
         if ( allowedColors == Color::NONE ) {
             // Nothing to do.
@@ -148,7 +163,7 @@ namespace
 
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
-        std::vector<Maps::Map_Format::HeroInfo> heroInfos;
+        std::vector<HeroInfo> heroInfos;
 
         // TODO: cache all heroes once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
@@ -171,7 +186,7 @@ namespace
                 }
 
                 heroInfos.emplace_back();
-                Maps::Map_Format::HeroInfo & heroInfo = heroInfos.back();
+                HeroInfo & heroInfo = heroInfos.back();
 
                 heroInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 heroInfo.color = color;
@@ -186,7 +201,7 @@ namespace
         return heroInfos;
     }
 
-    std::vector<Maps::Map_Format::TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
     {
         if ( allowedColors == Color::NONE ) {
             // Nothing to do.
@@ -195,7 +210,7 @@ namespace
 
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
-        std::vector<Maps::Map_Format::TownInfo> townInfos;
+        std::vector<TownInfo> townInfos;
 
         // TODO: cache all towns once this dialog is open. No need to run through all objects every time.
         for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
@@ -216,7 +231,7 @@ namespace
                 }
 
                 townInfos.emplace_back();
-                Maps::Map_Format::TownInfo & townInfo = townInfos.back();
+                TownInfo & townInfo = townInfos.back();
 
                 townInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 townInfo.color = color;
@@ -942,7 +957,7 @@ namespace
         // Town or hero loss metadata include: X position, Y position, color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
-        std::vector<Maps::Map_Format::TownInfo> _mapTownInfos;
+        std::vector<TownInfo> _mapTownInfos;
 
         fheroes2::ImageRestorer _restorer;
 
