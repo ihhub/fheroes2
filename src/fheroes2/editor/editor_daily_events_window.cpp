@@ -98,7 +98,17 @@ namespace
 
         void ActionListDoubleClick( Maps::Map_Format::DailyEvent & /*unused*/ ) override
         {
-            // Do nothing.
+            _isDoubleClicked = true;
+        }
+
+        bool isDoubleClicked() const
+        {
+            return _isDoubleClicked;
+        }
+
+        void resetDoubleClickedState()
+        {
+            _isDoubleClicked = false;
         }
 
         void ActionListSingleClick( Maps::Map_Format::DailyEvent & /*unused*/ ) override
@@ -132,6 +142,8 @@ namespace
 
     private:
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+
+        bool _isDoubleClicked{ false };
     };
 
     void sortEvents( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents )
@@ -245,10 +257,12 @@ namespace Editor
 
                 isRedrawNeeded = true;
             }
-            else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
+            else if ( eventList.isDoubleClicked() || le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( eventList.getCurrentId() < 0 ) {
                     continue;
                 }
+
+                eventList.resetDoubleClickedState();
 
                 Maps::Map_Format::DailyEvent temp = eventList.GetCurrent();
                 if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
