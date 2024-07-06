@@ -625,7 +625,7 @@ namespace Maps
                         }
 
                         const uint32_t color = 1 << heroObjects[object.index].metadata[0];
-                        if ( color != map.victoryConditionMetadata[1] ) {
+                        if ( color != conditionMetadata[1] ) {
                             // Current hero color is incorrect.
                             continue;
                         }
@@ -650,14 +650,14 @@ namespace Maps
 
         switch ( map.victoryConditionType ) {
         case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+            if ( ( map.victoryConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
                 map.victoryConditionMetadata.clear();
                 map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
             }
 
             break;
         case Maps::FileInfo::VICTORY_KILL_HERO:
-            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+            if ( ( map.victoryConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
                 map.victoryConditionMetadata.clear();
                 map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
             }
@@ -669,14 +669,14 @@ namespace Maps
 
         switch ( map.lossConditionType ) {
         case Maps::FileInfo::LOSS_TOWN:
-            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+            if ( ( map.lossConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
             }
 
             break;
         case Maps::FileInfo::LOSS_HERO:
-            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+            if ( ( map.lossConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
             }
