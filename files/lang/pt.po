@@ -1992,7 +1992,7 @@ msgid "Cannot build. You have already built here today."
 msgstr "Não é possível construir. Você já construiu aqui hoje."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr "Para esta ação, é necessário primeiro a construir um castelo."
+msgstr "Para essa ação, é necessário construir primeiro um castelo."
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produz %{monster}."
@@ -3876,7 +3876,6 @@ msgstr "Exército da Cidade"
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
 
-
 msgid "Enter Castle name"
 msgstr "Insira o nome do Castelo"
 
@@ -3916,7 +3915,7 @@ msgid "First day of occurrence:"
 msgstr "Primeiro dia de ocorrência"
 
 msgid "Repeat period (days):"
-msgstr "Período de repetição (dias)"
+msgstr "Período de repetição (dias):"
 
 msgid "Allow %{color} human player to get event"
 msgstr "Permitir que jogador humano %{color}  obtenha o evento"
@@ -4102,9 +4101,8 @@ msgstr "Falha ao atualizar informações do jogador."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
-#, fuzzy
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
+msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -4428,9 +4426,8 @@ msgstr "Condição Especial de Derrota"
 msgid "Special Victory Condition"
 msgstr "Condição Especial de Vitória"
 
-#, fuzzy
 msgid "Allow standard victory conditions"
-msgstr "Permite a vitória normal"
+msgstr "Permitir condições de vitória padrão"
 
 msgid "Gold:"
 msgstr "Ouro:"
@@ -4481,13 +4478,11 @@ msgstr "Nome do Mapa"
 msgid "Click to change the description of the current map."
 msgstr "Clique para alterar a descrição do mapa atual."
 
-#, fuzzy
 msgid "Click to change the victory condition of the current map."
-msgstr "Clique para alterar a descrição do mapa atual."
+msgstr "Clique para alterar a condição de vitória do mapa atual."
 
-#, fuzzy
 msgid "Click to change the loss condition of the current map."
-msgstr "Clique para alterar a descrição do mapa atual."
+msgstr "Clique para alterar a condição de derrota do mapa atual."
 
 msgid "Indicates the player types in the scenario. Click to change."
 msgstr "Indica os tipos de jogadores no cenário. Clique para alterar."
@@ -4607,7 +4602,7 @@ msgid "Delete an existing answer for the question."
 msgstr "Apagar uma resposta existente para a pergunta."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "Dia: %{day} Semana: %{week} Mês: %{month}"
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -10889,7 +10884,7 @@ msgstr ""
 "Grimório."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "A vitória pode ser alcançada encontrando qualquer Artefato Definitivo."
 
 msgid "Dummy 2"
 msgstr "Fantoche 2"
