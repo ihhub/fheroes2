@@ -600,7 +600,7 @@ namespace Maps
         auto checkSpecialCondition = [&map, &heroObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
             if ( conditionMetadata.size() == 2 ) {
                 // Verify that this is a valid town.
-                const int32_t tileIndex = conditionMetadata[0];
+                const uint32_t tileIndex = conditionMetadata[0];
 
                 bool objectFound = false;
                 for ( const auto & object : map.tiles[tileIndex].objects ) {
