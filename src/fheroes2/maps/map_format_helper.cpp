@@ -598,66 +598,71 @@ namespace Maps
 
         // Returns true if all is OK.
         auto checkSpecialCondition = [&map, &heroObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
-            if ( conditionMetadata.size() == 2 ) {
-                // Verify that this is a valid town.
-                const uint32_t tileIndex = conditionMetadata[0];
+            if ( conditionMetadata.size() != 2 ) {
+                return false;
+            }
 
-                bool objectFound = false;
-                for ( const auto & object : map.tiles[tileIndex].objects ) {
-                    if ( object.group != objectGroup ) {
+            // Verify that this is a valid map object.
+            const uint32_t tileIndex = conditionMetadata[0];
+
+            assert( tileIndex < map.tiles.size() );
+
+            bool objectFound = false;
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != objectGroup ) {
+                    continue;
+                }
+
+                switch ( objectGroup ) {
+                case Maps::ObjectGroup::KINGDOM_TOWNS: {
+                    const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                    if ( color != conditionMetadata[1] ) {
+                        // Current town color is incorrect.
                         continue;
                     }
 
-                    switch ( objectGroup ) {
-                    case Maps::ObjectGroup::KINGDOM_TOWNS: {
-                        const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
-                        if ( color != conditionMetadata[1] ) {
-                            // Current town color is incorrect.
-                            continue;
-                        }
+                    objectFound = true;
 
-                        break;
-                    }
-                    case Maps::ObjectGroup::KINGDOM_HEROES: {
-                        if ( object.index >= heroObjects.size() ) {
-                            assert( 0 );
-                            continue;
-                        }
-
-                        const uint32_t color = 1 << heroObjects[object.index].metadata[0];
-                        if ( color != conditionMetadata[1] ) {
-                            // Current hero color is incorrect.
-                            continue;
-                        }
-
-                        break;
-                    }
-                    default:
-                        // Have you added a new object type for victory or loss conditions? Update the logic!
+                    break;
+                }
+                case Maps::ObjectGroup::KINGDOM_HEROES: {
+                    if ( object.index >= heroObjects.size() ) {
                         assert( 0 );
-                        break;
+                        continue;
+                    }
+
+                    const uint32_t color = 1 << heroObjects[object.index].metadata[0];
+                    if ( color != conditionMetadata[1] ) {
+                        // Current hero color is incorrect.
+                        continue;
                     }
 
                     objectFound = true;
+
+                    break;
+                }
+                default:
+                    // Have you added a new object type for victory or loss conditions? Update the logic!
+                    assert( 0 );
                     break;
                 }
 
-                return objectFound;
+                break;
             }
 
-            return false;
+            return objectFound;
         };
 
         switch ( map.victoryConditionType ) {
         case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
-            if ( ( map.victoryConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
                 map.victoryConditionMetadata.clear();
                 map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
             }
 
             break;
         case Maps::FileInfo::VICTORY_KILL_HERO:
-            if ( ( map.victoryConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
                 map.victoryConditionMetadata.clear();
                 map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
             }
@@ -669,14 +674,14 @@ namespace Maps
 
         switch ( map.lossConditionType ) {
         case Maps::FileInfo::LOSS_TOWN:
-            if ( ( map.lossConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
             }
 
             break;
         case Maps::FileInfo::LOSS_HERO:
-            if ( ( map.lossConditionMetadata.size() != 2 ) || !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
                 map.lossConditionMetadata.clear();
                 map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
             }

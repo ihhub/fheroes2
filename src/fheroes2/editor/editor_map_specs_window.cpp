@@ -858,11 +858,11 @@ namespace
 
                 assert( !_mapTownInfos.empty() );
 
-                int selectedTownIndex = 0;
+                size_t selectedTownIndex = 0;
                 for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                     if ( static_cast<int32_t>( _townToCapture[0] ) == _mapTownInfos[i].tileIndex
                          && static_cast<int32_t>( _townToCapture[1] ) == _mapTownInfos[i].color ) {
-                        selectedTownIndex = static_cast<int>( i );
+                        selectedTownIndex = i;
                         break;
                     }
                 }
@@ -924,10 +924,10 @@ namespace
 
                 assert( !_mapHeroInfos.empty() );
 
-                int selectedHeroIndex = 0;
+                size_t selectedHeroIndex = 0;
                 for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                     if ( static_cast<int32_t>( _heroToKill[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToKill[1] ) == _mapHeroInfos[i].color ) {
-                        selectedHeroIndex = static_cast<int>( i );
+                        selectedHeroIndex = i;
                         break;
                     }
                 }
@@ -1455,10 +1455,10 @@ namespace
 
                 assert( !_mapTownInfos.empty() );
 
-                int selectedTownIndex = 0;
+                size_t selectedTownIndex = 0;
                 for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                     if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex && static_cast<int32_t>( _townToLose[1] ) == _mapTownInfos[i].color ) {
-                        selectedTownIndex = static_cast<int>( i );
+                        selectedTownIndex = i;
                         break;
                     }
                 }
@@ -1501,10 +1501,10 @@ namespace
 
                 assert( !_mapHeroInfos.empty() );
 
-                int selectedHeroIndex = 0;
+                size_t selectedHeroIndex = 0;
                 for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                     if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
-                        selectedHeroIndex = static_cast<int>( i );
+                        selectedHeroIndex = i;
                         break;
                     }
                 }
