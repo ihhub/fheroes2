@@ -741,9 +741,8 @@ namespace Dialog
     {
         const int32_t scrollBarWidth = _scrollbar.width();
 
-        setScrollBarImage(
-            fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                               { 0, 7, scrollBarWidth, 8 } ) );
+        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
+                                                              { 0, 7, scrollBarWidth, 8 } ) );
         _scrollbar.moveToIndex( _topId );
     }
 
