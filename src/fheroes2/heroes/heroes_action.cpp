@@ -2681,7 +2681,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        const Funds payment( Resource::GOLD, 1000 );
+        const Funds payment = PaymentConditions::getMagellansMapsPurchasePrice();
         Kingdom & kingdom = hero.GetKingdom();
 
         const std::string title( MP2::StringObject( objectType ) );
@@ -3341,7 +3341,7 @@ namespace
                     size_t delay = 0;
 
                     while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-                        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                             skipAnimation = true;
                             break;
                         }

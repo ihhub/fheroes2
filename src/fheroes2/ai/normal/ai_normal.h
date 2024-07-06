@@ -298,41 +298,29 @@ namespace AI
 
         void CastlePreBattle( Castle & castle ) override;
 
-        bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
-        void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
-        void evaluateRegionSafety();
-        std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
-
         void resetPathfinder() override;
-        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
 
         void battleBegins() override;
 
         void tradingPostVisitEvent( Kingdom & kingdom ) override;
 
+        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
+
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
-
-        bool isPriorityTask( const int32_t index ) const
-        {
-            return _priorityTargets.find( index ) != _priorityTargets.end();
-        }
-
-        bool isCriticalTask( const int32_t index ) const
-        {
-            const auto iter = _priorityTargets.find( index );
-            if ( iter == _priorityTargets.end() ) {
-                return false;
-            }
-
-            return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
-        }
 
     private:
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
 
         // Returns true if heroes can still do tasks but they have no move points.
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
+
+        bool recruitHero( Castle & castle, bool buyArmy );
+        void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
+
+        void evaluateRegionSafety();
+
+        std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
 
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
 
@@ -360,7 +348,6 @@ namespace AI
         std::set<int> findCastlesInDanger( const Kingdom & kingdom );
 
         void updatePriorityForEnemyArmy( const Kingdom & kingdom, const EnemyArmy & enemyArmy );
-
         void updatePriorityForCastle( const Castle & castle );
 
         // Return true if the castle is in danger.
@@ -368,8 +355,22 @@ namespace AI
         bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
 
         void removePriorityAttackTarget( const int32_t tileIndex );
-
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+
+        bool isPriorityTask( const int32_t index ) const
+        {
+            return _priorityTargets.find( index ) != _priorityTargets.end();
+        }
+
+        bool isCriticalTask( const int32_t index ) const
+        {
+            const auto iter = _priorityTargets.find( index );
+            if ( iter == _priorityTargets.end() ) {
+                return false;
+            }
+
+            return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
+        }
 
         // The following member variables should not be saved or serialized
         std::vector<IndexObject> _mapActionObjects;

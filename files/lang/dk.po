@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 03:46+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -307,6 +307,12 @@ msgstr ""
 "E\n"
 "L\n"
 "T"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -2023,6 +2029,12 @@ msgstr "Troldmandsøen"
 msgid "Descendants"
 msgstr "Efterkommere"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Til denne handling er det nødvendigt først at bygge en borg."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} frembringer %{monster}."
 
@@ -2031,12 +2043,6 @@ msgstr "Kræver:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Forlad denne menu, uden at gøre noget."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Til denne handling er det nødvendigt først at bygge en borg."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name}et kan ikke bygges, da borgen er for langt fra vand."
@@ -3518,9 +3524,6 @@ msgstr "Fil som skal indlæses:"
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} helt"
-
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
@@ -3539,6 +3542,26 @@ msgstr "Vælg væsen:"
 msgid "Select Hero:"
 msgstr "Vælg helt:"
 
+msgid "race|Random"
+msgstr "Tilfældig"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Klik for at godkende placering af valgte borg/by."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} helt"
+
+msgid "You will place"
+msgstr "Du vil placere"
+
+msgid "Click to select this class."
+msgstr "Klik for at vælge denne klasse."
+
+msgid "Click to select this color."
+msgstr "Klik for at vælge denne farve."
+
 msgid "Select Treasure:"
 msgstr "Vælg skat:"
 
@@ -3550,9 +3573,6 @@ msgstr "Borg/by-vindue"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
-
-msgid "race|Random"
-msgstr "Tilfældig"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Klik for at godkende placering af valgte borg/by."
@@ -3568,15 +3588,6 @@ msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
-
-msgid "You will place"
-msgstr "Du vil placere"
-
-msgid "Click to select this class."
-msgstr "Klik for at vælge denne klasse."
-
-msgid "Click to select this color."
-msgstr "Klik for at vælge denne farve."
 
 msgid "Select Dwelling:"
 msgstr "Vælg Bosted:"
@@ -3727,15 +3738,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
+msgid "Map Type"
+msgstr "Korttype"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Angiver om kortet er lavet til \"Arvefølgekrigene\"- eller \"Prisen for "
 "Loyalitet\"-versionen af spillet."
-
-msgid "Map Type"
-msgstr "Korttype"
 
 msgid "Selected Name"
 msgstr "Valgte navn"
@@ -3887,6 +3899,10 @@ msgstr "Bedste væsen:"
 msgid "Random Castle Name"
 msgstr "Tilfældigt borgnavn"
 
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Tilfældig by"
+
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
@@ -3900,6 +3916,10 @@ msgstr ""
 
 msgid "Castle Army"
 msgstr "Borghær"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "By"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
@@ -3930,7 +3950,7 @@ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 msgid "Message Text:"
 msgstr "Tekstbesked:"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3939,7 +3959,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3964,6 +3987,57 @@ msgstr "Besked:"
 msgid "Click to save the Event properties."
 msgstr "Klik for at gemme begivenhedens egenskaber."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr "Resurser"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+msgid "Click here to change the event message."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Dag: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klik for at gemme begivenhedens egenskaber."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Begivenhed"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Ekstra programmering"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Begivenhed"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -3976,25 +4050,10 @@ msgstr "Slet artefakt:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr "Resurser"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-msgid "Click here to change the event message."
-msgstr "Klik her for at gemme begivenhedsbeskeden."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -4089,6 +4148,10 @@ msgstr "Opdatering af spilleroplysninger mislykkedes."
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
+
+#, fuzzy
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 
 msgid "The map is corrupted."
 msgstr "Kortet er beskadiget."
@@ -4410,6 +4473,25 @@ msgid "Run out of time."
 msgstr "Forlad korteditoren."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "guld"
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Kort\n"
@@ -4421,14 +4503,6 @@ msgstr ""
 "\n"
 "\n"
 "Placering: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Vindervilkår"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Tabsvilkår"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4447,6 +4521,21 @@ msgid "Click to accept the changes made."
 msgstr "Klik for at se næste by."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klik for at gemme det aktuelle kort."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Klik for at godkende kampresultaterne."
+
+#, fuzzy
+msgid "Events"
+msgstr "Begivenhed"
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Klik for at se næste by."
 
@@ -4456,6 +4545,14 @@ msgstr "Kort-filnavn"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4487,6 +4584,41 @@ msgstr "Slå animation af objekterne til eller fra."
 
 msgid "Toggle display of objects' passability."
 msgstr "Slå visning af objekters fremkommelighed til eller fra."
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klik for at gemme begivenhedens egenskaber."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Ekstra programmering"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Editor"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "indlæs et eksisterende kort."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "indlæs et eksisterende kort."
 
 msgid ""
 "\n"
@@ -4543,6 +4675,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4941,6 +5076,10 @@ msgstr "Gentag forrige handling"
 
 msgid "hotkey|open game main menu"
 msgstr "Åben spillets hovedmenu"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "Status (til/fra)"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
@@ -5905,9 +6044,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Måned: %{month} Uge: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Dag: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -10769,14 +10905,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Pladsholder 1"
-
-msgid "The reserved artifact."
-msgstr "Pladsholder-artefaktet."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Pladsholder 2"
+
+msgid "The reserved artifact."
+msgstr "Pladsholder-artefaktet."
 
 msgid "Dummy 3"
 msgstr "Pladsholder 3"
@@ -11700,7 +11836,8 @@ msgstr "Du har ingen magibog, så du kan ikke kaste magi."
 msgid "No spell to cast."
 msgstr "Ingen magi at kaste."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Din helt har %{point} manapoint tilbage."
 
 msgid "View Adventure Spells"
@@ -11816,8 +11953,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Monsters cannot be placed on water."
-#~ msgstr "Væsener kan ikke placeres på vand."
-
-#~ msgid "Artifacts cannot be placed on water."
-#~ msgstr "Artefakter kan ikke placeres på vand."
+#~ msgid "Dummy 1"
+#~ msgstr "Pladsholder 1"

@@ -39,7 +39,6 @@
 
 #include "ai.h"
 #include "ai_normal.h"
-#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle.h"
@@ -601,7 +600,6 @@ namespace AI
                 }
 
                 const int gameDifficulty = Game::getDifficulty();
-                const bool isGameCampaign = Game::isCampaign();
 
                 // TODO: consider taking speed/turn order into account in the future
                 if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( gameDifficulty ) >= _enemyArmyStrength ) {
@@ -621,98 +619,87 @@ namespace AI
 
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
-                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
-                    if ( !Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) ) {
-                        return false;
-                    }
-
-                    if ( !arena.CanRetreatOpponent( _myColor ) ) {
-                        return false;
-                    }
-
-                    // If the hero has valuable artifacts, he should in any case consider retreating so that these artifacts do not end up at the disposal of the enemy,
-                    // especially in the case of an alliance war
-                    if ( hasValuableArtifacts ) {
-                        return true;
-                    }
-
-                    // Otherwise, if this hero is the last one, and the kingdom has no castles, then there is no point in retreating
-                    if ( kingdom.GetHeroes().size() == 1 ) {
-                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
-
-                        if ( kingdom.GetCastles().empty() ) {
-                            return false;
-                        }
-                    }
-
-                    // Otherwise, if this hero is relatively experienced, then he should think about retreating so that he can be hired again later
-                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
-                }();
-
-                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
-                    if ( !Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) ) {
-                        return false;
-                    }
-
+                const bool isAbleToSurrender = [this, &arena, &kingdom]() {
                     if ( !arena.CanSurrenderOpponent( _myColor ) ) {
                         return false;
                     }
 
-                    // If the hero has valuable artifacts, he should in any case consider surrendering so that these artifacts do not end up at the disposal of the enemy,
-                    // especially in the case of an alliance war
-                    if ( hasValuableArtifacts ) {
+                    return kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } );
+                }();
+
+                const bool isPossibleToReHire = [actualHero, &kingdom]() {
+                    // If the hero is not the last in his kingdom, then we will assume that there is a possibility of re-hiring - even if there are no castles in the
+                    // kingdom, one of the remaining heroes can capture an enemy castle
+                    const VecHeroes & heroes = kingdom.GetHeroes();
+                    if ( heroes.size() > 1 ) {
                         return true;
                     }
 
-                    // Otherwise, if this hero is the last one, and either the kingdom has no castles, or this hero is defending the last castle, then there is no point
-                    // in surrendering
-                    if ( kingdom.GetHeroes().size() == 1 ) {
-                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
+                    assert( heroes.size() == 1 && heroes.at( 0 ) == actualHero );
 
-                        const VecCastles & castles = kingdom.GetCastles();
-                        if ( castles.empty() ) {
-                            return false;
-                        }
-
-                        const Castle * castle = actualHero->inCastle();
-                        if ( castle && castles.size() == 1 ) {
-                            assert( castles.at( 0 ) == castle );
-
-                            return false;
-                        }
+                    // Otherwise, if this hero is the last one, and there are no castles in the kingdom, then it will be impossible to re-hire this hero
+                    const VecCastles & castles = kingdom.GetCastles();
+                    if ( castles.empty() ) {
+                        return false;
                     }
 
-                    // Otherwise, if this hero is relatively experienced, then he should think about surrendering so that he can be hired again later
-                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
+                    // Otherwise, if this hero is defending the last castle, then it will be impossible to re-hire this hero
+                    const Castle * castle = actualHero->inCastle();
+                    if ( castle && castles.size() == 1 ) {
+                        assert( castles.at( 0 ) == castle );
+
+                        return false;
+                    }
+
+                    // Otherwise, assume that there is a possibility of re-hiring
+                    return true;
                 }();
 
-                const Force & force = arena.getForce( _myColor );
+                const int minHeroTotalPrimarySkillLevelForRetreat = 10;
 
-                if ( !considerRetreat ) {
-                    if ( !considerSurrender ) {
+                if ( !arena.CanRetreatOpponent( _myColor ) ) {
+                    if ( !isAbleToSurrender ) {
                         return Outcome::ContinueBattle;
                     }
 
-                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
+                    // If the hero has valuable artifacts, he should surrender so that these artifacts do not end up at the disposal of the enemy, especially in the case
+                    // of an alliance war
+                    if ( hasValuableArtifacts ) {
+                        return Outcome::Surrender;
+                    }
+
+                    // Otherwise, if this hero cannot be rehired, then there is no point in surrendering
+                    if ( !isPossibleToReHire ) {
                         return Outcome::ContinueBattle;
                     }
 
-                    return Outcome::Surrender;
+                    // Otherwise, if this hero is relatively experienced, then he should surrender so that he can be hired again later
+                    if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
+                        return Outcome::Surrender;
+                    }
+
+                    // Otherwise, there is no point in surrendering
+                    return Outcome::ContinueBattle;
                 }
 
-                if ( !considerSurrender ) {
+                // If the hero has valuable artifacts, he should retreat so that these artifacts do not end up at the disposal of the enemy, especially in the case of an
+                // alliance war
+                if ( hasValuableArtifacts ) {
                     return Outcome::Retreat;
                 }
 
-                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
+                // Otherwise, if this hero cannot be rehired, then there is no point in retreating
+                if ( !isPossibleToReHire ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                // Otherwise, if this hero is relatively experienced, then he should retreat so that he can be hired again later
+                if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
                     return Outcome::Retreat;
                 }
 
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() } * Difficulty::getGoldReserveRatioForAISurrender( gameDifficulty ) ) ) {
-                    return Outcome::Retreat;
-                }
-
-                return Outcome::Surrender;
+                // Otherwise, there is no point in retreating or surrendering
+                return Outcome::ContinueBattle;
             }();
 
             const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {

@@ -334,14 +334,14 @@ namespace Interface
         {
             LocalEvent & le = LocalEvent::Get();
 
-            le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
-            le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
             if ( !IsValid() ) {
                 return false;
             }
 
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_UP ) && ( _topId > 0 ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_UP ) && ( _topId > 0 ) ) {
                 needRedraw = true;
 
                 if ( _topId > maxItems ) {
@@ -356,7 +356,7 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
                 _topId += maxItems;
@@ -369,7 +369,7 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_UP ) && ( _currentId > 0 ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_UP ) && ( _currentId > 0 ) ) {
                 needRedraw = true;
 
                 --_currentId;
@@ -378,7 +378,7 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
                 needRedraw = true;
 
                 ++_currentId;
@@ -387,7 +387,7 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
                 needRedraw = true;
 
                 _topId = 0;
@@ -397,7 +397,7 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
                 _topId = _size() - maxItems;
@@ -407,7 +407,7 @@ namespace Interface
 
                 return true;
             }
-            if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
+            if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.isMouseWheelUpInArea( rtAreaItems ) || le.isMouseWheelUpInArea( _scrollbar.getArea() )
                    || _timedButtonPgUp.isDelayPassed() )
                  && ( _topId > 0 ) ) {
                 needRedraw = true;
@@ -417,7 +417,7 @@ namespace Interface
 
                 return true;
             }
-            if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
+            if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.isMouseWheelDownInArea( rtAreaItems ) || le.isMouseWheelDownInArea( _scrollbar.getArea() )
                    || _timedButtonPgDn.isDelayPassed() )
                  && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
@@ -427,19 +427,19 @@ namespace Interface
 
                 return true;
             }
-            if ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) {
-                const fheroes2::Point mousePosition = le.GetMouseCursor();
+            if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) || le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
+                const fheroes2::Point mousePosition = le.getMouseCursorPos();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
                 const int32_t prevScrollbarY = _scrollbar.y();
 
                 UpdateScrollbarRange();
 
-                if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+                if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                     _scrollbar.moveToPos( mousePosition );
                 }
 
-                if ( le.MousePressLeft( rtAreaItems ) ) {
+                if ( le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         _dragStartPos = mousePosition;
@@ -484,7 +484,7 @@ namespace Interface
                 }
             }
 
-            const fheroes2::Point & mousePos = le.GetMouseCursor();
+            const fheroes2::Point & mousePos = le.getMouseCursorPos();
             if ( rtAreaItems & mousePos ) { // within our rectangle
                 needRedraw = true;
 
@@ -509,7 +509,7 @@ namespace Interface
                         return true;
                     }
 
-                    if ( le.MousePressRight( rtAreaItems ) ) {
+                    if ( le.isMouseRightButtonPressedInArea( rtAreaItems ) ) {
                         ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }

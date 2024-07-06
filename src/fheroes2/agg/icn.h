@@ -980,6 +980,7 @@ namespace ICN
         RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
         EDITBTNS_EVIL,
+        DROPLISL_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
@@ -1115,6 +1116,11 @@ namespace ICN
         BUTTON_SAVE_MAP_GOOD,
         BUTTON_LOAD_MAP_EVIL,
         BUTTON_LOAD_MAP_GOOD,
+
+        BUTTON_RUMORS_GOOD,
+        BUTTON_RUMORS_EVIL,
+        BUTTON_EVENTS_GOOD,
+        BUTTON_EVENTS_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

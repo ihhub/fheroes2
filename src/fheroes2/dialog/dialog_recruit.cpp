@@ -428,18 +428,18 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         }
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MousePressLeft( buttonUp.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
         }
         else {
             buttonReleaseRestore( buttonUp );
         }
 
-        if ( le.MousePressLeft( buttonDn.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
         else {
@@ -447,30 +447,30 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         if ( buttonMax.isEnabled() ) {
-            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         }
         if ( buttonMin.isEnabled() ) {
-            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
         }
 
         bool updateMonsterInfo = false;
 
         if ( showDowngradedMonsterSwitchButtons ) {
-            if ( le.MousePressLeft( monsterSwitchLeft.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchLeft.area() ) ) {
                 monsterSwitchLeft.drawOnPress();
             }
             else {
                 buttonReleaseRestore( monsterSwitchLeft );
             }
 
-            if ( le.MousePressLeft( monsterSwitchRight.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchRight.area() ) ) {
                 monsterSwitchRight.drawOnPress();
             }
             else {
                 buttonReleaseRestore( monsterSwitchRight );
             }
 
-            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( fheroes2::Key::KEY_LEFT ) ) {
+            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.isKeyPressed( fheroes2::Key::KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i < upgrades.size() - 1 ) {
@@ -484,7 +484,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 }
                 updateMonsterInfo = true;
             }
-            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( fheroes2::Key::KEY_RIGHT ) ) {
+            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.isKeyPressed( fheroes2::Key::KEY_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i > 0 ) {
@@ -523,7 +523,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             RedrawMonsterInfo( windowActiveArea, monster, available, true );
         }
 
-        if ( le.MousePressRight( monsterArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( monsterArea ) ) {
             ArmyInfo( Troop( monster, available ), ZERO );
 
             // Perform a full rendering to properly restore the parts of the screen outside of this dialog
@@ -539,7 +539,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             continue;
         }
 
-        if ( fheroes2::PressIntKey( max, result ) ) {
+        int32_t temp = static_cast<int32_t>( result );
+        if ( fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
+            result = temp;
             paymentCosts = paymentMonster * result;
             redraw = true;
             maxmin.clear();
@@ -552,7 +554,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
+        if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
              && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
@@ -566,7 +568,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( fheroes2::Key::KEY_DOWN ) || timedButtonDn.isDelayPassed() )
+        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
+                    || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
             paymentCosts -= paymentMonster;
@@ -592,16 +595,16 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             paymentCosts = paymentMonster;
             redraw = true;
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Recruit selected monsters." ), 0 );
         }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
         }
-        else if ( buttonMax.isEnabled() && le.MousePressRight( buttonMax.area() ) ) {
+        else if ( buttonMax.isEnabled() && le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
             fheroes2::showStandardTextMessage( _( "MAX" ), _( "Select maximum monsters to be recruited." ), 0 );
         }
-        else if ( buttonMin.isEnabled() && le.MousePressRight( buttonMin.area() ) ) {
+        else if ( buttonMin.isEnabled() && le.isMouseRightButtonPressedInArea( buttonMin.area() ) ) {
             fheroes2::showStandardTextMessage( _( "MIN" ), _( "Select only 1 monster to be recruited." ), 0 );
         }
 
@@ -667,7 +670,7 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() && le.MousePressRight() ) {
+    while ( le.HandleEvents() && le.isMouseRightButtonPressed() ) {
         // Do nothing.
     }
 }

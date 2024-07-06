@@ -449,7 +449,7 @@ namespace fheroes2
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
             if ( _button[i]->isEnabled() ) {
-                le.MousePressLeft( _button[i]->area() ) ? _button[i]->drawOnPress() : _button[i]->drawOnRelease();
+                le.isMouseLeftButtonPressedInArea( _button[i]->area() ) ? _button[i]->drawOnPress() : _button[i]->drawOnRelease();
             }
         }
 

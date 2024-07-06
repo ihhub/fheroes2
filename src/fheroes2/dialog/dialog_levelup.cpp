@@ -166,9 +166,9 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button_learn1.area() ) ? button_learn1.drawOnPress() : button_learn1.drawOnRelease();
-        le.MousePressLeft( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
-        le.MousePressLeft( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_learn1.area() ) ? button_learn1.drawOnPress() : button_learn1.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
 
         if ( le.MouseClickLeft( button_learn1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             return sec1.Skill();
@@ -179,7 +179,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
         }
 
         if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            LocalEvent::GetClean();
+            LocalEvent::Get().reset();
             hero.OpenDialog( false, true, true, true, true, false );
             display.render();
         }
@@ -191,15 +191,15 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
             fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::OK );
         }
 
-        if ( le.MousePressRight( rect_image1 ) ) {
+        if ( le.isMouseRightButtonPressedInArea( rect_image1 ) ) {
             fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
-        else if ( le.MousePressRight( rect_image2 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect_image2 ) ) {
             fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
-        else if ( le.MousePressRight( button_hero.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( button_hero.area() ) ) {
             fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
         }
     }

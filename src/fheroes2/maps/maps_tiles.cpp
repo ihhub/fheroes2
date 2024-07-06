@@ -151,102 +151,10 @@ namespace
         return false;
     }
 
-    bool isShadowSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-    {
-        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( objectIcnType ), icnIndex );
-    }
-
     bool isValidReefsSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
     {
         return objectIcnType == MP2::OBJ_ICN_TYPE_X_LOC2 && ObjXlc2::isReefs( icnIndex );
     }
-
-#if defined( VERIFY_SHADOW_SPRITES )
-    // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
-    bool isShadowImage( const fheroes2::Image & image )
-    {
-        // The image can't be empty and must have transform layer.
-        assert( !image.empty() && !image.singleLayer() );
-        if ( image.empty() )
-            return false;
-
-        const uint8_t * data = image.transform();
-        const uint8_t * dataEnd = data + image.width() * image.height();
-
-        size_t transformCounter = 0;
-
-        for ( ; data != dataEnd; ++data ) {
-            if ( *data == 0 ) {
-                return false;
-            }
-            else if ( *data != 1 ) {
-                ++transformCounter;
-            }
-        }
-
-        if ( transformCounter == 0 ) {
-            assert( image.width() == 1 && image.height() == 1 );
-            return true;
-        }
-
-        return true;
-    }
-
-    // Use this function to verify the correctness of data being returned by isValidShadowSprite function.
-    void findAllShadowImages()
-    {
-        static bool completed = false;
-        if ( completed ) {
-            return;
-        }
-
-        const std::vector<int32_t> icnIds
-            = { ICN::MTNDSRT,  ICN::MTNGRAS,  ICN::MTNLAVA,  ICN::MTNMULT,  ICN::MTNSNOW,  ICN::MTNSWMP,  ICN::MTNCRCK,  ICN::MTNDIRT,  ICN::TREDECI,
-                ICN::TREEVIL,  ICN::TREFALL,  ICN::TREFIR,   ICN::TREJNGL,  ICN::TRESNOW,  ICN::OBJNCRCK, ICN::OBJNDIRT, ICN::OBJNDSRT, ICN::OBJNGRA2,
-                ICN::OBJNGRAS, ICN::OBJNMUL2, ICN::OBJNMULT, ICN::OBJNSNOW, ICN::OBJNSWMP, ICN::OBJNWAT2, ICN::OBJNWATR, ICN::OBJNARTI, ICN::OBJNRSRC,
-                ICN::OBJNTWRD, ICN::OBJNTWSH, ICN::STREAM,   ICN::OBJNTWBA, ICN::ROAD,     ICN::EXTRAOVR, ICN::X_LOC1,   ICN::X_LOC2,   ICN::X_LOC3,
-                ICN::OBJNTOWN, ICN::OBJNLAVA, ICN::OBJNLAV2, ICN::OBJNLAV3, ICN::MONS32 };
-
-        for ( const int32_t icnId : icnIds ) {
-            const uint32_t maxIndex = fheroes2::AGG::GetICNCount( icnId );
-            assert( maxIndex != 0 );
-
-            std::string output;
-
-            for ( uint32_t i = 0; i < maxIndex; i++ ) {
-                const uint32_t startIndex = ICN::AnimationFrame( icnId, i, 0, true );
-                const bool hasAnimation = startIndex != 0;
-                bool isImageShadow = isShadowImage( fheroes2::AGG::GetICN( icnId, i ) );
-                if ( isImageShadow && hasAnimation ) {
-                    for ( uint32_t indexOffset = 1;; ++indexOffset ) {
-                        const uint32_t animationIndex = ICN::AnimationFrame( icnId, i, indexOffset, true );
-                        if ( startIndex == animationIndex ) {
-                            break;
-                        }
-
-                        if ( !isShadowImage( fheroes2::AGG::GetICN( icnId, animationIndex ) ) ) {
-                            isImageShadow = false;
-                            break;
-                        }
-                    }
-                }
-
-                if ( isValidShadowSprite( icnId, i ) != isImageShadow ) {
-                    output += std::to_string( i );
-                    output += ", ";
-                }
-            }
-
-            if ( output.empty() ) {
-                continue;
-            }
-
-            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output )
-        }
-
-        completed = true;
-    }
-#endif
 
     bool isShortObject( const MP2::MapObjectType objectType )
     {
@@ -441,7 +349,7 @@ namespace
 
     bool isAddonShadow( const Maps::TilesAddon & ta )
     {
-        return isShadowSprite( ta._objectIcnType, ta._imageIndex );
+        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
     }
 
     bool isAddonResource( const Maps::TilesAddon & ta )
@@ -1309,7 +1217,7 @@ void Maps::Tiles::_updateRoadFlag()
     }
 }
 
-void Maps::Tiles::fixTileObjectType( Tiles & tile )
+void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
 {
     const MP2::MapObjectType originalObjectType = tile.GetObject( false );
 

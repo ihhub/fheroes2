@@ -75,8 +75,6 @@ namespace Maps
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
-        bool isAllowCountPlayers( int playerCount ) const;
-
         int AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
@@ -179,20 +177,21 @@ namespace Maps
         uint8_t colorsAvailableForComp;
         uint8_t colorsOfRandomRaces;
 
-        // Refer to the VictoryCondition
+        // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
         std::array<uint16_t, 2> victoryConditionParams;
 
-        // Refer to the LossCondition
+        // Refer to the LossCondition enumeration.
         uint8_t lossConditionType;
         std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;
 
-        bool startWithHeroInEachCastle;
+        // Only for maps made by the original Editor.
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 
@@ -214,10 +213,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For all map files.
-    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
     // Only for RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
 
 #endif

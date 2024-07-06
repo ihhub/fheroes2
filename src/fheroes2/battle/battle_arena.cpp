@@ -327,7 +327,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        const int wallObject = castle->isFortificationBuilt() ? 3 : 2;
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
@@ -366,7 +366,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
         while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
-            if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
+            if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 // Cancel waiting for M82::PREBATTL to over and start the battle.
                 break;
             }

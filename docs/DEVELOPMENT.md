@@ -4,6 +4,8 @@
 
 Please follow the instructions below to be able to build the project from source:
 
+**Note:** You will need to clone the `fheroes2` project before following the instructions below.
+
 <a name="windows"></a>
 ### Windows
 

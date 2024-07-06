@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 15:03+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -315,6 +315,12 @@ msgstr ""
 "Т\n"
 "Е\n"
 "Н"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Войн"
@@ -2016,6 +2022,12 @@ msgstr "Островът на вълшебника"
 msgid "Descendants"
 msgstr "Потомци"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Не може да се строи. Ти вече си построил тук днес."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "За това действие е необходимо първо да построиш замък."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} произвежда %{monster}."
 
@@ -2024,12 +2036,6 @@ msgstr "Изисква:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Излез от това меню, без да правиш нищо."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Не може да се строи. Ти вече си построил тук днес."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "За това действие е необходимо първо да построиш замък."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -3530,9 +3536,6 @@ msgstr "Файл за зареждане:"
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} герой"
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Режим терен"
@@ -3552,6 +3555,28 @@ msgstr "Избери чудовище:"
 msgid "Select Hero:"
 msgstr "Избери герой:"
 
+msgid "race|Random"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} герой"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Избери герой:"
@@ -3568,9 +3593,6 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 "Неутра-\n"
 "лен"
-
-msgid "race|Random"
-msgstr "Случаен"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3590,17 +3612,6 @@ msgstr "%{color} %{race} герой"
 
 msgid "race|Neutral"
 msgstr "Неутрален"
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Кликни тук, за да избереш кой сценарий да играеш."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3762,15 +3773,16 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Размер на карта"
 
+msgid "Map Type"
+msgstr "Тип на карта"
+
+#, fuzzy
 msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 "Показва дали картата е направена за версията на играта \"Наследените войни\" "
 "или за \"Цената на лоялността\"."
-
-msgid "Map Type"
-msgstr "Тип на карта"
 
 msgid "Selected Name"
 msgstr "Избрано име"
@@ -3925,6 +3937,10 @@ msgid "Random Castle Name"
 msgstr "Случаен замък"
 
 #, fuzzy
+msgid "Random Town Name"
+msgstr "Случаен град"
+
+#, fuzzy
 msgid "Allow Castle build"
 msgstr "Замък в облаците"
 
@@ -3939,6 +3955,10 @@ msgstr "действие по подразбиране"
 #, fuzzy
 msgid "Castle Army"
 msgstr "Замък"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Град"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
@@ -3969,7 +3989,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Лента за съобщения"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3978,7 +3998,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -4005,6 +4028,59 @@ msgstr "Лента за съобщения"
 msgid "Click to save the Event properties."
 msgstr "Кликни, за да запазиш текущата игра."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ден: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Кликни, за да запазиш текущата игра."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Събитие"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Допълнително програмиране"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Събитие"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Зареди съществуваща карта."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Зареди съществуваща карта."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Артефакт"
 
@@ -4018,27 +4094,10 @@ msgstr "Избери артефакт:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Ресурс"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Кликни, за да запазиш текущата игра."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4140,6 +4199,9 @@ msgstr ""
 #, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
+
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
 
 #, fuzzy
 msgid "The map is corrupted."
@@ -4483,6 +4545,25 @@ msgid "Run out of time."
 msgstr "Излез от редактора на карти."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Състояние на загуба"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условие за победа"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Условие за победа"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Злато"
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Трудност\n"
@@ -4494,14 +4575,6 @@ msgstr ""
 "\n"
 "\n"
 "Местоположение: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Условие за победа"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Състояние на загуба"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4520,6 +4593,21 @@ msgid "Click to accept the changes made."
 msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Events"
+msgstr "Събитие"
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Кликни, за да покажеш следващия град."
 
@@ -4529,6 +4617,14 @@ msgstr "Размер на карта"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Описание на избраната в момента карта."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Описание на избраната в момента карта."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Описание на избраната в момента карта."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4563,6 +4659,41 @@ msgstr "Превключи изтриването на %{type} обекти."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Допълнително програмиране"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Редактор"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Зареди съществуваща карта."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Зареди съществуваща карта."
 
 msgid ""
 "\n"
@@ -4623,6 +4754,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -5030,6 +5164,10 @@ msgstr "повтори последното действие"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "ново меню на карта"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "превключи състояние"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
@@ -5998,9 +6136,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Ден: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -10942,14 +11077,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Манекен 1"
-
-msgid "The reserved artifact."
-msgstr "Запазеният артефакт."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Манекен 2"
+
+msgid "The reserved artifact."
+msgstr "Запазеният артефакт."
 
 msgid "Dummy 3"
 msgstr "Манекен 3"
@@ -11834,7 +11969,8 @@ msgstr "Нямаш магическа книга, така че не можеш 
 msgid "No spell to cast."
 msgstr "Няма магия за правене."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Твоят герой има %{point} оставащи точки магия."
 
 msgid "View Adventure Spells"
@@ -11946,3 +12082,6 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Манекен 1"

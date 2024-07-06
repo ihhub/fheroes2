@@ -66,7 +66,11 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
-        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override;
+
+        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override
+        {
+            // Do nothing.
+        }
 
         void undoAction()
         {
@@ -147,6 +151,13 @@ namespace Interface
         void _handleObjectMouseLeftClick( Maps::Tiles & tile );
 
         void _validateObjectsOnTerrainUpdate();
+
+        // Returns true if an existing object was moved.
+        bool _moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
+
+        void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
+
+        void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
         EditorPanel _editorPanel;
 

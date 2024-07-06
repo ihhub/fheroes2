@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -59,7 +59,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point & pos = le.GetMouseCursor();
+    const fheroes2::Point & pos = le.getMouseCursorPos();
     const fheroes2::Point position( pos.x, pos.y );
 
     for ( size_t i = 0; i < rects.size(); ++i ) {
@@ -190,8 +190,8 @@ struct ResourceBar
             int rs = Resource::getResourceTypeFromIconIndex( index );
             uint32_t step = rs == Resource::GOLD ? 100 : 1;
 
-            uint32_t cur = resource.Get( rs );
-            uint32_t sel = cur;
+            int32_t cur = resource.Get( rs );
+            int32_t sel = cur;
             uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
                 fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );

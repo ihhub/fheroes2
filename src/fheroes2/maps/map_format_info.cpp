@@ -32,12 +32,81 @@ namespace
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
 
     // This value is set to avoid any corrupted files to be processed.
-    const size_t minFileSize{ 128 };
+    // It is impossible to have a map with smaller than this size.
+    const size_t minFileSize{ 512 };
 
-    const uint16_t minimumSupportedVersion{ 2 };
+    constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    const uint16_t currentSupportedVersion{ 2 };
+    constexpr uint16_t currentSupportedVersion{ 4 };
+
+    void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 2, "Remove this function." );
+
+        if ( map.version > 2 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
+                    switch ( objInfo.index ) {
+                    case 17: // Graveyard, grass terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 62;
+                        break;
+                    case 18: // Graveyard, snow terrain, ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 63;
+                        break;
+                    case 19: // Graveyard, desert terrain(?), ugly version
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 64;
+                        break;
+                    case 20: // Graveyard, generic terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 0;
+                        break;
+                    case 21: // Graveyard, snow terrain
+                        objInfo.group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+                        objInfo.index = 1;
+                        break;
+                    default: // Shift the rest of the objects in the Dwellings group by 5 positions "up"
+                        if ( objInfo.index > 21 ) {
+                            objInfo.index -= 5;
+                        }
+                        break;
+                    }
+
+                    continue;
+                }
+
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    // Shift the objects in the Miscellaneous group by 2 positions "down", since non-ugly Graveyard versions were added to the beginning of this group
+                    objInfo.index += 2;
+                }
+            }
+        }
+    }
+
+    void convertFromV3ToV4( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 3, "Remove this function." );
+
+        if ( map.version > 3 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS && objInfo.index >= 18 ) {
+                    // Shift the objects in the Dwellings group by 1 position "down" to add a new Cave object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
 }
 
 namespace Maps::Map_Format
@@ -189,6 +258,11 @@ namespace Maps::Map_Format
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
             >> map.lossConditionMetadata >> map.size;
 
+        if ( map.size <= 0 ) {
+            // This is not a correct map size.
+            return false;
+        }
+
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
         LanguageUnderlyingType language;
@@ -263,6 +337,10 @@ namespace Maps::Map_Format
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
             >> map.adventureMapEventMetadata >> map.shrineMetadata;
+
+        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
+        convertFromV2ToV3( map );
+        convertFromV3ToV4( map );
 
         return !msg.fail();
     }

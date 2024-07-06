@@ -817,7 +817,7 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        const Funds payment( Resource::GOLD, 1000 );
+        const Funds payment = PaymentConditions::getMagellansMapsPurchasePrice();
         Kingdom & kingdom = hero.GetKingdom();
 
         if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
@@ -1171,11 +1171,17 @@ namespace
         assert( hero.GetIndex() == dst_index || MP2::isNeedStayFront( objectType ) );
 
         if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
-            // If we can't step on this tile, then we shouldn't be here at all
-            assert( !MP2::isNeedStayFront( objectType ) );
+            if ( MP2::isNeedStayFront( objectType ) ) {
+                // If we can't step on this tile, then we shouldn't be here at all, but we can still end up here due to inaccuracies in the hero's strength assessment at
+                // the starting point of his path (for example, if the hero's starting point was in a castle, then the castle's bonuses could affect the assessment of his
+                // strength)
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " does not interact with the object and ignores it" )
+            }
+            else {
+                // We're just passing through here, don't mess with this object
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
+            }
 
-            // We're just passing through here, don't mess with this object
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
         }
 

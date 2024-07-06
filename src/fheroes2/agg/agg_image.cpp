@@ -57,6 +57,7 @@
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -182,7 +183,11 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
+                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
+                                                ICN::BUTTON_RUMORS_GOOD,
+                                                ICN::BUTTON_RUMORS_EVIL,
+                                                ICN::BUTTON_EVENTS_GOOD,
+                                                ICN::BUTTON_EVENTS_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -2105,6 +2110,28 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_RUMORS_GOOD:
+            case ICN::BUTTON_RUMORS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_RUMORS_EVIL );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RUMORS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EVENTS_EVIL );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EVENTS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2765,6 +2792,10 @@ namespace fheroes2
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
+            case ICN::BUTTON_RUMORS_GOOD:
+            case ICN::BUTTON_RUMORS_EVIL:
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
@@ -3183,6 +3214,17 @@ namespace fheroes2
                 _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
                 for ( auto & image : _icnVsSprite[id] ) {
                     convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
+                }
+                return true;
+            }
+            case ICN::DROPLISL_EVIL: {
+                loadICN( ICN::DROPLISL );
+                _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+                for ( auto & image : _icnVsSprite[id] ) {
+                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
+                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
+                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
                 }
                 return true;
             }
@@ -4089,6 +4131,15 @@ namespace fheroes2
                     Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
                 }
                 return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 82 ) {
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution is below.
+                    const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
+                    SubpixelResize( originalImage, _icnVsSprite[id][82] );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -4102,6 +4153,12 @@ namespace fheroes2
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
                     }
+
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
+                    Sprite & targetImage = _icnVsSprite[id][83];
+                    targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );
+                    ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
                 }
                 return true;
             case ICN::OBJNARTI:
@@ -4919,6 +4976,32 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() == 131 ) {
                     _icnVsSprite[id].resize( 132 );
                     h2d::readImage( "missing_sphinx_part.image", _icnVsSprite[id][131] );
+                }
+
+                return true;
+            }
+            case ICN::OBJNGRAS: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 151 ) {
+                    _icnVsSprite[id].resize( 153 );
+
+                    loadICN( ICN::OBJNSNOW );
+
+                    if ( _icnVsSprite[ICN::OBJNSNOW].size() > 210 ) {
+                        fheroes2::Sprite temp;
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-01.image", temp );
+                        _icnVsSprite[id][151] = _icnVsSprite[ICN::OBJNSNOW][2];
+                        Blit( temp, _icnVsSprite[id][151] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][151], 255, 1 );
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-02.image", temp );
+                        _icnVsSprite[id][152] = _icnVsSprite[ICN::OBJNSNOW][3];
+                        Blit( temp, _icnVsSprite[id][152] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+                    }
                 }
 
                 return true;

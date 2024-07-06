@@ -3181,6 +3181,21 @@ namespace Maps
                 world.updatePassabilities();
             }
             return true;
+        case MP2::OBJ_MAGIC_GARDEN:
+            // Magic Garden uses the metadata to indicate whether it is empty or not.
+            // The Editor does not allow to edit this object but it is important to show it non-empty.
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            // These values will be replaced during map loading.
+            tile.metadata()[0] = 1;
+            tile.metadata()[1] = 1;
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
         default:
             break;
         }

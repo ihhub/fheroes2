@@ -722,4 +722,43 @@ namespace fheroes2
             ApplyPalette( image, rightRoi.x, rightRoi.y, image, rightRoi.x, rightRoi.y, rightRoi.width, rightRoi.height, paletteId );
         }
     }
+
+    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value )
+    {
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( !le.isAnyKeyPressed() ) {
+            // No key is pressed.
+            return false;
+        }
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
+            value = value / 10;
+            return true;
+        }
+
+        if ( minimum < 0 && value != 0 && ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) ) {
+            value = std::clamp( -value, minimum, maximum );
+
+            return true;
+        }
+
+        int32_t newDigit = 0;
+        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
+            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 );
+        }
+        else if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
+            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 );
+        }
+        else {
+            return false;
+        }
+
+        value *= 10;
+        value += ( value >= 0 ) ? newDigit : ( -newDigit );
+
+        value = std::clamp( value, minimum, maximum );
+
+        return true;
+    }
 }

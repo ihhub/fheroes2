@@ -879,7 +879,7 @@ int Heroes::GetManaIndexSprite() const
 int Heroes::getStatsValue() const
 {
     // experience and artifacts don't matter here, only natural stats
-    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+    return getTotalPrimarySkillLevel() + secondary_skills.GetTotalLevel();
 }
 
 double Heroes::getRecruitValue() const
