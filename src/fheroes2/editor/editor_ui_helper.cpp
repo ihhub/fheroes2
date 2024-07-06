@@ -26,7 +26,6 @@
 #include "color.h"
 #include "icn.h"
 #include "image.h"
-#include "pal.h"
 #include "resource.h"
 #include "screen.h"
 #include "tools.h"
