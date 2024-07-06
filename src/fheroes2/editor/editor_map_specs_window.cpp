@@ -125,9 +125,37 @@ namespace
         }
         else {
             // This is a hero with a random race dependent portrait. Render the default race portrait.
-            fheroes2::Image heroPortrait( 101, 93 );
-            fheroes2::renderHeroRacePortrait( race, { 0, 0, 101, 93 }, heroPortrait );
-            fheroes2::SubpixelResize( heroPortrait, 0, 0, 101, 93, castleIcon, castleLeftFlag.width() + 6, 4, 30, 22 );
+
+            uint32_t portraitIndex = 0;
+            switch ( race ) {
+            case Race::KNGT:
+                portraitIndex = 51;
+                break;
+            case Race::BARB:
+                portraitIndex = 52;
+                break;
+            case Race::SORC:
+                portraitIndex = 53;
+                break;
+            case Race::WRLK:
+                portraitIndex = 54;
+                break;
+            case Race::WZRD:
+                portraitIndex = 55;
+                break;
+            case Race::NECR:
+                portraitIndex = 56;
+                break;
+            case Race::RAND:
+                portraitIndex = 58;
+                break;
+            default:
+                // Have you added a new race? Correct the logic above!
+                assert( 0 );
+                break;
+            }
+
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::NGEXTRA, portraitIndex ), 17, 10, castleIcon, castleLeftFlag.width() + 6, 4, 30, 22 );
         }
 
         return castleIcon;
