@@ -187,7 +187,7 @@ namespace
             const auto & heroMetadata = _heroInfos[index].heroMetadata;
 
             renderItem( drawHeroIcon( heroMetadata->customPortrait, heroMetadata->race, _heroInfos[index].color, _townIcnId ),
-                        getObjectNameAndPositionText( heroMetadata->customName, _heroInfos[index].tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
+                        getObjectNameAndPositionText( heroMetadata->customName, _heroInfos[index].tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2,
                         current );
         }
 
