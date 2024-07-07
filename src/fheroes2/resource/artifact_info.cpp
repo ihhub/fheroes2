@@ -485,8 +485,10 @@ namespace
               {},
               {} },
 
-            // These are artifacts used only for map editor (?).
-            { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
+            // This artifact is only used in Editor for the special victory conditions.
+            { gettext_noop( "Ultimate Artifact" ), gettext_noop( "Victory can be achieved by finding any Ultimate Artifact." ), nullptr, {}, {} },
+
+            // These are artifacts used only for original map editor (?).
             { gettext_noop( "Dummy 2" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
             { gettext_noop( "Dummy 3" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
             { gettext_noop( "Dummy 4" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
@@ -769,7 +771,7 @@ namespace
         artifactData[Artifact::BLACK_PEARL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 2 );
 
         artifactData[Artifact::MAGIC_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::UNUSED_83].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_84].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_85].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
         artifactData[Artifact::UNUSED_86].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );

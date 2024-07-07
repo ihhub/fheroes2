@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2013,6 +2013,12 @@ msgstr "Đảo phù thủy"
 msgid "Descendants"
 msgstr "Huậ duệ"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} sinh ra %{monster}."
 
@@ -2021,12 +2027,6 @@ msgstr "Yêu cầu:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Thoát khỏi trình đơn này và không làm gì cả."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4508,16 +4508,22 @@ msgid "Run out of time."
 msgstr "Thoát khỏi biên tập bản đồ."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Điều kiện Thua"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Điều kiện Thắng"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Điều kiện Thắng"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Vàng"
 
-msgid "Also allow normal victory"
-msgstr ""
-
 msgid "Days:"
-msgstr ""
-
-msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 #, fuzzy
@@ -4532,14 +4538,6 @@ msgstr ""
 "\n"
 "\n"
 "Vị trí: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Điều kiện Thắng"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Điều kiện Thua"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4582,6 +4580,14 @@ msgstr "Tệp bản đồ"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Mô tả của bản đồ hiện được chọn."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Mô tả của bản đồ hiện được chọn."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Mô tả của bản đồ hiện được chọn."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4711,6 +4717,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -11074,14 +11083,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Bù nhìn 1"
-
-msgid "The reserved artifact."
-msgstr "Hiện vật được bảo lưu."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Bù nhìn 2"
+
+msgid "The reserved artifact."
+msgstr "Hiện vật được bảo lưu."
 
 msgid "Dummy 3"
 msgstr "Bù nhìn 3"
@@ -12100,3 +12109,6 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Bù nhìn 1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -1805,6 +1805,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr ""
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 
@@ -1812,12 +1818,6 @@ msgid "Requires:"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr ""
-
-msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4110,28 +4110,25 @@ msgstr ""
 msgid "Run out of time."
 msgstr ""
 
+msgid "Special Loss Condition"
+msgstr ""
+
+msgid "Special Victory Condition"
+msgstr ""
+
+msgid "Allow standard victory conditions"
+msgstr ""
+
 msgid "Gold:"
 msgstr ""
 
-msgid "Also allow normal victory"
-msgstr ""
-
 msgid "Days:"
-msgstr ""
-
-msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "Map Difficulty"
 msgstr ""
 
 msgid "Map Description"
-msgstr ""
-
-msgid "Special Victory Condition"
-msgstr ""
-
-msgid "Special Loss Condition"
 msgstr ""
 
 msgid "Change Map Name"
@@ -4171,6 +4168,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4282,6 +4287,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -9664,13 +9672,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"

@@ -1901,7 +1901,7 @@ namespace Interface
             return;
         }
 
-        size_t objectsReplaced = 0;
+        [[maybe_unused]] size_t objectsReplaced = 0;
 
         // This logic is based on an assumption that only one action object can exist on one tile.
         if ( replaceKey( _mapFormat.standardMetadata, object.id, newObjectUID ) ) {

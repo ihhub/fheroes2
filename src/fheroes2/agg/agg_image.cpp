@@ -57,6 +57,7 @@
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -517,33 +518,6 @@ namespace
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-    }
-
-    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
-    {
-        // Evil interface has special elements at each corner of the window.
-        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
-
-        // If this assertion blows up you are using some modded resources. Good luck!
-        assert( original.width() == 321 && original.height() == 304 );
-
-        // Top-left corner.
-        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
-        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
-
-        // Top-right corner.
-        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
-        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
-
-        // Bottom-right corner.
-        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
-
-        // Bottom-left corner.
-        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
 
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
@@ -3216,6 +3190,17 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::DROPLISL_EVIL: {
+                loadICN( ICN::DROPLISL );
+                _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+                for ( auto & image : _icnVsSprite[id] ) {
+                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
+                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
+                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
+                }
+                return true;
+            }
             case ICN::EDITPANL:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 6 ) {
@@ -4119,6 +4104,15 @@ namespace fheroes2
                     Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
                 }
                 return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 82 ) {
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution is below.
+                    const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
+                    SubpixelResize( originalImage, _icnVsSprite[id][82] );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -4132,6 +4126,12 @@ namespace fheroes2
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
                     }
+
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
+                    Sprite & targetImage = _icnVsSprite[id][83];
+                    targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );
+                    ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
                 }
                 return true;
             case ICN::OBJNARTI:
@@ -4322,28 +4322,6 @@ namespace fheroes2
                 convertToEvilInterface( output, roi );
 
                 _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
-
-                return true;
-            }
-            case ICN::RECR2BKG_EVIL: {
-                GetICN( ICN::RECR2BKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
-
-                return true;
-            }
-            case ICN::RECRBKG_EVIL: {
-                GetICN( ICN::RECRBKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
 
                 return true;
             }

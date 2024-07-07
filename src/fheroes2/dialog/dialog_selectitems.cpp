@@ -246,7 +246,7 @@ public:
     fheroes2::Button buttonCancel;
 };
 
-class SelectEnumMonster : public SelectEnum
+class SelectEnumMonster final : public SelectEnum
 {
 public:
     explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
@@ -280,7 +280,7 @@ private:
     static const int32_t _offsetY{ 43 };
 };
 
-class SelectEnumHeroes : public SelectEnum
+class SelectEnumHeroes final : public SelectEnum
 {
 public:
     explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
@@ -307,7 +307,7 @@ private:
     static const int32_t _offsetY{ 35 };
 };
 
-class SelectEnumArtifact : public SelectEnum
+class SelectEnumArtifact final : public SelectEnum
 {
 public:
     explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
@@ -335,7 +335,7 @@ private:
     static const int32_t _offsetY{ 42 };
 };
 
-class SelectEnumSpell : public SelectEnum
+class SelectEnumSpell final : public SelectEnum
 {
 public:
     explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
@@ -363,7 +363,7 @@ private:
     static const int32_t _offsetY{ 55 };
 };
 
-class SelectEnumSecSkill : public SelectEnum
+class SelectEnumSecSkill final : public SelectEnum
 {
 public:
     static int getSkillFromListIndex( int index )
@@ -401,7 +401,7 @@ private:
     static const int32_t _offsetY{ 42 };
 };
 
-class SelectKingdomCastle : public SelectEnum
+class SelectKingdomCastle final : public SelectEnum
 {
 public:
     explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
@@ -497,7 +497,7 @@ namespace
         const int32_t _offsetY{ 0 };
     };
 
-    class MonsterTypeSelection : public ObjectTypeSelection
+    class MonsterTypeSelection final : public ObjectTypeSelection
     {
     public:
         MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -524,7 +524,7 @@ namespace
         }
     };
 
-    class ArtifactTypeSelection : public ObjectTypeSelection
+    class ArtifactTypeSelection final : public ObjectTypeSelection
     {
     public:
         ArtifactTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -575,7 +575,7 @@ namespace
         }
     };
 
-    class TreasureTypeSelection : public ObjectTypeSelection
+    class TreasureTypeSelection final : public ObjectTypeSelection
     {
     public:
         TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -626,7 +626,7 @@ namespace
         }
     };
 
-    class OceanObjectTypeSelection : public ObjectTypeSelection
+    class OceanObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         OceanObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -651,7 +651,7 @@ namespace
         }
     };
 
-    class GenericObjectTypeSelection : public ObjectTypeSelection
+    class GenericObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         GenericObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -689,7 +689,7 @@ namespace
         }
     };
 
-    class PowerUpObjectTypeSelection : public ObjectTypeSelection
+    class PowerUpObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         PowerUpObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -722,7 +722,7 @@ namespace
         return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
     }
 
-    class MineTypeList : public Interface::ListBox<Maps::ObjectInfo>
+    class MineTypeList final : public Interface::ListBox<Maps::ObjectInfo>
     {
     public:
         using Interface::ListBox<Maps::ObjectInfo>::ActionListDoubleClick;
@@ -913,21 +913,41 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact( const int artifactId )
+Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryConditions )
 {
     std::vector<int> artifacts;
-    artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
+    artifacts.reserve( Artifact::ARTIFACT_COUNT - 2 );
 
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
     const bool isPriceofLoyaltyArtifactAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
-    // We show the magic book at the first place.
-    artifacts.emplace_back( Artifact::MAGIC_BOOK );
+    if ( !isForVictoryConditions ) {
+        // We show the Magic Book at the first place.
+        artifacts.emplace_back( Artifact::MAGIC_BOOK );
+    }
+    else {
+        // We show the Ultimate Artifact at the first place.
+        artifacts.emplace_back( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
+    }
 
     for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
-            artifacts.emplace_back( id );
+        if ( id == Artifact::MAGIC_BOOK ) {
+            continue;
         }
+
+        if ( isForVictoryConditions && id == Artifact::SPELL_SCROLL ) {
+            continue;
+        }
+
+        if ( !Artifact( id ).isValid() ) {
+            continue;
+        }
+
+        if ( !isPriceofLoyaltyArtifactAllowed && fheroes2::isPriceOfLoyaltyArtifact( id ) ) {
+            continue;
+        }
+
+        artifacts.emplace_back( id );
     }
 
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );

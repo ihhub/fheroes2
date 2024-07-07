@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2023,6 +2023,12 @@ msgstr "Čarodejov ostrov"
 msgid "Descendants"
 msgstr "Potomkovia"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pre tento krok je potrebné najprv postaviť hrad."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produkuje: %{monster}."
 
@@ -2031,12 +2037,6 @@ msgstr "Potrebuje:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Opusti túto ponuku bez vykonania akcie."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pre tento krok je potrebné najprv postaviť hrad."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -4511,16 +4511,22 @@ msgid "Run out of time."
 msgstr "Ukončiť prácu v editore máp."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Podmienka prehry"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Podmienka výhry"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Podmienka výhry"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
 
-msgid "Also allow normal victory"
-msgstr ""
-
 msgid "Days:"
-msgstr ""
-
-msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 #, fuzzy
@@ -4535,14 +4541,6 @@ msgstr ""
 "\n"
 "\n"
 "Umiestnenie: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Podmienka výhry"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Podmienka prehry"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4585,6 +4583,14 @@ msgstr "Veľkosť mapy"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Opis aktuálne zvolenej mapy."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Opis aktuálne zvolenej mapy."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4712,6 +4718,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -10974,14 +10983,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Atrapa 1"
-
-msgid "The reserved artifact."
-msgstr "Vyhradený artefakt."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Atrapa 2"
+
+msgid "The reserved artifact."
+msgstr "Vyhradený artefakt."
 
 msgid "Dummy 3"
 msgstr "Atrapa 3"
@@ -11973,3 +11982,6 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Atrapa 1"

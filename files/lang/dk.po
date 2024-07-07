@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 02:48+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2029,6 +2029,12 @@ msgstr "Troldmandsøen"
 msgid "Descendants"
 msgstr "Efterkommere"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Til denne handling er det nødvendigt først at bygge en borg."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} frembringer %{monster}."
 
@@ -2037,12 +2043,6 @@ msgstr "Kræver:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Forlad denne menu, uden at gøre noget."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Til denne handling er det nødvendigt først at bygge en borg."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name}et kan ikke bygges, da borgen er for langt fra vand."
@@ -4473,16 +4473,22 @@ msgid "Run out of time."
 msgstr "Forlad korteditoren."
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Tabsvilkår"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Vindervilkår"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Vindervilkår"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "guld"
 
-msgid "Also allow normal victory"
-msgstr ""
-
 msgid "Days:"
-msgstr ""
-
-msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 #, fuzzy
@@ -4497,14 +4503,6 @@ msgstr ""
 "\n"
 "\n"
 "Placering: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Vindervilkår"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Tabsvilkår"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4547,6 +4545,14 @@ msgstr "Kort-filnavn"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Beskrivelsen til det valgte kort."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4669,6 +4675,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -10896,14 +10905,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Pladsholder 1"
-
-msgid "The reserved artifact."
-msgstr "Pladsholder-artefaktet."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Pladsholder 2"
+
+msgid "The reserved artifact."
+msgstr "Pladsholder-artefaktet."
 
 msgid "Dummy 3"
 msgstr "Pladsholder 3"
@@ -11943,3 +11952,6 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Pladsholder 1"

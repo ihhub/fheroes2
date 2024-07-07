@@ -968,7 +968,6 @@ namespace ICN
         MONO_CURSOR_CMSSBW,
 
         ESPANBKG_EVIL,
-        RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
         UNIFORMBAK_GOOD,
@@ -977,9 +976,9 @@ namespace ICN
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
-        RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
         EDITBTNS_EVIL,
+        DROPLISL_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
