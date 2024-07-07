@@ -261,7 +261,7 @@ public:
     static const int32_t itemsOffsetY{ 35 };
 
 private:
-    const int _townFrameIcnId{ ICN::UNKNOWN };
+    const int _townFrameIcnId;
 };
 
 namespace

@@ -189,13 +189,10 @@ namespace
         std::string title;
 
         if ( name.empty() ) {
-            title = _( "[%{pos}]: Random %{race} hero" );
-        }
-        else if ( race == Race::RAND ) {
-            title = _( "[%{pos}]: Random hero" );
+            title = _( "[%{pos}]: %{race} hero" );
         }
         else {
-            title = _( "[%{pos}]: %{name} the %{race}" );
+            title = _( "[%{pos}]: %{name}, %{race} hero" );
 
             StringReplace( title, "%{name}", name );
         }
@@ -213,18 +210,10 @@ namespace
 
         if ( name.empty() ) {
             if ( isTown ) {
-                title = _( "[%{pos}]: Random %{race} town" );
+                title = _( "[%{pos}]: %{race} town" );
             }
             else {
-                title = _( "[%{pos}]: Random %{race} castle" );
-            }
-        }
-        else if ( race == Race::RAND ) {
-            if ( isTown ) {
-                title = _( "[%{pos}]: Random town" );
-            }
-            else {
-                title = _( "[%{pos}]: Random castle" );
+                title = _( "[%{pos}]: %{race} castle" );
             }
         }
         else {
