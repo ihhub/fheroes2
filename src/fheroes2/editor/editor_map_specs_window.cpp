@@ -275,7 +275,7 @@ namespace
 
             const auto & heroInfo = _heroInfos[index];
 
-            fheroes2::showStandardTextMessage( {}, getHeroTitle( heroInfo.heroMetadata->customName,  heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ),
+            fheroes2::showStandardTextMessage( {}, getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ),
                                                Dialog::ZERO );
         }
 
@@ -304,27 +304,27 @@ namespace
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
-            const auto & castleInfo = _townInfos[index];
-            const auto & castleMetadata = castleInfo.castleMetadata;
+            const auto & townInfo = _townInfos[index];
+            const auto & castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-            renderItem( getCastleIcon( isTown, castleInfo.race, castleInfo.color, _townIcnId ),
-                        getTownTitle( castleMetadata->customName, castleInfo.race, isTown, castleInfo.tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
+            renderItem( getCastleIcon( isTown, townInfo.race, townInfo.color, _townIcnId ),
+                        getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
                         current );
         }
 
         void ActionListPressRight( int & index ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
-            const auto & castleInfo = _townInfos[index];
-            const auto & castleMetadata = castleInfo.castleMetadata;
+            const auto & townInfo = _townInfos[index];
+            const auto & castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-            fheroes2::showStandardTextMessage( {}, getTownTitle( castleInfo.castleMetadata->customName, castleInfo.race, isTown, castleInfo.tileIndex, _mapWidth ),
+            fheroes2::showStandardTextMessage( {}, getTownTitle( townInfo.castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                                Dialog::ZERO );
         }
 
@@ -932,19 +932,19 @@ namespace
                     }
                 }
 
-                const auto & castleInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = castleInfo.castleMetadata;
+                const auto & townInfo = _mapTownInfos[selectedTownIndex];
+                const auto & castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
                     = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, castleInfo.race, castleInfo.color, townIcnId ) );
+                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
                 fheroes2::Blit( castleIcon, output, roi.x, roi.y + 4 );
 
-                fheroes2::Text text( getTownTitle( castleMetadata->customName, castleInfo.race, isTown, castleInfo.tileIndex, _mapWidth ),
+                fheroes2::Text text( getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
                 text.fitToOneRow( roi.width - castleIcon.width() - 5 );
                 text.drawInRoi( roi.x + castleIcon.width() + 5, roi.y + 12, output, roi );
@@ -1528,19 +1528,19 @@ namespace
                     }
                 }
 
-                const auto & castleInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = castleInfo.castleMetadata;
+                const auto & townInfo = _mapTownInfos[selectedTownIndex];
+                const auto & castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
                     = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, castleInfo.race, castleInfo.color, townIcnId ) );
+                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
                 fheroes2::Blit( castleIcon, output, roi.x, roi.y + 4 );
 
-                fheroes2::Text text( getTownTitle( castleMetadata->customName, castleInfo.race, isTown, castleInfo.tileIndex, _mapWidth ),
+                fheroes2::Text text( getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
                 text.fitToOneRow( roi.width - castleIcon.width() - 5 );
                 text.draw( roi.x + castleIcon.width() + 5, roi.y + 12, output );
