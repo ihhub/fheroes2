@@ -88,7 +88,17 @@ namespace
 
         void ActionListDoubleClick( std::string & /*unused*/ ) override
         {
-            // Do nothing.
+            _isDoubleClicked = true;
+        }
+
+        bool isDoubleClicked() const
+        {
+            return _isDoubleClicked;
+        }
+
+        void resetDoubleClickedState()
+        {
+            _isDoubleClicked = false;
         }
 
         void ActionListSingleClick( std::string & /*unused*/ ) override
@@ -122,6 +132,8 @@ namespace
 
     private:
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+
+        bool _isDoubleClicked{ false };
     };
 }
 
@@ -236,10 +248,12 @@ namespace Editor
                     isRedrawNeeded = true;
                 }
             }
-            else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
+            else if ( rumorList.isDoubleClicked() || le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( rumorList.getCurrentId() < 0 ) {
                     continue;
                 }
+
+                rumorList.resetDoubleClickedState();
 
                 std::string temp = rumorList.GetCurrent();
                 if ( Dialog::inputString( _( "Rumor:" ), temp, {}, longestRumor, true, true ) ) {
