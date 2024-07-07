@@ -234,6 +234,7 @@ class SelectKingdomCastle final : public Dialog::ItemSelectionWindow
 public:
     explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
         : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+        , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
     {
         SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
     }
@@ -260,7 +261,7 @@ public:
     static const int32_t itemsOffsetY{ 35 };
 
 private:
-    const int _townFrameIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+    const int _townFrameIcnId{ ICN::UNKNOWN };
 };
 
 namespace
