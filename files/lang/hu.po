@@ -4582,9 +4582,6 @@ msgstr "Válasz törlése"
 msgid "Delete an existing answer for the question."
 msgstr "Meglévő válasz törlése."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
