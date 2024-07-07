@@ -1288,7 +1288,7 @@ namespace
         const bool _isEvilInterface{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         const int32_t _mapWidth{ 0 };
-        // Town or hero loss metadata include: X position, Y position, color.
+        // Town or hero loss metadata include tile ID and color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
         std::vector<TownInfo> _mapTownInfos;
