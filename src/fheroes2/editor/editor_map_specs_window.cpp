@@ -248,8 +248,10 @@ namespace
     class SelectMapHero final : public Dialog::ItemSelectionWindow
     {
     public:
-        explicit SelectMapHero( const fheroes2::Size & rt, std::string title, std::string description, const int32_t mapWidth, const std::vector<HeroInfo> & heroInfos )
-            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+        explicit SelectMapHero( const fheroes2::Size & dialogSize, std::string title, std::string description, const int32_t mapWidth,
+                                const std::vector<HeroInfo> & heroInfos, const bool isEvilInterface )
+            : Dialog::ItemSelectionWindow( dialogSize, std::move( title ), std::move( description ) )
+            , _townIcnId( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS )
             , _mapWidth( mapWidth )
             , _heroInfos( heroInfos )
         {
@@ -282,7 +284,7 @@ namespace
         static const int32_t itemsOffsetY{ 35 };
 
     private:
-        const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+        const int _townIcnId{ ICN::UNKNOWN };
         const int32_t _mapWidth{ 0 };
         const std::vector<HeroInfo> & _heroInfos;
     };
@@ -290,8 +292,10 @@ namespace
     class SelectMapCastle final : public Dialog::ItemSelectionWindow
     {
     public:
-        explicit SelectMapCastle( const fheroes2::Size & rt, std::string title, std::string description, const int32_t mapWidth, const std::vector<TownInfo> & townInfos )
-            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+        explicit SelectMapCastle( const fheroes2::Size & dialogSize, std::string title, std::string description, const int32_t mapWidth,
+                                  const std::vector<TownInfo> & townInfos, const bool isEvilInterface )
+            : Dialog::ItemSelectionWindow( dialogSize, std::move( title ), std::move( description ) )
+            , _townIcnId( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS )
             , _mapWidth( mapWidth )
             , _townInfos( townInfos )
         {
@@ -331,7 +335,7 @@ namespace
         static const int32_t itemsOffsetY{ 35 };
 
     private:
-        const int _townIcnId{ Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS };
+        const int _townIcnId{ ICN::UNKNOWN };
         const int32_t _mapWidth{ 0 };
         const std::vector<TownInfo> & _townInfos;
     };
@@ -1116,7 +1120,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture for victory" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture for victory" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1179,7 +1183,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to kill for victory" ), {}, _mapWidth, _mapHeroInfos );
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to kill for victory" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
                     std::vector<int> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
@@ -1648,7 +1652,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose for defeat" ), {}, _mapWidth, _mapTownInfos );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose for defeat" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1697,7 +1701,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose for defeat" ), {}, _mapWidth, _mapHeroInfos );
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose for defeat" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
                     std::vector<int> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
