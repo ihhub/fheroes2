@@ -1029,6 +1029,7 @@ namespace
             }
         }
 
+        // Returns true if rendering is required.
         bool processEvents()
         {
             switch ( _conditionType ) {
@@ -1073,12 +1074,10 @@ namespace
                         if ( townIndex != initiallySelectedTownIndex ) {
                             _townToCapture[0] = static_cast<uint32_t>( _mapTownInfos[townIndex].tileIndex );
                             _townToCapture[1] = static_cast<uint32_t>( _mapTownInfos[townIndex].color );
-
-                            return true;
                         }
                     }
 
-                    return false;
+                    return true;
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
@@ -1137,12 +1136,10 @@ namespace
                         if ( heroIndex != initiallySelectedHeroIndex ) {
                             _heroToKill[0] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].tileIndex );
                             _heroToKill[1] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].color );
-
-                            return true;
                         }
                     }
 
-                    return false;
+                    return true;
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
@@ -1561,6 +1558,7 @@ namespace
             }
         }
 
+        // Returns true if rendering is required.
         bool processEvents()
         {
             switch ( _conditionType ) {
@@ -1604,12 +1602,10 @@ namespace
                         if ( townIndex != initiallySelectedTownIndex ) {
                             _townToLose[0] = static_cast<uint32_t>( _mapTownInfos[townIndex].tileIndex );
                             _townToLose[1] = static_cast<uint32_t>( _mapTownInfos[townIndex].color );
-
-                            return true;
                         }
                     }
 
-                    return false;
+                    return true;
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
@@ -1655,12 +1651,10 @@ namespace
                         if ( heroIndex != initiallySelectedHeroIndex ) {
                             _heroToLose[0] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].tileIndex );
                             _heroToLose[1] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].color );
-
-                            return true;
                         }
                     }
 
-                    return false;
+                    return true;
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
