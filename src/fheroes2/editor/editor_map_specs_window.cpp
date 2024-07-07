@@ -673,10 +673,11 @@ namespace
     class VictoryConditionUI final
     {
     public:
-        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat )
+        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.victoryConditionType )
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
+            , _isEvilInterface( isEvilInterface )
             , _mapWidth( mapFormat.size )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
@@ -1284,7 +1285,7 @@ namespace
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
-        const bool _isEvilInterface{ Settings::Get().isEvilInterfaceEnabled() };
+        const bool _isEvilInterface{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         const int32_t _mapWidth{ 0 };
         // Town or hero loss metadata include: X position, Y position, color.
@@ -1307,8 +1308,9 @@ namespace
     class LossConditionUI final
     {
     public:
-        LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat )
+        LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.lossConditionType )
+            , _isEvilInterface( isEvilInterface )
             , _mapWidth( mapFormat.size )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
@@ -1753,7 +1755,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::LOSS_EVERYTHING };
-        const bool _isEvilInterface{ Settings::Get().isEvilInterfaceEnabled() };
+        const bool _isEvilInterface{ false };
         const int32_t _mapWidth{ 0 };
         std::array<uint32_t, 2> _heroToLose{ 0 };
         std::array<uint32_t, 2> _townToLose{ 0 };
@@ -2059,7 +2061,7 @@ namespace Editor
         offsetY += 30;
 
         const fheroes2::Rect victoryConditionUIRoi{ offsetX, offsetY, victoryDroplistButtonRoi.width, 150 };
-        VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat );
+        VictoryConditionUI victoryConditionUI( display, victoryConditionUIRoi, mapFormat, isEvilInterface );
 
         victoryConditionUI.render( display, true );
 
@@ -2083,7 +2085,7 @@ namespace Editor
         offsetY += 30;
 
         const fheroes2::Rect lossConditionUIRoi{ offsetX, offsetY, lossDroplistButtonRoi.width, 150 };
-        LossConditionUI lossConditionUI( display, lossConditionUIRoi, mapFormat );
+        LossConditionUI lossConditionUI( display, lossConditionUIRoi, mapFormat, isEvilInterface );
 
         lossConditionUI.render( display, true );
 
