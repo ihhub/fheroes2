@@ -161,7 +161,7 @@ namespace
         return castleIcon;
     }
 
-    fheroes2::Sprite getCastleIcon( const bool isTown, const int32_t race, const int32_t color, const int townIcnId )
+    fheroes2::Sprite getTownIcon( const bool isTown, const int32_t race, const int32_t color, const int townIcnId )
     {
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
 
@@ -314,7 +314,7 @@ namespace
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-            renderItem( getCastleIcon( isTown, townInfo.race, townInfo.color, _townIcnId ),
+            renderItem( getTownIcon( isTown, townInfo.race, townInfo.color, _townIcnId ),
                         getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), { dstx, dsty }, 45, 95, itemsOffsetY / 2,
                         current );
         }
@@ -944,17 +944,17 @@ namespace
                 const bool isTown
                     = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
+                const fheroes2::Sprite townIcon( getTownIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
-                fheroes2::Blit( castleIcon, output, roi.x, roi.y + 4 );
+                fheroes2::Blit( townIcon, output, roi.x, roi.y + 4 );
 
                 fheroes2::Text text( getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
-                text.fitToOneRow( roi.width - castleIcon.width() - 5 );
-                text.drawInRoi( roi.x + castleIcon.width() + 5, roi.y + 12, output, roi );
+                text.fitToOneRow( roi.width - townIcon.width() - 5 );
+                text.drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, output, roi );
 
-                _selectConditionRoi = { roi.x, roi.y + 4, castleIcon.width() + 5 + text.width(), castleIcon.height() };
+                _selectConditionRoi = { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
 
                 _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output, roi.x + 5,
                                                                                roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
@@ -1541,17 +1541,17 @@ namespace
                 const bool isTown
                     = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-                const fheroes2::Sprite castleIcon( getCastleIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
+                const fheroes2::Sprite townIcon( getTownIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
 
                 const fheroes2::Rect roi{ _restorer.rect() };
-                fheroes2::Blit( castleIcon, output, roi.x, roi.y + 4 );
+                fheroes2::Blit( townIcon, output, roi.x, roi.y + 4 );
 
                 fheroes2::Text text( getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
-                text.fitToOneRow( roi.width - castleIcon.width() - 5 );
-                text.draw( roi.x + castleIcon.width() + 5, roi.y + 12, output );
+                text.fitToOneRow( roi.width - townIcon.width() - 5 );
+                text.draw( roi.x + townIcon.width() + 5, roi.y + 12, output );
 
-                _selectConditionRoi = { roi.x, roi.y + 4, castleIcon.width() + 5 + text.width(), castleIcon.height() };
+                _selectConditionRoi = { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
 
                 break;
             }
