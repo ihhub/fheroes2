@@ -1234,7 +1234,8 @@ namespace
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            if ( !isMainObject ) {
+            // Also do not move the main addon if a background layer object is placing over an object with ID.
+            if ( !isMainObject || ( partInfo.layerType == Maps::BACKGROUND_LAYER && currentTile.GetObjectUID() != 0 ) ) {
                 // Shadows and terrain object do not change main tile information.
                 currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
                 continue;
