@@ -597,7 +597,7 @@ namespace Maps
         // Check and update the special victory and loss conditions that depend on player objects.
 
         // Returns true if all is OK.
-        auto checkSpecialCondition = [&map, &heroObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
+        auto checkSpecialCondition = [&map, &heroObjects, &townObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
             if ( conditionMetadata.size() != 2 ) {
                 return false;
             }
@@ -614,6 +614,11 @@ namespace Maps
 
                 switch ( objectGroup ) {
                 case Maps::ObjectGroup::KINGDOM_TOWNS: {
+                    if ( object.index >= townObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
                     const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
                     if ( color != conditionMetadata[1] ) {
                         // Current town color is incorrect.
