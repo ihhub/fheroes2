@@ -607,7 +607,6 @@ namespace Maps
 
             assert( tileIndex < map.tiles.size() );
 
-            bool objectFound = false;
             for ( const auto & object : map.tiles[tileIndex].objects ) {
                 if ( object.group != objectGroup ) {
                     continue;
@@ -621,9 +620,7 @@ namespace Maps
                         continue;
                     }
 
-                    objectFound = true;
-
-                    break;
+                    return true;
                 }
                 case Maps::ObjectGroup::KINGDOM_HEROES: {
                     if ( object.index >= heroObjects.size() ) {
@@ -637,20 +634,16 @@ namespace Maps
                         continue;
                     }
 
-                    objectFound = true;
-
-                    break;
+                    return true;
                 }
                 default:
                     // Have you added a new object type for victory or loss conditions? Update the logic!
                     assert( 0 );
                     break;
                 }
-
-                break;
             }
 
-            return objectFound;
+            return false;
         };
 
         switch ( map.victoryConditionType ) {
