@@ -218,4 +218,6 @@ namespace fheroes2
                                        const int32_t textStartXOffset );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
+
+    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value );
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 02:43+0000\n"
+"POT-Creation-Date: 2024-07-03 03:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -255,6 +255,9 @@ msgid ""
 msgstr ""
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -1829,6 +1832,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr ""
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pradžioje būtina pastatyti pilį."
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 
@@ -1837,12 +1846,6 @@ msgstr "Reikalauja:"
 
 msgid "Exit this menu without doing anything."
 msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr ""
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pradžioje būtina pastatyti pilį."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -3516,14 +3519,14 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Map Type"
 msgstr "Pasaulio dydis"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
 
 msgid "Selected Name"
 msgstr ""
@@ -3726,7 +3729,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr ""
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3735,7 +3738,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3761,6 +3767,54 @@ msgstr ""
 msgid "Click to save the Event properties."
 msgstr "Rodyti kitą miestą"
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ištekliai"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Rodyti kitą miestą"
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr ""
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Rodyti kitą miestą"
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Magiškas artefaktas"
 
@@ -3774,27 +3828,10 @@ msgstr "Magiškas artefaktas"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Ištekliai"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Rodyti kitą miestą"
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -3892,6 +3929,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
+msgstr ""
+
+msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4200,6 +4240,25 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "Special Loss Condition"
+msgstr "Pralaimėjimo sąlygos"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Pergalės salygos"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Pergalės salygos"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Auksas"
+
+msgid "Days:"
+msgstr ""
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Žemėlapis\n"
@@ -4207,14 +4266,6 @@ msgstr ""
 
 msgid "Map Description"
 msgstr ""
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Pergalės salygos"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Pralaimėjimo sąlygos"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4239,6 +4290,13 @@ msgid "Rumors"
 msgstr ""
 
 #, fuzzy
+msgid "Click to edit daily events."
+msgstr "Rodyti kitą miestą"
+
+msgid "Events"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Rodyti kitą miestą"
 
@@ -4250,6 +4308,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Rodyti kitą miestą"
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4363,6 +4429,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4758,6 +4827,9 @@ msgstr "Rodyti kitą miestą"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Rodyti kitą miestą"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5656,9 +5728,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mėnuo: %{month} Savaitė: %{week}"
-
-msgid "Day: %{day}"
-msgstr ""
 
 msgid ""
 "You find a small\n"
@@ -9872,15 +9941,15 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
+
+msgid "Dummy 2"
 msgstr ""
 
 #, fuzzy
 msgid "The reserved artifact."
 msgstr " su vienu artefaktu"
-
-msgid "Dummy 2"
-msgstr ""
 
 msgid "Dummy 3"
 msgstr ""
@@ -10631,7 +10700,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr ""
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

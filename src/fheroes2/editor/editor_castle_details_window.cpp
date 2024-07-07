@@ -359,15 +359,12 @@ namespace Editor
         const fheroes2::Rect defaultBuildingsArea = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
-#if defined( RESTRICT_FEATURE )
-        // TODO: remove this macro definition check once the logic for building restriction is implemented.
         // Build restrict mode button.
         fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
         buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
         const fheroes2::Rect buttonRestrictBuildingArea( buttonRestrictBuilding.area() );
         fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
-#endif
 
         const bool isNeutral = ( color == Color::NONE );
 
@@ -477,13 +474,11 @@ namespace Editor
                 break;
             }
 
-#if defined( RESTRICT_FEATURE )
             if ( le.MouseClickLeft( buttonRestrictBuildingArea ) ) {
                 buildingRestriction = !buildingRestriction;
             }
 
             buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuildingArea ) );
-#endif
 
             if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
@@ -548,7 +543,6 @@ namespace Editor
                 }
             }
 
-#if defined( RESTRICT_FEATURE )
             else if ( le.isMouseCursorPosInArea( buttonRestrictBuildingArea ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
@@ -556,7 +550,6 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
-#endif
 
             else if ( isNeutral && le.isMouseCursorPosInArea( defaultArmyArea ) ) {
                 message = _( "Use default defenders army." );

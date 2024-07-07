@@ -107,7 +107,17 @@ namespace
 
         void ActionListDoubleClick( std::string & /*unused*/ ) override
         {
-            // Do nothing.
+            _isDoubleClicked = true;
+        }
+
+        bool isDoubleClicked() const
+        {
+            return _isDoubleClicked;
+        }
+
+        void resetDoubleClickedState()
+        {
+            _isDoubleClicked = false;
         }
 
         void ActionListSingleClick( std::string & /*unused*/ ) override
@@ -141,6 +151,8 @@ namespace
 
     private:
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+
+        bool _isDoubleClicked{ false };
     };
 }
 
@@ -286,10 +298,10 @@ namespace Editor
                     int32_t * resourcePtr = metadata.resources.GetPtr( resourceType );
                     assert( resourcePtr != nullptr );
 
-                    uint32_t temp = *resourcePtr;
+                    int32_t temp = *resourcePtr;
 
                     if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
-                        *resourcePtr = static_cast<int32_t>( temp );
+                        *resourcePtr = temp;
                     }
 
                     resourceRoiRestorer.restore();
@@ -327,10 +339,12 @@ namespace Editor
                     isRedrawNeeded = true;
                 }
             }
-            else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
+            else if ( answerList.isDoubleClicked() || le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( answerList.getCurrentId() < 0 ) {
                     continue;
                 }
+
+                answerList.resetDoubleClickedState();
 
                 std::string temp = answerList.GetCurrent();
                 if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false, true ) ) {
@@ -357,7 +371,7 @@ namespace Editor
                 isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( metadata.artifact );
+                const Artifact artifact = Dialog::selectArtifact( metadata.artifact, false );
                 if ( artifact.isValid() ) {
                     int32_t artifactMetadata = metadata.artifactMetadata;
 

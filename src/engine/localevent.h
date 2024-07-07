@@ -175,8 +175,6 @@ namespace fheroes2
 
     const char * KeySymGetName( const Key key );
 
-    bool PressIntKey( const uint32_t max, uint32_t & result );
-
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
 

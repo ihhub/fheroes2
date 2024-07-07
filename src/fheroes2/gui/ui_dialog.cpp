@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -245,9 +246,9 @@ namespace fheroes2
 
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
     {
-        fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
-        fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
-        return fheroes2::showMessage( header, body, buttons );
+        Text header( std::move( headerText ), FontType::normalYellow() );
+        Text body( std::move( messageBody ), FontType::normalWhite() );
+        return showMessage( header, body, buttons );
     }
 
     TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
@@ -302,7 +303,7 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        assert( artifact.isValid() );
+        assert( artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || artifact.isValid() );
 
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };
@@ -405,9 +406,9 @@ namespace fheroes2
     {
         const std::vector<ResourceDialogElement> elements = getResourceDialogElements( funds );
 
-        std::vector<const fheroes2::DialogElement *> uiElements;
+        std::vector<const DialogElement *> uiElements;
         uiElements.reserve( elements.size() );
-        for ( const fheroes2::ResourceDialogElement & element : elements ) {
+        for ( const ResourceDialogElement & element : elements ) {
             uiElements.emplace_back( &element );
         }
 
@@ -469,13 +470,13 @@ namespace fheroes2
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
         : _goodLuck( goodLuck )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void LuckDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -500,13 +501,13 @@ namespace fheroes2
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
         : _goodMorale( goodMorale )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void MoraleDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -695,8 +696,7 @@ namespace fheroes2
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
-        const fheroes2::Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(),
-                                      icn.height() );
+        const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
         Copy( icn, 0, 0, output, icnRect );
 
         Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
@@ -828,5 +828,105 @@ namespace fheroes2
         }
 
         return false;
+    }
+
+    ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step,
+                                                              const Point & offset )
+        : _minimum( std::min( maximum, minimum ) )
+        , _maximum( std::max( maximum, minimum ) )
+        , _step( std::max( step, 1 ) )
+        , _value( current )
+        , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
+        , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )
+    {
+        assert( step > 0 );
+        assert( maximum >= minimum );
+        assert( current >= minimum && current <= maximum );
+
+        _buttonUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
+        _buttonDown.setICNInfo( ICN::TOWNWIND, 7, 8 );
+
+        _buttonUp.subscribe( &_timedButtonUp );
+        _buttonDown.subscribe( &_timedButtonDown );
+
+        setOffset( offset );
+    }
+
+    void ValueSelectionDialogElement::setOffset( const fheroes2::Point & offset )
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        _area = { offset.x, offset.y, editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
+
+        _editBox = { offset.x, offset.y + ( _area.height - editBoxImage.height() ) / 2, editBoxImage.width(), editBoxImage.height() };
+
+        _buttonUp.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() );
+        _buttonDown.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() + _buttonUp.area().height + 5 );
+    }
+
+    void ValueSelectionDialogElement::draw( Image & output ) const
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        assert( _editBox.width == editBoxImage.width() && _editBox.height == editBoxImage.height() );
+
+        Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
+
+        const Text text( std::to_string( _value ), FontType::normalWhite() );
+        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 13 ) / 2, output );
+
+        _buttonUp.draw( output );
+        _buttonDown.draw( output );
+    }
+
+    bool ValueSelectionDialogElement::processEvents()
+    {
+        LocalEvent & le = LocalEvent::Get();
+
+        _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
+        _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
+
+        if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isMouseWheelUpEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
+            _value += _step;
+            return true;
+        }
+
+        if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
+            _value -= _step;
+            return true;
+        }
+
+        return false;
+    }
+
+    void ValueSelectionDialogElement::setValue( const int32_t value )
+    {
+        _value = std::clamp( value, _minimum, _maximum );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( const LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelUp();
+        }
+
+        return eventHandler.isMouseWheelUpInArea( _editBox );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( const LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelDown();
+        }
+
+        return eventHandler.isMouseWheelDownInArea( _editBox );
+    }
+
+    Size ValueSelectionDialogElement::getArea()
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        return { editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
     }
 }

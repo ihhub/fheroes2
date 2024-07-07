@@ -905,6 +905,14 @@ namespace Interface
                 if ( i != _selectedInstrument && ( _instrumentButtonsRect[i] & le.getMouseLeftButtonPressedPos() ) ) {
                     _selectedInstrument = static_cast<uint8_t>( i );
 
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    // Redraw all instrument buttons.
+                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
+                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
+                    }
+
                     // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
                     if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
                         // Update panel image and then open the Select Monster dialog.
@@ -912,15 +920,7 @@ namespace Interface
                         handleObjectMouseClick( Dialog::selectMonsterType );
                     }
 
-                    // Reset cursor updater since this UI element was clicked.
-                    _setCursor();
-
                     setRedraw();
-
-                    // Redraw all instrument buttons.
-                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
-                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
-                    }
 
                     break;
                 }

@@ -41,7 +41,7 @@ namespace Dialog
 
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId );
+    Artifact selectArtifact( const int artifactId, const bool isForVictoryConditions );
 
     Spell selectSpell( const int spellId, const bool includeRandomSpells );
 
