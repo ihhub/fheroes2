@@ -333,12 +333,12 @@ namespace EventProcessing
         {
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
             if ( SDL_SetHint( SDL_HINT_MOUSE_TOUCH_EVENTS, "0" ) != SDL_TRUE ) {
-                ERROR_LOG( "Failed to set SDL_HINT_MOUSE_TOUCH_EVENTS." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_MOUSE_TOUCH_EVENTS " hint." )
             }
 #endif
 #if SDL_VERSION_ATLEAST( 2, 0, 6 )
             if ( SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" ) != SDL_TRUE ) {
-                ERROR_LOG( "Failed to set SDL_HINT_TOUCH_MOUSE_EVENTS." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_TOUCH_MOUSE_EVENTS " hint." )
             }
 #endif
 
