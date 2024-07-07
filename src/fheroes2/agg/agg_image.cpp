@@ -4352,28 +4352,6 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::RECR2BKG_EVIL: {
-                GetICN( ICN::RECR2BKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
-
-                return true;
-            }
-            case ICN::RECRBKG_EVIL: {
-                GetICN( ICN::RECRBKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
-
-                return true;
-            }
             case ICN::STONEBAK_EVIL: {
                 GetICN( ICN::STONEBAK, 0 );
                 _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
