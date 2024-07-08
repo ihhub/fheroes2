@@ -42,28 +42,25 @@ namespace
     }
 }
 
-namespace fheroes2
+namespace fheroes2::h2d
 {
-    namespace h2d
+    H2DInitializer::H2DInitializer()
     {
-        H2DInitializer::H2DInitializer()
-        {
-            const std::string fileName{ "resurrection.h2d" };
-            std::string filePath;
-            if ( !getH2DFilePath( fileName, filePath ) ) {
-                VERBOSE_LOG( "'" << fileName << "' file cannot be found in the system." )
-                throw std::logic_error( fileName + " is not found." );
-            }
-
-            if ( !reader.open( filePath ) ) {
-                VERBOSE_LOG( "Failed to open '" << filePath << "' file." )
-                throw std::logic_error( std::string( "Cannot open file: " ) + filePath );
-            }
+        const std::string fileName{ "resurrection.h2d" };
+        std::string filePath;
+        if ( !getH2DFilePath( fileName, filePath ) ) {
+            VERBOSE_LOG( "'" << fileName << "' file cannot be found in the system." )
+            throw std::logic_error( fileName + " is not found." );
         }
 
-        bool readImage( const std::string & name, Sprite & image )
-        {
-            return readImageFromH2D( reader, name, image );
+        if ( !reader.open( filePath ) ) {
+            VERBOSE_LOG( "Failed to open '" << filePath << "' file." )
+            throw std::logic_error( std::string( "Cannot open file: " ) + filePath );
         }
+    }
+
+    bool readImage( const std::string & name, Sprite & image )
+    {
+        return readImageFromH2D( reader, name, image );
     }
 }

@@ -36,7 +36,7 @@
 #include "serialize.h"
 #include "translations.h"
 
-struct spellstats_t
+struct SpellStats
 {
     const char * name;
     uint8_t spellPoints; // The number of spell points consumed/required by this spell
@@ -50,7 +50,7 @@ struct spellstats_t
 // The original resources don't have most of sprites for Mass Spells
 // so we made some tricks in AGG source file. All modified sprite IDs start from 60
 
-spellstats_t spells[] = {
+const SpellStats spells[Spell::SPELL_COUNT] = {
     //  name | spell points | movement points | min movement points | image id | extra value | description
     { "Unknown", 0, 0, 0, 0, 0, "Unknown spell." },
     { gettext_noop( "Fireball" ), 9, 0, 0, 8, 10, gettext_noop( "Causes a giant fireball to strike the selected area, damaging all nearby creatures." ) },
