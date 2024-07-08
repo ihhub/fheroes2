@@ -314,10 +314,10 @@ msgstr ""
 "O"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "RUMORES"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "EVENTOS"
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -606,7 +606,7 @@ msgid "Okay"
 msgstr "OK"
 
 msgid "The enemy has surrendered!"
-msgstr "O inimigo desistiu!"
+msgstr "O inimigo se rendeu!"
 
 msgid "Their cowardice costs them %{gold} gold."
 msgstr "A covardia deles lhes custa %{gold} de ouro."
@@ -651,7 +651,7 @@ msgid "Restart"
 msgstr "Reiniciar"
 
 msgid "You have captured an enemy artifact!"
-msgstr "Vou capturou um artefato inimigo!"
+msgstr "Você capturou um artefato inimigo!"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "À medida que você alcança %{name}, ele desaparece misteriosamente."
@@ -667,7 +667,7 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Praticando as artes negras da necromancia, você é capaz de ressuscitar "
+"Praticando as artes negras da necromancia, você foi capaz de ressuscitar "
 "%{count} dos inimigos mortos para retornar sob seu serviço como %{monster}."
 
 msgid "%{name} the %{race}"
@@ -1992,7 +1992,7 @@ msgid "Cannot build. You have already built here today."
 msgstr "Não é possível construir. Você já construiu aqui hoje."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr "Para esta ação, é necessário primeiro a construir um castelo."
+msgstr "Para essa ação, é necessário construir primeiro um castelo."
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produz %{monster}."
@@ -2049,7 +2049,7 @@ msgid "Greywind"
 msgstr "Vento Cinzento"
 
 msgid "Portsmith"
-msgstr "Ferraria do Poto"
+msgstr "Ferraria do Porto"
 
 msgid "Atlantium"
 msgstr "Atlantium"
@@ -2553,7 +2553,7 @@ msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
 msgstr ""
-"A Estrutura da Horda aumenta a taxa de crescimento das criaturas de nível 1 "
+"A Estrutura da Horda aumenta a taxa de produção das criaturas de nível 1 "
 "em 8 por semana."
 
 msgid "Thieves' Guild"
@@ -2584,7 +2584,7 @@ msgid "Tent"
 msgstr "Tenda"
 
 msgid "Captain's Quarters"
-msgstr "Quartel do Capitão"
+msgstr "Alojamento do Capitão"
 
 msgid "Mage Guild, Level 1"
 msgstr "Guilda dos Magos Nv.1"
@@ -2673,7 +2673,7 @@ msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
-"O Quartel do Capitão fornece um capitão para ajudar na defesa do castelo, "
+"O Alojamento do Capitão fornece um capitão para ajudar na defesa do castelo, "
 "quando o herói não está presente."
 
 msgid ""
@@ -2846,7 +2846,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Ver informações sobre o cenário que você está jogando atualmente."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Cavar em busca do Artefato Definitivo enterrado."
+msgstr "Escavar em busca do Artefato Definitivo enterrado."
 
 msgid "Digging"
 msgstr "Cavar Tesouro"
@@ -3356,10 +3356,10 @@ msgid "Road"
 msgstr "Estrada"
 
 msgid "(digging ok)"
-msgstr "(Escavação possível)"
+msgstr "(Possível escavar)"
 
 msgid "(no digging)"
-msgstr "(Escavação impossível)"
+msgstr "(Impossível escavar)"
 
 msgid "penalty: %{cost}"
 msgstr "Penalização: %{cost}"
@@ -3500,15 +3500,13 @@ msgid "Select Hero:"
 msgstr "Selecionar Herói:"
 
 msgid "race|Random"
-msgstr "Aleatório"
+msgstr "Aleatória"
 
-#, fuzzy
 msgid "Click to start placing the selected hero."
-msgstr "Clique para começar a colocar o castelo/cidade selecionado."
+msgstr "Clique para começar a posicionar o herói selecionado."
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "Herói %{race} %{color}"
+msgstr "%{race} %{color}"
 
 msgid "You will place"
 msgstr "Você irá colocar"
@@ -3700,13 +3698,12 @@ msgstr "Tamanho do Ícone"
 msgid "Map Type"
 msgstr "Tipo de Mapa"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Indica se o mapa é feito para a versão \"As Guerras de Sucessão\" ou \"O "
-"Preço da Lealdade\" do jogo."
+"Indica se o mapa é feito para a versão \"As Guerras de Sucessão\", \"O "
+"Preço da Lealdade\" ou  \"Ressurreição\" do jogo."
 
 msgid "Selected Name"
 msgstr "Nome Escolhido"
@@ -3847,7 +3844,7 @@ msgid "Best Hero:"
 msgstr "Melhor Herói:"
 
 msgid "Best Hero Stats:"
-msgstr "Estatísticas (melhor herói):"
+msgstr "Estatíst. do Melhor Herói:"
 
 msgid "Personality:"
 msgstr "Personalidade:"
@@ -3856,11 +3853,10 @@ msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
 msgid "Random Castle Name"
-msgstr "Nome Aleatório do Castelo"
+msgstr "Nome Aleat. (Castelo)"
 
-#, fuzzy
 msgid "Random Town Name"
-msgstr "Cidade Aleatória"
+msgstr "Nome Aleat. (Cidade)"
 
 msgid "Allow Castle build"
 msgstr "Permitir construção do Castelo"
@@ -3874,14 +3870,11 @@ msgstr "Exército Padrão"
 msgid "Castle Army"
 msgstr "Exército do Castelo"
 
-#, fuzzy
 msgid "Town Army"
-msgstr "Cidade"
+msgstr "Exército da Cidade"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Clique para alterar o nome do castelo. Clique com o botão direito para "
-"redefinir para o padrão."
+msgstr "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
 
 msgid "Enter Castle name"
 msgstr "Insira o nome do Castelo"
@@ -3891,7 +3884,7 @@ msgstr "Permitir a construção de um castelo nessa cidade."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-"Alternar o uso de estruturas padrão. As estruturas personalizadas serão "
+"Alternar uso de estruturas padrão. Estruturas personalizadas serão "
 "redefinidas"
 
 msgid "Toggle building construction restriction mode."
@@ -3919,10 +3912,10 @@ msgid "Computer colors allowed to get event:"
 msgstr "As cores do computador podem ser usadas em eventos:"
 
 msgid "First day of occurrence:"
-msgstr ""
+msgstr "Primeiro dia de ocorrência"
 
 msgid "Repeat period (days):"
-msgstr ""
+msgstr "Período de repetição (dias):"
 
 msgid "Allow %{color} human player to get event"
 msgstr "Permitir que jogador humano %{color}  obtenha o evento"
@@ -3969,35 +3962,28 @@ msgid "Day: %{day}"
 msgstr "Dia: %{day}"
 
 msgid "Daily Events"
-msgstr ""
+msgstr "Eventos Diários"
 
-#, fuzzy
 msgid "Click to save the events."
-msgstr "Clique para salvar as propriedades do Evento."
+msgstr "Clique para salvar os eventos."
 
-#, fuzzy
 msgid "Add Event"
-msgstr "Evento"
+msgstr "Adicionar Evento"
 
-#, fuzzy
 msgid "Add an additional event."
-msgstr "Adicione uma resposta adicional para a pergunta."
+msgstr "Adiciona um evento adicional."
 
-#, fuzzy
 msgid "Edit Event"
-msgstr "Evento"
+msgstr "Editar Evento"
 
-#, fuzzy
 msgid "Edit an existing event."
-msgstr "Carregar um mapa existente."
+msgstr "Edita um evento existente."
 
-#, fuzzy
 msgid "Delete Event"
-msgstr "Apagar Resposta"
+msgstr "Excluir Evento"
 
-#, fuzzy
 msgid "Delete an existing event."
-msgstr "Apagar uma resposta existente para a pergunta."
+msgstr "Exclui um evento existente."
 
 msgid "Cancel event after first visit"
 msgstr "Cancelar evento após a primeira visita"
@@ -4115,9 +4101,8 @@ msgstr "Falha ao atualizar informações do jogador."
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
-#, fuzzy
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
+msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -4441,16 +4426,14 @@ msgstr "Condição Especial de Derrota"
 msgid "Special Victory Condition"
 msgstr "Condição Especial de Vitória"
 
-#, fuzzy
 msgid "Allow standard victory conditions"
-msgstr "Condição de Vitória"
+msgstr "Permitir condições de vitória padrão"
 
-#, fuzzy
 msgid "Gold:"
-msgstr "Ouro"
+msgstr "Ouro:"
 
 msgid "Days:"
-msgstr ""
+msgstr "Dias:"
 
 msgid "Map Difficulty"
 msgstr "Dificuldade do Mapa"
@@ -4474,20 +4457,17 @@ msgstr ""
 msgid "Click to accept the changes made."
 msgstr "Clique para aceitar as alterações feitas."
 
-#, fuzzy
 msgid "Click to edit custom rumors."
-msgstr "Clique para salvar o mapa atual."
+msgstr "Clique para editar rumores personalizados."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Rumores"
 
-#, fuzzy
 msgid "Click to edit daily events."
-msgstr "Clique para sair dos resultados da batalha."
+msgstr "Clique para editar eventos diários."
 
-#, fuzzy
 msgid "Events"
-msgstr "Evento"
+msgstr "Eventos"
 
 msgid "Click to change your map name."
 msgstr "Clique para alterar o nome do mapa."
@@ -4498,13 +4478,11 @@ msgstr "Nome do Mapa"
 msgid "Click to change the description of the current map."
 msgstr "Clique para alterar a descrição do mapa atual."
 
-#, fuzzy
 msgid "Click to change the victory condition of the current map."
-msgstr "Clique para alterar a descrição do mapa atual."
+msgstr "Clique para alterar a condição de vitória do mapa atual."
 
-#, fuzzy
 msgid "Click to change the loss condition of the current map."
-msgstr "Clique para alterar a descrição do mapa atual."
+msgstr "Clique para alterar a condição de derrota do mapa atual."
 
 msgid "Indicates the player types in the scenario. Click to change."
 msgstr "Indica os tipos de jogadores no cenário. Clique para alterar."
@@ -4534,41 +4512,34 @@ msgid "Toggle display of objects' passability."
 msgstr "Alternar exibição da transitabilidade dos objetos."
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Rumor:"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Rumor"
 
-#, fuzzy
 msgid "This rumor already exists in the list."
-msgstr "Essa resposta existe na lista."
+msgstr "Esse rumor já existe na lista."
 
-#, fuzzy
 msgid "Click to save the rumors."
-msgstr "Clique para salvar as propriedades do Evento."
+msgstr "Clique para salvar os rumores."
 
 msgid "Add Rumor"
-msgstr ""
+msgstr "Adicionar Rumor"
 
-#, fuzzy
 msgid "Add an additional rumor."
-msgstr "Adicione uma resposta adicional para a pergunta."
+msgstr "Adiciona um rumor adicional."
 
-#, fuzzy
 msgid "Edit Rumor"
-msgstr "Editor"
+msgstr "Editar Rumor"
 
-#, fuzzy
 msgid "Edit an existing rumor."
-msgstr "Carregar um mapa existente."
+msgstr "Edita um rumor existente."
 
-#, fuzzy
 msgid "Delete Rumor"
-msgstr "Apagar Resposta"
+msgstr "Excluir rumor"
 
-#, fuzzy
 msgid "Delete an existing rumor."
-msgstr "Apagar uma resposta existente para a pergunta."
+msgstr "Exclui um rumor existente."
 
 msgid ""
 "\n"
@@ -4631,7 +4602,7 @@ msgid "Delete an existing answer for the question."
 msgstr "Apagar uma resposta existente para a pergunta."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "Dia: %{day} Semana: %{week} Mês: %{month}"
 
 msgid "difficulty|Easy"
 msgstr "Fácil"
@@ -5034,9 +5005,8 @@ msgstr "refazer última ação"
 msgid "hotkey|open game main menu"
 msgstr "abrir menu principal do jogo"
 
-#, fuzzy
 msgid "hotkey|toggle passability"
-msgstr "alternar status"
+msgstr "alternar transitabilidade"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
@@ -5768,7 +5738,7 @@ msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Os astrólogos proclamam a Semana de %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr "Após um crescimento regular, a população de %{monster} é duplicada!"
+msgstr "Após uma produção regular, a população de %{monster} é duplicada!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -5777,10 +5747,10 @@ msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
 msgstr[0] ""
-"Após um crescimento regular, a população de %{monster} aumenta em %{count} "
+"Após uma produção regular, a população de %{monster} aumenta em %{count} "
 "porcento!"
 msgstr[1] ""
-"Após um crescimento regular, a população de %{monster} aumenta em %{count} "
+"Após uma produção regular, a população de %{monster} aumenta em %{count} "
 "porcento!"
 
 msgid "%{monster} growth +%{count}."
@@ -5944,8 +5914,8 @@ msgstr ""
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
-"Um ou mais heróis ainda podem se mover. Tem certeza de que deseja encerrar "
-"seu turno?"
+"Um ou mais heróis ainda podem se mover, você tem certeza de que deseja "
+"encerrar seu turno?"
 
 msgid "Are you sure you want to quit?"
 msgstr "Você tem certeza de que deseja sair?"
@@ -5982,7 +5952,7 @@ msgstr ""
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr ""
-"Cavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
+"Escavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -5996,7 +5966,7 @@ msgid "Nothing here. Where could it be?"
 msgstr "Nada aqui. Onde poderia estar?"
 
 msgid "Try searching on clear ground."
-msgstr "Tente cavar em um chão sem obstáculos."
+msgstr "Tente escavar em um chão sem obstáculos."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -6086,13 +6056,13 @@ msgstr ""
 "menos recursos por turno."
 
 msgid "Severe Handicap"
-msgstr "Desvantagem Grave"
+msgstr "Desvantagem Severa"
 
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
-"Os jogadores com desvantagem grave começam com menos recursos e ganham 30% "
+"Os jogadores com desvantagem severa começam com menos recursos e ganham 30% "
 "menos recursos por turno."
 
 msgid ""
@@ -7201,9 +7171,9 @@ msgid ""
 "in a fiery pool of molten lava. A group of them approach you and offer their "
 "services. Would you like to recruit Fire Elementals?"
 msgstr ""
-"Sob uma estrutura que serve para manter o calor, os Elementais de Fogo se "
+"Sob uma estrutura que serve para manter o calor, os Elementais do Fogo se "
 "movimentam em uma piscina de lava derretida. Um grupo deles se aproxima de "
-"você e oferece seus serviços. Você gostaria de recrutar os Elementais de "
+"você e oferece seus serviços. Você gostaria de recrutar os Elementais do "
 "Fogo?"
 
 msgid "A face forms in the water for a moment, and then is gone."
@@ -7648,14 +7618,14 @@ msgid ""
 "has any chance of luring them to a watery grave."
 msgstr ""
 "Você faz sua tripulação tampar seus ouvidos com cera antes que o canto das "
-"sirenas tenha qualquer chance de atraí-los para uma cova aquática."
+"sirenas tenha qualquer chance de atraí-los para uma sepultura aquática."
 
 msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
 "Enquanto as sirenas cantam seu canto sinistro, seu pequeno e determinado "
-"exército consegue superar a necessidade de mergulhar de cabeça no mar."
+"exército consegue superar o desejo de mergulhar de cabeça no mar."
 
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
@@ -7921,7 +7891,7 @@ msgid "Set Spell Points value"
 msgstr "Definir o valor da Mana"
 
 msgid "View Spell Points Info"
-msgstr "Ver Informação sobre a Mana"
+msgstr "Ver Informações Sobre a Mana"
 
 msgid "Set patrol radius in tiles"
 msgstr "Definir raio de patrulha em ladrilhos"
@@ -8918,7 +8888,7 @@ msgid "Shipwreck"
 msgstr "Naufrágio"
 
 msgid "Sea Chest"
-msgstr "Baú Marinho"
+msgstr "Baú no Mar"
 
 msgid "Desert Tent"
 msgstr "Tenda do Deserto"
@@ -8944,7 +8914,7 @@ msgid "Mermaid"
 msgstr "Sereia"
 
 msgid "Boat"
-msgstr "Bote"
+msgstr "Barco"
 
 msgid "Random Ultimate Artifact"
 msgstr "Artefato Definitivo Aleatório"
@@ -9052,7 +9022,7 @@ msgid "Tar Pit"
 msgstr "Poço de Piche"
 
 msgid "Artesian Spring"
-msgstr "Poço Artesiano"
+msgstr "Fonte Artesiana"
 
 msgid "Troll Bridge"
 msgstr "Ponte dos Trolls"
@@ -9079,7 +9049,7 @@ msgid "Derelict Ship"
 msgstr "Navio Abandonado"
 
 msgid "Shipwreck Survivor"
-msgstr "Sobrevivente de Náufragos"
+msgstr "Náufrago"
 
 msgid "Bottle"
 msgstr "Garrafa"
@@ -9129,7 +9099,7 @@ msgid "Cactus"
 msgstr "Cacto"
 
 msgid "Mound"
-msgstr "Monto"
+msgstr "Monte"
 
 msgid "Dune"
 msgstr "Duna"
@@ -9216,10 +9186,10 @@ msgid "Archers"
 msgstr "Arqueiros"
 
 msgid "Ranger"
-msgstr "Guardião da Floresta"
+msgstr "Guardião"
 
 msgid "Rangers"
-msgstr "Guardiões da Floresta"
+msgstr "Guardiões"
 
 msgid "Pikeman"
 msgstr "Piqueiro"
@@ -9318,10 +9288,10 @@ msgid "War Trolls"
 msgstr "Trolls de Guerra"
 
 msgid "Cyclopes"
-msgstr "Ciclope"
+msgstr "Ciclopes"
 
 msgid "Cyclops"
-msgstr "Ciclopes"
+msgstr "Ciclope"
 
 msgid "Sprite"
 msgstr "Fada"
@@ -9525,16 +9495,16 @@ msgid "Vampire Lords"
 msgstr "Lordes Vampiros"
 
 msgid "Lich"
-msgstr "Lich"
+msgstr "Liche"
 
 msgid "Liches"
 msgstr "Liches"
 
 msgid "Power Lich"
-msgstr "Lich do Poder"
+msgstr "Liche Poderoso"
 
 msgid "Power Liches"
-msgstr "Liches do Poder"
+msgstr "Liches Poderosos"
 
 msgid "Bone Dragon"
 msgstr "Dragão-Esqueleto"
@@ -9606,7 +9576,7 @@ msgid "Random Monsters 1"
 msgstr "Monstros Aleatórios 1"
 
 msgid "Random Monster 2"
-msgstr "Monstro Aleatórios 2"
+msgstr "Monstro Aleatório 2"
 
 msgid "Random Monsters 2"
 msgstr "Monstros Aleatórios 2"
@@ -10914,7 +10884,7 @@ msgstr ""
 "Grimório."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "A vitória pode ser alcançada encontrando qualquer Artefato Definitivo."
 
 msgid "Dummy 2"
 msgstr "Fantoche 2"
@@ -10946,7 +10916,7 @@ msgid ""
 msgstr ""
 "Você encontra um recipiente elaborado que abriga um velho pergaminho de "
 "velino. As runas no recipiente são muito antigas e a arte com a qual foi "
-"montado é impressionante. Ao puxar o pergaminho para fora, você se sente "
+"montado é impressionante. Ao desenrolar o pergaminho, você se sente "
 "imbuído de um poder mágico."
 
 msgid "Arm of the Martyr"
@@ -11550,7 +11520,7 @@ msgid "Damages all living (non-undead) units in the battle."
 msgstr "Causa danos a todas as unidades vivas (não mortos-vivos) na batalha."
 
 msgid "Death Ripple"
-msgstr "Ondulação da Morte"
+msgstr "Onda de Morte"
 
 msgid "Death Wave"
 msgstr "Onda da Morte"
@@ -11560,7 +11530,7 @@ msgid ""
 "improved version of Death Ripple."
 msgstr ""
 "Causa danos a todas as unidades vivas (não mortos-vivos) na batalha. Este "
-"feitiço é uma versão melhorada da Ondulação da Morte."
+"feitiço é uma versão melhorada da Onda de Morte."
 
 msgid "Dragon Slayer"
 msgstr "Matador de Dragão"
@@ -11821,9 +11791,8 @@ msgstr "Você não tem um Grimório, então não pode lançar um feitiço."
 msgid "No spell to cast."
 msgstr "Sem feitiço para lançar."
 
-#, fuzzy
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr "Seu herói tem %{point} de mana restante."
+msgstr "Seu herói tem %{sp} de mana restante de %{max}."
 
 msgid "View Adventure Spells"
 msgstr "Ver Feitiços de Aventura"
