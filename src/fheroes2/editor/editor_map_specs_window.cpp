@@ -947,26 +947,28 @@ namespace
 
                 _selectConditionRoi = { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
 
+                if ( !_isNormalVictoryAllowed ) {
+                    _allowNormalVictory.hide();
+                }
+
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
                                                                        roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
                 }
-                else {
-                    _allowNormalVictory.hide();
-                }
 
                 // Allow "Allow this condition also for AI" setting only for neutral towns.
                 if ( _townToCapture[1] == Color::NONE ) {
+                    if ( !_isVictoryConditionApplicableForAI ) {
+                        _allowVictoryConditionForAI.hide();
+                    }
+
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
                                                                                    roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
 
                     if ( _isVictoryConditionApplicableForAI ) {
                         _allowVictoryConditionForAI.show();
-                    }
-                    else {
-                        _allowVictoryConditionForAI.hide();
                     }
                 }
 
@@ -1036,6 +1038,10 @@ namespace
 
                     fheroes2::Blit( artifactFrame, output, _selectConditionRoi.x, _selectConditionRoi.y );
 
+                    if ( !_isNormalVictoryAllowed ) {
+                        _allowNormalVictory.hide();
+                    }
+
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
                                                                            roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
                 }
@@ -1064,6 +1070,13 @@ namespace
 
                     const fheroes2::Text text( _( "Gold:" ), fheroes2::FontType::normalWhite() );
                     text.draw( uiOffset.x - text.width() - 5, roi.y + ( valueSectionUiSize.height - text.height() ) / 2 + 2, output );
+
+                    if ( !_isVictoryConditionApplicableForAI ) {
+                        _allowVictoryConditionForAI.hide();
+                    }
+                    if ( !_isNormalVictoryAllowed ) {
+                        _allowNormalVictory.hide();
+                    }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
                                                                                    roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface );
