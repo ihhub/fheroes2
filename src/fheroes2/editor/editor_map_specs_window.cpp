@@ -846,7 +846,9 @@ namespace
                 std::copy( _townToCapture.begin(), _townToCapture.end(), mapFormat.victoryConditionMetadata.begin() );
 
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
-                mapFormat.isVictoryConditionApplicableForAI = _isVictoryConditionApplicableForAI;
+
+                // For all non-neutral towns disable the "Allow this condition also for AI" setting.
+                mapFormat.isVictoryConditionApplicableForAI = ( _townToCapture[1] == Color::NONE ) ? _isVictoryConditionApplicableForAI : false;
 
                 return;
             case Maps::FileInfo::VICTORY_KILL_HERO:
@@ -945,8 +947,6 @@ namespace
 
                 _selectConditionRoi = { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
 
-                _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output, roi.x + 5,
-                                                                               roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
                                                                        roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
 
@@ -957,11 +957,17 @@ namespace
                     _allowNormalVictory.hide();
                 }
 
-                if ( _isVictoryConditionApplicableForAI ) {
-                    _allowVictoryConditionForAI.show();
-                }
-                else {
-                    _allowVictoryConditionForAI.hide();
+                // Allow "Allow this condition also for AI" setting only for neutral towns.
+                if ( _townToCapture[1] == Color::NONE ) {
+                    _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
+                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+
+                    if ( _isVictoryConditionApplicableForAI ) {
+                        _allowVictoryConditionForAI.show();
+                    }
+                    else {
+                        _allowVictoryConditionForAI.hide();
+                    }
                 }
 
                 break;
