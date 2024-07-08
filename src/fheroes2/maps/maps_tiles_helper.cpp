@@ -1234,8 +1234,10 @@ namespace
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            // Also do not move the main addon if a background layer object is placing over an object with ID.
-            if ( !isMainObject || ( partInfo.layerType == Maps::BACKGROUND_LAYER && currentTile.GetObjectUID() != 0 ) ) {
+            // Also do not move the main addon if a BACKGROUND_LAYER object is being placed over an OBJECT_LAYER object.
+            const bool keepMainAddon = ( partInfo.layerType == Maps::BACKGROUND_LAYER ) && ( currentTile.getLayerType() == Maps::OBJECT_LAYER );
+
+            if ( !isMainObject || keepMainAddon ) {
                 // Shadows and terrain object do not change main tile information.
                 currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
                 continue;
@@ -1245,10 +1247,14 @@ namespace
             assert( partInfo.objectType != MP2::OBJ_NONE );
 
             bool setObjectType = true;
+            // Action objects should be always placed to the main addon.
             if ( !MP2::isOffGameActionObject( partInfo.objectType ) ) {
+                const MP2::MapObjectType mainType = currentTile.GetObject();
+
+                // If any of top layer addons have the same type as the main addon then keep the main addon object type.
                 for ( const auto & addon : currentTile.getTopLayerAddons() ) {
                     const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
-                    if ( type != MP2::OBJ_NONE ) {
+                    if ( type == mainType ) {
                         setObjectType = false;
                         break;
                     }
