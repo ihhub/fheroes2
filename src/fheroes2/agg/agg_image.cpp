@@ -2644,19 +2644,6 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BATTLESKIP:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
-
-                    // add 'skip'
-                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
-                }
-                return true;
             case ICN::BUYMAX:
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
@@ -2956,12 +2943,6 @@ namespace fheroes2
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                     }
-                }
-                return true;
-            case ICN::LISTBOX_EVIL:
-                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
-                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
-                    ApplyPalette( sprite, 2 );
                 }
                 return true;
             case ICN::MONS32:
