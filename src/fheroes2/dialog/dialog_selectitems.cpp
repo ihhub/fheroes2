@@ -1482,7 +1482,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     std::array<fheroes2::Rect, resourceCount> resourceRoi;
 
     // Resource type selection mark background.
-    const fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
+    const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
 
     // Resource icons.
     const int32_t iconOffsetX = 35;
