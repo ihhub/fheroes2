@@ -270,11 +270,11 @@ namespace Maps
             ++objectIndex;
         }
 
-        for ( const auto [uid, index] : roadParts ) {
+        for ( const auto & [uid, index] : roadParts ) {
             addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
-        for ( const auto [uid, index] : streamParts ) {
+        for ( const auto & [uid, index] : streamParts ) {
             addObjectToTile( info, ObjectGroup::STREAMS, index, uid );
         }
 
