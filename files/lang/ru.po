@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-09 14:38+0000\n"
-"PO-Revision-Date: 2024-07-07 16:17+0300\n"
+"PO-Revision-Date: 2024-07-09 19:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3604,10 +3604,10 @@ msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
 
 msgid "Lose a specific town."
-msgstr "Потерять определённый город."
+msgstr "Потерять указанный город."
 
 msgid "Lose a specific hero."
-msgstr "Потерять определённого героя."
+msgstr "Потерять указанного героя."
 
 msgid "Run out of time. Fail to win by a certain point."
 msgstr "Не успеть вовремя."
@@ -3619,10 +3619,10 @@ msgid "Defeat all enemy heroes and towns."
 msgstr "Победить всех противников и захватить все города."
 
 msgid "Capture a specific town."
-msgstr "Захватить определённый город."
+msgstr "Захватить указанный город."
 
 msgid "Defeat a specific hero."
-msgstr "Победить определённого героя."
+msgstr "Победить указанного героя."
 
 msgid "Find a specific artifact."
 msgstr "Найти указанный артефакт."
@@ -4406,29 +4406,23 @@ msgstr "Нет доступных карт!"
 msgid "Warning"
 msgstr "Внимание"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} герой - %{race}"
+msgstr "[%{pos}]: герой - %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} против %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, герой - %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} герой - %{race}"
+msgstr "[%{pos}]: %{race} (город)"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} %{townOrCastle} (%{race} )"
+msgstr "[%{pos}]: %{race} (замок)"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} против %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race} (город)"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} против %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race} (замок)"
 
 msgid "None."
 msgstr "Нет."
@@ -4452,42 +4446,43 @@ msgid "Allow standard victory conditions"
 msgstr "Разрешить обычную победу"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Применять условие и к ИИ"
 
 msgid "Gold:"
 msgstr "Золото:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Выберите, куда перенестись."
+msgstr "Выберите город, который следует захватить"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Нажмите, чтобы изменить сообщение при событии."
+msgstr ""
+"Нажмите, чтобы изменить город, который необходимо захватить для достижения "
+"победы."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Выберите героя, которого следует победить"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Нажмите, чтобы изменить сообщение при событии."
+msgstr ""
+"Нажмите, чтобы изменить героя, которого необходимо победить для достижения "
+"победы."
 
 msgid "Days:"
 msgstr "Дней:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Выберите город, потеря которого - поражение"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Нажмите, чтобы изменить сообщение при событии."
+msgstr ""
+"Нажмите, чтобы изменить город, потеря которого будет означать поражение."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Выберите героя, потеря которого - поражение"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Нажмите, чтобы изменить сообщение при событии."
+msgstr ""
+"Нажмите, чтобы изменить героя, потеря которого будет означать поражение."
 
 msgid "Map Difficulty"
 msgstr "Сложность карты"
