@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3533,12 +3533,12 @@ msgstr "Файл за запазване:"
 msgid "File to Load:"
 msgstr "Файл за зареждане:"
 
-msgid "Accept the choice made."
-msgstr "Приемете направения избор."
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Режим терен"
+
+msgid "Accept the choice made."
+msgstr "Приемете направения избор."
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -4529,6 +4529,30 @@ msgid "Warning"
 msgstr "Внимание"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Без"
 
@@ -4556,12 +4580,44 @@ msgstr "Условие за победа"
 msgid "Allow standard victory conditions"
 msgstr "Условие за победа"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Злато"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Избери град за пристанище."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Кликни, за да запазиш текущата игра."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Кликни, за да запазиш текущата игра."
 
 #, fuzzy
 msgid "Map Difficulty"

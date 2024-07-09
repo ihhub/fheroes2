@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3459,11 +3459,11 @@ msgstr "Fájl mentése:"
 msgid "File to Load:"
 msgstr "Fájl betöltése:"
 
-msgid "Accept the choice made."
-msgstr "A választás elfogadása."
-
 msgid "Terrain object"
 msgstr "Szárazföldi objektum"
+
+msgid "Accept the choice made."
+msgstr "A választás elfogadása."
 
 msgid "Select Skill:"
 msgstr "Képesség kiválasztása:"
@@ -4395,6 +4395,30 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} hős"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} hős"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} %{townOrCastle}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+
 msgid "None."
 msgstr "Nincs."
 
@@ -4417,12 +4441,44 @@ msgstr "Speciális győzelmi feltétel"
 msgid "Allow standard victory conditions"
 msgstr "Győzelmi feltétel"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Arany"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Válaszd ki, melyik városba szeretnél menni."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Kattints az esemény üzenetének megváltoztatásához."
 
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
