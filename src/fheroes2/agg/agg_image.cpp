@@ -3174,11 +3174,29 @@ namespace fheroes2
             case ICN::DROPLISL_EVIL: {
                 loadICN( ICN::DROPLISL );
                 _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+
+                // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                const std::vector<uint8_t> palette
+                    = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 for ( auto & image : _icnVsSprite[id] ) {
-                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
-                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
-                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
-                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                }
+                return true;
+            }
+            case ICN::CELLWIN_EVIL: {
+                loadICN( ICN::CELLWIN );
+
+                if ( _icnVsSprite[ICN::CELLWIN].size() > 18 ) {
+                    // Convert to Evil only the first 19 images. The rest are not standard buttons and are player color related settings used in original editor.
+                    _icnVsSprite[ICN::CELLWIN_EVIL].resize( 19 );
+                    std::copy( _icnVsSprite[ICN::CELLWIN].begin(), _icnVsSprite[ICN::CELLWIN].begin() + 19, _icnVsSprite[ICN::CELLWIN_EVIL].begin() );
+
+                    // To convert the yellow borders of some items the combination of good-to-evil and gray palettes is used here.
+                    const std::vector<uint8_t> palette
+                        = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                    for ( Sprite & image : _icnVsSprite[ICN::CELLWIN_EVIL] ) {
+                        fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                    }
                 }
                 return true;
             }

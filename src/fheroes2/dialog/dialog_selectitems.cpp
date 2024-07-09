@@ -779,11 +779,7 @@ namespace
             fheroes2::Blit( mineSprite, display, dstx + TILEWIDTH * 5 + 5 - mineSprite.width(), dsty + 1 );
 
             // Mine type selection mark background.
-            fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
-            if ( Settings::Get().isEvilInterfaceEnabled() ) {
-                fheroes2::ApplyPalette( markBackground,
-                                        PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-            }
+            const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
             fheroes2::Blit( markBackground, display, dstx + 10, dsty + 24 );
 
             if ( current ) {
@@ -1486,10 +1482,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     std::array<fheroes2::Rect, resourceCount> resourceRoi;
 
     // Resource type selection mark background.
-    fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
-    if ( isEvilInterface ) {
-        fheroes2::ApplyPalette( markBackground, PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-    }
+    const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
 
     // Resource icons.
     const int32_t iconOffsetX = 35;
