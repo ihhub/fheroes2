@@ -1988,12 +1988,6 @@ msgstr "Đảo phù thủy"
 msgid "Descendants"
 msgstr "Huậ duệ"
 
-msgid "Cannot build. You have already built here today."
-msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
-
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} sinh ra %{monster}."
 
@@ -2002,12 +1996,6 @@ msgstr "Yêu cầu:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Thoát khỏi trình đơn này và không làm gì cả."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Không thể xây %{name}. Lâu đài quá xa một đại dương."
