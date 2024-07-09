@@ -221,17 +221,30 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        std::deque<const TilesAddon *> roadParts;
-        std::deque<const TilesAddon *> streamParts;
+        std::deque<std::pair<uint32_t, uint8_t>> roadParts;
+        std::deque<std::pair<uint32_t, uint8_t>> streamParts;
+
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
+        if ( mainObjectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD || mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                const bool isRoad = ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
+                if ( isRoad ) {
+                    roadParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+                }
+                else {
+                    streamParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+                }
+            }
+        }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
                 const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
                 if ( isRoad ) {
-                    roadParts.push_back( &addon );
+                    roadParts.emplace_back( addon._uid, addon._imageIndex );
                 }
                 else {
-                    streamParts.push_back( &addon );
+                    streamParts.emplace_back( addon._uid, addon._imageIndex );
                 }
             }
         }
@@ -241,36 +254,36 @@ namespace Maps
 
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = roadParts.front()->_uid;
-                object.index = roadParts.front()->_imageIndex;
+                object.id = roadParts.front().first;
+                object.index = roadParts.front().second;
                 roadParts.pop_front();
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = streamParts.front()->_uid;
-                object.index = streamParts.front()->_imageIndex;
+                object.id = streamParts.front().first;
+                object.index = streamParts.front().second;
                 streamParts.pop_front();
             }
 
             ++objectIndex;
         }
 
-        for ( const TilesAddon * addon : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
+        for ( const auto & part : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, part.second, part.first );
         }
 
-        for ( const TilesAddon * addon : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
+        for ( const auto & part : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, part.second, part.first );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
