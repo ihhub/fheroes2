@@ -1272,8 +1272,13 @@ namespace
 
                     if ( !higherObjectFound ) {
                         for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                            if ( groundPart._layerType >= partInfo.layerType ) {
+                                // A ground object part is has "lower" or equal layer type. Skip it.
+                                continue;
+                            }
+
                             const MP2::MapObjectType type = Maps::getObjectTypeByIcn( groundPart._objectIcnType, groundPart._imageIndex );
-                            if ( type != MP2::OBJ_NONE && groundPart._layerType < partInfo.layerType ) {
+                            if ( type != MP2::OBJ_NONE ) {
                                 // A ground object part is present and it has "higher" layer type.
                                 higherObjectFound = true;
                                 break;
