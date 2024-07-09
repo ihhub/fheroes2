@@ -860,11 +860,19 @@ namespace
     {
         // To place some roads we need to check not only the road directions around this tile, but also the road ICN index at the nearby tile.
         auto checkRoadIcnIndex = []( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
-            for ( const Maps::TilesAddon & addon : world.GetTiles( tileIndex ).getBottomLayerAddons() ) {
+            const Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+
+            if ( currentTile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_ROAD ) {
+                return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(),
+                                    [&currentTile]( const uint8_t index ) { return currentTile.GetObjectSpriteIndex() == index; } );
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
                 if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
                     return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&addon]( const uint8_t index ) { return addon._imageIndex == index; } );
                 }
             }
+
             return false;
         };
 
