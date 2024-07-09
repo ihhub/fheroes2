@@ -4891,6 +4891,7 @@ namespace Maps
             }
         }
 
+        // TODO: check whether we need to add an assertion as we are hitting this code.
         return MP2::OBJ_NONE;
     }
 
