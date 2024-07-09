@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2024-06-16 11:15+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3462,11 +3462,11 @@ msgstr "Зберегти файли:"
 msgid "File to Load:"
 msgstr "Завантажити файли:"
 
-msgid "Accept the choice made."
-msgstr "Підтвердити ваш вибір."
-
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
+
+msgid "Accept the choice made."
+msgstr "Підтвердити ваш вибір."
 
 msgid "Select Skill:"
 msgstr "Оберіть навички:"
@@ -4403,6 +4403,30 @@ msgstr "Нема доступних мап!"
 msgid "Warning"
 msgstr "Попередження"
 
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} %{townOrCastle}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+
 msgid "None."
 msgstr "Нема."
 
@@ -4425,12 +4449,44 @@ msgstr "Особливі умови перемоги"
 msgid "Allow standard victory conditions"
 msgstr "Умови перемоги."
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Золото"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Оберіть місто, в яке переміститися."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Тицьніть сюди, щоб змінити повідомлення події."
 
 msgid "Map Difficulty"
 msgstr ""
