@@ -1196,17 +1196,21 @@ namespace
 
     bool placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
+        // If this assertion blows up then what kind of object you are trying to place if it's empty?
         assert( !info.empty() );
 
         // Verify that the object is allowed to be placed.
         const fheroes2::Point mainTilePos = tile.GetCenter();
 
         for ( const auto & partInfo : info.groundLevelParts ) {
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
+                continue;
+            }
 
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) && isMainObject ) {
-                // Only shadow and terrain layer object parts are allowed not to be placed.
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
                 assert( 0 );
                 return false;
             }
@@ -1224,57 +1228,77 @@ namespace
         const uint32_t uid = Maps::getNewObjectUID();
 
         for ( const auto & partInfo : info.groundLevelParts ) {
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
-
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                assert( !isMainObject );
+            if ( partInfo.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                // Ignore this object part as useless.
                 continue;
             }
 
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // Make sure that the above condition about object placement is correct.
+                assert( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER );
+
+                // Ignore this tile since it is out of the map.
+                continue;
+            }
+
+            // We need to be very careful to update tile object type to make sure that this is a correct type.
+            // Additionally, all object parts must be sorted based on their layer type.
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            // Also do not move the main addon if a BACKGROUND_LAYER object is being placed over an OBJECT_LAYER object.
-            const bool keepMainAddon = ( partInfo.layerType == Maps::BACKGROUND_LAYER ) && ( currentTile.getLayerType() == Maps::OBJECT_LAYER );
+            bool setObjectType = false;
+            // The first case if the existing tile has no object type being set.
+            const MP2::MapObjectType tileObjectType = currentTile.GetObject();
 
-            if ( !isMainObject || keepMainAddon ) {
-                // Shadows and terrain object do not change main tile information.
-                currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
-                continue;
+            if ( tileObjectType == MP2::OBJ_NONE ) {
+                setObjectType = ( partInfo.objectType != MP2::OBJ_NONE );
             }
+            else if ( partInfo.objectType != MP2::OBJ_NONE ) {
+                if ( MP2::isOffGameActionObject( partInfo.objectType ) ) {
+                    // Since this is an action object we must enforce setting its type.
+                    setObjectType = true;
+                }
+                else {
+                    // We need to run through each object part present at the tile and see if it has "higher" layer object.
+                    bool higherObjectFound = false;
 
-            // It is important that the type of the object is set properly for this layer.
-            assert( partInfo.objectType != MP2::OBJ_NONE );
-
-            bool setObjectType = true;
-            // Action objects should be always placed to the main addon.
-            if ( !MP2::isOffGameActionObject( partInfo.objectType ) ) {
-                const MP2::MapObjectType mainType = currentTile.GetObject();
-
-                // If any of top layer addons have the same type as the main addon then keep the main addon object type.
-                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
-                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
-                    if ( type == mainType ) {
-                        setObjectType = false;
-                        break;
+                    for ( const auto & topPart : currentTile.getTopLayerAddons() ) {
+                        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( topPart._objectIcnType, topPart._imageIndex );
+                        if ( type != MP2::OBJ_NONE ) {
+                            // A top object part is present.
+                            higherObjectFound = true;
+                            break;
+                        }
                     }
+
+                    if ( !higherObjectFound ) {
+                        for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( groundPart._objectIcnType, groundPart._imageIndex );
+                            if ( type != MP2::OBJ_NONE && groundPart._layerType < partInfo.layerType ) {
+                                // A ground object part is present and it has "higher" layer type.
+                                higherObjectFound = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    setObjectType = !higherObjectFound;
                 }
             }
 
+            // Always move the current object part to the back of the bottom layer list to make proper sorting later.
+            currentTile.moveMainAddonToBottomLayer();
+
+            // Push the object to the ground (bottom) object parts.
+            currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            // Sort all objects.
+            currentTile.AddonsSort();
+
+            // Set object type if needed.
             if ( setObjectType ) {
                 currentTile.SetObject( partInfo.objectType );
             }
-
-            currentTile.moveMainAddonToBottomLayer();
-
-            currentTile.setObjectUID( uid );
-            currentTile.setObjectIcnType( partInfo.icnType );
-
-            using TileImageIndexType = decltype( currentTile.GetObjectSpriteIndex() );
-            static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-            currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
-            currentTile.setObjectLayerType( partInfo.layerType );
         }
 
         for ( const auto & partInfo : info.topLevelParts ) {
@@ -1286,9 +1310,10 @@ namespace
             }
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
-
+            // Top object parts do not need sorting.
             currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
+            // Set object type only if the current object part has a type and the object is not an action object.
             if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.GetObject() ) ) {
                 currentTile.SetObject( partInfo.objectType );
             }
