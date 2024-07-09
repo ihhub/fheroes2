@@ -225,27 +225,19 @@ namespace Maps
         std::deque<std::pair<uint32_t, uint8_t>> streamParts;
 
         const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
-        if ( mainObjectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD || mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
-                }
-                else {
-                    streamParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
-                }
-            }
+        if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            roadParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+        }
+        else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+            streamParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
         }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.emplace_back( addon._uid, addon._imageIndex );
-                }
-                else {
-                    streamParts.emplace_back( addon._uid, addon._imageIndex );
-                }
+            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace_back( addon._uid, addon._imageIndex );
+            }
+            else if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace_back( addon._uid, addon._imageIndex );
             }
         }
 
