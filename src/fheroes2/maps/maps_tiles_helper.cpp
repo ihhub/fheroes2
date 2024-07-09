@@ -1250,6 +1250,9 @@ namespace
             // The first case if the existing tile has no object type being set.
             const MP2::MapObjectType tileObjectType = currentTile.GetObject();
 
+            // Always move the current object part to the back of the bottom layer list to make proper sorting later.
+            currentTile.moveMainAddonToBottomLayer();
+
             if ( tileObjectType == MP2::OBJ_NONE ) {
                 setObjectType = ( partInfo.objectType != MP2::OBJ_NONE );
             }
@@ -1286,9 +1289,6 @@ namespace
                     setObjectType = !higherObjectFound;
                 }
             }
-
-            // Always move the current object part to the back of the bottom layer list to make proper sorting later.
-            currentTile.moveMainAddonToBottomLayer();
 
             // Push the object to the ground (bottom) object parts.
             currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
