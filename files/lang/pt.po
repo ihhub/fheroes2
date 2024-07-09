@@ -2871,10 +2871,10 @@ msgid "Defense Skill"
 msgstr "Defesa"
 
 msgid "Shots"
-msgstr "Disparos"
+msgstr "Tiros"
 
 msgid "Shots Left"
-msgstr "Disparos Restantes"
+msgstr "Tiros Restantes"
 
 msgid "Hit Points"
 msgstr "Pts. de Vida"
@@ -9181,10 +9181,10 @@ msgid "Peasants"
 msgstr "Camponeses"
 
 msgid "Archer"
-msgstr "Arqueiro"
+msgstr "Arqueira"
 
 msgid "Archers"
-msgstr "Arqueiros"
+msgstr "Arqueiras"
 
 msgid "Ranger"
 msgstr "Guardião"
@@ -10839,7 +10839,7 @@ msgstr ""
 "Você se depara com uma ponte que se estende por um desfiladeiro. Antes que "
 "você possa atravessar, um Troll sai de baixo da ponte e exige pagamento para "
 "permitir que você passe. Você se recusa, e o Troll o cobra novamente, "
-"forçando-o a matá-lo. Você leva seu escudo com espinhos como um troféu."
+"forçando-o a matá-lo. Você leva seu escudo cravado como um troféu."
 
 msgid "White Pearl"
 msgstr "Pérola Branca"
