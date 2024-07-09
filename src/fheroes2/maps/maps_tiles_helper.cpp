@@ -1228,11 +1228,6 @@ namespace
         const uint32_t uid = Maps::getNewObjectUID();
 
         for ( const auto & partInfo : info.groundLevelParts ) {
-            if ( partInfo.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-                // Ignore this object part as useless.
-                continue;
-            }
-
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
                 // Make sure that the above condition about object placement is correct.
