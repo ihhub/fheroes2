@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3351,12 +3351,12 @@ msgstr "File da Salvare:"
 msgid "File to Load:"
 msgstr "File da Caricare:"
 
-msgid "Accept the choice made."
-msgstr "Accetta la scelta."
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Nessun oggetto"
+
+msgid "Accept the choice made."
+msgstr "Accetta la scelta."
 
 msgid "Select Skill:"
 msgstr "Scegli dote:"
@@ -4320,6 +4320,30 @@ msgid "Warning"
 msgstr ""
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "Giocatore %{color}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} incontra %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "Giocatore %{color}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "Giocatore %{color}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} incontra %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} incontra %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Nessun/a"
 
@@ -4346,12 +4370,43 @@ msgstr "Condizione Vittoria"
 msgid "Allow standard victory conditions"
 msgstr "Condizione Vittoria"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Oro"
 
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Clicca per salvare la partita in corso."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Clicca per salvare la partita in corso."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Clicca per salvare la partita in corso."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Clicca per salvare la partita in corso."
 
 #, fuzzy
 msgid "Map Difficulty"

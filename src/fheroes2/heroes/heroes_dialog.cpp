@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <functional>
@@ -69,55 +68,6 @@ namespace
     const fheroes2::Size primarySkillIconSize{ 82, 93 };
     const uint32_t experienceMaxValue{ 2990600 };
     const uint32_t spellPointsMaxValue{ 999 };
-
-    void renderRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )
-    {
-        fheroes2::Image racePortrait( portPos.width, portPos.height );
-
-        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
-            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
-            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
-            if ( applyRandomPalette ) {
-                fheroes2::Sprite tmp = heroSprite;
-                fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
-                fheroes2::Blit( tmp, 0, std::max( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
-                                std::max( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
-            }
-            else {
-                fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
-                                std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
-            }
-        };
-
-        switch ( race ) {
-        case Race::KNGT:
-            preparePortrait( ICN::CMBTHROK, 4, false );
-            break;
-        case Race::BARB:
-            preparePortrait( ICN::CMBTHROB, 5, false );
-            break;
-        case Race::SORC:
-            preparePortrait( ICN::CMBTHROS, 6, false );
-            break;
-        case Race::WRLK:
-            preparePortrait( ICN::CMBTHROW, 7, false );
-            break;
-        case Race::WZRD:
-            preparePortrait( ICN::CMBTHROZ, 8, false );
-            break;
-        case Race::NECR:
-            preparePortrait( ICN::CMBTHRON, 9, false );
-            break;
-        case Race::RAND:
-            preparePortrait( ICN::CMBTHROW, 10, true );
-            break;
-        default:
-            // Have you added a new race? Correct the logic above!
-            assert( 0 );
-            break;
-        }
-        fheroes2::Copy( racePortrait, 0, 0, output, portPos );
-    }
 }
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog,
@@ -159,7 +109,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
     if ( isEditor && !isValidId( portrait ) ) {
-        renderRacePortrait( _race, portPos, display );
+        fheroes2::renderHeroRacePortrait( _race, portPos, display );
     }
     else {
         PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
@@ -643,7 +593,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( le.isMouseRightButtonPressedInArea( portPos ) ) {
             if ( isEditor ) {
                 portrait = 0;
-                renderRacePortrait( _race, portPos, display );
+                fheroes2::renderHeroRacePortrait( _race, portPos, display );
                 needRedraw = true;
             }
             else {
@@ -701,7 +651,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     redrawRace( _race );
 
                     if ( portrait == 0 ) {
-                        renderRacePortrait( _race, portPos, display );
+                        fheroes2::renderHeroRacePortrait( _race, portPos, display );
                     }
 
                     if ( primarySkillsBar.isDefaultValues() ) {

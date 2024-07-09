@@ -826,8 +826,8 @@ namespace EventProcessing
                 buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_RIGHT;
                 break;
             default:
-                VERBOSE_LOG( "Unknown mouse button " << button.button )
-                break;
+                VERBOSE_LOG( "Unknown mouse button " << static_cast<int>( button.button ) )
+                return;
             }
 
             eventHandler.onMouseButtonEvent( button.state == SDL_PRESSED, buttonType, { button.x, button.y } );

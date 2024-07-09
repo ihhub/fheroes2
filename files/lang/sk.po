@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3514,12 +3514,12 @@ msgstr "Uložiť súbor:"
 msgid "File to Load:"
 msgstr "Nahrať súbor:"
 
-msgid "Accept the choice made."
-msgstr "Prijať uskutočnený výber."
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Režim terénu"
+
+msgid "Accept the choice made."
+msgstr "Prijať uskutočnený výber."
 
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
@@ -4495,6 +4495,30 @@ msgid "Warning"
 msgstr "Pozor"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} a %{name2} sa stretávajú"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} a %{name2} sa stretávajú"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} a %{name2} sa stretávajú"
+
+#, fuzzy
 msgid "None."
 msgstr "Žiadny"
 
@@ -4522,12 +4546,44 @@ msgstr "Podmienka výhry"
 msgid "Allow standard victory conditions"
 msgstr "Podmienka výhry"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Vyber mesto, do ktorého sa chceš preniesť."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Klikni pre uloženie terajšej hry."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Klikni pre uloženie terajšej hry."
 
 #, fuzzy
 msgid "Map Difficulty"

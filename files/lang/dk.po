@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3521,11 +3521,11 @@ msgstr "Fil som skal gemmes:"
 msgid "File to Load:"
 msgstr "Fil som skal indlæses:"
 
-msgid "Accept the choice made."
-msgstr "Acceptér de trufne valg."
-
 msgid "Terrain object"
 msgstr "Terræn-objekt"
+
+msgid "Accept the choice made."
+msgstr "Acceptér de trufne valg."
 
 msgid "Select Skill:"
 msgstr "Vælg evne:"
@@ -4457,6 +4457,30 @@ msgid "Warning"
 msgstr "Advarsel"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} helt"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} helt"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} %{townOrCastle}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Ingen"
 
@@ -4484,12 +4508,44 @@ msgstr "Vindervilkår"
 msgid "Allow standard victory conditions"
 msgstr "Vindervilkår"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "guld"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Vælg den by, du gerne vil havne i."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Klik her for at gemme begivenhedsbeskeden."
 
 #, fuzzy
 msgid "Map Difficulty"

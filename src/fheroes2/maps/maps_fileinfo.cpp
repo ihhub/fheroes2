@@ -446,13 +446,12 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     case LOSS_TOWN:
     case LOSS_HERO:
         // Town or hero loss metadata must include the following:
-        // - X position of the object
-        // - Y position of the object
+        // - tile index of the object
         // - color of the object (the color is needed to modify the game for multi-player)
-        assert( map.lossConditionMetadata.size() == 3 );
-        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] );
-        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[1] );
-        assert( ( map.lossConditionMetadata[2] & map.humanPlayerColors ) == map.lossConditionMetadata[2] );
+        assert( map.lossConditionMetadata.size() == 2 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] % map.size );
+        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[0] / map.size );
+        assert( ( map.lossConditionMetadata[1] & map.humanPlayerColors ) == map.lossConditionMetadata[1] );
         break;
     case LOSS_OUT_OF_TIME:
         assert( map.lossConditionMetadata.size() == 1 );
@@ -477,13 +476,12 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     case VICTORY_CAPTURE_TOWN:
     case VICTORY_KILL_HERO:
         // Town or hero capture metadata must include the following:
-        // - X position of the object
-        // - Y position of the object
-        // - color of the object (the color is needed to modify the game for multi-player)
-        assert( map.victoryConditionMetadata.size() == 3 );
-        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
-        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[1] );
-        assert( ( map.victoryConditionMetadata[2] & map.availablePlayerColors ) == map.victoryConditionMetadata[2] );
+        // - tile index of the object
+        // - color of the object (the color is needed to modify the game for multi-player mode)
+        assert( map.victoryConditionMetadata.size() == 2 );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.size );
+        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.size );
+        assert( ( map.victoryConditionMetadata[1] & map.availablePlayerColors ) == map.victoryConditionMetadata[1] );
         break;
     case VICTORY_OBTAIN_ARTIFACT:
         assert( map.victoryConditionMetadata.size() == 1 );

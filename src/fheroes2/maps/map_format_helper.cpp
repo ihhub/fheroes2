@@ -40,6 +40,7 @@
 #include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
@@ -471,20 +472,10 @@ namespace Maps
         // Update map format settings based on the gathered information.
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
-            if ( heroColorsPresent[i] || townColorsPresent[i] ) {
-                assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
+            map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
 
+            if ( map.playerRace[i] != 0 ) {
                 map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
-                map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
-
-                if ( map.playerRace[i] == 0 ) {
-                    map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
-                }
-            }
-            else {
-                assert( heroRacesPresent[i] == 0 && townRacesPresent[i] == 0 );
-
-                map.playerRace[i] = 0;
             }
 
             // Only one race can be present.
@@ -591,6 +582,101 @@ namespace Maps
         for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
             eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
             eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
+        }
+
+        // Check and update the special victory and loss conditions that depend on player objects.
+
+        // Returns true if all is OK.
+        auto checkSpecialCondition = [&map, &heroObjects, &townObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
+            if ( conditionMetadata.size() != 2 ) {
+                return false;
+            }
+
+            // Verify that this is a valid map object.
+            const uint32_t tileIndex = conditionMetadata[0];
+
+            assert( tileIndex < map.tiles.size() );
+
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != objectGroup ) {
+                    continue;
+                }
+
+                switch ( objectGroup ) {
+                case Maps::ObjectGroup::KINGDOM_TOWNS: {
+                    if ( object.index >= townObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                    if ( color != conditionMetadata[1] ) {
+                        // Current town color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                case Maps::ObjectGroup::KINGDOM_HEROES: {
+                    if ( object.index >= heroObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = 1 << heroObjects[object.index].metadata[0];
+                    if ( color != conditionMetadata[1] ) {
+                        // Current hero color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                default:
+                    // Have you added a new object type for victory or loss conditions? Update the logic!
+                    assert( 0 );
+                    break;
+                }
+            }
+
+            return false;
+        };
+
+        switch ( map.victoryConditionType ) {
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        case Maps::FileInfo::VICTORY_KILL_HERO:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        default:
+            break;
+        }
+
+        switch ( map.lossConditionType ) {
+        case Maps::FileInfo::LOSS_TOWN:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        case Maps::FileInfo::LOSS_HERO:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        default:
+            break;
         }
 
         return true;
