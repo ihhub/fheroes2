@@ -270,12 +270,12 @@ namespace Maps
             ++objectIndex;
         }
 
-        for ( const auto & part : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, part.second, part.first );
+        for ( const auto [uid, index] : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
-        for ( const auto & part : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, part.second, part.first );
+        for ( const auto [uid, index] : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, index, uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
