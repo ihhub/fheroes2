@@ -1129,7 +1129,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture for victory" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture to achieve victory" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1162,7 +1162,7 @@ namespace
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
-                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the town needed to capture for the victory." ),
+                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the town needed to capture to achieve victory." ),
                                                        Dialog::ZERO );
                     return false;
                 }
@@ -1192,7 +1192,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to kill for victory" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to defeat to achieve victory" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
                     std::vector<int> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
@@ -1224,7 +1224,7 @@ namespace
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( _selectConditionRoi ) ) {
-                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the hero needed to kill for the victory." ),
+                    fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), _( "Click here to change the hero needed to defeat to achieve victory." ),
                                                        Dialog::ZERO );
                     return false;
                 }
@@ -1662,7 +1662,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapTownInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose for defeat" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
+                    SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose to suffer defeat" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
                     std::vector<int> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
@@ -1711,7 +1711,7 @@ namespace
                         = std::max( 100 + SelectMapCastle::itemsOffsetY * static_cast<int32_t>( _mapHeroInfos.size() ), 100 + SelectMapCastle::itemsOffsetY * 5 );
                     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose for defeat" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
+                    SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose to suffer defeat" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
                     std::vector<int> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
