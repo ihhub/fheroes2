@@ -4409,29 +4409,23 @@ msgstr "Nenhum mapa disponível!"
 msgid "Warning"
 msgstr "Aviso"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{race} %{color}"
+msgstr "[%{pos}]: herói %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, herói %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{race} %{color}"
+msgstr "[%{pos}]: cidade %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{townOrCastle} %{race} %{color}"
+msgstr "[%{pos}]: castelo %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, cidade %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, castelo %{race}"
 
 msgid "None."
 msgstr "Nenhum."
@@ -4455,42 +4449,37 @@ msgid "Allow standard victory conditions"
 msgstr "Permitir condições de vitória padrão"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Permitir essa condição também para IA"
 
 msgid "Gold:"
 msgstr "Ouro:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Selecione a cidade de destino."
+msgstr "Selecione uma cidade para capturar e alcançar a vitória"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Clique aqui para alterar a mensagem do evento."
+msgstr "Clique aqui para alterar a cidade necessária para capturar e alcançar a vitória."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Selecione um herói para derrotar e alcançar a vitória"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Clique aqui para alterar a mensagem do evento."
+msgstr "Clique aqui para alterar o herói necessário para derrotar e alcançar a vitória."
 
 msgid "Days:"
 msgstr "Dias:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Selecione uma cidade para perder e sofrer a derrota"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Clique aqui para alterar a mensagem do evento."
+msgstr "Clique aqui para alterar a cidade cuja perda significaria a derrota."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Selecione um herói para perder e sofrer a derrota"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Clique aqui para alterar a mensagem do evento."
+msgstr "Clique aqui para alterar o herói cuja perda significaria a derrota."
 
 msgid "Map Difficulty"
 msgstr "Dificuldade do Mapa"
