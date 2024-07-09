@@ -909,7 +909,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
@@ -920,7 +919,6 @@ namespace ICN
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
-        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
