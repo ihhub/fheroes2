@@ -1258,7 +1258,8 @@ namespace
                     // Since this is an action object we must enforce setting its type.
                     setObjectType = true;
                 }
-                else {
+                else if ( !MP2::isOffGameActionObject( tileObjectType ) ) {
+                    // The current tile does not have an action object.
                     // We need to run through each object part present at the tile and see if it has "higher" layer object.
                     bool higherObjectFound = false;
 
