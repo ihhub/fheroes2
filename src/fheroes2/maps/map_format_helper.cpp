@@ -221,23 +221,24 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        std::deque<std::pair<uint32_t, uint8_t>> roadParts;
-        std::deque<std::pair<uint32_t, uint8_t>> streamParts;
+        // A tile cannot contain an exactly the same road or stream parts.
+        std::set<std::pair<uint32_t, uint8_t>> roadParts;
+        std::set<std::pair<uint32_t, uint8_t>> streamParts;
 
         const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
         if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-            roadParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            roadParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
         }
         else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            streamParts.emplace_back( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            streamParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
         }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                roadParts.emplace_back( addon._uid, addon._imageIndex );
+                roadParts.emplace( addon._uid, addon._imageIndex );
             }
             else if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                streamParts.emplace_back( addon._uid, addon._imageIndex );
+                streamParts.emplace( addon._uid, addon._imageIndex );
             }
         }
 
@@ -251,9 +252,9 @@ namespace Maps
                     continue;
                 }
 
-                object.id = roadParts.front().first;
-                object.index = roadParts.front().second;
-                roadParts.pop_front();
+                object.id = roadParts.begin()->first;
+                object.index = roadParts.begin()->second;
+                roadParts.erase( roadParts.begin() );
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
@@ -262,9 +263,9 @@ namespace Maps
                     continue;
                 }
 
-                object.id = streamParts.front().first;
-                object.index = streamParts.front().second;
-                streamParts.pop_front();
+                object.id = streamParts.begin()->first;
+                object.index = streamParts.begin()->second;
+                streamParts.erase( streamParts.begin() );
             }
 
             ++objectIndex;
