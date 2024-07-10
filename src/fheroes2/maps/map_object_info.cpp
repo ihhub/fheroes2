@@ -4825,8 +4825,8 @@ namespace
         for ( const auto & objects : objectData ) {
             for ( const auto & objectInfo : objects ) {
                 for ( const auto & info : objectInfo.groundLevelParts ) {
-                    const auto [iter, inserted] = groundObjectInfoVsObjectType.emplace(
-                        std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
+                    const auto [iter, inserted]
+                        = groundObjectInfoVsObjectType.emplace( std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
                     if ( !inserted ) {
                         assert( iter->second.first == info.layerType && iter->second.second == info.objectType );
                     }
