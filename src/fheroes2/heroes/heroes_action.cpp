@@ -59,6 +59,7 @@
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
@@ -1720,7 +1721,26 @@ namespace
 
             Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-            I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+            assert( tile.GetObject() == MP2::OBJ_ARTIFACT );
+
+            uint32_t objectUID = 0;
+
+            if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == MP2::OBJ_ARTIFACT ) {
+                objectUID = tile.GetObjectUID();
+            }
+            else {
+                // In maps made by the original map editor artifact can be in the bottom layer addons.
+                for ( const auto & addon : tile.getBottomLayerAddons() ) {
+                    if ( Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex ) == MP2::OBJ_ARTIFACT ) {
+                        objectUID = addon._uid;
+                        break;
+                    }
+                }
+            }
+
+            assert( objectUID != 0 );
+
+            I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), MP2::OBJ_ARTIFACT ) );
 
             resetObjectInfoOnTile( tile );
 
