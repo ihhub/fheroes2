@@ -135,11 +135,6 @@ namespace Maps
             _mainAddon._objectIcnType = type;
         }
 
-        void setObjectLayerType( const ObjectLayerType type )
-        {
-            _mainAddon._layerType = type;
-        }
-
         uint8_t GetObjectSpriteIndex() const
         {
             return _mainAddon._imageIndex;
@@ -295,6 +290,7 @@ namespace Maps
         {
             if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 _addonBottomLayer.emplace_back( _mainAddon );
+                _mainAddon = {};
             }
         }
 
