@@ -254,7 +254,7 @@ namespace
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
             const auto & heroInfo = _heroInfos[index];
-            const auto & heroMetadata = heroInfo.heroMetadata;
+            const auto * heroMetadata = heroInfo.heroMetadata;
 
             renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
                         getHeroTitle( heroMetadata->customName, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2, current );
@@ -298,7 +298,7 @@ namespace
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
             const auto & townInfo = _townInfos[index];
-            const auto & castleMetadata = townInfo.castleMetadata;
+            const auto * castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
@@ -312,7 +312,7 @@ namespace
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
             const auto & townInfo = _townInfos[index];
-            const auto & castleMetadata = townInfo.castleMetadata;
+            const auto * castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
@@ -929,7 +929,7 @@ namespace
                 }
 
                 const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = townInfo.castleMetadata;
+                const auto * castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
@@ -1010,7 +1010,7 @@ namespace
                 Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
                       castleRightFlag.height() );
 
-                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
@@ -1543,7 +1543,7 @@ namespace
                 }
 
                 const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = townInfo.castleMetadata;
+                const auto * castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
@@ -1599,7 +1599,7 @@ namespace
                 Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
                       castleRightFlag.height() );
 
-                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
