@@ -295,6 +295,7 @@ namespace Maps
         {
             if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 _addonBottomLayer.emplace_back( _mainAddon );
+                _mainAddon = {};
             }
         }
 
