@@ -4876,14 +4876,22 @@ namespace Maps
         for ( const auto & group : objectData ) {
             for ( const auto & object : group ) {
                 assert( !object.groundLevelParts.empty() );
-                const auto & info = object.groundLevelParts.front();
 
-                if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                    return info.objectType;
+                for ( const auto & info : object.groundLevelParts ) {
+                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
+                        return info.objectType;
+                    }
+                }
+
+                for ( const auto & info : object.topLevelParts ) {
+                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
+                        return info.objectType;
+                    }
                 }
             }
         }
 
+        // TODO: check whether we need to add an assertion as we are hitting this code.
         return MP2::OBJ_NONE;
     }
 

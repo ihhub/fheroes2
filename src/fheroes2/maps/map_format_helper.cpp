@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <deque>
 #include <list>
 #include <map>
 #include <memory>
@@ -221,18 +220,24 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        std::deque<const TilesAddon *> roadParts;
-        std::deque<const TilesAddon *> streamParts;
+        // A tile cannot contain an exactly the same road or stream parts.
+        std::set<std::pair<uint32_t, uint8_t>> roadParts;
+        std::set<std::pair<uint32_t, uint8_t>> streamParts;
+
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
+        if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            roadParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+        }
+        else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+            streamParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+        }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.push_back( &addon );
-                }
-                else {
-                    streamParts.push_back( &addon );
-                }
+            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( addon._uid, addon._imageIndex );
+            }
+            else if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace( addon._uid, addon._imageIndex );
             }
         }
 
@@ -241,36 +246,36 @@ namespace Maps
 
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = roadParts.front()->_uid;
-                object.index = roadParts.front()->_imageIndex;
-                roadParts.pop_front();
+                object.id = roadParts.begin()->first;
+                object.index = roadParts.begin()->second;
+                roadParts.erase( roadParts.begin() );
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = streamParts.front()->_uid;
-                object.index = streamParts.front()->_imageIndex;
-                streamParts.pop_front();
+                object.id = streamParts.begin()->first;
+                object.index = streamParts.begin()->second;
+                streamParts.erase( streamParts.begin() );
             }
 
             ++objectIndex;
         }
 
-        for ( const TilesAddon * addon : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
-        for ( const TilesAddon * addon : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, index, uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
