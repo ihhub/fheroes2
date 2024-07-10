@@ -40,7 +40,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
-#include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "mounts.h"
