@@ -1298,6 +1298,14 @@ namespace
                 }
             }
 
+#if defined( WITH_DEBUG )
+            // Check that we don't put the same object part.
+            for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                assert( groundPart._uid != uid || groundPart._imageIndex != static_cast<uint8_t>( partInfo.icnIndex ) || groundPart._objectIcnType != partInfo.icnType ||
+                        groundPart._layerType != partInfo.layerType );
+            }
+#endif
+
             // Push the object to the ground (bottom) object parts.
             currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
