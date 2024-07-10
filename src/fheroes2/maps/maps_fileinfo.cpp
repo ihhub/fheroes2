@@ -494,7 +494,7 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         assert( map.victoryConditionMetadata[0] >= 10000 );
 
         // Divide by 1000 since the old format supports only this.
-        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] ) / 1000;
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / 1000 );
         break;
     case VICTORY_DEFEAT_OTHER_SIDE:
         // As of now only 2 alliances are supported.
