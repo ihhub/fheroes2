@@ -4818,16 +4818,17 @@ namespace
             }
         }
 
-        // Check that an image part is set to the same layer type for all objects.
-        std::map<std::pair<MP2::ObjectIcnType, uint32_t>, Maps::ObjectLayerType> groundObjectInfoVsLayerType;
+        // Check that an image part is set to the same layer and object type for all objects.
+        std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectLayerType, MP2::MapObjectType>> groundObjectInfoVsObjectType;
         std::set<std::pair<MP2::ObjectIcnType, uint32_t>> topObjectInfo;
 
         for ( const auto & objects : objectData ) {
             for ( const auto & objectInfo : objects ) {
                 for ( const auto & info : objectInfo.groundLevelParts ) {
-                    const auto [iter, inserted] = groundObjectInfoVsLayerType.emplace( std::make_pair( info.icnType, info.icnIndex ), info.layerType );
+                    const auto [iter, inserted]
+                        = groundObjectInfoVsObjectType.emplace( std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
                     if ( !inserted ) {
-                        assert( iter->second == info.layerType );
+                        assert( iter->second.first == info.layerType && iter->second.second == info.objectType );
                     }
 
                     assert( topObjectInfo.find( std::make_pair( info.icnType, info.icnIndex ) ) == topObjectInfo.end() );
@@ -4836,7 +4837,7 @@ namespace
                 for ( const auto & info : objectInfo.topLevelParts ) {
                     topObjectInfo.emplace( info.icnType, info.icnIndex );
 
-                    assert( groundObjectInfoVsLayerType.find( std::make_pair( info.icnType, info.icnIndex ) ) == groundObjectInfoVsLayerType.end() );
+                    assert( groundObjectInfoVsObjectType.find( std::make_pair( info.icnType, info.icnIndex ) ) == groundObjectInfoVsObjectType.end() );
                 }
             }
         }
@@ -4891,7 +4892,10 @@ namespace Maps
             }
         }
 
-        // TODO: check whether we need to add an assertion as we are hitting this code.
+        // You can reach this code by 3 reasons:
+        // - you are passing invalid object information
+        // - you updated object properties but didn't do object info migration for save files
+        // - you are trying to get info of an object created by an original Editor
         return MP2::OBJ_NONE;
     }
 
