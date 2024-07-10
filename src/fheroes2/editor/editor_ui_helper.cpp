@@ -26,7 +26,6 @@
 #include "color.h"
 #include "icn.h"
 #include "image.h"
-#include "pal.h"
 #include "resource.h"
 #include "screen.h"
 #include "tools.h"
@@ -69,14 +68,8 @@ namespace Editor
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
                                          const bool isEvil )
     {
-        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-        if ( isEvil ) {
-            fheroes2::ApplyPalette( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height(),
-                                    PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-        }
-        else {
-            fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
-        }
+        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
+        fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
 
         fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
         const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
