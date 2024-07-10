@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
+#include <list>
 #include <memory>
 #include <ostream>
 #include <string>
