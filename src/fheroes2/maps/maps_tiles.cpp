@@ -40,6 +40,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "mounts.h"
@@ -1462,14 +1463,22 @@ void Maps::Tiles::updateEmpty()
 
 void Maps::Tiles::setAsEmpty()
 {
+    // After removing an action object there could be some other object part in the top layer addons.
+    for ( const Maps::TilesAddon & addon : _addonTopLayer ) {
+        const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+
+        if ( objectType != MP2::OBJ_NONE ) {
+            SetObject( objectType );
+            return;
+        }
+    }
+
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
     // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
         SetObject( MP2::OBJ_NONE );
         return;
     }
-
-    bool isCoast = false;
 
     const Indexes tileIndices = Maps::getAroundIndexes( _index, 1 );
     for ( const int tileIndex : tileIndices ) {
@@ -1479,12 +1488,12 @@ void Maps::Tiles::setAsEmpty()
         }
 
         if ( world.GetTiles( tileIndex ).isWater() ) {
-            isCoast = true;
-            break;
+            SetObject( MP2::OBJ_COAST );
+            return;
         }
     }
 
-    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_NONE );
+    SetObject( MP2::OBJ_NONE );
 }
 
 uint32_t Maps::Tiles::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const
