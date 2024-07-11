@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-09 14:38+0000\n"
-"PO-Revision-Date: 2024-06-16 11:15+0300\n"
+"PO-Revision-Date: 2024-07-11 19:03+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -319,10 +319,10 @@ msgstr ""
 "Т"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "ЧУТКИ"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ПОДІЇ"
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -3486,13 +3486,11 @@ msgstr "Оберіть героя:"
 msgid "race|Random"
 msgstr "Випадково"
 
-#, fuzzy
 msgid "Click to start placing the selected hero."
-msgstr "Тицьніть для розміщення вибраного замку/міста"
+msgstr "Тицьніть для початку розміщення вибраного героя."
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "%{color} %{race} герой"
+msgstr "%{color} %{race}"
 
 msgid "You will place"
 msgstr "Розмістити"
@@ -3679,13 +3677,12 @@ msgstr "Іконка розміру"
 msgid "Map Type"
 msgstr "Тип мапи"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Визначає створена для версії \"Війни за Спадщину\" або для версії \"Ціна "
-"Вірності\"."
+"Вказує, чи створена мапа для версії гри \"Війни за спадщину\", \"Ціна "
+"вірності\" або \"Воскресіння\"."
 
 msgid "Selected Name"
 msgstr "Назва"
@@ -3838,25 +3835,23 @@ msgstr "Найсильніший монстр:"
 msgid "Random Castle Name"
 msgstr "Випадкова назва замку"
 
-#, fuzzy
 msgid "Random Town Name"
-msgstr "Випадкове Місто"
+msgstr "Випадкова назва міста"
 
 msgid "Allow Castle build"
 msgstr "Дозволити будівництво замку"
 
 msgid "Default Buildings"
-msgstr "Споруди за налаштуванням"
+msgstr "Наявні споруди"
 
 msgid "Default Army"
-msgstr "Армія за налаштуванням"
+msgstr "Наявна армія"
 
 msgid "Castle Army"
 msgstr "Гарнізон замку"
 
-#, fuzzy
 msgid "Town Army"
-msgstr "Місто"
+msgstr "Гарнізон міста"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
@@ -3901,10 +3896,10 @@ msgid "Computer colors allowed to get event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
 msgid "First day of occurrence:"
-msgstr ""
+msgstr "Перший день появи:"
 
 msgid "Repeat period (days):"
-msgstr ""
+msgstr "Період повторення (дні):"
 
 msgid "Allow %{color} human player to get event"
 msgstr "Дозволити %{color} гравцю-людині отримати подію"
@@ -3951,35 +3946,28 @@ msgid "Day: %{day}"
 msgstr "День: %{day}"
 
 msgid "Daily Events"
-msgstr ""
+msgstr "Щоденні події"
 
-#, fuzzy
 msgid "Click to save the events."
-msgstr "Натисніть, щоб зберегти властивості події."
+msgstr "Тицьніть, щоб зберегти події."
 
-#, fuzzy
 msgid "Add Event"
-msgstr "Подія"
+msgstr "Додати подію"
 
-#, fuzzy
 msgid "Add an additional event."
-msgstr "Додати додаткову відповідь на запитання."
+msgstr "Додати додаткову подію."
 
-#, fuzzy
 msgid "Edit Event"
-msgstr "Подія"
+msgstr "Редагувати подію"
 
-#, fuzzy
 msgid "Edit an existing event."
-msgstr "Завантажити існуючу мапу."
+msgstr "Редагувати існуючу подію."
 
-#, fuzzy
 msgid "Delete Event"
-msgstr "Видалити відповідь"
+msgstr "Видалити подію"
 
-#, fuzzy
 msgid "Delete an existing event."
-msgstr "Видалити існуючу відповідь на запитання."
+msgstr "Видалити існуючу подію."
 
 msgid "Cancel event after first visit"
 msgstr "Скасувати подію після першого відвідування"
@@ -4097,9 +4085,8 @@ msgstr "Не вдалося оновити інформацію по гравц�
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "На карті можна розмістити лише один випадковий Легендарний артефакт."
 
-#, fuzzy
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "На мапі можна розмістити максимум %{count} героя однакового кольору."
+msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4403,29 +4390,23 @@ msgstr "Нема доступних мап!"
 msgid "Warning"
 msgstr "Попередження"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race} герой"
+msgstr "[%{pos}]: %{race} герой"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race} герой"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} герой"
+msgstr "[%{pos}]: %{race} місто"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} %{race} %{townOrCastle}"
+msgstr "[%{pos}]: %{race} замок"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race} місто"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} проти %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race} замок"
 
 msgid "None."
 msgstr "Нема."
@@ -4445,48 +4426,45 @@ msgstr "Особливі умови програшу"
 msgid "Special Victory Condition"
 msgstr "Особливі умови перемоги"
 
-#, fuzzy
 msgid "Allow standard victory conditions"
-msgstr "Умови перемоги."
+msgstr "Дозволити стандартні умови перемоги"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Дозволити цю умову для ШІ тажок"
 
-#, fuzzy
 msgid "Gold:"
-msgstr "Золото"
+msgstr "Золото:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Оберіть місто, в яке переміститися."
+msgstr "Виберіть місто, яке потрібно захопити, щоб досягти перемоги"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+msgstr ""
+"Тицьніть сюди, щоб змінити місто, яке потрібно захопити для досягнення "
+"перемоги."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Виберіть героя, здолавши якого, досягнете перемоги"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+msgstr ""
+"Тицьніть сюди, щоб змінити героя, якого потрібно перемогти, для досягнення "
+"перемоги."
 
 msgid "Days:"
-msgstr ""
+msgstr "Дні:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Виберіть місто, яке потрібно втратити, щоб зазнати поразки"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+msgstr "Тицьніть тут для зміни місто, втрата якого означатиме поразку."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Виберіть героя, втрата якого означатиме поразку."
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Тицьніть сюди, щоб змінити повідомлення події."
+msgstr "Тицьніть сюди, щоб змінити героя, втрата якого означатиме поразку."
 
 msgid "Map Difficulty"
 msgstr ""
@@ -4512,20 +4490,17 @@ msgstr ""
 msgid "Click to accept the changes made."
 msgstr "Тицьніть, щоб прийняти внесені зміни."
 
-#, fuzzy
 msgid "Click to edit custom rumors."
-msgstr "Натисніть, щоб зберегти поточну гру."
+msgstr "Тицьніть, щоб редагувати власні чутки."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Чутки"
 
-#, fuzzy
 msgid "Click to edit daily events."
-msgstr "Тицьніть щоб вийти з результатів битви."
+msgstr "Тицьніть для редагування щоденних подій."
 
-#, fuzzy
 msgid "Events"
-msgstr "Подія"
+msgstr "Події"
 
 msgid "Click to change your map name."
 msgstr "Тицьніть, щоб змінити назву вашої мапи."
@@ -4536,13 +4511,11 @@ msgstr "Назва мапи"
 msgid "Click to change the description of the current map."
 msgstr "Тицьніть, щоб змінити опис поточної мапи."
 
-#, fuzzy
 msgid "Click to change the victory condition of the current map."
-msgstr "Опис обраної вами мапи."
+msgstr "Тицьніть, щоб змінити умови перемоги для поточної мапи."
 
-#, fuzzy
 msgid "Click to change the loss condition of the current map."
-msgstr "Опис обраної вами мапи."
+msgstr "Тицьніть, щоб змінити умови поразки для поточної мапи."
 
 msgid "Indicates the player types in the scenario. Click to change."
 msgstr "Показує типи гравців у сценарії. Тицьніть, щоб змінити."
@@ -4572,41 +4545,34 @@ msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Чутка:"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Чутка"
 
-#, fuzzy
 msgid "This rumor already exists in the list."
-msgstr "Ця відповідь є у списку."
+msgstr "Ця чутка вже є у списку."
 
-#, fuzzy
 msgid "Click to save the rumors."
-msgstr "Натисніть, щоб зберегти властивості події."
+msgstr "Тицьніть, щоб зберегти чутку."
 
 msgid "Add Rumor"
-msgstr ""
+msgstr "Додати чутку"
 
-#, fuzzy
 msgid "Add an additional rumor."
-msgstr "Додати додаткову відповідь на запитання."
+msgstr "Додати додаткову чутку."
 
-#, fuzzy
 msgid "Edit Rumor"
-msgstr "Редактор"
+msgstr "Редагувати чутку"
 
-#, fuzzy
 msgid "Edit an existing rumor."
-msgstr "Завантажити існуючу мапу."
+msgstr "Редагувати існуючу чутку."
 
-#, fuzzy
 msgid "Delete Rumor"
-msgstr "Видалити відповідь"
+msgstr "Видалити чутку"
 
-#, fuzzy
 msgid "Delete an existing rumor."
-msgstr "Видалити існуючу відповідь на запитання."
+msgstr "Видалити існуючу чутку."
 
 msgid ""
 "\n"
@@ -4669,7 +4635,7 @@ msgid "Delete an existing answer for the question."
 msgstr "Видалити існуючу відповідь на запитання."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
 
 msgid "difficulty|Easy"
 msgstr "Проста"
@@ -5070,9 +5036,8 @@ msgstr "повторити останню дію"
 msgid "hotkey|open game main menu"
 msgstr "відкрити головне меню гри"
 
-#, fuzzy
 msgid "hotkey|toggle passability"
-msgstr "відобразити статус"
+msgstr "відобразити прохідність"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"
