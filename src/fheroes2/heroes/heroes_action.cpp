@@ -220,22 +220,27 @@ namespace
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
-    uint32_t getObjectUIDFromTile( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+    void runActionObjectFadeOutAnumation( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
     {
-        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
-            return tile.GetObjectUID();
-        }
+        uint32_t objectUID = 0;
 
-        // In maps made by the original map editor the action object can be in the bottom layer addons.
-        for ( const Maps::TilesAddon & addon : tile.getBottomLayerAddons() ) {
-            if ( Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex ) == objectType ) {
-                return addon._uid;
+        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
+            objectUID = tile.GetObjectUID();
+        }
+        else {
+            // In maps made by the original map editor the action object can be in the bottom layer addons.
+            for ( const Maps::TilesAddon & addon : tile.getBottomLayerAddons() ) {
+                if ( Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex ) == objectType ) {
+                    objectUID = addon._uid;
+                    break;
+                }
             }
         }
 
-        assert( 0 );
+        assert( objectUID != 0 );
 
-        return 0;
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
+            std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -253,12 +258,7 @@ namespace
 
                     assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
-                    const uint32_t objectUID = getObjectUIDFromTile( tile, MP2::OBJ_MONSTER );
-
-                    assert( objectUID != 0 );
-
-                    Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                        std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), MP2::OBJ_MONSTER ) );
+                    runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
@@ -449,12 +449,7 @@ namespace
 
             assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
-            const uint32_t objectUID = getObjectUIDFromTile( tile, MP2::OBJ_MONSTER );
-
-            assert( objectUID != 0 );
-
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), MP2::OBJ_MONSTER ) );
+            runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
         }
 
         // Clear the hero's attacked monster tile index
@@ -733,11 +728,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-        assert( objectUID != 0 );
-
-        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
 
@@ -946,12 +937,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-        assert( objectUID != 0 );
-
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
     }
@@ -1577,12 +1563,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-        assert( objectUID != 0 );
-
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
     }
@@ -1766,11 +1747,7 @@ namespace
 
             assert( tile.GetObject() == MP2::OBJ_ARTIFACT );
 
-            const uint32_t objectUID = getObjectUIDFromTile( tile, MP2::OBJ_ARTIFACT );
-
-            assert( objectUID != 0 );
-
-            I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), MP2::OBJ_ARTIFACT ) );
+            runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
             resetObjectInfoOnTile( tile );
 
@@ -1885,12 +1862,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-        assert( objectUID != 0 );
-
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
     }
@@ -3325,13 +3297,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-            assert( objectUID != 0 );
-
-            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-
-            adventureMapInterface.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+            runActionObjectFadeOutAnumation( tile, objectType );
 
             // TODO: add hero fading in animation together with jail animation.
             Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3340,7 +3306,7 @@ namespace
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
 
                 // Update the kingdom heroes list including the scrollbar.
-                adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
+                Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
         else {
@@ -3582,12 +3548,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            const uint32_t objectUID = getObjectUIDFromTile( tile, objectType );
-
-            assert( objectUID != 0 );
-
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+            runActionObjectFadeOutAnumation( tile, objectType );
         }
         else {
             fheroes2::showStandardTextMessage(
