@@ -1463,7 +1463,13 @@ void Maps::Tiles::updateEmpty()
 
 void Maps::Tiles::setAsEmpty()
 {
-    // After removing an action object there could be some other object part in the top layer addons.
+    // After removing an action object there could be some other object part in the main addon.
+    if ( const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( getObjectIcnType(), GetObjectSpriteIndex() ); objectType != MP2::OBJ_NONE ) {
+        SetObject( objectType );
+        return;
+    }
+
+    // Or object part can be in the top layer addons.
     for ( const Maps::TilesAddon & addon : _addonTopLayer ) {
         const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
 
