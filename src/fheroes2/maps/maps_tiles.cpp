@@ -1479,6 +1479,16 @@ void Maps::Tiles::setAsEmpty()
         }
     }
 
+    // And sometimes even in the bottom layer addons.
+    for ( const Maps::TilesAddon & addon : _addonBottomLayer ) {
+        const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+
+        if ( objectType != MP2::OBJ_NONE ) {
+            SetObject( objectType );
+            return;
+        }
+    }
+
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
     // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
