@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3519,11 +3519,11 @@ msgstr "Tệp để Lưu:"
 msgid "File to Load:"
 msgstr "Tệp để Tải:"
 
-msgid "Accept the choice made."
-msgstr "Chấp nhận sự lựa chọn được thực hiện."
-
 msgid "Terrain object"
 msgstr "Đối tượng địa hình"
+
+msgid "Accept the choice made."
+msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
 msgid "Select Skill:"
 msgstr "Chọn Kỹ năng:"
@@ -4492,6 +4492,30 @@ msgid "Warning"
 msgstr "Cảnh báo"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} tướng"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} tướng"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} %{townOrCastle}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Không"
 
@@ -4519,12 +4543,44 @@ msgstr "Điều kiện Thắng"
 msgid "Allow standard victory conditions"
 msgstr "Điều kiện Thắng"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Vàng"
 
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Chọn thị trấn để dịch chuyển tới."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Nhấp để lưu trò chơi hiện tại."
 
 #, fuzzy
 msgid "Map Difficulty"

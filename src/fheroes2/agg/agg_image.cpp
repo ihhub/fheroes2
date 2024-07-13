@@ -520,33 +520,6 @@ namespace
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
     }
 
-    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
-    {
-        // Evil interface has special elements at each corner of the window.
-        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
-
-        // If this assertion blows up you are using some modded resources. Good luck!
-        assert( original.width() == 321 && original.height() == 304 );
-
-        // Top-left corner.
-        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
-        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
-
-        // Top-right corner.
-        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
-        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
-
-        // Bottom-right corner.
-        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
-
-        // Bottom-left corner.
-        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
-    }
-
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
     void setButtonCornersTransparent( fheroes2::Sprite & buttonSprite )
     {
@@ -2671,19 +2644,6 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BATTLESKIP:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
-
-                    // add 'skip'
-                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
-                }
-                return true;
             case ICN::BUYMAX:
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
@@ -2958,6 +2918,21 @@ namespace fheroes2
                         out = Crop( out, 0, 0, out.width() - 1, out.height() );
                     }
                 }
+
+                if ( _icnVsSprite[id].size() == 25 ) {
+                    // Add random town and castle icons for Editor.
+                    // A temporary solution: blurred Wizard castle/town in purple palette.
+                    _icnVsSprite[id].resize( 27 );
+                    _icnVsSprite[id][25] = CreateHolyShoutEffect( _icnVsSprite[id][13], 1, 0 );
+                    _icnVsSprite[id][26] = CreateHolyShoutEffect( _icnVsSprite[id][19], 1, 0 );
+                    ApplyPalette( _icnVsSprite[id][25], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                    ApplyPalette( _icnVsSprite[id][26], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+                    // Add the '?' mark above the image.
+                    const Text text( "? ? ?", FontType::normalWhite() );
+                    text.draw( ( _icnVsSprite[id][25].width() - text.width() ) / 2, 6, _icnVsSprite[id][25] );
+                    text.draw( ( _icnVsSprite[id][26].width() - text.width() ) / 2, 6, _icnVsSprite[id][26] );
+                }
                 return true;
             case ICN::TOWNBKG2:
                 LoadOriginalICN( id );
@@ -2983,12 +2958,6 @@ namespace fheroes2
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                     }
-                }
-                return true;
-            case ICN::LISTBOX_EVIL:
-                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
-                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
-                    ApplyPalette( sprite, 2 );
                 }
                 return true;
             case ICN::MONS32:
@@ -3220,11 +3189,29 @@ namespace fheroes2
             case ICN::DROPLISL_EVIL: {
                 loadICN( ICN::DROPLISL );
                 _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+
+                // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                const std::vector<uint8_t> palette
+                    = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 for ( auto & image : _icnVsSprite[id] ) {
-                    // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
-                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(),
-                                            PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ),
-                                                                  PAL::GetPalette( PAL::PaletteType::GRAY ) ) );
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                }
+                return true;
+            }
+            case ICN::CELLWIN_EVIL: {
+                loadICN( ICN::CELLWIN );
+
+                if ( _icnVsSprite[ICN::CELLWIN].size() > 18 ) {
+                    // Convert to Evil only the first 19 images. The rest are not standard buttons and are player color related settings used in original editor.
+                    _icnVsSprite[ICN::CELLWIN_EVIL].resize( 19 );
+                    std::copy( _icnVsSprite[ICN::CELLWIN].begin(), _icnVsSprite[ICN::CELLWIN].begin() + 19, _icnVsSprite[ICN::CELLWIN_EVIL].begin() );
+
+                    // To convert the yellow borders of some items the combination of good-to-evil and gray palettes is used here.
+                    const std::vector<uint8_t> palette
+                        = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                    for ( Sprite & image : _icnVsSprite[ICN::CELLWIN_EVIL] ) {
+                        fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                    }
                 }
                 return true;
             }
@@ -4349,28 +4336,6 @@ namespace fheroes2
                 convertToEvilInterface( output, roi );
 
                 _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
-
-                return true;
-            }
-            case ICN::RECR2BKG_EVIL: {
-                GetICN( ICN::RECR2BKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
-
-                return true;
-            }
-            case ICN::RECRBKG_EVIL: {
-                GetICN( ICN::RECRBKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
 
                 return true;
             }
