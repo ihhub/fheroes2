@@ -91,6 +91,47 @@ namespace
             }
         }
     }
+
+    /// Draw shadow around an area
+    ///
+    /// @note This is a good candidate for becoming a generic drawing
+    /// function available system-wide.
+    ///
+    /// @param i Image to draw on
+    /// @param box Draw shadow on the left and bottom of this area
+    void DrawShadow( fheroes2::Image & i, fheroes2::Rect box )
+    {
+        auto x = box.x;
+        auto y = box.y;
+        auto w = box.width;
+        auto h = box.height;
+        auto b = BORDERWIDTH;
+
+        // Use the shadow strategy outlined in StandardWindow::render()
+
+        // The table format makes it easier to understand what the
+        // multiple transform calls do and how they relate to each other.
+        // clang-format off
+
+        // "left side" shadow
+        ApplyTransform( i, x - b    , y + b    , b    , 1        , 5 );
+        ApplyTransform( i, x - b    , y + b + 1, 1    , h - 2    , 5 );
+        ApplyTransform( i, x - b + 1, y + b + 1, b - 1, 1        , 4 );
+        ApplyTransform( i, x - b + 1, y + b + 2, 1    , h - 4    , 4 );
+        ApplyTransform( i, x - b + 2, y + b + 2, b - 2, 1        , 3 );
+        ApplyTransform( i, x - b + 2, y + b + 3, 1    , h - 6    , 3 );
+        ApplyTransform( i, x - b + 3, y + b + 3, b - 3, h - b - 3, 2 );
+
+        // "bottom side" shadow
+        ApplyTransform( i, x - b + 3    , y + h        , w - 6, b - 3, 2 );
+        ApplyTransform( i, x - b + 2    , y + h + b - 3, w - 4, 1    , 3 );
+        ApplyTransform( i, x + w - b - 3, y + h        , 1    , b - 3, 3 );
+        ApplyTransform( i, x - b + 1    , y + h + b - 2, w - 2, 1    , 4 );
+        ApplyTransform( i, x + w - b - 2, y + h        , 1    , b - 2, 4 );
+        ApplyTransform( i, x - b        , y + h + b - 1, w    , 1    , 5 );
+        ApplyTransform( i, x + w - b - 1, y + h        , 1    , b - 1, 5 );
+        // clang-format on
+    }
 }
 
 class MeetingArmyBar : public ArmyBar
@@ -247,8 +288,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     Cursor::Get().SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
-    fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
+    // include shadow
+    fheroes2::ImageRestorer restorer( display, cur_pt.x - BORDERWIDTH, cur_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH );
 
     const fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
@@ -262,6 +305,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // background
     fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
+
+    // This ICN (SWAPWIN) does not have an associated shadow
+    // (typically the '1' index). Therefore, we will draw the shadow
+    // by hand.
+    DrawShadow( display, { dst_pt.x, dst_pt.y, src_rt.width, src_rt.height } );
 
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
