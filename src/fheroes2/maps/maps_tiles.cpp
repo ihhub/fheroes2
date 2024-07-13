@@ -481,7 +481,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
-            setAsEmpty();
+            updateObjectType();
         }
 
         _occupantHeroId = Heroes::UNKNOWN;
@@ -1457,11 +1457,11 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
 void Maps::Tiles::updateEmpty()
 {
     if ( _mainObjectType == MP2::OBJ_NONE ) {
-        setAsEmpty();
+        updateObjectType();
     }
 }
 
-void Maps::Tiles::setAsEmpty()
+void Maps::Tiles::updateObjectType()
 {
     // After removing an action object there could be some other object part in the main addon.
     if ( const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( getObjectIcnType(), GetObjectSpriteIndex() ); objectType != MP2::OBJ_NONE ) {

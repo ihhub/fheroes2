@@ -340,11 +340,12 @@ namespace Maps
         Heroes * getHero() const;
         void setHero( Heroes * hero );
 
-        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
+        // If tile is empty (MP2::OBJ_NONE) then update tile's object type if needed.
         void updateEmpty();
 
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
-        void setAsEmpty();
+        // Set tile's object type according to the object's sprite if there is any, otherwise
+        // it is set to coast (MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE).
+        void updateObjectType();
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
 

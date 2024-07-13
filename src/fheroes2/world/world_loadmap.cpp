@@ -1153,7 +1153,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
 
         // Remove the predefined Ultimate Artifact object
         ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
-        ultArtTileIter->setAsEmpty();
+        ultArtTileIter->updateObjectType();
     }
 
     setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );

@@ -575,7 +575,7 @@ namespace
             setMonsterCountOnTile( tile, 0 );
 
             removeObjectSprite( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
         }
     }
 
@@ -1401,7 +1401,7 @@ namespace
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
             removeObjectSprite( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
         }
     }
 
@@ -1502,7 +1502,7 @@ namespace
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
             removeObjectSprite( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
         }
     }
 
@@ -1661,7 +1661,7 @@ namespace
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
             removeObjectSprite( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
 
@@ -2219,7 +2219,7 @@ namespace AI
         }
         else {
             removeObjectSprite( tileSource );
-            tileSource.setAsEmpty();
+            tileSource.updateObjectType();
         }
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );

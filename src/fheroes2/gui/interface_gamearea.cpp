@@ -1205,6 +1205,6 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 
     if ( tile.GetObject() == type ) {
         removeObjectSprite( tile );
-        tile.setAsEmpty();
+        tile.updateObjectType();
     }
 }

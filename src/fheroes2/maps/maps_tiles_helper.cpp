@@ -123,7 +123,7 @@ namespace
         if ( !art.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
@@ -180,7 +180,7 @@ namespace
         if ( !mons.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set a monster over a random monster on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
@@ -217,7 +217,7 @@ namespace
             if ( topTile.GetObject() == MP2::OBJ_NON_ACTION_JAIL && topTile.GetObjectUID() == 0 ) {
                 // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
                 // This is not ideal but it doesn't break things.
-                topTile.setAsEmpty();
+                topTile.updateObjectType();
                 topTile.FixObject();
             }
 
@@ -229,7 +229,7 @@ namespace
                 if ( leftTile.GetObject() == MP2::OBJ_NON_ACTION_JAIL && leftTile.GetObjectUID() == 0 ) {
                     // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
                     // This is not ideal but it doesn't break things.
-                    leftTile.setAsEmpty();
+                    leftTile.updateObjectType();
                     leftTile.FixObject();
                 }
             }
@@ -1935,7 +1935,7 @@ namespace Maps
 
         const MP2::MapObjectType objectType = tile.GetObject( false );
         if ( MP2::isPickupObject( objectType ) ) {
-            tile.setAsEmpty();
+            tile.updateObjectType();
         }
     }
 
