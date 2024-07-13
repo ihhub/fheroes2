@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,5 @@ void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 
     AudioManager::PlaySound( M82::TREASURE );
 
-    fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
-                           fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+    fheroes2::showStandardTextMessage( artifact.GetName(), _( artifactSetData._assembleMessage ), Dialog::OK, { &artifactUI } );
 }

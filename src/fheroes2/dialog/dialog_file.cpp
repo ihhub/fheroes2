@@ -104,8 +104,7 @@ namespace
             }
             else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
-                    fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
+                    fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
                 }
                 else if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
@@ -129,24 +128,19 @@ namespace
                 break;
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "New Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Start a single or multi-player game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Load a previously saved game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Save Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Save the current game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Save Game" ), _( "Save the current game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Quit" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Quit out of Heroes of Might and Magic II." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
 

@@ -464,8 +464,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             StringReplace( msg, "%{artifact}", ultimate.GetName() );
 
             const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( _( "Congratulations!" ), std::move( msg ), Dialog::OK, { &artifactUI } );
         }
         else {
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );

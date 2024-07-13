@@ -194,18 +194,18 @@ struct ResourceBar
             int32_t sel = cur;
             uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "First select recipients!" ), Dialog::OK );
             }
             else if ( 0 == max ) {
                 std::string msg = _( "You cannot select %{resource}!" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK );
             }
             else {
                 std::string msg = _( "Select count %{resource}:" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
 
-                if ( Dialog::SelectCount( msg, 0, max, sel, step ) && cur != sel ) {
+                if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
                     int32_t * from = funds.GetPtr( rs );
                     int32_t * to = resource.GetPtr( rs );
 

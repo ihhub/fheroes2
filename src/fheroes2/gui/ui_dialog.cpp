@@ -84,7 +84,7 @@ namespace
 
 namespace fheroes2
 {
-    int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
         outputInTextSupportMode( header, body, buttons );
 
@@ -159,7 +159,7 @@ namespace fheroes2
             elementHeight += rowHeight.back();
         }
 
-        Dialog::FrameBox box( overallTextHeight + elementHeight, isProperDialog );
+        const Dialog::FrameBox box( overallTextHeight + elementHeight, isProperDialog );
         const Rect & pos = box.GetArea();
 
         Display & display = Display::instance();
@@ -244,11 +244,11 @@ namespace fheroes2
         return result;
     }
 
-    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
-        Text header( std::move( headerText ), FontType::normalYellow() );
-        Text body( std::move( messageBody ), FontType::normalWhite() );
-        return showMessage( header, body, buttons );
+        const Text header( std::move( headerText ), FontType::normalYellow() );
+        const Text body( std::move( messageBody ), FontType::normalWhite() );
+        return showMessage( header, body, buttons, elements );
     }
 
     TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
@@ -328,10 +328,7 @@ namespace fheroes2
 
     void ArtifactDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _artifact.GetName(), FontType::normalYellow() );
-        const Text description( _artifact.GetDescription(), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _artifact.GetName(), _artifact.GetDescription(), buttons, { this } );
     }
 
     ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string text )
@@ -367,10 +364,7 @@ namespace fheroes2
 
     void ResourceDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( Resource::String( _resourceType ), FontType::normalYellow() );
-        const Text description( Resource::getDescription(), FontType::normalWhite() );
-
-        showMessage( header, description, buttons );
+        showStandardTextMessage( Resource::String( _resourceType ), Resource::getDescription(), buttons );
     }
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds )
@@ -461,10 +455,7 @@ namespace fheroes2
 
     void SpellDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _spell.GetName(), FontType::normalYellow() );
-        const Text description( getSpellDescription( _spell, _hero ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _spell.GetName(), getSpellDescription( _spell, _hero ), buttons, { this } );
     }
 
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
@@ -492,10 +483,7 @@ namespace fheroes2
     {
         const int luckType = _goodLuck ? Luck::GOOD : Luck::BAD;
 
-        const Text header( LuckString( luckType ), FontType::normalYellow() );
-        const Text description( Luck::Description( luckType ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( LuckString( luckType ), Luck::Description( luckType ), buttons, { this } );
     }
 
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
@@ -523,10 +511,7 @@ namespace fheroes2
     {
         const int moraleType = _goodMorale ? Morale::GOOD : Morale::POOR;
 
-        const Text header( MoraleString( moraleType ), FontType::normalYellow() );
-        const Text description( Morale::Description( moraleType ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( MoraleString( moraleType ), Morale::Description( moraleType ), buttons, { this } );
     }
 
     ExperienceDialogElement::ExperienceDialogElement( const int32_t experience )
@@ -569,12 +554,9 @@ namespace fheroes2
 
     void ExperienceDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( getExperienceName(), FontType::normalYellow() );
-        const Text description( getExperienceDescription(), FontType::normalWhite() );
-
         const ExperienceDialogElement experienceUI( 0 );
 
-        showMessage( header, description, buttons, { &experienceUI } );
+        showStandardTextMessage( getExperienceName(), getExperienceDescription(), buttons, { &experienceUI } );
     }
 
     PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string text )
@@ -635,12 +617,9 @@ namespace fheroes2
 
     void PrimarySkillDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( Skill::Primary::String( _skillType ), FontType::normalYellow() );
-        const Text description( Skill::Primary::StringDescription( _skillType, nullptr ), FontType::normalWhite() );
-
         const PrimarySkillDialogElement elementUI( _skillType, std::string() );
 
-        showMessage( header, description, buttons, { &elementUI } );
+        showStandardTextMessage( Skill::Primary::String( _skillType ), Skill::Primary::StringDescription( _skillType, nullptr ), buttons, { &elementUI } );
     }
 
     SmallPrimarySkillDialogElement::SmallPrimarySkillDialogElement( const int32_t skillType, std::string text )
@@ -718,10 +697,7 @@ namespace fheroes2
 
     void SecondarySkillDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _skill.GetNameWithBonus( _hero ), FontType::normalYellow() );
-        const Text description( _skill.GetDescription( _hero ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _skill.GetNameWithBonus( _hero ), _skill.GetDescription( _hero ), buttons, { this } );
     }
 
     AnimationDialogElement::AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay )

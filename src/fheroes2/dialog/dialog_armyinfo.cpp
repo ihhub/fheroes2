@@ -659,8 +659,7 @@ int Dialog::ArmyJoinFree( const Troop & troop )
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
-                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO );
+    return fheroes2::showStandardTextMessage( _( "Followers" ), std::move( message ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )

@@ -130,11 +130,10 @@ namespace
 
     void showMissingVideoFilesWindow()
     {
-        fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
-                               fheroes2::Text{ _( "The required video files for the campaign selection window are missing. "
-                                                  "Please make sure that all necessary files are present in the system." ),
-                                               fheroes2::FontType::normalWhite() },
-                               Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning!" ),
+                                           _( "The required video files for the campaign selection window are missing. "
+                                              "Please make sure that all necessary files are present in the system." ),
+                                           Dialog::OK );
     }
 }
 
