@@ -311,7 +311,7 @@ namespace
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
                                 "Christophe Didion\n"
-                                "Christopher Elliott");
+                                "Christopher Elliott" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
