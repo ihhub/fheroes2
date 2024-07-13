@@ -514,7 +514,7 @@ namespace
         const fheroes2::Sprite & winIcon = fheroes2::AGG::GetICN( ICN::REQUESTS, getVictoryIcnIndex( condition ) );
         fheroes2::Copy( winIcon, 0, 0, output, roi.x + 1, roi.y, winIcon.width(), winIcon.height() );
         const fheroes2::Text winText( getVictoryConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
+        winText.drawInRoi( roi.x + 20, roi.y + 2, 0, output, roi );
     }
 
     void redrawLossCondition( const uint8_t condition, const fheroes2::Rect & roi, const bool yellowFont, fheroes2::Image & output )
@@ -522,7 +522,7 @@ namespace
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::REQUESTS, getLossIcnIndex( condition ) );
         fheroes2::Copy( icon, 0, 0, output, roi.x + 1, roi.y, icon.width(), icon.height() );
         const fheroes2::Text winText( getLossConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
+        winText.drawInRoi( roi.x + 20, roi.y + 2, 0, output, roi );
     }
 
     class DropBoxList final : public Interface::ListBox<uint8_t>
@@ -943,7 +943,7 @@ namespace
                 fheroes2::Text text( getTownTitle( castleMetadata->customName, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                      fheroes2::FontType::normalWhite() );
                 text.fitToOneRow( roi.width - townIcon.width() - 5 );
-                text.drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, output, roi );
+                text.drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, 0, output, roi );
 
                 _selectConditionRoi = { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
 
