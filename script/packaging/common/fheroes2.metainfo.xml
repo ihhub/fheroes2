@@ -66,7 +66,7 @@
           <li>add hotkey for passability within the Editor</li>
           <li>add color names to Traveller's Tent and Barrier objects within object selection window</li>
           <li>reduce castle area for mouse right clicking inside Editor's castle selection window</li>
-          <li>update map type popup message by right click to include Resurrection maps</li>
+          <li>update map type popup message by right clicking to include Resurrection maps</li>
           <li>add a new variation of Cave object on the Adventure Map</li>
           <li>change hero selection dialog in the Editor</li>
           <li>add an ability in the Editor to edit Rumors for maps</li>
@@ -85,14 +85,14 @@
           <li>fix invalid logic for setting random artifacts</li>
           <li>put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites</li>
           <li>remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels</li>
-          <li>limit the minimum slider length by 15 pixels</li>
+          <li>limit the minimum slider length to 15 pixels</li>
           <li>update the Portuguese translation</li>
           <li>fix hero editing assertion</li>
           <li>update the Ukrainian translation</li>
           <li>fix random artifact types</li>
           <li>implement the file manager for FH2M maps in Android</li>
           <li>force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts</li>
-          <li>fix Editor instruments buttons rendering</li>
+          <li>fix Editor instruments' buttons rendering</li>
           <li>AI: properly handle the Spell Book artifacts on the Adventure Map</li>
           <li>add missing checks for Miscellaneous objects in the Editor</li>
           <li>add missing Sphinx part</li>

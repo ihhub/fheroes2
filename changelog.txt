@@ -23,7 +23,7 @@ version 1.1.1 (13 July 2024)
 - add hotkey for passability within the Editor
 - add color names to Traveller's Tent and Barrier objects within object selection window
 - reduce castle area for mouse right clicking inside Editor's castle selection window
-- update map type popup message by right click to include Resurrection maps
+- update map type popup message by right clicking to include Resurrection maps
 - add a new variation of Cave object on the Adventure Map
 - change hero selection dialog in the Editor
 - add an ability in the Editor to edit Rumors for maps
@@ -42,14 +42,14 @@ version 1.1.1 (13 July 2024)
 - fix invalid logic for setting random artifacts
 - put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites
 - remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels
-- limit the minimum slider length by 15 pixels
+- limit the minimum slider length to 15 pixels
 - update the Portuguese translation
 - fix hero editing assertion
 - update the Ukrainian translation
 - fix random artifact types
 - implement the file manager for FH2M maps in Android
 - force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts
-- fix Editor instruments buttons rendering
+- fix Editor instruments' buttons rendering
 - AI: properly handle the Spell Book artifacts on the Adventure Map
 - add missing checks for Miscellaneous objects in the Editor
 - add missing Sphinx part
