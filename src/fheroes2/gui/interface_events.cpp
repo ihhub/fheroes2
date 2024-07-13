@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact.h"
@@ -68,7 +69,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"

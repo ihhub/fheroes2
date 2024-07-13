@@ -39,7 +39,6 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_window.h"
 
 namespace

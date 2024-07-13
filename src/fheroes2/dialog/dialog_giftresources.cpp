@@ -27,6 +27,7 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -188,11 +189,11 @@ struct ResourceBar
 
         if ( index >= 0 ) {
             int rs = Resource::getResourceTypeFromIconIndex( index );
-            uint32_t step = rs == Resource::GOLD ? 100 : 1;
+            const int32_t step = ( rs == Resource::GOLD ) ? 100 : 1;
 
             int32_t cur = resource.Get( rs );
             int32_t sel = cur;
-            uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
+            const int32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / static_cast<int32_t>( mul ) : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
                 fheroes2::showStandardTextMessage( {}, _( "First select recipients!" ), Dialog::OK );
             }
@@ -212,7 +213,7 @@ struct ResourceBar
                     if ( from && to ) {
                         int32_t count = sel - cur;
 
-                        *from -= mul > 1 ? count * mul : count;
+                        *from -= mul > 1 ? count * static_cast<int32_t>( mul ) : count;
                         *to += count;
 
                         return true;

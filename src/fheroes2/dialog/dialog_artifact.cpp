@@ -26,7 +26,6 @@
 #include "m82.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 
 void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 {
