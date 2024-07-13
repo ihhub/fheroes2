@@ -1,3 +1,62 @@
+version 1.1.1 (13 July 2024)
+- update the Russian translation
+- properly set tile information upon placing a new object
+- update the Hungarian translation
+- implement special victory and loss conditions for heroes and towns
+- add Evil theme for ADD, EDIT and DELETE buttons in the Editor
+- fix object UID restoration after Redo operation in the Editor
+- add support for double click within Sphinx, Daily Events and Rumors lists
+- show date description for daily events
+- allow to disable any building in castles and towns in the Editor
+- add Find Artifact victory condition in Editor
+- add popup messages for right clicking on special map conditions
+- restrict obelisk placement to 48 objects
+- update logic related to human player selection for maps
+- fix crash when entering an empty line in text boxes
+- fix town placement over action objects
+- allow normal victory for "Accumulate gold" condition
+- fix the display of identical artifacts captured in battle
+- Magic Book window: show the maximum number of spell points
+- add "Out of Time" and "Accumulate Gold" map conditions within the Editor
+- add support of editing daily events within the Editor
+- show pressed monster button on Editor panel while clicking on it
+- add hotkey for passability within the Editor
+- add color names to Traveller's Tent and Barrier objects within object selection window
+- reduce castle area for mouse right clicking inside Editor's castle selection window
+- update map type popup message by right clicking to include Resurrection maps
+- add a new variation of Cave object on the Adventure Map
+- change hero selection dialog in the Editor
+- add an ability in the Editor to edit Rumors for maps
+- bring the logic of the Summon Boat spell for the human player in line with its logic of operation in the case of AI
+- AI: fix the assertion failure when visiting an object that is impossible to stand on
+- fix castle and hero radar rendering in the Editor
+- fix Magic Garden being shown without animation within the Editor
+- speed up save file loading and saving operations
+- add '?' symbol to Virtual Keyboard
+- properly check the Price of Loyalty resources in order to enable the Editor
+- move an existing object in front while trying to place an exact one on the same tile in the Editor
+- generate a random hero portrait for the Editor
+- fix crash when a hero is killed defending a castle
+- differentiate Random Castle and Town names in the Editor
+- update the Swedish translation
+- fix invalid logic for setting random artifacts
+- put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites
+- remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels
+- limit the minimum slider length to 15 pixels
+- update the Portuguese translation
+- fix hero editing assertion
+- update the Ukrainian translation
+- fix random artifact types
+- implement the file manager for FH2M maps in Android
+- force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts
+- fix Editor instruments' buttons rendering
+- AI: properly handle the Spell Book artifacts on the Adventure Map
+- add missing checks for Miscellaneous objects in the Editor
+- add missing Sphinx part
+- fix text editing crash
+- fix crash when using quick switch to hero when castle is current object
+- fix the evaluation of the DOUBLE_SHOOTING and DOUBLE_MELEE_ATTACK abilities
+
 version 1.1.0 (22 May 2024)
 - properly connect Streams and Deltas while placing Streams
 - do not allow placing Ultimate Artifact on non-diggable terrain in Editor
