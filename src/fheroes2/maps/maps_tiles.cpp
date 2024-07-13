@@ -1454,13 +1454,6 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
     tile._updateRoadFlag();
 }
 
-void Maps::Tiles::updateEmpty()
-{
-    if ( _mainObjectType == MP2::OBJ_NONE ) {
-        updateObjectType();
-    }
-}
-
 void Maps::Tiles::updateObjectType()
 {
     // After removing an action object there could be some other object part in the main addon.
