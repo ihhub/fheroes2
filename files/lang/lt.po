@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3291,10 +3291,10 @@ msgstr "Įrašyti į failą:"
 msgid "File to Load:"
 msgstr "Failas įkėlimui:"
 
-msgid "Accept the choice made."
+msgid "Terrain object"
 msgstr ""
 
-msgid "Terrain object"
+msgid "Accept the choice made."
 msgstr ""
 
 #, fuzzy
@@ -4226,6 +4226,27 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
+msgid "[%{pos}]: %{race} hero"
+msgstr ""
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "Žiūrėti %{name}"
+
+msgid "[%{pos}]: %{race} town"
+msgstr ""
+
+msgid "[%{pos}]: %{race} castle"
+msgstr ""
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "Žiūrėti %{name}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "Žiūrėti %{name}"
+
 msgid "None."
 msgstr ""
 
@@ -4251,12 +4272,43 @@ msgstr "Pergalės salygos"
 msgid "Allow standard victory conditions"
 msgstr "Pergalės salygos"
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Auksas"
 
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Rodyti kitą miestą"
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Rodyti kitą miestą"
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Rodyti kitą miestą"
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "Map Difficulty"

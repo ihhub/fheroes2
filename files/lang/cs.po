@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 03:05+0000\n"
+"POT-Creation-Date: 2024-07-09 14:38+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3500,10 +3500,10 @@ msgstr "Uložit do souboru:"
 msgid "File to Load:"
 msgstr "Soubor k načtení:"
 
-msgid "Accept the choice made."
+msgid "Terrain object"
 msgstr ""
 
-msgid "Terrain object"
+msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
@@ -4458,6 +4458,30 @@ msgid "Warning"
 msgstr "Varování"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Nic"
 
@@ -4487,12 +4511,43 @@ msgstr ""
 msgid "Allow standard victory conditions"
 msgstr ""
 
+msgid "Allow this condition also for AI"
+msgstr ""
+
 #, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
 
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Klikni pro uložení aktuální hry."
+
 msgid "Days:"
 msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Klikni pro uložení aktuální hry."
 
 #, fuzzy
 msgid "Map Difficulty"
