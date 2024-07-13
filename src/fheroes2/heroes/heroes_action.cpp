@@ -256,9 +256,7 @@ namespace
 
                     setMonsterCountOnTile( tile, 0 );
 
-                    assert( tile.GetObject() == MP2::OBJ_MONSTER );
-
-                    runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+                    runActionObjectFadeOutAnumation( tile, tile.GetObject() );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
