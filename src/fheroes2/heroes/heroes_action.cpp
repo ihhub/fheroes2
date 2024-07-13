@@ -243,6 +243,13 @@ namespace
             std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
     }
 
+    void scoutTileOnRadar( const int32_t tileIndex )
+    {
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getRadar().SetRenderArea( { { Maps::GetPoint( tileIndex ) }, { 1, 1 } } );
+        I.setRedraw( Interface::REDRAW_RADAR );
+    }
+
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
     {
         if ( !hero.GetArmy().CanJoinTroop( troop ) )
@@ -257,6 +264,9 @@ namespace
                     setMonsterCountOnTile( tile, 0 );
 
                     runActionObjectFadeOutAnumation( tile, tile.GetObject() );
+
+                    // Update the position of recruited monster on radar.
+                    scoutTileOnRadar( tile.GetIndex() );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
@@ -448,6 +458,9 @@ namespace
             assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+
+            // Update the position of defeated monster on radar.
+            scoutTileOnRadar( dst_index );
         }
 
         // Clear the hero's attacked monster tile index
@@ -730,12 +743,8 @@ namespace
 
         resetObjectInfoOnTile( tile );
 
-        if ( objectType == MP2::OBJ_RESOURCE ) {
-            // Update the position of picked up resource on radar to remove its mark.
-            const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
-            I.getRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
-            I.setRedraw( Interface::REDRAW_RADAR );
-        }
+        // Update the position of picked up resource on radar to remove its mark.
+        scoutTileOnRadar( dst_index );
     }
 
     void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -938,6 +947,9 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
+
+        // Update the position of picked up object on radar.
+        scoutTileOnRadar( dst_index );
     }
 
     void ActionToShrine( Heroes & hero, int32_t dst_index )
@@ -1564,6 +1576,9 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
+
+        // Update the position of picked up object on radar.
+        scoutTileOnRadar( dst_index );
     }
 
     void ActionToArtifact( Heroes & hero, int32_t dst_index )
@@ -1741,19 +1756,14 @@ namespace
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
             assert( tile.GetObject() == MP2::OBJ_ARTIFACT );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
             resetObjectInfoOnTile( tile );
 
-            const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
-
             // Update the position of picked up artifact on radar to remove its mark.
-            I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
-            I.setRedraw( Interface::REDRAW_RADAR );
+            scoutTileOnRadar( dst_index );
         }
     }
 
@@ -1863,6 +1873,9 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectInfoOnTile( tile );
+
+        // Update the position of picked up chest on radar.
+        scoutTileOnRadar( dst_index );
     }
 
     void ActionToGenieLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -3306,6 +3319,10 @@ namespace
                 // Update the kingdom heroes list including the scrollbar.
                 Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
             }
+            else {
+                // Update the position of removed jail on radar.
+                scoutTileOnRadar( dst_index );
+            }
         }
         else {
             std::string str = _( "You already have %{count} heroes, and regretfully must leave the prisoner in this jail to languish in agony for untold days." );
@@ -3547,6 +3564,9 @@ namespace
             AudioManager::PlaySound( M82::KILLFADE );
 
             runActionObjectFadeOutAnumation( tile, objectType );
+
+            // Update the position of removed barrier on radar.
+            scoutTileOnRadar( dst_index );
         }
         else {
             fheroes2::showStandardTextMessage(
