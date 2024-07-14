@@ -1192,20 +1192,12 @@ namespace Interface
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
-                    std::string str = _( "Set %{monster} Count" );
-                    StringReplace( str, "%{monster}", tempMonster.GetName() );
-
-                    fheroes2::Sprite surface;
-
-                    if ( tempMonster.isValid() ) {
-                        surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                        fheroes2::renderMonsterFrame( tempMonster, surface, { 6, 6 } );
-                    }
-
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
-                        _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
-                        action.commit();
+                    if ( tempMonster.isValid() ) {
+                        if ( Dialog::SelectMonsterCount( tempMonster, 0, 500000, monsterCount, 1 ) ) {
+                            _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
+                            action.commit();
+                        }
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
