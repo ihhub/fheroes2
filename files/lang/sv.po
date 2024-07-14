@@ -4383,6 +4383,7 @@ msgstr "Inga kartor tillgängliga!"
 msgid "Warning"
 msgstr "Varning"
 
+#, fuzzy
 msgid "[%{pos}]: %{race} hero"
 msgstr "%{color} %{race}hjälte"
 
