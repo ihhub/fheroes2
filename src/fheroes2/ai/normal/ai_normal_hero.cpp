@@ -1068,10 +1068,19 @@ namespace AI
                     value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
             }
-            else if ( otherHero->GetControl() == CONTROL_AI ) {
-                // AI heroes should not attack other AI heroes so aggressively as human heroes.
-                // This is done to avoid situations when human players just wait when AI heroes kill each other.
-                value *= 0.8;
+            else {
+                const Castle * castle = otherHero->inCastle();
+
+                if ( castle != nullptr ) {
+                    // If the enemy hero is in the castle, then after defeating this hero, AI will automatically capture his
+                    // castle, so it's worth adding the value of the castle to the value of the enemy hero
+                    value += calculateCastleValue( castle );
+                }
+                else if ( otherHero->GetControl() == CONTROL_AI ) {
+                    // AI heroes should not attack other AI heroes so aggressively as human heroes.
+                    // This is done to avoid situations when human players just wait when AI heroes kill each other.
+                    value *= 0.8;
+                }
             }
 
             return value;
@@ -1697,10 +1706,19 @@ namespace AI
                     value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
             }
-            else if ( otherHero->GetControl() == CONTROL_AI ) {
-                // AI heroes should not attack other AI heroes so aggressively as human heroes.
-                // This is done to avoid situations when human players just wait when AI heroes kill each other.
-                value *= 0.8;
+            else {
+                const Castle * castle = otherHero->inCastle();
+
+                if ( castle != nullptr ) {
+                    // If the enemy hero is in the castle, then after defeating this hero, AI will automatically capture his
+                    // castle, so it's worth adding the value of the castle to the value of the enemy hero
+                    value += calculateCastleValue( castle );
+                }
+                else if ( otherHero->GetControl() == CONTROL_AI ) {
+                    // AI heroes should not attack other AI heroes so aggressively as human heroes.
+                    // This is done to avoid situations when human players just wait when AI heroes kill each other.
+                    value *= 0.8;
+                }
             }
 
             return value;

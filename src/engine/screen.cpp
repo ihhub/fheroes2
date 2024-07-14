@@ -621,7 +621,13 @@ namespace
             return filteredResolutions;
         }
 
-    protected:
+    private:
+        SDL_Window * _window;
+        SDL_Surface * _surface;
+        vita2d_texture * _texBuffer;
+        uint8_t * _palettedTexturePointer;
+        fheroes2::Rect _destRect;
+
         RenderEngine()
             : _window( nullptr )
             , _surface( nullptr )
@@ -738,13 +744,6 @@ namespace
         {
             return true;
         }
-
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        vita2d_texture * _texBuffer;
-        uint8_t * _palettedTexturePointer;
-        fheroes2::Rect _destRect;
 
         void _createPalette()
         {
