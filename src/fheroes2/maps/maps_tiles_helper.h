@@ -168,7 +168,7 @@ namespace Maps
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
     // Update the existing streams to connect them to the river delta.
-    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection );
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection );
 
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 

@@ -297,12 +297,14 @@ namespace
         // For streams we can check only the next four directions.
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
             if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
-                const Maps::Tiles & currectTile = world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) );
+                const Maps::Tiles & currentTile = world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) );
 
                 // Check also for Deltas connection.
-                if ( currectTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
-                     || ( direction == Direction::TOP && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
-                     || ( direction == Direction::BOTTOM && currectTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) ) ) {
+                if ( currentTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
+                     || ( direction == Direction::TOP && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
+                     || ( direction == Direction::BOTTOM && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) )
+                     || ( direction == Direction::RIGHT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 ) )
+                     || ( direction == Direction::LEFT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 13 ) ) ) {
                     streamDirection |= direction;
                 }
             }
@@ -1441,12 +1443,11 @@ namespace Maps
         return true;
     }
 
-    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection )
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection )
     {
         const int32_t tileIndex = tile.GetIndex();
-        const int direction = isDeltaBottomConnection ? Direction::BOTTOM : Direction::TOP;
-        if ( isValidDirection( tileIndex, direction ) ) {
-            updateStreamSpritesAround( world.GetTiles( GetDirectionIndex( tileIndex, direction ) ) );
+        if ( isValidDirection( tileIndex, deltaDirection ) ) {
+            updateStreamSpritesAround( world.GetTiles( GetDirectionIndex( tileIndex, deltaDirection ) ) );
         }
     }
 

@@ -1032,12 +1032,16 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 bool Maps::Tiles::isStream() const
 {
     for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM || ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && addon._imageIndex < 14 ) ) {
+        if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
+             || ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                  && ( addon._imageIndex < 14 || ( addon._imageIndex > 217 && addon._imageIndex < ( 218 + 14 ) ) ) ) ) {
             return true;
         }
     }
 
-    return _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM || ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && _mainAddon._imageIndex < 14 );
+    return _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
+           || ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                && ( _mainAddon._imageIndex < 14 || ( _mainAddon._imageIndex > 217 && _mainAddon._imageIndex < ( 218 + 14 ) ) ) );
 }
 
 bool Maps::Tiles::isShadow() const
