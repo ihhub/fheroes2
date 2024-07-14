@@ -129,8 +129,6 @@ namespace Maps
 
     void resetObjectMetadata( Tiles & tile );
 
-    void resetObjectInfoOnTile( Tiles & tile );
-
     uint32_t getMonsterCountFromTile( const Tiles & tile );
     void setMonsterCountOnTile( Tiles & tile, uint32_t count );
 
@@ -155,6 +153,8 @@ namespace Maps
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
     void removeMainObjectFromTile( Tiles & tile );
+
+    bool removeObjectFromTileByType( Tiles & tile, const MP2::MapObjectType objectType );
 
     bool isClearGround( const Tiles & tile );
 

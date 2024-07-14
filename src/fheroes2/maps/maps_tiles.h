@@ -297,7 +297,7 @@ namespace Maps
         void AddonsSort();
 
         // Returns true if any object part was removed.
-        bool RemoveObjectPartsByUID( const uint32_t objectUID );
+        bool removeObjectPartsByUID( const uint32_t objectUID );
 
         // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
         void removeObjects( const MP2::ObjectIcnType objectIcnType );

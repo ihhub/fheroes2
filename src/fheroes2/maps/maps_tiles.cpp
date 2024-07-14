@@ -1355,7 +1355,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
     }
 }
 
-bool Maps::Tiles::RemoveObjectPartsByUID( const uint32_t objectUID )
+bool Maps::Tiles::removeObjectPartsByUID( const uint32_t objectUID )
 {
     // TODO: this method must update the type of the main object
 
@@ -1376,6 +1376,23 @@ bool Maps::Tiles::RemoveObjectPartsByUID( const uint32_t objectUID )
     _addonTopLayer.remove_if( [objectUID]( const Maps::TilesAddon & v ) { return v._uid == objectUID; } );
     if ( addonCountBefore != _addonTopLayer.size() ) {
         isObjectPartRemoved = true;
+    }
+
+    if ( isObjectPartRemoved ) {
+        // Since an object part was removed we have to update main object type.
+        updateObjectType();
+
+        setInitialPassability();
+        updatePassability();
+
+        if ( Heroes::isValidId( _occupantHeroId ) ) {
+            Heroes * hero = world.GetHeroes( _occupantHeroId );
+            if ( hero != nullptr ) {
+                hero->setObjectTypeUnderHero( _mainObjectType );
+
+                SetObject( MP2::OBJ_HERO );
+            }
+        }
     }
 
     return isObjectPartRemoved;

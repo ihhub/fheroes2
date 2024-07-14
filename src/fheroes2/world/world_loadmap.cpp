@@ -1152,8 +1152,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
         ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
 
         // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->RemoveObjectPartsByUID( ultArtTileIter->GetObjectUID() );
-        ultArtTileIter->updateObjectType();
+        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->GetObjectUID() );
     }
 
     setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
@@ -1249,7 +1248,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_FIRE_ALTAR:
     case MP2::OBJ_WATER_ALTAR:
         // We need to clear metadata because it is being stored as a part of an MP2 object.
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         updateObjectInfoTile( tile, true );
         break;
 
@@ -1260,7 +1259,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_HERO: {
         // remove map editor sprite
         if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
-            tile.RemoveObjectPartsByUID( tile.GetObjectUID() );
+            tile.removeObjectPartsByUID( tile.GetObjectUID() );
         }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );

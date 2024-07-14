@@ -741,7 +741,7 @@ namespace
 
         runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
 
         // Update the position of picked up resource on radar to remove its mark.
         scoutTileOnRadar( dst_index );
@@ -814,7 +814,7 @@ namespace
             fheroes2::showStandardTextMessage( caption, msg, Dialog::OK );
         }
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         hero.setVisitedForAllies( dst_index );
     }
 
@@ -853,7 +853,7 @@ namespace
                 hero.PickupArtifact( art );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else {
             message += '\n';
@@ -907,7 +907,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( funds );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else {
             message += '\n';
@@ -946,7 +946,7 @@ namespace
 
         runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
 
         // Update the position of picked up object on radar.
         scoutTileOnRadar( dst_index );
@@ -1178,7 +1178,7 @@ namespace
                         fheroes2::showStandardTextMessage( title, msg, Dialog::OK );
                     }
 
-                    resetObjectInfoOnTile( tile );
+                    resetObjectMetadata( tile );
                     hero.SetVisited( dst_index, Visit::GLOBAL );
                 }
                 else {
@@ -1407,7 +1407,7 @@ namespace
         }
 
         if ( complete ) {
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
         else if ( 0 == gold ) {
@@ -1575,7 +1575,7 @@ namespace
 
         runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
 
         // Update the position of picked up object on radar.
         scoutTileOnRadar( dst_index );
@@ -1760,7 +1760,7 @@ namespace
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
 
             // Update the position of picked up artifact on radar to remove its mark.
             scoutTileOnRadar( dst_index );
@@ -1872,7 +1872,7 @@ namespace
 
         runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
 
         // Update the position of picked up chest on radar.
         scoutTileOnRadar( dst_index );
@@ -3141,7 +3141,7 @@ namespace
                     break;
                 }
 
-                resetObjectInfoOnTile( tile );
+                resetObjectMetadata( tile );
             }
 
             // Even if the hero has been defeated by a demon (and no longer belongs to any

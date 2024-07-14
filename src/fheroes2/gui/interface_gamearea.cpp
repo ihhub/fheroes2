@@ -1205,6 +1205,5 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 
     if ( tile.GetObject() == type ) {
         removeMainObjectFromTile( tile );
-        tile.updateObjectType();
     }
 }
