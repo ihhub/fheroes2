@@ -79,7 +79,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
