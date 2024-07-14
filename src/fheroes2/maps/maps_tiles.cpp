@@ -1391,6 +1391,9 @@ bool Maps::Tiles::removeObjectPartsByUID( const uint32_t objectUID )
                 SetObject( MP2::OBJ_HERO );
             }
         }
+
+        // TODO: since we remove an object we need to check whether this tile contains any object with additional metadata.
+        //       If it doesn't contain we need to reset metadata.
     }
 
     return isObjectPartRemoved;
