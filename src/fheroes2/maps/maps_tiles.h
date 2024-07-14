@@ -342,6 +342,8 @@ namespace Maps
 
         // Set tile's object type according to the object's sprite if there is any, otherwise
         // it is set to coast (MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE).
+        // This method works perfectly only on Resurrection (.fh2m) maps.
+        // It might not work properly on the original maps due to small differences in object types.
         void updateObjectType();
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
