@@ -258,9 +258,9 @@ namespace
                 if ( remove && recruit == troop.GetCount() ) {
                     Game::PlayPickupSound();
 
-                    setMonsterCountOnTile( tile, 0 );
-
                     runActionObjectFadeOutAnumation( tile, tile.GetObject() );
+
+                    resetObjectMetadata( tile );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
@@ -447,11 +447,11 @@ namespace
         if ( destroy ) {
             AudioManager::PlaySound( M82::KILLFADE );
 
-            setMonsterCountOnTile( tile, 0 );
-
             assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+
+            resetObjectMetadata( tile );
         }
 
         // Clear the hero's attacked monster tile index
