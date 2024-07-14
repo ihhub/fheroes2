@@ -1295,7 +1295,7 @@ namespace
         return true;
     }
 
-    void removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
     {
         assert( startTileIndex >= 0 && startTileIndex < world.w() * world.h() );
 
@@ -1326,6 +1326,8 @@ namespace
             processedTileIndicies.emplace( tiles[currentId] );
             ++currentId;
         }
+
+        return !processedTileIndicies.empty();
     }
 }
 
@@ -3000,8 +3002,7 @@ namespace Maps
             return false;
         }
 
-        removeObjectFromMapByUID( tile.GetIndex(), objectUID );
-        return true;
+        return removeObjectFromMapByUID( tile.GetIndex(), objectUID );
     }
 
     bool isClearGround( const Tiles & tile )
