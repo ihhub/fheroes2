@@ -1050,7 +1050,7 @@ msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
 msgid "Monsters"
-msgstr "Monster"
+msgstr "Varelser"
 
 msgid "N/A"
 msgstr "Ingen"
@@ -3384,13 +3384,13 @@ msgid "Number to buy:"
 msgstr "Antal att köpa:"
 
 msgid "Recruit selected monsters."
-msgstr "Rekrytera valda monster."
+msgstr "Rekrytera valda varelser."
 
 msgid "Select maximum monsters to be recruited."
-msgstr "Välj maximalt antal monster att rekrytera."
+msgstr "Välj maximalt antal varelser att rekrytera."
 
 msgid "Select only 1 monster to be recruited."
-msgstr "Välj endast 1 monster att rekrytera."
+msgstr "Välj endast 1 varelse att rekrytera."
 
 msgid "Select Game Resolution:"
 msgstr "Ange Spelupplösning:"
@@ -3474,7 +3474,7 @@ msgid "Select Artifact:"
 msgstr "Välj Artefakt:"
 
 msgid "Select Monster:"
-msgstr "Välj Monster:"
+msgstr "Välj Varelse:"
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
@@ -5771,7 +5771,7 @@ msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
 msgid " All populations are halved."
-msgstr " All populationer är halverade."
+msgstr " Alla populationer är halverade."
 
 msgid " All dwellings increase population."
 msgstr " Alla boningar ökar sin population."
@@ -6378,7 +6378,7 @@ msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
-"Förolämpade av ditt avvisande av deras erbjudande, attackerar monsterna!"
+"Förolämpade av ditt avvisande av deras erbjudande, attackerar varelserna!"
 
 msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
@@ -7818,7 +7818,7 @@ msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""
-"Hjälten måste befinna sig inom %{count} rutor från ett monster för att "
+"Hjälten måste befinna sig inom %{count} rutor från en varelse för att "
 "Synerbesvärjelsen ska ge effekt."
 
 msgid ""
@@ -8897,7 +8897,7 @@ msgid "Random Resource"
 msgstr "Slumpad Resurs"
 
 msgid "Random Monster"
-msgstr "Slumpat Monster"
+msgstr "Slumpad Varelse"
 
 msgid "Random Town"
 msgstr "Slumpad Stad"
@@ -8909,16 +8909,16 @@ msgid "Eye of the Magi"
 msgstr "De vise männens öga"
 
 msgid "Random Monster - weak"
-msgstr "Slumpat Monster - svag"
+msgstr "Slumpad Varelse - svag"
 
 msgid "Random Monster - medium"
-msgstr "Slumpat Monster - medel"
+msgstr "Slumpad Varelse- medel"
 
 msgid "Random Monster - strong"
-msgstr "Slumpat Monster - starkt"
+msgstr "Slumpad Varelse - starkt"
 
 msgid "Random Monster - very strong"
-msgstr "Slumpat Monster - väldigt starkt"
+msgstr "Slumpad Varelse - väldigt starkt"
 
 msgid "Hero"
 msgstr "Hjälte"
@@ -9139,10 +9139,10 @@ msgid "randomRace|level 6 creatures"
 msgstr "nivå 6 varelser"
 
 msgid "Unknown Monsters"
-msgstr "Okända Monster"
+msgstr "Okända Varelser"
 
 msgid "Unknown Monster"
-msgstr "Okänt Monster"
+msgstr "Okänd Varelse"
 
 msgid "Peasant"
 msgstr "Bonde"
@@ -9538,31 +9538,31 @@ msgid "Water Elementals"
 msgstr "Vattenväsen"
 
 msgid "Random Monsters"
-msgstr "Slumpade Monster"
+msgstr "Slumpade Varelser"
 
 msgid "Random Monster 1"
-msgstr "Slumpat Monster 1"
+msgstr "Slumpad Varelse 1"
 
 msgid "Random Monsters 1"
-msgstr "Slumpade Monster 1"
+msgstr "Slumpade Varelser 1"
 
 msgid "Random Monster 2"
-msgstr "Slumpat Monster 2"
+msgstr "Slumpad Varelse 2"
 
 msgid "Random Monsters 2"
-msgstr "Slumpade Monster 2"
+msgstr "Slumpade Varelser 2"
 
 msgid "Random Monster 3"
-msgstr "Slumpat Monster 3"
+msgstr "Slumpad Varelse 3"
 
 msgid "Random Monsters 3"
-msgstr "Slumpade Monster 3"
+msgstr "Slumpade Varelser 3"
 
 msgid "Random Monster 4"
-msgstr "Slumpat Monster 4"
+msgstr "Slumpad Varelse 4"
 
 msgid "Random Monsters 4"
-msgstr "Slumpade Monster 4"
+msgstr "Slumpade Varelser 4"
 
 msgid "Double shot"
 msgstr "Dubbel avfyrning"
