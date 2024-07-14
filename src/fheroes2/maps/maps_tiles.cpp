@@ -1522,9 +1522,13 @@ void Maps::Tiles::updateObjectType()
     for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
         const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
-        if ( type != MP2::OBJ_NONE ) {
+        if ( MP2::isOffGameActionObject( type ) ) {
             SetObject( type );
             return;
+        }
+
+        if ( objectType == MP2::OBJ_NONE ) {
+            objectType = type;
         }
     }
 
