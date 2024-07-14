@@ -3539,7 +3539,7 @@ msgid ""
 msgstr "Resurstyp:"
 
 msgid "%{mineName} appearance:"
-msgstr "%Utseende %{mineName}:"
+msgstr "Utseende %{mineName}:"
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klicka här för att välja %{object} som föremål att placera."
