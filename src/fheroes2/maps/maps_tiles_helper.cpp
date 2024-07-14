@@ -2964,12 +2964,12 @@ namespace Maps
         restoreMineObjectType( Direction::TOP_RIGHT );
     }
 
-    void removeMainObjectFromTile( Tiles & tile )
+    void removeMainObjectFromTile( const Tiles & tile )
     {
         removeObjectFromTileByType( tile, tile.GetObject() );
     }
 
-    bool removeObjectFromTileByType( Tiles & tile, const MP2::MapObjectType objectType )
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType )
     {
         assert( objectType != MP2::OBJ_NONE );
 

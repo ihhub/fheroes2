@@ -152,9 +152,9 @@ namespace Maps
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
-    void removeMainObjectFromTile( Tiles & tile );
+    void removeMainObjectFromTile( const Tiles & tile );
 
-    bool removeObjectFromTileByType( Tiles & tile, const MP2::MapObjectType objectType );
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType );
 
     bool isClearGround( const Tiles & tile );
 
