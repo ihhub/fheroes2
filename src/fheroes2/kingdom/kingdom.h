@@ -246,7 +246,7 @@ public:
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );
-    void AddCastles( AllCastles & castles );
+    void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms
