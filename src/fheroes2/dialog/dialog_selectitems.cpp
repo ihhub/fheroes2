@@ -1604,17 +1604,22 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     // Mine appearance selection text.
     auto redrawAppearanceText = [&appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
+
         if ( info.objectType == MP2::OBJ_MINE ) {
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {
             StringReplace( mineText, "%{mineName}", MP2::StringObject( info.objectType ) );
         }
+
         const fheroes2::Text appearanceText( std::move( mineText ), fheroes2::FontType::smallWhite() );
         const int32_t textWidth = appearanceText.width( listRoi.width );
         const int32_t textHeight = appearanceText.height( listRoi.width );
+
         appearanceTextBackground.restore();
-        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight, textWidth, textHeight );
+
+        // The text height does not take into account the diacritical marks. Add extra 2 pixels to the restorer.
+        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight - 2, textWidth, textHeight + 2 );
         appearanceText.draw( listRoi.x, listRoi.y - textHeight, listRoi.width, display );
     };
     redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
