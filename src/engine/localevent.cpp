@@ -1085,9 +1085,8 @@ namespace fheroes2
             }
             break;
         case fheroes2::Key::KEY_DELETE:
-            if ( !res.empty() ) {
-                if ( pos < res.size() )
-                    res.erase( pos, 1 );
+            if ( pos < res.size() ) {
+                res.erase( pos, 1 );
             }
             break;
 
