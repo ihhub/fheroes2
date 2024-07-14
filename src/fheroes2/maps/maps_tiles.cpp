@@ -1357,8 +1357,6 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
 
 bool Maps::Tiles::removeObjectPartsByUID( const uint32_t objectUID )
 {
-    // TODO: this method must update the type of the main object
-
     bool isObjectPartRemoved = false;
     if ( _mainAddon._uid == objectUID ) {
         _mainAddon = {};
