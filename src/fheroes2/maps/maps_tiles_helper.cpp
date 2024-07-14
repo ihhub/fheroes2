@@ -2969,6 +2969,8 @@ namespace Maps
 
     bool removeObjectFromTileByType( Tiles & tile, const MP2::MapObjectType objectType )
     {
+        assert( objectType != MP2::OBJ_NONE );
+
         // Verify that this tile indeed contains an object with given object type.
         uint32_t objectUID = 0;
 
