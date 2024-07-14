@@ -1456,8 +1456,9 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
 
 void Maps::Tiles::updateObjectType()
 {
-    // After removing an action object there could be some other object part in the main addon.
-    if ( const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( getObjectIcnType(), GetObjectSpriteIndex() ); objectType != MP2::OBJ_NONE ) {
+    // After removing an object there could be some other object part in the main addon.
+    const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
+    if ( objectType != MP2::OBJ_NONE ) {
         SetObject( objectType );
         return;
     }
@@ -1485,7 +1486,8 @@ void Maps::Tiles::updateObjectType()
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
     // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
-        SetObject( MP2::OBJ_NONE );
+        assert( objectType == MP2::OBJ_NONE );
+        SetObject( objectType );
         return;
     }
 
@@ -1502,7 +1504,8 @@ void Maps::Tiles::updateObjectType()
         }
     }
 
-    SetObject( MP2::OBJ_NONE );
+    assert( objectType == MP2::OBJ_NONE );
+    SetObject( objectType );
 }
 
 uint32_t Maps::Tiles::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const
