@@ -4976,9 +4976,9 @@ namespace fheroes2
                 auto & images = _icnVsSprite[id];
                 if ( images.size() == 218 ) {
                     // Add 2 extra river deltas. Each delta has 7 parts.
-                    images.resize( 218 + 7 * 2 );
+                    images.resize( 218 + 14 );
 
-                    for ( size_t i = 0; i < 7 * 2; ++i ) {
+                    for ( size_t i = 0; i < 14; ++i ) {
                         images[218 + i].resize( images[i].height(), images[i].width() );
                         fheroes2::Transpose( images[i], images[218 + i] );
                         images[218 + i].setPosition( images[i].y(), images[i].x() );
