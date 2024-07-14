@@ -2983,7 +2983,7 @@ namespace Maps
         restoreMineObjectType( Direction::TOP_RIGHT );
     }
 
-    void removeObjectSprite( Tiles & tile )
+    void removeMainObjectFromTile( Tiles & tile )
     {
         switch ( tile.GetObject() ) {
         case MP2::OBJ_MONSTER:

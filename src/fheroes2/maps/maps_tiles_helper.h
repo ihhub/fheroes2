@@ -154,7 +154,7 @@ namespace Maps
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
-    void removeObjectSprite( Tiles & tile );
+    void removeMainObjectFromTile( Tiles & tile );
 
     bool isClearGround( const Tiles & tile );
 

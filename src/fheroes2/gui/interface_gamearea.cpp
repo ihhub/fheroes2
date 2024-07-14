@@ -1204,7 +1204,7 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
     Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        removeObjectSprite( tile );
+        removeMainObjectFromTile( tile );
         tile.updateObjectType();
     }
 }
