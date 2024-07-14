@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-09 14:38+0000\n"
-"PO-Revision-Date: 2024-07-05 09:59+0200\n"
+"PO-Revision-Date: 2024-07-14 14:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -273,10 +273,7 @@ msgstr ""
 "R\n"
 "U\n"
 "L\n"
-"L\n"
-"E\n"
-"R\n"
-"A"
+"L"
 
 msgid ""
 "C\n"
@@ -4122,7 +4119,6 @@ msgid ""
 "select another monster."
 msgstr ""
 "Klicka här för att\n"
-" \n"
 "välja en annan varelse."
 
 msgid ""
@@ -4244,7 +4240,7 @@ msgid "No special modifiers."
 msgstr "Ger inget förflyttningsstraff."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr "Aktivera raderingen av %{type}objekt."
+msgstr "Aktivera raderingen av %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
@@ -4387,17 +4383,15 @@ msgstr "Inga kartor tillgängliga!"
 msgid "Warning"
 msgstr "Varning"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race}"
+msgstr "%{color} %{race}hjälte"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race}"
+msgstr "%{color} %{race}stad"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} castle"
@@ -4433,42 +4427,37 @@ msgid "Allow standard victory conditions"
 msgstr "Tillåt standardsegervillkor"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Tillåt detta villkor även för Datorn"
 
 msgid "Gold:"
 msgstr "Guld:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Välj stad att teleportera till."
+msgstr "Välj en Stad att inta för att uppnå seger"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Klicka för att ändra händelsemeddelandet."
+msgstr "Klicka för att ändra Staden som måste intas för att uppnå seger."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Välj en Hjälte att besegra för att uppnå seger"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Klicka för att ändra händelsemeddelandet."
+msgstr "Klicka för att ändra Hjälten som måste besegras för att uppnå seger."
 
 msgid "Days:"
 msgstr "Dagar:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Välj en Stad att besegras för att förlora"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Klicka för att ändra händelsemeddelandet."
+msgstr "Klicka för att ändra Staden vars besegring innebär förlust."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Välj en Hjälte att besegras för att förlora"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Klicka för att ändra händelsemeddelandet."
+msgstr "Klicka för att ändra Hjälten vars besegring innebär förlust."
 
 msgid "Map Difficulty"
 msgstr "Kartsvårighet"
@@ -4538,7 +4527,9 @@ msgid "Animation"
 msgstr "Animering"
 
 msgid "Passability"
-msgstr "Framkomlighet"
+msgstr ""
+"Framkomlig-\n"
+"het"
 
 msgid "Toggle animation of the objects."
 msgstr "Aktivera animationen för objekten."
@@ -8249,7 +8240,7 @@ msgid ""
 "by %{count} percent, and eliminates the %{penalty} percent penalty when "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} ökar skadan från hjältens skjutande varelser med %{count} procent "
+"%{skill} ökar skadan från hjältens skjutande varelser med %{count} procent "
 "och tar bort %{penalty} procent av straffet när projektiler passerar hinder, "
 "exempelvis slottsmurar."
 
@@ -8281,7 +8272,7 @@ msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
 msgstr ""
-"%{name} sänker kostnaden för kapitulation med %{count} procent av "
+"%{skill} sänker kostnaden för kapitulation med %{count} procent av "
 "totalkostnaden för trupperna i hjältens armé."
 
 msgid ""
