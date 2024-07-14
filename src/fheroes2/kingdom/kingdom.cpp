@@ -907,7 +907,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
     }
 }
 
-void Kingdoms::AddCastles( AllCastles & castles )
+void Kingdoms::AddCastles( const AllCastles & castles )
 {
     for ( Castle * castle : castles ) {
         assert( castle != nullptr );
