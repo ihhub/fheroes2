@@ -4382,29 +4382,23 @@ msgstr "Inga kartor tillgängliga!"
 msgid "Warning"
 msgstr "Varning"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race}"
+msgstr "%[%{pos}]: %{race}hjälte"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} mot %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race}hjälte"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race}"
+msgstr "[%{pos}]: %{race}stad"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} %{race} %{townOrCastle}"
+msgstr "[%{pos}]: %{race}slott"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} mot %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race}stad"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} mot %{race2} %{name2}"
+msgstr "[%{pos}]: %{name}, %{race}slott"
 
 msgid "None."
 msgstr "Inga."
