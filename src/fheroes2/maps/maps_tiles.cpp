@@ -1488,33 +1488,42 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
 
 void Maps::Tiles::updateObjectType()
 {
-    // After removing an object there could be some other object part in the main addon.
+    // After removing an object there could be an object part in the main addon.
     MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
+        // Set object type only when this is an interactive object type to make sure that interaction can be done.
         SetObject( objectType );
         return;
     }
 
-    // Or object part can be in the top layer addons.
+    // And sometimes even in the bottom layer addons.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
     if ( objectType == MP2::OBJ_NONE ) {
-        for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
-            objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+        for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
+            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+            if ( type == MP2::OBJ_NONE ) {
+                continue;
+            }
 
-            if ( MP2::isOffGameActionObject( objectType ) ) {
-                SetObject( objectType );
+            if ( MP2::isOffGameActionObject( type ) ) {
+                // Set object type only when this is an interactive object type to make sure that interaction can be done.
+                SetObject( type );
                 return;
+            }
+
+            if ( objectType == MP2::OBJ_NONE ) {
+                objectType = type;
             }
         }
     }
 
-    // And sometimes even in the bottom layer addons.
+    // Or object part can be in the top layer addons.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
-    for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
-        objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+    for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
+        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
-        if ( objectType != MP2::OBJ_NONE ) {
-            SetObject( objectType );
+        if ( MP2::isOffGameActionObject( type ) ) {
+            SetObject( type );
             return;
         }
     }
