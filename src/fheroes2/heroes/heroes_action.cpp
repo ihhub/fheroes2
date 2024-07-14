@@ -229,9 +229,9 @@ namespace
         }
         else {
             // In maps made by the original map editor the action object can be in the bottom layer addons.
-            for ( const Maps::TilesAddon & addon : tile.getBottomLayerAddons() ) {
-                if ( Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex ) == objectType ) {
-                    objectUID = addon._uid;
+            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
                     break;
                 }
             }
