@@ -1490,19 +1490,21 @@ void Maps::Tiles::updateObjectType()
 {
     // After removing an object there could be some other object part in the main addon.
     MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
-    if ( objectType != MP2::OBJ_NONE ) {
+    if ( MP2::isOffGameActionObject( objectType ) ) {
         SetObject( objectType );
         return;
     }
 
     // Or object part can be in the top layer addons.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
-    for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
-        objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+    if ( objectType == MP2::OBJ_NONE ) {
+        for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
+            objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
-        if ( objectType != MP2::OBJ_NONE ) {
-            SetObject( objectType );
-            return;
+            if ( MP2::isOffGameActionObject( objectType ) ) {
+                SetObject( objectType );
+                return;
+            }
         }
     }
 
@@ -1515,6 +1517,12 @@ void Maps::Tiles::updateObjectType()
             SetObject( objectType );
             return;
         }
+    }
+
+    // Top objects do not have object type while bottom object do.
+    if ( objectType != MP2::OBJ_NONE ) {
+        SetObject( objectType );
+        return;
     }
 
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
