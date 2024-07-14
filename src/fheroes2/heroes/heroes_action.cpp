@@ -239,14 +239,11 @@ namespace
 
         assert( objectUID != 0 );
 
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
-    }
-
-    void scoutTileOnRadar( const int32_t tileIndex )
-    {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
-        I.getRadar().SetRenderArea( { { Maps::GetPoint( tileIndex ) }, { 1, 1 } } );
+        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+
+        // Update radar in the place of the removed object.
+        I.getRadar().SetRenderArea( { Maps::GetPoint( tile.GetIndex() ), { 1, 1 } } );
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
@@ -264,9 +261,6 @@ namespace
                     setMonsterCountOnTile( tile, 0 );
 
                     runActionObjectFadeOutAnumation( tile, tile.GetObject() );
-
-                    // Update the position of recruited monster on radar.
-                    scoutTileOnRadar( tile.GetIndex() );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
@@ -458,9 +452,6 @@ namespace
             assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
-
-            // Update the position of defeated monster on radar.
-            scoutTileOnRadar( dst_index );
         }
 
         // Clear the hero's attacked monster tile index
@@ -742,9 +733,6 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectMetadata( tile );
-
-        // Update the position of picked up resource on radar to remove its mark.
-        scoutTileOnRadar( dst_index );
     }
 
     void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -947,9 +935,6 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectMetadata( tile );
-
-        // Update the position of picked up object on radar.
-        scoutTileOnRadar( dst_index );
     }
 
     void ActionToShrine( Heroes & hero, int32_t dst_index )
@@ -1576,9 +1561,6 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectMetadata( tile );
-
-        // Update the position of picked up object on radar.
-        scoutTileOnRadar( dst_index );
     }
 
     void ActionToArtifact( Heroes & hero, int32_t dst_index )
@@ -1761,9 +1743,6 @@ namespace
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
             resetObjectMetadata( tile );
-
-            // Update the position of picked up artifact on radar to remove its mark.
-            scoutTileOnRadar( dst_index );
         }
     }
 
@@ -1873,9 +1852,6 @@ namespace
         runActionObjectFadeOutAnumation( tile, objectType );
 
         resetObjectMetadata( tile );
-
-        // Update the position of picked up chest on radar.
-        scoutTileOnRadar( dst_index );
     }
 
     void ActionToGenieLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -3319,10 +3295,6 @@ namespace
                 // Update the kingdom heroes list including the scrollbar.
                 Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
             }
-            else {
-                // Update the position of removed jail on radar.
-                scoutTileOnRadar( dst_index );
-            }
         }
         else {
             std::string str = _( "You already have %{count} heroes, and regretfully must leave the prisoner in this jail to languish in agony for untold days." );
@@ -3564,9 +3536,6 @@ namespace
             AudioManager::PlaySound( M82::KILLFADE );
 
             runActionObjectFadeOutAnumation( tile, objectType );
-
-            // Update the position of removed barrier on radar.
-            scoutTileOnRadar( dst_index );
         }
         else {
             fheroes2::showStandardTextMessage(
