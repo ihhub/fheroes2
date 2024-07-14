@@ -126,6 +126,26 @@ namespace
             if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '9';
             break;
+        case fheroes2::Key::KEY_KP_PERIOD:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '.';
+            break;
+        case fheroes2::Key::KEY_KP_DIVIDE:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '/';
+            break;
+        case fheroes2::Key::KEY_KP_MULTIPLY:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '*';
+            break;
+        case fheroes2::Key::KEY_KP_MINUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '-';
+            break;
+        case fheroes2::Key::KEY_KP_PLUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '+';
+            break;
         case fheroes2::Key::KEY_MINUS:
             return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '_' : '-' );
         case fheroes2::Key::KEY_EQUALS:
