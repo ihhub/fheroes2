@@ -1457,15 +1457,16 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
 void Maps::Tiles::updateObjectType()
 {
     // After removing an object there could be some other object part in the main addon.
-    const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
+    MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
     if ( objectType != MP2::OBJ_NONE ) {
         SetObject( objectType );
         return;
     }
 
     // Or object part can be in the top layer addons.
-    for ( const Maps::TilesAddon & addon : _addonTopLayer ) {
-        const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+    // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
+    for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
+        objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
         if ( objectType != MP2::OBJ_NONE ) {
             SetObject( objectType );
@@ -1474,8 +1475,9 @@ void Maps::Tiles::updateObjectType()
     }
 
     // And sometimes even in the bottom layer addons.
-    for ( const Maps::TilesAddon & addon : _addonBottomLayer ) {
-        const MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+    // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
+    for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
+        objectType = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
         if ( objectType != MP2::OBJ_NONE ) {
             SetObject( objectType );
