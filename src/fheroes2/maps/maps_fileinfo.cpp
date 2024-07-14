@@ -315,7 +315,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
         fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
 
-        MP2::mp2TileInfo mp2tile;
+        MP2::MP2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
 
         Maps::Tiles tile;

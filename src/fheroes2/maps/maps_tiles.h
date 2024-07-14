@@ -109,7 +109,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::mp2TileInfo & mp2 );
+        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -260,11 +260,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushBottomLayerAddon( const MP2::mp2AddonInfo & ma );
+        void pushBottomLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushBottomLayerAddon( TilesAddon ta );
 
-        void pushTopLayerAddon( const MP2::mp2AddonInfo & ma );
+        void pushTopLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushTopLayerAddon( TilesAddon ta )
         {

@@ -94,14 +94,14 @@ namespace
     }
 }
 
-struct buildingStats
+struct BuildingStats
 {
     uint32_t id2;
     uint8_t race;
     cost_t cost;
 };
 
-const buildingStats _builds[] = {
+const BuildingStats _builds[] = {
     // id                             gold wood mercury ore sulfur crystal gems
     { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
     { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
@@ -206,7 +206,7 @@ const buildingStats _builds[] = {
 Funds BuildingInfo::GetCost( uint32_t build, int race )
 {
     Funds payment;
-    const buildingStats * ptr = &_builds[0];
+    const BuildingStats * ptr = &_builds[0];
 
     while ( BUILD_NOTHING != ptr->id2 && !( ptr->id2 == build && ( !race || ( race & ptr->race ) ) ) )
         ++ptr;
