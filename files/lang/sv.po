@@ -4385,14 +4385,15 @@ msgstr "Varning"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race}hjälte"
+msgstr "%{color} %{race}"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
+#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race}stad"
+msgstr "%{color} %{race}"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} castle"
