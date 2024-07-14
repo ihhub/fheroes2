@@ -1303,11 +1303,15 @@ namespace
 
         std::vector<int32_t> tiles;
         tiles.push_back( startTileIndex );
-        size_t currentId = 0;
 
         std::set<int32_t> processedTileIndicies;
 
-        while ( currentId < tiles.size() ) {
+        for ( size_t currentId = 0; currentId < tiles.size(); ++currentId ) {
+            if ( processedTileIndicies.count( tiles[currentId] ) == 1 ) {
+                // This tile is already processed, skip it.
+                continue;
+            }
+
             if ( world.GetTiles( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
                 // This tile has the object. Get neighboring tiles to see if they have the same.
                 const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
@@ -1324,7 +1328,6 @@ namespace
             }
 
             processedTileIndicies.emplace( tiles[currentId] );
-            ++currentId;
         }
 
         return !processedTileIndicies.empty();
