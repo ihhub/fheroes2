@@ -1355,16 +1355,30 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
     }
 }
 
-void Maps::Tiles::Remove( uint32_t uniqID )
+bool Maps::Tiles::RemoveObjectPartsByUID( const uint32_t objectUID )
 {
     // TODO: this method must update the type of the main object
-    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
-    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
 
-    if ( _mainAddon._uid == uniqID ) {
-        resetObjectSprite();
-        _mainAddon._uid = 0;
+    bool isObjectPartRemoved = false;
+    if ( _mainAddon._uid == objectUID ) {
+        _mainAddon = {};
+
+        isObjectPartRemoved = true;
     }
+
+    size_t addonCountBefore = _addonBottomLayer.size();
+    _addonBottomLayer.remove_if( [objectUID]( const Maps::TilesAddon & v ) { return v._uid == objectUID; } );
+    if ( addonCountBefore != _addonBottomLayer.size() ) {
+        isObjectPartRemoved = true;
+    }
+
+    addonCountBefore = _addonTopLayer.size();
+    _addonTopLayer.remove_if( [objectUID]( const Maps::TilesAddon & v ) { return v._uid == objectUID; } );
+    if ( addonCountBefore != _addonTopLayer.size() ) {
+        isObjectPartRemoved = true;
+    }
+
+    return isObjectPartRemoved;
 }
 
 void Maps::Tiles::removeObjects( const MP2::ObjectIcnType objectIcnType )

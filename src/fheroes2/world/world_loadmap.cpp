@@ -1152,7 +1152,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
         ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
 
         // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
+        ultArtTileIter->RemoveObjectPartsByUID( ultArtTileIter->GetObjectUID() );
         ultArtTileIter->updateObjectType();
     }
 
@@ -1260,7 +1260,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_HERO: {
         // remove map editor sprite
         if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
-            tile.Remove( tile.GetObjectUID() );
+            tile.RemoveObjectPartsByUID( tile.GetObjectUID() );
         }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
