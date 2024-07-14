@@ -2985,7 +2985,38 @@ namespace Maps
 
     void removeMainObjectFromTile( Tiles & tile )
     {
-        switch ( tile.GetObject() ) {
+        const MP2::MapObjectType objectType = tile.GetObject();
+
+#if defined( WITH_DEBUG )
+        // Verify that this tile indeed contains an object with given object type.
+        bool isObjectTypeFound = false;
+
+        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
+            isObjectTypeFound = true;
+        }
+
+        if ( !isObjectTypeFound ) {
+            for ( auto iter = tile.getTopLayerAddons().rbegin(); iter != tile.getTopLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    isObjectTypeFound = true;
+                    break;
+                }
+            }
+        }
+
+        if ( !isObjectTypeFound ) {
+            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    isObjectTypeFound = true;
+                    break;
+                }
+            }
+        }
+
+        assert( isObjectTypeFound );
+#endif
+
+        switch ( objectType ) {
         case MP2::OBJ_MONSTER:
             tile.Remove( tile.GetObjectUID() );
             break;
