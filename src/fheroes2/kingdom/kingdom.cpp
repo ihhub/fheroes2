@@ -340,11 +340,12 @@ void Kingdom::RemoveHero( const Heroes * hero )
     }
 }
 
-void Kingdom::AddCastle( const Castle * castle )
+void Kingdom::AddCastle( Castle * castle )
 {
     if ( castle ) {
-        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) )
-            castles.push_back( const_cast<Castle *>( castle ) );
+        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
+            castles.push_back( castle );
+        }
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
@@ -906,9 +907,9 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
     }
 }
 
-void Kingdoms::AddCastles( const AllCastles & castles )
+void Kingdoms::AddCastles( AllCastles & castles )
 {
-    for ( const Castle * castle : castles ) {
+    for ( Castle * castle : castles ) {
         assert( castle != nullptr );
 
         // Skip neutral castles and towns.

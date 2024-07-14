@@ -164,7 +164,7 @@ public:
     void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
-    void AddCastle( const Castle * );
+    void AddCastle( Castle * castle );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
@@ -246,7 +246,7 @@ public:
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );
-    void AddCastles( const AllCastles & );
+    void AddCastles( AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms
