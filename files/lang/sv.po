@@ -4125,7 +4125,7 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
-"Cell-\n"
+"Rut-\n"
 "detaljer"
 
 msgid "Erase"
