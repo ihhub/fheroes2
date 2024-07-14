@@ -210,7 +210,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // It is a valid case that a map has no add-ons.
     const size_t addonCount = fs.getLE32();
-    std::vector<MP2::mp2addon_t> vec_mp2addons( addonCount );
+    std::vector<MP2::mp2AddonInfo> vec_mp2addons( addonCount );
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
@@ -218,7 +218,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         return false;
     }
 
-    for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
+    for ( auto & mp2addon : vec_mp2addons ) {
         MP2::loadAddon( fs, mp2addon );
     }
 
@@ -241,7 +241,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     for ( int32_t i = 0; i < worldSize; ++i ) {
         Maps::Tiles & tile = vec_tiles[i];
 
-        MP2::mp2tile_t mp2tile;
+        MP2::mp2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
         // There are some tiles which have object type as 65 and 193 which are Thatched Hut. This is exactly the same object as Peasant Hut.
         // Since the original number of object types is limited and in order not to confuse players we will convert this type into Peasant Hut.

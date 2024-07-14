@@ -23,10 +23,10 @@ class StreamBase;
 
 namespace MP2
 {
-    struct mp2tile_t;
-    struct mp2addon_t;
+    struct mp2TileInfo;
+    struct mp2AddonInfo;
 
-    void loadTile( StreamBase & stream, mp2tile_t & tile );
+    void loadTile( StreamBase & stream, mp2TileInfo & tile );
 
-    void loadAddon( StreamBase & stream, mp2addon_t & addon );
+    void loadAddon( StreamBase & stream, mp2AddonInfo & addon );
 }
