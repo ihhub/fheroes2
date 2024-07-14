@@ -101,7 +101,7 @@ struct BuildingStats
     cost_t cost;
 };
 
-const BuildingStats _builds[] = {
+const BuildingStats buildingStats[] = {
     // id                             gold wood mercury ore sulfur crystal gems
     { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
     { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
@@ -206,7 +206,7 @@ const BuildingStats _builds[] = {
 Funds BuildingInfo::GetCost( uint32_t build, int race )
 {
     Funds payment;
-    const BuildingStats * ptr = &_builds[0];
+    const BuildingStats * ptr = &buildingStats[0];
 
     while ( BUILD_NOTHING != ptr->id2 && !( ptr->id2 == build && ( !race || ( race & ptr->race ) ) ) )
         ++ptr;
