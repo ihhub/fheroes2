@@ -2964,8 +2964,6 @@ namespace Maps
 
     void removeMainObjectFromTile( Tiles & tile )
     {
-        const MP2::MapObjectType objectType = tile.GetObject();
-
         removeObjectFromTileByType( tile, tile.GetObject() );
     }
 
