@@ -832,7 +832,7 @@ namespace fheroes2
         return false;
     }
 
-    MonsterDialogElement::MonsterDialogElement(const Monster& monster)
+    MonsterDialogElement::MonsterDialogElement( const Monster & monster )
         : _monster( monster )
     {
         assert( _monster.isValid() );
@@ -840,18 +840,18 @@ namespace fheroes2
         _area = { sprite.width(), sprite.height() };
     }
 
-    void MonsterDialogElement::draw(Image& output, const Point& offset) const
+    void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
         fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
         fheroes2::renderMonsterFrame( _monster, sprite, { 6, 6 } );
         Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
     }
 
-    void MonsterDialogElement::processEvents(const Point& offset) const
+    void MonsterDialogElement::processEvents( const Point & offset ) const
     {
         LocalEvent & le = LocalEvent::Get();
         const Rect rect{ offset.x, offset.y, _area.width, _area.height };
-        if ( le.isMouseRightButtonPressedInArea(  rect) ) {
+        if ( le.isMouseRightButtonPressedInArea( rect ) ) {
             showPopup( defaultElementPopupButtons );
         }
         if ( le.MouseClickLeft( rect ) ) {
@@ -859,7 +859,7 @@ namespace fheroes2
         }
     }
 
-    void MonsterDialogElement::showPopup( const int buttons) const
+    void MonsterDialogElement::showPopup( const int buttons ) const
     {
         Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
     }

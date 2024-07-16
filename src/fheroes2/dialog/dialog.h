@@ -118,7 +118,7 @@ namespace Dialog
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
     bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
-                      const fheroes2::DialogElement* uiElement = nullptr );
+                      const fheroes2::DialogElement * uiElement = nullptr );
     bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
                       const bool englishOnlyVirtualKeyboard );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );

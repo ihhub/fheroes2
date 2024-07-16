@@ -72,7 +72,8 @@ namespace
     }
 }
 
-bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step, const fheroes2::DialogElement* uiElement )
+bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step,
+                          const fheroes2::DialogElement * uiElement )
 {
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -91,8 +92,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
 
     const fheroes2::Point uiOffset{ windowArea.x + ( windowArea.width - uiWidth ) / 2, windowArea.y + headerHeight + headerOffsetY };
-    if (uiElement)
-    {
+    if ( uiElement ) {
         uiElement->draw( display, uiOffset );
         headerOffsetY *= 2;
     }
