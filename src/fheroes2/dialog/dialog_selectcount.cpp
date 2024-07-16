@@ -31,7 +31,6 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -40,7 +39,6 @@
 #include "image.h"
 #include "localevent.h"
 #include "math_base.h"
-#include "monster.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -50,7 +48,6 @@
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
 #include "ui_language.h"
-#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
