@@ -109,7 +109,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::mp2tile_t & mp2 );
+        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -260,11 +260,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
+        void pushBottomLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushBottomLayerAddon( TilesAddon ta );
 
-        void pushTopLayerAddon( const MP2::mp2addon_t & ma );
+        void pushTopLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushTopLayerAddon( TilesAddon ta )
         {
@@ -348,8 +348,6 @@ namespace Maps
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
-
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
@@ -360,15 +358,15 @@ namespace Maps
             _fogDirection = fogDirection;
         }
 
-        // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixMP2MapTileObjectType( Tiles & tile );
-
-        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
-
         void swap( TilesAddon & addon ) noexcept
         {
             std::swap( addon, _mainAddon );
         }
+
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixMP2MapTileObjectType( Tiles & tile );
+
+        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
         // Update tile or bottom layer object image index.
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
@@ -390,6 +388,8 @@ namespace Maps
         int getOriginalPassability() const;
 
         bool doesObjectExist( const uint32_t uid ) const;
+
+        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );

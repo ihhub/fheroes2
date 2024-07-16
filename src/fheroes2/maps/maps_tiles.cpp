@@ -382,7 +382,7 @@ namespace
     }
 }
 
-void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
+void Maps::Tiles::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
 {
     _tilePassabilityDirections = DIRECTION_ALL;
 
@@ -760,7 +760,7 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     }
 }
 
-void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
+void Maps::Tiles::pushBottomLayerAddon( const MP2::MP2AddonInfo & ma )
 {
     const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );
     if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
@@ -777,7 +777,7 @@ void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
     _addonBottomLayer.emplace_back( static_cast<uint8_t>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
 }
 
-void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
+void Maps::Tiles::pushTopLayerAddon( const MP2::MP2AddonInfo & ma )
 {
     const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 );
     if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
@@ -1032,12 +1032,16 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 bool Maps::Tiles::isStream() const
 {
     for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM || ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && addon._imageIndex < 14 ) ) {
+        if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
+             || ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                  && ( addon._imageIndex < 14 || ( addon._imageIndex > 217 && addon._imageIndex < ( 218 + 14 ) ) ) ) ) {
             return true;
         }
     }
 
-    return _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM || ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && _mainAddon._imageIndex < 14 );
+    return _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
+           || ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                && ( _mainAddon._imageIndex < 14 || ( _mainAddon._imageIndex > 217 && _mainAddon._imageIndex < ( 218 + 14 ) ) ) );
 }
 
 bool Maps::Tiles::isShadow() const

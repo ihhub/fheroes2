@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,7 @@
 
 namespace MP2
 {
-    void loadTile( StreamBase & stream, mp2tile_t & tile )
+    void loadTile( StreamBase & stream, MP2TileInfo & tile )
     {
         tile.terrainImageIndex = stream.getLE16();
         tile.objectName1 = stream.get();
@@ -40,7 +40,7 @@ namespace MP2
         tile.level2ObjectUID = stream.getLE32();
     }
 
-    void loadAddon( StreamBase & stream, mp2addon_t & addon )
+    void loadAddon( StreamBase & stream, MP2AddonInfo & addon )
     {
         addon.nextAddonIndex = stream.getLE16();
         addon.objectNameN1 = stream.get() * 2; // TODO: why we multiply by 2 here?
