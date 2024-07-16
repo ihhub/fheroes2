@@ -44,6 +44,7 @@
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
@@ -471,9 +472,13 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
-                int32_t count = 1;
+                std::string str = _( "Set %{monster} Count" );
+                StringReplace( str, "%{monster}", mons.GetName() );
 
-                if ( Dialog::SelectMonsterCount( mons, 1, 500000, count, 1 ) ) {
+                int32_t count = 1;
+                const fheroes2::MonsterDialogElement monsUi{ mons };
+
+                if ( Dialog::SelectCount( str, 1, 500000, count, 1, &monsUi ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }

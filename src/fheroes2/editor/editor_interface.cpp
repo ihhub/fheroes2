@@ -1191,9 +1191,13 @@ namespace Interface
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
+                    std::string str = _( "Set %{monster} Count" );
+                    StringReplace( str, "%{monster}", tempMonster.GetName() );
+
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( tempMonster.isValid() ) {
-                        if ( Dialog::SelectMonsterCount( tempMonster, 0, 500000, monsterCount, 1 ) ) {
+                        const fheroes2::MonsterDialogElement monsterUi{ tempMonster };
+                        if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, &monsterUi ) ) {
                             _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                             action.commit();
                         }

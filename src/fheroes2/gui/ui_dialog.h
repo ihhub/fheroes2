@@ -28,6 +28,7 @@
 #include "artifact.h"
 #include "image.h"
 #include "math_base.h"
+#include "monster.h"
 #include "skill.h"
 #include "spell.h"
 #include "ui_button.h"
@@ -340,6 +341,23 @@ namespace fheroes2
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
+    };
+
+    class MonsterDialogElement : public DialogElement
+    {
+    public:
+        explicit MonsterDialogElement( const Monster & monster );
+
+        ~MonsterDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        Monster _monster;
     };
 
     class ValueSelectionDialogElement

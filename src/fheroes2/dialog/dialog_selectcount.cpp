@@ -75,7 +75,7 @@ namespace
     }
 }
 
-bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step, const fheroes2::Image & backgroundImage )
+bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step, const fheroes2::DialogElement* uiElement )
 {
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -83,24 +83,25 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     int32_t headerOffsetY{ 10 };
     const int32_t selectionAreaHeight{ 30 };
     const int32_t headerHeight = headerText.height( BOXAREA_WIDTH );
-    const int32_t imageHeight = backgroundImage.height();
+    const int32_t uiWidth = uiElement ? uiElement->area().width : 0;
+    const int32_t uiHeight = uiElement ? uiElement->area().height : 0;
 
-    const FrameBox box( headerHeight + headerOffsetY + selectionAreaHeight + imageHeight, true );
+    const FrameBox box( headerHeight + headerOffsetY + selectionAreaHeight + uiHeight, true );
 
     const fheroes2::Rect & windowArea = box.GetArea();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
 
-    if ( !backgroundImage.empty() ) {
-        fheroes2::Blit( backgroundImage, 0, 0, display, windowArea.x + ( windowArea.width - backgroundImage.width() ) / 2, windowArea.y + headerHeight + headerOffsetY,
-                        backgroundImage.width(), backgroundImage.height() );
-
-        headerOffsetY = headerOffsetY * 2;
+    const fheroes2::Point uiOffset{ windowArea.x + ( windowArea.width - uiWidth ) / 2, windowArea.y + headerHeight + headerOffsetY };
+    if (uiElement)
+    {
+        uiElement->draw( display, uiOffset );
+        headerOffsetY *= 2;
     }
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + imageHeight, valueSelectionSize.width,
+    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
                                            valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
@@ -112,7 +113,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     const fheroes2::Text mainText( _( "MAX" ), fheroes2::FontType::smallWhite() );
     const int32_t maxAreaOffsetY{ ( 26 - mainText.height() ) / 2 };
-    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + imageHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
+    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + uiHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
     mainText.draw( rectMax.x, rectMax.y + 2, display );
 
     display.render();
@@ -138,103 +139,14 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             redraw_count = true;
         }
 
-        if ( redraw_count ) {
-            valueSelectionElement.draw( display );
-            display.render( selectionBoxArea );
-        }
-
-        result = btnGroups.processEvents();
-    }
-
-    selectedValue = ( result == Dialog::OK ) ? valueSelectionElement.getValue() : 0;
-
-    return result == Dialog::OK;
-}
-
-bool Dialog::SelectMonsterCount( const Monster & monster, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step )
-{
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    std::string header = _( "Set %{monster} Count" );
-    StringReplace( header, "%{monster}", monster.GetName() );
-    const fheroes2::Text headerText( std::move( header ), fheroes2::FontType::normalWhite() );
-
-    fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-    fheroes2::renderMonsterFrame( monster, monsterSprite, { 6, 6 } );
-
-    int32_t headerOffsetY{ 10 };
-    const int32_t selectionAreaHeight{ 30 };
-    const int32_t headerHeight = headerText.height( BOXAREA_WIDTH );
-    const int32_t imageHeight = monsterSprite.height();
-
-    const FrameBox box( headerHeight + headerOffsetY + selectionAreaHeight + imageHeight, true );
-
-    const fheroes2::Rect & windowArea = box.GetArea();
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-    headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
-
-    fheroes2::Rect monsterRect{ windowArea.x + ( windowArea.width - monsterSprite.width() ) / 2, windowArea.y + headerHeight + headerOffsetY, monsterSprite.width(),
-                                monsterSprite.height() };
-    fheroes2::Blit( monsterSprite, 0, 0, display, windowArea.x + ( windowArea.width - monsterSprite.width() ) / 2, windowArea.y + headerHeight + headerOffsetY,
-                    monsterSprite.width(), monsterSprite.height() );
-
-    headerOffsetY = headerOffsetY * 2;
-
-    const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + imageHeight, valueSelectionSize.width,
-                                           valueSelectionSize.height };
-
-    fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
-    valueSelectionElement.ignoreMouseWheelEventRoiCheck();
-    valueSelectionElement.draw( display );
-
-    fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
-    btnGroups.draw();
-
-    const fheroes2::Text mainText( _( "MAX" ), fheroes2::FontType::smallWhite() );
-    const int32_t maxAreaOffsetY{ ( 26 - mainText.height() ) / 2 };
-    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + imageHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
-    mainText.draw( rectMax.x, rectMax.y + 2, display );
-
-    display.render();
-
-    int result = Dialog::ZERO;
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        bool redraw_count = false;
-
-        if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
-            valueSelectionElement.setValue( selectedValue );
-            redraw_count = true;
-        }
-
-        if ( le.MouseClickLeft( rectMax ) ) {
-            valueSelectionElement.setValue( max );
-            redraw_count = true;
-        }
-
-        if ( valueSelectionElement.processEvents() ) {
-            selectedValue = valueSelectionElement.getValue();
-            redraw_count = true;
+        if ( uiElement ) {
+            uiElement->processEvents( uiOffset );
+            display.render();
         }
 
         if ( redraw_count ) {
             valueSelectionElement.draw( display );
             display.render( selectionBoxArea );
-        }
-
-        if ( le.isMouseRightButtonPressedInArea( monsterRect ) ) {
-            ArmyInfo( Troop( monster, valueSelectionElement.getValue() ), ZERO );
-            display.render();
-            continue;
-        }
-
-        if ( le.MouseClickLeft( monsterRect ) ) {
-            ArmyInfo( Troop( monster, valueSelectionElement.getValue() ), BUTTONS );
-            display.render();
-            continue;
         }
 
         result = btnGroups.processEvents();

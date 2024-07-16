@@ -30,6 +30,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
@@ -45,6 +46,7 @@
 #include "screen.h"
 #include "spell_info.h"
 #include "ui_button.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 
 class HeroBase;
@@ -828,6 +830,38 @@ namespace fheroes2
         }
 
         return false;
+    }
+
+    MonsterDialogElement::MonsterDialogElement(const Monster& monster)
+        : _monster( monster )
+    {
+        assert( _monster.isValid() );
+        const fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+        _area = { sprite.width(), sprite.height() };
+    }
+
+    void MonsterDialogElement::draw(Image& output, const Point& offset) const
+    {
+        fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+        fheroes2::renderMonsterFrame( _monster, sprite, { 6, 6 } );
+        Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+    }
+
+    void MonsterDialogElement::processEvents(const Point& offset) const
+    {
+        LocalEvent & le = LocalEvent::Get();
+        const Rect rect{ offset.x, offset.y, _area.width, _area.height };
+        if ( le.isMouseRightButtonPressedInArea(  rect) ) {
+            showPopup( defaultElementPopupButtons );
+        }
+        if ( le.MouseClickLeft( rect ) ) {
+            showPopup( Dialog::BUTTONS );
+        }
+    }
+
+    void MonsterDialogElement::showPopup( const int buttons) const
+    {
+        Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
     }
 
     ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step,
