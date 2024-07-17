@@ -3106,7 +3106,7 @@ msgid "You cannot select %{resource}!"
 msgstr "Du kan inte välja %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr "Välj antalet %{resource}:"
+msgstr "Välj antal %{resource}:"
 
 msgid "Select Recipients"
 msgstr "Välj mottagare"
