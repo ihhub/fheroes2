@@ -349,16 +349,15 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
         return;
     }
 
-    const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-    // AI is cheating!
     const Kingdom & kingdom = world.GetKingdom( playerColor );
-    const bool isAIPlayer = kingdom.isControlAI();
 
-    const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isAIPlayer = kingdom.isControlAI();
     const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
+    const int alliedColors = Players::GetPlayerFriends( playerColor );
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
+
+    const fheroes2::Point center = Maps::GetPoint( tileIndex );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
