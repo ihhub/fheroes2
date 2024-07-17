@@ -1036,11 +1036,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         }
     }
 
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
-    }
-
     return result;
 }
 

@@ -46,15 +46,11 @@ namespace Difficulty
 
     std::string String( int );
 
-    int GetScoutingBonusForAI( int difficulty );
-
     // Returns an extra resource bonus for AI based on difficulty level.
     Funds getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom );
 
     // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );
-
-    int GetHeroMovementBonusForAI( int difficulty );
 
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
