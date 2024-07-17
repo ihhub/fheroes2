@@ -30,9 +30,7 @@
 #include <ostream>
 
 #include "ai.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
