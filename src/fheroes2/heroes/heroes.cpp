@@ -43,9 +43,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -1034,11 +1032,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
             result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
         }
-    }
-
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
     }
 
     return result;

@@ -30,9 +30,7 @@
 #include <ostream>
 
 #include "ai.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -344,26 +342,21 @@ MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
     return monsters;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor )
+void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
         return;
     }
 
-    const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-    // AI is cheating!
     const Kingdom & kingdom = world.GetKingdom( playerColor );
-    const bool isAIPlayer = kingdom.isControlAI();
-    if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
-    }
 
-    const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isAIPlayer = kingdom.isControlAI();
     const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
+    const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
+    const int alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
@@ -412,20 +405,13 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scoutingDistance, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         return 0;
     }
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-    // AI is cheating!
-    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
-    if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
-    }
-
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
