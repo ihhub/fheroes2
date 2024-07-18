@@ -140,10 +140,10 @@ namespace
             return icnIndex == 1;
         }
         case ICN::OBJNWATR: {
-           static const std::bitset<256> objWatrShadowBitset
-                = fheroes2::makeBitsetFromVector<256>( { 12,  13,  14,  15,  16,  17,  18,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,
-                                                         42,  43,  44,  52,  55,  118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 166, 167,
-                                                         168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 184, 188, 189, 190, 191, 192, 193, 194, 240 } );
+            static const std::bitset<256> objWatrShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 12,  13,  14,  15,  16,  17,  18,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,
+                  42,  43,  44,  52,  55,  118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 166, 167,
+                  168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 184, 188, 189, 190, 191, 192, 193, 194, 240 } );
             return objWatrShadowBitset[icnIndex];
         }
         case ICN::OBJNARTI:
@@ -157,8 +157,8 @@ namespace
             return objXlc1ShadowBitset[icnIndex];
         }
         case ICN::X_LOC2: {
-            static const std::bitset<256> objXlc2ShadowBitset
-                = fheroes2::makeBitsetFromVector<256>( { 2, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 47, 48, 49, 50, 51, 52, 53, 54, 55, 83, 84, 85, 86, 87, 88, 89, 90, 91 } );
+            static const std::bitset<256> objXlc2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 2, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 47, 48, 49, 50, 51, 52, 53, 54, 55, 83, 84, 85, 86, 87, 88, 89, 90, 91 } );
             return objXlc2ShadowBitset[icnIndex];
         }
         case ICN::X_LOC3: {
