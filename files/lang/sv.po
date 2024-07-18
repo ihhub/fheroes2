@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2024-07-05 09:59+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2797,11 +2797,11 @@ msgstr "Inga varelser tillgängliga för köp."
 msgid "Recruit Creatures"
 msgstr "Rekrytera Varelser"
 
-msgid "Max"
-msgstr "Maximalt"
-
 msgid "Hire all creatures in the town."
 msgstr "Rekrytera alla varelser i staden."
+
+msgid "Max"
+msgstr "Maximalt"
 
 msgid "Available"
 msgstr "Tillgängligt"
@@ -4913,6 +4913,9 @@ msgstr "Kartkreatörer"
 msgid "Package Design"
 msgstr "Paketdesign"
 
+msgid "High Scores"
+msgstr "Poänglistan"
+
 msgid "Your Name"
 msgstr "Ditt Namn"
 
@@ -5411,9 +5414,6 @@ msgstr "Tack till"
 
 msgid "View the credits screen."
 msgstr "Visa \"Tack till\"-skärmen."
-
-msgid "High Scores"
-msgstr "Poänglistan"
 
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."

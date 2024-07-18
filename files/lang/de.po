@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2866,11 +2866,11 @@ msgstr "Keine Kreatur zum Kauf verfügbar."
 msgid "Recruit Creatures"
 msgstr "Kreaturen rekrutieren"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Alle Kreaturen in der Stadt rekrutieren."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Verfügbar"
@@ -5112,6 +5112,9 @@ msgstr "Kartendesigner"
 msgid "Package Design"
 msgstr "Verpackungsdesign"
 
+msgid "High Scores"
+msgstr "Bestenliste"
+
 msgid "Your Name"
 msgstr "Euer Name"
 
@@ -5630,9 +5633,6 @@ msgstr "Credits"
 
 msgid "View the credits screen."
 msgstr "Abspannbildschirm zeigen."
-
-msgid "High Scores"
-msgstr "Bestenliste"
 
 msgid "View the high scores screen."
 msgstr "Die Bestenliste anzeigen."

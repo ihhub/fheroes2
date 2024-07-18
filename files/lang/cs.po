@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2835,11 +2835,11 @@ msgstr "Nejsou zde žádné stvoření k najmutí."
 msgid "Recruit Creatures"
 msgstr "Najmout Stvoření"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Najmout všechna stvoření ve městě."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Dostupných"
@@ -5010,6 +5010,9 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "High Scores"
+msgstr "Nejlepší výsledky"
+
 msgid "Your Name"
 msgstr ""
 
@@ -5527,9 +5530,6 @@ msgstr "Autoři"
 
 msgid "View the credits screen."
 msgstr "Zobraz obrazovku s autory."
-
-msgid "High Scores"
-msgstr "Nejlepší výsledky"
 
 msgid "View the high scores screen."
 msgstr "Zobraz tabulku s nej. skóre."

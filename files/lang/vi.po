@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2847,11 +2847,11 @@ msgstr "Không có sinh vật nào sẵn có để mua."
 msgid "Recruit Creatures"
 msgstr "Chiêu mộ Quái"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Thuê tất cả các sinh vật trong thị trấn."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Có sẵn"
@@ -5056,6 +5056,9 @@ msgstr "Thiết kế Bản đồ"
 msgid "Package Design"
 msgstr "Thiết kế Đóng gói"
 
+msgid "High Scores"
+msgstr "Điểm Cao"
+
 msgid "Your Name"
 msgstr "Tên của Ngươi"
 
@@ -5560,9 +5563,6 @@ msgstr "Công trạng"
 
 msgid "View the credits screen."
 msgstr "Xem màn hình giới thiệu thông tin."
-
-msgid "High Scores"
-msgstr "Điểm Cao"
 
 msgid "View the high scores screen."
 msgstr "Xem màn hình điểm cao."
