@@ -107,8 +107,6 @@ target_include_directories(
 	kingdom
 	maps
 	monster
-	objects
-	pocketpc
 	resource
 	spell
 	system
