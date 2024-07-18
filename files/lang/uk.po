@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2024-07-11 19:03+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2807,11 +2807,11 @@ msgstr "Нема істот доступних для найму."
 msgid "Recruit Creatures"
 msgstr "Найняти Створінь"
 
-msgid "Max"
-msgstr "Макс"
-
 msgid "Hire all creatures in the town."
 msgstr "Найняти усіх істот в місті."
+
+msgid "Max"
+msgstr "Макс"
 
 msgid "Available"
 msgstr "Доступно"
@@ -4913,6 +4913,9 @@ msgstr "Дизайнери мап"
 msgid "Package Design"
 msgstr "Дизайн упаковки"
 
+msgid "High Scores"
+msgstr "Рекорди"
+
 msgid "Your Name"
 msgstr "Ваше Ім'я"
 
@@ -5414,9 +5417,6 @@ msgstr "Титри"
 
 msgid "View the credits screen."
 msgstr "Переглянути титри."
-
-msgid "High Scores"
-msgstr "Рекорди"
 
 msgid "View the high scores screen."
 msgstr "Перегляд сторінки рекордів."

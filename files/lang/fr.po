@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2859,11 +2859,11 @@ msgstr "Pas de créatures disponibles à l'achat."
 msgid "Recruit Creatures"
 msgstr "Recruter des créatures"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Recruter toutes les créatures disponibles dans le village."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Disponible"
@@ -5073,6 +5073,9 @@ msgstr "Concepteurs de cartes"
 msgid "Package Design"
 msgstr "Conception du conditionnement"
 
+msgid "High Scores"
+msgstr "Meilleurs scores"
+
 msgid "Your Name"
 msgstr "Votre nom"
 
@@ -5578,9 +5581,6 @@ msgstr "Crédits"
 
 msgid "View the credits screen."
 msgstr "Voir l'écran des crédits."
-
-msgid "High Scores"
-msgstr "Meilleurs scores"
 
 msgid "View the high scores screen."
 msgstr "Voir l'écran des meilleurs scores."
