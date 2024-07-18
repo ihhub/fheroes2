@@ -3021,8 +3021,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 listlog->SetOpenLog( !listlog->isOpenLog() );
             }
             else if ( le.isMouseRightButtonPressedInArea( status ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Message Bar" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Message Bar" ), _( "Shows the results of individual monster's actions." ), Dialog::ZERO );
             }
         }
 
@@ -3175,9 +3174,7 @@ void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actio
     assert( arena.CanToggleAutoBattle() );
     assert( !arena.AutoBattleInProgress() );
 
-    int startAutoBattle
-        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                 Dialog::YES | Dialog::NO );
+    int startAutoBattle = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable auto combat?" ), Dialog::YES | Dialog::NO );
     if ( startAutoBattle != Dialog::YES ) {
         return;
     }
@@ -3190,10 +3187,7 @@ void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actio
 
 void Battle::Interface::EventAutoFinish( Actions & actions )
 {
-    if ( fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                fheroes2::Text( _( "Are you sure you want to finish the battle in auto mode?" ), fheroes2::FontType::normalWhite() ),
-                                Dialog::YES | Dialog::NO )
-         != Dialog::YES ) {
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to finish the battle in auto mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
         return;
     }
 
@@ -6412,9 +6406,7 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
     // Right now there should be no pending auto battle interruptions.
     assert( _interruptAutoBattleForColor == 0 );
 
-    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                                 Dialog::YES | Dialog::NO );
+    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat?" ), Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
         _interruptAutoBattleForColor = color;
     }

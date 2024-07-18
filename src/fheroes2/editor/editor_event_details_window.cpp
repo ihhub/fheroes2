@@ -366,12 +366,11 @@ namespace Editor
                 const Artifact artifact( eventMetadata.artifact );
 
                 if ( artifact.isValid() ) {
-                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
-                    const fheroes2::Text description( fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ),
-                                                      fheroes2::FontType::normalWhite() );
-
                     fheroes2::ArtifactDialogElement artifactUI( artifact );
-                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
+
+                    fheroes2::showStandardTextMessage( artifact.GetName(),
+                                                       fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ), Dialog::ZERO,
+                                                       { &artifactUI } );
                 }
                 else {
                     fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );

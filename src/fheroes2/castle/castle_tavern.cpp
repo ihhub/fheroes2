@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,6 +44,5 @@ void Castle::OpenTavern() const
     const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
     const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( std::move( body ), fheroes2::FontType::normalWhite() ) );
 
-    fheroes2::showMessage( fheroes2::Text( GetStringBuilding( BUILD_TAVERN ), fheroes2::FontType::normalYellow() ), fheroes2::Text( "", {} ), Dialog::OK,
-                           { &imageUI, &textBodyUI } );
+    fheroes2::showStandardTextMessage( GetStringBuilding( BUILD_TAVERN ), {}, Dialog::OK, { &imageUI, &textBodyUI } );
 }

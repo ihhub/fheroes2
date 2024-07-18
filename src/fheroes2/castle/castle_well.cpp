@@ -177,15 +177,14 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         }
         if ( isCreaturePresent ) {
             if ( !canAffordOneCreature ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to recruit creatures." ), normalWhite ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "Not enough resources to recruit creatures." ), Dialog::OK );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "You are unable to recruit at this time, your ranks are full." ), normalWhite ),
-                                       Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "You are unable to recruit at this time, your ranks are full." ), Dialog::OK );
             }
         }
         else {
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ), Dialog::OK );
+            fheroes2::showStandardTextMessage( {}, _( "No creatures available for purchase." ), Dialog::OK );
         }
     }
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit Creatures" ), fheroes2::FontType::normalYellow() ),
@@ -297,13 +296,11 @@ void Castle::OpenWell()
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Max" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Hire all creatures in the town." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Max" ), _( "Hire all creatures in the town." ), Dialog::ZERO );
         }
     }
 }
