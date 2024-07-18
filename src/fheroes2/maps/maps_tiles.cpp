@@ -172,7 +172,7 @@ namespace
             return obTownShadowBitset[icnIndex];
         }
         case ICN::OBJNLAVA: {
-            const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
+            static const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
             return objLavaShadowBitset[icnIndex];
         }
         case ICN::OBJNLAV2: {
