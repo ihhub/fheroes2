@@ -835,15 +835,17 @@ namespace fheroes2
     MonsterDialogElement::MonsterDialogElement( const Monster & monster )
         : _monster( monster )
     {
-        assert( _monster.isValid() );
-        const fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+        if ( !_monster.isValid() ) {
+            throw std::logic_error( "Invalid monster provided" );
+        }
+        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 12 );
         _area = { sprite.width(), sprite.height() };
     }
 
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
-        fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-        fheroes2::renderMonsterFrame( _monster, sprite, { 6, 6 } );
+        Sprite sprite = AGG::GetICN( ICN::STRIP, 12 );
+        renderMonsterFrame( _monster, sprite, { 6, 6 } );
         Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
     }
 
@@ -854,7 +856,7 @@ namespace fheroes2
         if ( le.isMouseRightButtonPressedInArea( rect ) ) {
             showPopup( defaultElementPopupButtons );
         }
-        if ( le.MouseClickLeft( rect ) ) {
+        else if ( le.MouseClickLeft( rect ) ) {
             showPopup( Dialog::BUTTONS );
         }
     }

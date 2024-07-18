@@ -1198,12 +1198,18 @@ namespace Interface
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( tempMonster.isValid() ) {
-                        const fheroes2::MonsterDialogElement monsterUi{ tempMonster };
-                        if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, &monsterUi ) ) {
-                            _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
-                            action.commit();
-                        }
+                    std::unique_ptr<const fheroes2::MonsterDialogElement> monsterUi = nullptr;
+                    try {
+                        monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
+                    }
+                    catch ( const std::logic_error & ) {
+                        // It is expected for a random monster
+                        monsterUi = nullptr;
+                    }
+
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) ) {
+                        _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
+                        action.commit();
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {

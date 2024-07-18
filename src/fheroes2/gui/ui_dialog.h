@@ -357,7 +357,7 @@ namespace fheroes2
         void showPopup( const int buttons ) const override;
 
     private:
-        Monster _monster;
+        const Monster _monster;
     };
 
     class ValueSelectionDialogElement
