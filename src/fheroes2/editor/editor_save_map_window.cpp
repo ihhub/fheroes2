@@ -72,7 +72,7 @@ namespace
         const bool isTextLimit = ( nameText.width() + 10 ) > maxFileNameWidth;
 
         nameText.fitToOneRow( maxFileNameWidth );
-        nameText.drawInRoi( roi.x + 4, roi.y + 4, fheroes2::Display::instance(), roi );
+        nameText.drawInRoi( roi.x + 4, roi.y + 4, 0, fheroes2::Display::instance(), roi );
 
         return isTextLimit;
     }

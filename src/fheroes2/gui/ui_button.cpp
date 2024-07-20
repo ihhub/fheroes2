@@ -694,8 +694,10 @@ namespace fheroes2
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align
-        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
-        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
+        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) - releasedTextSize.height ) / 2,
+                           textAreaWidth, released );
+        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_PRESSED ) - pressedTextSize.height ) / 2,
+                          textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

@@ -139,7 +139,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
         fheroes2::Text text{ Skill::Primary::String( skill ), fheroes2::FontType::smallWhite() };
 
         if ( _hero == nullptr ) {
-            text.drawInRoi( pos.x + ( pos.width - text.width() ) / 2, pos.y + 6, dstsf, pos );
+            text.drawInRoi( pos.x + ( pos.width - text.width() ) / 2, pos.y + 6, 0, dstsf, pos );
             return;
         }
 
@@ -154,7 +154,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
                 fheroes2::ApplyPalette( dstsf, pos.x, pos.y, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
                 const fheroes2::Text defaultText( _( "Default\nvalue" ), fheroes2::FontType::normalWhite() );
-                defaultText.drawInRoi( pos.x, pos.y + ( pos.height - defaultText.height() * defaultText.rows( pos.width ) ) / 2 + 2, pos.width, dstsf, pos );
+                defaultText.drawInRoi( pos.x, pos.y + ( pos.height - defaultText.height( pos.width ) ) / 2 + 2, pos.width, dstsf, pos );
             }
 
             std::string skillText = "%{withModificators} (%{base})";
@@ -185,7 +185,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
         }
 
         // In editor the background may be darkened so we render texts here.
-        text.drawInRoi( pos.x + ( pos.width - text.width() ) / 2, pos.y + 6, dstsf, pos );
+        text.drawInRoi( pos.x + ( pos.width - text.width() ) / 2, pos.y + 6, 0, dstsf, pos );
         text.set( std::move( skillValueText ), fheroes2::FontType::normalWhite() );
         text.drawInRoi( pos.x, pos.y + pos.height - text.height(), pos.width, dstsf, pos );
     }
@@ -356,14 +356,14 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
             text.fitToOneRow( pos.width );
         }
         const int skillNamePaddingX = ( pos.width - text.width() ) / 2 - 1;
-        text.drawInRoi( pos.x + skillNamePaddingX, pos.y + 5, dstsf, pos );
+        text.drawInRoi( pos.x + skillNamePaddingX, pos.y + 5, 0, dstsf, pos );
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
         if ( text.width() > sprite.width() + 1 ) {
             text.fitToOneRow( pos.width );
         }
         const int skillLevelPaddingX = ( pos.width - text.width() ) / 2 - 1;
-        text.drawInRoi( pos.x + skillLevelPaddingX, pos.y + 53, dstsf, pos );
+        text.drawInRoi( pos.x + skillLevelPaddingX, pos.y + 53, 0, dstsf, pos );
     }
 }
 
