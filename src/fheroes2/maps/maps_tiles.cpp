@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bitset>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
@@ -42,23 +43,11 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
-#include "mounts.h"
 #include "mp2.h"
-#include "objcrck.h"
-#include "objdirt.h"
-#include "objdsrt.h"
-#include "objgras.h"
-#include "objlava.h"
-#include "objmult.h"
-#include "objsnow.h"
-#include "objswmp.h"
-#include "objtown.h"
-#include "objwatr.h"
-#include "objxloc.h"
 #include "pairs.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "trees.h"
+#include "tools.h"
 #include "world.h"
 #include "world_object_uid.h"
 
@@ -66,7 +55,7 @@ namespace
 {
     bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
     {
-        if ( icn == 0 ) {
+        if ( icn == ICN::UNKNOWN ) {
             // Special case when no objects exist.
             return false;
         }
@@ -77,59 +66,131 @@ namespace
         case ICN::MTNLAVA:
         case ICN::MTNMULT:
         case ICN::MTNSNOW:
-        case ICN::MTNSWMP:
-            return ObjMnts1::isShadow( icnIndex );
+        case ICN::MTNSWMP: {
+            static const std::bitset<256> objMnts1ShadowBitset
+                = fheroes2::makeBitsetFromVector<256>( { 0, 5, 11, 17, 21, 26, 32, 38, 42, 45, 49, 52, 55, 59, 62, 65, 68, 71, 74, 75, 79, 80 } );
+            return objMnts1ShadowBitset[icnIndex];
+        }
         case ICN::MTNCRCK:
-        case ICN::MTNDIRT:
-            return ObjMnts2::isShadow( icnIndex );
+        case ICN::MTNDIRT: {
+            static const std::bitset<256> objMnts2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 0, 5, 11, 17, 21, 26, 32, 38, 42, 46, 47, 53, 57, 58, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110 } );
+            return objMnts2ShadowBitset[icnIndex];
+        }
         case ICN::TREDECI:
         case ICN::TREEVIL:
         case ICN::TREFALL:
         case ICN::TREFIR:
         case ICN::TREJNGL:
-        case ICN::TRESNOW:
-            return ObjTree::isShadow( icnIndex );
-        case ICN::OBJNCRCK:
-            return ObjCrck::isShadow( icnIndex );
-        case ICN::OBJNDIRT:
-            return ObjDirt::isShadow( icnIndex );
-        case ICN::OBJNDSRT:
-            return ObjDsrt::isShadow( icnIndex );
-        case ICN::OBJNGRA2:
-            return ObjGra2::isShadow( icnIndex );
-        case ICN::OBJNGRAS:
-            return ObjGras::isShadow( icnIndex );
-        case ICN::OBJNMUL2:
-            return ObjMul2::isShadow( icnIndex );
-        case ICN::OBJNMULT:
-            return ObjMult::isShadow( icnIndex );
-        case ICN::OBJNSNOW:
-            return ObjSnow::isShadow( icnIndex );
-        case ICN::OBJNSWMP:
-            return ObjSwmp::isShadow( icnIndex );
-        case ICN::OBJNWAT2:
-            return ObjWat2::isShadow( icnIndex );
-        case ICN::OBJNWATR:
-            return ObjWatr::isShadow( icnIndex );
+        case ICN::TRESNOW: {
+            static const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
+            return objTreeShadowBitset[icnIndex];
+        }
+        case ICN::OBJNCRCK: {
+            static const std::bitset<256> objCrckShadowBitset
+                = fheroes2::makeBitsetFromVector<256>( { 2, 9, 13, 15, 20, 23, 28, 33, 36, 39, 45, 48, 51, 54, 56, 73, 75, 79, 200, 201, 207, 237 } );
+            return objCrckShadowBitset[icnIndex];
+        }
+        case ICN::OBJNDIRT: {
+            static const std::bitset<256> objDirtShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 0,   1,   5,   6,   14,  47,  52,  59,  62,  65,  68,  70,  72,  75,  78,  81,  84,  87,  91,  94,  97,  100, 103, 111, 114, 117,
+                  126, 128, 136, 149, 150, 158, 161, 162, 163, 164, 165, 166, 167, 168, 177, 178, 179, 180, 181, 182, 183, 184, 193, 196, 200 } );
+            return objDirtShadowBitset[icnIndex];
+        }
+        case ICN::OBJNDSRT: {
+            static const std::bitset<256> objDsrtShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 } );
+            return objDsrtShadowBitset[icnIndex];
+        }
+        case ICN::OBJNGRA2: {
+            static const std::bitset<256> objGra2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 5,  14, 19, 20, 28, 31, 32, 33, 34, 35,  36,  37,  38,  47,  48,  49,  50,  51,  52,  53,  54,  70,  71,  72,  73,  74, 75,
+                  76, 77, 78, 79, 80, 81, 82, 83, 91, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 121, 124, 128 } );
+            return objGra2ShadowBitset[icnIndex];
+        }
+        case ICN::OBJNGRAS: {
+            static const std::bitset<256> objGrasShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
+            return objGrasShadowBitset[icnIndex];
+        }
+        case ICN::OBJNMUL2: {
+            static const std::bitset<256> objMul2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 14,  17,  20,  24,  34,  36,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+                  147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 164, 180, 181, 182, 183, 184, 185, 186, 189, 199, 200, 202, 206 } );
+            return objMul2ShadowBitset[icnIndex];
+        }
+        case ICN::OBJNMULT: {
+            static const std::bitset<256> objMultShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 1,  3,  15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54, 57,
+                  61, 67, 68, 75, 77, 79, 81, 83, 97, 98, 99, 100, 101, 102, 103, 105, 106, 107, 108, 109, 110, 113, 115, 121, 122, 124, 125, 126, 127, 128, 129, 130 } );
+            return objMultShadowBitset[icnIndex];
+        }
+        case ICN::OBJNSNOW: {
+            static const std::bitset<256> objSnowShadowBitset
+                = fheroes2::makeBitsetFromVector<256>( { 21,  25,  29,  31,  33,  36,  40,  48,  54,  59,  63,  67,  70,  73,  76,  79,  101, 104, 105, 106, 107,
+                                                         108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 137, 140, 142, 144, 148, 193, 203, 207 } );
+            return objSnowShadowBitset[icnIndex];
+        }
+        case ICN::OBJNSWMP: {
+            static const std::bitset<256> objSwmpShadowBitset
+                = fheroes2::makeBitsetFromVector<256>( { 2,  3,   14,  15,  16,  17,  18,  19,  20,  21,  31,  43,  44,  45,  46,  47,  48,  49, 66,
+                                                         83, 125, 127, 130, 132, 136, 141, 163, 170, 175, 178, 195, 197, 202, 204, 207, 211, 215 } );
+            return objSwmpShadowBitset[icnIndex];
+        }
+        case ICN::OBJNWAT2: {
+            return icnIndex == 1;
+        }
+        case ICN::OBJNWATR: {
+            static const std::bitset<256> objWatrShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 12,  13,  14,  15,  16,  17,  18,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,
+                  42,  43,  44,  52,  55,  118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 166, 167,
+                  168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 184, 188, 189, 190, 191, 192, 193, 194, 240 } );
+            return objWatrShadowBitset[icnIndex];
+        }
         case ICN::OBJNARTI:
         case ICN::OBJNRSRC:
             return 0 == ( icnIndex % 2 );
         case ICN::OBJNTWRD:
             return icnIndex > 31;
-        case ICN::X_LOC1:
-            return ObjXlc1::isShadow( icnIndex );
-        case ICN::X_LOC2:
-            return ObjXlc2::isShadow( icnIndex );
-        case ICN::X_LOC3:
-            return ObjXlc3::isShadow( icnIndex );
-        case ICN::OBJNTOWN:
-            return ObjTown::isShadow( icnIndex );
-        case ICN::OBJNLAVA:
-            return ObjLava::isShadow( icnIndex );
-        case ICN::OBJNLAV2:
-            return ObjLav2::isShadow( icnIndex );
-        case ICN::OBJNLAV3:
-            return ObjLav3::isShadow( icnIndex );
+        case ICN::X_LOC1: {
+            static const std::bitset<256> objXlc1ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 1, 2, 32, 33, 34, 35, 36, 37, 38, 39, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 72, 78, 79, 83, 84, 112, 116, 120, 124, 125, 129, 133 } );
+            return objXlc1ShadowBitset[icnIndex];
+        }
+        case ICN::X_LOC2: {
+            static const std::bitset<256> objXlc2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 2, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 47, 48, 49, 50, 51, 52, 53, 54, 55, 83, 84, 85, 86, 87, 88, 89, 90, 91 } );
+            return objXlc2ShadowBitset[icnIndex];
+        }
+        case ICN::X_LOC3: {
+            static const std::bitset<256> objXlc3ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,   20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  41,  42,  43,  44,  45,  46, 47,
+                  48, 49, 59, 65, 71, 77, 83, 89, 95, 101, 108, 109, 112, 113, 116, 117, 120, 121, 124, 125, 128, 129, 132, 133, 136, 137 } );
+            return objXlc3ShadowBitset[icnIndex];
+        }
+        case ICN::OBJNTOWN: {
+            static const std::bitset<256> obTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
+            return obTownShadowBitset[icnIndex];
+        }
+        case ICN::OBJNLAVA: {
+            static const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
+            return objLavaShadowBitset[icnIndex];
+        }
+        case ICN::OBJNLAV2: {
+            static const std::bitset<256> objLav2ShadowBitset
+                = fheroes2::makeBitsetFromVector<256>( { 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 34, 38, 39, 43, 44, 45, 46,
+                                                         47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 72, 77, 78 } );
+            return objLav2ShadowBitset[icnIndex];
+        }
+        case ICN::OBJNLAV3: {
+            static const std::bitset<256> objLav3ShadowBitset = fheroes2::makeBitsetFromVector<256>(
+                { 1,   2,   3,   4,   16,  17,  18,  19,  31,  32,  33,  34,  38,  46,  47,  48,  49,  50,  57,  58,  59,  61,  62,  63,  64,  76,  77,
+                  91,  92,  93,  106, 107, 108, 109, 110, 111, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+                  134, 136, 137, 138, 139, 142, 143, 144, 145, 146, 147, 148, 149, 166, 167, 168, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
+                  187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213,
+                  214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 243 } );
+            return objLav3ShadowBitset[icnIndex];
+        }
         case ICN::OBJNTWSH:
             return true;
         case ICN::STREAM:
@@ -143,17 +204,22 @@ namespace
         case ICN::MINIHERO:
             return false;
         default:
+            // Did you add a new ICN group of objects into the game?
+            assert( 0 );
             break;
         }
 
-        // Did you add a new type of objects into the game?
-        assert( 0 );
         return false;
+    }
+
+    bool isReefs( const uint8_t index )
+    {
+        return index >= 111 && index <= 135;
     }
 
     bool isValidReefsSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
     {
-        return objectIcnType == MP2::OBJ_ICN_TYPE_X_LOC2 && ObjXlc2::isReefs( icnIndex );
+        return objectIcnType == MP2::OBJ_ICN_TYPE_X_LOC2 && isReefs( icnIndex );
     }
 
     bool isShortObject( const MP2::MapObjectType objectType )
@@ -303,7 +369,7 @@ namespace
                 return MP2::OBJ_SIRENS;
             else if ( 46 < icnIndex && icnIndex < 111 )
                 return MP2::OBJ_NON_ACTION_SIRENS;
-            else if ( ObjXlc2::isReefs( icnIndex ) )
+            else if ( isReefs( icnIndex ) )
                 return MP2::OBJ_REEFS;
             break;
 
