@@ -30,6 +30,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -280,14 +281,10 @@ namespace
                 break;
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the selected resolution." ), Dialog::ZERO );
             }
 
             if ( !listBox.IsNeedRedraw() ) {

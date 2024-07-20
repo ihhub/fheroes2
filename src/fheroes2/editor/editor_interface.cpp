@@ -37,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "direction.h"
 #include "editor_castle_details_window.h"
 #include "editor_event_details_window.h"
 #include "editor_map_specs_window.h"
@@ -459,7 +460,9 @@ namespace
 
             // River deltas are only objects that can be placed on water and on land.
             // Yes, the below code is very hacky but so far this is the best we can do.
-            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U ) ) {
+            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U || firstObjectPart.icnIndex == 218 + 2U
+                      || firstObjectPart.icnIndex == 218 + 11U ) ) {
                 // This is a river delta. Just don't check the terrain type.
             }
             else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
@@ -1568,11 +1571,29 @@ namespace Interface
             // For River Deltas we update the nearby Streams to properly connect to them.
             const Maps::ObjectInfo & objectInfo = Maps::getObjectInfo( groupType, objectType );
             std::for_each( objectInfo.groundLevelParts.begin(), objectInfo.groundLevelParts.end(), [&tile]( const Maps::LayeredObjectPartInfo & info ) {
-                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 && info.icnIndex != 0 && info.icnIndex != 13 ) {
+                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 ) {
                     return;
                 }
 
-                Maps::updateStreamsToDeltaConnection( tile, info.icnIndex == 13 );
+                int deltaDirection = Direction::UNKNOWN;
+                switch ( info.icnIndex ) {
+                case 0:
+                    deltaDirection = Direction::TOP;
+                    break;
+                case 13:
+                    deltaDirection = Direction::BOTTOM;
+                    break;
+                case 218:
+                    deltaDirection = Direction::LEFT;
+                    break;
+                case 218 + 13:
+                    deltaDirection = Direction::RIGHT;
+                    break;
+                default:
+                    return;
+                }
+
+                Maps::updateStreamsToDeltaConnection( tile, deltaDirection );
             } );
 
             action.commit();

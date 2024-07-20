@@ -29,6 +29,7 @@
 #include <ostream>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ai.h"
@@ -57,7 +58,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -213,7 +213,7 @@ namespace
                 Game::PlayPickupSound();
 
                 const fheroes2::SpellDialogElement spellUI( sp, &hero );
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
+                fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK, { &spellUI } );
             }
         }
 

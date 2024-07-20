@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-18 11:06+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2787,11 +2787,11 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Reclutar Criaturas"
 
-msgid "Max"
-msgstr "Máx"
-
 msgid "Hire all creatures in the town."
 msgstr "Recluta a todas las criaturas de la ciudad."
+
+msgid "Max"
+msgstr "Máx"
 
 msgid "Available"
 msgstr "Disponible"
@@ -4975,6 +4975,9 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "High Scores"
+msgstr "Puntuaciones más altas"
+
 msgid "Your Name"
 msgstr "Tu nombre"
 
@@ -5489,9 +5492,6 @@ msgstr "Creditos"
 
 msgid "View the credits screen."
 msgstr "Ver la pantalla de créditos."
-
-msgid "High Scores"
-msgstr "Puntuaciones más altas"
 
 msgid "View the high scores screen."
 msgstr "Ver la pantalla de puntuaciones más altas."
