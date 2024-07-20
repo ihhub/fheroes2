@@ -26,7 +26,6 @@
 #include <cstdint>
 #include <functional>
 #include <ostream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -812,9 +811,7 @@ namespace fheroes2
     MonsterDialogElement::MonsterDialogElement( const Monster & monster )
         : _monster( monster )
     {
-        if ( !_monster.isValid() ) {
-            throw std::logic_error( "Invalid monster provided" );
-        }
+        assert( _monster.isValid() );
         const Sprite & sprite = AGG::GetICN( ICN::STRIP, 12 );
         _area = { sprite.width(), sprite.height() };
     }
@@ -822,8 +819,9 @@ namespace fheroes2
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
         Sprite sprite = AGG::GetICN( ICN::STRIP, 12 );
+        sprite._disableTransformLayer();
         renderMonsterFrame( _monster, sprite, { 6, 6 } );
-        Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+        Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
     }
 
     void MonsterDialogElement::processEvents( const Point & offset ) const

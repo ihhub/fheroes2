@@ -137,8 +137,11 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
         }
 
         if ( uiElement ) {
-            uiElement->processEvents( uiOffset );
-            display.render();
+            const fheroes2::Rect uiRect{ uiOffset, uiElement->area() };
+            if ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) {
+                uiElement->processEvents( uiOffset );
+                display.render();
+            }
         }
 
         if ( redraw_count ) {

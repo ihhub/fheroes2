@@ -27,7 +27,6 @@
 #include <map>
 #include <memory>
 #include <set>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -1200,12 +1199,9 @@ namespace Interface
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     std::unique_ptr<const fheroes2::MonsterDialogElement> monsterUi = nullptr;
-                    try {
+
+                    if ( tempMonster.isValid() ) {
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
-                    }
-                    catch ( const std::logic_error & ) {
-                        // It is expected for a random monster
-                        monsterUi = nullptr;
                     }
 
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) ) {
