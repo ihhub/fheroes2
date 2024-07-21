@@ -4381,29 +4381,23 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race} hős"
+msgstr "[%{pos}]: %{race} hős"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "%[%{pos}]: %{name}, %{race} hős"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} hős"
+msgstr "[%{pos}]: %{race} város"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} %{race} %{townOrCastle}"
+msgstr "[%{pos}]: %{race} vár"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "[%{pos}]: %{name}, %{race} város"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "[%{pos}]: %{name}, %{race} vár"
 
 msgid "None."
 msgstr "Nincs."
@@ -4427,7 +4421,7 @@ msgid "Allow standard victory conditions"
 msgstr "Normál győzelmi feltételek engedélyezése"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "A gépi játékos számára is megengedett ez a feltétel"
 
 msgid "Gold:"
 msgstr "Arany:"
