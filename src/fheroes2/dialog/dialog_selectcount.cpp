@@ -117,6 +117,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     int result = Dialog::ZERO;
 
+    const fheroes2::Rect uiRect = uiElement ? fheroes2::Rect{ uiOffset, uiElement->area() } : fheroes2::Rect{};
+
     LocalEvent & le = LocalEvent::Get();
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool redraw_count = false;
@@ -137,7 +139,6 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
         }
 
         if ( uiElement ) {
-            const fheroes2::Rect uiRect{ uiOffset, uiElement->area() };
             if ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) {
                 uiElement->processEvents( uiOffset );
                 display.render();
