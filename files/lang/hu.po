@@ -10827,7 +10827,7 @@ msgstr ""
 "megszólalhatnál, kezedbe nyom egy Varázskönyvet."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "A győzelem elnyeréséhez meg kell találni a Szent Varázstárgyat."
 
 msgid "Dummy 2"
 msgstr "Próba 2"
