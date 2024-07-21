@@ -4426,37 +4426,32 @@ msgstr "A gépi játékos számára is megengedett ez a feltétel"
 msgid "Gold:"
 msgstr "Arany:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Válaszd ki, melyik városba szeretnél menni."
+msgstr "Válaszd ki a várost, melynek elfoglalása a győzelem feltétele"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr "Kattints a győzelem kivívásához szükséges elfoglalandó vár megváltoztatásához."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Válaszd ki a hőst, akinek legyőzése a győzelem feltétele"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr "Kattints a győzelem kivívásához szükséges legyőzendő hős megváltoztatásához."
 
 msgid "Days:"
 msgstr "Napok:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Válaszd ki a várost, melynek elvesztése teljes bukással jár"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr "Kattints annak a városnak a megváltoztatásához, melynek elvesztése teljes bukással jár."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Válaszd ki a hőst, akinek elvesztése teljes bukással jár"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr "Kattints annak a hősnek a megváltoztatásához, akinek elvesztése teljes bukással jár."
 
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
