@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2654,12 +2654,12 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Pasamdyti %{name}"
 
-msgid "Max"
-msgstr ""
-
 #, fuzzy
 msgid "Hire all creatures in the town."
 msgstr "Prarasti visus savo herojus bei miestus."
+
+msgid "Max"
+msgstr ""
 
 msgid "Available"
 msgstr ""
@@ -4750,6 +4750,9 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "High Scores"
+msgstr "Geriausi rezultatai"
+
 msgid "Your Name"
 msgstr ""
 
@@ -5252,9 +5255,6 @@ msgstr ""
 
 msgid "View the credits screen."
 msgstr ""
-
-msgid "High Scores"
-msgstr "Geriausi rezultatai"
 
 msgid "View the high scores screen."
 msgstr ""
@@ -10426,7 +10426,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"

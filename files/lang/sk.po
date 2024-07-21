@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2850,11 +2850,11 @@ msgstr "Žiadni bojovníci nie sú k dispozícii na nákup."
 msgid "Recruit Creatures"
 msgstr "Najať bojovníkov"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Najmi všetkých bojovníkov v meste."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Dostupné"
@@ -5055,6 +5055,9 @@ msgstr "Návrhári máp"
 msgid "Package Design"
 msgstr "Dizajn balíkov"
 
+msgid "High Scores"
+msgstr "Najvyššie skóre"
+
 msgid "Your Name"
 msgstr "Tvoje meno"
 
@@ -5565,9 +5568,6 @@ msgstr "Zásluhy"
 
 msgid "View the credits screen."
 msgstr "Zobrazenie obrazovky so zásluhami."
-
-msgid "High Scores"
-msgstr "Najvyššie skóre"
 
 msgid "View the high scores screen."
 msgstr "Zobrazenie obrazovky s najvyššími výsledkami."
@@ -11569,7 +11569,8 @@ msgstr "Svätý výkrik"
 msgid "Anti-Magic"
 msgstr "Protimágia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Bráni škodlivým kúzlam proti vybraným tvorom."
 
 msgid "Dispel Magic"

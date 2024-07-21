@@ -43,9 +43,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -77,7 +75,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -1036,11 +1033,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         }
     }
 
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
-    }
-
     return result;
 }
 
@@ -1602,8 +1594,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                   Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1613,9 +1604,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         header.append( _( "Do you wish to buy one?" ) );
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } )
-             == Dialog::NO ) {
+        if ( fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
             return false;
         }
     }

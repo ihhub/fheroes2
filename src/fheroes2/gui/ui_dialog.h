@@ -28,6 +28,7 @@
 #include "artifact.h"
 #include "image.h"
 #include "math_base.h"
+#include "monster.h"
 #include "skill.h"
 #include "spell.h"
 #include "ui_button.h"
@@ -47,7 +48,7 @@ namespace fheroes2
 
     // This is a simplified version of UI window which is used to display a window with a text.
     // Header text has yellow normal font style and body text - white normal font style.
-    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons );
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements = {} );
 
     // An interactive UI element within a dialog.
     class DialogElement
@@ -340,6 +341,23 @@ namespace fheroes2
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
+    };
+
+    class MonsterDialogElement : public DialogElement
+    {
+    public:
+        explicit MonsterDialogElement( const Monster & monster );
+
+        ~MonsterDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Monster _monster;
     };
 
     class ValueSelectionDialogElement

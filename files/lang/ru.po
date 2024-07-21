@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2024-07-14 13:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2816,11 +2816,11 @@ msgstr "Нет доступных существ для найма."
 msgid "Recruit Creatures"
 msgstr "Нанять существ"
 
-msgid "Max"
-msgstr "Максимум"
-
 msgid "Hire all creatures in the town."
 msgstr "Нанять всех существ в городе."
+
+msgid "Max"
+msgstr "Максимум"
 
 msgid "Available"
 msgstr "Доступно"
@@ -4931,6 +4931,9 @@ msgstr "Разработка карт"
 msgid "Package Design"
 msgstr "Дизайн упаковки"
 
+msgid "High Scores"
+msgstr "Рейтинги"
+
 msgid "Your Name"
 msgstr "Ваше имя"
 
@@ -5427,9 +5430,6 @@ msgstr "Авторы"
 
 msgid "View the credits screen."
 msgstr "Просмотр окна авторов."
-
-msgid "High Scores"
-msgstr "Рейтинги"
 
 msgid "View the high scores screen."
 msgstr "Просмотр лучших результатов."
@@ -11388,7 +11388,8 @@ msgstr "Экзорцизм"
 msgid "Anti-Magic"
 msgstr "Антимагия"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Защищает выбранный отряд от действия всех заклинаний."
 
 msgid "Dispel Magic"

@@ -153,6 +153,9 @@ namespace Maps
         // Monsters.
         MONSTERS,
 
+        // Extra map objects that are not placed in editor (currently).
+        MAP_EXTRAS,
+
         // IMPORTANT!!!
         // Put all new entries just above this entry.
         GROUP_COUNT

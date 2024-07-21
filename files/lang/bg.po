@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2861,11 +2861,11 @@ msgstr "Няма налични същества за покупка."
 msgid "Recruit Creatures"
 msgstr "Вербувай същества"
 
-msgid "Max"
-msgstr "Максимално"
-
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
+
+msgid "Max"
+msgstr "Максимално"
 
 msgid "Available"
 msgstr "Налични"
@@ -5095,6 +5095,9 @@ msgstr "Дизайнери на картите"
 msgid "Package Design"
 msgstr "Дизайн на опаковката"
 
+msgid "High Scores"
+msgstr "Класиране"
+
 msgid "Your Name"
 msgstr "Твоето име"
 
@@ -5603,9 +5606,6 @@ msgstr "За играта"
 
 msgid "View the credits screen."
 msgstr "Виж екран за играта."
-
-msgid "High Scores"
-msgstr "Класиране"
 
 msgid "View the high scores screen."
 msgstr "Виж екрана с високи резултати."
@@ -11671,7 +11671,8 @@ msgstr "Свещен вик"
 msgid "Anti-Magic"
 msgstr "Антимагия"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Предотвратява вредната магия срещу избраните същества."
 
 msgid "Dispel Magic"

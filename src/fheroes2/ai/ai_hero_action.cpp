@@ -572,10 +572,8 @@ namespace
         }
 
         if ( destroy ) {
-            setMonsterCountOnTile( tile, 0 );
-
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -589,8 +587,8 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         }
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
         hero.GetPath().Reset();
     }
 
@@ -668,8 +666,8 @@ namespace
             kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
@@ -742,7 +740,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         hero.setVisitedForAllies( dst_index );
     }
 
@@ -760,7 +758,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
 
         hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
@@ -780,7 +778,7 @@ namespace
             else
                 hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -793,8 +791,8 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToSign( Heroes & hero, int32_t dst_index )
@@ -1217,7 +1215,7 @@ namespace
         }
 
         if ( complete ) {
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else if ( 0 == gold && !hero.isObjectTypeVisited( objectType ) ) {
             // Modify morale
@@ -1257,7 +1255,7 @@ namespace
                     hero.AppendSpellToBook( spell );
                 }
 
-                resetObjectInfoOnTile( tile );
+                resetObjectMetadata( tile );
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
@@ -1332,7 +1330,7 @@ namespace
                 AIBattleLose( hero, res, true );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1400,8 +1398,8 @@ namespace
 
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1501,8 +1499,8 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1527,8 +1525,8 @@ namespace
         else
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToArtifact( Heroes & hero, int32_t dst_index )
@@ -1580,8 +1578,8 @@ namespace
         }
 
         if ( result && hero.PickupArtifact( art ) ) {
-            removeObjectSprite( tile );
-            resetObjectInfoOnTile( tile );
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1660,8 +1658,8 @@ namespace
         if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
 
@@ -2218,8 +2216,7 @@ namespace AI
             gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
         }
         else {
-            removeObjectSprite( tileSource );
-            tileSource.setAsEmpty();
+            removeMainObjectFromTile( tileSource );
         }
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );

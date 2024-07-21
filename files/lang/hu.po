@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-10 07:28+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2790,11 +2790,11 @@ msgstr "Nincsenek megvásárolható lények."
 msgid "Recruit Creatures"
 msgstr "Lények toborzása"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Összes lény toborzása."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Elérhető"
@@ -4909,6 +4909,9 @@ msgstr "Térkép tervezők"
 msgid "Package Design"
 msgstr "Csomagterv"
 
+msgid "High Scores"
+msgstr "Dicsőségtábla"
+
 msgid "Your Name"
 msgstr "A te neved"
 
@@ -5410,9 +5413,6 @@ msgstr "Készítők"
 
 msgid "View the credits screen."
 msgstr "Készítők listájának megjelenítése."
-
-msgid "High Scores"
-msgstr "Dicsőségtábla"
 
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
@@ -11364,7 +11364,8 @@ msgstr "Szent kiáltás"
 msgid "Anti-Magic"
 msgstr "Antimágia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 "Megakadályozza a kártékony varázslatok idézését a kiválasztott egységeken."
 

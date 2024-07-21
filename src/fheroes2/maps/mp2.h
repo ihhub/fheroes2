@@ -49,7 +49,7 @@ namespace MP2
     };
 
     // Tile structure from the original map format.
-    struct mp2tile_t
+    struct MP2TileInfo
     {
         // Terrain image index used for terrain tile display on Adventure Map.
         uint16_t terrainImageIndex;
@@ -101,7 +101,7 @@ namespace MP2
     };
 
     // Addon structure from the original map format.
-    struct mp2addon_t
+    struct MP2AddonInfo
     {
         // Next add-on index. Zero value means it's the last addon chunk.
         uint16_t nextAddonIndex;

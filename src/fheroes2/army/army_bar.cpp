@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include "agg_image.h"
@@ -44,6 +45,7 @@
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
@@ -474,16 +476,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 std::string str = _( "Set %{monster} Count" );
                 StringReplace( str, "%{monster}", mons.GetName() );
 
-                fheroes2::Sprite surface;
-
-                if ( mons.isValid() ) {
-                    surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                    fheroes2::renderMonsterFrame( mons, surface, { 6, 6 } );
-                }
-
                 int32_t count = 1;
+                auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
 
-                if ( Dialog::SelectCount( str, 1, 500000, count, 1, surface ) ) {
+                if ( Dialog::SelectCount( str, 1, 500000, count, 1, monsUi.get() ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }

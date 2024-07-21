@@ -2675,6 +2675,34 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // River delta (ocean on right), generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 3U, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 5U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 6U, fheroes2::Point{ 1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // River delta (ocean on left), generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 11U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 7U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 8U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 9U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 10U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 12U, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 13U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateLandscapeTownBasements( std::vector<Maps::ObjectInfo> & objects )
@@ -3719,7 +3747,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Boat.
+        // Boat, direction: right.
         {
             Maps::ObjectInfo object{ MP2::OBJ_BOAT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 18, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
@@ -4724,6 +4752,68 @@ namespace
         }
     }
 
+    void populateExtraBoatDirections( std::vector<Maps::ObjectInfo> & objects )
+    {
+        // Boat, direction: top.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: top-right.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 9, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom-right.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 27, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 36, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom-left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 27 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 18 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: top-left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 9 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateObjectData()
     {
         static bool isPopulated = false;
@@ -4759,6 +4849,8 @@ namespace
         populateKingdomTowns( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
 
         populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
+
+        populateExtraBoatDirections( objectData[static_cast<size_t>( Maps::ObjectGroup::MAP_EXTRAS )] );
 
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.

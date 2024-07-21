@@ -129,8 +129,6 @@ namespace Maps
 
     void resetObjectMetadata( Tiles & tile );
 
-    void resetObjectInfoOnTile( Tiles & tile );
-
     uint32_t getMonsterCountFromTile( const Tiles & tile );
     void setMonsterCountOnTile( Tiles & tile, uint32_t count );
 
@@ -154,7 +152,9 @@ namespace Maps
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
-    void removeObjectSprite( Tiles & tile );
+    void removeMainObjectFromTile( const Tiles & tile );
+
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType );
 
     bool isClearGround( const Tiles & tile );
 
@@ -168,7 +168,7 @@ namespace Maps
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
     // Update the existing streams to connect them to the river delta.
-    void updateStreamsToDeltaConnection( const Tiles & tile, const bool isDeltaBottomConnection );
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection );
 
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
-"PO-Revision-Date: 2023-08-26 23:09+0200\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
 "channels/733093692860137523/817386375888371772\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 msgid ""
 "BATTLE\n"
@@ -146,7 +146,7 @@ msgid "X-L"
 msgstr "BD"
 
 msgid "ALL"
-msgstr "CAŁOŚĆ"
+msgstr "M-BD"
 
 msgid "SELECT"
 msgstr "WYBIERZ"
@@ -2859,11 +2859,11 @@ msgstr "Brak stworzeń do zakupienia."
 msgid "Recruit Creatures"
 msgstr "Rekrutuj stworzenia"
 
-msgid "Max"
-msgstr "Maks"
-
 msgid "Hire all creatures in the town."
 msgstr "Zwerbuj wszystkie jednostki w tym mieście."
+
+msgid "Max"
+msgstr "Maks"
 
 msgid "Available"
 msgstr "Dostępne"
@@ -5060,6 +5060,9 @@ msgstr "Projektanci Map"
 msgid "Package Design"
 msgstr "Projekt opakowania"
 
+msgid "High Scores"
+msgstr "Najlepsze wyniki"
+
 msgid "Your Name"
 msgstr "Twoje imię"
 
@@ -5576,9 +5579,6 @@ msgstr "Autorzy"
 
 msgid "View the credits screen."
 msgstr "Obejrzyj autorów gry."
-
-msgid "High Scores"
-msgstr "Najlepsze wyniki"
 
 msgid "View the high scores screen."
 msgstr "Obejrzyj najlepsze wyniki."
@@ -11682,7 +11682,8 @@ msgstr "Święte Zawołanie"
 msgid "Anti-Magic"
 msgstr "Antymagia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Neguje działanie wszystkich zaklęć na wybranej jednostce."
 
 msgid "Dispel Magic"

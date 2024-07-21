@@ -80,7 +80,7 @@ const SpellStats spells[Spell::SPELL_COUNT] = {
     { gettext_noop( "Mass Curse" ), 12, 0, 0, 64, 0, gettext_noop( "Causes all enemy troops to inflict minimum damage." ) },
     { gettext_noop( "Holy Word" ), 9, 0, 0, 22, 10, gettext_noop( "Damages all undead in the battle." ) },
     { gettext_noop( "Holy Shout" ), 12, 0, 0, 23, 20, gettext_noop( "Damages all undead in the battle. This is an improved version of Holy Word." ) },
-    { gettext_noop( "Anti-Magic" ), 7, 0, 0, 17, 0, gettext_noop( "Prevents harmful magic against the selected creatures." ) },
+    { gettext_noop( "Anti-Magic" ), 7, 0, 0, 17, 0, gettext_noop( "Prevents any magic against the selected creatures." ) },
     { gettext_noop( "Dispel Magic" ), 5, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from a single target." ) },
     { gettext_noop( "Mass Dispel" ), 12, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from all creatures." ) },
     { gettext_noop( "Magic Arrow" ), 3, 0, 0, 38, 10, gettext_noop( "Causes a magic arrow to strike the selected target." ) },

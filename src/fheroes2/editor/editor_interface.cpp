@@ -37,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "direction.h"
 #include "editor_castle_details_window.h"
 #include "editor_event_details_window.h"
 #include "editor_map_specs_window.h"
@@ -79,7 +80,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
@@ -459,7 +459,9 @@ namespace
 
             // River deltas are only objects that can be placed on water and on land.
             // Yes, the below code is very hacky but so far this is the best we can do.
-            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U ) ) {
+            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U || firstObjectPart.icnIndex == 218 + 2U
+                      || firstObjectPart.icnIndex == 218 + 11U ) ) {
                 // This is a river delta. Just don't check the terrain type.
             }
             else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
@@ -1195,15 +1197,14 @@ namespace Interface
                     std::string str = _( "Set %{monster} Count" );
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
 
-                    fheroes2::Sprite surface;
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    std::unique_ptr<const fheroes2::MonsterDialogElement> monsterUi = nullptr;
 
                     if ( tempMonster.isValid() ) {
-                        surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                        fheroes2::renderMonsterFrame( tempMonster, surface, { 6, 6 } );
+                        monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) ) {
                         _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
@@ -1568,11 +1569,29 @@ namespace Interface
             // For River Deltas we update the nearby Streams to properly connect to them.
             const Maps::ObjectInfo & objectInfo = Maps::getObjectInfo( groupType, objectType );
             std::for_each( objectInfo.groundLevelParts.begin(), objectInfo.groundLevelParts.end(), [&tile]( const Maps::LayeredObjectPartInfo & info ) {
-                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 && info.icnIndex != 0 && info.icnIndex != 13 ) {
+                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 ) {
                     return;
                 }
 
-                Maps::updateStreamsToDeltaConnection( tile, info.icnIndex == 13 );
+                int deltaDirection = Direction::UNKNOWN;
+                switch ( info.icnIndex ) {
+                case 0:
+                    deltaDirection = Direction::TOP;
+                    break;
+                case 13:
+                    deltaDirection = Direction::BOTTOM;
+                    break;
+                case 218:
+                    deltaDirection = Direction::LEFT;
+                    break;
+                case 218 + 13:
+                    deltaDirection = Direction::RIGHT;
+                    break;
+                default:
+                    return;
+                }
+
+                Maps::updateStreamsToDeltaConnection( tile, deltaDirection );
             } );
 
             action.commit();

@@ -1293,7 +1293,11 @@ void World::resetPathfinder()
 void World::updatePassabilities()
 {
     for ( Maps::Tiles & tile : vec_tiles ) {
-        tile.updateEmpty();
+        // If tile is empty then update tile's object type if needed.
+        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+            tile.updateObjectType();
+        }
+
         tile.setInitialPassability();
     }
 

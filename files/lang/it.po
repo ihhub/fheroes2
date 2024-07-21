@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-07-21 15:17+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2675,12 +2675,12 @@ msgstr "Niente truppe disponibili da comprare."
 msgid "Recruit Creatures"
 msgstr "Recluta Eroe"
 
-msgid "Max"
-msgstr "Max"
-
 #, fuzzy
 msgid "Hire all creatures in the town."
 msgstr "Perdi tutti i tuoi eroi e le città."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Disponibile"
@@ -4870,6 +4870,9 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "High Scores"
+msgstr "Classifiche"
+
 msgid "Your Name"
 msgstr ""
 
@@ -5389,9 +5392,6 @@ msgstr "Titoli di coda"
 
 msgid "View the credits screen."
 msgstr "Mostra titoli di coda."
-
-msgid "High Scores"
-msgstr "Classifiche"
 
 msgid "View the high scores screen."
 msgstr "Vedi i migliori punteggi."
@@ -10641,7 +10641,8 @@ msgstr "Sacro Grido"
 msgid "Anti-Magic"
 msgstr "Anti-Magia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Previene tutte le magie, sia utili che dannose, all'unità prescelta."
 
 msgid "Dispel Magic"
