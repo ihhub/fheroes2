@@ -123,7 +123,7 @@ namespace
         if ( !art.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
@@ -180,7 +180,7 @@ namespace
         if ( !mons.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set a monster over a random monster on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
@@ -192,50 +192,6 @@ namespace
         assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( mons.GetID() - 1 ) ); // ICN::MONS32 starts from PEASANT
-    }
-
-    void removeJailSprite( Maps::Tiles & tile )
-    {
-        assert( tile.GetObject() == MP2::OBJ_JAIL );
-
-        // remove left sprite
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            const int32_t left = Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT );
-            world.GetTiles( left ).Remove( tile.GetObjectUID() );
-
-            // remove left left sprite
-            if ( Maps::isValidDirection( left, Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( left, Direction::LEFT ) ).Remove( tile.GetObjectUID() );
-        }
-
-        // remove top sprite
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::TOP ) ) {
-            const int32_t top = Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP );
-            Maps::Tiles & topTile = world.GetTiles( top );
-            topTile.Remove( tile.GetObjectUID() );
-
-            if ( topTile.GetObject() == MP2::OBJ_JAIL && topTile.GetObjectUID() == 0 ) {
-                // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
-                // This is not ideal but it doesn't break things.
-                topTile.setAsEmpty();
-                topTile.FixObject();
-            }
-
-            // remove top left sprite
-            if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
-                Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
-                leftTile.Remove( tile.GetObjectUID() );
-
-                if ( leftTile.GetObject() == MP2::OBJ_JAIL && leftTile.GetObjectUID() == 0 ) {
-                    // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
-                    // This is not ideal but it doesn't break things.
-                    leftTile.setAsEmpty();
-                    leftTile.FixObject();
-                }
-            }
-        }
-
-        tile.Remove( tile.GetObjectUID() );
     }
 
     // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
@@ -1340,6 +1296,44 @@ namespace
 
         return true;
     }
+
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
+    {
+        assert( startTileIndex >= 0 && startTileIndex < world.w() * world.h() );
+
+        assert( objectUID > 0 );
+
+        std::vector<int32_t> tiles;
+        tiles.push_back( startTileIndex );
+
+        std::set<int32_t> processedTileIndicies;
+
+        for ( size_t currentId = 0; currentId < tiles.size(); ++currentId ) {
+            if ( processedTileIndicies.count( tiles[currentId] ) == 1 ) {
+                // This tile is already processed, skip it.
+                continue;
+            }
+
+            if ( world.GetTiles( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
+                // This tile has the object. Get neighboring tiles to see if they have the same.
+                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
+                for ( const int tileIndex : tileIndices ) {
+                    if ( tileIndex < 0 ) {
+                        // Invalid tile index.
+                        continue;
+                    }
+
+                    if ( processedTileIndicies.count( tileIndex ) == 0 ) {
+                        tiles.push_back( tileIndex );
+                    }
+                }
+            }
+
+            processedTileIndicies.emplace( tiles[currentId] );
+        }
+
+        return !processedTileIndicies.empty();
+    }
 }
 
 namespace Maps
@@ -1927,16 +1921,6 @@ namespace Maps
     {
         for ( uint32_t & value : tile.metadata() ) {
             value = 0;
-        }
-    }
-
-    void resetObjectInfoOnTile( Tiles & tile )
-    {
-        resetObjectMetadata( tile );
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-        if ( MP2::isPickupObject( objectType ) ) {
-            tile.setAsEmpty();
         }
     }
 
@@ -2984,44 +2968,45 @@ namespace Maps
         restoreMineObjectType( Direction::TOP_RIGHT );
     }
 
-    void removeObjectSprite( Tiles & tile )
+    void removeMainObjectFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_MONSTER:
-            tile.Remove( tile.GetObjectUID() );
-            break;
-        case MP2::OBJ_JAIL:
-            removeJailSprite( tile );
-            tile.resetPassability();
-            break;
-        case MP2::OBJ_ARTIFACT: {
-            const uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
-            tile.Remove( uidArtifact );
+        removeObjectFromTileByType( tile, tile.GetObject() );
+    }
 
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidArtifact );
-            break;
-        }
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_RESOURCE: {
-            const uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
-            tile.Remove( uidResource );
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        assert( objectType != MP2::OBJ_NONE );
 
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidResource );
-            break;
-        }
-        case MP2::OBJ_BARRIER:
-            tile.resetPassability();
-            [[fallthrough]];
-        default:
-            // remove shadow sprite from left cell
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( tile.GetObjectUID() );
+        // Verify that this tile indeed contains an object with given object type.
+        uint32_t objectUID = 0;
 
-            tile.Remove( tile.GetObjectUID() );
-            break;
+        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
+            objectUID = tile.GetObjectUID();
         }
+
+        if ( objectUID == 0 ) {
+            for ( auto iter = tile.getTopLayerAddons().rbegin(); iter != tile.getTopLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
+                    break;
+                }
+            }
+        }
+
+        if ( objectUID == 0 ) {
+            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
+                    break;
+                }
+            }
+        }
+
+        if ( objectUID == 0 ) {
+            return false;
+        }
+
+        return removeObjectFromMapByUID( tile.GetIndex(), objectUID );
     }
 
     bool isClearGround( const Tiles & tile )

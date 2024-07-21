@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
+#include <list>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -59,6 +60,7 @@
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
@@ -216,7 +218,34 @@ namespace
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
-    void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, std::string msg, const Troop & troop, bool remove )
+    void runActionObjectFadeOutAnumation( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        uint32_t objectUID = 0;
+
+        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
+            objectUID = tile.GetObjectUID();
+        }
+        else {
+            // In maps made by the original map editor the action object can be in the bottom layer addons.
+            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
+                    break;
+                }
+            }
+        }
+
+        assert( objectUID != 0 );
+
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+
+        // Update radar in the place of the removed object.
+        I.getRadar().SetRenderArea( { Maps::GetPoint( tile.GetIndex() ), { 1, 1 } } );
+        I.setRedraw( Interface::REDRAW_RADAR );
+    }
+
+    void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, std::string msg, const Troop & troop, const bool remove )
     {
         if ( !hero.GetArmy().CanJoinTroop( troop ) )
             fheroes2::showStandardTextMessage( std::move( msg ), _( "You are unable to recruit at this time, your ranks are full." ), Dialog::OK );
@@ -227,10 +256,9 @@ namespace
                 if ( remove && recruit == troop.GetCount() ) {
                     Game::PlayPickupSound();
 
-                    setMonsterCountOnTile( tile, 0 );
+                    runActionObjectFadeOutAnumation( tile, tile.GetObject() );
 
-                    Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                        std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+                    resetObjectMetadata( tile );
                 }
                 else {
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
@@ -417,10 +445,11 @@ namespace
         if ( destroy ) {
             AudioManager::PlaySound( M82::KILLFADE );
 
-            setMonsterCountOnTile( tile, 0 );
+            assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+            runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+
+            resetObjectMetadata( tile );
         }
 
         // Clear the hero's attacked monster tile index
@@ -699,16 +728,9 @@ namespace
 
         Game::PlayPickupSound();
 
-        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
-
-        if ( objectType == MP2::OBJ_RESOURCE ) {
-            // Update the position of picked up resource on radar to remove its mark.
-            const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
-            I.getRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
-            I.setRedraw( Interface::REDRAW_RADAR );
-        }
+        resetObjectMetadata( tile );
     }
 
     void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -778,7 +800,7 @@ namespace
             fheroes2::showStandardTextMessage( std::move( caption ), std::move( msg ), Dialog::OK );
         }
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         hero.setVisitedForAllies( dst_index );
     }
 
@@ -816,7 +838,7 @@ namespace
                 hero.PickupArtifact( art );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else {
             message += '\n';
@@ -869,7 +891,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( funds );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else {
             message += '\n';
@@ -906,10 +928,9 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void ActionToShrine( Heroes & hero, int32_t dst_index )
@@ -1134,7 +1155,7 @@ namespace
                         fheroes2::showStandardTextMessage( std::move( title ), std::move( msg ), Dialog::OK );
                     }
 
-                    resetObjectInfoOnTile( tile );
+                    resetObjectMetadata( tile );
                     hero.SetVisited( dst_index, Visit::GLOBAL );
                 }
                 else {
@@ -1359,7 +1380,7 @@ namespace
         }
 
         if ( complete ) {
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
         else if ( 0 == gold ) {
@@ -1520,10 +1541,9 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void ActionToArtifact( Heroes & hero, int32_t dst_index )
@@ -1698,17 +1718,11 @@ namespace
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            Interface::AdventureMap & I = Interface::AdventureMap::Get();
+            assert( tile.GetObject() == MP2::OBJ_ARTIFACT );
 
-            I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+            runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
-            resetObjectInfoOnTile( tile );
-
-            const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
-
-            // Update the position of picked up artifact on radar to remove its mark.
-            I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
-            I.setRedraw( Interface::REDRAW_RADAR );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1810,10 +1824,9 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        runActionObjectFadeOutAnumation( tile, objectType );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void ActionToGenieLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -3072,7 +3085,7 @@ namespace
                     break;
                 }
 
-                resetObjectInfoOnTile( tile );
+                resetObjectMetadata( tile );
             }
 
             // Even if the hero has been defeated by a demon (and no longer belongs to any
@@ -3240,10 +3253,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-
-            adventureMapInterface.getGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+            runActionObjectFadeOutAnumation( tile, objectType );
 
             // TODO: add hero fading in animation together with jail animation.
             Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3252,7 +3262,7 @@ namespace
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
 
                 // Update the kingdom heroes list including the scrollbar.
-                adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
+                Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
         else {
@@ -3494,8 +3504,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+            runActionObjectFadeOutAnumation( tile, objectType );
         }
         else {
             fheroes2::showStandardTextMessage(
