@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 11:06+0000\n"
+"POT-Creation-Date: 2024-07-21 15:29+0000\n"
 "PO-Revision-Date: 2024-07-05 09:59+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -11375,7 +11375,8 @@ msgstr "Heligt Rop"
 msgid "Anti-Magic"
 msgstr "Antimagi"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Förhindrar onda besvärjelser mot vald varelse."
 
 msgid "Dispel Magic"
