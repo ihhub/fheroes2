@@ -2159,7 +2159,21 @@ namespace Maps
         case MP2::OBJ_ARTIFACT: {
             assert( isFirstLoad );
 
-            const int art = Artifact::getArtifactFromMapSpriteIndex( tile.GetObjectSpriteIndex() ).GetID();
+            uint8_t artifactSpriteIndex = Artifact::UNKNOWN;
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                artifactSpriteIndex = tile.GetObjectSpriteIndex();
+            }
+            else {
+                // On some hacked original maps artifact can be placed to the bottom layer addons.
+                for ( const auto & addon : tile.getBottomLayerAddons() ) {
+                    if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                        artifactSpriteIndex = addon._imageIndex;
+                        break;
+                    }
+                }
+            }
+
+            const int art = Artifact::getArtifactFromMapSpriteIndex( artifactSpriteIndex ).GetID();
             if ( Artifact::UNKNOWN == art ) {
                 // This is an unknown artifact. Did you add a new one?
                 assert( 0 );
@@ -2208,7 +2222,7 @@ namespace Maps
                 resourceType = Resource::FromIndexSprite( tile.GetObjectSpriteIndex() );
             }
             else {
-                for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
+                for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
                     if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                         resourceType = Resource::FromIndexSprite( addon._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
