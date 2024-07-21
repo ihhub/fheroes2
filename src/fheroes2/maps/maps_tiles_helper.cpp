@@ -2212,8 +2212,8 @@ namespace Maps
                     if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                         resourceType = Resource::FromIndexSprite( addon._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
-                        // Let's swap the addon and main tile objects
-                        tile.swap( addon );
+                        // Let's update the tile's object type to properly show the action object.
+                        tile.updateObjectType();
 
                         break;
                     }
