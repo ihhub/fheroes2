@@ -41,6 +41,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "mp2.h"
@@ -546,7 +547,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
-            setAsEmpty();
+            updateObjectType();
         }
 
         _occupantHeroId = Heroes::UNKNOWN;
@@ -1424,16 +1425,48 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
     }
 }
 
-void Maps::Tiles::Remove( uint32_t uniqID )
+bool Maps::Tiles::removeObjectPartsByUID( const uint32_t objectUID )
 {
-    // TODO: this method must update the type of the main object
-    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
-    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
+    bool isObjectPartRemoved = false;
+    if ( _mainAddon._uid == objectUID ) {
+        _mainAddon = {};
 
-    if ( _mainAddon._uid == uniqID ) {
-        resetObjectSprite();
-        _mainAddon._uid = 0;
+        isObjectPartRemoved = true;
     }
+
+    size_t addonCountBefore = _addonBottomLayer.size();
+    _addonBottomLayer.remove_if( [objectUID]( const Maps::TilesAddon & v ) { return v._uid == objectUID; } );
+    if ( addonCountBefore != _addonBottomLayer.size() ) {
+        isObjectPartRemoved = true;
+    }
+
+    addonCountBefore = _addonTopLayer.size();
+    _addonTopLayer.remove_if( [objectUID]( const Maps::TilesAddon & v ) { return v._uid == objectUID; } );
+    if ( addonCountBefore != _addonTopLayer.size() ) {
+        isObjectPartRemoved = true;
+    }
+
+    if ( isObjectPartRemoved ) {
+        // Since an object part was removed we have to update main object type.
+        updateObjectType();
+
+        setInitialPassability();
+        updatePassability();
+
+        if ( Heroes::isValidId( _occupantHeroId ) ) {
+            Heroes * hero = world.GetHeroes( _occupantHeroId );
+            if ( hero != nullptr ) {
+                hero->setObjectTypeUnderHero( _mainObjectType );
+
+                SetObject( MP2::OBJ_HERO );
+            }
+        }
+
+        // TODO: since we remove an object we need to check whether this tile contains any object with additional metadata.
+        //       If it doesn't contain we need to reset metadata.
+    }
+
+    return isObjectPartRemoved;
 }
 
 void Maps::Tiles::removeObjects( const MP2::ObjectIcnType objectIcnType )
@@ -1523,23 +1556,61 @@ void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t u
     tile._updateRoadFlag();
 }
 
-void Maps::Tiles::updateEmpty()
+void Maps::Tiles::updateObjectType()
 {
-    if ( _mainObjectType == MP2::OBJ_NONE ) {
-        setAsEmpty();
-    }
-}
-
-void Maps::Tiles::setAsEmpty()
-{
-    // If an object is removed we should validate if this tile a potential candidate to be a coast.
-    // Check if this tile is not water and it has neighbouring water tiles.
-    if ( isWater() ) {
-        SetObject( MP2::OBJ_NONE );
+    // After removing an object there could be an object part in the main addon.
+    MP2::MapObjectType objectType = Maps::getObjectTypeByIcn( _mainAddon._objectIcnType, _mainAddon._imageIndex );
+    if ( MP2::isOffGameActionObject( objectType ) ) {
+        // Set object type only when this is an interactive object type to make sure that interaction can be done.
+        SetObject( objectType );
         return;
     }
 
-    bool isCoast = false;
+    // And sometimes even in the bottom layer addons.
+    // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
+    if ( objectType == MP2::OBJ_NONE ) {
+        for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
+            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+            if ( type == MP2::OBJ_NONE ) {
+                continue;
+            }
+
+            if ( MP2::isOffGameActionObject( type ) ) {
+                // Set object type only when this is an interactive object type to make sure that interaction can be done.
+                SetObject( type );
+                return;
+            }
+
+            if ( objectType == MP2::OBJ_NONE ) {
+                objectType = type;
+            }
+        }
+    }
+
+    // Or object part can be in the top layer addons.
+    // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
+    for ( auto iter = _addonTopLayer.rbegin(); iter != _addonTopLayer.rend(); ++iter ) {
+        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+
+        if ( type != MP2::OBJ_NONE ) {
+            SetObject( type );
+            return;
+        }
+    }
+
+    // Top objects do not have object type while bottom object do.
+    if ( objectType != MP2::OBJ_NONE ) {
+        SetObject( objectType );
+        return;
+    }
+
+    // If an object is removed we should validate if this tile a potential candidate to be a coast.
+    // Check if this tile is not water and it has neighbouring water tiles.
+    if ( isWater() ) {
+        assert( objectType == MP2::OBJ_NONE );
+        SetObject( objectType );
+        return;
+    }
 
     const Indexes tileIndices = Maps::getAroundIndexes( _index, 1 );
     for ( const int tileIndex : tileIndices ) {
@@ -1549,12 +1620,13 @@ void Maps::Tiles::setAsEmpty()
         }
 
         if ( world.GetTiles( tileIndex ).isWater() ) {
-            isCoast = true;
-            break;
+            SetObject( MP2::OBJ_COAST );
+            return;
         }
     }
 
-    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_NONE );
+    assert( objectType == MP2::OBJ_NONE );
+    SetObject( objectType );
 }
 
 uint32_t Maps::Tiles::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const

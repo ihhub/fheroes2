@@ -295,7 +295,10 @@ namespace Maps
         }
 
         void AddonsSort();
-        void Remove( uint32_t uniqID );
+
+        // Returns true if any object part was removed.
+        bool removeObjectPartsByUID( const uint32_t objectUID );
+
         // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
         void removeObjects( const MP2::ObjectIcnType objectIcnType );
 
@@ -340,11 +343,11 @@ namespace Maps
         Heroes * getHero() const;
         void setHero( Heroes * hero );
 
-        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
-        void updateEmpty();
-
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
-        void setAsEmpty();
+        // Set tile's object type according to the object's sprite if there is any, otherwise
+        // it is set to coast (MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE).
+        // This method works perfectly only on Resurrection (.fh2m) maps.
+        // It might not work properly on the original maps due to small differences in object types.
+        void updateObjectType();
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
 
