@@ -80,7 +80,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
@@ -1198,15 +1197,14 @@ namespace Interface
                     std::string str = _( "Set %{monster} Count" );
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
 
-                    fheroes2::Sprite surface;
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    std::unique_ptr<const fheroes2::MonsterDialogElement> monsterUi = nullptr;
 
                     if ( tempMonster.isValid() ) {
-                        surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                        fheroes2::renderMonsterFrame( tempMonster, surface, { 6, 6 } );
+                        monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) ) {
                         _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
