@@ -113,16 +113,6 @@ namespace Editor
             recurringEventCheckbox.show();
         }
 
-        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
-                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
-            int32_t colorsAdded = 0;
-
-            for ( const int color : Colors( availableColors ) ) {
-                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
-                ++colorsAdded;
-            }
-        };
-
         const int32_t playerAreaOffsetX = dialogRoi.x + elementOffset + messageRoi.width + elementOffset;
 
         text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
@@ -140,7 +130,7 @@ namespace Editor
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY, display );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
@@ -159,7 +149,7 @@ namespace Editor
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY, display );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
 
