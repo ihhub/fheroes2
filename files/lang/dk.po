@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-23 08:22+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4160,6 +4160,10 @@ msgid "Unable to locate data directory to save the map."
 msgstr ""
 
 msgid "Unable to create a directory to save the map."
+msgstr "Kan ikke oprette en mappe til at gemme kortet i."
+
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
 msgstr "Kan ikke oprette en mappe til at gemme kortet i."
 
 msgid "Are you sure you want to overwrite the existing map?"
