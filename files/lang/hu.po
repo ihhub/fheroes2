@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-23 04:38+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4089,6 +4089,10 @@ msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
 
 msgid "Unable to create a directory to save the map."
 msgstr "Nem hozható létre könyvtár a térkép mentéséhez."
+
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Biztosan felülírod a meglévő térképet?"

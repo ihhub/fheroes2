@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-23 04:38+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4203,6 +4203,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Unable to create a directory to save the map."
+msgstr "Permet d'effacer les éléments placés sur la carte."
+
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
 msgstr "Permet d'effacer les éléments placés sur la carte."
 
 #, fuzzy
