@@ -5248,6 +5248,7 @@ namespace
         // Offset symbols that either have diacritics or need less space to neighboring symbols.
         released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[129].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[133].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
@@ -5289,6 +5290,14 @@ namespace
         // J
         released[131] = released[42];
 
+        // GHE with upturn.
+        released[133].resize( 8 + offset * 2, 12 + offset * 2 );
+        released[133].reset();
+        fheroes2::DrawLine( released[133], { offset + 0, offset + 2 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 7, offset + 0 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 0, offset + 11 }, { offset + 2, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 1, offset + 3 }, { offset + 1, offset + 10 }, buttonGoodReleasedColor );
+
         // E with two dots above.
         released[136].resize( released[37].width() - 1, released[37].height() + 3 );
         released[136].reset();
@@ -5296,6 +5305,8 @@ namespace
                         released[37].height() - offset * 2 );
         fheroes2::SetPixel( released[136], offset + 3, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[136], offset + 6, offset + 1, buttonGoodReleasedColor );
+
+        // Ukrainian IE (index 138) is made after the letter with index 189.
 
         // I with two dots above, Cyrillic YI
         released[143].resize( released[41].width(), released[41].height() + 3 );
@@ -5590,6 +5601,11 @@ namespace
         fheroes2::SetPixel( released[189], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 6, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 6, offset + 8, buttonGoodReleasedColor );
+
+        // Ukrainian IE. Make it by mirroring horizontally the previous letter.
+        released[138].resize( 8 + offset * 2, 10 + offset * 2 );
+        released[138].reset();
+        fheroes2::Blit( released[189], released[138], true );
 
         // IO, Cyrillic YU
         released[190].resize( 11 + offset * 2, 10 + offset * 2 );
