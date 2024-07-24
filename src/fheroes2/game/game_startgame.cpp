@@ -34,7 +34,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -158,8 +158,6 @@ fheroes2::GameMode Game::StartBattleOnly()
 
 fheroes2::GameMode Game::StartGame()
 {
-    AI::Get().Reset();
-
     const Settings & conf = Settings::Get();
 
     // setup cursor
@@ -861,7 +859,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Get().KingdomTurn( kingdom );
+                    AI::Planner::Get().KingdomTurn( kingdom );
 
 #if defined( WITH_DEBUG )
                     if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {

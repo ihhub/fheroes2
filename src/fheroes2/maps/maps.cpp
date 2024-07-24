@@ -29,7 +29,7 @@
 #include <cstdlib>
 #include <ostream>
 
-#include "ai.h"
+#include "ai_planner.h"
 #include "direction.h"
 #include "heroes.h"
 #include "kingdom.h"
@@ -377,7 +377,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
             if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                 Maps::Tiles & tile = world.GetTiles( x, y );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
-                    AI::Get().revealFog( tile, kingdom );
+                    AI::Planner::Get().revealFog( tile, kingdom );
                 }
 
                 if ( tile.isFog( alliedColors ) ) {

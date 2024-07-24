@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,8 +25,8 @@
 #include <optional>
 #include <vector>
 
-#include "ai.h"
-#include "ai_normal.h"
+#include "ai_common.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -131,10 +131,7 @@ namespace
 
         return genericBuildOrder;
     }
-}
 
-namespace AI
-{
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const uint32_t multiplier = 1 )
     {
         const int gameDifficulty = Game::getDifficulty();
@@ -148,11 +145,11 @@ namespace AI
             const uint32_t fundsMultiplier = order.priority * multiplier;
 
             if ( fundsMultiplier == 1 ) {
-                if ( BuildIfPossible( castle, order.building ) ) {
+                if ( AI::BuildIfPossible( castle, order.building ) ) {
                     return true;
                 }
             }
-            else if ( BuildIfEnoughFunds( castle, order.building, fundsMultiplier ) ) {
+            else if ( AI::BuildIfEnoughFunds( castle, order.building, fundsMultiplier ) ) {
                 return true;
             }
         }
@@ -168,7 +165,7 @@ namespace AI
 
         if ( castle.isCastle() && !castle.isBuild( BUILD_WELL ) && world.CountDay() > 6 ) {
             // If you can't build Well, you won't be able to build anything else
-            return BuildIfPossible( castle, BUILD_WELL );
+            return AI::BuildIfPossible( castle, BUILD_WELL );
         }
 
         if ( Build( castle, GetIncomeStructures( castle.GetRace() ) ) ) {
@@ -179,7 +176,7 @@ namespace AI
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // Force building a shipyard, +1 to cost check since we can have 0 neighbours
-        if ( islandOrPeninsula && BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
+        if ( islandOrPeninsula && AI::BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }
 
@@ -217,7 +214,7 @@ namespace AI
 
             // Even if the kingdom does not have the necessary supply of these resources right now, there may be enough resources of another type available to get the
             // missing resources as a result of resource exchange
-            if ( !calculateMarketplaceTransaction( kingdom, requiredFunds ) ) {
+            if ( !AI::calculateMarketplaceTransaction( kingdom, requiredFunds ) ) {
                 return false;
             }
 
@@ -227,7 +224,7 @@ namespace AI
             }
 
             // There are no available resources, but it is possible to make a resource exchange
-            if ( tradeAtMarketplace( kingdom, PaymentConditions::BuyBoat() ) ) {
+            if ( AI::tradeAtMarketplace( kingdom, PaymentConditions::BuyBoat() ) ) {
                 return true;
             }
 
@@ -246,100 +243,100 @@ namespace AI
 
         return Build( castle, supportingDefensiveStructures, 10 );
     }
+}
 
-    void Normal::CastlePreBattle( Castle & castle )
-    {
-        Heroes * hero = world.GetHero( castle );
-        if ( hero == nullptr ) {
-            return;
-        }
-
-        Army & army = hero->GetArmy();
-
-        if ( !army.ArrangeForCastleDefense( castle.GetArmy() ) ) {
-            return;
-        }
-
-        // Optimization cannot be performed if we have not received any reinforcements from the garrison, otherwise the actual placement of units during the battle will
-        // differ from that observed by the enemy player before the start of the battle
-        OptimizeTroopsOrder( army );
+void AI::Planner::CastlePreBattle( Castle & castle )
+{
+    Heroes * hero = world.GetHero( castle );
+    if ( hero == nullptr ) {
+        return;
     }
 
-    void Normal::updateKingdomBudget( const Kingdom & kingdom )
-    {
-        // clean up first
-        for ( BudgetEntry & budgetEntry : _budget ) {
-            budgetEntry.reset();
+    Army & army = hero->GetArmy();
+
+    if ( !army.ArrangeForCastleDefense( castle.GetArmy() ) ) {
+        return;
+    }
+
+    // Optimization cannot be performed if we have not received any reinforcements from the garrison, otherwise the actual placement of units during the battle will
+    // differ from that observed by the enemy player before the start of the battle
+    OptimizeTroopsOrder( army );
+}
+
+void AI::Planner::updateKingdomBudget( const Kingdom & kingdom )
+{
+    // clean up first
+    for ( BudgetEntry & budgetEntry : _budget ) {
+        budgetEntry.reset();
+    }
+
+    const Funds & kindgomFunds = kingdom.GetFunds();
+    Funds requirements;
+    for ( const Castle * castle : kingdom.GetCastles() ) {
+        if ( !castle ) {
+            continue;
         }
 
-        const Funds & kindgomFunds = kingdom.GetFunds();
-        Funds requirements;
-        for ( const Castle * castle : kingdom.GetCastles() ) {
-            if ( !castle ) {
-                continue;
-            }
+        const int race = castle->GetRace();
+        const std::vector<BuildOrder> & buildOrder = GetBuildOrder( race );
+        for ( const BuildOrder & order : buildOrder ) {
+            const BuildingStatus status = castle->CheckBuyBuilding( order.building );
+            if ( status == BuildingStatus::LACK_RESOURCES ) {
+                Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
 
-            const int race = castle->GetRace();
-            const std::vector<BuildOrder> & buildOrder = GetBuildOrder( race );
-            for ( const BuildOrder & order : buildOrder ) {
-                const BuildingStatus status = castle->CheckBuyBuilding( order.building );
-                if ( status == BuildingStatus::LACK_RESOURCES ) {
-                    Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
-
-                    requirements = requirements.max( missing );
-                }
-            }
-
-            if ( castle->isBuild( DWELLING_MONSTER6 ) ) {
-                Funds bestUnitCost = Monster( race, DWELLING_MONSTER6 ).GetUpgrade().GetCost();
-                for ( BudgetEntry & budgetEntry : _budget ) {
-                    if ( bestUnitCost.Get( budgetEntry.resource ) > 0 ) {
-                        budgetEntry.recurringCost = true;
-                    }
-                }
+                requirements = requirements.max( missing );
             }
         }
 
-        for ( BudgetEntry & budgetEntry : _budget ) {
-            budgetEntry.missing = requirements.Get( budgetEntry.resource );
-
-            if ( budgetEntry.missing ) {
-                budgetEntry.priority = true;
+        if ( castle->isBuild( DWELLING_MONSTER6 ) ) {
+            Funds bestUnitCost = Monster( race, DWELLING_MONSTER6 ).GetUpgrade().GetCost();
+            for ( BudgetEntry & budgetEntry : _budget ) {
+                if ( bestUnitCost.Get( budgetEntry.resource ) > 0 ) {
+                    budgetEntry.recurringCost = true;
+                }
             }
         }
     }
 
-    void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
-    {
-        if ( defensiveStrategy ) {
-            const Funds & kingdomFunds = castle.GetKingdom().GetFunds();
+    for ( BudgetEntry & budgetEntry : _budget ) {
+        budgetEntry.missing = requirements.Get( budgetEntry.resource );
 
-            // If the castle is potentially under threat, then it makes sense to try to hire the maximum number of troops so that the enemy cannot hire them even if he
-            // captures the castle, therefore, it is worth starting with hiring.
-            castle.recruitBestAvailable( kingdomFunds );
-
-            Army & garrison = castle.GetArmy();
-
-            // Then we try to upgrade the existing units in the castle garrison...
-            garrison.UpgradeTroops( castle );
-
-            // ... and then we try to hire troops again, because after upgrading the existing troops, there could be a place for new units.
-            castle.recruitBestAvailable( kingdomFunds );
-
-            OptimizeTroopsOrder( garrison );
-
-            // Avoid building monster dwellings when defensive as they might fall into enemy's hands. Instead, try to build defensive structures if there is at least some
-            // kind of garrison in the castle.
-            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
-                Build( castle, defensiveStructures );
-                Build( castle, supportingDefensiveStructures );
-            }
+        if ( budgetEntry.missing ) {
+            budgetEntry.priority = true;
         }
-        else {
-            const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
-            const RegionStats & stats = _regions[regionID];
+    }
+}
 
-            CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );
+void AI::Planner::CastleTurn( Castle & castle, const bool defensiveStrategy )
+{
+    if ( defensiveStrategy ) {
+        const Funds & kingdomFunds = castle.GetKingdom().GetFunds();
+
+        // If the castle is potentially under threat, then it makes sense to try to hire the maximum number of troops so that the enemy cannot hire them even if he
+        // captures the castle, therefore, it is worth starting with hiring.
+        castle.recruitBestAvailable( kingdomFunds );
+
+        Army & garrison = castle.GetArmy();
+
+        // Then we try to upgrade the existing units in the castle garrison...
+        garrison.UpgradeTroops( castle );
+
+        // ... and then we try to hire troops again, because after upgrading the existing troops, there could be a place for new units.
+        castle.recruitBestAvailable( kingdomFunds );
+
+        OptimizeTroopsOrder( garrison );
+
+        // Avoid building monster dwellings when defensive as they might fall into enemy's hands. Instead, try to build defensive structures if there is at least some
+        // kind of garrison in the castle.
+        if ( castle.GetActualArmy().getTotalCount() > 0 ) {
+            Build( castle, defensiveStructures );
+            Build( castle, supportingDefensiveStructures );
         }
+    }
+    else {
+        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        const RegionStats & stats = _regions[regionID];
+
+        CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );
     }
 }
