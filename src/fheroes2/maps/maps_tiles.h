@@ -165,11 +165,6 @@ namespace Maps
             return _tilePassabilityDirections;
         }
 
-        void resetPassability()
-        {
-            _tilePassabilityDirections = DIRECTION_ALL;
-        }
-
         int GetGround() const
         {
             return Ground::getGroundByImageIndex( _terrainImageIndex );
@@ -234,8 +229,6 @@ namespace Maps
             _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
             _mainAddon._imageIndex = 255;
         }
-
-        void FixObject();
 
         uint32_t GetRegion() const
         {

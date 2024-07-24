@@ -419,17 +419,6 @@ namespace
         return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
     }
 
-    bool isAddonResource( const Maps::TilesAddon & ta )
-    {
-        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-    }
-
-    bool isAddonArtifact( const Maps::TilesAddon & ta )
-    {
-        // OBJNARTI (skip ultimate)
-        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
-    }
-
     void getAddonInfo( const Maps::TilesAddon & addon, std::ostringstream & os )
     {
         os << "UID             : " << addon._uid << std::endl
@@ -1000,16 +989,6 @@ std::string Maps::Tiles::String() const
     os << "*************************" << std::endl;
 
     return os.str();
-}
-
-void Maps::Tiles::FixObject()
-{
-    if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonArtifact ) )
-            SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonResource ) )
-            SetObject( MP2::OBJ_RESOURCE );
-    }
 }
 
 bool Maps::Tiles::GoodForUltimateArtifact() const
