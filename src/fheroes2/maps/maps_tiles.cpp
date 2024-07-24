@@ -419,17 +419,6 @@ namespace
         return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
     }
 
-    bool isAddonResource( const Maps::TilesAddon & ta )
-    {
-        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-    }
-
-    bool isAddonArtifact( const Maps::TilesAddon & ta )
-    {
-        // OBJNARTI (skip ultimate)
-        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
-    }
-
     void getAddonInfo( const Maps::TilesAddon & addon, std::ostringstream & os )
     {
         os << "UID             : " << addon._uid << std::endl
