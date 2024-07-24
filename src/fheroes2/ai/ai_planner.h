@@ -178,10 +178,10 @@ namespace AI
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
-        Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
-
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
+
+        static Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
 
     private:
         Planner() = default;

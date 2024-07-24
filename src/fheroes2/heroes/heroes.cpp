@@ -1857,7 +1857,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
     else if ( isControlAI() ) {
-        selected = AI::Planner::Get().pickSecondarySkill( *this, sec1, sec2 );
+        selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );
