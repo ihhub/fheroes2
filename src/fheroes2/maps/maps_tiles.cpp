@@ -1002,16 +1002,6 @@ std::string Maps::Tiles::String() const
     return os.str();
 }
 
-void Maps::Tiles::FixObject()
-{
-    if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonArtifact ) )
-            SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonResource ) )
-            SetObject( MP2::OBJ_RESOURCE );
-    }
-}
-
 bool Maps::Tiles::GoodForUltimateArtifact() const
 {
     if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
