@@ -32,7 +32,6 @@
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
-#include "skill.h"
 #include "world_pathfinding.h"
 
 class Castle;
@@ -46,6 +45,11 @@ struct VecHeroes;
 namespace Maps
 {
     class Tiles;
+}
+
+namespace Skill
+{
+    class Secondary;
 }
 
 namespace AI
