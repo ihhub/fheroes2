@@ -28,12 +28,16 @@
 #include "artifact.h"
 #include "image.h"
 #include "math_base.h"
+#include "monster.h"
 #include "skill.h"
 #include "spell.h"
+#include "ui_button.h"
+#include "ui_tool.h"
 
 struct Funds;
 class HeroBase;
 class Heroes;
+class LocalEvent;
 
 namespace fheroes2
 {
@@ -44,7 +48,7 @@ namespace fheroes2
 
     // This is a simplified version of UI window which is used to display a window with a text.
     // Header text has yellow normal font style and body text - white normal font style.
-    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons );
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements = {} );
 
     // An interactive UI element within a dialog.
     class DialogElement
@@ -337,5 +341,70 @@ namespace fheroes2
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
+    };
+
+    class MonsterDialogElement : public DialogElement
+    {
+    public:
+        explicit MonsterDialogElement( const Monster & monster );
+
+        ~MonsterDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const Monster _monster;
+    };
+
+    class ValueSelectionDialogElement
+    {
+    public:
+        explicit ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step, const Point & offset );
+
+        ~ValueSelectionDialogElement() = default;
+
+        void draw( Image & output ) const;
+
+        bool processEvents();
+
+        int32_t getValue() const
+        {
+            return _value;
+        }
+
+        void setValue( const int32_t value );
+
+        void ignoreMouseWheelEventRoiCheck()
+        {
+            _isIgnoreMouseWheelEventRoiCheck = true;
+        }
+
+        void setOffset( const fheroes2::Point & offset );
+
+        static Size getArea();
+
+    private:
+        const int32_t _minimum{ 0 };
+        const int32_t _maximum{ 0 };
+        const int32_t _step{ 0 };
+        int32_t _value{ 0 };
+
+        Button _buttonUp;
+        Button _buttonDown;
+
+        TimedEventValidator _timedButtonUp;
+        TimedEventValidator _timedButtonDown;
+
+        Rect _editBox;
+        Rect _area;
+
+        bool _isIgnoreMouseWheelEventRoiCheck{ false };
+
+        bool _isMouseWheelUpEvent( const LocalEvent & eventHandler ) const;
+        bool _isMouseWheelDownEvent( const LocalEvent & eventHandler ) const;
     };
 }

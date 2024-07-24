@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto">
 
     <!-- OpenGL ES 2.0 -->
@@ -46,7 +47,8 @@
             android:process=":GameActivityProcess"
             android:screenOrientation="sensorLandscape"
             android:taskAffinity="org.fheroes2.GameTask"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            tools:ignore="DiscouragedApi,UnusedAttribute">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,6 +81,14 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_save_file_manager_label"
+            android:taskAffinity="org.fheroes2.ToolsetTask"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".MapFileManagerActivity"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_toolset"
+            android:label="@string/activity_map_file_manager_label"
             android:taskAffinity="org.fheroes2.ToolsetTask"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
     </application>

@@ -35,7 +35,7 @@
 #include <utility>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -43,9 +43,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -77,7 +75,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -602,10 +599,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
 
-    if ( isControlAI() ) {
-        AI::Get().HeroesPostLoad( *this );
-    }
-
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
@@ -803,7 +796,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     const size_t skillsSize = skills.size();
     assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
     for ( size_t i = 0; i < skillsSize; ++i ) {
-        heroMetadata.secondarySkill[i] = skills[i].Skill();
+        heroMetadata.secondarySkill[i] = static_cast<int8_t>( skills[i].Skill() );
         heroMetadata.secondarySkillLevel[i] = static_cast<uint8_t>( skills[i].Level() );
     }
 
@@ -879,7 +872,7 @@ int Heroes::GetManaIndexSprite() const
 int Heroes::getStatsValue() const
 {
     // experience and artifacts don't matter here, only natural stats
-    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+    return getTotalPrimarySkillLevel() + secondary_skills.GetTotalLevel();
 }
 
 double Heroes::getRecruitValue() const
@@ -1034,11 +1027,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
             result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
         }
-    }
-
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
     }
 
     return result;
@@ -1399,12 +1387,26 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art.GetID() == Artifact::MAGIC_BOOK ? fheroes2::showStandardTextMessage(
-                GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Dialog::OK )
-                                                : fheroes2::showStandardTextMessage( art.GetName(),
-                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+                if ( HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    // In theory, there should be no other reason not to pick up the artifact
+                    assert( IsFullBagArtifacts() );
+
+                    fheroes2::showStandardTextMessage(
+                        art.GetName(),
+                        _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                        Dialog::OK );
+                }
+            }
+            else {
+                // In theory, there should be no other reason not to pick up the artifact
+                assert( IsFullBagArtifacts() );
+
+                fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            }
         }
 
         return false;
@@ -1588,8 +1590,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                   Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1599,9 +1600,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         header.append( _( "Do you wish to buy one?" ) );
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } )
-             == Dialog::NO ) {
+        if ( fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
             return false;
         }
     }
@@ -1640,7 +1639,7 @@ void Heroes::SetMove( const bool enable )
         ResetModes( SLEEPER );
 
         if ( isControlAI() ) {
-            AI::Get().HeroesBeginMovement( *this );
+            AI::Planner::Get().HeroesBeginMovement( *this );
         }
 
         SetModes( ENABLEMOVE );
@@ -1651,10 +1650,6 @@ void Heroes::SetMove( const bool enable )
         }
 
         ResetModes( ENABLEMOVE );
-
-        if ( isControlAI() ) {
-            AI::Get().HeroesFinishMovement( *this );
-        }
 
         // Reset the hero sprite
         resetHeroSprite();
@@ -1832,10 +1827,9 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
-    if ( !skipsecondary )
+    if ( !skipsecondary ) {
         LevelUpSecondarySkill( seeds, primarySkill, autoselect );
-    if ( isControlAI() )
-        AI::Get().HeroesLevelUp( *this );
+    }
 }
 
 void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
@@ -1863,7 +1857,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
     else if ( isControlAI() ) {
-        selected = AI::Get().pickSecondarySkill( *this, sec1, sec2 );
+        selected = AI::Planner::Get().pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );
@@ -2019,8 +2013,9 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( isControlAI() )
-        AI::Get().HeroesActionNewPosition( *this );
+    if ( isControlAI() ) {
+        AI::Planner::Get().HeroesActionNewPosition( *this );
+    }
 
     ResetModes( VISIONS );
 }
@@ -2163,8 +2158,6 @@ std::string Heroes::String() const
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl
            << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
-
-        os << AI::Get().HeroesString( *this );
     }
 
     return os.str();
@@ -2544,8 +2537,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
     static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
             int temp = 0;

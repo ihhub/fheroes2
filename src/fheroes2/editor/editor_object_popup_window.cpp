@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,6 +79,12 @@ namespace Editor
         else {
             infoString = getObjectInfoText( tile );
         }
+
+        infoString += "\n[";
+        infoString += std::to_string( tile.GetIndex() % world.w() );
+        infoString += "; ";
+        infoString += std::to_string( tile.GetIndex() / world.w() );
+        infoString += ']';
 
         Interface::displayStandardPopupWindow( std::move( infoString ), Interface::EditorInterface::Get().getGameArea().GetROI() );
     }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -169,7 +169,7 @@ int Dialog::SelectSkillFromArena()
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
@@ -191,13 +191,13 @@ int Dialog::SelectSkillFromArena()
             res = Skill::Primary::POWER;
             redraw = true;
         }
-        else if ( le.MousePressRight( rect1 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect1 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::ATTACK, "" ).showPopup( Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rect2 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect2 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::DEFENSE, "" ).showPopup( Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rect3 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect3 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::POWER, "" ).showPopup( Dialog::ZERO );
         }
 

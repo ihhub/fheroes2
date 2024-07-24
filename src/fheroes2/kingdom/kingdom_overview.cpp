@@ -848,21 +848,21 @@ void Kingdom::openOverviewDialog()
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MousePressRight( buttonHeroes.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonHeroes.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Heroes" ), _( "View Heroes." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCastle.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Towns/Castles" ), _( "View Towns and Castles." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonExit.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rectIncome ) || le.isMouseRightButtonPressedInArea( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rectLighthouse ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rectLighthouse ) ) {
             fheroes2::showLighthouseInfo( *this, Dialog::ZERO );
         }
 

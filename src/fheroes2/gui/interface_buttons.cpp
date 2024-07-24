@@ -144,14 +144,14 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.MousePressLeft( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
-    le.MousePressLeft( heroMovementRect ) ? buttonHeroMovement.drawOnPress() : buttonHeroMovement.drawOnRelease();
-    le.MousePressLeft( kingdomRect ) ? buttonKingdom.drawOnPress() : buttonKingdom.drawOnRelease();
-    le.MousePressLeft( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
-    le.MousePressLeft( endTurnRect ) ? buttonEndTurn.drawOnPress() : buttonEndTurn.drawOnRelease();
-    le.MousePressLeft( adventureRect ) ? buttonAdventure.drawOnPress() : buttonAdventure.drawOnRelease();
-    le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
-    le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( heroMovementRect ) ? buttonHeroMovement.drawOnPress() : buttonHeroMovement.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( kingdomRect ) ? buttonKingdom.drawOnPress() : buttonKingdom.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( endTurnRect ) ? buttonEndTurn.drawOnPress() : buttonEndTurn.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( adventureRect ) ? buttonAdventure.drawOnPress() : buttonAdventure.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
@@ -187,32 +187,32 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
         interface.EventSystemDialog();
     }
 
-    if ( le.MousePressRight( nextHeroRect ) ) {
+    if ( le.isMouseRightButtonPressedInArea( nextHeroRect ) ) {
         fheroes2::showStandardTextMessage( _( "Next Hero" ), _( "Select the next Hero." ), Dialog::ZERO );
     }
-    else if ( le.MousePressRight( heroMovementRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( heroMovementRect ) ) {
         fheroes2::showStandardTextMessage(
             _( "Hero Movement" ),
             _( "Start the Hero's movement along the current path or re-visit the object occupied by the Hero. Press and hold this button to reset the Hero's path." ),
             Dialog::ZERO );
     }
-    else if ( le.MousePressRight( kingdomRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( kingdomRect ) ) {
         fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a summary of your Kingdom." ), Dialog::ZERO );
     }
-    else if ( le.MousePressRight( spellRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( spellRect ) ) {
         fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
     }
-    else if ( le.MousePressRight( endTurnRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( endTurnRect ) ) {
         fheroes2::showStandardTextMessage( _( "End Turn" ), _( "End your turn and let the computer take its turn." ), Dialog::ZERO );
     }
-    else if ( le.MousePressRight( adventureRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( adventureRect ) ) {
         fheroes2::showStandardTextMessage( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Dialog::ZERO );
     }
-    else if ( le.MousePressRight( fileRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( fileRect ) ) {
         fheroes2::showStandardTextMessage( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ),
                                            Dialog::ZERO );
     }
-    else if ( le.MousePressRight( systemRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( systemRect ) ) {
         fheroes2::showStandardTextMessage( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Dialog::ZERO );
     }
 
@@ -227,7 +227,7 @@ void Interface::ButtonsArea::SetButtonStatus()
         buttonHeroMovement.setICNIndexes( 2, 3 );
         buttonHeroMovement.enable();
     }
-    else if ( currentHero && MP2::isActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+    else if ( currentHero && MP2::isInGameActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
         buttonHeroMovement.setICNIndexes( 16, 17 );
         buttonHeroMovement.enable();
     }

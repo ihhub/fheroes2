@@ -83,7 +83,7 @@ namespace
             return false;
         }
 
-        if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) ) {
+        if ( MP2::isPickupObject( objectType ) || MP2::isInGameActionObject( objectType, fromWater ) ) {
             return false;
         }
 
@@ -100,8 +100,8 @@ namespace
         return true;
     }
 
-    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const int color, const bool isArtifactsBagFull, const double armyStrength,
-                                                     const double minimalAdvantage )
+    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const int color, const bool isArtifactsBagFull,
+                                                     const bool isEquippedWithSpellBook, const double armyStrength, const double minimalAdvantage )
     {
         assert( color & Color::ALL );
 
@@ -183,6 +183,11 @@ namespace
 
             // Hero should have a place for this artifact in his artifact bag
             if ( isArtifactsBagFull ) {
+                return false;
+            }
+
+            // Hero will not be able to pick up a spell book if he already has one
+            if ( art.GetID() == Artifact::MAGIC_BOOK && isEquippedWithSpellBook ) {
                 return false;
             }
 
@@ -598,6 +603,7 @@ void AIWorldPathfinder::reset()
     _maxMovePointsOnWater = 0;
     _armyStrength = -1;
     _isArtifactsBagFull = false;
+    _isEquippedWithSpellBook = false;
     _isSummonBoatSpellAvailable = false;
 
     _townGateCastleIndex = -1;
@@ -662,10 +668,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }();
 
     auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _maxMovePointsOnLand, _maxMovePointsOnWater, _armyStrength,
-                                     _isArtifactsBagFull, _isSummonBoatSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
+                                     _isArtifactsBagFull, _isEquippedWithSpellBook, _isSummonBoatSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
     const auto newSettings
         = std::make_tuple( hero.GetIndex(), hero.GetColor(), hero.GetMovePoints(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ),
-                           hero.GetMaxMovePoints( false ), hero.GetMaxMovePoints( true ), hero.GetArmy().GetStrength(), hero.IsFullBagArtifacts(),
+                           hero.GetMaxMovePoints( false ), hero.GetMaxMovePoints( true ), hero.GetArmy().GetStrength(), hero.IsFullBagArtifacts(), hero.HaveSpellBook(),
                            isSummonBoatSpellAvailable, townGateCastleIndex, townPortalCastleIndexes );
 
     if ( currentSettings != newSettings ) {
@@ -678,8 +684,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
     auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _maxMovePointsOnLand, _maxMovePointsOnWater, _armyStrength,
-                                     _isArtifactsBagFull, _isSummonBoatSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
-    const auto newSettings = std::make_tuple( start, color, 0U, skill, 0U, 0U, armyStrength, false, false, -1, std::vector<int32_t>{} );
+                                     _isArtifactsBagFull, _isEquippedWithSpellBook, _isSummonBoatSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
+    const auto newSettings = std::make_tuple( start, color, 0U, skill, 0U, 0U, armyStrength, false, false, false, -1, std::vector<int32_t>{} );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -753,7 +759,8 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
         const bool fromWater = world.GetTiles( currentNode._from ).isWater();
 
-        if ( !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, fromWater, _color, _isArtifactsBagFull, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
+        if ( !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, fromWater, _color, _isArtifactsBagFull, _isEquippedWithSpellBook, _armyStrength,
+                                                          _minimalArmyStrengthAdvantage ) ) {
             return;
         }
     }
@@ -979,7 +986,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
         }
 
         // Don't go onto action objects as they might be castles or dwellings with guards.
-        if ( MP2::isActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+        if ( MP2::isInGameActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
             continue;
         }
 

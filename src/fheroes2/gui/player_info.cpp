@@ -291,8 +291,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     Settings & conf = Settings::Get();
     const LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MousePressRight() ) {
-        const Player * player = GetFromOpponentClick( le.GetMouseCursor() );
+    if ( le.isMouseRightButtonPressed() ) {
+        const Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
             fheroes2::showStandardTextMessage(
                 _( "Opponents" ),
@@ -301,7 +301,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             return true;
         }
 
-        player = GetFromClassClick( le.GetMouseCursor() );
+        player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
             fheroes2::showStandardTextMessage(
                 _( "Class" ),
@@ -310,23 +310,21 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             return true;
         }
 
-        player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+        player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
         if ( player != nullptr ) {
-            fheroes2::
-                showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
-                             fheroes2::Text( _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
-                                                "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                "respectively." ),
-                                             fheroes2::FontType::normalWhite() ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Handicap" ),
+                                               _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
+                                                  "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
+                                                  "respectively." ),
+                                               Dialog::ZERO );
             return true;
         }
 
         return false;
     }
 
-    if ( le.MouseWheelUp() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
+    if ( le.isMouseWheelUp() ) {
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getPreviousRace( player->GetRace() ) );
 
@@ -336,8 +334,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    if ( le.MouseWheelDn() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
+    if ( le.isMouseWheelDown() ) {
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
             player->SetRace( Race::getNextRace( player->GetRace() ) );
 
@@ -346,7 +344,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    Player * player = GetFromOpponentClick( le.GetMouseCursor() );
+    Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
@@ -385,27 +383,27 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return true;
     }
 
-    player = GetFromOpponentNameClick( le.GetMouseCursor() );
+    player = GetFromOpponentNameClick( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         std::string str = _( "%{color} player" );
         StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
 
         std::string res = player->GetName();
-        if ( Dialog::InputString( str, res ) && !res.empty() ) {
+        if ( Dialog::inputString( str, res, {}, 0, false, false ) && !res.empty() ) {
             player->SetName( res );
         }
 
         return true;
     }
 
-    player = GetFromClassClick( le.GetMouseCursor() );
+    player = GetFromClassClick( le.getMouseCursorPos() );
     if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
         player->SetRace( Race::getNextRace( player->GetRace() ) );
 
         return true;
     }
 
-    player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+    player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         if ( !( player->GetControl() & CONTROL_AI ) ) {
             switch ( player->getHandicapStatus() ) {
@@ -433,31 +431,24 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 bool Interface::PlayersInfo::readOnlyEventProcessing()
 {
     const LocalEvent & le = LocalEvent::Get();
-    if ( !le.MousePressRight() ) {
+    if ( !le.isMouseRightButtonPressed() ) {
         // Read only mode works only for right click events.
         return false;
     }
 
-    const Player * player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+    const Player * player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
-            fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "No Handicap" ), _( "No special restrictions on starting resources and resource income per turn." ), Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:
-            fheroes2::showMessage( fheroes2::Text( _( "Mild Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Mild Handicap" ), _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
+                                               Dialog::ZERO );
             break;
         case Player::HandicapStatus::SEVERE:
-            fheroes2::showMessage( fheroes2::Text( _( "Severe Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Severe Handicap" ),
+                                               _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ), Dialog::ZERO );
             break;
         default:
             // Did you add a new handicap status? Add the logic above!

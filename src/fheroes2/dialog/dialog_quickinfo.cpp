@@ -440,7 +440,8 @@ namespace
             return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
         }
 
-        return Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::AdventureMap::Get().getGameArea().GetROI(), { imageBox.width(), imageBox.height() } );
+        return Interface::getPopupWindowPosition( le.getMouseCursorPos(), Interface::AdventureMap::Get().getGameArea().GetROI(),
+                                                  { imageBox.width(), imageBox.height() } );
     }
 
     std::string getQuickInfoText( const Maps::Tiles & tile )
@@ -569,9 +570,9 @@ namespace
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
-        // These objects does not have extra text for quick info.
-        case MP2::OBJ_CAMPFIRE:
+        // These objects do not have extra text for quick info.
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_CAMPFIRE:
         default:
             return MP2::StringObject( objectType );
         }
@@ -613,39 +614,14 @@ namespace
         fheroes2::drawCastleIcon( castle, display, fheroes2::Point( dst_pt.x + 4, dst_pt.y + 4 ) );
 
         // color flags
-        uint32_t index = 0;
-        switch ( castle.GetColor() ) {
-        case Color::BLUE:
-            index = 0;
-            break;
-        case Color::GREEN:
-            index = 2;
-            break;
-        case Color::RED:
-            index = 4;
-            break;
-        case Color::YELLOW:
-            index = 6;
-            break;
-        case Color::ORANGE:
-            index = 8;
-            break;
-        case Color::PURPLE:
-            index = 10;
-            break;
-        case Color::NONE:
-            index = 12;
-            break;
-        default:
-            break;
-        }
+        const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( castle.GetColor() );
 
         const fheroes2::Point flagOffset( 5, 4 );
 
-        const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
+        const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
         fheroes2::Blit( l_flag, display, dst_pt.x - flagOffset.x - l_flag.width(), dst_pt.y + flagOffset.y );
 
-        const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
+        const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
         fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
         const int currentColor = conf.CurrentColor();
@@ -686,7 +662,7 @@ namespace
         display.render();
 
         // quick info loop
-        while ( le.HandleEvents() && le.MousePressRight() )
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() )
             ;
 
         // restore background
@@ -798,36 +774,14 @@ namespace
 
         // color flags, except for neutral heroes
         if ( !isNeutralHero ) {
-            uint32_t index = 0;
+            // Use castle flags to show hero's color flags.
+            const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( hero.GetColor() );
 
-            switch ( hero.GetColor() ) {
-            case Color::BLUE:
-                index = 0;
-                break;
-            case Color::GREEN:
-                index = 2;
-                break;
-            case Color::RED:
-                index = 4;
-                break;
-            case Color::YELLOW:
-                index = 6;
-                break;
-            case Color::ORANGE:
-                index = 8;
-                break;
-            case Color::PURPLE:
-                index = 10;
-                break;
-            default:
-                break;
-            }
-
-            const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
+            const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
             dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
             fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
-            const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
+            const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
             dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
             fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
         }
@@ -914,7 +868,7 @@ namespace
         display.render();
 
         // quick info loop
-        while ( le.HandleEvents() && le.MousePressRight() )
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() )
             ;
 
         // restore background

@@ -609,11 +609,14 @@ namespace Campaign
         case DESCENDANTS_CAMPAIGN:
         case WIZARDS_ISLE_CAMPAIGN:
         case VOYAGE_HOME_CAMPAIGN:
+            break;
         default:
+            // Did you add a new campaign? Add the case handling code for it!
+            assert( 0 );
             break;
         }
 
-        return std::vector<Campaign::CampaignAwardData>();
+        return {};
     }
 
     const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo )

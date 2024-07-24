@@ -71,9 +71,8 @@ namespace Game
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
-    fheroes2::GameMode ScenarioInfo();
     fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
-    fheroes2::GameMode SelectScenario();
+    fheroes2::GameMode SelectScenario( const uint8_t humanPlayerCount );
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
@@ -106,7 +105,7 @@ namespace Game
     uint32_t getGameOverScoreFactor();
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
-    uint32_t SelectCountPlayers();
+    uint8_t SelectCountPlayers();
 
     void PlayPickupSound();
 

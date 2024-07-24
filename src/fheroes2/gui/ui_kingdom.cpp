@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,6 @@ namespace fheroes2
     void showLighthouseInfo( const Kingdom & kingdom, const int buttons )
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
-        const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
         const Sprite & shadowTop = AGG::GetICN( ICN::OBJNMUL2, 60 );
         const Sprite & shadowMiddle = AGG::GetICN( ICN::OBJNMUL2, 71 );
@@ -81,7 +80,7 @@ namespace fheroes2
                                                                                 getAnimationDelayValue( Game::MAPS_DELAY ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
-        showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
-                     { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
+        showStandardTextMessage( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), _( "For every lighthouse controlled, your ships will move further each day." ), buttons,
+                                 { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
     }
 }

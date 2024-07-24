@@ -91,20 +91,17 @@ struct MapEvent : public MapObjectSimple
         return ( color & colors ) != 0;
     }
 
-    void SetVisited( const int color )
+    void SetVisited()
     {
-        if ( cancel ) {
+        if ( isSingleTimeEvent ) {
             colors = 0;
-        }
-        else {
-            colors &= ~color;
         }
     }
 
     Funds resources;
     Artifact artifact;
     bool computer{ false };
-    bool cancel{ true };
+    bool isSingleTimeEvent{ true };
     int colors{ 0 };
     std::string message;
 };
@@ -119,20 +116,44 @@ struct MapSphinx : public MapObjectSimple
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
-    bool AnswerCorrect( const std::string & answer );
+    bool isCorrectAnswer( std::string answer );
 
-    void SetQuiet()
+    void reset()
     {
+        riddle = {};
+        answers = {};
+
         valid = false;
         artifact = Artifact::UNKNOWN;
         resources.Reset();
     }
 
+    void validate()
+    {
+        if ( artifact == Artifact::UNKNOWN && resources.GetValidItemsCount() == 0 ) {
+            // No reward so nothing to ask.
+            valid = false;
+            return;
+        }
+
+        if ( riddle.empty() || answers.empty() ) {
+            // No question or no answers then nothing to do.
+            valid = false;
+            return;
+        }
+
+        valid = true;
+    }
+
     Funds resources;
     Artifact artifact;
     std::list<std::string> answers;
-    std::string message;
+    std::string riddle;
     bool valid{ false };
+
+    // This is the behavior of the original game when each answer was cut only to 4 characters.
+    // This is not the case for new map format.
+    bool isTruncatedAnswer{ true };
 };
 
 struct MapSign : public MapObjectSimple

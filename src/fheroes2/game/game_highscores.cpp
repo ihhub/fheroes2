@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -241,8 +241,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             msg += std::to_string( GetRating() * getGameOverScoreFactor() / 100 );
         }
 
-        fheroes2::showMessage( fheroes2::Text( "High Scores", fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                               Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "High Scores" ), std::move( msg ), Dialog::OK );
 
         gameResult.ResetResult();
 
@@ -267,7 +266,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( isAfterGameCompletion ) {
         const auto inputPlayerName = []( std::string & playerName ) {
-            Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
+            Dialog::inputString( _( "Your Name" ), playerName, {}, 15, false, false );
             if ( playerName.empty() ) {
                 playerName = _( "Unknown Hero" );
             }
@@ -373,8 +372,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-        le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
             if ( isAfterGameCompletion || isDefaultScreenSize ) {
@@ -391,18 +390,15 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
         }
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOtherHighScore.area() ) ) {
             if ( isCampaign ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Standard" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "View High Scores for Standard Maps." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Standard" ), _( "View High Scores for Standard Maps." ), Dialog::ZERO );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( _( "Campaign" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "View High Scores for Campaigns." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Campaign" ), _( "View High Scores for Campaigns." ), Dialog::ZERO );
             }
         }
 

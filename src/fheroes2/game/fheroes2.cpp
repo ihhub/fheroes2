@@ -141,7 +141,7 @@ namespace
                 break;
             }
 
-            if ( le.KeyPress() || le.MouseClickLeft() ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
                 closeWindow = true;
             }
         }
