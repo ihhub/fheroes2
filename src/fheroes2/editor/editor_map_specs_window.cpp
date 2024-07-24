@@ -1347,11 +1347,9 @@ namespace
 
                         const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[i][j]->getColor() );
 
-                        
                         // Allow to select player only if it is not already selected.
                         if ( le.MouseClickLeft( checkboxRect ) && ( ( _alliances[i] & color ) == 0 )
                              && ( ( totalPlayerCont + 1 - Color::Count( _alliances[i] ) ) > _alliancesCheckboxes.size() ) ) {
-
                             for ( size_t ii = 0; ii < _alliancesCheckboxes.size(); ++ii ) {
                                 if ( _alliancesCheckboxes[ii][j]->toggle() ) {
                                     _alliances[ii] |= color;
