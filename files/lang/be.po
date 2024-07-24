@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-23 04:38+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3932,6 +3932,9 @@ msgid "Unable to locate data directory to save the map."
 msgstr ""
 
 msgid "Unable to create a directory to save the map."
+msgstr ""
+
+msgid "Unable to locate a directory to save the map."
 msgstr ""
 
 #, fuzzy
