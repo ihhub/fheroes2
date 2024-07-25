@@ -508,7 +508,7 @@ namespace
             assert( 0 );
         }
 
-        return {};
+        return "Unknown";
     }
 
     uint32_t getLossIcnIndex( const uint8_t lossConditionType )
@@ -677,7 +677,7 @@ namespace
     class VictoryConditionUI final
     {
     public:
-        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
+        VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.victoryConditionType )
             , _availableColors( mapFormat.availablePlayerColors )
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
