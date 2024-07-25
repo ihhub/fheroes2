@@ -5951,7 +5951,7 @@ namespace fheroes2
         // Add the '\' character.
         icnVsSprite[60].resize( 8, 14 );
         icnVsSprite[60].reset();
-        fheroes2::Blit( icnVsSprite[15], 1, 0, icnVsSprite[60], 1, 0, 7, 12, true );
+        fheroes2::Blit( icnVsSprite[15], 0, 0, icnVsSprite[60], 1, 0, 7, 12, true );
         icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
         updateNormalFontLetterShadow( icnVsSprite[60] );
 
