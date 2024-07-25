@@ -442,7 +442,7 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
     }
 
     uint32_t getVictoryIcnIndex( const uint8_t victoryConditionType )
@@ -486,7 +486,7 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
     }
 
     // Returns the order text of the alliance: 0 will be "1st" and so on.
@@ -758,8 +758,16 @@ namespace
                 break;
             case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
                 // As of now only 2 alliances are supported.
-                if ( mapFormat.alliances.size() == 2 ) {
-                    _alliances = mapFormat.alliances;
+                // TODO: Update this logic for more than 2 alliances.
+                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0 ) {
+                    const int playersCount = Color::Count( mapFormat.availablePlayerColors );
+                    const int alliance1Count = Color::Count( mapFormat.alliances[0] );
+                    const int alliance2Count = Color::Count( mapFormat.alliances[1] );
+
+                    // Use the saved in mapFormat alliances only if they are correct.
+                    if ( playersCount != alliance1Count && playersCount != alliance2Count && alliance1Count != 0 && alliance2Count != 0 ) {
+                        _alliances = mapFormat.alliances;
+                    }
                 }
 
                 break;
@@ -778,7 +786,7 @@ namespace
             }
 
             if ( _alliances.size() < 2 ) {
-                // Fill in the default alliances - the first human player against all others.
+                // Fill in the default alliances: the first human player against all others.
                 _alliances.clear();
 
                 const uint8_t firstColor = static_cast<uint8_t>( Color::GetFirst( mapFormat.humanPlayerColors ) );
@@ -1106,14 +1114,15 @@ namespace
                 if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
+                    int32_t offsetY = roi.y + 2;
+
                     fheroes2::Text text( _( "Set alliances:" ), fheroes2::FontType::normalWhite() );
-                    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 2, output );
+                    text.draw( roi.x + ( roi.width - text.width() ) / 2, offsetY, output );
 
                     _alliancesCheckboxes.clear();
 
-                    int32_t offsetY = roi.y + 24;
+                    offsetY += text.height();
                     const int32_t stepY = 32;
-
                     const int32_t checkboxesOffsetX = roi.x + ( roi.width - Color::Count( _availableColors ) * 32 + 12 ) / 2;
 
                     for ( size_t i = 0; i < _alliances.size(); ++i ) {
@@ -1225,9 +1234,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int townIndex = listbox.GetCurrent();
 
                         if ( townIndex != initiallySelectedTownIndex ) {
@@ -1287,9 +1294,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int heroIndex = listbox.GetCurrent();
 
                         if ( heroIndex != initiallySelectedHeroIndex ) {
@@ -1339,42 +1344,45 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE: {
                 LocalEvent & le = LocalEvent::Get();
 
-                const int totalPlayerCont = Color::Count( _availableColors );
-
-                for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
-                    for ( size_t j = 0; j < _alliancesCheckboxes[i].size(); ++j ) {
-                        const fheroes2::Rect & checkboxRect = _alliancesCheckboxes[i][j]->getRect();
-
-                        const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[i][j]->getColor() );
+                for ( size_t allianceNumber = 0; allianceNumber < _alliancesCheckboxes.size(); ++allianceNumber ) {
+                    for ( size_t playerNumber = 0; playerNumber < _alliancesCheckboxes[allianceNumber].size(); ++playerNumber ) {
+                        const fheroes2::Rect & checkboxRect = _alliancesCheckboxes[allianceNumber][playerNumber]->getRect();
 
                         // Allow to select player only if it is not already selected.
-                        if ( le.MouseClickLeft( checkboxRect ) && ( ( _alliances[i] & color ) == 0 )
-                             && ( ( totalPlayerCont + 1 - Color::Count( _alliances[i] ) ) > static_cast<int>( _alliancesCheckboxes.size() ) ) ) {
-                            for ( size_t ii = 0; ii < _alliancesCheckboxes.size(); ++ii ) {
-                                if ( _alliancesCheckboxes[ii][j]->toggle() ) {
-                                    _alliances[ii] |= color;
+                        if ( le.MouseClickLeft( checkboxRect ) ) {
+                            const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+
+                            // There can be maximum (active_players - 1) in one alliance to have at least one player in the other alliance.
+                            if ( ( ( _alliances[allianceNumber] & color ) == 0 )
+                                 && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
+                                for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
+                                    if ( _alliancesCheckboxes[i][playerNumber]->toggle() ) {
+                                        _alliances[i] |= color;
+                                    }
+                                    else {
+                                        _alliances[i] ^= color;
+                                    }
                                 }
-                                else {
-                                    _alliances[ii] ^= color;
-                                }
+
+                                return true;
                             }
 
-                            break;
+                            return false;
                         }
 
                         if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
                             std::string header = _( "Select %{color} player to be in the %{alliance} alliance" );
                             std::string messageText = _( "If this checkbox is checked, the %{color} player will be in the %{alliance} alliance." );
 
-                            const std::string colorString = Color::String( _alliancesCheckboxes[i][j]->getColor() );
+                            const std::string colorString = Color::String( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
                             StringReplace( header, "%{color}", colorString );
-                            StringReplace( header, "%{alliance}", getAllianceNumberText( i ) );
+                            StringReplace( header, "%{alliance}", getAllianceNumberText( allianceNumber ) );
                             StringReplace( messageText, "%{color}", colorString );
-                            StringReplace( messageText, "%{alliance}", getAllianceNumberText( i ) );
+                            StringReplace( messageText, "%{alliance}", getAllianceNumberText( allianceNumber ) );
 
                             fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
 
-                            break;
+                            return false;
                         }
                     }
                 }
