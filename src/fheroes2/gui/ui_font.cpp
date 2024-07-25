@@ -2345,6 +2345,7 @@ namespace
             updateSmallFontLetterShadow( font[255 - 32] );
         }
     }
+
     // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
@@ -2365,7 +2366,7 @@ namespace
             font[161 - 32].reset();
             fheroes2::Copy( font[33 - 32], 1, 0, font[161 - 32], 1, 3, font[33 - 32].width(), font[33 - 32].height() );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[161 - 32], false, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[161 - 32], false, true );
                 fheroes2::Copy( temp, 0, 2, font[161 - 32], 1, 2, temp.width(), temp.height() );
             }
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
@@ -2400,7 +2401,7 @@ namespace
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 11 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[191 - 32], true, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[191 - 32], true, true );
                 fheroes2::Copy( temp, 1, 2, font[191 - 32], 0, 0, temp.width(), temp.height() );
             }
             // Remove old shadows
@@ -2925,7 +2926,7 @@ namespace
             font[161 - 32].reset();
             fheroes2::Copy( font[33 - 32], 1, 0, font[161 - 32], 1, 0, font[33 - 32].width(), 7 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[161 - 32], false, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[161 - 32], false, true );
                 fheroes2::Copy( temp, 0, 1, font[161 - 32], 0, 0, temp.width(), temp.height() );
             }
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
@@ -2936,7 +2937,7 @@ namespace
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 7 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[191 - 32], true, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[191 - 32], true, true );
                 fheroes2::Copy( temp, 0, 1, font[191 - 32], 0, 0, temp.width(), temp.height() );
             }
             // Remove old shadows
@@ -5973,6 +5974,16 @@ namespace fheroes2
         fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
         fheroes2::FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
         updateNormalFontLetterShadow( icnVsSprite[5] );
+
+        // Add the '\' character.
+        icnVsSprite[60].resize( 5, 9 );
+        icnVsSprite[60].reset();
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 1, 0, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 2, 2, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 3, 4, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 4, 6, 1, 2 );
+        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
+        updateSmallFontLetterShadow( icnVsSprite[60] );
 
         // Proper lowercase k.
         icnVsSprite[75].resize( 6, 8 );
