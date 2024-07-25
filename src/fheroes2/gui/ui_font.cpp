@@ -5948,6 +5948,13 @@ namespace fheroes2
         icnVsSprite[13].setPosition( icnVsSprite[13].x(), icnVsSprite[13].y() + 1 );
         updateNormalFontLetterShadow( icnVsSprite[13] );
 
+        // Add the '\' character.
+        icnVsSprite[60].resize( 8, 14 );
+        icnVsSprite[60].reset();
+        fheroes2::Blit( icnVsSprite[15], 1, 0, icnVsSprite[60], 1, 0, 7, 12, true );
+        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
+        updateNormalFontLetterShadow( icnVsSprite[60] );
+
         // Proper lowercase k.
         fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
         fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
