@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 04:38+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4539,6 +4539,26 @@ msgid "Run out of time."
 msgstr "Ukončiť prácu v editore máp."
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " aliancia"
+
+#, fuzzy
 msgid "Special Loss Condition"
 msgstr "Podmienka prehry"
 
@@ -4552,6 +4572,14 @@ msgstr "Podmienka výhry"
 
 msgid "Allow this condition also for AI"
 msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " aliancia"
 
 #, fuzzy
 msgid "Gold:"
@@ -4571,6 +4599,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""

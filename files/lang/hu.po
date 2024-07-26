@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 04:38+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4421,6 +4421,26 @@ msgstr "Arany összegyűjtése."
 msgid "Run out of time."
 msgstr "Kifutás az időből."
 
+#, fuzzy
+msgid "alliance|1st"
+msgstr " szövetség"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " szövetség"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " szövetség"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " szövetség"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " szövetség"
+
 msgid "Special Loss Condition"
 msgstr "Speciális vesztési feltétel"
 
@@ -4432,6 +4452,14 @@ msgstr "Normál győzelmi feltételek engedélyezése"
 
 msgid "Allow this condition also for AI"
 msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " szövetség"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " szövetség"
 
 msgid "Gold:"
 msgstr "Arany:"
@@ -4450,6 +4478,17 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Kattints az esemény üzenetének megváltoztatásához."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény %{color} emberi "
+"játékos számára ki fog váltódni."
 
 msgid "Days:"
 msgstr "Napok:"

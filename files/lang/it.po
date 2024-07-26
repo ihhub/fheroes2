@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 04:38+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4363,6 +4363,22 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr "Ballista"
+
+msgid "alliance|2nd"
+msgstr ""
+
+msgid "alliance|3rd"
+msgstr ""
+
+msgid "alliance|4th"
+msgstr ""
+
+msgid "alliance|5th"
+msgstr ""
+
+#, fuzzy
 msgid "Special Loss Condition"
 msgstr "Condizione Sconfitta"
 
@@ -4375,6 +4391,13 @@ msgid "Allow standard victory conditions"
 msgstr "Condizione Vittoria"
 
 msgid "Allow this condition also for AI"
+msgstr ""
+
+msgid "Set alliances:"
+msgstr ""
+
+#
+msgid "{%number} alliance: "
 msgstr ""
 
 #, fuzzy
@@ -4394,6 +4417,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Clicca per salvare la partita in corso."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""
