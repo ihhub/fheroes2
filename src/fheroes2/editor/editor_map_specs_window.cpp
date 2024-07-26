@@ -490,19 +490,19 @@ namespace
     }
 
     // Returns the order text of the alliance: 0 will be "1st" and so on.
-    const char * getAllianceNumberText( const size_t index )
+    const char * getAllianceOrderText( const size_t index )
     {
         switch ( index ) {
         case 0:
-            return _( "1st" );
+            return _( "alliance|1st" );
         case 1:
-            return _( "2nd" );
+            return _( "alliance|2nd" );
         case 2:
-            return _( "3rd" );
+            return _( "alliance|3rd" );
         case 3:
-            return _( "4th" );
+            return _( "alliance|4th" );
         case 4:
-            return _( "5th" );
+            return _( "alliance|5th" );
         default:
             // The engine supports up to 6 players so there can be a maximum of 5 alliances: one with 2 players and four with 1 player.
             assert( 0 );
@@ -556,6 +556,7 @@ namespace
 
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
+        ~DropBoxList() override = default;
 
         explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const int dropBoxIcn )
             : Interface::ListBox<uint8_t>( pt )
@@ -759,15 +760,12 @@ namespace
             case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
                 // As of now only 2 alliances are supported.
                 // TODO: Update this logic for more than 2 alliances.
-                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0 ) {
-                    const int playersCount = Color::Count( mapFormat.availablePlayerColors );
-                    const int alliance1Count = Color::Count( mapFormat.alliances[0] );
-                    const int alliance2Count = Color::Count( mapFormat.alliances[1] );
 
-                    // Use the alliances saved in the mapFormat only if they are correct.
-                    if ( playersCount != alliance1Count && playersCount != alliance2Count && alliance1Count != 0 && alliance2Count != 0 ) {
-                        _alliances = mapFormat.alliances;
-                    }
+                // Use the alliances saved in the mapFormat only if they are correct.
+                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0
+                     && mapFormat.availablePlayerColors == ( mapFormat.alliances[0] | mapFormat.alliances[1] ) && mapFormat.alliances[0] != 0
+                     && mapFormat.alliances[1] != 0 ) {
+                    _alliances = mapFormat.alliances;
                 }
 
                 break;
@@ -785,7 +783,7 @@ namespace
                 break;
             }
 
-            if ( _alliances.size() < 2 ) {
+            if ( _alliances.size() != 2 ) {
                 // Fill in the default alliances: the first human player against all others.
                 _alliances.clear();
 
@@ -915,11 +913,7 @@ namespace
 
                 return;
             case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
-                if ( mapFormat.alliances.size() != 2 ) {
-                    mapFormat.alliances.resize( 2 );
-                }
-
-                std::copy( _alliances.begin(), _alliances.end(), mapFormat.alliances.begin() );
+                mapFormat.alliances = _alliances;
 
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
@@ -1127,7 +1121,7 @@ namespace
 
                     for ( size_t i = 0; i < _alliances.size(); ++i ) {
                         std::string allianceText = _( "{%number} alliance: " );
-                        StringReplace( allianceText, "{%number}", getAllianceNumberText( i ) );
+                        StringReplace( allianceText, "{%number}", getAllianceOrderText( i ) );
                         text.set( std::move( allianceText ), fheroes2::FontType::normalWhite() );
 
                         const int32_t textWidth = text.width() + 5;
@@ -1376,9 +1370,9 @@ namespace
 
                             const std::string colorString = Color::String( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
                             StringReplace( header, "%{color}", colorString );
-                            StringReplace( header, "%{alliance}", getAllianceNumberText( allianceNumber ) );
+                            StringReplace( header, "%{alliance}", getAllianceOrderText( allianceNumber ) );
                             StringReplace( messageText, "%{color}", colorString );
-                            StringReplace( messageText, "%{alliance}", getAllianceNumberText( allianceNumber ) );
+                            StringReplace( messageText, "%{alliance}", getAllianceOrderText( allianceNumber ) );
 
                             fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
 
@@ -1422,7 +1416,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
-        uint8_t _availableColors{ Color::NONE };
+        const uint8_t _availableColors{ Color::NONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
