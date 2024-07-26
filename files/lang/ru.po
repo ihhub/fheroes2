@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 04:38+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2024-07-14 13:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4440,6 +4440,26 @@ msgstr "Накопить золото."
 msgid "Run out of time."
 msgstr "Не успеть вовремя."
 
+#, fuzzy
+msgid "alliance|1st"
+msgstr " союз"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " союз"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " союз"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " союз"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " союз"
+
 msgid "Special Loss Condition"
 msgstr "Особое условие поражения"
 
@@ -4451,6 +4471,14 @@ msgstr "Разрешить обычную победу"
 
 msgid "Allow this condition also for AI"
 msgstr "Применять условие и к ИИ"
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " союз"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " союз"
 
 msgid "Gold:"
 msgstr "Золото:"
@@ -4470,6 +4498,17 @@ msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr ""
 "Нажмите, чтобы сменить героя, которого необходимо победить для достижения "
 "победы."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+"Если этот флажок установлен, то это событие произойдёт для игрока-человека, "
+"если его цвет %{color}."
 
 msgid "Days:"
 msgstr "Дней:"
