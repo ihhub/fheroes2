@@ -504,7 +504,7 @@ namespace
         case 4:
             return _( "5th" );
         default:
-            // The engine supports up to 6 players so there might be maximum 5 alliances: one with 2 players and four with 1 player.
+            // The engine supports up to 6 players so there can be a maximum of 5 alliances: one with 2 players and four with 1 player.
             assert( 0 );
         }
 
@@ -764,7 +764,7 @@ namespace
                     const int alliance1Count = Color::Count( mapFormat.alliances[0] );
                     const int alliance2Count = Color::Count( mapFormat.alliances[1] );
 
-                    // Use the saved in mapFormat alliances only if they are correct.
+                    // Use the alliances saved in the mapFormat only if they are correct.
                     if ( playersCount != alliance1Count && playersCount != alliance2Count && alliance1Count != 0 && alliance2Count != 0 ) {
                         _alliances = mapFormat.alliances;
                     }
@@ -1142,7 +1142,7 @@ namespace
                     }
                 }
 
-                // The checkboxes' marks render is handled in processEvents().
+                // The mark rendering of the  checkboxes is handled in processEvents().
 
                 break;
             }
@@ -1352,7 +1352,7 @@ namespace
                         if ( le.MouseClickLeft( checkboxRect ) ) {
                             const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
 
-                            // There can be maximum (active_players - 1) in one alliance to have at least one player in the other alliance.
+                            // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
                             if ( ( ( _alliances[allianceNumber] & color ) == 0 )
                                  && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
                                 for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
@@ -1371,7 +1371,7 @@ namespace
                         }
 
                         if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
-                            std::string header = _( "Select %{color} player to be in the %{alliance} alliance" );
+                            std::string header = _( "Put %{color} player in the %{alliance} alliance" );
                             std::string messageText = _( "If this checkbox is checked, the %{color} player will be in the %{alliance} alliance." );
 
                             const std::string colorString = Color::String( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
@@ -1945,7 +1945,7 @@ namespace
                                   conditions.end() );
             }
 
-            // Alliances can be formed for minimum three players: two on the one side and one on the other.
+            // Alliances can be formed for a minimum of three players: two on the one side and one on the other.
             if ( Color::Count( mapFormat.availablePlayerColors ) < 3 ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE; } ),

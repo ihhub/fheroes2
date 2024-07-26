@@ -538,7 +538,7 @@ namespace Maps
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
                     uint8_t & allianceColors = *iter;
 
-                    // There should be only available players in the alliances.
+                    // Only available players should be in the alliances.
                     allianceColors &= map.availablePlayerColors;
 
                     for ( size_t i = 0; i < mainColors; ++i ) {
