@@ -1547,22 +1547,20 @@ void Maps::Tiles::updateObjectType()
 
     // And sometimes even in the bottom layer addons.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
-    if ( objectType == MP2::OBJ_NONE ) {
-        for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
-            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
-            if ( type == MP2::OBJ_NONE ) {
-                continue;
-            }
+    for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
+        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+        if ( type == MP2::OBJ_NONE ) {
+            continue;
+        }
 
-            if ( MP2::isOffGameActionObject( type ) ) {
-                // Set object type only when this is an interactive object type to make sure that interaction can be done.
-                SetObject( type );
-                return;
-            }
+        if ( MP2::isOffGameActionObject( type ) ) {
+            // Set object type only when this is an interactive object type to make sure that interaction can be done.
+            SetObject( type );
+            return;
+        }
 
-            if ( objectType == MP2::OBJ_NONE ) {
-                objectType = type;
-            }
+        if ( objectType == MP2::OBJ_NONE ) {
+            objectType = type;
         }
     }
 
