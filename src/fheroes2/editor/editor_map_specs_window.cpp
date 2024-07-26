@@ -82,9 +82,9 @@ namespace
 
     const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
 
-    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
-                                                           Maps::FileInfo::VICTORY_KILL_HERO, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
-                                                           Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
+    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE,   Maps::FileInfo::VICTORY_CAPTURE_TOWN,
+                                                           Maps::FileInfo::VICTORY_KILL_HERO,         Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
+                                                           Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO,
                                                         Maps::FileInfo::LOSS_OUT_OF_TIME };
 
@@ -115,13 +115,13 @@ namespace
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
 
-        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
-        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
-        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
+        fheroes2::Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        fheroes2::Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        fheroes2::Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         if ( heroPortait > 0 ) {
             const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::MINIPORT, heroPortait - 1 );
-            Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
+            fheroes2::Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
         }
         else {
             // This is a hero with a random race dependent portrait. Render the default race portrait.
@@ -172,14 +172,14 @@ namespace
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
 
-        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
-        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
-        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
+        fheroes2::Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        fheroes2::Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        fheroes2::Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         const uint32_t icnIndex = fheroes2::getCastleIcnIndex( race, !isTown );
 
         const fheroes2::Sprite & castleImage = fheroes2::AGG::GetICN( townIcnId, icnIndex );
-        Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
+        fheroes2::Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
 
         return castleIcon;
     }
@@ -442,7 +442,7 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
     }
 
     uint32_t getVictoryIcnIndex( const uint8_t victoryConditionType )
@@ -486,7 +486,29 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
+    }
+
+    // Returns the order text of the alliance: 0 will be "1st" and so on.
+    const char * getAllianceOrderText( const size_t index )
+    {
+        switch ( index ) {
+        case 0:
+            return _( "alliance|1st" );
+        case 1:
+            return _( "alliance|2nd" );
+        case 2:
+            return _( "alliance|3rd" );
+        case 3:
+            return _( "alliance|4th" );
+        case 4:
+            return _( "alliance|5th" );
+        default:
+            // The engine supports up to 6 players so there can be a maximum of 5 alliances: one with 2 players and four with 1 player.
+            assert( 0 );
+        }
+
+        return "Unknown";
     }
 
     uint32_t getLossIcnIndex( const uint8_t lossConditionType )
@@ -534,6 +556,7 @@ namespace
 
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
+        ~DropBoxList() override = default;
 
         explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const int dropBoxIcn )
             : Interface::ListBox<uint8_t>( pt )
@@ -582,13 +605,6 @@ namespace
             _background = std::make_unique<fheroes2::ImageRestorer>( display, pt.x + 2, pt.y + 2, listWidth - 3, listHeight - 4 );
 
             SetAreaItems( { pt.x + 2, pt.y + 5, listWidth - 4, listHeight - 6 } );
-        }
-
-        ~DropBoxList() override
-        {
-            // After closing the drop list we also need to render the restored background.
-            _restorer->restore();
-            fheroes2::Display::instance().render( _restorer->rect() );
         }
 
         void RedrawItem( const uint8_t & condition, int32_t dstX, int32_t dstY, bool current ) override
@@ -664,6 +680,7 @@ namespace
     public:
         VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.victoryConditionType )
+            , _availableColors( mapFormat.availablePlayerColors )
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
             , _isEvilInterface( isEvilInterface )
@@ -740,6 +757,18 @@ namespace
                 }
 
                 break;
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
+                // As of now only 2 alliances are supported.
+                // TODO: Update this logic for more than 2 alliances.
+
+                // Use the alliances saved in the mapFormat only if they are correct.
+                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0
+                     && mapFormat.availablePlayerColors == ( mapFormat.alliances[0] | mapFormat.alliances[1] ) && mapFormat.alliances[0] != 0
+                     && mapFormat.alliances[1] != 0 ) {
+                    _alliances = mapFormat.alliances;
+                }
+
+                break;
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     _goldAccumulationValue.setValue( static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] ) );
@@ -752,6 +781,15 @@ namespace
                 assert( 0 );
 
                 break;
+            }
+
+            if ( _alliances.size() != 2 ) {
+                // Fill in the default alliances: the first human player against all others.
+                _alliances.clear();
+
+                const uint8_t firstColor = static_cast<uint8_t>( Color::GetFirst( mapFormat.humanPlayerColors ) );
+                _alliances.push_back( firstColor );
+                _alliances.push_back( mapFormat.availablePlayerColors ^ firstColor );
             }
         }
 
@@ -872,6 +910,13 @@ namespace
                 // In original game's map format '0' stands for any Ultimate Artifact. Set it also to '0' for the compatibility.
                 mapFormat.victoryConditionMetadata[0] = ( _victoryArtifactId == ultimateArtifactId ) ? 0 : _victoryArtifactId;
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
+
+                return;
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
+                mapFormat.alliances = _alliances;
+
+                mapFormat.allowNormalVictory = false;
+                mapFormat.isVictoryConditionApplicableForAI = false;
 
                 return;
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
@@ -1059,6 +1104,42 @@ namespace
 
                 break;
             }
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE: {
+                if ( renderEverything ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    int32_t offsetY = roi.y + 2;
+
+                    fheroes2::Text text( _( "Set alliances:" ), fheroes2::FontType::normalWhite() );
+                    text.draw( roi.x + ( roi.width - text.width() ) / 2, offsetY, output );
+
+                    _alliancesCheckboxes.clear();
+
+                    offsetY += text.height();
+                    const int32_t stepY = 32;
+                    const int32_t checkboxesOffsetX = roi.x + ( roi.width - Color::Count( _availableColors ) * 32 + 12 ) / 2;
+
+                    for ( size_t i = 0; i < _alliances.size(); ++i ) {
+                        std::string allianceText = _( "{%number} alliance: " );
+                        StringReplace( allianceText, "{%number}", getAllianceOrderText( i ) );
+                        text.set( std::move( allianceText ), fheroes2::FontType::normalWhite() );
+
+                        const int32_t textWidth = text.width() + 5;
+                        const int32_t posX = checkboxesOffsetX - textWidth / 2;
+                        text.draw( posX, offsetY + 4, output );
+
+                        std::vector<std::unique_ptr<Editor::Checkbox>> allianceCheckboxes;
+                        createColorCheckboxes( allianceCheckboxes, _availableColors, _alliances[i], posX + textWidth, offsetY, output );
+                        _alliancesCheckboxes.push_back( std::move( allianceCheckboxes ) );
+
+                        offsetY += stepY;
+                    }
+                }
+
+                // The mark rendering of the  checkboxes is handled in processEvents().
+
+                break;
+            }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( renderEverything ) {
                     const fheroes2::Size valueSectionUiSize = fheroes2::ValueSelectionDialogElement::getArea();
@@ -1147,9 +1228,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int townIndex = listbox.GetCurrent();
 
                         if ( townIndex != initiallySelectedTownIndex ) {
@@ -1209,9 +1288,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int heroIndex = listbox.GetCurrent();
 
                         if ( heroIndex != initiallySelectedHeroIndex ) {
@@ -1258,6 +1335,54 @@ namespace
 
                 break;
             }
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE: {
+                LocalEvent & le = LocalEvent::Get();
+
+                for ( size_t allianceNumber = 0; allianceNumber < _alliancesCheckboxes.size(); ++allianceNumber ) {
+                    for ( size_t playerNumber = 0; playerNumber < _alliancesCheckboxes[allianceNumber].size(); ++playerNumber ) {
+                        const fheroes2::Rect & checkboxRect = _alliancesCheckboxes[allianceNumber][playerNumber]->getRect();
+
+                        // Allow to select player only if it is not already selected.
+                        if ( le.MouseClickLeft( checkboxRect ) ) {
+                            const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+
+                            // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
+                            if ( ( ( _alliances[allianceNumber] & color ) == 0 )
+                                 && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
+                                for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
+                                    if ( _alliancesCheckboxes[i][playerNumber]->toggle() ) {
+                                        _alliances[i] |= color;
+                                    }
+                                    else {
+                                        _alliances[i] ^= color;
+                                    }
+                                }
+
+                                return true;
+                            }
+
+                            return false;
+                        }
+
+                        if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
+                            std::string header = _( "Put %{color} player in the %{alliance} alliance" );
+                            std::string messageText = _( "If this checkbox is checked, the %{color} player will be in the %{alliance} alliance." );
+
+                            const std::string colorString = Color::String( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+                            StringReplace( header, "%{color}", colorString );
+                            StringReplace( header, "%{alliance}", getAllianceOrderText( allianceNumber ) );
+                            StringReplace( messageText, "%{color}", colorString );
+                            StringReplace( messageText, "%{alliance}", getAllianceOrderText( allianceNumber ) );
+
+                            fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+            }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( _goldAccumulationValue.processEvents() ) {
                     return true;
@@ -1291,6 +1416,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
+        const uint8_t _availableColors{ Color::NONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
@@ -1299,6 +1425,8 @@ namespace
         // Town or hero loss metadata include tile ID and color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
+        std::vector<uint8_t> _alliances;
+        std::vector<std::vector<std::unique_ptr<Editor::Checkbox>>> _alliancesCheckboxes;
         std::vector<TownInfo> _mapTownInfos;
         std::vector<HeroInfo> _mapHeroInfos;
 
@@ -1810,6 +1938,13 @@ namespace
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ),
                                   conditions.end() );
             }
+
+            // Alliances can be formed for a minimum of three players: two on the one side and one on the other.
+            if ( Color::Count( mapFormat.availablePlayerColors ) < 3 ) {
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE; } ),
+                                  conditions.end() );
+            }
         }
 
         DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, dropBoxIcn );
@@ -2218,6 +2353,10 @@ namespace Editor
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
                     display.render( fheroes2::getBoundaryRect( victoryTextRoi, victoryConditionUIRoi ) );
                 }
+                else {
+                    // Render the restored area after closing the drop list.
+                    display.render( victoryConditionUIRoi );
+                }
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
                 const uint8_t result
@@ -2233,6 +2372,10 @@ namespace Editor
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                     redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
                     display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
+                }
+                else {
+                    // Render the restored area after closing the drop list.
+                    display.render( lossConditionUIRoi );
                 }
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
