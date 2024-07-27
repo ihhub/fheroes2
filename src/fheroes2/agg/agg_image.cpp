@@ -578,6 +578,35 @@ namespace
         fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
         fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY );
     }
+
+    void removeColorCycling( fheroes2::Image & image )
+    {
+        if ( image.empty() ) {
+            return;
+        }
+
+        uint8_t * data = image.image();
+        const uint8_t * imageEnd = data + static_cast<size_t>( image.width() ) * image.height();
+
+        for ( ; data < imageEnd; ++data ) {
+            if ( *data < 214 ) {
+                continue;
+            }
+
+            if ( *data < 218 ) {
+                *data = 188;
+            }
+            else if ( *data < 222 ) {
+                *data = 118;
+            }
+            else if ( *data < 231 ) {
+                continue;
+            }
+            else if ( *data < 241 ) {
+                *data = 69;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -3285,20 +3314,20 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     // Fix the cycling colors in original editor main menu background.
-                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    removeColorCycling( _icnVsSprite[id].front() );
                 }
                 return true;
             case ICN::MINIHERO:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 42 ) {
                     // Fix cycling colors on the Green heroes' flag for Knight, Sorceress and Warlock.
-                    ApplyPalette( _icnVsSprite[id][7], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
-                    ApplyPalette( _icnVsSprite[id][9], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
-                    ApplyPalette( _icnVsSprite[id][10], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    removeColorCycling( _icnVsSprite[id][7] );
+                    removeColorCycling( _icnVsSprite[id][9] );
+                    removeColorCycling( _icnVsSprite[id][10] );
 
                     // Fix cycling colors on the Yellow heroes' flag.
                     for ( size_t i = 21; i < 28; ++i ) {
-                        ApplyPalette( _icnVsSprite[id][i], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                        removeColorCycling( _icnVsSprite[id][i] );
                     }
 
                     // Fix Blue Random hero flag.
@@ -3492,11 +3521,7 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 22 ) {
                     // Cliff nest image has a glowing pixel.
-                    Sprite & original = _icnVsSprite[id][22];
-                    if ( original.width() == 135 && original.height() == 57 ) {
-                        original._disableTransformLayer();
-                        original.image()[136] = 54;
-                    }
+                    removeColorCycling( _icnVsSprite[id][22] );
                 }
                 if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
@@ -3996,9 +4021,9 @@ namespace fheroes2
             }
             case ICN::TWNWUP_5: {
                 LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
+                if ( !_icnVsSprite[id].empty() ) {
                     // Fix glowing red pixel.
-                    Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
+                    removeColorCycling( _icnVsSprite[id].front() );
                 }
 
                 return true;
