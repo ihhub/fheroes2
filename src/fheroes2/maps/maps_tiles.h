@@ -354,11 +354,6 @@ namespace Maps
             _fogDirection = fogDirection;
         }
 
-        void swap( TilesAddon & addon ) noexcept
-        {
-            std::swap( addon, _mainAddon );
-        }
-
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixMP2MapTileObjectType( Tiles & tile );
 
