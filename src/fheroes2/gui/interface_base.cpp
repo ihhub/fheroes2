@@ -25,6 +25,18 @@
 
 namespace Interface
 {
+    void BaseInterface::renderWithFadeInOrPlanRender( const uint32_t redrawMask )
+    {
+        if ( Game::validateDisplayFadeIn() ) {
+            redraw( redrawMask );
+
+            fheroes2::fadeInDisplay();
+        }
+        else {
+            setRedraw( redrawMask );
+        }
+    }
+
     void Interface::BaseInterface::validateFadeInAndRender()
     {
         if ( Game::validateDisplayFadeIn() ) {
@@ -36,5 +48,4 @@ namespace Interface
             fheroes2::Display::instance().render();
         }
     }
-
 }

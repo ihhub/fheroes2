@@ -85,7 +85,6 @@
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
-#include "ui_tool.h"
 #include "visit.h"
 #include "world.h"
 
@@ -244,20 +243,6 @@ namespace
         // Update radar in the place of the removed object.
         I.getRadar().SetRenderArea( { Maps::GetPoint( tile.GetIndex() ), { 1, 1 } } );
         I.setRedraw( Interface::REDRAW_RADAR );
-    }
-
-    // Call this function after the battle or other dialog than can update hero icon (movement points and/or spell points)
-    // and there is some animation (enemy fade-out) to perform before returning to the standard game area rendering.
-    void redrawHeroIcons()
-    {
-        if ( Game::validateDisplayFadeIn() ) {
-            Interface::AdventureMap::Get().redraw( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
-
-            fheroes2::fadeInDisplay();
-        }
-        else {
-            Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
-        }
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, std::string msg, const Troop & troop, const bool remove )
@@ -422,7 +407,7 @@ namespace
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             // Hero' spell points could have changed. Update heroes icons.
-            redrawHeroIcons();
+            I.renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -543,7 +528,7 @@ namespace
             castle->ActionAfterBattle( res.AttackerWins() );
 
             // Hero' spell points could have changed. Update heroes icons.
-            redrawHeroIcons();
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_ICONS | Interface::REDRAW_BUTTONS );
 
             // The defender was defeated
             if ( !res.DefenderWins() && defender ) {
@@ -618,7 +603,7 @@ namespace
         const Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
 
         // Hero' spell points could have changed. Update heroes icons.
-        redrawHeroIcons();
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
         // TODO: make fading animation of both heroes together.
 
@@ -1150,7 +1135,7 @@ namespace
                 const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
                 // Hero' spell points could have changed. Update heroes icons.
-                redrawHeroIcons();
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -1369,7 +1354,7 @@ namespace
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             // Hero' spell points could have changed. Update heroes icons.
-            redrawHeroIcons();
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -1713,7 +1698,7 @@ namespace
                 const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
                 // Hero' spell points could have changed. Update heroes icons.
-                redrawHeroIcons();
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -2109,7 +2094,7 @@ namespace
                 const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
                 // Hero' spell points could have changed. Update heroes icons.
-                redrawHeroIcons();
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -2162,7 +2147,7 @@ namespace
             const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
             // Hero' spell points could have changed. Update heroes icons.
-            redrawHeroIcons();
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -2446,7 +2431,7 @@ namespace
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             // Hero' spell points could have changed. Update heroes icons.
-            redrawHeroIcons();
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -3082,7 +3067,7 @@ namespace
                     const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
                     // Hero' spell points could have changed. Update heroes icons.
-                    redrawHeroIcons();
+                    Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );

@@ -71,7 +71,6 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "ui_tool.h"
 #include "visit.h"
 #include "world.h"
 
@@ -329,20 +328,6 @@ namespace
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }
 
-    // Call this function after the battle with human controlled hero or castle to update icons on the interface.
-    // This function also runs fade-in after the battle if it is planned.
-    void redrawPlayerIcons()
-    {
-        if ( Game::validateDisplayFadeIn() ) {
-            Interface::AdventureMap::Get().redraw( Interface::REDRAW_ICONS );
-
-            fheroes2::fadeInDisplay();
-        }
-        else {
-            Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_ICONS );
-        }
-    }
-
     void AIToCastle( Heroes & hero, const int32_t dstIndex )
     {
         Castle * castle = world.getCastleEntrance( Maps::GetPoint( dstIndex ) );
@@ -415,7 +400,7 @@ namespace
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
             // Human controlled castle or hero in this castle was in the battle. Update icons.
-            redrawPlayerIcons();
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_ICONS );
 
             castle->ActionAfterBattle( res.AttackerWins() );
 
@@ -507,7 +492,7 @@ namespace
         const Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
 
         // Human controlled hero could be in the battle. Update icons.
-        redrawPlayerIcons();
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES );
 
         // The defender was defeated
         if ( !res.DefenderWins() ) {
@@ -515,7 +500,7 @@ namespace
 
             if ( isDefenderHuman ) {
                 // Update interface heroes and castles icons after the defeat.
-                Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_ICONS );
+                Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_HEROES );
             }
         }
 
