@@ -345,7 +345,7 @@ namespace
             }
         }
 
-        bool isvalid() const
+        bool isValid() const
         {
             return !tracks.empty();
         }
@@ -418,24 +418,7 @@ namespace
     {
         uint32_t trackTempo = 0;
 
-        size_t size() const
-        {
-            return std::accumulate( begin(), end(), static_cast<size_t>( 0 ), []( const size_t total, const MidiChunk & chunk ) { return total + chunk.size(); } );
-        }
-
         MidiEvents() = default;
-
-        bool checkDataPresence( const uint8_t * ptr, const uint8_t * end, const int32_t requiredLength )
-        {
-            assert( requiredLength > 0 );
-            if ( end - ptr < requiredLength ) {
-                emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                ERROR_LOG( "MIDI track: the data is truncated." )
-                return false;
-            }
-
-            return true;
-        }
 
         explicit MidiEvents( const XMITrack & t )
         {
@@ -588,6 +571,23 @@ namespace
                 delta = chunk._time;
             }
         }
+
+        bool checkDataPresence( const uint8_t * ptr, const uint8_t * end, const int32_t requiredLength )
+        {
+            assert( requiredLength > 0 );
+            if ( end - ptr < requiredLength ) {
+                emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
+                ERROR_LOG( "MIDI track: the data is truncated." )
+                return false;
+            }
+
+            return true;
+        }
+
+        size_t size() const
+        {
+            return std::accumulate( begin(), end(), static_cast<size_t>( 0 ), []( const size_t total, const MidiChunk & chunk ) { return total + chunk.size(); } );
+        }
     };
 
     StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
@@ -621,11 +621,6 @@ namespace
 
     struct MidTracks : std::list<MidTrack>
     {
-        size_t count() const
-        {
-            return std::list<MidTrack>::size();
-        }
-
         MidTracks() = default;
 
         explicit MidTracks( const XMITracks & tracks )
@@ -633,6 +628,11 @@ namespace
             for ( const XMITrack & track : tracks ) {
                 emplace_back( track );
             }
+        }
+
+        size_t count() const
+        {
+            return std::list<MidTrack>::size();
         }
     };
 
@@ -680,13 +680,15 @@ namespace
 
 std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
 {
-    XMIData xmi( buf );
+    const XMIData xmi( buf );
+    if ( !xmi.isValid() ) {
+        return {};
+    }
+
     StreamBuf sb( 16 * 4096 );
 
-    if ( xmi.isvalid() ) {
-        MidData mid( xmi.tracks );
-        sb << mid;
-    }
+    const MidData mid( xmi.tracks );
+    sb << mid;
 
     return std::vector<uint8_t>( sb.data(), sb.data() + sb.size() );
 }
