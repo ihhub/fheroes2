@@ -140,7 +140,7 @@ public:
 
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
-                         const std::function<void( const std::string & )> * statusCallback ) const;
+                         const std::function<void( const std::string & )> & statusCallback ) const;
 
     bool HaveSpellBook() const
     {

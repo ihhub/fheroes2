@@ -1,3 +1,120 @@
+version 1.1.1 (13 July 2024)
+- update the Russian translation
+- properly set tile information upon placing a new object
+- update the Hungarian translation
+- implement special victory and loss conditions for heroes and towns
+- add Evil theme for ADD, EDIT and DELETE buttons in the Editor
+- fix object UID restoration after Redo operation in the Editor
+- add support for double click within Sphinx, Daily Events and Rumors lists
+- show date description for daily events
+- allow to disable any building in castles and towns in the Editor
+- add Find Artifact victory condition in Editor
+- add popup messages for right clicking on special map conditions
+- restrict obelisk placement to 48 objects
+- update logic related to human player selection for maps
+- fix crash when entering an empty line in text boxes
+- fix town placement over action objects
+- allow normal victory for "Accumulate gold" condition
+- fix the display of identical artifacts captured in battle
+- Magic Book window: show the maximum number of spell points
+- add "Out of Time" and "Accumulate Gold" map conditions within the Editor
+- add support of editing daily events within the Editor
+- show pressed monster button on Editor panel while clicking on it
+- add hotkey for passability within the Editor
+- add color names to Traveller's Tent and Barrier objects within object selection window
+- reduce castle area for mouse right clicking inside Editor's castle selection window
+- update map type popup message by right clicking to include Resurrection maps
+- add a new variation of Cave object on the Adventure Map
+- change hero selection dialog in the Editor
+- add an ability in the Editor to edit Rumors for maps
+- bring the logic of the Summon Boat spell for the human player in line with its logic of operation in the case of AI
+- AI: fix the assertion failure when visiting an object that is impossible to stand on
+- fix castle and hero radar rendering in the Editor
+- fix Magic Garden being shown without animation within the Editor
+- speed up save file loading and saving operations
+- add '?' symbol to Virtual Keyboard
+- properly check the Price of Loyalty resources in order to enable the Editor
+- move an existing object in front while trying to place an exact one on the same tile in the Editor
+- generate a random hero portrait for the Editor
+- fix crash when a hero is killed defending a castle
+- differentiate Random Castle and Town names in the Editor
+- update the Swedish translation
+- fix invalid logic for setting random artifacts
+- put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites
+- remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels
+- limit the minimum slider length to 15 pixels
+- update the Portuguese translation
+- fix hero editing assertion
+- update the Ukrainian translation
+- fix random artifact types
+- implement the file manager for FH2M maps in Android
+- force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts
+- fix Editor instruments' buttons rendering
+- AI: properly handle the Spell Book artifacts on the Adventure Map
+- add missing checks for Miscellaneous objects in the Editor
+- add missing Sphinx part
+- fix text editing crash
+- fix crash when using quick switch to hero when castle is current object
+- fix the evaluation of the DOUBLE_SHOOTING and DOUBLE_MELEE_ATTACK abilities
+
+version 1.1.0 (22 May 2024)
+- properly connect Streams and Deltas while placing Streams
+- do not allow placing Ultimate Artifact on non-diggable terrain in Editor
+- use golden color to highlight cells that are sometimes possible to edit
+- set the last edited map file as default for the new Standard game
+- allow picking-up the Magic Book artifact from the Adventure Map
+- show a warning message for no modification of normal artifacts
+- show a warning message that streams and roads cannot be placed on water
+- fix Editor interface items positions when Hide Interface mode is enabled in the engine
+- speed up object erasure in the Editor
+- allow only English to be used for text input within the Editor
+- add a general text for action objects with no metadata
+- display object coordinates in the right mouse click popup window
+- implement Event details window in the Editor
+- add generated buttons for map file dialog
+- make Editor panel buttons change good/evil interface
+- fix std::string serialization
+- implement base functions of Map Specifications dialog for the Editor
+- update the Swedish translation
+- add UI window to edit Sphinx properties
+- change a message while trying to get another Magic Book
+- fix the flickering of the map filter buttons in the map selection dialog
+- add an extra space between UI elements in the monster separation window
+- implement simple Save Map dialog for the Editor
+- properly handle objects while changing terrain in the Editor
+- properly connect roads and castles in the Editor
+- add a multi-line text editing feature to edit Sign and Bottle texts in the Editor
+- fix software cursor show delay
+- allow Events to be placed on Water within the Editor
+- remove Editor's beta flag
+- add Editor icon to the Main Menu
+- add a window to enter Random Ultimate Artifact radius
+- describe all Adventure Map objects used in the game
+- add relaxed requirements for object placement in the Editor
+- add a shortcut to go to the Main Menu from the Editor
+- allow river deltas to be placed anywhere in the Editor
+- implement Castle/Town details dialog in the Editor
+- add logic to handle victory and loss conditions for maps made by the Editor
+- fix typo in Hot Seat maximum players value
+- update the Russian translation
+- update the Portuguese translation
+- add a window to change Monster properties in the Editor
+- add the jailed hero details dialog in the Editor
+- implement hero details dialog in the Editor
+- do not add scaled resolutions for PS Vita
+- avoid extra I/O operations while changing game's settings
+- change the text in the monster separation window
+- introduce new object types: Swampy Lake and Frozen Lake
+- fix wrong name for Neutral race troops
+- update the Romanian translation
+- update the Ukrainian translation
+- use the AI pathfinder to assess the threat of enemy heroes instead of relying on the region database
+- update the Hungarian translation
+- fix hero battle info text X offset
+- make the default left and right hotkeys select skills in the level up dialog
+- add Editor related options
+- update the Spanish translation
+
 version 1.0.13 (16 March 2024)
 - fix Sphinx title offset
 - add a window telling about demo version being used

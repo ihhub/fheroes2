@@ -25,7 +25,9 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <map>
 #include <memory>
+#include <set>
 #include <utility>
 
 #include "artifact.h"
@@ -408,8 +410,8 @@ namespace
         // Desert dune.
         {
             Maps::ObjectInfo object{ MP2::OBJ_DUNE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 15U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 15U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 13U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -419,8 +421,8 @@ namespace
         // Desert mound.
         {
             Maps::ObjectInfo object{ MP2::OBJ_DUNE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 17U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 18U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 17U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 18U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 19U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -430,9 +432,9 @@ namespace
         // Desert dune.
         {
             Maps::ObjectInfo object{ MP2::OBJ_DUNE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 21U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 20U, fheroes2::Point{ -1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 22U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 21U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 20U, fheroes2::Point{ -1, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 22U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 23U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -546,7 +548,7 @@ namespace
         // Tiny rocks, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 28U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 28U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -596,8 +598,8 @@ namespace
         // Wide and low mossy rock, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MOSSY_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 139U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOSSY_ROCK, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 138U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOSSY_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 139U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOSSY_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 138U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOSSY_ROCK, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1436,14 +1438,14 @@ namespace
         // Medium water lake, grass terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 71U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 65U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 66U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 67U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 68U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 69U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 70U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 72U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 71U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 65U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 66U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 67U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 68U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 69U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 70U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 72U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1451,9 +1453,9 @@ namespace
         // Small water lake, grass terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 74U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 73U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 75U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 74U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 73U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 75U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1566,7 +1568,7 @@ namespace
         // Very small flowers, grass terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FLOWERS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 137U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FLOWERS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 137U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FLOWERS, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1660,15 +1662,15 @@ namespace
         // Big frozen water lake, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FROZEN_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 87U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 81U, fheroes2::Point{ -2, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 82U, fheroes2::Point{ -1, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 83U, fheroes2::Point{ 0, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 84U, fheroes2::Point{ 1, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 85U, fheroes2::Point{ -2, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 86U, fheroes2::Point{ -1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 88U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 89U, fheroes2::Point{ 2, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 87U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 81U, fheroes2::Point{ -2, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 82U, fheroes2::Point{ -1, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 83U, fheroes2::Point{ 0, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 84U, fheroes2::Point{ 1, -1 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 85U, fheroes2::Point{ -2, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 86U, fheroes2::Point{ -1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 88U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 89U, fheroes2::Point{ 2, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1676,9 +1678,9 @@ namespace
         // Medium frozen water lake, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FROZEN_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 91U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 90U, fheroes2::Point{ -1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 92U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 91U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 90U, fheroes2::Point{ -1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 92U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1686,8 +1688,8 @@ namespace
         // Small frozen water lake, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FROZEN_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 94U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 95U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 94U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 95U, fheroes2::Point{ 1, 0 }, MP2::OBJ_FROZEN_LAKE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 93U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
@@ -1725,20 +1727,20 @@ namespace
         // Big water lake, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 96U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 88U, fheroes2::Point{ -2, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 89U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 90U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 91U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 94U, fheroes2::Point{ -2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 95U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 97U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 98U, fheroes2::Point{ 2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 101U, fheroes2::Point{ -2, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 102U, fheroes2::Point{ -1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 103U, fheroes2::Point{ 0, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 104U, fheroes2::Point{ 1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 105U, fheroes2::Point{ 2, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 96U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 88U, fheroes2::Point{ -2, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 89U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 90U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 91U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 94U, fheroes2::Point{ -2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 95U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 97U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 98U, fheroes2::Point{ 2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 101U, fheroes2::Point{ -2, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 102U, fheroes2::Point{ -1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 103U, fheroes2::Point{ 0, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 104U, fheroes2::Point{ 1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 105U, fheroes2::Point{ 2, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 87U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 92U, fheroes2::Point{ 2, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -1753,11 +1755,11 @@ namespace
         // Medium (wide) water lake, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 108U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 110U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 109U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 112U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 108U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 110U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 109U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 112U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 107U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 111U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -1769,12 +1771,12 @@ namespace
         // Medium (tall) water lake, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 119U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 115U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 116U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 118U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 122U, fheroes2::Point{ -1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 123U, fheroes2::Point{ 0, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 119U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 115U, fheroes2::Point{ -1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 116U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 118U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 122U, fheroes2::Point{ -1, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 123U, fheroes2::Point{ 0, 1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 117U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 120U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -1840,14 +1842,14 @@ namespace
         // Wide swampy water lake, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 147U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 142U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 143U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 144U, fheroes2::Point{ 2, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 145U, fheroes2::Point{ -2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 146U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 148U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 149U, fheroes2::Point{ 2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 147U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 142U, fheroes2::Point{ 0, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 143U, fheroes2::Point{ 1, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 144U, fheroes2::Point{ 2, -1 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 145U, fheroes2::Point{ -2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 146U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 148U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 149U, fheroes2::Point{ 2, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1856,9 +1858,9 @@ namespace
         for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 150U + count * 3U;
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 2U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 2U, fheroes2::Point{ 1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1866,8 +1868,8 @@ namespace
         // Small swampy water lake, swamp terrain. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_SWAMPY_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 160U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 159U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 160U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 159U, fheroes2::Point{ -1, 0 }, MP2::OBJ_SWAMPY_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1875,11 +1877,11 @@ namespace
         // Wide reed, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 181U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 179U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 180U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 182U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 183U, fheroes2::Point{ 2, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 181U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 179U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 180U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 182U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 183U, fheroes2::Point{ 2, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 178U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -1889,9 +1891,9 @@ namespace
         // Medium-wide reed, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 185U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 184U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 186U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 185U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 184U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 186U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1899,7 +1901,7 @@ namespace
         // Small reed, swamp terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 187U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 187U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1908,8 +1910,8 @@ namespace
         for ( uint32_t count = 0; count < 2; ++count ) {
             const uint32_t offset = 188U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1917,7 +1919,7 @@ namespace
         // Small rotten roots, swamp terrain. 2 variants. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 192U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 192U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1981,14 +1983,14 @@ namespace
         // Medium crater (wide), lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 2U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 3U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 4U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 5U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 2U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 3U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 4U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 5U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -1996,12 +1998,12 @@ namespace
         // Medium crater (high), lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 12U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 13U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 16U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 17U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 12U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 13U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 16U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 17U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2009,9 +2011,9 @@ namespace
         // Small lava pool, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 20U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 18U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 19U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 20U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 18U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 19U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2039,18 +2041,18 @@ namespace
         // Big lava pool, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 36U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 27U, fheroes2::Point{ -3, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 28U, fheroes2::Point{ -2, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 29U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 30U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 31U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 32U, fheroes2::Point{ 2, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 33U, fheroes2::Point{ -3, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 34U, fheroes2::Point{ -2, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 35U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 37U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 38U, fheroes2::Point{ 2, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 36U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 27U, fheroes2::Point{ -3, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 28U, fheroes2::Point{ -2, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 29U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 30U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 31U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 32U, fheroes2::Point{ 2, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 33U, fheroes2::Point{ -3, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 34U, fheroes2::Point{ -2, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 35U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 37U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 38U, fheroes2::Point{ 2, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2058,12 +2060,12 @@ namespace
         // Medium lava pool, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 43U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 39U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 40U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 41U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 42U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 44U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 43U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 39U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 40U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 41U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 42U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 44U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2071,12 +2073,12 @@ namespace
         // Medium (little lifted) lava pool, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 51U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 46U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 47U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 48U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 50U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 52U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 51U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 46U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 47U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 48U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 50U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 52U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 49U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -2086,10 +2088,10 @@ namespace
         // Small lava streams, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 56U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 53U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 54U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 55U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 56U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 53U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 54U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 55U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2097,9 +2099,9 @@ namespace
         // Small lava streams, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 57U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 58U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 57U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 58U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2107,10 +2109,10 @@ namespace
         // Small lava streams, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 63U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 60U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 62U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 63U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 60U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 62U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2118,10 +2120,10 @@ namespace
         // Medium lava streams, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 67U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 65U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 66U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 68U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 67U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 65U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 66U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 68U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 64U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -2131,11 +2133,11 @@ namespace
         // Medium lava streams, lava terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 72U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 69U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 70U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 71U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 73U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 72U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 69U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 70U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 71U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 73U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2274,9 +2276,9 @@ namespace
         // Big hole, desert terrain. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 111U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 110U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 112U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 111U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 110U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 112U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2294,8 +2296,8 @@ namespace
         for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 17U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2303,28 +2305,28 @@ namespace
         // Big water lake, dirt terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 35U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 23U, fheroes2::Point{ -4, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 24U, fheroes2::Point{ -3, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 25U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 26U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 27U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 28U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 29U, fheroes2::Point{ 2, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 30U, fheroes2::Point{ 3, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 31U, fheroes2::Point{ -4, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 32U, fheroes2::Point{ -3, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 33U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 34U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 36U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 37U, fheroes2::Point{ 2, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 38U, fheroes2::Point{ 3, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 40U, fheroes2::Point{ -3, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 41U, fheroes2::Point{ -2, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 42U, fheroes2::Point{ -1, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 43U, fheroes2::Point{ 0, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 44U, fheroes2::Point{ 1, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 45U, fheroes2::Point{ 2, 1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 35U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 23U, fheroes2::Point{ -4, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 24U, fheroes2::Point{ -3, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 25U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 26U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 27U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 28U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 29U, fheroes2::Point{ 2, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 30U, fheroes2::Point{ 3, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 31U, fheroes2::Point{ -4, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 32U, fheroes2::Point{ -3, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 33U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 34U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 36U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 37U, fheroes2::Point{ 2, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 38U, fheroes2::Point{ 3, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 40U, fheroes2::Point{ -3, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 41U, fheroes2::Point{ -2, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 42U, fheroes2::Point{ -1, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 43U, fheroes2::Point{ 0, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 44U, fheroes2::Point{ 1, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 45U, fheroes2::Point{ 2, 1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 39U, fheroes2::Point{ -4, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 46U, fheroes2::Point{ 3, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -2335,14 +2337,14 @@ namespace
         // Medium water lake, dirt terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 55U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 48U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 49U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 50U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 51U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 53U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 54U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 56U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 55U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 48U, fheroes2::Point{ -2, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 49U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 50U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 51U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 53U, fheroes2::Point{ -2, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 54U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 56U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2350,8 +2352,8 @@ namespace
         // Small water lake, dirt terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 58U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 57U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 58U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 57U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2404,7 +2406,7 @@ namespace
         // Tiny flowers, dirt terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FLOWERS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 86U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FLOWERS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 86U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FLOWERS, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2473,7 +2475,7 @@ namespace
         }
 
         // Small cliff, dirt terrain. 3 variants.
-        for ( uint32_t count = 0; count < 2; ++count ) {
+        for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 141U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_NONE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -2534,14 +2536,14 @@ namespace
         // Big crack, wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 64U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 58U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 59U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 62U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 63U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 65U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 68U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 69U, fheroes2::Point{ 1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 64U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 58U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 59U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 62U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 63U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 65U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 68U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 69U, fheroes2::Point{ 1, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 60U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 61U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
@@ -2571,30 +2573,30 @@ namespace
         // Tar pit, wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_TAR_PIT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 76U, fheroes2::Point{ -2, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 77U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 80U, fheroes2::Point{ -3, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 76U, fheroes2::Point{ -2, -1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 77U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 80U, fheroes2::Point{ -3, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 91U, fheroes2::Point{ -2, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 91U, fheroes2::Point{ -2, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 102U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 102U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 124U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 124U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 135U, fheroes2::Point{ 2, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 136U, fheroes2::Point{ -3, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 137U, fheroes2::Point{ -2, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 135U, fheroes2::Point{ 2, 0 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 136U, fheroes2::Point{ -3, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 137U, fheroes2::Point{ -2, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 148U, fheroes2::Point{ -1, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 148U, fheroes2::Point{ -1, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 159U, fheroes2::Point{ 0, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 159U, fheroes2::Point{ 0, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 170U, fheroes2::Point{ 1, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 170U, fheroes2::Point{ 1, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 181U, fheroes2::Point{ 2, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 181U, fheroes2::Point{ 2, 1 }, MP2::OBJ_TAR_PIT, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2602,11 +2604,11 @@ namespace
         // Crack, wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 225U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 221U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 222U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 223U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 224U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 225U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 221U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 222U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 223U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 224U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 226U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
@@ -2616,12 +2618,12 @@ namespace
         // Crack (vertical), wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 230U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 227U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 228U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 229U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 231U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 232U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 230U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 227U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 228U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 229U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 231U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 232U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2629,9 +2631,9 @@ namespace
         // Crack (horizontal), wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_CRATER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 234U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 233U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 235U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 234U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 233U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 235U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::BACKGROUND_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2670,6 +2672,34 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 10U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 12U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13U, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // River delta (ocean on right), generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 3U, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 5U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 6U, fheroes2::Point{ 1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // River delta (ocean on left), generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 11U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 7U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 8U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 9U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 10U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 12U, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 13U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2757,9 +2787,9 @@ namespace
 
         // Random artifacts.
         addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT, 163U );
-        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MINOR, 167U );
-        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 169U );
-        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 171U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 167U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MINOR, 169U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 171U );
 
         // The random Ultimate artifact does not have a shadow in original assets.
         // We temporary use an empty shadow image from the Spell Scroll artifact for this case.
@@ -2924,9 +2954,8 @@ namespace
 
         // Troll's Bridge.
         {
-            // This is the only action object who's parts should be on background layer.
             Maps::ObjectInfo object{ MP2::OBJ_TROLL_BRIDGE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 189U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TROLL_BRIDGE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 189U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TROLL_BRIDGE, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 188U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_TROLL_BRIDGE, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 187U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_TROLL_BRIDGE, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 186U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NON_ACTION_TROLL_BRIDGE, Maps::BACKGROUND_LAYER );
@@ -3010,68 +3039,6 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Graveyard (for Zombies).
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 58U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 57U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 56U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Graveyard (for Zombies).
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 160U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 159U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 158U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Graveyard (for Zombies).
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 122U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 121U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 120U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Graveyard (for Zombies).
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 208U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 209U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 207U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 206U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 205U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 204U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 203U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 202U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Graveyard (for Zombies).
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 209U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 210U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 208U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 207U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 206U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 205U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 204U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 203U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
         // Wagon Camp (for Rogues).
         {
             Maps::ObjectInfo object{ MP2::OBJ_WAGON_CAMP };
@@ -3091,6 +3058,15 @@ namespace
         }
 
         // Cave (for Centaurs).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CAVE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 152U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAVE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 151U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CAVE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Snow Cave (for Centaurs).
         {
             Maps::ObjectInfo object{ MP2::OBJ_CAVE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 3U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAVE, Maps::OBJECT_LAYER );
@@ -3263,6 +3239,8 @@ namespace
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
 
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
             objects.emplace_back( std::move( object ) );
         }
         {
@@ -3277,6 +3255,8 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -3363,10 +3343,10 @@ namespace
         // Watering Hole.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATERING_HOLE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 218U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 217U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 219U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 220U, fheroes2::Point{ 2, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 218U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATERING_HOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 217U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 219U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 220U, fheroes2::Point{ 2, 0 }, MP2::OBJ_WATERING_HOLE, Maps::BACKGROUND_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 216U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 215U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE );
@@ -3767,7 +3747,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Boat.
+        // Boat, direction: right.
         {
             Maps::ObjectInfo object{ MP2::OBJ_BOAT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 18, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
@@ -3796,9 +3776,10 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 55, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 52, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 54, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 53, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 52, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -3806,17 +3787,17 @@ namespace
         // Whirlpool. The center point is middle lower tile.
         {
             Maps::ObjectInfo object{ MP2::OBJ_WHIRLPOOL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 218, fheroes2::Point{ 0, 0 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 218, fheroes2::Point{ 0, 0 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 222, fheroes2::Point{ 1, 0 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 222, fheroes2::Point{ 1, 0 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 214, fheroes2::Point{ -1, 0 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 214, fheroes2::Point{ -1, 0 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 206, fheroes2::Point{ 0, -1 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 206, fheroes2::Point{ 0, -1 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 210, fheroes2::Point{ 1, -1 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 210, fheroes2::Point{ 1, -1 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 202, fheroes2::Point{ -1, -1 }, MP2::OBJ_WHIRLPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 202, fheroes2::Point{ -1, -1 }, MP2::OBJ_WHIRLPOOL, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.back().animationFrames = 3;
 
             objects.emplace_back( std::move( object ) );
@@ -3916,6 +3897,38 @@ namespace
     void populateAdventureMiscellaneous( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
+
+        // Graveyard, generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 208U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 209U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 207U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 206U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 205U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 204U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 203U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 202U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Graveyard, snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 209U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 210U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 208U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 207U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 206U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 205U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 204U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_GRAVEYARD );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 203U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
 
         // Hill Fort, grass terrain.
         {
@@ -4148,7 +4161,7 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_LEAN_TO };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 13U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LEAN_TO, Maps::OBJECT_LAYER );
 
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 12U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 12U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4326,6 +4339,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 86U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 85U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SPHINX );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 131U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SPHINX );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4533,6 +4547,9 @@ namespace
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
+            // Barrier colors start from 1.
+            object.metadata[0] = count + 1;
+
             objects.emplace_back( std::move( object ) );
         }
 
@@ -4546,6 +4563,39 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, offset + 2U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_TRAVELLER_TENT );
+
+            // Traveller's Tent colors start from 1.
+            object.metadata[0] = count + 1;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Graveyard, grass terrain, ugly version - for compatibility.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 58U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 57U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 56U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Graveyard, snow terrain, ugly version - for compatibility.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 160U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 159U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 158U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Graveyard, desert terrain(?), ugly version - for compatibility.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GRAVEYARD };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 122U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 121U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_GRAVEYARD, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 120U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4579,8 +4629,8 @@ namespace
         assert( objects.empty() );
 
         auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t race, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
-                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
-            assert( MP2::isActionObject( mainObjectType ) );
+                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType, const bool isCastle ) {
+            assert( MP2::isOffGameActionObject( mainObjectType ) );
 
             const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
 
@@ -4621,6 +4671,7 @@ namespace
             object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
             object.metadata[0] = race;
+            object.metadata[1] = ( isCastle ? 1 : 0 );
 
             objects.emplace_back( std::move( object ) );
         };
@@ -4630,13 +4681,14 @@ namespace
         for ( uint8_t i = 0; i < 6 * 2; ++i ) {
             const uint8_t icnOffset = i * 16;
             const uint8_t race = i / 2;
+            const bool isCastle = ( i % 2 ) == 0;
 
-            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
+            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH, isCastle );
         }
 
         // Random castle/town
-        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
-        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
+        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, true );
+        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, false );
     }
 
     void populateMonsters( std::vector<Maps::ObjectInfo> & objects )
@@ -4700,6 +4752,68 @@ namespace
         }
     }
 
+    void populateExtraBoatDirections( std::vector<Maps::ObjectInfo> & objects )
+    {
+        // Boat, direction: top.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: top-right.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 9, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom-right.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 27, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 36, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: bottom-left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 27 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 18 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Boat, direction: top-left.
+        // TODO: Redo direction setting not to use pseudo sprite index that leads to an empty image.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 9 + 128, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateObjectData()
     {
         static bool isPopulated = false;
@@ -4735,6 +4849,8 @@ namespace
         populateKingdomTowns( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
 
         populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
+
+        populateExtraBoatDirections( objectData[static_cast<size_t>( Maps::ObjectGroup::MAP_EXTRAS )] );
 
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.
@@ -4780,7 +4896,7 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
-                assert( !MP2::isActionObject( objectInfo.objectType ) );
+                assert( !MP2::isOffGameActionObject( objectInfo.objectType ) );
             }
         }
 
@@ -4790,7 +4906,31 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
-                assert( MP2::isActionObject( objectInfo.objectType ) || objectInfo.objectType == MP2::OBJ_EVENT );
+                assert( MP2::isOffGameActionObject( objectInfo.objectType ) );
+            }
+        }
+
+        // Check that an image part is set to the same layer and object type for all objects.
+        std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectLayerType, MP2::MapObjectType>> groundObjectInfoVsObjectType;
+        std::set<std::pair<MP2::ObjectIcnType, uint32_t>> topObjectInfo;
+
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    const auto [iter, inserted]
+                        = groundObjectInfoVsObjectType.emplace( std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
+                    if ( !inserted ) {
+                        assert( iter->second.first == info.layerType && iter->second.second == info.objectType );
+                    }
+
+                    assert( topObjectInfo.find( std::make_pair( info.icnType, info.icnIndex ) ) == topObjectInfo.end() );
+                }
+
+                for ( const auto & info : objectInfo.topLevelParts ) {
+                    topObjectInfo.emplace( info.icnType, info.icnIndex );
+
+                    assert( groundObjectInfoVsObjectType.find( std::make_pair( info.icnType, info.icnIndex ) ) == groundObjectInfoVsObjectType.end() );
+                }
             }
         }
 #endif
@@ -4810,6 +4950,18 @@ namespace Maps
         return objectData[static_cast<size_t>( group )];
     }
 
+    const ObjectInfo & getObjectInfo( const ObjectGroup group, const int32_t objectIndex )
+    {
+        const auto & objectInfo = getObjectsByGroup( group );
+        if ( objectIndex < 0 || objectIndex >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            static const ObjectInfo emptyObjectInfo{ MP2::OBJ_NONE };
+            return emptyObjectInfo;
+        }
+
+        return objectInfo[objectIndex];
+    }
+
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
     {
         populateObjectData();
@@ -4817,14 +4969,25 @@ namespace Maps
         for ( const auto & group : objectData ) {
             for ( const auto & object : group ) {
                 assert( !object.groundLevelParts.empty() );
-                const auto & info = object.groundLevelParts.front();
 
-                if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                    return info.objectType;
+                for ( const auto & info : object.groundLevelParts ) {
+                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
+                        return info.objectType;
+                    }
+                }
+
+                for ( const auto & info : object.topLevelParts ) {
+                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
+                        return info.objectType;
+                    }
                 }
             }
         }
 
+        // You can reach this code by 3 reasons:
+        // - you are passing invalid object information
+        // - you updated object properties but didn't do object info migration for save files
+        // - you are trying to get info of an object created by an original Editor
         return MP2::OBJ_NONE;
     }
 

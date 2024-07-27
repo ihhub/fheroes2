@@ -35,6 +35,7 @@
 #include <iterator>
 #include <ostream>
 #include <set>
+#include <type_traits>
 
 #include "agg_image.h"
 #include "audio.h"
@@ -1006,7 +1007,7 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
         assert( unit != nullptr );
 
         const fheroes2::Rect unitRoi = unitPos + offset;
-        if ( le.MouseCursor( unitRoi ) ) {
+        if ( le.isMouseCursorPosInArea( unitRoi ) ) {
             msg = _( "View %{monster} info" );
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
         }
@@ -1014,7 +1015,7 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
         if ( le.MouseClickLeft( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect() );
         }
-        else if ( le.MousePressRight( unitRoi ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
         }
     }
@@ -1313,9 +1314,9 @@ void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & un
     _turnOrder.Set( GetArea(), units, arena.GetArmy2Color() );
 }
 
-fheroes2::Point Battle::Interface::GetMouseCursor() const
+fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
 {
-    return LocalEvent::Get().GetMouseCursor() - _interfacePosition.getPosition();
+    return LocalEvent::Get().getMouseCursorPos() - _interfacePosition.getPosition();
 }
 
 void Battle::Interface::SetStatus( const std::string & message, const bool top /* = false */ )
@@ -2211,7 +2212,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Castle top wall.
     if ( castle != nullptr ) {
-        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
+        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
 }
@@ -2275,7 +2276,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
             break;
         }
 
-        if ( castle.isFortificationBuild() ) {
+        if ( castle.isFortificationBuilt() ) {
             switch ( Board::GetCell( cellId )->GetObject() ) {
             case 0:
                 index += 31;
@@ -2569,7 +2570,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
 
             if ( !availableAttackDirection.empty() ) {
-                int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                int currentDirection = cell->GetTriangleDirection( getRelativeMouseCursorPos() );
                 if ( currentDirection == UNKNOWN ) {
                     // This could happen when another window has popped up and the user moved the mouse.
                     currentDirection = CENTER;
@@ -2714,8 +2715,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     while ( !humanturn_exit && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         // move cursor
         int32_t indexNew = -1;
-        if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
-            indexNew = board->GetIndexAbsPosition( GetMouseCursor() );
+        if ( le.isMouseCursorPosInArea( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
+            indexNew = board->GetIndexAbsPosition( getRelativeMouseCursorPos() );
         }
         if ( index_pos != indexNew ) {
             index_pos = indexNew;
@@ -2763,9 +2764,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
-    if ( le.KeyPress() ) {
+    if ( le.isAnyKeyPressed() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
             actions.emplace_back( Command::SKIP, unit.GetUID() );
@@ -2814,7 +2815,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         battleFieldRect.height -= lislogRect.height;
 
         // Do battle log event processing only if mouse pointer is over it.
-        doListlogProcessing = le.MouseCursor( lislogRect ) || le.MousePressLeft( lislogRect );
+        doListlogProcessing = le.isMouseCursorPosInArea( lislogRect ) || le.isMouseLeftButtonPressedInArea( lislogRect );
     }
 
     if ( doListlogProcessing ) {
@@ -2822,11 +2823,11 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
         listlog->QueueEventProcessing();
     }
-    else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.isMouseCursorPosInArea( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
 
-        if ( le.MouseClickLeft( mainTowerRect ) || le.MousePressRight( mainTowerRect ) ) {
+        if ( le.MouseClickLeft( mainTowerRect ) || le.isMouseRightButtonPressedInArea( mainTowerRect ) ) {
             const Castle * cstl = Arena::GetCastle();
             std::string ballistaMessage = Tower::GetInfo( *cstl );
 
@@ -2835,43 +2836,43 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 ballistaMessage.append( Battle::Board::GetMoatInfo() );
             }
 
-            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.MouseCursor( turnOrderRect ) ) {
+    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( turnOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         _turnOrder.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
-    else if ( le.MouseCursor( btn_auto.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Enable auto combat" );
         ButtonAutoAction( unit, actions );
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
-    else if ( le.MouseCursor( btn_settings.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( btn_settings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Customize system options" );
         ButtonSettingsAction();
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
-    else if ( le.MouseCursor( btn_skip.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( btn_skip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
         ButtonSkipAction( actions );
 
-        if ( le.MousePressRight() ) {
+        if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Skip" ),
                                                _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
                                                Dialog::ZERO );
         }
     }
-    else if ( _opponent1 && le.MouseCursor( _opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
+    else if ( _opponent1 && le.isMouseCursorPosInArea( _opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = _opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
             if ( _opponent1->GetHero()->isCaptain() ) {
@@ -2902,12 +2903,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             }
         }
 
-        if ( le.MousePressRight( opponent1Area ) ) {
+        if ( le.isMouseRightButtonPressedInArea( opponent1Area ) ) {
             arena.DialogBattleHero( *_opponent1->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
-    else if ( _opponent2 && le.MouseCursor( _opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
+    else if ( _opponent2 && le.isMouseCursorPosInArea( _opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent2Area = _opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
             if ( _opponent2->GetHero()->isCaptain() ) {
@@ -2940,12 +2941,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             }
         }
 
-        if ( le.MousePressRight( opponent2Area ) ) {
+        if ( le.isMouseRightButtonPressedInArea( opponent2Area ) ) {
             arena.DialogBattleHero( *_opponent2->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
-    else if ( le.MouseCursor( battleFieldRect ) ) {
+    else if ( le.isMouseCursorPosInArea( battleFieldRect ) ) {
         int themes = GetBattleCursor( msg );
 
         if ( _swipeAttack.isValid() ) {
@@ -2994,10 +2995,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                 MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
-            else if ( le.MousePressRight() ) {
+            else if ( le.isMouseRightButtonPressed() ) {
                 MousePressRightBoardAction( *cell );
             }
-            else if ( le.MousePressLeft( battleFieldRect ) ) {
+            else if ( le.isMouseLeftButtonPressedInArea( battleFieldRect ) ) {
                 if ( !le.isDragInProgress() && !_swipeAttack.isValid() ) {
                     le.registerDrag();
 
@@ -3009,19 +3010,18 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         else {
             le.MouseClickLeft();
-            le.MousePressRight();
+            le.MouseClickRight();
         }
     }
-    else if ( le.MouseCursor( status ) ) {
+    else if ( le.isMouseCursorPosInArea( status ) ) {
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
 
             if ( le.MouseClickLeft( status ) ) {
                 listlog->SetOpenLog( !listlog->isOpenLog() );
             }
-            else if ( le.MousePressRight( status ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Message Bar" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            else if ( le.isMouseRightButtonPressedInArea( status ) ) {
+                fheroes2::showStandardTextMessage( _( "Message Bar" ), _( "Shows the results of individual monster's actions." ), Dialog::ZERO );
             }
         }
 
@@ -3031,7 +3031,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         cursor.SetThemes( Cursor::WAR_NONE );
 
         le.MouseClickLeft();
-        le.MousePressRight();
+        le.MouseClickRight();
     }
 }
 
@@ -3040,15 +3040,15 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
     // Cancel the spellcast
-    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+    if ( le.isMouseRightButtonPressed() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
 
         _teleportSpellSrcIdx = -1;
     }
-    else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
+    else if ( le.isMouseCursorPosInArea( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
         cursor.SetThemes( themes );
 
@@ -3174,9 +3174,7 @@ void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actio
     assert( arena.CanToggleAutoBattle() );
     assert( !arena.AutoBattleInProgress() );
 
-    int startAutoBattle
-        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                 Dialog::YES | Dialog::NO );
+    int startAutoBattle = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable auto combat?" ), Dialog::YES | Dialog::NO );
     if ( startAutoBattle != Dialog::YES ) {
         return;
     }
@@ -3189,10 +3187,7 @@ void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actio
 
 void Battle::Interface::EventAutoFinish( Actions & actions )
 {
-    if ( fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                fheroes2::Text( _( "Are you sure you want to finish the battle in auto mode?" ), fheroes2::FontType::normalWhite() ),
-                                Dialog::YES | Dialog::NO )
-         != Dialog::YES ) {
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to finish the battle in auto mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
         return;
     }
 
@@ -3206,7 +3201,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
         EventStartAutoBattle( unit, actions );
@@ -3217,7 +3212,7 @@ void Battle::Interface::ButtonSettingsAction()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.MousePressLeft( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_settings.area() ) ) {
         _openBattleSettingsDialog();
@@ -3230,7 +3225,7 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
+    le.isMouseLeftButtonPressedInArea( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
         actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
@@ -6411,9 +6406,7 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
     // Right now there should be no pending auto battle interruptions.
     assert( _interruptAutoBattleForColor == 0 );
 
-    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                                 Dialog::YES | Dialog::NO );
+    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat?" ), Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
         _interruptAutoBattleForColor = color;
     }
@@ -6439,7 +6432,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         status.Redraw( fheroes2::Display::instance() );
                     };
 
-                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, statusCallback );
 
                     // Reset battlefield grid cursor position after closing the spell book.
                     index_pos = -1;

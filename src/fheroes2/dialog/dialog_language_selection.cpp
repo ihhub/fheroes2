@@ -29,6 +29,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -40,6 +41,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -224,10 +226,10 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            if ( le.MousePressRight( listRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( listRoi ) ) {
                 continue;
             }
 
@@ -244,15 +246,11 @@ namespace
                 return false;
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Click to choose the selected language." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to choose the selected language." ), Dialog::ZERO );
             }
 
             if ( !listBox.IsNeedRedraw() ) {

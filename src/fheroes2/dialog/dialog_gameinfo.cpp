@@ -160,12 +160,12 @@ void Dialog::GameInfo()
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() )
             break;
 
-        if ( le.MousePressRight( buttonOk.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
         }
         else {

@@ -30,6 +30,7 @@
 #include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
+#include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -75,16 +76,32 @@ namespace
             return {};
         }
     }
+
+    const char * GetBuildConditionDescription( const BuildingStatus status )
+    {
+        switch ( status ) {
+        case BuildingStatus::NOT_TODAY:
+            return _( "Cannot build. You have already built here today." );
+
+        case BuildingStatus::NEED_CASTLE:
+            return _( "For this action it is necessary to build a castle first." );
+
+        default:
+            break;
+        }
+
+        return nullptr;
+    }
 }
 
-struct buildstats_t
+struct BuildingStats
 {
     uint32_t id2;
     uint8_t race;
     cost_t cost;
 };
 
-const buildstats_t _builds[] = {
+const BuildingStats buildingStats[] = {
     // id                             gold wood mercury ore sulfur crystal gems
     { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
     { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
@@ -189,7 +206,7 @@ const buildstats_t _builds[] = {
 Funds BuildingInfo::GetCost( uint32_t build, int race )
 {
     Funds payment;
-    const buildstats_t * ptr = &_builds[0];
+    const BuildingStats * ptr = &buildingStats[0];
 
     while ( BUILD_NOTHING != ptr->id2 && !( ptr->id2 == build && ( !race || ( race & ptr->race ) ) ) )
         ++ptr;
@@ -207,126 +224,34 @@ Funds BuildingInfo::GetCost( uint32_t build, int race )
     return payment;
 }
 
-int GetIndexBuildingSprite( uint32_t build )
-{
-    switch ( build ) {
-    case DWELLING_MONSTER1:
-        return 19;
-    case DWELLING_MONSTER2:
-        return 20;
-    case DWELLING_MONSTER3:
-        return 21;
-    case DWELLING_MONSTER4:
-        return 22;
-    case DWELLING_MONSTER5:
-        return 23;
-    case DWELLING_MONSTER6:
-        return 24;
-    case DWELLING_UPGRADE2:
-        return 25;
-    case DWELLING_UPGRADE3:
-        return 26;
-    case DWELLING_UPGRADE4:
-        return 27;
-    case DWELLING_UPGRADE5:
-        return 28;
-    case DWELLING_UPGRADE6:
-        return 29;
-    case DWELLING_UPGRADE7:
-        return 30;
-    case BUILD_MAGEGUILD1:
-    case BUILD_MAGEGUILD2:
-    case BUILD_MAGEGUILD3:
-    case BUILD_MAGEGUILD4:
-    case BUILD_MAGEGUILD5:
-        return 0;
-    case BUILD_THIEVESGUILD:
-        return 1;
-    case BUILD_SHRINE:
-    case BUILD_TAVERN:
-        return 2;
-    case BUILD_SHIPYARD:
-        return 3;
-    case BUILD_WELL:
-        return 4;
-    case BUILD_CASTLE:
-        return 6;
-    case BUILD_STATUE:
-        return 7;
-    case BUILD_LEFTTURRET:
-        return 8;
-    case BUILD_RIGHTTURRET:
-        return 9;
-    case BUILD_MARKETPLACE:
-        return 10;
-    case BUILD_WEL2:
-        return 11;
-    case BUILD_MOAT:
-        return 12;
-    case BUILD_SPEC:
-        return 13;
-    case BUILD_CAPTAIN:
-        return 15;
-    default:
-        break;
-    }
-
-    return 0;
-}
-
 BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     : castle( c )
-    , building( b )
+    , _buildingType( b )
     , area( 0, 0, 135, 70 )
-    , bcond( ALLOW_BUILD )
+    , _status( BuildingStatus::ALLOW_BUILD )
 {
-    if ( IsDwelling() )
-        building = castle.GetActualDwelling( b );
+    if ( isDwelling( _buildingType ) )
+        _buildingType = castle.GetActualDwelling( b );
 
-    building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
+    _buildingType = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
 
-    if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() ) {
+    if ( BUILD_TAVERN == _buildingType && Race::NECR == castle.GetRace() ) {
         const GameVersion version = Settings::Get().getCurrentMapInfo().version;
-        building = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? BUILD_SHRINE : BUILD_NOTHING;
+        _buildingType = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? BUILD_SHRINE : BUILD_NOTHING;
     }
 
-    bcond = castle.CheckBuyBuilding( building );
+    _status = castle.CheckBuyBuilding( _buildingType );
 
     // generate description
-    if ( BUILD_DISABLE == bcond )
+    if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED )
         description = GetConditionDescription();
-    else if ( IsDwelling() ) {
-        description = _( "The %{building} produces %{monster}." );
-        StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplaceWithLowercase( description, "%{monster}", Monster( castle.GetRace(), building ).GetMultiName() );
-    }
-    else
-        description = Castle::GetDescriptionBuilding( building, castle.GetRace() );
-
-    switch ( building ) {
-    case BUILD_WELL:
-        StringReplace( description, "%{count}", Castle::GetGrownWell() );
-        break;
-
-    case BUILD_WEL2:
-        StringReplace( description, "%{count}", Castle::GetGrownWel2() );
-        break;
-
-    case BUILD_CASTLE:
-    case BUILD_STATUE:
-    case BUILD_SPEC: {
-        const Funds profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
-        StringReplace( description, "%{count}", profit.gold );
-        break;
-    }
-
-    default:
-        break;
+    else {
+        description = getBuildingDescription( castle.GetRace(), _buildingType );
     }
 
     // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();
         area.height = sprite.height();
     }
@@ -338,7 +263,7 @@ void BuildingInfo::SetPos( int32_t x, int32_t y )
     area.y = y;
 }
 
-bool BuildingInfo::IsDwelling() const
+bool BuildingInfo::isDwelling( const uint32_t building )
 {
     switch ( building ) {
     case DWELLING_MONSTER1:
@@ -360,10 +285,49 @@ bool BuildingInfo::IsDwelling() const
     return false;
 }
 
+std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t buildingId )
+{
+    std::string description;
+
+    if ( isDwelling( buildingId ) ) {
+        description = _( "The %{building} produces %{monster}." );
+        StringReplace( description, "%{building}", Castle::GetStringBuilding( buildingId, race ) );
+        if ( race == Race::RAND ) {
+            StringReplace( description, "%{monster}", Monster::getRandomRaceMonstersName( buildingId ) );
+        }
+        else {
+            StringReplaceWithLowercase( description, "%{monster}", Monster( race, buildingId ).GetMultiName() );
+        }
+    }
+    else {
+        description = fheroes2::getBuildingDescription( race, static_cast<building_t>( buildingId ) );
+
+        switch ( buildingId ) {
+        case BUILD_WELL:
+            StringReplace( description, "%{count}", Castle::GetGrownWell() );
+            break;
+        case BUILD_WEL2:
+            StringReplace( description, "%{count}", Castle::GetGrownWel2() );
+            break;
+        case BUILD_CASTLE:
+        case BUILD_STATUE:
+        case BUILD_SPEC: {
+            const Funds profit = ProfitConditions::FromBuilding( buildingId, race );
+            StringReplace( description, "%{count}", profit.gold );
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return description;
+}
+
 void BuildingInfo::RedrawCaptain() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    if ( bcond == ALREADY_BUILT ) {
+    if ( _status == BuildingStatus::ALREADY_BUILT ) {
         const fheroes2::Sprite & captainSprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0 );
 
@@ -376,12 +340,12 @@ void BuildingInfo::RedrawCaptain() const
     }
 
     // indicator
-    if ( bcond == ALREADY_BUILT ) {
+    if ( _status == BuildingStatus::ALREADY_BUILT ) {
         const fheroes2::Sprite & spriteAllow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
         fheroes2::Blit( spriteAllow, display, area.x + 83 - 4 - spriteAllow.width(), area.y + 79 - 2 - spriteAllow.height() );
     }
-    else if ( bcond != ALLOW_BUILD ) {
-        if ( LACK_RESOURCES == bcond ) {
+    else if ( _status != BuildingStatus::ALLOW_BUILD ) {
+        if ( BuildingStatus::LACK_RESOURCES == _status ) {
             const fheroes2::Sprite & spriteMoney = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
             fheroes2::Blit( spriteMoney, display, area.x + 83 - 4 + 1 - spriteMoney.width(), area.y + 79 - 3 - spriteMoney.height() );
         }
@@ -394,17 +358,17 @@ void BuildingInfo::RedrawCaptain() const
 
 void BuildingInfo::Redraw() const
 {
-    if ( BUILD_CAPTAIN == building ) {
+    if ( BUILD_CAPTAIN == _buildingType ) {
         RedrawCaptain();
         return;
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int index = GetIndexBuildingSprite( building );
+    const int index = fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
-    if ( BUILD_DISABLE == bcond ) {
+    if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
         const fheroes2::Point offset( 6, 59 );
         fheroes2::Sprite grayedOut = fheroes2::Crop( buildingFrame, offset.x, offset.y, 125, 12 );
         fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -413,7 +377,7 @@ void BuildingInfo::Redraw() const
     }
 
     // build image
-    if ( BUILD_NOTHING == building ) {
+    if ( BUILD_NOTHING == _buildingType ) {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const fheroes2::Sprite & buildBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 );
         fheroes2::Copy( buildBackground, 0, 0, display, area.x, area.y, buildBackground.width(), buildBackground.height() );
@@ -423,19 +387,19 @@ void BuildingInfo::Redraw() const
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
 
     // indicator
-    if ( bcond == ALREADY_BUILT ) {
+    if ( _status == BuildingStatus::ALREADY_BUILT ) {
         const fheroes2::Sprite & spriteAllow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
         fheroes2::Blit( spriteAllow, display, area.x + buildingFrame.width() - 5 - spriteAllow.width(), area.y + 58 - 2 - spriteAllow.height() );
     }
-    else if ( bcond == BUILD_DISABLE ) {
+    else if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
         const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
         fheroes2::Sprite disabledSprite( spriteDeny );
         fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
         fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         fheroes2::Blit( disabledSprite, display, area.x + buildingFrame.width() - 5 + 1 - spriteDeny.width(), area.y + 58 - 2 - spriteDeny.height() );
     }
-    else if ( bcond != ALLOW_BUILD ) {
-        if ( LACK_RESOURCES == bcond ) {
+    else if ( _status != BuildingStatus::ALLOW_BUILD ) {
+        if ( BuildingStatus::LACK_RESOURCES == _status ) {
             const fheroes2::Sprite & spriteMoney = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
             fheroes2::Blit( spriteMoney, display, area.x + buildingFrame.width() - 5 + 1 - spriteMoney.width(), area.y + 58 - 3 - spriteMoney.height() );
         }
@@ -452,13 +416,13 @@ void BuildingInfo::Redraw() const
         fheroes2::Copy( textBackground, 0, 0, display, area.x, area.y + 58, textBackground.width(), textBackground.height() );
     }
 
-    const fheroes2::Text buildingName( Castle::GetStringBuilding( building, castle.GetRace() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text buildingName( Castle::GetStringBuilding( _buildingType, castle.GetRace() ), fheroes2::FontType::smallWhite() );
     buildingName.draw( area.x + 68 - buildingName.width() / 2, area.y + 61, display );
 }
 
 const char * BuildingInfo::GetName() const
 {
-    return Castle::GetStringBuilding( building, castle.GetRace() );
+    return Castle::GetStringBuilding( _buildingType, castle.GetRace() );
 }
 
 bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const
@@ -466,12 +430,12 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) con
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) ) {
-        if ( bcond == LACK_RESOURCES || bcond == ALLOW_BUILD ) {
+        if ( _status == BuildingStatus::LACK_RESOURCES || _status == BuildingStatus::ALLOW_BUILD ) {
             const fheroes2::ButtonRestorer exitRestorer( exitButton );
             return DialogBuyBuilding( true );
         }
     }
-    else if ( le.MousePressRight( area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( area ) ) {
         DialogBuyBuilding( false );
     }
     return false;
@@ -479,7 +443,7 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) con
 
 bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 {
-    if ( building == BUILD_NOTHING ) {
+    if ( _buildingType == BUILD_NOTHING ) {
         return false;
     }
 
@@ -487,7 +451,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     std::string extendedDescription = description;
 
-    if ( ALLOW_BUILD != bcond ) {
+    if ( BuildingStatus::ALLOW_BUILD != _status ) {
         const std::string & ext = GetConditionDescription();
         if ( !ext.empty() && ext != description ) {
             extendedDescription.append( "\n\n" );
@@ -499,18 +463,9 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     // prepare requirement build string
     std::string requirement;
-    const uint32_t requirementBuildingIds = castle.GetBuildingRequirement( building );
-    const char sep = '\n';
 
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( requirementBuildingIds & itr ) {
-            requirement.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
-            requirement += sep;
-        }
-
-    // Remove the last separator.
-    if ( !requirement.empty() ) {
-        requirement.pop_back();
+    if ( _status != BuildingStatus::BUILD_DISABLE ) {
+        requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( _buildingType ) );
     }
 
     const bool requirementsPresent = !requirement.empty();
@@ -525,7 +480,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         requirementHeight = requirementTitle.height() + requirementText.height( BOXAREA_WIDTH ) + elementOffset;
     }
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), building ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), BOXAREA_WIDTH );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
@@ -553,7 +508,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
-    const fheroes2::Sprite & buildingImage = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), GetIndexBuildingSprite( building ) );
+    const fheroes2::Sprite & buildingImage
+        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
@@ -583,7 +539,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     rbs.Redraw();
 
     if ( buttons ) {
-        if ( ALLOW_BUILD != castle.CheckBuyBuilding( building ) ) {
+        if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
             buttonOkay.disable();
         }
 
@@ -602,12 +558,12 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        if ( !buttons && !le.MousePressRight() ) {
+        if ( !buttons && !le.isMouseRightButtonPressed() ) {
             break;
         }
 
-        le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return true;
@@ -617,10 +573,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
             break;
         }
 
-        if ( buttonOkay.isVisible() && le.MousePressRight( buttonOkay.area() ) ) {
+        if ( buttonOkay.isVisible() && le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), GetConditionDescription(), Dialog::ZERO );
         }
-        else if ( buttonCancel.isVisible() && le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( buttonCancel.isVisible() && le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }
@@ -628,84 +584,69 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     return false;
 }
 
-const char * GetBuildConditionDescription( int bcond )
-{
-    switch ( bcond ) {
-    case NOT_TODAY:
-        return _( "Cannot build. You have already built here today." );
-
-    case NEED_CASTLE:
-        return _( "For this action it is necessary to build a castle first." );
-
-    default:
-        break;
-    }
-
-    return nullptr;
-}
-
 std::string BuildingInfo::GetConditionDescription() const
 {
-    std::string res;
+    switch ( _status ) {
+    case BuildingStatus::NOT_TODAY:
+    case BuildingStatus::NEED_CASTLE:
+        return GetBuildConditionDescription( _status );
 
-    switch ( bcond ) {
-    case NOT_TODAY:
-    case NEED_CASTLE:
-        return GetBuildConditionDescription( bcond );
+    case BuildingStatus::SHIPYARD_NOT_ALLOWED: {
+        assert( _buildingType == BUILD_SHIPYARD );
+        std::string res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
+        StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
+        return res;
+    }
 
-    case BUILD_DISABLE:
-        if ( building == BUILD_SHIPYARD ) {
-            res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
-            StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
-        }
-        else {
-            // TODO: Add future disabled buildings here when it is made possible in the Editor.
-            assert( 0 );
-            res = _( "This building has been disabled." );
-        }
-        break;
+    case BuildingStatus::BUILD_DISABLE:
+        return _( "This building has been disabled." );
 
-    case LACK_RESOURCES:
-        res = _( "Cannot afford the %{name}." );
+    case BuildingStatus::LACK_RESOURCES: {
+        std::string res = _( "Cannot afford the %{name}." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
-    case ALREADY_BUILT:
-        res = _( "The %{name} is already built." );
+    case BuildingStatus::ALREADY_BUILT: {
+        std::string res = _( "The %{name} is already built." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
-    case REQUIRES_BUILD:
-        res = _( "Cannot build the %{name}." );
+    case BuildingStatus::REQUIRES_BUILD: {
+        std::string res = _( "Cannot build the %{name}." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
-    case ALLOW_BUILD:
-        res = _( "Build %{name}." );
+    case BuildingStatus::ALLOW_BUILD: {
+        std::string res = _( "Build %{name}." );
         StringReplace( res, "%{name}", GetName() );
-        break;
+        return res;
+    }
 
     default:
         break;
     }
 
-    return res;
+    return {};
 }
 
 void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
 {
-    if ( building == BUILD_NOTHING ) {
+    if ( _buildingType == BUILD_NOTHING ) {
         return;
     }
 
-    switch ( bcond ) {
-    case NOT_TODAY:
-    case ALREADY_BUILT:
-    case NEED_CASTLE:
-    case BUILD_DISABLE:
-    case LACK_RESOURCES:
-    case REQUIRES_BUILD:
-    case ALLOW_BUILD:
+    switch ( _status ) {
+    case BuildingStatus::NOT_TODAY:
+    case BuildingStatus::ALREADY_BUILT:
+    case BuildingStatus::NEED_CASTLE:
+    case BuildingStatus::BUILD_DISABLE:
+    case BuildingStatus::SHIPYARD_NOT_ALLOWED:
+    case BuildingStatus::LACK_RESOURCES:
+    case BuildingStatus::REQUIRES_BUILD:
+    case BuildingStatus::ALLOW_BUILD:
         bar.ShowMessage( GetConditionDescription() );
         break;
 
@@ -776,7 +717,7 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
         castle.RecruitMonster( Dialog::RecruitMonster( { castle.GetRace(), dwType }, castle.getMonstersInDwelling( dwType ), true, -60 ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
-        fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( NEED_CASTLE ), Dialog::OK );
+        fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( BuildingStatus::NEED_CASTLE ), Dialog::OK );
     else {
         const BuildingInfo dwelling( castle, static_cast<building_t>( dwType ) );
 

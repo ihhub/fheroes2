@@ -468,7 +468,7 @@ void Interface::Radar::QueueEventProcessing()
     const fheroes2::Rect & rect = GetArea();
     const fheroes2::Rect & borderArea = GetRect();
 
-    if ( !le.MouseCursor( borderArea ) || le.MouseCursor( rect ) ) {
+    if ( !le.isMouseCursorPosInArea( borderArea ) || le.isMouseCursorPosInArea( rect ) ) {
         _mouseDraggingMovement = false;
     }
 
@@ -477,11 +477,11 @@ void Interface::Radar::QueueEventProcessing()
         _cursorArea.hide();
         _interface.setRedraw( REDRAW_RADAR_CURSOR );
     }
-    else if ( le.MouseCursor( rect ) ) {
+    else if ( le.isMouseCursorPosInArea( rect ) ) {
         // move cursor
-        if ( le.MouseClickLeft( rect ) || le.MousePressLeft( rect ) ) {
+        if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
             _mouseDraggingMovement = true;
-            const fheroes2::Point & pt = le.GetMouseCursor();
+            const fheroes2::Point & pt = le.getMouseCursorPos();
 
             if ( rect & pt ) {
                 GameArea & gamearea = _interface.getGameArea();
@@ -495,7 +495,7 @@ void Interface::Radar::QueueEventProcessing()
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
             fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
     }
@@ -507,9 +507,9 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     const fheroes2::Rect & rect = GetArea();
 
     // move cursor
-    if ( le.MouseCursor( rect ) ) {
-        if ( le.MouseClickLeft( rect ) || le.MousePressLeft( rect ) ) {
-            const fheroes2::Point & pt = le.GetMouseCursor();
+    if ( le.isMouseCursorPosInArea( rect ) ) {
+        if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
+            const fheroes2::Point & pt = le.getMouseCursorPos();
 
             if ( rect & pt ) {
                 const fheroes2::Rect & initROI = roi.GetROIinPixels();
@@ -522,13 +522,13 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
             fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
-        else if ( le.MouseWheelUp() ) {
+        else if ( le.isMouseWheelUp() ) {
             return roi.zoomIn( false );
         }
-        else if ( le.MouseWheelDn() ) {
+        if ( le.isMouseWheelDown() ) {
             return roi.zoomOut( false );
         }
     }

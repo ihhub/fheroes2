@@ -22,6 +22,9 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <vector>
+
+class Army;
 
 namespace Maps
 {
@@ -31,10 +34,12 @@ namespace Maps
     {
         struct MapFormat;
         struct TileInfo;
-        struct ObjectInfo;
+        struct TileObjectInfo;
+        struct CastleMetadata;
+        struct HeroMetadata;
     }
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );
@@ -42,7 +47,7 @@ namespace Maps
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
     void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
+    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object );
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 
@@ -51,4 +56,20 @@ namespace Maps
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
+
+    bool isJailObject( const ObjectGroup group, const uint32_t index );
+
+    uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector );
+
+    // Should be used only for the neutral color player.
+    void setDefaultCastleDefenderArmy( Map_Format::CastleMetadata & metadata );
+
+    // Returns true if all monsters are RANDOM_MONSTER and count is 0. Should be used only for the neutral color player.
+    bool isDefaultCastleDefenderArmy( const Map_Format::CastleMetadata & metadata );
+
+    // Returns false if there are no custom units set in metadata.
+    bool loadCastleArmy( Army & army, const Map_Format::CastleMetadata & metadata );
+    void saveCastleArmy( const Army & army, Map_Format::CastleMetadata & metadata );
+    bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
+    void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
 }

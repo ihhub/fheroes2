@@ -23,9 +23,15 @@
 
 #include "difficulty.h"
 
+#include <algorithm>
 #include <cassert>
+#include <vector>
 
+#include "kingdom.h"
+#include "profit.h"
+#include "race.h"
 #include "translations.h"
+#include "world.h"
 
 std::string Difficulty::String( int difficulty )
 {
@@ -47,21 +53,94 @@ std::string Difficulty::String( int difficulty )
     return "Unknown";
 }
 
-int Difficulty::GetScoutingBonusForAI( int difficulty )
+Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom )
 {
+    assert( kingdom.isControlAI() );
+
+    const auto getIncomeFromSetsOfResourceMines = []( const int resourceTypes, const uint32_t numOfSets ) {
+        Funds result;
+
+        Resource::forEach( resourceTypes, [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
+
+        return result * numOfSets;
+    };
+
+    const auto getBonusForCastles = [kingdomColor = kingdom.GetColor(), &kingdomCastles = kingdom.GetCastles()]() {
+        Funds result;
+
+        const bool kingdomHasMarketplace = std::any_of( kingdomCastles.begin(), kingdomCastles.end(), []( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            return castle->isBuild( BUILD_MARKETPLACE );
+        } );
+
+        // Additional rare resources for hiring units from higher-level dwellings can only be provided if the kingdom already has some source of those resources - either
+        // through trade or through mining
+        const auto doesKingdomHaveResourceSource = [kingdomColor, kingdomHasMarketplace]( const int resourceType ) {
+            return ( kingdomHasMarketplace || world.CountCapturedMines( resourceType, kingdomColor ) > 0 );
+        };
+
+        for ( const Castle * castle : kingdomCastles ) {
+            assert( castle != nullptr );
+
+            // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles
+            result += ProfitConditions::FromMine( Resource::GOLD );
+
+            // Provide additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
+            if ( !castle->isBuild( DWELLING_MONSTER6 ) ) {
+                continue;
+            }
+
+            switch ( castle->GetRace() ) {
+            case Race::KNGT:
+            case Race::NECR:
+                // Rare resources are not required to hire maximum-level units in these castles
+                break;
+            case Race::BARB:
+                if ( doesKingdomHaveResourceSource( Resource::CRYSTAL ) ) {
+                    result += ProfitConditions::FromMine( Resource::CRYSTAL );
+                }
+                break;
+            case Race::SORC:
+                if ( doesKingdomHaveResourceSource( Resource::MERCURY ) ) {
+                    result += ProfitConditions::FromMine( Resource::MERCURY );
+                }
+                break;
+            case Race::WRLK:
+                if ( doesKingdomHaveResourceSource( Resource::SULFUR ) ) {
+                    result += ProfitConditions::FromMine( Resource::SULFUR );
+                }
+                // The maximum level units in this castle are more expensive than in others
+                result += ProfitConditions::FromMine( Resource::GOLD );
+                break;
+            case Race::WZRD:
+                if ( doesKingdomHaveResourceSource( Resource::GEMS ) ) {
+                    result += ProfitConditions::FromMine( Resource::GEMS );
+                }
+                // The maximum level units in this castle are more expensive than in others
+                result += ProfitConditions::FromMine( Resource::GOLD );
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+        }
+
+        return result;
+    };
+
     switch ( difficulty ) {
-    case Difficulty::NORMAL:
-        return 1;
     case Difficulty::HARD:
-        return 2;
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 );
     case Difficulty::EXPERT:
-        return 3;
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) + getBonusForCastles();
     case Difficulty::IMPOSSIBLE:
-        return 4;
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 2 ) + getBonusForCastles();
     default:
         break;
     }
-    return 0;
+
+    return {};
 }
 
 double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
@@ -70,77 +149,11 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     case Difficulty::EASY:
         // It is deduction from the income.
         return -0.25;
-    case Difficulty::HARD:
-        return 0.29;
-    case Difficulty::EXPERT:
-        return 0.45;
-    case Difficulty::IMPOSSIBLE:
-        return 0.6;
     default:
         break;
     }
+
     return 0;
-}
-
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
-{
-    // In the original game AI has a cheeky monster growth bonus depending on difficulty:
-    // Easy - 0.0 (no bonus)
-    // Normal - 0.0 (no bonus)
-    // Hard - 0.20 (or 20% extra)
-    // Expert - 0.32 (or 32% extra)
-    // Impossible - 0.44 (or 44% extra)
-    // This bonus was introduced to compensate weak AI in the game.
-    //
-    // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
-    // Also this bonus can be abused by players while capturing AI castles on a first day of a week.
-    //
-    // Completely removing these bonuses might break some maps and they become unplayable.
-    // Therefore, these bonuses are reduced by 5% which is the value of noise in many processes / systems.
-
-    switch ( difficulty ) {
-    case Difficulty::EASY:
-    case Difficulty::NORMAL:
-        return 0;
-    case Difficulty::HARD:
-        return 0.14;
-    case Difficulty::EXPERT:
-        return 0.254;
-    case Difficulty::IMPOSSIBLE:
-        return 0.368;
-    default:
-        // Did you add a new difficulty level? Add the logic above!
-        assert( 0 );
-        break;
-    }
-    return 0;
-}
-
-int Difficulty::GetHeroMovementBonusForAI( int difficulty )
-{
-    switch ( difficulty ) {
-    case Difficulty::EXPERT:
-    case Difficulty::IMPOSSIBLE:
-        return 75;
-    default:
-        break;
-    }
-    return 0;
-}
-
-bool Difficulty::allowAIToRetreat( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
-bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
-int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
-{
-    return 3;
 }
 
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
@@ -156,12 +169,8 @@ double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
     default:
         break;
     }
-    return 100.0 / 6.0;
-}
 
-uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty */ )
-{
-    return 10;
+    return 100.0 / 6.0;
 }
 
 uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
@@ -176,6 +185,7 @@ uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
     default:
         break;
     }
+
     return UINT32_MAX;
 }
 
@@ -227,6 +237,7 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     default:
         break;
     }
+
     return true;
 }
 
@@ -238,6 +249,7 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
     default:
         break;
     }
+
     return true;
 }
 
@@ -246,9 +258,10 @@ bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool 
     switch ( difficulty ) {
     case Difficulty::EASY:
         // Only the construction of the corresponding dwelling is limited, but not its upgrade
-        return isCampaign || building != DWELLING_MONSTER6;
+        return isCampaign || ( building != DWELLING_MONSTER6 && building != BUILD_MAGEGUILD5 );
     default:
         break;
     }
+
     return true;
 }

@@ -21,8 +21,8 @@
 #pragma once
 
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-#define INTERMEDIATE_VERSION 13
+#define MINOR_VERSION 1
+#define INTERMEDIATE_VERSION 1
 
 #ifndef BUILD_VERSION
 #define BUILD_VERSION 0

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -247,12 +247,12 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     int32_t returnValue = -1;
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-        const fheroes2::Point & mp = le.GetMouseCursor();
+        const fheroes2::Point & mp = le.getMouseCursorPos();
 
         if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -269,7 +269,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
-            if ( dst >= 0 && le.MousePressRight() ) {
+            if ( dst >= 0 && le.isMouseRightButtonPressed() ) {
                 Dialog::QuickInfo( world.GetTiles( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {

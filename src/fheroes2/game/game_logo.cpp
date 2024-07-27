@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ void fheroes2::showTeamInfo()
 
     Display & display = Display::instance();
 
-    Text text( _( "fheroes2 Resurrection Team presents" ), FontType{ FontSize::LARGE, FontColor::WHITE } );
+    Text text( _( "fheroes2 Resurrection Team presents" ), FontType::largeWhite() );
     const int32_t correctedTextWidth = text.width( 500 );
 
     const Rect roi{ ( display.width() - correctedTextWidth ) / 2, ( display.height() - text.height( correctedTextWidth ) ) / 2, text.width(),
@@ -63,7 +63,7 @@ void fheroes2::showTeamInfo()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && alpha > 20 ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
             break;
 
         // Subsequent frames must update only the area within the text.

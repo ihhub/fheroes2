@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include "agg_image.h"
@@ -44,6 +45,7 @@
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
@@ -81,31 +83,32 @@ namespace
             troopTarget.SetCount( 2 );
         }
         else {
-            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
-
-            if ( isSameTroopType )
+            int32_t freeSlots = static_cast<int32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
+            if ( isSameTroopType ) {
                 ++freeSlots;
+            }
 
-            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = isSameTroopType ? 1 : troopFrom.GetCount() / 2;
+            const int32_t maxCount = static_cast<int32_t>( saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount() );
+            int32_t redistributeCount = isSameTroopType ? 1 : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
-            const uint32_t slots
-                = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit, troopFrom.GetName() );
+            const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),
+                                                          maxCount, redistributeCount, useFastSplit, troopFrom.GetName() );
 
-            if ( slots < 2 || slots > 6 )
+            if ( slots < 2 || slots > 6 ) {
                 return;
+            }
 
             uint32_t totalSplitTroopCount = troopFrom.GetCount();
 
             if ( !useFastSplit && slots == 2 ) {
                 // this logic is used when splitting to a stack with the same unit
                 if ( isSameTroopType )
-                    troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
+                    troopTarget.SetCount( troopTarget.GetCount() + static_cast<uint32_t>( redistributeCount ) );
                 else
-                    troopTarget.Set( troopFrom, redistributeCount );
+                    troopTarget.Set( troopFrom, static_cast<uint32_t>( redistributeCount ) );
 
-                troopFrom.SetCount( totalSplitTroopCount - redistributeCount );
+                troopFrom.SetCount( totalSplitTroopCount - static_cast<uint32_t>( redistributeCount ) );
             }
             else {
                 if ( isSameTroopType )
@@ -242,14 +245,16 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
         fheroes2::Copy( backsf, 0, 0, dstsf, pos );
     }
     else {
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
-
         if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
             // If none of army's slot is set within the Editor, then a default army will be applied at the game start.
-            fheroes2::ApplyPalette( dstsf, pos.x, pos.y, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );
+        }
+        else {
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
         }
     }
 }
@@ -468,10 +473,15 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
-                uint32_t count = 1;
+                std::string str = _( "Set %{monster} Count" );
+                StringReplace( str, "%{monster}", mons.GetName() );
 
-                if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
-                    troop.Set( mons, count );
+                int32_t count = 1;
+                auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
+
+                if ( Dialog::SelectCount( str, 1, 500000, count, 1, monsUi.get() ) ) {
+                    troop.Set( mons, static_cast<uint32_t>( count ) );
+                }
             }
         }
 
@@ -595,7 +605,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         return true;
     }
 
-    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().GetMousePressLeft() );
+    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().getMouseLeftButtonPressedPos() );
     if ( srcTroop == nullptr || !srcTroop->isValid() ) {
         return true;
     }

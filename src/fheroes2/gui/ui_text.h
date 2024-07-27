@@ -20,8 +20,11 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string>
+#include <string_view>
+#include <utility>
 #include <vector>
 
 #include "image.h"
@@ -130,7 +133,7 @@ namespace fheroes2
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
-        // Returns full text. Multi-text class cannot return by reference hence returning by value .
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
 
         void setUniformVerticalAlignment( const bool isUniform )
@@ -148,7 +151,14 @@ namespace fheroes2
         friend class MultiFontText;
 
         Text() = default;
-        Text( std::string text, const FontType fontType );
+
+        Text( std::string text, const FontType fontType )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            // Do nothing.
+        }
+
         Text( const Text & text ) = default;
         Text( Text && text ) = default;
         Text & operator=( const Text & text ) = default;
@@ -169,12 +179,22 @@ namespace fheroes2
 
         bool empty() const override;
 
-        void set( std::string text, const FontType fontType );
+        void set( std::string text, const FontType fontType )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+        }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        void fitToOneRow( const int32_t maxWidth );
+        // By default it ignores spaces at the end of the text phrase.
+        void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
         std::string text() const override;
+
+        FontType getFontType() const
+        {
+            return _fontType;
+        }
 
     private:
         std::string _text;
@@ -209,6 +229,37 @@ namespace fheroes2
         std::vector<Text> _texts;
     };
 
+    class FontCharHandler
+    {
+    public:
+        explicit FontCharHandler( const FontType fontType );
+
+        // Returns true if character is available to render, including space (' ') and new line ('\n').
+        bool isAvailable( const uint8_t character ) const;
+
+        const Sprite & getSprite( const uint8_t character ) const;
+
+        int32_t getWidth( const uint8_t character ) const;
+
+        int32_t getSpaceCharWidth() const
+        {
+            return _spaceCharWidth;
+        }
+
+    private:
+        // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
+        bool _isValid( const uint8_t character ) const;
+
+        int32_t _getSpaceCharWidth() const;
+
+        const FontType _fontType;
+        const uint32_t _charLimit;
+        const int32_t _spaceCharWidth;
+    };
+
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
-    bool isFontAvailable( const std::string & text, const FontType fontType );
+    bool isFontAvailable( const std::string_view text, const FontType fontType );
 }

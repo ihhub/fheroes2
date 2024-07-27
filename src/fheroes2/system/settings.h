@@ -79,7 +79,7 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( const Maps::FileInfo & );
+    void SetCurrentFileInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {
@@ -188,7 +188,6 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    bool isEditorEnabled() const;
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -319,13 +318,6 @@ public:
         players.setCurrentColor( color );
     }
 
-    int PreferablyCountPlayers() const
-    {
-        return preferably_count_players;
-    }
-
-    void SetPreferablyCountPlayers( int );
-
     int controllerPointerSpeed() const
     {
         return _controllerPointerSpeed;
@@ -386,7 +378,6 @@ private:
     int battle_speed;
 
     int game_type;
-    int preferably_count_players;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
@@ -397,7 +388,7 @@ private:
     Players players;
 };
 
-StreamBase & operator<<( StreamBase &, const Settings & );
-StreamBase & operator>>( StreamBase &, Settings & );
+StreamBase & operator<<( StreamBase & msg, const Settings & conf );
+StreamBase & operator>>( StreamBase & msg, Settings & conf );
 
 #endif

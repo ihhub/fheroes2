@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,7 +23,6 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <list>
@@ -140,7 +139,6 @@ StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
 using EventsDate = std::list<EventDate>;
-using MapsTiles = std::vector<Maps::Tiles>;
 
 class World : protected fheroes2::Size
 {
@@ -228,6 +226,13 @@ public:
         return vec_kingdoms.GetKingdom( color );
     }
 
+    void addCastle( int32_t index, uint8_t race, uint8_t color )
+    {
+        Castle * castle = new Castle( index % width, index / width, race );
+        castle->SetColor( color );
+        vec_castles.AddCastle( castle );
+    }
+
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const
     {
@@ -307,7 +312,6 @@ public:
     std::string DateString() const;
 
     void NewDay();
-    void NewDayAI();
     void NewWeek();
     void NewMonth();
 
@@ -364,22 +368,28 @@ private:
     void Defaults();
     void Reset();
     void MonthOfMonstersAction( const Monster & );
-    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
+    bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
 
     bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
+    void setUltimateArtifact( const int32_t tileId, const int32_t radius );
+
+    void addDebugHero();
+
+    void setHeroIdsForMapConditions();
+
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );
 
-    MapsTiles vec_tiles;
+    std::vector<Maps::Tiles> vec_tiles;
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    std::vector<std::string> _rumors;
+    std::vector<std::string> _customRumors;
     EventsDate vec_eventsday;
 
     // index, object, color
@@ -391,8 +401,8 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    int heroes_cond_wins = Heroes::UNKNOWN;
-    int heroes_cond_loss = Heroes::UNKNOWN;
+    int heroIdAsWinCondition = Heroes::UNKNOWN;
+    int heroIdAsLossCondition = Heroes::UNKNOWN;
 
     MapObjects map_objects;
 

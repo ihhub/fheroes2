@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -59,7 +60,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point & pos = le.GetMouseCursor();
+    const fheroes2::Point & pos = le.getMouseCursorPos();
     const fheroes2::Point position( pos.x, pos.y );
 
     for ( size_t i = 0; i < rects.size(); ++i ) {
@@ -188,31 +189,31 @@ struct ResourceBar
 
         if ( index >= 0 ) {
             int rs = Resource::getResourceTypeFromIconIndex( index );
-            uint32_t step = rs == Resource::GOLD ? 100 : 1;
+            const int32_t step = ( rs == Resource::GOLD ) ? 100 : 1;
 
-            uint32_t cur = resource.Get( rs );
-            uint32_t sel = cur;
-            uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
+            int32_t cur = resource.Get( rs );
+            int32_t sel = cur;
+            const int32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / static_cast<int32_t>( mul ) : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "First select recipients!" ), Dialog::OK );
             }
             else if ( 0 == max ) {
                 std::string msg = _( "You cannot select %{resource}!" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK );
             }
             else {
                 std::string msg = _( "Select count %{resource}:" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
 
-                if ( Dialog::SelectCount( msg, 0, max, sel, step ) && cur != sel ) {
+                if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
                     int32_t * from = funds.GetPtr( rs );
                     int32_t * to = resource.GetPtr( rs );
 
                     if ( from && to ) {
                         int32_t count = sel - cur;
 
-                        *from -= mul > 1 ? count * mul : count;
+                        *from -= mul > 1 ? count * static_cast<int32_t>( mul ) : count;
                         *to += count;
 
                         return true;

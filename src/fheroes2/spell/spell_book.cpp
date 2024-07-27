@@ -175,7 +175,7 @@ namespace
 }
 
 Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
-                       const std::function<void( const std::string & )> * statusCallback ) const
+                       const std::function<void( const std::string & )> & statusCallback ) const
 {
     if ( !hero.HaveSpellBook() ) {
         fheroes2::showStandardTextMessage( "", _( "You have no Magic Book, so you cannot cast a spell." ), Dialog::OK );
@@ -202,7 +202,6 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         _startSpellIndex = 0;
     }
 
-    // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
@@ -238,9 +237,17 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     display.render();
 
+    const auto getHeroSpellPointsInfo = [&hero]() {
+        std::string result = _( "Your hero has %{sp} spell points remaining out of %{max}." );
+
+        StringReplace( result, "%{sp}", hero.GetSpellPoints() );
+        StringReplace( result, "%{max}", hero.GetMaxSpellPoints() );
+
+        return result;
+    };
+
     LocalEvent & le = LocalEvent::Get();
 
-    // message loop
     while ( le.HandleEvents() ) {
         if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && _startSpellIndex > 0 ) {
             _startSpellIndex -= spellsPerPage * 2;
@@ -252,9 +259,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             redraw = true;
         }
         else if ( le.MouseClickLeft( info_rt ) ) {
-            std::string str = _( "Your hero has %{point} spell points remaining." );
-            StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            fheroes2::showStandardTextMessage( "", str, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", getHeroSpellPointsInfo(), Dialog::OK );
         }
         else if ( le.MouseClickLeft( advn_rt ) && _spellFilter != Filter::ADVN && displayableSpells != Filter::CMBT ) {
             _spellFilter = Filter::ADVN;
@@ -268,27 +273,25 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             displayedSpells = SetFilter( _spellFilter, &hero );
             redraw = true;
         }
-        else if ( le.MousePressRight( info_rt ) ) {
-            std::string str = _( "Your hero has %{point} spell points remaining." );
-            StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            fheroes2::showStandardTextMessage( "", str, Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( info_rt ) ) {
+            fheroes2::showStandardTextMessage( "", getHeroSpellPointsInfo(), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( advn_rt ) && displayableSpells != Filter::CMBT ) {
+        else if ( le.isMouseRightButtonPressedInArea( advn_rt ) && displayableSpells != Filter::CMBT ) {
             fheroes2::showStandardTextMessage( "", _( "View Adventure Spells" ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
+        else if ( le.isMouseRightButtonPressedInArea( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
             fheroes2::showStandardTextMessage( "", _( "View Combat Spells" ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( prev_list ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( prev_list ) ) {
             fheroes2::showStandardTextMessage( "", _( "View previous page" ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( next_list ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( next_list ) ) {
             fheroes2::showStandardTextMessage( "", _( "View next page" ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
-            const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+            const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + _startSpellIndex );
@@ -312,50 +315,50 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             }
         }
 
-        if ( statusCallback != nullptr ) {
-            if ( le.MouseCursor( info_rt ) ) {
-                std::string str = _( "Your hero has %{point} spell points remaining." );
-                StringReplace( str, "%{point}", hero.GetSpellPoints() );
-                ( *statusCallback )( str );
+        if ( statusCallback ) {
+            if ( le.isMouseCursorPosInArea( info_rt ) ) {
+                statusCallback( getHeroSpellPointsInfo() );
             }
-            else if ( le.MouseCursor( advn_rt ) && displayableSpells != Filter::CMBT ) {
-                ( *statusCallback )( _( "View Adventure Spells" ) );
+            else if ( le.isMouseCursorPosInArea( advn_rt ) && displayableSpells != Filter::CMBT ) {
+                statusCallback( _( "View Adventure Spells" ) );
             }
-            else if ( le.MouseCursor( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
-                ( *statusCallback )( _( "View Combat Spells" ) );
+            else if ( le.isMouseCursorPosInArea( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
+                statusCallback( _( "View Combat Spells" ) );
             }
-            else if ( le.MouseCursor( prev_list ) ) {
-                ( *statusCallback )( _( "View previous page" ) );
+            else if ( le.isMouseCursorPosInArea( prev_list ) ) {
+                statusCallback( _( "View previous page" ) );
             }
-            else if ( le.MouseCursor( next_list ) ) {
-                ( *statusCallback )( _( "View next page" ) );
+            else if ( le.isMouseCursorPosInArea( next_list ) ) {
+                statusCallback( _( "View next page" ) );
             }
-            else if ( le.MouseCursor( clos_rt ) ) {
-                ( *statusCallback )( _( "Close Spellbook" ) );
+            else if ( le.isMouseCursorPosInArea( clos_rt ) ) {
+                statusCallback( _( "Close Spellbook" ) );
             }
-            else if ( le.MouseCursor( pos ) ) {
-                const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+            else if ( le.isMouseCursorPosInArea( pos ) ) {
+                const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
                 if ( 0 <= index && index + _startSpellIndex < displayedSpells.size() ) {
                     const Spell & spell = displayedSpells[index + _startSpellIndex];
+
                     std::string str = _( "View %{spell}" );
                     StringReplace( str, "%{spell}", spell.GetName() );
-                    ( *statusCallback )( str );
+
+                    statusCallback( str );
                 }
                 else if ( displayableSpells == Filter::CMBT ) {
-                    ( *statusCallback )( _( "View Combat Spells" ) );
+                    statusCallback( _( "View Combat Spells" ) );
                 }
                 else if ( displayableSpells == Filter::ADVN ) {
-                    ( *statusCallback )( _( "View Adventure Spells" ) );
+                    statusCallback( _( "View Adventure Spells" ) );
                 }
                 else {
-                    ( *statusCallback )( _( "View Spells" ) );
+                    statusCallback( _( "View Spells" ) );
                 }
             }
         }
 
-        if ( le.MousePressRight( pos ) ) {
-            const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+        if ( le.isMouseRightButtonPressedInArea( pos ) ) {
+            const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + _startSpellIndex );
@@ -433,7 +436,7 @@ void SpellBook::Edit( const HeroBase & hero )
             break;
         }
         else if ( le.MouseClickLeft( pos ) ) {
-            const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+            const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
@@ -453,7 +456,7 @@ void SpellBook::Edit( const HeroBase & hero )
         }
         else if ( le.MouseClickRight( pos ) ) {
             // Remove Spell under the cursor from the Spell Book.
-            const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+            const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( index >= 0 ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );

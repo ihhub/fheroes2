@@ -51,6 +51,11 @@ namespace fheroes2
     class Image;
 }
 
+namespace Maps::Map_Format
+{
+    struct CastleMetadata;
+}
+
 struct Funds;
 class HeroBase;
 class Heroes;
@@ -97,17 +102,18 @@ enum building_t : uint32_t
     DWELLING_UPGRADES = DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE4 | DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7
 };
 
-enum buildcond_t
+enum class BuildingStatus : int32_t
 {
-    NOT_TODAY = -1,
-    ALREADY_BUILT = -2,
-    NEED_CASTLE = -3,
-    BUILD_DISABLE = -4,
-    UNKNOWN_UPGRADE = -5,
-    REQUIRES_BUILD = -6,
-    LACK_RESOURCES = -7,
-    UNKNOWN_COND = 0,
-    ALLOW_BUILD = 1
+    UNKNOWN_COND,
+    ALLOW_BUILD,
+    NOT_TODAY,
+    ALREADY_BUILT,
+    NEED_CASTLE,
+    BUILD_DISABLE,
+    SHIPYARD_NOT_ALLOWED,
+    UNKNOWN_UPGRADE,
+    REQUIRES_BUILD,
+    LACK_RESOURCES
 };
 
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
@@ -115,9 +121,9 @@ class Castle : public MapPosition, public BitModes, public ColorBase, public Con
 public:
     enum : uint32_t
     {
-        ALLOWCASTLE = 0x00000002,
-        CUSTOMARMY = 0x00000004,
-        ALLOWBUILD = 0x00000008
+        UNUSED_ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
+        CUSTOM_ARMY = ( 1 << 2 ),
+        ALLOW_TO_BUILD_TODAY = ( 1 << 3 )
     };
 
     enum class CastleDialogReturnValue : int
@@ -139,6 +145,8 @@ public:
 
     void LoadFromMP2( const std::vector<uint8_t> & data );
 
+    void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata );
+
     Captain & GetCaptain()
     {
         return captain;
@@ -151,7 +159,7 @@ public:
 
     bool isCastle() const
     {
-        return ( building & BUILD_CASTLE ) != 0;
+        return ( _constructedBuildings & BUILD_CASTLE ) != 0;
     }
 
     bool HasSeaAccess() const;
@@ -195,7 +203,7 @@ public:
     bool isLibraryBuild() const;
     void MageGuildEducateHero( HeroBase & ) const;
 
-    bool isFortificationBuild() const;
+    bool isFortificationBuilt() const;
 
     const Army & GetArmy() const;
     Army & GetArmy();
@@ -231,10 +239,7 @@ public:
     void ChangeColor( int );
 
     void ActionNewDay();
-
     void ActionNewWeek();
-    void ActionNewWeekAIBonuses();
-
     void ActionNewMonth() const;
 
     void ActionPreBattle();
@@ -255,14 +260,13 @@ public:
 
     bool isBuild( uint32_t bd ) const
     {
-        return ( building & bd ) != 0;
+        return ( _constructedBuildings & bd ) != 0;
     }
 
     bool BuyBuilding( uint32_t );
-    uint32_t GetBuildingRequirement( uint32_t ) const;
 
-    int CheckBuyBuilding( const uint32_t build ) const;
-    static int GetAllBuildingStatus( const Castle & );
+    BuildingStatus CheckBuyBuilding( const uint32_t build ) const;
+    static BuildingStatus GetAllBuildingStatus( const Castle & );
 
     bool AllowBuyBoat( const bool checkPayment ) const;
     bool BuyBoat() const;
@@ -273,11 +277,10 @@ public:
     std::string GetDescriptionBuilding( uint32_t ) const;
 
     static const char * GetStringBuilding( uint32_t, int race );
-    static const char * GetDescriptionBuilding( uint32_t, int race );
 
     static int GetICNBuilding( uint32_t, int race );
     static int GetICNBoat( int race );
-    uint32_t GetUpgradeBuilding( uint32_t ) const;
+    uint32_t GetUpgradeBuilding( const uint32_t buildingId ) const;
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
@@ -294,6 +297,11 @@ public:
     int DialogBuyCastle( bool fixed = true ) const;
 
     Troops getAvailableArmy( Funds potentialBudget ) const;
+
+    bool isBuildingDisabled( const uint32_t buildingType ) const
+    {
+        return ( _disabledBuildings & buildingType ) != 0;
+    }
 
 private:
     enum class ConstructionDialogResult : int
@@ -324,6 +332,8 @@ private:
     void _wellRedrawBackground( fheroes2::Image & background ) const;
     void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
 
+    void _setDefaultBuildings();
+
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
@@ -332,13 +342,15 @@ private:
     friend StreamBase & operator>>( StreamBase &, Castle & );
 
     int race;
-    uint32_t building;
+    uint32_t _constructedBuildings;
+    uint32_t _disabledBuildings;
+
     Captain captain;
 
     std::string name;
 
     MageGuild mageguild;
-    uint32_t dwelling[CASTLEMAXMONSTER];
+    std::array<uint32_t, CASTLEMAXMONSTER> dwelling;
     Army army;
 };
 
@@ -409,9 +421,14 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * GetFirstCastle() const;
+    VecCastles() = default;
+    VecCastles( const VecCastles & ) = delete;
 
-    void ChangeColors( int, int );
+    ~VecCastles() = default;
+
+    VecCastles & operator=( const VecCastles & ) = delete;
+
+    Castle * GetFirstCastle() const;
 };
 
 class AllCastles
@@ -448,11 +465,6 @@ public:
     void NewWeek()
     {
         std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
-    }
-
-    void NewWeekAI()
-    {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeekAIBonuses(); } );
     }
 
     void NewMonth()

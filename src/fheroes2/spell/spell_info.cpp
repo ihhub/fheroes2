@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -325,39 +325,45 @@ namespace fheroes2
             return -1;
         }
 
-        const int32_t center = hero.GetIndex();
-        const int tilePassability = world.GetTiles( center ).GetPassable();
-        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+        const int32_t heroTileIdx = hero.GetIndex();
+        const int heroTilePassability = world.GetTiles( heroTileIdx ).GetPassable();
+
         std::vector<int32_t> possibleBoatPositions;
-        for ( const int32_t tileId : tilesAround ) {
-            const int direction = Maps::GetDirection( center, tileId );
-            assert( direction != Direction::UNKNOWN );
+        possibleBoatPositions.reserve( 8 );
 
-            if ( ( tilePassability & direction ) != 0 ) {
-                possibleBoatPositions.emplace_back( tileId );
+        for ( const int32_t tileIdx : Maps::getAroundIndexes( heroTileIdx ) ) {
+            const int direction = Maps::GetDirection( heroTileIdx, tileIdx );
+            assert( direction != Direction::UNKNOWN && direction != Direction::CENTER );
+
+            if ( ( heroTilePassability & direction ) == 0 ) {
+                continue;
             }
+
+            const Maps::Tiles & tile = world.GetTiles( tileIdx );
+            if ( !tile.isWater() || tile.GetObject() != MP2::OBJ_NONE ) {
+                continue;
+            }
+
+            possibleBoatPositions.emplace_back( tileIdx );
         }
 
-        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point & rightPoint = Maps::GetPoint( right );
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+        const auto iter = std::min_element( possibleBoatPositions.begin(), possibleBoatPositions.end(),
+                                            [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
+                                                const fheroes2::Point leftPoint = Maps::GetPoint( left );
+                                                const fheroes2::Point rightPoint = Maps::GetPoint( right );
 
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
+                                                const int32_t leftDiffX = leftPoint.x - heroPoint.x;
+                                                const int32_t leftDiffY = leftPoint.y - heroPoint.y;
+                                                const int32_t rightDiffX = rightPoint.x - heroPoint.x;
+                                                const int32_t rightDiffY = rightPoint.y - heroPoint.y;
 
-        for ( const int32_t tileId : possibleBoatPositions ) {
-            const Maps::Tiles & tile = world.GetTiles( tileId );
-            if ( tile.isWater() ) {
-                return tileId;
-            }
+                                                return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+                                            } );
+        if ( iter == possibleBoatPositions.end() ) {
+            return -1;
         }
 
-        return -1;
+        return *iter;
     }
 
     int32_t getSummonableBoat( const Heroes & hero )

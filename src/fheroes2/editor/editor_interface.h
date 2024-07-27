@@ -36,7 +36,7 @@ namespace Maps
 {
     class Tiles;
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 }
 
 namespace Interface
@@ -66,7 +66,11 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
-        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override;
+
+        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override
+        {
+            // Do nothing.
+        }
 
         void undoAction()
         {
@@ -90,6 +94,10 @@ namespace Interface
         }
 
         bool loadMap( const std::string & filePath );
+
+        void saveMapToFile();
+
+        void openMapSpecificationsDialog();
 
     private:
         class WarningMessage
@@ -136,11 +144,20 @@ namespace Interface
             // Do nothing.
         }
 
-        bool setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void handleObjectMouseLeftClick( Maps::Tiles & tile );
+        void _handleObjectMouseLeftClick( Maps::Tiles & tile );
+
+        void _validateObjectsOnTerrainUpdate();
+
+        // Returns true if an existing object was moved.
+        bool _moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
+
+        void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
+
+        void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
         EditorPanel _editorPanel;
 
@@ -154,5 +171,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }

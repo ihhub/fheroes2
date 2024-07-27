@@ -34,7 +34,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_battle.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -327,7 +327,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        const int wallObject = castle->isFortificationBuilt() ? 3 : 2;
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
@@ -358,7 +358,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
-    AI::Get().battleBegins();
+    AI::BattlePlanner::Get().battleBegins();
 
     if ( _interface ) {
         _interface->fullRedraw();
@@ -366,7 +366,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
         while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
-            if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
+            if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 // Cancel waiting for M82::PREBATTL to over and start the battle.
                 break;
             }
@@ -428,7 +428,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
             }
 
             if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
-                AI::Get().BattleTurn( *this, *_currentUnit, actions );
+                AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
                 assert( _interface != nullptr );

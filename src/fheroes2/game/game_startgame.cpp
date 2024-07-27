@@ -34,7 +34,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -158,8 +158,6 @@ fheroes2::GameMode Game::StartBattleOnly()
 
 fheroes2::GameMode Game::StartGame()
 {
-    AI::Get().Reset();
-
     const Settings & conf = Settings::Get();
 
     // setup cursor
@@ -205,8 +203,7 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
@@ -643,7 +640,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
@@ -751,10 +748,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
-        // This prevents human players from abusing AI bonuses.
-        bool applyAIBonuses = true;
-
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
@@ -830,12 +823,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
-                    if ( applyAIBonuses ) {
-                        world.NewDayAI();
-
-                        applyAIBonuses = false;
-                    }
-
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
                     conf.SetCurrentColor( playerColor );
@@ -872,7 +859,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Get().KingdomTurn( kingdom );
+                    AI::Planner::Get().KingdomTurn( kingdom );
 
 #if defined( WITH_DEBUG )
                     if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -1038,7 +1025,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         _statusWindow.TimerEventProcessing();
 
         // hotkeys
-        if ( le.KeyPress() ) {
+        if ( le.isAnyKeyPressed() ) {
             // if the hero is currently moving, pressing any key should stop him
             if ( isMovingHero ) {
                 stopHero = true;
@@ -1123,7 +1110,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
             else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
-                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() );
                 // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
                 if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
                     cursor.SetThemes( GetCursorTileIndex( index ) );
@@ -1141,13 +1128,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
-            if ( isScrollLeft( le.GetMouseCursor() ) )
+            if ( isScrollLeft( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_LEFT;
-            else if ( isScrollRight( le.GetMouseCursor() ) )
+            else if ( isScrollRight( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_RIGHT;
-            if ( isScrollTop( le.GetMouseCursor() ) )
+            if ( isScrollTop( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_TOP;
-            else if ( isScrollBottom( le.GetMouseCursor() ) )
+            else if ( isScrollBottom( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
             if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
@@ -1170,7 +1157,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         // Re-enable fast scroll if the cursor movement indicates the need
-        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.GetMouseCursor() ) ) {
+        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.getMouseCursorPos() ) ) {
             _gameArea.setFastScrollStatus( true );
         }
 
@@ -1184,44 +1171,45 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             cursor.SetThemes( Cursor::WAIT );
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            if ( le.MouseClickLeft() || le.MousePressRight() ) {
+            if ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) {
                 stopHero = true;
             }
         }
         // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && ( le.MouseCursor( iconsPanel.GetRect() ) || le.MousePressLeft( iconsPanel.GetRect() ) ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowIcons() )
+                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             iconsPanel.QueueEventProcessing();
         }
         // cursor is over the status window
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
-        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( buttonsArea.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
         // cursor is over the radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             if ( !_gameArea.isDragScroll() )
                 _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
-        else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
+        else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
-        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
+        else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
         // cursor is somewhere else
@@ -1235,7 +1223,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !_radar.isDragRadar() )
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.MousePressLeft() )
+            else if ( !le.isMouseLeftButtonPressed() )
                 _radar.QueueEventProcessing();
         }
 
@@ -1342,11 +1330,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 _gameArea.SetUpdateCursor();
                             }
                             else {
-                                if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                                if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
                                     // We do not use '_gameArea.SetUpdateCursor()' here because we need to update the cursor before rendering the current frame
                                     // and '_gameArea.QueueEventProcessing()' was called earlier in this loop and will only be able to update the cursor in the
                                     // next loop for the next frame.
-                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() ) ) );
                                 }
                                 else {
                                     // When the cursor is not over the game area we use the Pointer cursor.
@@ -1374,8 +1362,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         // fast scroll
         if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                       || isScrollBottom( le.GetMouseCursor() ) )
+                if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
+                       || isScrollBottom( le.getMouseCursorPos() ) )
                      && !_gameArea.isDragScroll() ) {
                     cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }

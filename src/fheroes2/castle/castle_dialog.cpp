@@ -261,7 +261,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Image surfaceHero;
 
     auto constructionDialogHandler = [this, &display, &dialogRoi, &fadeBuilding, &hero, &surfaceHero, &alphaHero]() {
-        switch ( uint32_t build = BUILD_NOTHING; openConstructionDialog( build ) ) {
+        uint32_t build = BUILD_NOTHING;
+        const Castle::ConstructionDialogResult result = openConstructionDialog( build );
+
+        switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
             return CastleDialogReturnValue::NextCostructionWindow;
         case ConstructionDialogResult::PrevConstructionWindow:
@@ -399,13 +402,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
-                le.MousePressLeft( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
+                le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
             }
             if ( buttonNextCastle.isEnabled() ) {
-                le.MousePressLeft( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
+                le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
             }
 
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
@@ -434,30 +437,30 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 fheroes2::showKingdomIncome( GetKingdom(), Dialog::OK );
             }
-            else if ( le.MousePressRight( resActiveArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( resActiveArea ) ) {
                 fheroes2::showKingdomIncome( GetKingdom(), 0 );
             }
-            else if ( le.MousePressRight( buttonExit.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
             }
-            else if ( isBuild( BUILD_CAPTAIN ) && le.MousePressRight( rectSign1 ) ) {
+            else if ( isBuild( BUILD_CAPTAIN ) && le.isMouseRightButtonPressedInArea( rectSign1 ) ) {
                 Dialog::QuickInfo( GetCaptain() );
             }
-            else if ( hero && le.MousePressRight( rectSign2 ) ) {
+            else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
             }
 
             // Army bar events processing.
             if ( ( bottomArmyBar.isValid()
-                   && ( ( le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
-                        || ( le.MouseCursor( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
-                 || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
+                   && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
+                        || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
+                 || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
                 needRedraw = true;
             }
 
@@ -519,7 +522,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 const uint32_t monsterDwelling = GetActualDwelling( it->id );
                 const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
 
-                if ( le.MousePressRight( it->coord ) ) {
+                if ( le.isMouseRightButtonPressedInArea( it->coord ) ) {
                     // Check mouse right click.
                     if ( isMonsterDwelling ) {
                         Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
@@ -609,7 +612,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                         case BUILD_TENT: {
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( !Modes( ALLOWCASTLE ) ) {
+                            if ( isBuildingDisabled( BUILD_CASTLE ) ) {
                                 fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
@@ -690,25 +693,25 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
         for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( isBuild( it->id ) && le.MouseCursor( it->coord ) ) {
+            if ( isBuild( it->id ) && le.isMouseCursorPosInArea( it->coord ) ) {
                 statusMessage = buildingStatusMessage( race, it->id );
                 break;
             }
         }
 
-        if ( le.MouseCursor( buttonExit.area() ) ) {
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
             statusMessage = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
         }
-        else if ( le.MouseCursor( resActiveArea ) ) {
+        else if ( le.isMouseCursorPosInArea( resActiveArea ) ) {
             statusMessage = _( "Show Income" );
         }
-        else if ( buttonPrevCastle.isEnabled() && le.MouseCursor( buttonPrevCastle.area() ) ) {
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
             statusMessage = _( "Show previous town" );
         }
-        else if ( buttonNextCastle.isEnabled() && le.MouseCursor( buttonNextCastle.area() ) ) {
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
             statusMessage = _( "Show next town" );
         }
-        else if ( hero && le.MouseCursor( rectSign2 ) ) {
+        else if ( hero && le.isMouseCursorPosInArea( rectSign2 ) ) {
             statusMessage = _( "View Hero" );
         }
 

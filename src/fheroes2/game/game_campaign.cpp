@@ -422,7 +422,7 @@ namespace
         const LocalEvent & le = LocalEvent::Get();
 
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
-            if ( le.MousePressRight( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
+            if ( le.isMouseRightButtonPressedInArea( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
                 fheroes2::showScenarioBonusDataPopupWindow( bonuses[i] );
                 return true;
             }
@@ -488,7 +488,7 @@ namespace
         const LocalEvent & le = LocalEvent::Get();
 
         for ( size_t i = 0; i < indexEnd; ++i ) {
-            if ( le.MousePressRight( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
+            if ( le.isMouseRightButtonPressedInArea( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
                 fheroes2::showAwardDataPopupWindow( obtainedAwards[i] );
                 return true;
             }
@@ -1030,7 +1030,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
             if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -1038,32 +1038,20 @@ namespace
 
             bool updateInfo = false;
 
-            if ( le.MousePressRight( buttonOk.area() ) ) {
-                const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 updateInfo = true;
             }
-            else if ( le.MousePressRight( difficultyArea[0] ) ) {
-                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
+            else if ( le.isMouseRightButtonPressedInArea( difficultyArea[0] ) ) {
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), easyDescription, Dialog::ZERO );
                 updateInfo = true;
             }
-            else if ( le.MousePressRight( difficultyArea[1] ) ) {
-                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
+            else if ( le.isMouseRightButtonPressedInArea( difficultyArea[1] ) ) {
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), normalDescription, Dialog::ZERO );
                 updateInfo = true;
             }
-            else if ( le.MousePressRight( difficultyArea[2] ) ) {
-                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
+            else if ( le.isMouseRightButtonPressedInArea( difficultyArea[2] ) ) {
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), hardDescription, Dialog::ZERO );
                 updateInfo = true;
             }
 
@@ -1517,14 +1505,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     bool updateDisplay = false;
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
-        le.MousePressLeft( buttonDifficulty.area() ) ? buttonDifficulty.drawOnPress() : buttonDifficulty.drawOnRelease();
-        le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) ? buttonDifficulty.drawOnPress() : buttonDifficulty.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-            if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
                 scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
                 optionButtonGroup.draw();
@@ -1564,32 +1552,25 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         const bool restartButtonClicked
             = ( buttonRestart.isEnabled() && ( le.MouseClickLeft( buttonRestart.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) ) );
 
-        if ( le.MousePressRight( buttonCancel.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             updateDisplay = true;
         }
-        else if ( buttonOk.isVisible() && le.MousePressRight( buttonOk.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Okay" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Start the selected scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        else if ( buttonOk.isVisible() && le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Start the selected scenario." ), Dialog::ZERO );
             updateDisplay = true;
         }
-        else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( buttonViewIntro.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "View Intro" ), _( "View the intro video for the current state of the campaign." ), Dialog::ZERO );
             updateDisplay = true;
         }
-        else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Select the campaign difficulty. This can be lowered at any point during the campaign." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( buttonDifficulty.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Campaign Difficulty" ), _( "Select the campaign difficulty. This can be lowered at any point during the campaign." ),
+                                               Dialog::ZERO );
             updateDisplay = true;
         }
-        else if ( buttonRestart.isVisible() && le.MousePressRight( buttonRestart.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        else if ( buttonRestart.isVisible() && le.isMouseRightButtonPressedInArea( buttonRestart.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Restart" ), _( "Restart the current scenario." ), Dialog::ZERO );
             updateDisplay = true;
         }
         else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
@@ -1686,9 +1667,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             fheroes2::fadeInDisplay( restorer.rect(), false );
         }
-        else if ( le.MousePressRight( areaDaysSpent ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( areaDaysSpent ) ) {
+            fheroes2::showStandardTextMessage( _( "Days spent" ), _( "The number of days spent on this campaign." ), Dialog::ZERO );
             updateDisplay = true;
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {

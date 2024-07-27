@@ -204,44 +204,44 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
     }
 
     // The case when we are in Editor mode.
-    auto primarySkillEditDialog = [&skill]( uint32_t & skillValue ) {
+    auto primarySkillEditDialog = [&skill]( int32_t & skillValue ) {
         std::string header = _( "Set %{skill} Skill" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
         return Dialog::SelectCount( header, skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue );
     };
 
-    uint32_t value;
+    int32_t value;
 
     switch ( skill ) {
     case Skill::Primary::ATTACK:
-        value = static_cast<uint32_t>( _hero->getAttackBaseValue() );
+        value = _hero->getAttackBaseValue();
         if ( primarySkillEditDialog( value ) ) {
-            _hero->setAttackBaseValue( static_cast<int>( value ) );
+            _hero->setAttackBaseValue( value );
             _isDefault = false;
             return true;
         }
         break;
     case Skill::Primary::DEFENSE:
-        value = static_cast<uint32_t>( _hero->getDefenseBaseValue() );
+        value = _hero->getDefenseBaseValue();
         if ( primarySkillEditDialog( value ) ) {
-            _hero->setDefenseBaseValue( static_cast<int>( value ) );
+            _hero->setDefenseBaseValue( value );
             _isDefault = false;
             return true;
         }
         break;
     case Skill::Primary::POWER:
-        value = static_cast<uint32_t>( _hero->getPowerBaseValue() );
+        value = _hero->getPowerBaseValue();
         if ( primarySkillEditDialog( value ) ) {
-            _hero->setPowerBaseValue( static_cast<int>( value ) );
+            _hero->setPowerBaseValue( value );
             _isDefault = false;
             return true;
         }
         break;
     case Skill::Primary::KNOWLEDGE:
-        value = static_cast<uint32_t>( _hero->getKnowledgeBaseValue() );
+        value = _hero->getKnowledgeBaseValue();
         if ( primarySkillEditDialog( value ) ) {
-            _hero->setKnowledgeBaseValue( static_cast<int>( value ) );
+            _hero->setKnowledgeBaseValue( value );
             _isDefault = false;
             return true;
         }
@@ -321,13 +321,16 @@ void SecondarySkillsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2:
         fheroes2::Copy( backsf, 0, 0, dstsf, pos );
     }
     else {
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos );
         if ( _showDefaultSkillsMessage && std::none_of( items.begin(), items.end(), []( Skill::Secondary const * skill ) { return skill->isValid(); } ) ) {
             // In editor when no skill are set it means that default skills will be applied on the game start.
-            fheroes2::ApplyPalette( dstsf, pos.x, pos.y, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\nskill" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + ( pos.height - text.height() * text.rows( pos.width ) ) / 2 + 2, pos.width, dstsf, pos );
+        }
+        else {
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos );
         }
     }
 }

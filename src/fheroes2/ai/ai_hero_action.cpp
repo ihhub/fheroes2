@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ai_hero_action.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -29,7 +31,8 @@
 #include <string>
 #include <vector>
 
-#include "ai.h"
+#include "ai_common.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -267,7 +270,7 @@ namespace
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
 
-        AI::Get().HeroesActionComplete( hero, targetIndex, hero.getObjectTypeUnderHero() );
+        AI::Planner::Get().HeroesActionComplete( hero, targetIndex, hero.getObjectTypeUnderHero() );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " used the " << spellToUse.GetName() << " to reach the " << targetCastle->GetName() )
     }
@@ -572,10 +575,8 @@ namespace
         }
 
         if ( destroy ) {
-            setMonsterCountOnTile( tile, 0 );
-
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -589,8 +590,8 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         }
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
         hero.GetPath().Reset();
     }
 
@@ -668,8 +669,8 @@ namespace
             kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
@@ -742,7 +743,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         hero.setVisitedForAllies( dst_index );
     }
 
@@ -760,7 +761,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
 
         hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
@@ -780,7 +781,7 @@ namespace
             else
                 hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -793,8 +794,8 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToSign( Heroes & hero, int32_t dst_index )
@@ -817,7 +818,7 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        const Funds payment( Resource::GOLD, 1000 );
+        const Funds payment = PaymentConditions::getMagellansMapsPurchasePrice();
         Kingdom & kingdom = hero.GetKingdom();
 
         if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
@@ -1119,13 +1120,17 @@ namespace
         MapEvent * event_maps = world.GetMapEvent( Maps::GetPoint( dst_index ) );
 
         if ( event_maps && event_maps->isAllow( hero.GetColor() ) && event_maps->computer ) {
-            if ( event_maps->resources.GetValidItemsCount() )
+            if ( event_maps->resources.GetValidItemsCount() ) {
                 hero.GetKingdom().AddFundsResource( event_maps->resources );
-            if ( event_maps->artifact.isValid() )
-                hero.PickupArtifact( event_maps->artifact );
-            event_maps->SetVisited( hero.GetColor() );
+            }
 
-            if ( event_maps->cancel ) {
+            if ( event_maps->artifact.isValid() ) {
+                hero.PickupArtifact( event_maps->artifact );
+            }
+
+            event_maps->SetVisited();
+
+            if ( event_maps->isSingleTimeEvent ) {
                 hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }
@@ -1166,12 +1171,18 @@ namespace
 
         assert( hero.GetIndex() == dst_index || MP2::isNeedStayFront( objectType ) );
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
-            // If we can't step on this tile, then we shouldn't be here at all
-            assert( !MP2::isNeedStayFront( objectType ) );
+        if ( !AI::Planner::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
+            if ( MP2::isNeedStayFront( objectType ) ) {
+                // If we can't step on this tile, then we shouldn't be here at all, but we can still end up here due to inaccuracies in the hero's strength assessment at
+                // the starting point of his path (for example, if the hero's starting point was in a castle, then the castle's bonuses could affect the assessment of his
+                // strength)
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " does not interact with the object and ignores it" )
+            }
+            else {
+                // We're just passing through here, don't mess with this object
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
+            }
 
-            // We're just passing through here, don't mess with this object
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
         }
 
@@ -1207,7 +1218,7 @@ namespace
         }
 
         if ( complete ) {
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
         else if ( 0 == gold && !hero.isObjectTypeVisited( objectType ) ) {
             // Modify morale
@@ -1222,7 +1233,7 @@ namespace
 
         assert( hero.GetIndex() == dst_index );
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
+        if ( !AI::Planner::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1247,7 +1258,7 @@ namespace
                     hero.AppendSpellToBook( spell );
                 }
 
-                resetObjectInfoOnTile( tile );
+                resetObjectMetadata( tile );
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
@@ -1301,7 +1312,7 @@ namespace
 
         assert( hero.GetIndex() == dst_index );
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
+        if ( !AI::Planner::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1322,7 +1333,7 @@ namespace
                 AIBattleLose( hero, res, true );
             }
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1390,8 +1401,8 @@ namespace
 
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1401,7 +1412,7 @@ namespace
 
         assert( hero.GetIndex() == tileIndex );
 
-        if ( !AI::Get().isValidHeroObject( hero, tileIndex, ( hero.GetIndex() == tileIndex ) ) ) {
+        if ( !AI::Planner::Get().isValidHeroObject( hero, tileIndex, ( hero.GetIndex() == tileIndex ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1459,7 +1470,7 @@ namespace
 
         assert( hero.GetIndex() == dstIndex );
 
-        if ( !AI::Get().isValidHeroObject( hero, dstIndex, ( hero.GetIndex() == dstIndex ) ) ) {
+        if ( !AI::Planner::Get().isValidHeroObject( hero, dstIndex, ( hero.GetIndex() == dstIndex ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1491,8 +1502,8 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1517,56 +1528,61 @@ namespace
         else
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
-        removeObjectSprite( tile );
-        resetObjectInfoOnTile( tile );
+        removeMainObjectFromTile( tile );
+        resetObjectMetadata( tile );
     }
 
     void AIToArtifact( Heroes & hero, int32_t dst_index )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
+        if ( hero.IsFullBagArtifacts() ) {
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( !hero.IsFullBagArtifacts() ) {
-            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
-            const Artifact art = getArtifactFromTile( tile );
+        const Artifact art = getArtifactFromTile( tile );
+        if ( art.GetID() == Artifact::MAGIC_BOOK && hero.HaveSpellBook() ) {
+            return;
+        }
 
-            bool result = false;
+        const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                const Funds payment = getArtifactResourceRequirement( tile );
+        bool result = false;
 
-                if ( hero.GetKingdom().AllowPayment( payment ) ) {
-                    result = true;
-                    hero.GetKingdom().OddFundsResource( payment );
-                }
-            }
-            else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-                // TODO: do we need to check this condition?
+        if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+             || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+            const Funds payment = getArtifactResourceRequirement( tile );
+
+            if ( hero.GetKingdom().AllowPayment( payment ) ) {
                 result = true;
+                hero.GetKingdom().OddFundsResource( payment );
             }
-            else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                Army army( tile );
+        }
+        else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+            // TODO: do we need to check this condition?
+            result = true;
+        }
+        else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+            Army army( tile );
 
-                // new battle
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    result = true;
-                }
-                else {
-                    AIBattleLose( hero, res, true );
-                }
+            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+                result = true;
             }
             else {
-                result = true;
+                AIBattleLose( hero, res, true );
             }
+        }
+        else {
+            result = true;
+        }
 
-            if ( result && hero.PickupArtifact( art ) ) {
-                removeObjectSprite( tile );
-                resetObjectInfoOnTile( tile );
-            }
+        if ( result && hero.PickupArtifact( art ) ) {
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
         }
     }
 
@@ -1645,8 +1661,8 @@ namespace
         if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-            removeObjectSprite( tile );
-            tile.setAsEmpty();
+            removeMainObjectFromTile( tile );
+            resetObjectMetadata( tile );
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
 
@@ -1719,418 +1735,348 @@ namespace
     void AIToTradingPost( const Heroes & hero )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
-
-        AI::Get().tradingPostVisitEvent( hero.GetKingdom() );
+#ifndef WITH_DEBUG
+        (void)hero;
+#endif
     }
 }
 
-namespace AI
+void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
 {
-    void HeroesAction( Heroes & hero, const int32_t dst_index )
-    {
-        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+    const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
 
-        const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
+    const Maps::Tiles & tile = world.GetTiles( dst_index );
+    const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
 
-        const bool isActionObject = MP2::isActionObject( objectType, hero.isShipMaster() );
-        if ( isActionObject )
-            hero.SetModes( Heroes::ACTION );
+    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
+    if ( isActionObject )
+        hero.SetModes( Heroes::ACTION );
 
-        switch ( objectType ) {
-        case MP2::OBJ_BOAT:
-            AIToBoat( hero, dst_index );
-            break;
-        case MP2::OBJ_COAST:
-            // Coast is not an action object by definition but we need to do hero's animation.
-            AIToCoast( hero, dst_index );
-            break;
+    switch ( objectType ) {
+    case MP2::OBJ_BOAT:
+        AIToBoat( hero, dst_index );
+        break;
+    case MP2::OBJ_COAST:
+        // Coast is not an action object by definition but we need to do hero's animation.
+        AIToCoast( hero, dst_index );
+        break;
 
-        case MP2::OBJ_MONSTER:
-            AIToMonster( hero, dst_index );
-            break;
-        case MP2::OBJ_HERO:
-            AIToHeroes( hero, dst_index );
-            break;
-        case MP2::OBJ_CASTLE:
-            AIToCastle( hero, dst_index );
-            break;
+    case MP2::OBJ_MONSTER:
+        AIToMonster( hero, dst_index );
+        break;
+    case MP2::OBJ_HERO:
+        AIToHeroes( hero, dst_index );
+        break;
+    case MP2::OBJ_CASTLE:
+        AIToCastle( hero, dst_index );
+        break;
 
-        // pickup object
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_RESOURCE:
-            AIToPickupResource( hero, objectType, dst_index );
-            break;
+    // pickup object
+    case MP2::OBJ_BOTTLE:
+    case MP2::OBJ_CAMPFIRE:
+    case MP2::OBJ_RESOURCE:
+        AIToPickupResource( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-            AIToTreasureChest( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_ARTIFACT:
-            AIToArtifact( hero, dst_index );
-            break;
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+        AIToTreasureChest( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_ARTIFACT:
+        AIToArtifact( hero, dst_index );
+        break;
 
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATER_WHEEL:
-            AIToObjectResource( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WINDMILL:
+    case MP2::OBJ_WATER_WHEEL:
+        AIToObjectResource( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_WAGON:
-            AIToWagon( hero, dst_index );
-            break;
-        case MP2::OBJ_SKELETON:
-            AIToSkeleton( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_FLOTSAM:
-            AIToFlotSam( hero, dst_index );
-            break;
+    case MP2::OBJ_WAGON:
+        AIToWagon( hero, dst_index );
+        break;
+    case MP2::OBJ_SKELETON:
+        AIToSkeleton( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_FLOTSAM:
+        AIToFlotSam( hero, dst_index );
+        break;
 
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINE:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_LIGHTHOUSE:
-            AIToCaptureObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_MINE:
+    case MP2::OBJ_SAWMILL:
+    case MP2::OBJ_LIGHTHOUSE:
+        AIToCaptureObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_ABANDONED_MINE:
-            AIToAbandonedMine( hero, dst_index );
-            break;
+    case MP2::OBJ_ABANDONED_MINE:
+        AIToAbandonedMine( hero, dst_index );
+        break;
 
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-            AIToShipwreckSurvivor( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        AIToShipwreckSurvivor( hero, objectType, dst_index );
+        break;
 
-        // event
-        case MP2::OBJ_EVENT:
-            AIToEvent( hero, dst_index );
-            break;
+    // event
+    case MP2::OBJ_EVENT:
+        AIToEvent( hero, dst_index );
+        break;
 
-        case MP2::OBJ_SIGN:
-            AIToSign( hero, dst_index );
-            break;
+    case MP2::OBJ_SIGN:
+        AIToSign( hero, dst_index );
+        break;
 
-        // increase view
-        case MP2::OBJ_OBSERVATION_TOWER:
-            AIToObservationTower( hero, dst_index );
-            break;
-        case MP2::OBJ_MAGELLANS_MAPS:
-            AIToMagellanMaps( hero, dst_index );
-            break;
+    // increase view
+    case MP2::OBJ_OBSERVATION_TOWER:
+        AIToObservationTower( hero, dst_index );
+        break;
+    case MP2::OBJ_MAGELLANS_MAPS:
+        AIToMagellanMaps( hero, dst_index );
+        break;
 
-        // teleports
-        case MP2::OBJ_STONE_LITHS:
-            AIToTeleports( hero, dst_index );
-            break;
-        case MP2::OBJ_WHIRLPOOL:
-            AIToWhirlpools( hero, dst_index );
-            break;
+    // teleports
+    case MP2::OBJ_STONE_LITHS:
+        AIToTeleports( hero, dst_index );
+        break;
+    case MP2::OBJ_WHIRLPOOL:
+        AIToWhirlpools( hero, dst_index );
+        break;
 
-        // primary skill modification
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-            AIToPrimarySkillObject( hero, objectType, dst_index );
-            break;
+    // primary skill modification
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_MERCENARY_CAMP:
+    case MP2::OBJ_WITCH_DOCTORS_HUT:
+    case MP2::OBJ_STANDING_STONES:
+        AIToPrimarySkillObject( hero, objectType, dst_index );
+        break;
 
-        // experience modification
-        case MP2::OBJ_GAZEBO:
-            AIToExperienceObject( hero, objectType, dst_index );
-            break;
+    // experience modification
+    case MP2::OBJ_GAZEBO:
+        AIToExperienceObject( hero, objectType, dst_index );
+        break;
 
-        // Witch's hut
-        case MP2::OBJ_WITCHS_HUT:
-            AIToWitchsHut( hero, dst_index );
-            break;
+    // Witch's hut
+    case MP2::OBJ_WITCHS_HUT:
+        AIToWitchsHut( hero, dst_index );
+        break;
 
-        // shrine circle
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-            AIToShrine( hero, dst_index );
-            break;
+    // shrine circle
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        AIToShrine( hero, dst_index );
+        break;
 
-        // luck modification
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_MERMAID:
-            AIToGoodLuckObject( hero, dst_index );
-            break;
+    // luck modification
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_MERMAID:
+        AIToGoodLuckObject( hero, dst_index );
+        break;
 
-        // morale modification
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_WATERING_HOLE:
-        case MP2::OBJ_BUOY:
-            AIToGoodMoraleObject( hero, objectType, dst_index );
-            break;
+    // morale modification
+    case MP2::OBJ_OASIS:
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_WATERING_HOLE:
+    case MP2::OBJ_BUOY:
+        AIToGoodMoraleObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_OBELISK:
-            AIToObelisk( hero, tile );
-            break;
+    case MP2::OBJ_OBELISK:
+        AIToObelisk( hero, tile );
+        break;
 
-        // magic point
-        case MP2::OBJ_ARTESIAN_SPRING:
-            AIToArtesianSpring( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_MAGIC_WELL:
-            AIToMagicWell( hero, dst_index );
-            break;
+    // magic point
+    case MP2::OBJ_ARTESIAN_SPRING:
+        AIToArtesianSpring( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_MAGIC_WELL:
+        AIToMagicWell( hero, dst_index );
+        break;
 
-        // increase skill
-        case MP2::OBJ_XANADU:
-            AIToXanadu( hero, dst_index );
-            break;
+    // increase skill
+    case MP2::OBJ_XANADU:
+        AIToXanadu( hero, dst_index );
+        break;
 
-        case MP2::OBJ_HILL_FORT:
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            AIToUpgradeArmyObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_HILL_FORT:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
+        AIToUpgradeArmyObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DERELICT_SHIP:
-            AIToPoorMoraleObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_DERELICT_SHIP:
+        AIToPoorMoraleObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_PYRAMID:
-            AIToPyramid( hero, dst_index );
-            break;
-        case MP2::OBJ_DAEMON_CAVE:
-            AIToDaemonCave( hero, dst_index );
-            break;
+    case MP2::OBJ_PYRAMID:
+        AIToPyramid( hero, dst_index );
+        break;
+    case MP2::OBJ_DAEMON_CAVE:
+        AIToDaemonCave( hero, dst_index );
+        break;
 
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            AIToTreeKnowledge( hero, dst_index );
-            break;
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        AIToTreeKnowledge( hero, dst_index );
+        break;
 
-        // accept army
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_DWARF_COTTAGE:
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_PEASANT_HUT:
-            AIToDwellingJoinMonster( hero, dst_index );
-            break;
+    // accept army
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+        AIToDwellingJoinMonster( hero, dst_index );
+        break;
 
-        // recruit army
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
-        // loyalty version objects
-        case MP2::OBJ_WATER_ALTAR:
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-            AIToDwellingRecruitMonster( hero, objectType, dst_index );
-            break;
+    // recruit army
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+    // loyalty version objects
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
+        AIToDwellingRecruitMonster( hero, objectType, dst_index );
+        break;
 
-        // recruit army (battle)
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-            AIToDwellingBattleMonster( hero, objectType, dst_index );
-            break;
+    // recruit army (battle)
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_TROLL_BRIDGE:
+        AIToDwellingBattleMonster( hero, objectType, dst_index );
+        break;
 
-        // recruit genie
-        case MP2::OBJ_GENIE_LAMP:
-            AIToDwellingRecruitMonster( hero, objectType, dst_index );
-            break;
+    // recruit genie
+    case MP2::OBJ_GENIE_LAMP:
+        AIToDwellingRecruitMonster( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_STABLES:
-            AIToStables( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_ARENA:
-            AIToPrimarySkillObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_STABLES:
+        AIToStables( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_ARENA:
+        AIToPrimarySkillObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_BARRIER:
-            AIToBarrier( hero, dst_index );
-            break;
-        case MP2::OBJ_TRAVELLER_TENT:
-            AIToTravellersTent( hero, dst_index );
-            break;
+    case MP2::OBJ_BARRIER:
+        AIToBarrier( hero, dst_index );
+        break;
+    case MP2::OBJ_TRAVELLER_TENT:
+        AIToTravellersTent( hero, dst_index );
+        break;
 
-        case MP2::OBJ_JAIL:
-            AIToJail( hero, dst_index );
-            break;
-        case MP2::OBJ_HUT_OF_MAGI:
-            AIToHutMagi( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_ALCHEMIST_TOWER:
-            AIToAlchemistTower( hero );
-            break;
+    case MP2::OBJ_JAIL:
+        AIToJail( hero, dst_index );
+        break;
+    case MP2::OBJ_HUT_OF_MAGI:
+        AIToHutMagi( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_ALCHEMIST_TOWER:
+        AIToAlchemistTower( hero );
+        break;
 
-        case MP2::OBJ_TRADING_POST:
-            AIToTradingPost( hero );
-            break;
+    case MP2::OBJ_TRADING_POST:
+        AIToTradingPost( hero );
+        break;
 
-        // AI has no advantage or knowledge to use these objects
-        case MP2::OBJ_ORACLE:
-        case MP2::OBJ_EYE_OF_MAGI:
-        case MP2::OBJ_SPHINX:
-            break;
-        case MP2::OBJ_SIRENS:
-            // AI must have some action even if it goes on this object by mistake.
-            AIToSirens( hero, objectType, dst_index );
-            break;
-        default:
-            // AI should know what to do with this type of action object! Please add logic for it.
-            assert( !isActionObject );
-            break;
-        }
-
-        if ( MP2::isNeedStayFront( objectType ) )
-            hero.GetPath().Reset();
-
-        // Ignore empty tiles
-        if ( isActionObject ) {
-            AI::Get().HeroesActionComplete( hero, dst_index, objectType );
-        }
+    // AI has no advantage or knowledge to use these objects
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_SPHINX:
+        break;
+    case MP2::OBJ_SIRENS:
+        // AI must have some action even if it goes on this object by mistake.
+        AIToSirens( hero, objectType, dst_index );
+        break;
+    default:
+        // AI should know what to do with this type of action object! Please add logic for it.
+        assert( !isActionObject );
+        break;
     }
 
-    void HeroesMove( Heroes & hero )
-    {
-        const Route::Path & path = hero.GetPath();
+    if ( MP2::isNeedStayFront( objectType ) )
+        hero.GetPath().Reset();
 
-        if ( path.isValidForTeleportation() ) {
-            const int32_t targetIndex = path.GetFrontIndex();
+    // Ignore empty tiles
+    if ( isActionObject ) {
+        AI::Planner::Get().HeroesActionComplete( hero, dst_index, objectType );
+    }
+}
 
-            // At the moment, this kind of movement using paths generated by AI pathfinder is only possible
-            // to the towns/castles with the use of Town Gate or Town Portal spells
-            assert( path.GetFrontFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE );
+void AI::HeroesMove( Heroes & hero )
+{
+    const Route::Path & path = hero.GetPath();
 
-            AITownPortal( hero, targetIndex );
+    if ( path.isValidForTeleportation() ) {
+        const int32_t targetIndex = path.GetFrontIndex();
 
-            // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
-            // The further path of this hero will be re-planned by AI.
-            return;
+        // At the moment, this kind of movement using paths generated by AI pathfinder is only possible
+        // to the towns/castles with the use of Town Gate or Town Portal spells
+        assert( path.GetFrontFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE );
+
+        AITownPortal( hero, targetIndex );
+
+        // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
+        // The further path of this hero will be re-planned by AI.
+        return;
+    }
+
+    if ( !path.isValidForMovement() ) {
+        return;
+    }
+
+    hero.SetMove( true );
+
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+    Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
+
+    const Settings & conf = Settings::Get();
+
+    const uint32_t colors = AIGetAllianceColors();
+    bool recenterNeeded = true;
+
+    int heroAnimationFrameCount = 0;
+    fheroes2::Point heroAnimationOffset;
+    int heroAnimationSpriteId = 0;
+
+    const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
+    const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
+
+    const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+        if ( !hero.isActive() || !hero.isMoveEnabled() ) {
+            break;
         }
 
-        if ( !path.isValidForMovement() ) {
-            return;
-        }
+        if ( hideAIMovements || !AIIsShowAnimationForHero( hero, colors ) ) {
+            // A hero might have been moving with visible animation for humans till he reaches the area
+            // where animation is not needed. This can be in the middle of movement between tiles.
+            // In this case it is important to reset animation sprite to make sure that the hero is
+            // ready for jump steps.
+            hero.resetHeroSprite();
 
-        hero.SetMove( true );
+            hero.Move( true );
+            recenterNeeded = true;
 
-        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-        Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
-
-        const Settings & conf = Settings::Get();
-
-        const uint32_t colors = AIGetAllianceColors();
-        bool recenterNeeded = true;
-
-        int heroAnimationFrameCount = 0;
-        fheroes2::Point heroAnimationOffset;
-        int heroAnimationSpriteId = 0;
-
-        const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
-        const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
-
-        const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        LocalEvent & le = LocalEvent::Get();
-        while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
-            if ( !hero.isActive() || !hero.isMoveEnabled() ) {
-                break;
-            }
-
-            if ( hideAIMovements || !AIIsShowAnimationForHero( hero, colors ) ) {
-                // A hero might have been moving with visible animation for humans till he reaches the area
-                // where animation is not needed. This can be in the middle of movement between tiles.
-                // In this case it is important to reset animation sprite to make sure that the hero is
-                // ready for jump steps.
-                hero.resetHeroSprite();
-
-                hero.Move( true );
-                recenterNeeded = true;
-
-                // Render a frame only if there is a need to show one.
-                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // Update Adventure Map objects' animation.
-                    Game::updateAdventureMapAnimationIndex();
-
-                    adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
-
-                    // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( adventureMapInterface.getRedrawMask() == 0 );
-
-                    display.render();
-                }
-            }
-            else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
-                // re-center in case hero appears from the fog
-                if ( recenterNeeded ) {
-                    gameArea.SetCenter( hero.GetCenter() );
-                    recenterNeeded = false;
-                }
-
-                bool resetHeroSprite = false;
-                if ( heroAnimationFrameCount > 0 ) {
-                    const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
-
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                    gameArea.SetRedraw();
-                    heroAnimationFrameCount -= heroMovementSkipValue;
-                    if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
-                        hero.SetSpriteIndex( heroAnimationSpriteId );
-
-                        if ( heroAnimationFrameCount == 0 )
-                            resetHeroSprite = true;
-                        else
-                            ++heroAnimationSpriteId;
-                    }
-                    const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                    hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
-                }
-
-                if ( heroAnimationFrameCount == 0 ) {
-                    if ( resetHeroSprite ) {
-                        hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                    }
-
-                    if ( hero.Move( noMovementAnimation ) ) {
-                        if ( AIIsShowAnimationForHero( hero, colors ) ) {
-                            gameArea.SetCenter( hero.GetCenter() );
-                        }
-                    }
-                    else {
-                        const fheroes2::Point movement( hero.MovementDirection() );
-                        if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
-                            const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
-
-                            heroAnimationOffset = movement;
-                            gameArea.ShiftCenter( movement );
-                            heroAnimationFrameCount = 32 - heroMovementSkipValue;
-                            heroAnimationSpriteId = hero.GetSpriteIndex();
-                            if ( heroMovementSkipValue < 4 ) {
-                                hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                hero.SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                            }
-                            else {
-                                ++heroAnimationSpriteId;
-                            }
-                        }
-                    }
-                }
-
-                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // Update Adventure Map objects' animation.
-                    Game::updateAdventureMapAnimationIndex();
-                }
+            // Render a frame only if there is a need to show one.
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                // Update Adventure Map objects' animation.
+                Game::updateAdventureMapAnimationIndex();
 
                 adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
@@ -2140,97 +2086,164 @@ namespace AI
                 display.render();
             }
         }
+        else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
+            // re-center in case hero appears from the fog
+            if ( recenterNeeded ) {
+                gameArea.SetCenter( hero.GetCenter() );
+                recenterNeeded = false;
+            }
 
-        hero.SetMove( false );
+            bool resetHeroSprite = false;
+            if ( heroAnimationFrameCount > 0 ) {
+                const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
+
+                gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                gameArea.SetRedraw();
+                heroAnimationFrameCount -= heroMovementSkipValue;
+                if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
+                    hero.SetSpriteIndex( heroAnimationSpriteId );
+
+                    if ( heroAnimationFrameCount == 0 )
+                        resetHeroSprite = true;
+                    else
+                        ++heroAnimationSpriteId;
+                }
+                const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
+                hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
+            }
+
+            if ( heroAnimationFrameCount == 0 ) {
+                if ( resetHeroSprite ) {
+                    hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                }
+
+                if ( hero.Move( noMovementAnimation ) ) {
+                    if ( AIIsShowAnimationForHero( hero, colors ) ) {
+                        gameArea.SetCenter( hero.GetCenter() );
+                    }
+                }
+                else {
+                    const fheroes2::Point movement( hero.MovementDirection() );
+                    if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                        const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
+
+                        heroAnimationOffset = movement;
+                        gameArea.ShiftCenter( movement );
+                        heroAnimationFrameCount = 32 - heroMovementSkipValue;
+                        heroAnimationSpriteId = hero.GetSpriteIndex();
+                        if ( heroMovementSkipValue < 4 ) {
+                            hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                            hero.SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                        }
+                        else {
+                            ++heroAnimationSpriteId;
+                        }
+                    }
+                }
+            }
+
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                // Update Adventure Map objects' animation.
+                Game::updateAdventureMapAnimationIndex();
+            }
+
+            adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+
+            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+            assert( adventureMapInterface.getRedrawMask() == 0 );
+
+            display.render();
+        }
     }
 
-    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
-    {
-        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() != world.GetTiles( targetIndex ).isWater() ) {
-            return;
-        }
+    hero.SetMove( false );
+}
 
-        const Spell dimensionDoor( Spell::DIMENSIONDOOR );
-        if ( !hero.CanCastSpell( dimensionDoor ) ) {
-            // How is it even possible to call this function if the hero does not have this spell?
-            assert( 0 );
-            return;
-        }
-
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
-        }
-
-        hero.Scout( targetIndex );
-        hero.Move2Dest( targetIndex );
-        hero.SpellCasted( dimensionDoor );
-        hero.setDimensionDoorUsage( hero.getDimensionDoorUses() + 1 );
-        hero.GetPath().Reset();
-
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
-        }
-
-        hero.ActionNewPosition( false );
-
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " moved to " << targetIndex )
+void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
+{
+    if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() != world.GetTiles( targetIndex ).isWater() ) {
+        return;
     }
 
-    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex )
-    {
-        assert( !hero.isShipMaster() && Maps::isValidAbsIndex( boatDestinationIndex ) );
-
-        const Spell summonBoat( Spell::SUMMONBOAT );
-        assert( hero.CanCastSpell( summonBoat ) );
-
-        const int32_t boatSource = fheroes2::getSummonableBoat( hero );
-
-        // Player should have a summonable boat before calling this function.
-        assert( Maps::isValidAbsIndex( boatSource ) );
-
-        hero.SpellCasted( summonBoat );
-
-        const int heroColor = hero.GetColor();
-
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
-
-        Maps::Tiles & tileSource = world.GetTiles( boatSource );
-
-        if ( AIIsShowAnimationForTile( tileSource, AIGetAllianceColors() ) ) {
-            gameArea.SetCenter( Maps::GetPoint( boatSource ) );
-            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
-        }
-        else {
-            removeObjectSprite( tileSource );
-            tileSource.setAsEmpty();
-        }
-
-        Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );
-        assert( tileDest.GetObject() == MP2::OBJ_NONE );
-
-        tileDest.setBoat( Direction::RIGHT, heroColor );
-        tileSource.resetBoatOwnerColor();
-
-        if ( AIIsShowAnimationForTile( tileDest, AIGetAllianceColors() ) ) {
-            gameArea.SetCenter( Maps::GetPoint( boatDestinationIndex ) );
-            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
-        }
-
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " summoned the boat from " << boatSource << " to " << boatDestinationIndex )
-
-        return boatSource;
+    const Spell dimensionDoor( Spell::DIMENSIONDOOR );
+    if ( !hero.CanCastSpell( dimensionDoor ) ) {
+        // How is it even possible to call this function if the hero does not have this spell?
+        assert( 0 );
+        return;
     }
 
-    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
-    {
-        if ( !hero.CanCastSpell( spell ) ) {
-            return false;
-        }
-
-        hero.SpellCasted( spell );
-
-        return true;
+    if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+        hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
     }
+
+    hero.Scout( targetIndex );
+    hero.Move2Dest( targetIndex );
+    hero.SpellCasted( dimensionDoor );
+    hero.setDimensionDoorUsage( hero.getDimensionDoorUses() + 1 );
+    hero.GetPath().Reset();
+
+    if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+        hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
+    }
+
+    hero.ActionNewPosition( false );
+
+    DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " moved to " << targetIndex )
+}
+
+int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex )
+{
+    assert( !hero.isShipMaster() && Maps::isValidAbsIndex( boatDestinationIndex ) );
+
+    const Spell summonBoat( Spell::SUMMONBOAT );
+    assert( hero.CanCastSpell( summonBoat ) );
+
+    const int32_t boatSource = fheroes2::getSummonableBoat( hero );
+
+    // Player should have a summonable boat before calling this function.
+    assert( Maps::isValidAbsIndex( boatSource ) );
+
+    hero.SpellCasted( summonBoat );
+
+    const int heroColor = hero.GetColor();
+
+    Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+
+    Maps::Tiles & tileSource = world.GetTiles( boatSource );
+
+    if ( AIIsShowAnimationForTile( tileSource, AIGetAllianceColors() ) ) {
+        gameArea.SetCenter( Maps::GetPoint( boatSource ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+    }
+    else {
+        removeMainObjectFromTile( tileSource );
+    }
+
+    Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );
+    assert( tileDest.GetObject() == MP2::OBJ_NONE );
+
+    tileDest.setBoat( Direction::RIGHT, heroColor );
+    tileSource.resetBoatOwnerColor();
+
+    if ( AIIsShowAnimationForTile( tileDest, AIGetAllianceColors() ) ) {
+        gameArea.SetCenter( Maps::GetPoint( boatDestinationIndex ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
+    }
+
+    DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " summoned the boat from " << boatSource << " to " << boatDestinationIndex )
+
+    return boatSource;
+}
+
+bool AI::HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
+{
+    if ( !hero.CanCastSpell( spell ) ) {
+        return false;
+    }
+
+    hero.SpellCasted( spell );
+
+    return true;
 }

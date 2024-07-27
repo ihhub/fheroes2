@@ -29,8 +29,10 @@
 #include <vector>
 
 #include "color.h"
+#include "game_io.h"
 #include "logging.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
@@ -100,9 +102,6 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     // - string
     //    Null terminated string containing the event text.
 
-    SetIndex( index );
-    SetUID( index );
-
     StreamBuf dataStream( data );
 
     dataStream.skip( 1 );
@@ -123,7 +122,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     computer = ( dataStream.get() != 0 );
 
     // Does event occur only once?
-    cancel = ( dataStream.get() != 0 );
+    isSingleTimeEvent = ( dataStream.get() != 0 );
 
     dataStream.skip( 10 );
 
@@ -154,6 +153,8 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     }
 
     message = dataStream.toString();
+
+    setUIDAndIndex( index );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
@@ -254,24 +255,27 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         }
     }
 
-    message = dataStream.toString();
-    if ( message.empty() ) {
+    riddle = dataStream.toString();
+    if ( riddle.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << message << "'." )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << riddle << "'." )
 
-    valid = true;
-
-    SetIndex( tileIndex );
-    SetUID( tileIndex );
+    setUIDAndIndex( tileIndex );
 }
 
-bool MapSphinx::AnswerCorrect( const std::string & answer )
+bool MapSphinx::isCorrectAnswer( std::string answer )
 {
-    const std::string ans = StringLower( answer ).substr( 0, 4 );
-    const auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    if ( isTruncatedAnswer ) {
+        answer = StringLower( answer ).substr( 0, 4 );
+        const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == answer; };
+        return std::any_of( answers.begin(), answers.end(), checkAnswer );
+    }
+
+    answer = StringLower( answer );
+    const auto checkAnswer = [&answer]( const std::string & str ) { return StringLower( str ) == answer; };
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
@@ -296,13 +300,18 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
     message = dataStream.toString();
 
     if ( message.empty() ) {
-        const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
-        message = Rand::Get( randomMessage );
+        setDefaultMessage();
     }
 
-    SetIndex( mapIndex );
-    SetUID( mapIndex );
+    setUIDAndIndex( mapIndex );
+
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
+}
+
+void MapSign::setDefaultMessage()
+{
+    const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
+    message = Rand::Get( randomMessage );
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
@@ -317,22 +326,32 @@ StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapEvent & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.cancel << obj.colors << obj.message;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.cancel >> obj.colors >> obj.message;
+    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
+    msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        obj.isTruncatedAnswer = true;
+    }
+    else {
+        msg >> obj.isTruncatedAnswer;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

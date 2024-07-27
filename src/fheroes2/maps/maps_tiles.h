@@ -109,7 +109,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::mp2tile_t & mp2 );
+        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -165,11 +165,6 @@ namespace Maps
             return _tilePassabilityDirections;
         }
 
-        void resetPassability()
-        {
-            _tilePassabilityDirections = DIRECTION_ALL;
-        }
-
         int GetGround() const
         {
             return Ground::getGroundByImageIndex( _terrainImageIndex );
@@ -209,7 +204,6 @@ namespace Maps
         }
 
         bool isStream() const;
-        bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
         TilesAddon * getBottomLayerAddon( const uint32_t uid );
@@ -236,8 +230,6 @@ namespace Maps
             _mainAddon._imageIndex = 255;
         }
 
-        void FixObject();
-
         uint32_t GetRegion() const
         {
             return _region;
@@ -261,11 +253,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
+        void pushBottomLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushBottomLayerAddon( TilesAddon ta );
 
-        void pushTopLayerAddon( const MP2::mp2addon_t & ma );
+        void pushTopLayerAddon( const MP2::MP2AddonInfo & ma );
 
         void pushTopLayerAddon( TilesAddon ta )
         {
@@ -291,11 +283,15 @@ namespace Maps
         {
             if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 _addonBottomLayer.emplace_back( _mainAddon );
+                _mainAddon = {};
             }
         }
 
         void AddonsSort();
-        void Remove( uint32_t uniqID );
+
+        // Returns true if any object part was removed.
+        bool removeObjectPartsByUID( const uint32_t objectUID );
+
         // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
         void removeObjects( const MP2::ObjectIcnType objectIcnType );
 
@@ -340,15 +336,13 @@ namespace Maps
         Heroes * getHero() const;
         void setHero( Heroes * hero );
 
-        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
-        void updateEmpty();
-
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
-        void setAsEmpty();
+        // Set tile's object type according to the object's sprite if there is any, otherwise
+        // it is set to coast (MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE).
+        // This method works perfectly only on Resurrection (.fh2m) maps.
+        // It might not work properly on the original maps due to small differences in object types.
+        void updateObjectType();
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
-
-        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
@@ -360,20 +354,22 @@ namespace Maps
             _fogDirection = fogDirection;
         }
 
-        // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixTileObjectType( Tiles & tile );
-
-        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
-
         void swap( TilesAddon & addon ) noexcept
         {
             std::swap( addon, _mainAddon );
         }
 
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixMP2MapTileObjectType( Tiles & tile );
+
+        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
+
         // Update tile or bottom layer object image index.
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
     private:
+        bool isShadow() const;
+
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.
@@ -388,6 +384,8 @@ namespace Maps
         int getOriginalPassability() const;
 
         bool doesObjectExist( const uint32_t uid ) const;
+
+        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );

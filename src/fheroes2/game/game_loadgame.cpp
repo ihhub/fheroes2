@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -104,8 +104,8 @@ fheroes2::GameMode Game::LoadMulti()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
-        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ), false ) ) {
@@ -120,12 +120,12 @@ fheroes2::GameMode Game::LoadMulti()
         }
 
         // right info
-        else if ( le.MousePressRight( buttonHotSeat.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonHotSeat.area() ) ) {
             fheroes2::showStandardTextMessage(
-                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 6 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
                 Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCancelGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancelGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
@@ -177,7 +177,7 @@ fheroes2::GameMode Game::LoadGame()
 
     while ( le.HandleEvents() ) {
         for ( fheroes2::ButtonBase * button : buttons ) {
-            le.MousePressLeft( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
         }
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
@@ -202,17 +202,17 @@ fheroes2::GameMode Game::LoadGame()
         else if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( le.MousePressRight( buttonStandardGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonStandardGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCampaignGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCampaignGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonMultiplayerGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonMultiplayerGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
                                                _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }

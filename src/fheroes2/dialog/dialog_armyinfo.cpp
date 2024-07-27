@@ -557,7 +557,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
         if ( !( flags & BUTTONS ) ) {
-            if ( !le.MousePressRight() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 
@@ -565,14 +565,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         }
 
         if ( buttonUpgrade.isEnabled() ) {
-            le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
         }
 
         if ( buttonDismiss.isEnabled() ) {
-            le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
         }
 
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
             // If this assertion blows up then you are executing this code for a monster which has no upgrades.
@@ -606,18 +606,18 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             break;
         }
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
-        else if ( buttonUpgrade.isEnabled() && le.MousePressRight( buttonUpgrade.area() ) ) {
+        else if ( buttonUpgrade.isEnabled() && le.isMouseRightButtonPressedInArea( buttonUpgrade.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
         }
-        else if ( buttonDismiss.isEnabled() && le.MousePressRight( buttonDismiss.area() ) ) {
+        else if ( buttonDismiss.isEnabled() && le.isMouseRightButtonPressedInArea( buttonDismiss.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
         }
 
         for ( const auto & spellInfo : spellAreas ) {
-            if ( le.MousePressRight( spellInfo.first ) ) {
+            if ( le.isMouseRightButtonPressedInArea( spellInfo.first ) ) {
                 fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
                 break;
             }
@@ -659,8 +659,7 @@ int Dialog::ArmyJoinFree( const Troop & troop )
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
-                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO );
+    return fheroes2::showStandardTextMessage( _( "Followers" ), std::move( message ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )

@@ -672,8 +672,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // message loop
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        le.MousePressLeft( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
 
         bool changed = false;
 
@@ -684,12 +684,12 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         if ( le.MouseClickLeft( buttonZoom.area() ) ) {
             changed = currentROI.zoomOut( true );
         }
-        else if ( le.MouseCursor( radar.GetRect() ) ) {
+        else if ( le.isMouseCursorPosInArea( radar.GetRect() ) ) {
             changed = radar.QueueEventProcessingForWorldView( currentROI );
         }
-        else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( visibleScreenInPixels ) ) {
             if ( isDrag ) {
-                const fheroes2::Point & newMousePos = le.GetMouseCursor();
+                const fheroes2::Point & newMousePos = le.getMouseCursorPos();
                 const int32_t tileSize = tileSizePerZoomLevel[static_cast<uint8_t>( currentROI.getZoomLevel() )];
                 const fheroes2::Point newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSize,
                                                     initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSize );
@@ -697,18 +697,18 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
             }
             else {
                 isDrag = true;
-                initMousePos = le.GetMouseCursor();
+                initMousePos = le.getMouseCursorPos();
                 initRoiCenter = currentROI.getCenter();
             }
         }
-        else if ( le.MouseWheelUp() ) {
+        else if ( le.isMouseWheelUp() ) {
             changed = currentROI.zoomIn( false );
         }
-        else if ( le.MouseWheelDn() ) {
+        else if ( le.isMouseWheelDown() ) {
             changed = currentROI.zoomOut( false );
         }
 
-        if ( !le.MousePressLeft( visibleScreenInPixels ) || !le.MouseCursor( visibleScreenInPixels ) ) {
+        if ( !le.isMouseLeftButtonPressedInArea( visibleScreenInPixels ) || !le.isMouseCursorPosInArea( visibleScreenInPixels ) ) {
             isDrag = false;
         }
 

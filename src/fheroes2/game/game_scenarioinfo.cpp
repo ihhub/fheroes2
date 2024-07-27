@@ -146,7 +146,7 @@ namespace
         return { textX, y, text.width(), text.height() };
     }
 
-    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
+    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists, const int humanPlayerCount )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -208,8 +208,6 @@ namespace
         bool resetStartingSettings = conf.getCurrentMapInfo().filename.empty();
         Players & players = conf.GetPlayers();
         Interface::PlayersInfo playersInfo;
-
-        const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
 
         if ( !resetStartingSettings ) { // verify that current map really exists in map's list
             resetStartingSettings = true;
@@ -308,13 +306,13 @@ namespace
             }
 
             // press button
-            le.MousePressLeft( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-                const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
                 const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
                 if ( fi && fi->filename != currentMapName ) {
@@ -355,7 +353,7 @@ namespace
                 break;
             }
             else if ( le.MouseClickLeft( roi ) ) {
-                const int32_t index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
+                const int32_t index = GetRectIndex( coordDifficulty, le.getMouseCursorPos() );
 
                 // select difficulty
                 if ( 0 <= index ) {
@@ -377,7 +375,7 @@ namespace
                     display.render( roi );
                 }
             }
-            else if ( ( le.MouseWheelUp() || le.MouseWheelDn() ) && playersInfo.QueueEventProcessing() ) {
+            else if ( ( le.isMouseWheelUp() || le.isMouseWheelDown() ) && playersInfo.QueueEventProcessing() ) {
                 playersInfo.resetSelection();
                 opponentsArea.restore();
                 classArea.restore();
@@ -387,26 +385,26 @@ namespace
                 display.render( roi );
             }
 
-            if ( le.MousePressRight( roi ) ) {
-                if ( le.MousePressRight( buttonSelectMaps.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( roi ) ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonSelectMaps.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
                 }
-                else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) ) {
+                else if ( 0 <= GetRectIndex( coordDifficulty, le.getMouseCursorPos() ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you off with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( ratingRoi ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( ratingRoi ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Difficulty Rating" ),
                         _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                         Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( buttonOk.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
                 }
-                else if ( le.MousePressRight( buttonCancel.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Click to return to the main menu." ), Dialog::ZERO );
                 }
                 else {
@@ -445,23 +443,20 @@ namespace
     }
 }
 
-fheroes2::GameMode Game::SelectScenario()
+fheroes2::GameMode Game::SelectScenario( const uint8_t humanPlayerCount )
 {
-    return fheroes2::GameMode::SCENARIO_INFO;
-}
+    assert( humanPlayerCount >= 1 && humanPlayerCount <= 6 );
 
-fheroes2::GameMode Game::ScenarioInfo()
-{
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, Settings::Get().IsGameType( Game::TYPE_MULTI ) );
+    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 
     // We must release UI resources for this window before loading a new map. That's why all UI logic is in a separate function.
-    const fheroes2::GameMode result = ChooseNewMap( maps );
+    const fheroes2::GameMode result = ChooseNewMap( maps, humanPlayerCount );
     if ( result != fheroes2::GameMode::START_GAME ) {
         return result;
     }

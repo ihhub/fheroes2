@@ -31,9 +31,10 @@
 #include <ostream>
 #include <set>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_planner.h"
 #include "artifact.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -67,7 +68,7 @@
 
 namespace
 {
-    bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
 
@@ -90,7 +91,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const MapsTiles & mapTiles, const int32_t tileId, const bool allDirections )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const bool allDirections )
     {
         std::vector<int32_t> suitableIds;
 
@@ -127,7 +128,7 @@ namespace
         return Rand::Get( suitableIds );
     }
 
-    int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
+    int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
 
@@ -328,7 +329,7 @@ void World::Reset()
     vec_eventsday.clear();
 
     // rumors
-    _rumors.clear();
+    _customRumors.clear();
 
     // castles
     vec_castles.Clear();
@@ -346,8 +347,8 @@ void World::Reset()
     week = 0;
     month = 0;
 
-    heroes_cond_wins = Heroes::UNKNOWN;
-    heroes_cond_loss = Heroes::UNKNOWN;
+    heroIdAsWinCondition = Heroes::UNKNOWN;
+    heroIdAsLossCondition = Heroes::UNKNOWN;
 
     _seed = 0;
 }
@@ -373,7 +374,7 @@ void World::generateBattleOnlyMap()
         fi.version = GameVersion::PRICE_OF_LOYALTY;
     }
 
-    conf.SetCurrentFileInfo( fi );
+    conf.SetCurrentFileInfo( std::move( fi ) );
 
     Defaults();
 
@@ -408,7 +409,7 @@ void World::generateForEditor( const int32_t size )
 
     fi.version = GameVersion::PRICE_OF_LOYALTY;
 
-    conf.SetCurrentFileInfo( fi );
+    conf.SetCurrentFileInfo( std::move( fi ) );
 
     Defaults();
 
@@ -554,13 +555,6 @@ void World::NewDay()
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
-void World::NewDayAI()
-{
-    if ( BeginWeek() ) {
-        vec_castles.NewWeekAI();
-    }
-}
-
 void World::NewWeek()
 {
     // update objects
@@ -624,7 +618,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             continue;
         }
 
-        if ( MP2::isActionObject( objectType ) ) {
+        if ( MP2::isInGameActionObject( objectType ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
                 continue;
             }
@@ -717,7 +711,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 std::string World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
-    const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
+    const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
     switch ( chosenRumorId ) {
@@ -785,7 +779,7 @@ std::string World::getCurrentRumor() const
     }
 
     assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
-    return _rumors[chosenRumorId - standardRumorCount];
+    return _customRumors[chosenRumorId - standardRumorCount];
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -994,7 +988,7 @@ void World::ActionForMagellanMaps( int color )
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             if ( isAIPlayer && tile.isFog( color ) ) {
-                AI::Get().revealFog( tile, kingdom );
+                AI::Planner::Get().revealFog( tile, kingdom );
             }
 
             tile.ClearFog( alliedColors );
@@ -1021,12 +1015,12 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 
 const Heroes * World::GetHeroesCondWins() const
 {
-    return ( ( Settings::Get().getCurrentMapInfo().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroIdAsWinCondition ) : nullptr;
 }
 
 const Heroes * World::GetHeroesCondLoss() const
 {
-    return ( ( Settings::Get().getCurrentMapInfo().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroIdAsLossCondition ) : nullptr;
 }
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
@@ -1060,7 +1054,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        if ( heroes_cond_wins == Heroes::UNKNOWN ) {
+        if ( heroIdAsWinCondition == Heroes::UNKNOWN ) {
             return false;
         }
 
@@ -1130,7 +1124,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
     }
 
     case GameOver::LOSS_HERO: {
-        if ( heroes_cond_loss == Heroes::UNKNOWN ) {
+        if ( heroIdAsLossCondition == Heroes::UNKNOWN ) {
             return false;
         }
 
@@ -1293,13 +1287,17 @@ std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 void World::resetPathfinder()
 {
     _pathfinder.reset();
-    AI::Get().resetPathfinder();
+    AI::Planner::Get().resetPathfinder();
 }
 
 void World::updatePassabilities()
 {
     for ( Maps::Tiles & tile : vec_tiles ) {
-        tile.updateEmpty();
+        // If tile is empty then update tile's object type if needed.
+        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+            tile.updateObjectType();
+        }
+
         tile.setInitialPassability();
     }
 
@@ -1447,8 +1445,8 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
+    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._customRumors << w.vec_eventsday << w.map_captureobj
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1466,13 +1464,13 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         msg >> w.width >> w.height;
     }
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
+        >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-        ++w.heroes_cond_wins;
-        ++w.heroes_cond_loss;
+        ++w.heroIdAsWinCondition;
+        ++w.heroIdAsLossCondition;
     }
 
     msg >> w.map_objects >> w._seed;

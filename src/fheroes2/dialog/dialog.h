@@ -47,6 +47,11 @@ class Troop;
 struct ArtifactSetData;
 struct CapturedObject;
 
+namespace fheroes2
+{
+    class DialogElement;
+}
+
 namespace Skill
 {
     class Secondary;
@@ -112,14 +117,16 @@ namespace Dialog
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
-    bool SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step = 1 );
-    bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
+    bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
+                      const fheroes2::DialogElement * uiElement = nullptr );
+    bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
+                      const bool englishOnlyVirtualKeyboard );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
+    int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
@@ -155,7 +162,12 @@ namespace Dialog
     class FrameBox : public NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false );
+        FrameBox( int height, bool buttons = false )
+            : Dialog::NonFixedFrameBox( height, -1, buttons )
+        {
+            // Do nothing.
+        }
+
         ~FrameBox() override = default;
     };
 
@@ -163,7 +175,6 @@ namespace Dialog
     {
     public:
         explicit FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
 
         int BorderWidth() const
         {

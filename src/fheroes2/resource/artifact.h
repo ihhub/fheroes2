@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -146,10 +146,12 @@ public:
 
         MAGIC_BOOK,
 
+        // This entry is used in Editor for the special victory conditions.
+        EDITOR_ANY_ULTIMATE_ARTIFACT,
+
         // These four artifacts are used in original editor for the Ultimate and Random artifacts.
         // They should not exist and used on the adventure map after the game is properly started.
         // We do not use these or create extra entries for the Ultimate and Random artifacts in editor.
-        UNUSED_83,
         UNUSED_84,
         UNUSED_85,
         UNUSED_86,
@@ -210,7 +212,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < UNUSED_83 || id > UNUSED_86 );
+        return id != UNKNOWN && id != EDITOR_ANY_ULTIMATE_ARTIFACT && id < ARTIFACT_COUNT && ( id < UNUSED_84 || id > UNUSED_86 );
     }
 
     void Reset()
@@ -251,7 +253,7 @@ public:
     }
 
     static int Rand( level_t );
-    static Artifact FromMP2IndexSprite( uint32_t );
+    static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:

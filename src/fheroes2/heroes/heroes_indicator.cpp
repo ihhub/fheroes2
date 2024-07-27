@@ -126,7 +126,7 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
     if ( le.MouseClickLeft( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator._area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::ZERO );
     }
 }
@@ -177,7 +177,7 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
     if ( le.MouseClickLeft( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator._area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::ZERO );
     }
 }
@@ -210,12 +210,12 @@ void ExperienceIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
+    if ( le.MouseClickLeft( _area ) || le.isMouseRightButtonPressedInArea( _area ) ) {
         std::string message = _( "Level %{level}" );
 
         StringReplace( message, "%{level}", _hero->GetLevel() );
 
-        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
 
@@ -250,7 +250,7 @@ void SpellPointsIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
-        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+    if ( le.MouseClickLeft( _area ) || le.isMouseRightButtonPressedInArea( _area ) ) {
+        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
