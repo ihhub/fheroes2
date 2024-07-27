@@ -26,10 +26,11 @@
 #include <cstdint>
 #include <string>
 
-#include "castle.h"
 #include "resource.h"
 
 class Kingdom;
+
+enum building_t : uint32_t;
 
 namespace Difficulty
 {

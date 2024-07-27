@@ -25,7 +25,6 @@
 
 #include <cstdint>
 #include <list>
-#include <memory>
 #include <string>
 
 #include "direction.h"

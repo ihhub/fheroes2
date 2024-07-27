@@ -24,7 +24,6 @@
 #include "game_delays.h"
 
 #include <cassert>
-#include <memory>
 
 #include "gamedefs.h"
 #include "settings.h"

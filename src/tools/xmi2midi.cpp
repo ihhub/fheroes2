@@ -25,10 +25,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <iostream>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <system_error>
 #include <type_traits>

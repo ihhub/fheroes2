@@ -26,13 +26,12 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <system_error>

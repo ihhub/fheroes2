@@ -33,7 +33,6 @@
 #include <memory>
 #include <mutex>
 #include <ostream>
-#include <type_traits>
 #include <utility>
 #include <variant>
 

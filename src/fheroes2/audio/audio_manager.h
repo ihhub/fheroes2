@@ -25,13 +25,16 @@
 #include <string>
 #include <vector>
 
-#include "audio.h"
-
 struct ListFiles;
 
 namespace M82
 {
     enum SoundType : int;
+}
+
+namespace Music
+{
+    enum class PlaybackMode : uint8_t;
 }
 
 namespace AudioManager

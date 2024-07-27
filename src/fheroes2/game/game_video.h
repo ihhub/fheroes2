@@ -24,7 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "game_video_type.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
@@ -36,6 +35,8 @@ namespace fheroes2
 
 namespace Video
 {
+    enum class VideoAction : int;
+
     class Subtitle
     {
     public:

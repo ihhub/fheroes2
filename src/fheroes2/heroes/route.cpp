@@ -24,7 +24,6 @@
 #include "route.h"
 
 #include <cassert>
-#include <memory>
 #include <numeric>
 
 #include "game_io.h"

@@ -28,13 +28,13 @@
 #include <cstdlib>
 #include <deque>
 #include <list>
-#include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
 #include <utility>
 
 #include "agg_file.h"
+#include "audio.h"
 #include "dir.h"
 #include "logging.h"
 #include "m82.h"

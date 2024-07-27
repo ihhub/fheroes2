@@ -25,10 +25,14 @@
 #include <string>
 #include <vector>
 
-#include "game_video_type.h"
 #include "maps_fileinfo.h"
 
 class StreamBase;
+
+namespace Video
+{
+    enum class VideoAction : int;
+}
 
 namespace Campaign
 {

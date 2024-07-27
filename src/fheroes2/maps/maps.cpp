@@ -36,6 +36,7 @@
 #include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "mp2.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
