@@ -3490,6 +3490,14 @@ namespace fheroes2
                         imageData[5294] = 108;
                     }
                 }
+                if ( _icnVsSprite[id].size() > 22 ) {
+                    // Cliff nest image has a glowing pixel.
+                    Sprite & original = _icnVsSprite[id][22];
+                    if ( original.width() == 135 && original.height() == 57 ) {
+                        original._disableTransformLayer();
+                        original.image()[136] = 54;
+                    }
+                }
                 if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
                     for ( const uint32_t index : { 23, 28 } ) {
