@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "castle.h"
-#include "color.h"
 #include "icn.h"
 #include "luck.h"
 #include "morale.h"
