@@ -162,7 +162,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
     // Recruit monster text.
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
-    fheroes2::Text text( str, fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( std::move( str ), fheroes2::FontType::normalYellow() );
     fheroes2::Point dst_pt( pos.x + ( pos.width - text.width() ) / 2, pos.y + 11 );
     text.draw( dst_pt.x, dst_pt.y, display );
 
@@ -173,7 +173,8 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
 
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
     dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
-    dst_pt.y = pos.y + 119 - smon.height();
+    const int32_t monsterExtraOffsetY = std::max( 0, smon.height() - 96 );
+    dst_pt.y = pos.y + 119 - smon.height() + monsterExtraOffsetY;
 
     if ( monsterId == Monster::CHAMPION ) {
         ++dst_pt.x;
@@ -212,7 +213,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
     str = _( "Available: %{count}" );
     StringReplace( str, "%{count}", available );
     text.set( std::move( str ), fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 64 - text.width() / 2, pos.y + 121, display );
+    text.draw( pos.x + 64 - text.width() / 2, pos.y + 120 + std::max( monsterExtraOffsetY, 2 ), display );
 
     if ( showTotalSum ) {
         text.set( _( "Number to buy:" ), fheroes2::FontType::smallWhite() );
@@ -652,14 +653,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
 void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 {
-    const fheroes2::Size windowSize{ 289, 139 };
+    const fheroes2::Size windowSize{ 289, 141 };
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // Set cursor.
     const CursorRestorer cursorRestorer( false );
 
-    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - fheroes2::Display::DEFAULT_HEIGHT / 2 + BORDERWIDTH );
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 
