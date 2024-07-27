@@ -101,9 +101,10 @@ public:
 
     uint32_t GetAttack() const override;
     uint32_t GetDefense() const override;
-    int GetColor() const override;
     int GetMorale() const override;
     int GetLuck() const override;
+
+    int GetColor() const;
 
     void SetArmy( const Army & );
     const Army * GetArmy() const;

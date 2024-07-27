@@ -124,11 +124,6 @@ uint32_t Monster::GetDefense() const
     return fheroes2::getMonsterData( id ).battleStats.defense;
 }
 
-int Monster::GetColor() const
-{
-    return Color::NONE;
-}
-
 int Monster::GetMorale() const
 {
     return Morale::NORMAL;
