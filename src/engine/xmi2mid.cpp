@@ -610,11 +610,6 @@ namespace
         {
             mtrk.length = static_cast<uint32_t>( events.size() );
         }
-
-        size_t size() const
-        {
-            return sizeof( mtrk ) + events.size();
-        }
     };
 
     StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
