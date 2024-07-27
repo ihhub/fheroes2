@@ -590,19 +590,24 @@ namespace
 
         for ( ; data < imageEnd; ++data ) {
             if ( *data < 214 ) {
+                // Normal, not glowing colors. Skip them.
                 continue;
             }
 
             if ( *data < 218 ) {
+                // Lava cycling animation. Replace it with a "medium" red color.
                 *data = 188;
             }
             else if ( *data < 222 ) {
+                // Gold (creature selection in battle) cycling animation. Replace it with a "medium" yellow color.
                 *data = 118;
             }
             else if ( *data < 231 ) {
+                // Green gradient, not glowing. Skip.
                 continue;
             }
             else if ( *data < 241 ) {
+                // Water and portal (blue) cycling animation. Replace it with a "medium" blue color.
                 *data = 69;
             }
         }
