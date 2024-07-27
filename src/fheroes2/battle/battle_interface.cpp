@@ -133,7 +133,8 @@ namespace
         const double sinValue = sin( angle );
         const double cosValue = cos( angle );
 
-        return { std::lround( point.x * cosValue - point.y * sinValue ), std::lround( point.x * sinValue + point.y * cosValue ) };
+        return { static_cast<int32_t>( std::round( point.x * cosValue - point.y * sinValue ) ),
+                 static_cast<int32_t>( std::round( point.x * sinValue + point.y * cosValue ) ) };
     }
 
     double getAngle( const fheroes2::Point & start, const fheroes2::Point & end )
@@ -143,7 +144,7 @@ namespace
 
     std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
-        int32_t distance = std::lround( getDistance( src, dst ) );
+        int32_t distance = static_cast<int32_t>( std::round( getDistance( src, dst ) ) );
         const double angle = getAngle( src, dst );
 
         const int32_t iterationCount = std::clamp( ( distance + 50 ) / 100, 3, 5 );
@@ -500,7 +501,7 @@ namespace Battle
     private:
         Dialog::FrameBorder _border;
         std::vector<std::string> _messages;
-        int32_t _scrollbarSliderAreaLength;
+        int32_t _scrollbarSliderAreaLength{ 0 };
         bool _isLogOpened{ false };
     };
 

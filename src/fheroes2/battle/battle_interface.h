@@ -174,6 +174,7 @@ namespace Battle
     public:
         Status();
         Status( const Status & ) = delete;
+        ~Status() = default;
 
         Status & operator=( const Status & ) = delete;
 
@@ -208,6 +209,7 @@ namespace Battle
     public:
         TurnOrder() = default;
         TurnOrder( const TurnOrder & ) = delete;
+        ~TurnOrder() = default;
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
