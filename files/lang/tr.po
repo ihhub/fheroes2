@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 11:06+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3825,6 +3825,9 @@ msgstr ""
 msgid "Unable to create a directory to save the map."
 msgstr ""
 
+msgid "Unable to locate a directory to save the map."
+msgstr ""
+
 #, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Otomatik savaşı kesmek istediğine emin misin?"
@@ -4134,6 +4137,22 @@ msgstr ""
 msgid "Run out of time."
 msgstr ""
 
+#, fuzzy
+msgid "alliance|1st"
+msgstr "Mancınık"
+
+msgid "alliance|2nd"
+msgstr ""
+
+msgid "alliance|3rd"
+msgstr ""
+
+msgid "alliance|4th"
+msgstr ""
+
+msgid "alliance|5th"
+msgstr ""
+
 msgid "Special Loss Condition"
 msgstr ""
 
@@ -4144,6 +4163,14 @@ msgid "Allow standard victory conditions"
 msgstr ""
 
 msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr "Dev İttifakı"
+
+#
+msgid "{%number} alliance: "
 msgstr ""
 
 msgid "Gold:"
@@ -4162,6 +4189,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -10155,7 +10190,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"

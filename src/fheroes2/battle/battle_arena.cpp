@@ -34,7 +34,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_battle.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -358,7 +358,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
-    AI::Get().battleBegins();
+    AI::BattlePlanner::Get().battleBegins();
 
     if ( _interface ) {
         _interface->fullRedraw();
@@ -428,7 +428,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
             }
 
             if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
-                AI::Get().BattleTurn( *this, *_currentUnit, actions );
+                AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
                 assert( _interface != nullptr );

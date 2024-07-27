@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 11:06+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2024-05-30 12:20-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4114,6 +4114,10 @@ msgstr "Não foi possível localizar a pasta de dados para salvar o mapa."
 msgid "Unable to create a directory to save the map."
 msgstr "Não foi possível criar um diretório para salvar o mapa."
 
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Não foi possível localizar a pasta de dados para salvar o mapa."
+
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Tem certeza de que deseja substituir o mapa existente?"
 
@@ -4439,6 +4443,26 @@ msgstr "Acumular ouro."
 msgid "Run out of time."
 msgstr "Ficar sem tempo."
 
+#, fuzzy
+msgid "alliance|1st"
+msgstr " aliança"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " aliança"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " aliança"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " aliança"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " aliança"
+
 msgid "Special Loss Condition"
 msgstr "Condição Especial de Derrota"
 
@@ -4450,6 +4474,14 @@ msgstr "Permitir condições de vitória padrão"
 
 msgid "Allow this condition also for AI"
 msgstr "Permitir essa condição também para IA"
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " aliança"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " aliança"
 
 msgid "Gold:"
 msgstr "Ouro:"
@@ -4469,6 +4501,17 @@ msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr ""
 "Clique aqui para alterar o herói necessário para derrotar e alcançar a "
 "vitória."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+"Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
+"jogador %{color} se ele for controlado por um humano."
 
 msgid "Days:"
 msgstr "Dias:"
@@ -11474,7 +11517,8 @@ msgstr "Clamor Divino"
 msgid "Anti-Magic"
 msgstr "Anti-Magia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Impede magia prejudicial contra as criaturas selecionadas."
 
 msgid "Dispel Magic"

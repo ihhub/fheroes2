@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 11:06+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4016,6 +4016,9 @@ msgstr ""
 msgid "Unable to create a directory to save the map."
 msgstr ""
 
+msgid "Unable to locate a directory to save the map."
+msgstr ""
+
 #, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Weet je zeker dat je het automatisch vechten wilt onderbreken?"
@@ -4326,6 +4329,26 @@ msgstr ""
 msgid "Run out of time."
 msgstr ""
 
+#, fuzzy
+msgid "alliance|1st"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " alliantie"
+
 msgid "Special Loss Condition"
 msgstr ""
 
@@ -4337,6 +4360,14 @@ msgstr ""
 
 msgid "Allow this condition also for AI"
 msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " alliantie"
 
 msgid "Gold:"
 msgstr ""
@@ -4356,6 +4387,14 @@ msgstr ""
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -10364,7 +10403,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"

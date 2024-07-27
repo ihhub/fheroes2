@@ -1731,11 +1731,23 @@ namespace Interface
             return;
         }
 
-        const std::string mapDirectory = System::concatPath( dataPath, "maps" );
+        std::string mapDirectory = System::concatPath( dataPath, "maps" );
 
         if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
             fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
             return;
+        }
+
+        // Since the name of the map directory can be in arbitrary case, we need to get its real case-sensitive name first
+        {
+            std::string correctedMapDirectory;
+
+            if ( !System::GetCaseInsensitivePath( mapDirectory, correctedMapDirectory ) ) {
+                fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate a directory to save the map." ), Dialog::OK );
+                return;
+            }
+
+            mapDirectory = std::move( correctedMapDirectory );
         }
 
         std::string fileName = _loadedFileName;
@@ -1768,11 +1780,7 @@ namespace Interface
                 assert( 0 );
             }
 
-            // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols with '/' symbols.
-            StringReplace( fullPath, "\\", "/" );
-
-            _warningMessage.reset( _( "Map saved to: " ) + fullPath );
+            _warningMessage.reset( _( "Map saved to: " ) + std::move( fullPath ) );
 
             return;
         }

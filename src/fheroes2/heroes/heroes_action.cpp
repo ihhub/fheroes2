@@ -34,7 +34,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_hero_action.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"

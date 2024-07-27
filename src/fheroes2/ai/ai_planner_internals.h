@@ -20,59 +20,38 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <memory>
-#include <string>
-#include <vector>
+#include "world_pathfinding.h"
 
-#include "math_base.h"
-#include "ui_tool.h"
-
-struct Funds;
-
-namespace fheroes2
+namespace AI
 {
-    class Image;
-}
+    const double ARMY_ADVANTAGE_DESPERATE = 0.8;
+    const double ARMY_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_ADVANTAGE_MEDIUM = 1.5;
+    const double ARMY_ADVANTAGE_LARGE = 1.8;
 
-namespace Editor
-{
-    class Checkbox
+    class AIWorldPathfinderStateRestorer
     {
     public:
-        Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output );
+        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+            : _pathfinder( pathfinder )
+            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+        {}
 
-        Checkbox( Checkbox && other ) = delete;
-        ~Checkbox() = default;
-        Checkbox( Checkbox & ) = delete;
-        Checkbox & operator=( const Checkbox & ) = delete;
+        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
 
-        const fheroes2::Rect & getRect() const
+        ~AIWorldPathfinderStateRestorer()
         {
-            return _area;
+            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
         }
 
-        int getColor() const
-        {
-            return _color;
-        }
-
-        bool toggle();
+        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
 
     private:
-        const int _color{ 0 };
-        fheroes2::Rect _area;
-        fheroes2::MovableSprite _checkmark;
+        AIWorldPathfinder & _pathfinder;
+
+        const double _originalMinimalArmyStrengthAdvantage;
+        const double _originalSpellPointsReserveRatio;
     };
-
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
-                                const int32_t boxOffsetY, fheroes2::Image & output );
-
-    fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
-                                         const bool isEvil );
-
-    void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
-
-    std::string getDateDescription( const int32_t day );
 }
