@@ -39,10 +39,13 @@
 #include "serialize.h"
 #include "tools.h"
 
-// The original MIDI files are stored in XMI format which is not readable by SDL. You can read about this format here: https://moddingwiki.shikadi.net/wiki/XMI_Format
+// The original MIDI files are stored in XMI format which is not readable by SDL.
+// You can read about this format here: https://moddingwiki.shikadi.net/wiki/XMI_Format
+//
 // A conversion from XMI to MID files is required before playing files.
-// MIDI format is described here: http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html and here:
-// https://en.wikipedia.org/wiki/General_MIDI
+//
+// MIDI format is described here: http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html
+// and here: https://en.wikipedia.org/wiki/General_MIDI
 
 namespace
 {
