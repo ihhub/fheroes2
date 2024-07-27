@@ -440,7 +440,7 @@ namespace
         explicit MidiEvents( const XMITrack & t )
         {
             const uint8_t * ptr = t.evnt.data();
-            const uint8_t * endPtr = ptr + t.evnt.size();
+            const uint8_t * const endPtr = ptr + t.evnt.size();
 
             uint32_t delta = 0;
 
