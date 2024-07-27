@@ -4125,7 +4125,8 @@ namespace fheroes2
                     // A temporary solution is below.
                     const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
                     SubpixelResize( originalImage, _icnVsSprite[id][82] );
-                } else if ( _icnVsSprite[id].size() > 63 ) {
+                }
+                else if ( _icnVsSprite[id].size() > 63 ) {
                     // This fixes "Golden Bow" (#63) small artifact icon glowing yellow pixel
                     Copy( _icnVsSprite[id][63], 12, 17, _icnVsSprite[id][63], 16, 12, 1, 1 );
                 }
