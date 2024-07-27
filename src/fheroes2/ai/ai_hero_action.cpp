@@ -71,6 +71,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
+#include "ui_tool.h"
 #include "visit.h"
 #include "world.h"
 
