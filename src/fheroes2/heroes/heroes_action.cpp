@@ -2364,7 +2364,7 @@ namespace
             return;
         }
 
-        enum class Outcome : uint8_t
+        enum class Outcome
         {
             Invalid,
             Empty,
@@ -2925,7 +2925,7 @@ namespace
 
         const std::string title = MP2::StringObject( objectType );
 
-        enum class Outcome : uint8_t
+        enum class Outcome
         {
             Invalid,
             Ignore,
@@ -3403,7 +3403,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        enum class Outcome : uint8_t
+        enum class Outcome
         {
             Invalid,
             Empty,

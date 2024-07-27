@@ -382,10 +382,10 @@ namespace
                 assert( 0 );
 
                 if ( isDefenderHuman ) {
-                    DEBUG_LOG( DBG_AI, DBG_INFO, defender->GetName() << " the AI hero is protecting the human castle " << castle->GetName() )
+                    DEBUG_LOG( DBG_AI, DBG_WARN, defender->GetName() << " the AI hero is protecting the human castle " << castle->GetName() )
                 }
                 else {
-                    DEBUG_LOG( DBG_AI, DBG_INFO, defender->GetName() << " the human hero is protecting the AI castle " << castle->GetName() )
+                    DEBUG_LOG( DBG_AI, DBG_WARN, defender->GetName() << " the human hero is protecting the AI castle " << castle->GetName() )
                 }
             }
 
