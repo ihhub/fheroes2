@@ -4090,9 +4090,8 @@ msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
 msgid "Unable to create a directory to save the map."
 msgstr "Nem hozható létre könyvtár a térkép mentéséhez."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
-msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
+msgstr "Nem található könyvtár a térkép mentéséhez."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Biztosan felülírod a meglévő térképet?"
@@ -4415,25 +4414,20 @@ msgstr "Arany összegyűjtése."
 msgid "Run out of time."
 msgstr "Kifutás az időből."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " szövetség"
+msgstr "1."
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " szövetség"
+msgstr "2."
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " szövetség"
+msgstr "3."
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " szövetség"
+msgstr "4."
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " szövetség"
+msgstr "5."
 
 msgid "Special Loss Condition"
 msgstr "Speciális vesztési feltétel"
@@ -4447,13 +4441,11 @@ msgstr "Normál győzelmi feltételek engedélyezése"
 msgid "Allow this condition also for AI"
 msgstr "A gépi játékos számára is megengedett ez a feltétel"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " szövetség"
+msgstr "Szövetségesek beállítása:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " szövetség"
+msgstr "{%number} szövetséges: "
 
 msgid "Gold:"
 msgstr "Arany:"
@@ -4471,15 +4463,14 @@ msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Kattints a győzelem kivívásához szükséges legyőzendő hős megváltoztatásához."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "%{color} játékos felvétele %{alliance} szövetségbe"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény %{color} emberi "
-"játékos számára ki fog váltódni."
+"Ha ez a jelölőnégyzet meg van jelölve, akkor %{color} játékos %{alliance}"
+"szövetség tagja lesz."
 
 msgid "Days:"
 msgstr "Napok:"
@@ -11396,10 +11387,9 @@ msgstr "Szent kiáltás"
 msgid "Anti-Magic"
 msgstr "Antimágia"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
 msgstr ""
-"Megakadályozza a kártékony varázslatok idézését a kiválasztott egységeken."
+"Megakadályoz bármely varázslatot a kiválasztott lények ellen."
 
 msgid "Dispel Magic"
 msgstr "Varázslatűzés"
