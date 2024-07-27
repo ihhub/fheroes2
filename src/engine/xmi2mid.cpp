@@ -201,479 +201,479 @@ namespace
 
         return res;
     }
-}
 
-struct IFFChunkHeader
-{
-    uint32_t ID; // 4 upper case ASCII chars, padded with 0x20 (space)
-    uint32_t length; // big-endian
-
-    IFFChunkHeader( uint32_t id, uint32_t sz )
-        : ID( id )
-        , length( sz )
-    {}
-
-    IFFChunkHeader()
-        : ID( 0 )
-        , length( 0 )
-    {}
-};
-
-StreamBuf & operator>>( StreamBuf & sb, IFFChunkHeader & st )
-{
-    st.ID = sb.getBE32();
-    st.length = sb.getBE32();
-    return sb;
-}
-
-StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
-{
-    sb.putBE32( st.ID );
-    sb.putBE32( st.length );
-    return sb;
-}
-
-struct GroupChunkHeader
-{
-    uint32_t ID{ 0 }; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
-    uint32_t length{ 0 };
-    uint32_t type{ 0 }; // 4 byte ASCII string
-};
-
-StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
-{
-    st.ID = sb.getBE32();
-    st.length = sb.getBE32();
-    st.type = sb.getBE32();
-    return sb;
-}
-
-struct XMITrack
-{
-    std::vector<uint8_t> timb;
-    std::vector<uint8_t> evnt;
-};
-
-using XMITracks = std::list<XMITrack>;
-
-struct XMIData
-{
-    XMITracks tracks;
-
-    explicit XMIData( const std::vector<uint8_t> & buf )
+    struct IFFChunkHeader
     {
-        // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
-        StreamBuf sb( buf );
+        uint32_t ID; // 4 upper case ASCII chars, padded with 0x20 (space)
+        uint32_t length; // big-endian
 
-        GroupChunkHeader group;
-        sb >> group;
+        IFFChunkHeader( uint32_t id, uint32_t sz )
+            : ID( id )
+            , length( sz )
+        {}
 
-        if ( group.ID != TAG_FORM || group.type != TAG_XDIR ) {
-            ERROR_LOG( "XMI parsing: invalid IFF root chunk 1 (FORM:XDIR)" )
-            return;
-        }
+        IFFChunkHeader()
+            : ID( 0 )
+            , length( 0 )
+        {}
+    };
 
-        IFFChunkHeader iff;
-        sb >> iff;
-        if ( iff.ID != TAG_INFO || iff.length != 2 ) {
-            ERROR_LOG( "XMI parsing: expected TAG_INFO of length 2" )
-            return;
-        }
+    StreamBuf & operator>>( StreamBuf & sb, IFFChunkHeader & st )
+    {
+        st.ID = sb.getBE32();
+        st.length = sb.getBE32();
+        return sb;
+    }
 
-        const int numTracks = sb.getLE16();
-        if ( numTracks <= 0 ) {
-            ERROR_LOG( "XMI parsing: the number of sequences cannot be less than 1" )
-            return;
-        }
+    StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
+    {
+        sb.putBE32( st.ID );
+        sb.putBE32( st.length );
+        return sb;
+    }
 
-        // CAT XMID
-        sb >> group;
-        if ( group.ID != TAG_CAT0 || group.type != TAG_XMID ) {
-            ERROR_LOG( "XMI parsing: invalid IFF root chunk 2 (CAT :XMID)" )
-            return;
-        }
+    struct GroupChunkHeader
+    {
+        uint32_t ID{ 0 }; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
+        uint32_t length{ 0 };
+        uint32_t type{ 0 }; // 4 byte ASCII string
+    };
 
-        for ( int track = 0; track < numTracks; ++track ) {
-            tracks.emplace_back();
+    StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
+    {
+        st.ID = sb.getBE32();
+        st.length = sb.getBE32();
+        st.type = sb.getBE32();
+        return sb;
+    }
 
-            std::vector<uint8_t> & timb = tracks.back().timb;
-            std::vector<uint8_t> & evnt = tracks.back().evnt;
+    struct XMITrack
+    {
+        std::vector<uint8_t> timb;
+        std::vector<uint8_t> evnt;
+    };
 
+    using XMITracks = std::list<XMITrack>;
+
+    struct XMIData
+    {
+        XMITracks tracks;
+
+        explicit XMIData( const std::vector<uint8_t> & buf )
+        {
+            // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
+            StreamBuf sb( buf );
+
+            GroupChunkHeader group;
             sb >> group;
-            // FORM XMID
-            if ( group.ID != TAG_FORM || group.type != TAG_XMID ) {
-                ERROR_LOG( "XMI parsing: invalid form type (FORM:XMID)" )
+
+            if ( group.ID != TAG_FORM || group.type != TAG_XDIR ) {
+                ERROR_LOG( "XMI parsing: invalid IFF root chunk 1 (FORM:XDIR)" )
                 return;
             }
 
+            IFFChunkHeader iff;
             sb >> iff;
+            if ( iff.ID != TAG_INFO || iff.length != 2 ) {
+                ERROR_LOG( "XMI parsing: expected TAG_INFO of length 2" )
+                return;
+            }
 
-            // Read TIMB cbhunk.
-            if ( iff.ID == TAG_TIMB ) {
-                timb = sb.getRaw( iff.length );
-                if ( timb.size() != iff.length ) {
+            const int numTracks = sb.getLE16();
+            if ( numTracks <= 0 ) {
+                ERROR_LOG( "XMI parsing: the number of sequences cannot be less than 1" )
+                return;
+            }
+
+            // CAT XMID
+            sb >> group;
+            if ( group.ID != TAG_CAT0 || group.type != TAG_XMID ) {
+                ERROR_LOG( "XMI parsing: invalid IFF root chunk 2 (CAT :XMID)" )
+                return;
+            }
+
+            for ( int track = 0; track < numTracks; ++track ) {
+                tracks.emplace_back();
+
+                std::vector<uint8_t> & timb = tracks.back().timb;
+                std::vector<uint8_t> & evnt = tracks.back().evnt;
+
+                sb >> group;
+                // FORM XMID
+                if ( group.ID != TAG_FORM || group.type != TAG_XMID ) {
+                    ERROR_LOG( "XMI parsing: invalid form type (FORM:XMID)" )
+                    return;
+                }
+
+                sb >> iff;
+
+                // Read TIMB cbhunk.
+                if ( iff.ID == TAG_TIMB ) {
+                    timb = sb.getRaw( iff.length );
+                    if ( timb.size() != iff.length ) {
+                        ERROR_LOG( "parse error: "
+                                   << "out of range" )
+                        break;
+                    }
+                    sb >> iff;
+                }
+
+                // [RBRN]
+                if ( iff.ID == TAG_RBRN ) {
+                    sb.skip( iff.length );
+                    sb >> iff;
+                }
+
+                // EVNT
+                if ( iff.ID != TAG_EVNT ) {
+                    ERROR_LOG( "parse error: "
+                               << "evnt" )
+                    break;
+                }
+
+                evnt = sb.getRaw( iff.length );
+
+                if ( evnt.size() != iff.length ) {
                     ERROR_LOG( "parse error: "
                                << "out of range" )
                     break;
                 }
-                sb >> iff;
-            }
-
-            // [RBRN]
-            if ( iff.ID == TAG_RBRN ) {
-                sb.skip( iff.length );
-                sb >> iff;
-            }
-
-            // EVNT
-            if ( iff.ID != TAG_EVNT ) {
-                ERROR_LOG( "parse error: "
-                           << "evnt" )
-                break;
-            }
-
-            evnt = sb.getRaw( iff.length );
-
-            if ( evnt.size() != iff.length ) {
-                ERROR_LOG( "parse error: "
-                           << "out of range" )
-                break;
             }
         }
-    }
 
-    bool isvalid() const
-    {
-        return !tracks.empty();
-    }
-};
-
-struct MidiChunk
-{
-    uint32_t _time;
-    uint8_t _type;
-    std::vector<uint8_t> _binaryTime;
-    std::vector<uint8_t> _data;
-
-    MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
-    {
-        _time = time;
-        _type = type;
-        _binaryTime = packVariableLengthQuantity( time );
-        _data.push_back( data1 );
-    }
-
-    MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
-    {
-        _time = time;
-        _type = type;
-        _binaryTime = packVariableLengthQuantity( time );
-        _data.push_back( data1 );
-        _data.push_back( data2 );
-    }
-
-    MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
-    {
-        _time = time;
-        _type = meta;
-        _binaryTime = packVariableLengthQuantity( time );
-        _data.push_back( subType );
-        _data.push_back( metaLength );
-        for ( uint8_t i = 0; i < metaLength; ++i ) {
-            _data.push_back( *( ptr + i ) );
+        bool isvalid() const
+        {
+            return !tracks.empty();
         }
-    }
+    };
 
-    size_t size() const
+    struct MidiChunk
     {
-        return _binaryTime.size() + 1 + _data.size();
-    }
-};
+        uint32_t _time;
+        uint8_t _type;
+        std::vector<uint8_t> _binaryTime;
+        std::vector<uint8_t> _data;
 
-static bool operator<( const MidiChunk & left, const MidiChunk & right )
-{
-    return left._time < right._time;
-}
-
-StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
-{
-    for ( std::vector<uint8_t>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
-        sb << *it;
-
-    sb << event._type;
-
-    for ( std::vector<uint8_t>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
-        sb << *it;
-
-    return sb;
-}
-
-struct MidiEvents : public std::vector<MidiChunk>
-{
-    uint32_t trackTempo = 0;
-
-    size_t size() const
-    {
-        size_t res = 0;
-        for ( const_iterator it = begin(); it != end(); ++it )
-            res += ( *it ).size();
-        return res;
-    }
-
-    MidiEvents() = default;
-
-    bool checkDataPresence( const uint8_t * ptr, const uint8_t * end, const int32_t requiredLength )
-    {
-        assert( requiredLength > 0 );
-        if ( end - ptr < requiredLength ) {
-            emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-            ERROR_LOG( "MIDI track: the data is truncated." )
-            return false;
+        MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
+        {
+            _time = time;
+            _type = type;
+            _binaryTime = packVariableLengthQuantity( time );
+            _data.push_back( data1 );
         }
 
-        return true;
+        MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
+        {
+            _time = time;
+            _type = type;
+            _binaryTime = packVariableLengthQuantity( time );
+            _data.push_back( data1 );
+            _data.push_back( data2 );
+        }
+
+        MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
+        {
+            _time = time;
+            _type = meta;
+            _binaryTime = packVariableLengthQuantity( time );
+            _data.push_back( subType );
+            _data.push_back( metaLength );
+            for ( uint8_t i = 0; i < metaLength; ++i ) {
+                _data.push_back( *( ptr + i ) );
+            }
+        }
+
+        size_t size() const
+        {
+            return _binaryTime.size() + 1 + _data.size();
+        }
+    };
+
+    static bool operator<( const MidiChunk & left, const MidiChunk & right )
+    {
+        return left._time < right._time;
     }
 
-    explicit MidiEvents( const XMITrack & t )
+    StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
     {
-        const uint8_t * ptr = &t.evnt[0];
-        const uint8_t * end = ptr + t.evnt.size();
+        for ( std::vector<uint8_t>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
+            sb << *it;
 
-        uint32_t delta = 0;
+        sb << event._type;
 
-        while ( ptr && ptr < end ) {
-            // XMI delay is 7 bit values summed together
-            if ( *ptr < 128 ) {
-                delta += *ptr;
-                ++ptr;
-                continue;
-            }
+        for ( std::vector<uint8_t>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
+            sb << *it;
 
-            if ( *ptr == 0xFF ) {
-                if ( !checkDataPresence( ptr, end, 3 ) ) {
-                    break;
-                }
+        return sb;
+    }
 
-                if ( *( ptr + 1 ) == 0x2F ) {
-                    if ( *( ptr + 2 ) != 0x00 ) {
-                        ERROR_LOG( "MIDI track: End of Track sequence is incorrect." )
-                    }
+    struct MidiEvents : public std::vector<MidiChunk>
+    {
+        uint32_t trackTempo = 0;
 
-                    emplace_back( delta, *ptr, *( ptr + 1 ), static_cast<uint8_t>( 0x00 ) );
-                    break;
-                }
+        size_t size() const
+        {
+            size_t res = 0;
+            for ( const_iterator it = begin(); it != end(); ++it )
+                res += ( *it ).size();
+            return res;
+        }
 
-                // Meta-Event, always starts from 0xFF.
-                ++ptr; // skip 0xFF
-                const uint8_t metaType = *( ptr++ );
-                const uint8_t metaLength = *( ptr++ );
+        MidiEvents() = default;
 
-                if ( !checkDataPresence( ptr, end, metaLength ) ) {
-                    break;
-                }
-
-                emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
-                // Tempo switch
-                if ( metaType == 0x51 && metaLength == 3 ) {
-                    // 24-bit big endian
-                    trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
-                }
-
-                ptr += metaLength;
-                continue;
-            }
-
-            switch ( *ptr >> 4 ) {
-            // Polyphonic Key Pressure (Aftertouch).
-            case 0x0A:
-            // Control Change.
-            case 0x0B:
-            // Pitch Wheel Change.
-            case 0x0E:
-                if ( !checkDataPresence( ptr, end, 3 ) ) {
-                    break;
-                }
-
-                emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                ptr += 3;
-                break;
-
-            // XMI events do not have note off events.
-            // Note On event.
-            case 0x09: {
-                if ( !checkDataPresence( ptr, end, 4 ) ) {
-                    break;
-                }
-
-                emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-
-                VariableLengthQuantity quantity;
-                if ( !readVariableLengthQuantity( ptr + 3, end, quantity ) ) {
-                    break;
-                }
-
-                // note off
-                emplace_back( delta + quantity.value, static_cast<uint8_t>( *ptr - 0x10 ), *( ptr + 1 ), static_cast<uint8_t>( 0x7F ) );
-                ptr += 3 + quantity.lengthInBytes;
-                break;
-            }
-
-            // Program Change: in other words which instrument is going to be played.
-            case 0x0C: {
-                if ( !checkDataPresence( ptr, end, 2 ) ) {
-                    break;
-                }
-
-                const int32_t channelId = *ptr - 0xC0;
-
-                emplace_back( delta, *ptr, *( ptr + 1 ) );
-
-                // Drum sounds are only played in channel 9 if channel ID starts from 0, or 10 if channel ID starts from 1. In our case it starts from 0.
-                if ( channelId == 9 ) {
-                    // It is a drum kit.
-                    const uint32_t drumKitId = *( ptr + 1 );
-                    const auto drumKitIter = drumKitDescription.find( drumKitId );
-
-                    if ( drumKitIter != drumKitDescription.end() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ", drum kit ID " << drumKitId << ": " << drumKitIter->second )
-                    }
-                    else {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ": unknown drum kit ID " << drumKitId )
-                    }
-                }
-                else {
-                    const uint32_t instrumentId = *( ptr + 1 );
-
-                    if ( instrumentId < instrumentDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                                   "MIDI channel " << channelId << ", instrument ID " << instrumentId << ": " << instrumentDescription[instrumentId] )
-                    }
-                    else {
-                        ERROR_LOG( "MIDI channel " << channelId << ": unknown instrument ID " << instrumentId )
-                    }
-                }
-
-                ptr += 2;
-                break;
-            }
-
-            // Channel Pressure (After-touch).
-            case 0x0D:
-                if ( !checkDataPresence( ptr, end, 2 ) ) {
-                    break;
-                }
-
-                emplace_back( delta, *ptr, *( ptr + 1 ) );
-                ptr += 2;
-                break;
-
-            // Unknown command.
-            default:
+        bool checkDataPresence( const uint8_t * ptr, const uint8_t * end, const int32_t requiredLength )
+        {
+            assert( requiredLength > 0 );
+            if ( end - ptr < requiredLength ) {
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 )
-                                                           << ", byte: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
-                break;
+                ERROR_LOG( "MIDI track: the data is truncated." )
+                return false;
+            }
+
+            return true;
+        }
+
+        explicit MidiEvents( const XMITrack & t )
+        {
+            const uint8_t * ptr = &t.evnt[0];
+            const uint8_t * end = ptr + t.evnt.size();
+
+            uint32_t delta = 0;
+
+            while ( ptr && ptr < end ) {
+                // XMI delay is 7 bit values summed together
+                if ( *ptr < 128 ) {
+                    delta += *ptr;
+                    ++ptr;
+                    continue;
+                }
+
+                if ( *ptr == 0xFF ) {
+                    if ( !checkDataPresence( ptr, end, 3 ) ) {
+                        break;
+                    }
+
+                    if ( *( ptr + 1 ) == 0x2F ) {
+                        if ( *( ptr + 2 ) != 0x00 ) {
+                            ERROR_LOG( "MIDI track: End of Track sequence is incorrect." )
+                        }
+
+                        emplace_back( delta, *ptr, *( ptr + 1 ), static_cast<uint8_t>( 0x00 ) );
+                        break;
+                    }
+
+                    // Meta-Event, always starts from 0xFF.
+                    ++ptr; // skip 0xFF
+                    const uint8_t metaType = *( ptr++ );
+                    const uint8_t metaLength = *( ptr++ );
+
+                    if ( !checkDataPresence( ptr, end, metaLength ) ) {
+                        break;
+                    }
+
+                    emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
+                    // Tempo switch
+                    if ( metaType == 0x51 && metaLength == 3 ) {
+                        // 24-bit big endian
+                        trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
+                    }
+
+                    ptr += metaLength;
+                    continue;
+                }
+
+                switch ( *ptr >> 4 ) {
+                // Polyphonic Key Pressure (Aftertouch).
+                case 0x0A:
+                // Control Change.
+                case 0x0B:
+                // Pitch Wheel Change.
+                case 0x0E:
+                    if ( !checkDataPresence( ptr, end, 3 ) ) {
+                        break;
+                    }
+
+                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+                    ptr += 3;
+                    break;
+
+                // XMI events do not have note off events.
+                // Note On event.
+                case 0x09: {
+                    if ( !checkDataPresence( ptr, end, 4 ) ) {
+                        break;
+                    }
+
+                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+
+                    VariableLengthQuantity quantity;
+                    if ( !readVariableLengthQuantity( ptr + 3, end, quantity ) ) {
+                        break;
+                    }
+
+                    // note off
+                    emplace_back( delta + quantity.value, static_cast<uint8_t>( *ptr - 0x10 ), *( ptr + 1 ), static_cast<uint8_t>( 0x7F ) );
+                    ptr += 3 + quantity.lengthInBytes;
+                    break;
+                }
+
+                // Program Change: in other words which instrument is going to be played.
+                case 0x0C: {
+                    if ( !checkDataPresence( ptr, end, 2 ) ) {
+                        break;
+                    }
+
+                    const int32_t channelId = *ptr - 0xC0;
+
+                    emplace_back( delta, *ptr, *( ptr + 1 ) );
+
+                    // Drum sounds are only played in channel 9 if channel ID starts from 0, or 10 if channel ID starts from 1. In our case it starts from 0.
+                    if ( channelId == 9 ) {
+                        // It is a drum kit.
+                        const uint32_t drumKitId = *( ptr + 1 );
+                        const auto drumKitIter = drumKitDescription.find( drumKitId );
+
+                        if ( drumKitIter != drumKitDescription.end() ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ", drum kit ID " << drumKitId << ": " << drumKitIter->second )
+                        }
+                        else {
+                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ": unknown drum kit ID " << drumKitId )
+                        }
+                    }
+                    else {
+                        const uint32_t instrumentId = *( ptr + 1 );
+
+                        if ( instrumentId < instrumentDescription.size() ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                                       "MIDI channel " << channelId << ", instrument ID " << instrumentId << ": " << instrumentDescription[instrumentId] )
+                        }
+                        else {
+                            ERROR_LOG( "MIDI channel " << channelId << ": unknown instrument ID " << instrumentId )
+                        }
+                    }
+
+                    ptr += 2;
+                    break;
+                }
+
+                // Channel Pressure (After-touch).
+                case 0x0D:
+                    if ( !checkDataPresence( ptr, end, 2 ) ) {
+                        break;
+                    }
+
+                    emplace_back( delta, *ptr, *( ptr + 1 ) );
+                    ptr += 2;
+                    break;
+
+                // Unknown command.
+                default:
+                    emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
+                    ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 )
+                                                               << ", byte: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                    break;
+                }
+            }
+
+            std::stable_sort( this->begin(), this->end() );
+
+            // update duration
+            delta = 0;
+            for ( iterator it = this->begin(); it != this->end(); ++it ) {
+                it->_binaryTime = packVariableLengthQuantity( it->_time - delta );
+                delta = it->_time;
             }
         }
+    };
 
-        std::stable_sort( this->begin(), this->end() );
-
-        // update duration
-        delta = 0;
-        for ( iterator it = this->begin(); it != this->end(); ++it ) {
-            it->_binaryTime = packVariableLengthQuantity( it->_time - delta );
-            delta = it->_time;
+    StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
+    {
+        for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
+            sb << *it;
         }
+        return sb;
     }
-};
 
-StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
-{
-    for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
-        sb << *it;
-    }
-    return sb;
-}
-
-struct MidTrack
-{
-    IFFChunkHeader mtrk;
-    MidiEvents events;
-
-    explicit MidTrack( const XMITrack & t )
-        : mtrk( TAG_MTRK, 0 )
-        , events( t )
+    struct MidTrack
     {
-        mtrk.length = static_cast<uint32_t>( events.size() );
-    }
+        IFFChunkHeader mtrk;
+        MidiEvents events;
 
-    size_t size() const
-    {
-        return sizeof( mtrk ) + events.size();
-    }
-};
-
-StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
-{
-    sb << st.mtrk;
-    sb << st.events;
-    return sb;
-}
-
-struct MidTracks : std::list<MidTrack>
-{
-    size_t count() const
-    {
-        return std::list<MidTrack>::size();
-    }
-
-    MidTracks() = default;
-
-    explicit MidTracks( const XMITracks & tracks )
-    {
-        for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
-            emplace_back( *it );
-    }
-};
-
-StreamBuf & operator<<( StreamBuf & sb, const MidTracks & st )
-{
-    for ( std::list<MidTrack>::const_iterator it = st.begin(); it != st.end(); ++it )
-        sb << *it;
-    return sb;
-}
-
-struct MidData
-{
-    IFFChunkHeader mthd;
-    int format;
-    int ppqn;
-    MidTracks tracks;
-
-    explicit MidData( const XMITracks & t )
-        : mthd( TAG_MTHD, 6 )
-        , format( 0 )
-        , ppqn( 60 )
-        , tracks( t )
-    {
-        // MIDI format 0 can contain only one track
-        assert( tracks.count() == 1 );
-
-        // XMI files play MIDI at a fixed clock rate of 120 Hz
-        if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
-            ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
+        explicit MidTrack( const XMITrack & t )
+            : mtrk( TAG_MTRK, 0 )
+            , events( t )
+        {
+            mtrk.length = static_cast<uint32_t>( events.size() );
         }
-    }
-};
 
-StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
-{
-    sb << st.mthd;
-    sb.putBE16( static_cast<uint16_t>( st.format ) );
-    sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
-    sb.putBE16( static_cast<uint16_t>( st.ppqn ) );
-    sb << st.tracks;
-    return sb;
+        size_t size() const
+        {
+            return sizeof( mtrk ) + events.size();
+        }
+    };
+
+    StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
+    {
+        sb << st.mtrk;
+        sb << st.events;
+        return sb;
+    }
+
+    struct MidTracks : std::list<MidTrack>
+    {
+        size_t count() const
+        {
+            return std::list<MidTrack>::size();
+        }
+
+        MidTracks() = default;
+
+        explicit MidTracks( const XMITracks & tracks )
+        {
+            for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
+                emplace_back( *it );
+        }
+    };
+
+    StreamBuf & operator<<( StreamBuf & sb, const MidTracks & st )
+    {
+        for ( std::list<MidTrack>::const_iterator it = st.begin(); it != st.end(); ++it )
+            sb << *it;
+        return sb;
+    }
+
+    struct MidData
+    {
+        IFFChunkHeader mthd;
+        int format;
+        int ppqn;
+        MidTracks tracks;
+
+        explicit MidData( const XMITracks & t )
+            : mthd( TAG_MTHD, 6 )
+            , format( 0 )
+            , ppqn( 60 )
+            , tracks( t )
+        {
+            // MIDI format 0 can contain only one track
+            assert( tracks.count() == 1 );
+
+            // XMI files play MIDI at a fixed clock rate of 120 Hz
+            if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
+                ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
+            }
+        }
+    };
+
+    StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
+    {
+        sb << st.mthd;
+        sb.putBE16( static_cast<uint16_t>( st.format ) );
+        sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
+        sb.putBE16( static_cast<uint16_t>( st.ppqn ) );
+        sb << st.tracks;
+        return sb;
+    }
 }
 
 std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
