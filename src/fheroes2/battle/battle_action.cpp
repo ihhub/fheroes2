@@ -1277,14 +1277,14 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
     while ( shots-- ) {
         const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
-        const uint32_t damage = cmd.GetNextValue();
+        const int damage = cmd.GetNextValue();
         const bool hit = cmd.GetNextValue() != 0;
 
         if ( target == CastleDefenseElement::NONE ) {
             continue;
         }
 
-        const uint32_t castleTargetValue = GetCastleTargetValue( target );
+        const int castleTargetValue = static_cast<int>( GetCastleTargetValue( target ) );
 
         using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
 
@@ -1309,7 +1309,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
             continue;
         }
 
-        SetCastleTargetValue( target, castleTargetValue - damage );
+        setCastleTargetValue( target, castleTargetValue - damage );
 
         if ( _interface ) {
             // Continue animating the smoke cloud after changing the "health" of the building.
@@ -1554,9 +1554,11 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
     const auto [minDamage, maxDamage] = getEarthquakeDamageRange( commander );
 
     // Get vector of targets and their health left to apply it during blast animation.
-    std::vector<std::pair<size_t, int>> damagedTargets;
+    std::vector<CastleDefenseElement> targets;
+    std::vector<int> targetsConditionAfter;
     // There could be maximum 9 targets: 4 walls, 4 towers on the wall and a bridge.
-    damagedTargets.reserve( 9 );
+    targetsConditionAfter.reserve( 9 );
+    targets.reserve( 9 );
 
     for ( const size_t position : { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS,
                                     CASTLE_TOP_GATE_TOWER_POS, CASTLE_BOTTOM_GATE_TOWER_POS } ) {
@@ -1565,7 +1567,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         if ( wallCondition > 0 ) {
             const int damage = static_cast<int>( _randomGenerator.Get( minDamage, maxDamage ) );
             if ( damage > 0 ) {
-                damagedTargets.emplace_back( position, std::max( 0, wallCondition - damage ) );
+                targetsConditionAfter.push_back( std::max( 0, wallCondition - damage ) );
+                targets.push_back( getEarthQuakeTarget( position ) );
             }
         }
     }
@@ -1574,47 +1577,31 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
     // In example, with low spell power there is 25% chance (0.5*0.5=0.25) to destroy the bridge,
     // with very high spell power it is 50% chance (0.5*1=0.5).
     if ( _bridge && _bridge->isValid() && _randomGenerator.Get( 0, 1 ) * _randomGenerator.Get( minDamage, maxDamage ) != 0 ) {
-        damagedTargets.emplace_back( CASTLE_GATE_POS, 0 );
+        targetsConditionAfter.push_back( 0 );
+        targets.push_back( getEarthQuakeTarget( CASTLE_GATE_POS ) );
     }
     if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
-        damagedTargets.emplace_back( CASTLE_TOP_ARCHER_TOWER_POS, 0 );
+        targetsConditionAfter.push_back( 0 );
+        targets.push_back( getEarthQuakeTarget( CASTLE_TOP_ARCHER_TOWER_POS ) );
     }
     if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
-        damagedTargets.emplace_back( CASTLE_BOTTOM_ARCHER_TOWER_POS, 0 );
+        targetsConditionAfter.push_back( 0 );
+        targets.push_back( getEarthQuakeTarget( CASTLE_BOTTOM_ARCHER_TOWER_POS ) );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << damagedTargets.size() )
+    size_t targetsCount = targets.size();
+    assert( targetsCount == targetsConditionAfter.size() );
 
-    std::vector<CastleDefenseElement> targets;
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << targetsCount )
 
     if ( _interface ) {
-        // Prepare the list of damaged targets where to render the blast animation.
-        targets.reserve( damagedTargets.size() );
-        for ( const auto [position, health] : damagedTargets ) {
-            targets.push_back( getEarthQuakeTarget( position ) );
-            assert( targets.back() != CastleDefenseElement::NONE );
-        }
-
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
         _interface->redrawActionEarthQuakeSpellPart1( targets );
     }
 
     // Apply new conditions for the damaged targets.
-    for ( const auto [position, health] : damagedTargets ) {
-        switch ( position ) {
-        case CASTLE_GATE_POS:
-            _bridge->SetDestroyed();
-            break;
-        case CASTLE_TOP_ARCHER_TOWER_POS:
-            _towers[0]->SetDestroy();
-            break;
-        case CASTLE_BOTTOM_ARCHER_TOWER_POS:
-            _towers[2]->SetDestroy();
-            break;
-        default:
-            board[position].SetObject( health );
-            break;
-        }
+    for ( size_t i = 0; i < targetsCount; ++i ) {
+        setCastleTargetValue( targets[i], targetsConditionAfter[i] );
     }
 
     if ( _interface ) {

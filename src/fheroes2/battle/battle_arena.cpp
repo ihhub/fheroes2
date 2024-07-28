@@ -981,7 +981,7 @@ Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
     return graveyard.GetOccupiedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value )
+void Battle::Arena::setCastleTargetValue( const CastleDefenseElement target, const int value )
 {
     switch ( target ) {
     case CastleDefenseElement::WALL1:

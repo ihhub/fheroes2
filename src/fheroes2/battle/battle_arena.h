@@ -241,7 +241,7 @@ namespace Battle
 
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
+        void setCastleTargetValue( const CastleDefenseElement target, const int value );
         void CatapultAction();
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
