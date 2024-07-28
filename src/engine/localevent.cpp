@@ -519,6 +519,7 @@ namespace EventProcessing
                     assert( eventTypeStatus.count( event.type ) == 0 );
 
                     // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
+                    processImmediately = false;
                     break;
                 }
 
