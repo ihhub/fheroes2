@@ -23,8 +23,6 @@
 
 #include "localevent.h"
 
-#include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
@@ -416,19 +414,11 @@ namespace EventProcessing
 
             SDL_Event event;
 
-            // Most SDL events should be processed sequentially one event at a time, but for some event types, the processing of
-            // intermediate events may be skipped in order to gain overall event processing speed.
-            constexpr std::array<decltype( event.type ), 7> nonImmediatelyProcessedEventTypes
-                = { // Most window events do not require immediate processing, with some exceptions handled separately (see below).
-                    SDL_WINDOWEVENT,
-                    // Events related to moving the mouse cursor do not require immediate processing. For these events, the starting
-                    // and ending points of the movement are mainly important, and the intermediate points are not so important.
-                    SDL_MOUSEMOTION, SDL_CONTROLLERAXISMOTION, SDL_FINGERMOTION,
-                    // Joystick movement events are not processed separately at all (see below), so the lack of immediate processing
-                    // will not hurt them as well.
-                    SDL_JOYAXISMOTION, SDL_JOYBALLMOTION, SDL_JOYHATMOTION };
-
             while ( SDL_PollEvent( &event ) ) {
+                // Most SDL events should be processed sequentially one event at a time, but for some event types, the processing of
+                // intermediate events may be skipped in order to gain overall event processing speed.
+                bool processImmediately = true;
+
                 switch ( event.type ) {
                 case SDL_WINDOWEVENT:
                     if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
@@ -436,10 +426,16 @@ namespace EventProcessing
                             // Try to perform clear exit to catch all memory leaks, for example.
                             return false;
                         }
+                        else {
+                            processImmediately = false;
+                        }
                         break;
                     }
                     if ( onWindowEvent( event.window ) ) {
                         updateDisplay = true;
+                    }
+                    else {
+                        processImmediately = false;
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -448,6 +444,7 @@ namespace EventProcessing
                     break;
                 case SDL_MOUSEMOTION:
                     onMouseMotionEvent( eventHandler, event.motion );
+                    processImmediately = false;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -473,9 +470,11 @@ namespace EventProcessing
                     // SDL requires joystick events to be enabled in order to handle controller events.
                     // This is because the controller related code depends on the joystick related code.
                     // See SDL_gamecontroller.c within SDL source code for implementation details.
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERAXISMOTION:
                     onControllerAxisEvent( eventHandler, event.caxis );
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERBUTTONDOWN:
                 case SDL_CONTROLLERBUTTONUP:
@@ -485,6 +484,9 @@ namespace EventProcessing
                 case SDL_FINGERUP:
                 case SDL_FINGERMOTION:
                     onTouchEvent( eventHandler, event.tfinger );
+                    if ( event.type == SDL_FINGERMOTION ) {
+                        processImmediately = false;
+                    }
                     break;
                 case SDL_RENDER_TARGETS_RESET:
                     // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
@@ -505,6 +507,9 @@ namespace EventProcessing
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
                     }
+                    else {
+                        processImmediately = false;
+                    }
                     break;
                 case SDL_APP_LOWMEMORY:
                     // According to SDL this event can only happen on Android or iOS.
@@ -521,8 +526,7 @@ namespace EventProcessing
                 }
 
                 // If the current event does require immediate processing, then we need to return immediately.
-                if ( std::find( nonImmediatelyProcessedEventTypes.begin(), nonImmediatelyProcessedEventTypes.end(), event.type )
-                     == nonImmediatelyProcessedEventTypes.end() ) {
+                if ( processImmediately ) {
                     break;
                 }
 
