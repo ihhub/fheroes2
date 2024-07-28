@@ -415,8 +415,9 @@ namespace EventProcessing
             SDL_Event event;
 
             while ( SDL_PollEvent( &event ) ) {
-                // Most SDL events should be processed sequentially one event at a time, but for some event types, the processing of
-                // intermediate events may be skipped in order to gain overall event processing speed.
+                // Most SDL events should be processed sequentially one event at a time, but for some
+                // event types, the processing of intermediate events may be skipped in order to gain
+                // overall event processing speed.
                 bool processImmediately = true;
 
                 switch ( event.type ) {
