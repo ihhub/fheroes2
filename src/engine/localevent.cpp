@@ -23,6 +23,7 @@
 
 #include "localevent.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cmath>
