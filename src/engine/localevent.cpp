@@ -427,9 +427,7 @@ namespace EventProcessing
                             // Try to perform clear exit to catch all memory leaks, for example.
                             return false;
                         }
-                        else {
-                            processImmediately = false;
-                        }
+                        processImmediately = false;
                         break;
                     }
                     if ( onWindowEvent( event.window ) ) {
@@ -508,9 +506,7 @@ namespace EventProcessing
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
                     }
-                    else {
-                        processImmediately = false;
-                    }
+                    processImmediately = false;
                     break;
                 case SDL_APP_LOWMEMORY:
                     // According to SDL this event can only happen on Android or iOS.
