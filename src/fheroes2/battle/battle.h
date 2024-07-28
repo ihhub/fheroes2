@@ -138,7 +138,9 @@ namespace Battle
         TOWER1 = 5,
         TOWER2 = 6,
         BRIDGE = 7,
-        CENTRAL_TOWER = 8
+        CENTRAL_TOWER = 8,
+        TOP_BRIDGE_TOWER = 9,
+        BOTTOM_BRIDGE_TOWER = 10
     };
 }
 

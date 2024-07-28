@@ -315,7 +315,8 @@ namespace Battle
         void RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit );
         void RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget );
         void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets );
+        void redrawActionEarthQuakeSpellPart1( const std::vector<CastleDefenseElement> & targets );
+        void redrawActionEarthQuakeSpellPart2( const std::vector<CastleDefenseElement> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );

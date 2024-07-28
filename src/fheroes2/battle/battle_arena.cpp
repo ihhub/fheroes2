@@ -333,9 +333,9 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
-        // tower
-        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
-        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
+        // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
+        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 1 );
+        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 1 );
 
         // archers tower
         board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
@@ -996,6 +996,12 @@ void Battle::Arena::SetCastleTargetValue( const CastleDefenseElement target, con
     case CastleDefenseElement::WALL4:
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
+    case CastleDefenseElement::TOP_BRIDGE_TOWER:
+        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( value );
+        break;
+    case CastleDefenseElement::BOTTOM_BRIDGE_TOWER:
+        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( value );
+        break;
 
     case CastleDefenseElement::TOWER1:
         if ( _towers[0] && _towers[0]->isValid() ) {
@@ -1035,6 +1041,10 @@ uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target 
         return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
     case CastleDefenseElement::WALL4:
         return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
+    case CastleDefenseElement::TOP_BRIDGE_TOWER:
+        return board[CASTLE_TOP_GATE_TOWER_POS].GetObject();
+    case CastleDefenseElement::BOTTOM_BRIDGE_TOWER:
+        return board[CASTLE_BOTTOM_GATE_TOWER_POS].GetObject();
 
     case CastleDefenseElement::TOWER1:
         return _towers[0] && _towers[0]->isValid() ? 1 : 0;
@@ -1052,32 +1062,45 @@ uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target 
     return 0;
 }
 
-std::vector<Battle::CastleDefenseElement> Battle::Arena::GetEarthQuakeTargets() const
+Battle::CastleDefenseElement Battle::Arena::getEarthQuakeTarget( const size_t position ) const
 {
-    std::vector<CastleDefenseElement> targets;
-    targets.reserve( 8 );
-
-    if ( board[CASTLE_FIRST_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL1 );
-    }
-    if ( board[CASTLE_SECOND_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL2 );
-    }
-    if ( board[CASTLE_THIRD_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL3 );
-    }
-    if ( board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL4 );
+    if ( board[position].GetObject() == 0 ) {
+        return CastleDefenseElement::NONE;
     }
 
-    if ( _towers[0] && _towers[0]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER1 );
-    }
-    if ( _towers[2] && _towers[2]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER2 );
+    switch ( position ) {
+    case CASTLE_GATE_POS:
+        if ( _bridge && _bridge->isValid() ) {
+            return CastleDefenseElement::BRIDGE;
+        }
+        break;
+    case CASTLE_TOP_ARCHER_TOWER_POS:
+        if ( _towers[0] && _towers[0]->isValid() ) {
+            return CastleDefenseElement::TOWER1;
+        }
+        break;
+    case CASTLE_BOTTOM_ARCHER_TOWER_POS:
+        if ( _towers[2] && _towers[2]->isValid() ) {
+            return CastleDefenseElement::TOWER2;
+        }
+        break;
+    case CASTLE_FIRST_TOP_WALL_POS:
+        return CastleDefenseElement::WALL1;
+    case CASTLE_SECOND_TOP_WALL_POS:
+        return CastleDefenseElement::WALL2;
+    case CASTLE_THIRD_TOP_WALL_POS:
+        return CastleDefenseElement::WALL3;
+    case CASTLE_FOURTH_TOP_WALL_POS:
+        return CastleDefenseElement::WALL4;
+    case CASTLE_TOP_GATE_TOWER_POS:
+        return CastleDefenseElement::TOP_BRIDGE_TOWER;
+    case CASTLE_BOTTOM_GATE_TOWER_POS:
+        return CastleDefenseElement::BOTTOM_BRIDGE_TOWER;
+    default:
+        break;
     }
 
-    return targets;
+    return CastleDefenseElement::NONE;
 }
 
 const HeroBase * Battle::Arena::getCommander( const int color ) const

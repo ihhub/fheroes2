@@ -94,6 +94,10 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( const CastleDefenseElement 
         return hit ? fheroes2::Point( 400, 195 ) : fheroes2::Point( 450, 235 );
     case CastleDefenseElement::CENTRAL_TOWER:
         return hit ? fheroes2::Point( 580, 160 ) : fheroes2::Point( 610, 320 );
+    case CastleDefenseElement::TOP_BRIDGE_TOWER:
+        return hit ? fheroes2::Point( 395, 152 ) : fheroes2::Point( 445, 202 );
+    case CastleDefenseElement::BOTTOM_BRIDGE_TOWER:
+        return hit ? fheroes2::Point( 395, 240 ) : fheroes2::Point( 445, 290 );
     default:
         break;
     }

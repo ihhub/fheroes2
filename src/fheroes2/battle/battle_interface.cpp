@@ -2317,8 +2317,9 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
         const Tower * ltower = Arena::GetTower( TowerType::TWR_LEFT );
         uint32_t index = 17;
 
-        if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower )
+        if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower ) {
             index = ltower->isValid() ? 18 : 19;
+        }
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
@@ -2327,18 +2328,21 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
         const Tower * rtower = Arena::GetTower( TowerType::TWR_RIGHT );
         uint32_t index = 17;
 
-        if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower )
+        if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower ) {
             index = rtower->isValid() ? 18 : 19;
+        }
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
+        const int index = Board::GetCell( cellId )->GetObject() == 0 ? 19 : 17;
+        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
+        const int index = Board::GetCell( cellId )->GetObject() == 0 ? 19 : 17;
+        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
 }
@@ -5816,7 +5820,23 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect area = GetArea();
 
-    area.height -= 37;
+    area.height -= status.height;
+
+    // Hide Turn Order for the Armageddon animation original image not to shake it together with the land.
+    Settings & settings = Settings::Get();
+    const bool isTurnOrderShown = settings.BattleShowTurnOrder();
+    if ( isTurnOrderShown ) {
+        settings.setBattleShowTurnOrder( false );
+    }
+
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
+    RedrawPartialStart();
+
+    // Restore the Turn Order rendering if it was enabled.
+    if ( isTurnOrderShown ) {
+        settings.setBattleShowTurnOrder( true );
+    }
 
     fheroes2::Image spriteWhitening;
     spriteWhitening._disableTransformLayer();
@@ -5824,6 +5844,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
     fheroes2::Image spriteReddish = spriteWhitening;
+    fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::PaletteType::RED ) );
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
@@ -5845,113 +5866,142 @@ void Battle::Interface::RedrawActionArmageddonSpell()
         }
     }
 
-    fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::PaletteType::RED ) );
     fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
-            const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
-            const fheroes2::Rect initialArea( area );
-            fheroes2::Rect original = initialArea ^ fheroes2::Rect( area.x + offsetX, area.y + offsetY, area.width, area.height );
+            const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
+            const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
 
-            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.width, original.height );
-            if ( shifted.x < 0 ) {
-                const int32_t offset = -shifted.x;
-                shifted.x = 0;
-                original.x += offset;
-                shifted.width -= offset;
-                shifted.x = 0;
-            }
-            if ( shifted.y < 0 ) {
-                const int32_t offset = -shifted.y;
-                shifted.y = 0;
-                original.y += offset;
-                shifted.height -= offset;
-                shifted.y = 0;
-            }
-            fheroes2::Copy( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( spriteReddish, std::max( 0, -offsetX ), std::max( 0, -offsetY ), _mainSurface, std::max( 0, offsetX ), std::max( 0, offsetY ),
+                            area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
 
             RedrawPartialFinish();
         }
     }
 }
 
-void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets )
+void Battle::Interface::redrawActionEarthQuakeSpellPart1( const std::vector<CastleDefenseElement> & targets )
 {
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     fheroes2::Rect area = GetArea();
+    area.height -= status.height;
 
-    uint32_t frame = 0;
-    area.height -= 38;
+    // Hide Turn Order for the Earthquake animation original image not to shake it together with the land.
+    Settings & settings = Settings::Get();
+    const bool isTurnOrderShown = settings.BattleShowTurnOrder();
+    if ( isTurnOrderShown ) {
+        settings.setBattleShowTurnOrder( false );
+    }
 
-    cursor.SetThemes( Cursor::WAR_POINTER );
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
+    RedrawPartialStart();
 
-    fheroes2::Image sprite;
-    sprite._disableTransformLayer();
-    sprite.resize( area.width, area.height );
-    fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
+    // Restore the Turn Order rendering if it was enabled.
+    if ( isTurnOrderShown ) {
+        settings.setBattleShowTurnOrder( true );
+    }
+
+    fheroes2::Image battlefieldImage;
+    battlefieldImage._disableTransformLayer();
+    battlefieldImage.resize( area.width, area.height );
+    fheroes2::Copy( _mainSurface, area.x, area.y, battlefieldImage, area );
 
     _currentUnit = nullptr;
     AudioManager::PlaySound( M82::ERTHQUAK );
 
+    LocalEvent & le = LocalEvent::Get();
+    uint32_t frame = 0;
+
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    // draw earth quake
+    // Draw earth quake animation.
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < 18 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
-            const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
-            const fheroes2::Rect initialArea( area );
-            fheroes2::Rect original = initialArea ^ fheroes2::Rect( area.x + offsetX, area.y + offsetY, area.width, area.height );
+            const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
+            const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
 
-            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.width, original.height );
-            if ( shifted.x < 0 ) {
-                const int32_t offset = -shifted.x;
-                shifted.x = 0;
-                original.x += offset;
-                shifted.width -= offset;
-                shifted.x = 0;
-            }
-            if ( shifted.y < 0 ) {
-                const int32_t offset = -shifted.y;
-                shifted.y = 0;
-                original.y += offset;
-                shifted.height -= offset;
-                shifted.y = 0;
-            }
-
-            fheroes2::Copy( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( battlefieldImage, std::max( 0, -offsetX ), std::max( 0, -offsetY ), _mainSurface, std::max( 0, offsetX ), std::max( 0, offsetY ),
+                            area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
 
             RedrawPartialFinish();
+
             ++frame;
         }
     }
 
     // draw cloud
     const int icn = ICN::LICHCLOD;
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn ) / 2;
     frame = 0;
 
     AudioManager::PlaySound( M82::CATSND02 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             for ( const CastleDefenseElement target : targets ) {
-                fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
+                const fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
-                pt2.x += area.x;
-                pt2.y += area.y;
+                if ( target == CastleDefenseElement::BRIDGE && frame >= bridgeDestroySmokeDelay ) {
+                    // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
+                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay );
+                    fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );
+                }
+
+                const fheroes2::Sprite & spriteCloud = fheroes2::AGG::GetICN( icn, frame );
+                fheroes2::Blit( spriteCloud, _mainSurface, pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
+            }
+
+            RedrawPartialFinish();
+
+            ++frame;
+        }
+    }
+}
+
+void Battle::Interface::redrawActionEarthQuakeSpellPart2( const std::vector<CastleDefenseElement> & targets )
+{
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    LocalEvent & le = LocalEvent::Get();
+    const int icn = ICN::LICHCLOD;
+    uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
+    uint32_t frame = maxFrame / 2;
+
+    const bool isBridgeDestroyed
+        = std::any_of( targets.begin(), targets.end(), []( const CastleDefenseElement target ) { return target == CastleDefenseElement::BRIDGE; } );
+    if ( isBridgeDestroyed ) {
+        maxFrame += bridgeDestroySmokeDelay - 1;
+    }
+
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < maxFrame ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            RedrawPartialStart();
+
+            for ( const CastleDefenseElement target : targets ) {
+                const fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
+
+                if ( target == CastleDefenseElement::BRIDGE ) {
+                    // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
+                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay + 1 );
+                    fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );
+                }
 
                 const fheroes2::Sprite & spriteCloud = fheroes2::AGG::GetICN( icn, frame );
                 fheroes2::Blit( spriteCloud, _mainSurface, pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );

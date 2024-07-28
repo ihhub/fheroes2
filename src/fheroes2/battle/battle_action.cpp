@@ -1551,36 +1551,75 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         return;
     }
 
-    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
+    const auto [minDamage, maxDamage] = getEarthquakeDamageRange( commander );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+    // Get vector of targets and their health left to apply it during blast animation.
+    std::vector<std::pair<size_t, int>> damagedTargets;
+    // There could be maximum 9 targets: 4 walls, 4 towers on the wall and a bridge.
+    damagedTargets.reserve( 9 );
 
-    if ( _interface ) {
-        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
-        _interface->RedrawActionEarthQuakeSpell( targets );
-    }
-
-    const std::pair<uint32_t, uint32_t> range = getEarthquakeDamageRange( commander );
-    const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
-    for ( int position : wallHexPositions ) {
+    for ( const size_t position : { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS,
+                                    CASTLE_TOP_GATE_TOWER_POS, CASTLE_BOTTOM_GATE_TOWER_POS } ) {
         const int wallCondition = board[position].GetObject();
 
         if ( wallCondition > 0 ) {
-            uint32_t wallDamage = _randomGenerator.Get( range.first, range.second );
-
-            if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
-                wallDamage = wallCondition;
+            const int damage = static_cast<int>( _randomGenerator.Get( minDamage, maxDamage ) );
+            if ( damage > 0 ) {
+                damagedTargets.emplace_back( position, std::max( 0, wallCondition - damage ) );
             }
-
-            board[position].SetObject( wallCondition - wallDamage );
         }
     }
 
+    // There is a 0.5 multiplied by a spell power dependent chance to destroy the bridge by the Earthquake spell.
+    // In example, with low spell power there is 25% chance (0.5*0.5=0.25) to destroy the bridge,
+    // with very high spell power it is 50% chance (0.5*1=0.5).
+    if ( _bridge && _bridge->isValid() && _randomGenerator.Get( 0, 1 ) * _randomGenerator.Get( minDamage, maxDamage ) != 0 ) {
+        damagedTargets.emplace_back( CASTLE_GATE_POS, 0 );
+    }
     if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[0]->SetDestroy();
+        damagedTargets.emplace_back( CASTLE_TOP_ARCHER_TOWER_POS, 0 );
     }
     if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[2]->SetDestroy();
+        damagedTargets.emplace_back( CASTLE_BOTTOM_ARCHER_TOWER_POS, 0 );
+    }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << damagedTargets.size() )
+
+    std::vector<CastleDefenseElement> targets;
+
+    if ( _interface ) {
+        // Prepare the list of damaged targets where to render the blast animation.
+        targets.reserve( damagedTargets.size() );
+        for ( const auto [position, health] : damagedTargets ) {
+            targets.push_back( getEarthQuakeTarget( position ) );
+            assert( targets.back() != CastleDefenseElement::NONE );
+        }
+
+        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
+        _interface->redrawActionEarthQuakeSpellPart1( targets );
+    }
+
+    // Apply new conditions for the damaged targets.
+    for ( const auto [position, health] : damagedTargets ) {
+        switch ( position ) {
+        case CASTLE_GATE_POS:
+            _bridge->SetDestroyed();
+            break;
+        case CASTLE_TOP_ARCHER_TOWER_POS:
+            _towers[0]->SetDestroy();
+            break;
+        case CASTLE_BOTTOM_ARCHER_TOWER_POS:
+            _towers[2]->SetDestroy();
+            break;
+        default:
+            board[position].SetObject( health );
+            break;
+        }
+    }
+
+    if ( _interface ) {
+        // Render a second part of blast animation after targets are damaged or even destroyed.
+        _interface->redrawActionEarthQuakeSpellPart2( targets );
     }
 }
 
