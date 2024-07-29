@@ -578,40 +578,6 @@ namespace
         fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
         fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY );
     }
-
-    void removeColorCycling( fheroes2::Image & image )
-    {
-        if ( image.empty() ) {
-            return;
-        }
-
-        uint8_t * data = image.image();
-        const uint8_t * imageEnd = data + static_cast<size_t>( image.width() ) * image.height();
-
-        for ( ; data < imageEnd; ++data ) {
-            if ( *data < 214 ) {
-                // Normal, not glowing colors. Skip them.
-                continue;
-            }
-
-            if ( *data < 218 ) {
-                // Lava cycling animation. Replace it with a "medium" red color.
-                *data = 188;
-            }
-            else if ( *data < 222 ) {
-                // Gold (creature selection in battle) cycling animation. Replace it with a "medium" yellow color.
-                *data = 118;
-            }
-            else if ( *data < 231 ) {
-                // Green gradient, not glowing. Skip.
-                continue;
-            }
-            else if ( *data < 241 ) {
-                // Water and portal (blue) cycling animation. Replace it with a "medium" blue color.
-                *data = 69;
-            }
-        }
-    }
 }
 
 namespace fheroes2
@@ -3315,24 +3281,27 @@ namespace fheroes2
                     Blit( GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
                 }
                 return true;
+            case ICN::TWNWUP_5:
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // Fix the cycling colors in original editor main menu background.
-                    removeColorCycling( _icnVsSprite[id].front() );
+                    // Fix the cycling colors in original editor main menu background and Red Tower (Warlock castle screen).
+                    ApplyPalette( _icnVsSprite[id].front(), PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 return true;
             case ICN::MINIHERO:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 42 ) {
+                    const auto & noCyclePalette = PAL::GetPalette( PAL::PaletteType::NO_CYCLE );
+
                     // Fix cycling colors on the Green heroes' flag for Knight, Sorceress and Warlock.
-                    removeColorCycling( _icnVsSprite[id][7] );
-                    removeColorCycling( _icnVsSprite[id][9] );
-                    removeColorCycling( _icnVsSprite[id][10] );
+                    ApplyPalette( _icnVsSprite[id][7], noCyclePalette );
+                    ApplyPalette( _icnVsSprite[id][9], noCyclePalette );
+                    ApplyPalette( _icnVsSprite[id][10], noCyclePalette );
 
                     // Fix cycling colors on the Yellow heroes' flag.
                     for ( size_t i = 21; i < 28; ++i ) {
-                        removeColorCycling( _icnVsSprite[id][i] );
+                        ApplyPalette( _icnVsSprite[id][i], noCyclePalette );
                     }
 
                     // Fix Blue Random hero flag.
@@ -3526,7 +3495,7 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 22 ) {
                     // Cliff nest image has a glowing pixel.
-                    removeColorCycling( _icnVsSprite[id][22] );
+                    ApplyPalette( _icnVsSprite[id][22], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
@@ -4020,15 +3989,6 @@ namespace fheroes2
                     // Copy red central part.
                     const fheroes2::Sprite goodBox = GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
                     Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
-                }
-
-                return true;
-            }
-            case ICN::TWNWUP_5: {
-                LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    // Fix glowing red pixel.
-                    removeColorCycling( _icnVsSprite[id].front() );
                 }
 
                 return true;
