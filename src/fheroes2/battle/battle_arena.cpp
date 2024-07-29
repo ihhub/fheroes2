@@ -335,6 +335,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
         // NOTE: All towers can be destroyed but can not be passable.
         // Initially their condition is 2 and becomes 1 after their upper part is destroyed.
+        // The tower's condition should not be 0 to keep them non-passable by the troops.
 
         // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
