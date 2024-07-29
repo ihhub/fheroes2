@@ -689,5 +689,5 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
     const MidData mid( xmi.tracks );
     sb << mid;
 
-    return std::vector<uint8_t>( sb.data(), sb.data() + sb.size() );
+    return { sb.data(), sb.data() + sb.size() };
 }
