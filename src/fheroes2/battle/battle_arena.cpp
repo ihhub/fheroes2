@@ -333,11 +333,14 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
-        // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
-        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 1 );
-        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 1 );
+        // NOTE: All towers can be destroyed but can not be passable.
+        // Initially their condition is 2 and becomes 1 after their upper part is destroyed.
 
-        // archers tower
+        // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
+        board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
+        board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
+
+        // Turret towers with small ballista.
         board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
         board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( 2 );
 
@@ -997,20 +1000,38 @@ void Battle::Arena::setCastleTargetValue( const CastleDefenseElement target, con
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
     case CastleDefenseElement::TOP_BRIDGE_TOWER:
+        // Tower can be damaged by the Earthquake spell, but not fully demolished.
+        assert( value > 0 );
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( value );
         break;
     case CastleDefenseElement::BOTTOM_BRIDGE_TOWER:
+        // Tower can be damaged by the Earthquake spell, but not fully demolished.
+        assert( value > 0 );
         board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( value );
         break;
 
     case CastleDefenseElement::TOWER1:
-        if ( _towers[0] && _towers[0]->isValid() ) {
-            _towers[0]->SetDestroy();
+        if ( _towers[0] ) {
+            if ( _towers[0]->isValid() ) {
+                _towers[0]->SetDestroy();
+            }
+        }
+        else {
+            // Tower without built turret can be damaged by the Earthquake spell, but not fully demolished.
+            assert( value > 0 );
+            board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( value );
         }
         break;
     case CastleDefenseElement::TOWER2:
-        if ( _towers[2] && _towers[2]->isValid() ) {
-            _towers[2]->SetDestroy();
+        if ( _towers[2] ) {
+            if ( _towers[2]->isValid() ) {
+                _towers[2]->SetDestroy();
+            }
+        }
+        else {
+            // Tower without built turret can be damaged by the Earthquake spell, but not fully demolished.
+            assert( value > 0 );
+            board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( value );
         }
         break;
     case CastleDefenseElement::CENTRAL_TOWER:
@@ -1075,12 +1096,12 @@ Battle::CastleDefenseElement Battle::Arena::getEarthQuakeTarget( const size_t po
         }
         break;
     case CASTLE_TOP_ARCHER_TOWER_POS:
-        if ( _towers[0] && _towers[0]->isValid() ) {
+        if ( board[position].GetObject() > 1 ) {
             return CastleDefenseElement::TOWER1;
         }
         break;
     case CASTLE_BOTTOM_ARCHER_TOWER_POS:
-        if ( _towers[2] && _towers[2]->isValid() ) {
+        if ( board[position].GetObject() > 1 ) {
             return CastleDefenseElement::TOWER2;
         }
         break;

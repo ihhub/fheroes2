@@ -2320,6 +2320,10 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
         if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower ) {
             index = ltower->isValid() ? 18 : 19;
         }
+        else if ( Board::GetCell( cellId )->GetObject() == 1 ) {
+            // Tower without built turret can be damaged by the Earthquake spell.
+            index = 19;
+        }
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
@@ -2331,17 +2335,21 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
         if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower ) {
             index = rtower->isValid() ? 18 : 19;
         }
+        else if ( Board::GetCell( cellId )->GetObject() == 1 ) {
+            // Tower without built turret can be damaged by the Earthquake spell.
+            index = 19;
+        }
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
-        const int index = Board::GetCell( cellId )->GetObject() == 0 ? 19 : 17;
+        const int index = ( Board::GetCell( cellId )->GetObject() == 1 ) ? 19 : 17;
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
-        const int index = Board::GetCell( cellId )->GetObject() == 0 ? 19 : 17;
+        const int index = ( Board::GetCell( cellId )->GetObject() == 1 ) ? 19 : 17;
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }

@@ -1561,8 +1561,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
     targetsConditionAfter.reserve( 9 );
     targets.reserve( 9 );
 
-    for ( const size_t position : { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS,
-                                    CASTLE_TOP_GATE_TOWER_POS, CASTLE_BOTTOM_GATE_TOWER_POS } ) {
+    for ( const size_t position : { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS } ) {
         const int wallCondition = board[position].GetObject();
 
         if ( wallCondition > 0 ) {
@@ -1574,20 +1573,27 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         }
     }
 
+    // Castle towers have a slightly different logic because they cannot be demolished, only damaged:
+    // '2' is for normal condition and '1' is for the damaged condition.
+    // Also towers without built turrets can be damaged by the Earthquake spell.
+    for ( const size_t position : { CASTLE_TOP_ARCHER_TOWER_POS, CASTLE_BOTTOM_ARCHER_TOWER_POS, CASTLE_TOP_GATE_TOWER_POS, CASTLE_BOTTOM_GATE_TOWER_POS } ) {
+        const int wallCondition = board[position].GetObject();
+
+        if ( wallCondition > 1 ) {
+            const int damage = static_cast<int>( _randomGenerator.Get( minDamage, maxDamage ) );
+            if ( damage > 0 ) {
+                targetsConditionAfter.push_back( std::max( 1, wallCondition - damage ) );
+                targets.push_back( getEarthQuakeTarget( position ) );
+            }
+        }
+    }
+
     // There is a 0.5 multiplied by a spell power dependent chance to destroy the bridge by the Earthquake spell.
     // In example, with low spell power there is 25% chance (0.5*0.5=0.25) to destroy the bridge,
     // with very high spell power it is 50% chance (0.5*1=0.5).
     if ( _bridge && _bridge->isValid() && _randomGenerator.Get( 0, 1 ) * _randomGenerator.Get( minDamage, maxDamage ) != 0 ) {
         targetsConditionAfter.push_back( 0 );
         targets.push_back( getEarthQuakeTarget( CASTLE_GATE_POS ) );
-    }
-    if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
-        targetsConditionAfter.push_back( 0 );
-        targets.push_back( getEarthQuakeTarget( CASTLE_TOP_ARCHER_TOWER_POS ) );
-    }
-    if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
-        targetsConditionAfter.push_back( 0 );
-        targets.push_back( getEarthQuakeTarget( CASTLE_BOTTOM_ARCHER_TOWER_POS ) );
     }
 
     size_t targetsCount = targets.size();
