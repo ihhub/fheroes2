@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#include "audio.h"
+#include "audio.h" // IWYU pragma: associated
 #include "logging.h"
 #include "serialize.h"
 #include "tools.h"
