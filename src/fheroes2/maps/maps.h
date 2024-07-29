@@ -28,11 +28,15 @@
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
 
 #define TILEWIDTH 32
 
 class Heroes;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 using MapsIndexes = std::vector<int32_t>;
 

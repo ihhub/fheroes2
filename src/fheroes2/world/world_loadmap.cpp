@@ -29,7 +29,6 @@
 #include <functional>
 #include <list>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
@@ -63,7 +62,7 @@
 #include "resource.h"
 #include "serialize.h"
 #include "settings.h"
-#include "world.h"
+#include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
 namespace

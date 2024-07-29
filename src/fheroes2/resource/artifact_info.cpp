@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
 #include <sstream>
 
 #include "artifact.h"

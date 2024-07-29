@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <list>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -46,6 +45,7 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "monster_anim.h"
+#include "mp2.h"
 #include "race.h"
 #include "spell.h"
 #include "til.h"

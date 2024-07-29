@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "color.h"
@@ -165,11 +164,6 @@ namespace Maps
             return _tilePassabilityDirections;
         }
 
-        void resetPassability()
-        {
-            _tilePassabilityDirections = DIRECTION_ALL;
-        }
-
         int GetGround() const
         {
             return Ground::getGroundByImageIndex( _terrainImageIndex );
@@ -234,8 +228,6 @@ namespace Maps
             _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
             _mainAddon._imageIndex = 255;
         }
-
-        void FixObject();
 
         uint32_t GetRegion() const
         {
@@ -359,11 +351,6 @@ namespace Maps
         void setFogDirection( const uint16_t fogDirection )
         {
             _fogDirection = fogDirection;
-        }
-
-        void swap( TilesAddon & addon ) noexcept
-        {
-            std::swap( addon, _mainAddon );
         }
 
         // Some tiles have incorrect object type. This is due to original Editor issues.

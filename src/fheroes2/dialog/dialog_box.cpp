@@ -26,10 +26,9 @@
 #include <memory>
 
 #include "agg_image.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 

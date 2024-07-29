@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <array>
 #include <ctime>
-#include <memory>
 
 #include "campaign_scenariodata.h"
 #include "game_language.h"

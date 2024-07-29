@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -39,7 +40,7 @@
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"

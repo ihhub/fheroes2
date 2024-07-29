@@ -30,6 +30,7 @@
 #include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
