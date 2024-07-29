@@ -35,7 +35,7 @@
 #include <vector>
 
 #include "battle.h"
-#include "battle_arena.h"
+#include "battle_arena.h" // IWYU pragma: associated
 #include "battle_army.h"
 #include "battle_board.h"
 #include "battle_bridge.h"

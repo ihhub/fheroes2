@@ -35,7 +35,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "dir.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"

@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "dialog.h"
 #include "game_delays.h"
 #include "icn.h"

@@ -35,7 +35,7 @@
 #include "battle.h"
 #include "battle_cell.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"

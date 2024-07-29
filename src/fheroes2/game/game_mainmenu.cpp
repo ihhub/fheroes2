@@ -39,7 +39,7 @@
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "editor_mainmenu.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"

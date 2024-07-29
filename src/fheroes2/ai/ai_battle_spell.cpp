@@ -25,7 +25,7 @@
 #include <ostream>
 #include <vector>
 
-#include "ai_battle.h"
+#include "ai_battle.h" // IWYU pragma: associated
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"

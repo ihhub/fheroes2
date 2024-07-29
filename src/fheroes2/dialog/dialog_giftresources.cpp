@@ -32,7 +32,7 @@
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
