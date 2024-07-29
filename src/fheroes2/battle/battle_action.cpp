@@ -1596,7 +1596,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         targets.push_back( getEarthQuakeTarget( CASTLE_GATE_POS ) );
     }
 
-    size_t targetsCount = targets.size();
+    const size_t targetsCount = targets.size();
     assert( targetsCount == targetsConditionAfter.size() );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << targetsCount )
