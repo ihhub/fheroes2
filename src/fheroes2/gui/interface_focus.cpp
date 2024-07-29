@@ -29,7 +29,7 @@
 #include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "heroes.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"

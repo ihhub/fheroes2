@@ -39,7 +39,7 @@
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
-#include "battle.h"
+#include "battle.h" // IWYU pragma: associated
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"

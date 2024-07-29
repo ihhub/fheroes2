@@ -30,7 +30,7 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "world.h"
+#include "world.h" // IWYU pragma: associated
 #include "world_regions.h"
 
 namespace

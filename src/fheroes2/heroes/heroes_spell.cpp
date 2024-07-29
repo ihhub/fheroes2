@@ -37,7 +37,7 @@
 #include "dialog_selectitems.h"
 #include "direction.h"
 #include "game_interface.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"

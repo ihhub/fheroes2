@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "castle_building_info.h"
 #include "game_delays.h"
 #include "icn.h"
