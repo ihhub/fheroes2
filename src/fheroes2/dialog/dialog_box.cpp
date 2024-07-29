@@ -29,7 +29,6 @@
 #include "dialog.h"
 #include "icn.h"
 #include "image.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 

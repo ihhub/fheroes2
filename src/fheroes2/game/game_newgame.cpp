@@ -52,6 +52,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "screen.h"
