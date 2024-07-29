@@ -27,6 +27,7 @@
 #include <cassert>
 #include <vector>
 
+#include "castle.h"
 #include "kingdom.h"
 #include "profit.h"
 #include "race.h"

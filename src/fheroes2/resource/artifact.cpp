@@ -42,6 +42,7 @@
 #include "icn.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "mp2.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"

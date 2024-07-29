@@ -26,12 +26,17 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
 class Monster;
 class Spell;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+    enum ObjectIcnType : uint8_t;
+}
 
 namespace Maps
 {
