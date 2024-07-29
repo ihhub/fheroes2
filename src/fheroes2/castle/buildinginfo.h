@@ -28,7 +28,6 @@
 #include <string>
 #include <vector>
 
-#include "castle.h"
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
@@ -39,7 +38,11 @@ namespace fheroes2
     class ButtonBase;
 }
 
+class Castle;
 class StatusBar;
+
+enum building_t : uint32_t;
+enum class BuildingStatus : int32_t;
 
 class BuildingInfo
 {

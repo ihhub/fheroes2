@@ -28,7 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"

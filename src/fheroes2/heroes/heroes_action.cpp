@@ -48,7 +48,7 @@
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"

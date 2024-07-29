@@ -35,9 +35,9 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
-#include "battle_arena.h"
+#include "battle_arena.h" // IWYU pragma: associated
 #include "battle_army.h"
-#include "battle_interface.h"
+#include "battle_interface.h" // IWYU pragma: associated
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"

@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -41,7 +40,7 @@
 #include "game.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"

@@ -29,13 +29,12 @@
 #include <functional>
 #include <limits>
 #include <map>
-#include <memory>
 #include <numeric>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 #include <vector>
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,13 +25,16 @@
 #include <string>
 #include <vector>
 
-#include "audio.h"
-
 struct ListFiles;
 
 namespace M82
 {
     enum SoundType : int;
+}
+
+namespace Music
+{
+    enum class PlaybackMode : uint8_t;
 }
 
 namespace AudioManager
