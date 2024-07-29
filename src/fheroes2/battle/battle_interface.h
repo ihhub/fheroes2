@@ -66,7 +66,7 @@ namespace Battle
     struct TargetInfo;
     struct TargetsInfo;
 
-    enum class CastleDefenseElement : int;
+    enum class CastleDefenseStructure : int;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
@@ -316,11 +316,11 @@ namespace Battle
         void RedrawActionLuck( const Unit & unit );
         void RedrawActionTowerPart1( const Tower & tower, const Unit & defender );
         void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
-        void RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit );
-        void RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget );
+        void RedrawActionCatapultPart1( const CastleDefenseStructure catapultTarget, const bool isHit );
+        void RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget );
         void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void redrawActionEarthQuakeSpellPart1( const std::vector<CastleDefenseElement> & targets );
-        void redrawActionEarthQuakeSpellPart2( const std::vector<CastleDefenseElement> & targets );
+        void redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets );
+        void redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );

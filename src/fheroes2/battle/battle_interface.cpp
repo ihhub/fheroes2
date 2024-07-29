@@ -4905,7 +4905,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     assert( _movingUnit == nullptr );
 }
 
-void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit )
+void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseStructure catapultTarget, const bool isHit )
 {
     // Reset the delay before rendering the first frame of catapult animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
@@ -4937,24 +4937,24 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement ca
     // set the projectile arc height for each castle target and a formula for an unknown target
     int32_t boulderArcHeight;
     switch ( catapultTarget ) {
-    case CastleDefenseElement::WALL1:
+    case CastleDefenseStructure::WALL1:
         boulderArcHeight = 220;
         break;
-    case CastleDefenseElement::WALL2:
-    case CastleDefenseElement::BRIDGE:
+    case CastleDefenseStructure::WALL2:
+    case CastleDefenseStructure::BRIDGE:
         boulderArcHeight = 216;
         break;
-    case CastleDefenseElement::WALL3:
+    case CastleDefenseStructure::WALL3:
         boulderArcHeight = 204;
         break;
-    case CastleDefenseElement::WALL4:
+    case CastleDefenseStructure::WALL4:
         boulderArcHeight = 208;
         break;
-    case CastleDefenseElement::TOWER1:
-    case CastleDefenseElement::TOWER2:
+    case CastleDefenseStructure::TOWER1:
+    case CastleDefenseStructure::TOWER2:
         boulderArcHeight = 206;
         break;
-    case CastleDefenseElement::CENTRAL_TOWER:
+    case CastleDefenseStructure::CENTRAL_TOWER:
         boulderArcHeight = 290;
         break;
     default:
@@ -4998,7 +4998,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement ca
     uint32_t frame = 0;
     // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
     uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
-    const bool isBridgeDestroyed = isHit && ( catapultTarget == CastleDefenseElement::BRIDGE );
+    const bool isBridgeDestroyed = isHit && ( catapultTarget == CastleDefenseStructure::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt1 = pt2 + bridgeDestroySmokeOffset;
@@ -5031,7 +5031,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement ca
     }
 }
 
-void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget )
+void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget )
 {
     // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
 
@@ -5043,7 +5043,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseElement ca
     uint32_t frame = castleBuildingDestroyFrame;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
-    const bool isBridgeDestroyed = ( catapultTarget == CastleDefenseElement::BRIDGE );
+    const bool isBridgeDestroyed = ( catapultTarget == CastleDefenseStructure::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt2 = pt1 + bridgeDestroySmokeOffset;
@@ -5891,7 +5891,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     }
 }
 
-void Battle::Interface::redrawActionEarthQuakeSpellPart1( const std::vector<CastleDefenseElement> & targets )
+void Battle::Interface::redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -5959,10 +5959,10 @@ void Battle::Interface::redrawActionEarthQuakeSpellPart1( const std::vector<Cast
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( const CastleDefenseElement target : targets ) {
+            for ( const CastleDefenseStructure target : targets ) {
                 const fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
-                if ( target == CastleDefenseElement::BRIDGE && frame >= bridgeDestroySmokeDelay ) {
+                if ( target == CastleDefenseStructure::BRIDGE && frame >= bridgeDestroySmokeDelay ) {
                     // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
                     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay );
                     fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );
@@ -5979,7 +5979,7 @@ void Battle::Interface::redrawActionEarthQuakeSpellPart1( const std::vector<Cast
     }
 }
 
-void Battle::Interface::redrawActionEarthQuakeSpellPart2( const std::vector<CastleDefenseElement> & targets )
+void Battle::Interface::redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -5989,7 +5989,7 @@ void Battle::Interface::redrawActionEarthQuakeSpellPart2( const std::vector<Cast
     uint32_t frame = maxFrame / 2;
 
     const bool isBridgeDestroyed
-        = std::any_of( targets.begin(), targets.end(), []( const CastleDefenseElement target ) { return target == CastleDefenseElement::BRIDGE; } );
+        = std::any_of( targets.begin(), targets.end(), []( const CastleDefenseStructure target ) { return target == CastleDefenseStructure::BRIDGE; } );
     if ( isBridgeDestroyed ) {
         maxFrame += bridgeDestroySmokeDelay - 1;
     }
@@ -6002,10 +6002,10 @@ void Battle::Interface::redrawActionEarthQuakeSpellPart2( const std::vector<Cast
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( const CastleDefenseElement target : targets ) {
+            for ( const CastleDefenseStructure target : targets ) {
                 const fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
-                if ( target == CastleDefenseElement::BRIDGE ) {
+                if ( target == CastleDefenseStructure::BRIDGE ) {
                     // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
                     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay + 1 );
                     fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );

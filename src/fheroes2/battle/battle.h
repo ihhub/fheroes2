@@ -126,7 +126,7 @@ namespace Battle
         IS_MIND_MAGIC = SP_BERSERKER | SP_HYPNOTIZE | SP_BLIND | SP_PARALYZE,
     };
 
-    enum class CastleDefenseElement : int
+    enum class CastleDefenseStructure : int
     {
         NONE = 0,
         WALL1 = 1,
