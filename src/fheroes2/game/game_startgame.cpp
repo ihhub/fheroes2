@@ -21,15 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -46,7 +46,7 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"

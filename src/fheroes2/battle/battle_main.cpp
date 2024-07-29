@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
@@ -36,7 +35,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
-#include "battle.h"
+#include "battle.h" // IWYU pragma: associated
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "campaign_savedata.h"

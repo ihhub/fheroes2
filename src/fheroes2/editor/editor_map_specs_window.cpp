@@ -2351,12 +2351,9 @@ namespace Editor
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
-                    display.render( fheroes2::getBoundaryRect( victoryTextRoi, victoryConditionUIRoi ) );
                 }
-                else {
-                    // Render the restored area after closing the drop list.
-                    display.render( victoryConditionUIRoi );
-                }
+
+                display.render( fheroes2::getBoundaryRect( victoryTextRoi, victoryConditionUIRoi ) );
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
                 const uint8_t result
@@ -2371,12 +2368,9 @@ namespace Editor
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                     redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
-                    display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
                 }
-                else {
-                    // Render the restored area after closing the drop list.
-                    display.render( lossConditionUIRoi );
-                }
+
+                display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );

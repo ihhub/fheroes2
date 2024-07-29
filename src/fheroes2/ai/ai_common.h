@@ -23,13 +23,14 @@
 #include <cstdint>
 #include <optional>
 
-#include "castle.h"
-
 class Army;
+class Castle;
 class Heroes;
 class Kingdom;
 
 struct Funds;
+
+enum building_t : uint32_t;
 
 namespace AI
 {

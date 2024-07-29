@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
-#include <memory>
 #include <set>
 #include <tuple>
 #include <utility>

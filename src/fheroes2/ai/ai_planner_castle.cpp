@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "ai_common.h"
-#include "ai_planner.h"
+#include "ai_planner.h" // IWYU pragma: associated
 #include "army.h"
 #include "castle.h"
 #include "difficulty.h"

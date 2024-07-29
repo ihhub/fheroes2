@@ -24,12 +24,10 @@
 #ifndef H2BATTLE_H
 #define H2BATTLE_H
 
-#include <utility>
+#include <cstdint>
 #include <vector>
 
-#include "army.h"
-#include "gamedefs.h"
-#include "m82.h"
+class Army;
 
 namespace Battle
 {

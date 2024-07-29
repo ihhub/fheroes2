@@ -33,12 +33,16 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "ui_tool.h"
 
 class Heroes;
 class StatusBar;
 class StreamBase;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 class Artifact
 {
