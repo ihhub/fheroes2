@@ -47,6 +47,11 @@ namespace Maps
     class Tiles;
 }
 
+namespace Skill
+{
+    class Secondary;
+}
+
 namespace AI
 {
     // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
@@ -179,6 +184,8 @@ namespace AI
 
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
+
+        static Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
 
     private:
         Planner() = default;
