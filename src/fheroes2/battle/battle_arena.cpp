@@ -1114,6 +1114,7 @@ void Battle::Arena::applyDamageToCastleDefenseStructure( const CastleDefenseStru
     }
 
     default:
+        assert( 0 );
         break;
     }
 }
@@ -1205,6 +1206,7 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
     }
 
     default:
+        assert( 0 );
         break;
     }
 
