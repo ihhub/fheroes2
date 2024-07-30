@@ -1296,24 +1296,30 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     uint32_t spellsUsed = 0;
     while ( maxCasts > spellsUsed ) {
         const int32_t currentNodeIdx = Maps::GetIndexFromAbsPoint( current );
+
         fheroes2::Point another = current;
         another.x += ( difference.x > 0 ) ? std::min( difference.x, distanceLimit ) : std::max( difference.x, -distanceLimit );
         another.y += ( difference.y > 0 ) ? std::min( difference.y, distanceLimit ) : std::max( difference.y, -distanceLimit );
 
         const int32_t anotherNodeIdx = Maps::GetIndexFromAbsPoint( another );
-        bool found = Maps::isValidForDimensionDoor( anotherNodeIdx, water );
 
-        if ( !found ) {
+        if ( Maps::isValidForDimensionDoor( anotherNodeIdx, water ) ) {
+            path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
+            current = another;
+        }
+        else {
             fheroes2::Point bestDirectionDiff;
             int bestNextIdx = -1;
 
             for ( size_t i = 0; i < directions.size(); ++i ) {
-                if ( !Maps::isValidDirection( anotherNodeIdx, directions[i] ) )
+                if ( !Maps::isValidDirection( anotherNodeIdx, directions[i] ) ) {
                     continue;
+                }
 
                 const int newIndex = anotherNodeIdx + _mapOffset[i];
-                if ( !Maps::isValidForDimensionDoor( newIndex, water ) )
+                if ( !Maps::isValidForDimensionDoor( newIndex, water ) ) {
                     continue;
+                }
 
                 // If we are near the destination and we cannot reach the cell, skip it.
                 if ( anotherNodeIdx == targetIndex && !isMovementAllowed( newIndex, Direction::Reflect( directions[i] ) ) ) {
@@ -1339,10 +1345,6 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
             path.emplace_back( bestNextIdx, currentNodeIdx, Direction::CENTER, movementCost );
             current = Maps::GetPoint( bestNextIdx );
-        }
-        else {
-            path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
-            current = another;
         }
 
         ++spellsUsed;
