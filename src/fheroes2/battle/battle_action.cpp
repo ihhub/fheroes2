@@ -1601,16 +1601,17 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
         }
     }
 
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << earthquakeDamage.size() )
+
     std::vector<CastleDefenseStructure> earthquakeTargets;
-    earthquakeTargets.reserve( earthquakeDamage.size() );
-
-    for ( const auto & [target, dummy] : earthquakeDamage ) {
-        earthquakeTargets.push_back( target );
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << earthquakeTargets.size() )
 
     if ( _interface ) {
+        earthquakeTargets.reserve( earthquakeDamage.size() );
+
+        for ( const auto & [target, dummy] : earthquakeDamage ) {
+            earthquakeTargets.push_back( target );
+        }
+
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
         _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
     }
