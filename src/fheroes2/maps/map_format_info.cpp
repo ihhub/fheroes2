@@ -38,7 +38,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 4 };
+    constexpr uint16_t currentSupportedVersion{ 5 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -102,6 +102,24 @@ namespace
             for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
                 if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_DWELLINGS && objInfo.index >= 18 ) {
                     // Shift the objects in the Dwellings group by 1 position "down" to add a new Cave object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
+
+    void convertFromV4ToV5( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 4, "Remove this function." );
+
+        if ( map.version > 4 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS && objInfo.index >= 128 ) {
+                    // Shift the objects in the Landscape Miscellaneous group by 1 position "down" to add missed Small cliff, dirt terrain.
                     objInfo.index += 1;
                 }
             }
@@ -341,6 +359,7 @@ namespace Maps::Map_Format
         static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
+        convertFromV4ToV5( map );
 
         return !msg.fail();
     }

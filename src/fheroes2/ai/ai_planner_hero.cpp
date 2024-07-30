@@ -26,18 +26,16 @@
 #include <functional>
 #include <list>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
 #include "ai_common.h"
 #include "ai_hero_action.h"
-#include "ai_planner.h"
+#include "ai_planner.h" // IWYU pragma: associated
 #include "ai_planner_internals.h"
 #include "army.h"
 #include "army_troop.h"
@@ -62,7 +60,6 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
-#include "math_base.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
@@ -878,6 +875,84 @@ namespace
         }
 
         return fogDiscoveryBaseValue;
+    }
+
+    double getSecondarySkillValue( const Heroes & hero, const Skill::Secondary & skill )
+    {
+        const int type = skill.Skill();
+        const int level = skill.Level();
+        if ( hero.GetLevelSkill( type ) >= level ) {
+            return 0;
+        }
+
+        switch ( type ) {
+        case Skill::Secondary::WISDOM:
+            // wouldn't check castles/spell availability since high wisdom drives building priority
+            return level == Skill::Level::BASIC ? 2500.0 : 1000.0;
+        case Skill::Secondary::LOGISTICS:
+            return 1500.0;
+        case Skill::Secondary::LEADERSHIP:
+            return hero.GetArmy().AllTroopsAreUndead() ? 100.0 : 1000.0;
+        case Skill::Secondary::NECROMANCY:
+            return hero.GetArmy().AllTroopsAreUndead() ? 1000.0 : 100.0;
+        case Skill::Secondary::LUCK: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return 500.0;
+        }
+        case Skill::Secondary::BALLISTICS: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 1250.0 : 250.0;
+        }
+        case Skill::Secondary::ARCHERY: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 100.0 : 500.0;
+        }
+        case Skill::Secondary::ESTATES: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return 1000.0;
+        }
+        case Skill::Secondary::PATHFINDING: {
+            const double roughness = world.getLandRoughness();
+            return ( roughness > 1.25 ) ? 1000.0 : ( roughness > 1.1 ) ? 250.0 : 100.0;
+        }
+        case Skill::Secondary::NAVIGATION: {
+            const uint8_t waterPercentage = world.getWaterPercentage();
+            return ( waterPercentage > 60 ) ? 1000.0 : ( waterPercentage > 25 ) ? 100.0 : 0.0;
+        }
+        case Skill::Secondary::SCOUTING: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return hero.getAIRole() == Heroes::Role::SCOUT ? 1250.0 : 100.0;
+        }
+        case Skill::Secondary::MYSTICISM:
+            return hero.HaveSpellBook() ? 500.0 : 100.0;
+        case Skill::Secondary::EAGLE_EYE:
+            return hero.HaveSpellBook() ? 250.0 : 0.0;
+        case Skill::Secondary::DIPLOMACY:
+            // discourage AI picking it up, but if it's already there prioritise leveling to save gold
+            return level == Skill::Level::BASIC ? 100.0 : 1250.0;
+        case Skill::Secondary::UNKNOWN:
+            return 0;
+        default:
+            // If you make a new secondary skill don't forget to update this.
+            assert( 0 );
+            break;
+        }
+        return 0;
     }
 
     uint32_t getTimeoutBeforeFogDiscoveryIntensification( const Heroes & hero )
@@ -2509,6 +2584,33 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         assert( 0 );
         break;
     }
+}
+
+Skill::Secondary AI::Planner::pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right )
+{
+    // heroes can get 1 or 0 skill choices depending on a level
+    if ( !right.isValid() ) {
+        // if both left and right are invalid returning either is fine
+        return left;
+    }
+
+    const double leftValue = getSecondarySkillValue( hero, left );
+    const double rightValue = getSecondarySkillValue( hero, right );
+
+    DEBUG_LOG( DBG_AI, DBG_TRACE,
+               hero.GetName() << " picking a skill: " << leftValue << " for " << left.String( left.first ) << " and " << rightValue << " for "
+                              << right.String( right.first ) )
+
+    if ( std::fabs( leftValue - rightValue ) < 0.001 ) {
+        // If skill value is lower than the threshold then it's undesireable. Avoid learning it.
+        if ( leftValue < 300.0 ) {
+            return left.Level() == Skill::Level::BASIC ? right : left;
+        }
+
+        return left.Level() == Skill::Level::BASIC ? left : right;
+    }
+
+    return leftValue > rightValue ? left : right;
 }
 
 void AI::Planner::HeroesBeginMovement( Heroes & hero )

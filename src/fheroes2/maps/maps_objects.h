@@ -24,6 +24,7 @@
 #define H2MAPS_OBJECTS_H
 
 #include <cstdint>
+#include <initializer_list>
 #include <list>
 #include <string>
 #include <vector>

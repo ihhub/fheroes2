@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cstddef>
 #include <map>
-#include <memory>
 #include <utility>
 
 #include "army.h"

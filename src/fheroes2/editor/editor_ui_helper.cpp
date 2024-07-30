@@ -39,12 +39,12 @@ namespace Editor
         : _color( boxColor )
         , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
     {
-        const int32_t icnIndex = Color::GetIndex( _color ) + 43;
+        const int32_t icnIndex = ( _color == Color::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
         const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
 
         _area = { x, y, playerIcon.width(), playerIcon.height() };
 
-        fheroes2::Copy( playerIcon, 0, 0, output, _area.x, _area.y, _area.width, _area.height );
+        fheroes2::Copy( playerIcon, 0, 0, output, _area );
 
         _checkmark.setPosition( _area.x + 2, _area.y + 2 );
 
@@ -63,6 +63,17 @@ namespace Editor
         fheroes2::Display::instance().render( _area );
 
         return !_checkmark.isHidden();
+    }
+
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
+                                const int32_t boxOffsetY, fheroes2::Image & output )
+    {
+        int32_t colorsAdded = 0;
+
+        for ( const int color : Colors( availableColors ) ) {
+            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, output ) );
+            ++colorsAdded;
+        }
     }
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,

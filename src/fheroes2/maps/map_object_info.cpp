@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -2475,7 +2474,7 @@ namespace
         }
 
         // Small cliff, dirt terrain. 3 variants.
-        for ( uint32_t count = 0; count < 2; ++count ) {
+        for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 141U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_NONE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );

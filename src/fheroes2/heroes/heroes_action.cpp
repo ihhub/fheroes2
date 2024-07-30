@@ -48,7 +48,7 @@
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -406,6 +406,9 @@ namespace
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
+            // Hero' spell points could have changed. Update heroes icons.
+            I.renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
@@ -524,6 +527,9 @@ namespace
 
             castle->ActionAfterBattle( res.AttackerWins() );
 
+            // Hero' spell points could have changed. Update heroes icons.
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_ICONS | Interface::REDRAW_BUTTONS );
+
             // The defender was defeated
             if ( !res.DefenderWins() && defender ) {
                 BattleLose( *defender, res, false );
@@ -596,6 +602,9 @@ namespace
 
         const Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
 
+        // Hero' spell points could have changed. Update heroes icons.
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
         // TODO: make fading animation of both heroes together.
 
         // The defender was defeated
@@ -618,7 +627,7 @@ namespace
         }
     }
 
-    void ActionToBoat( Heroes & hero, int32_t dst_index )
+    void ActionToBoat( Heroes & hero, const int32_t dst_index )
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
@@ -631,7 +640,8 @@ namespace
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         // Get the direction of the boat so that the direction of the hero can be set to it after boarding
-        const int boatDirection = world.GetTiles( dst_index ).getBoatDirection();
+        Maps::Tiles & destinationTile = world.GetTiles( dst_index );
+        const int boatDirection = destinationTile.getBoatDirection();
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
@@ -650,13 +660,13 @@ namespace
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
         hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-        world.GetTiles( dst_index ).resetObjectSprite();
+        destinationTile.resetObjectSprite();
         hero.SetShipMaster( true );
 
         hero.ShowPath( true );
 
         // Boat is no longer empty so we reset color to default
-        world.GetTiles( dst_index ).resetBoatOwnerColor();
+        destinationTile.resetBoatOwnerColor();
     }
 
     void ActionToCoast( Heroes & hero, int32_t dst_index )
@@ -1123,6 +1133,10 @@ namespace
                 Army army( tile );
 
                 const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+                // Hero' spell points could have changed. Update heroes icons.
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     bool valid = false;
@@ -1338,6 +1352,10 @@ namespace
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+            // Hero' spell points could have changed. Update heroes icons.
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
@@ -1678,6 +1696,10 @@ namespace
 
             if ( battle ) {
                 const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+                // Hero' spell points could have changed. Update heroes icons.
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     result = true;
@@ -2071,6 +2093,9 @@ namespace
 
                 const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
+                // Hero' spell points could have changed. Update heroes icons.
+                Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
 
@@ -2120,6 +2145,9 @@ namespace
             Army army( tile );
 
             const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            // Hero' spell points could have changed. Update heroes icons.
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -2401,6 +2429,10 @@ namespace
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+            // Hero' spell points could have changed. Update heroes icons.
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
@@ -2529,19 +2561,24 @@ namespace
 
     bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
     {
-        const std::string combTypeAnd = _( " and " );
-        const std::string combTypeComma = ", ";
-
         if ( army.HasMonster( mons ) ) {
+            const std::string combText = combineWithAnd ? _( " and " ) : ", ";
+
             army.UpgradeMonsters( mons );
-            if ( !str1.empty() )
-                str1 += combineWithAnd ? combTypeAnd : combTypeComma;
+
+            if ( !str1.empty() ) {
+                str1 += combText;
+            }
             str1 += mons.GetMultiName();
-            if ( !str2.empty() )
-                str2 += combineWithAnd ? combTypeAnd : combTypeComma;
+
+            if ( !str2.empty() ) {
+                str2 += combText;
+            }
             str2 += mons.GetUpgrade().GetMultiName();
+
             return true;
         }
+
         return false;
     }
 
@@ -3028,6 +3065,10 @@ namespace
                     Army army( tile );
 
                     const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+                    // Hero' spell points could have changed. Update heroes icons.
+                    Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
+
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );
 
@@ -3599,7 +3640,9 @@ void Heroes::Action( int tileIndex )
         // Restore the original music after the action is completed.
         const AudioManager::MusicRestorer musicRestorer;
 
-        return AI::HeroesAction( *this, tileIndex );
+        AI::HeroesAction( *this, tileIndex );
+
+        return;
     }
 
     const int32_t heroPosIndex = GetIndex();

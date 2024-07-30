@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <memory>
+#include <sstream>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )

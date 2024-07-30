@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <list>
 #include <map>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -42,6 +41,7 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
 #include "race.h"
 #include "world.h"
@@ -538,11 +538,19 @@ namespace Maps
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
                     uint8_t & allianceColors = *iter;
 
+                    // Only available players should be in the alliances.
+                    allianceColors &= map.availablePlayerColors;
+
                     for ( size_t i = 0; i < mainColors; ++i ) {
                         const uint8_t color = static_cast<uint8_t>( 1 << i );
-                        if ( ( allianceColors & color ) != 0 && usedAllianceColors[i] ) {
-                            // This color is used in another alliance. Remove it from here.
-                            allianceColors = allianceColors & ( ~color );
+                        if ( ( allianceColors & color ) != 0 ) {
+                            if ( usedAllianceColors[i] ) {
+                                // This color is used in another alliance. Remove it from here.
+                                allianceColors = allianceColors & ( ~color );
+                            }
+                            else {
+                                usedAllianceColors[i] = true;
+                            }
                         }
                     }
 
