@@ -1615,7 +1615,6 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
         _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
     }
 
-    // Apply new conditions for the damaged targets.
     for ( const auto & [target, damage] : earthquakeDamage ) {
         applyDamageToCastleDefenseStructure( target, damage );
     }
