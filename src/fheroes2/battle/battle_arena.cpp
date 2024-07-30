@@ -203,6 +203,35 @@ namespace
             orderOfUnits.push_back( unit );
         }
     }
+
+    size_t getPositionOfCastleDefenseStructure( const Battle::CastleDefenseStructure structure )
+    {
+        switch ( structure ) {
+        case Battle::CastleDefenseStructure::BRIDGE:
+            return Battle::Arena::CASTLE_GATE_POS;
+        case Battle::CastleDefenseStructure::TOWER1:
+            return Battle::Arena::CASTLE_TOP_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::TOWER2:
+            return Battle::Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::WALL1:
+            return Battle::Arena::CASTLE_FIRST_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL2:
+            return Battle::Arena::CASTLE_SECOND_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL3:
+            return Battle::Arena::CASTLE_THIRD_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL4:
+            return Battle::Arena::CASTLE_FOURTH_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_TOP_GATE_TOWER_POS;
+        case Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_BOTTOM_GATE_TOWER_POS;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
 }
 
 Battle::Arena * Battle::GetArena()
@@ -1176,35 +1205,6 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
     }
 
     default:
-        break;
-    }
-
-    return 0;
-}
-
-size_t Battle::Arena::getPositionOfCastleDefenseStructure( const CastleDefenseStructure structure )
-{
-    switch ( structure ) {
-    case CastleDefenseStructure::BRIDGE:
-        return CASTLE_GATE_POS;
-    case CastleDefenseStructure::TOWER1:
-        return CASTLE_TOP_ARCHER_TOWER_POS;
-    case CastleDefenseStructure::TOWER2:
-        return CASTLE_BOTTOM_ARCHER_TOWER_POS;
-    case CastleDefenseStructure::WALL1:
-        return CASTLE_FIRST_TOP_WALL_POS;
-    case CastleDefenseStructure::WALL2:
-        return CASTLE_SECOND_TOP_WALL_POS;
-    case CastleDefenseStructure::WALL3:
-        return CASTLE_THIRD_TOP_WALL_POS;
-    case CastleDefenseStructure::WALL4:
-        return CASTLE_FOURTH_TOP_WALL_POS;
-    case CastleDefenseStructure::TOP_BRIDGE_TOWER:
-        return CASTLE_TOP_GATE_TOWER_POS;
-    case CastleDefenseStructure::BOTTOM_BRIDGE_TOWER:
-        return CASTLE_BOTTOM_GATE_TOWER_POS;
-    default:
-        assert( 0 );
         break;
     }
 
