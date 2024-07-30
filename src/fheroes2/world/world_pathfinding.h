@@ -228,9 +228,12 @@ private:
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
+    int32_t _patrolCenter{ -1 };
+    uint32_t _patrolDistance{ 0 };
     uint32_t _maxMovePointsOnLand{ 0 };
     uint32_t _maxMovePointsOnWater{ 0 };
     double _armyStrength{ -1 };
+    bool _isOnPatrol{ false };
     bool _isArtifactsBagFull{ false };
     bool _isEquippedWithSpellBook{ false };
     bool _isSummonBoatSpellAvailable{ false };
