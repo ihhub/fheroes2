@@ -2179,11 +2179,9 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
     return targetIndex;
 }
 
-int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
+int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 {
-    assert( hero != nullptr );
-
-    DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero->GetName() << " at current position " << hero->GetIndex() )
+    DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
     const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
 
@@ -2210,7 +2208,7 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
 #endif
 
     // Pre-calculate penalties for tiles where there is a threat of enemy attack
-    const std::vector<double> enemyThreatPenalties = [this, hero = static_cast<const Heroes *>( hero )]() {
+    const std::vector<double> enemyThreatPenalties = [this, &hero = std::as_const( hero )]() {
         std::vector<double> result( world.getSize(), 0.0 );
 
         const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
@@ -2219,7 +2217,7 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
         _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
         _pathfinder.setSpellPointsReserveRatio( 0.0 );
 
-        const double heroStrength = hero->GetArmy().GetStrength();
+        const double heroStrength = hero.GetArmy().GetStrength();
 
         for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             // Only enemy heroes are taken into account
@@ -2242,8 +2240,8 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
             const uint32_t enemyArmyMovePointsThreshold = enemyArmy.movePoints + Maps::Ground::slowestMovePenalty * 2;
             // If the enemy hero can't cross paths with our hero anywhere, then it makes sense to use a rough but quick estimate. Otherwise, an accurate but
             // relatively slow estimate will be used.
-            const bool useRoughEstimate = ( Maps::GetApproximateDistance( hero->GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
-                                            > hero->GetMovePoints() + enemyArmyMovePointsThreshold );
+            const bool useRoughEstimate = ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
+                                            > hero.GetMovePoints() + enemyArmyMovePointsThreshold );
 
             if ( !useRoughEstimate ) {
                 // Pre-cache the pathfinder database for the enemy hero
@@ -2291,12 +2289,12 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
     }();
 
     // Pre-cache the pathfinder database for our hero
-    _pathfinder.reEvaluateIfNeeded( *hero );
+    _pathfinder.reEvaluateIfNeeded( hero );
 
-    ObjectValidator objectValidator( *hero, _pathfinder, *this );
-    ObjectValueStorage valueStorage( *hero, *this, lowestPossibleValue );
+    ObjectValidator objectValidator( hero, _pathfinder, *this );
+    ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-    const auto getObjectValue = [this, hero = static_cast<const Heroes *>( hero ), &enemyThreatPenalties, &objectValidator,
+    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
                                  &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
@@ -2311,16 +2309,16 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
             }
         }
 
-        const uint32_t heroMovePoints = hero->GetMovePoints();
+        const uint32_t heroMovePoints = hero.GetMovePoints();
 
-        const double enemyThreatPenalty = [hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
+        const double enemyThreatPenalty = [&hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
             if ( type == MP2::OBJ_CASTLE ) {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
                 assert( castle != nullptr );
 
                 // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat
                 // penalties should not apply if our hero is able to reach the castle within one turn.
-                if ( castle->GetColor() == hero->GetColor() && distance <= heroMovePoints ) {
+                if ( castle->GetColor() == hero.GetColor() && distance <= heroMovePoints ) {
                     return 0.0;
                 }
             }
@@ -2341,8 +2339,8 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
     };
 
     // Set baseline target if it's a special role
-    if ( hero->getAIRole() == Heroes::Role::COURIER ) {
-        const int courierTarget = getCourierMainTarget( *hero, _pathfinder, lowestPossibleValue );
+    if ( hero.getAIRole() == Heroes::Role::COURIER ) {
+        const int courierTarget = getCourierMainTarget( hero, _pathfinder, lowestPossibleValue );
         if ( courierTarget != -1 ) {
             // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
             maxPriority = 0;
@@ -2351,11 +2349,11 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
             objectType = world.GetTiles( courierTarget ).GetObject();
 #endif
 
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << " is a courier with a main target tile at " << courierTarget )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
         }
         else {
             // If there's nothing to do as a Courier reset the role
-            hero->setAIRole( Heroes::Role::HUNTER );
+            hero.setAIRole( Heroes::Role::HUNTER );
         }
     }
 
@@ -2367,7 +2365,7 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
         uint32_t dist = _pathfinder.getDistance( node.first );
 
         bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( *hero, node.first ) );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
         if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
             dist = dimensionDoorDist;
             useDimensionDoor = true;
@@ -2388,19 +2386,19 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       hero->GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                       << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
+                       hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
+                                      << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
         }
     }
 
-    double fogDiscoveryValue = getFogDiscoveryValue( *hero );
-    const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( *hero );
+    double fogDiscoveryValue = getFogDiscoveryValue( hero );
+    const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
     if ( fogDiscoveryTarget >= 0 ) {
         uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
         // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
         bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( *hero, fogDiscoveryTarget ) );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
         if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
             distanceToFogDiscovery = dimensionDoorDist;
             useDimensionDoor = true;
@@ -2408,7 +2406,7 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
 
         if ( isTerritoryExpansion ) {
             // Over time the AI should focus more on territory expansion.
-            const uint32_t period = getTimeoutBeforeFogDiscoveryIntensification( *hero );
+            const uint32_t period = getTimeoutBeforeFogDiscoveryIntensification( hero );
             assert( period > 0 );
 
             if ( fogDiscoveryValue < 0 ) {
@@ -2436,16 +2434,16 @@ int AI::Planner::getPriorityTarget( Heroes * hero, double & maxPriority )
         if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
             priorityTarget = fogDiscoveryTarget;
             maxPriority = fogDiscoveryValue;
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
         }
         else {
             DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero->GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+                       hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
     }
     else {
         priorityTarget = fogDiscoveryTarget;
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
     }
 
     return priorityTarget;
@@ -2751,7 +2749,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
                 for ( Heroes * hero : availableHeroes ) {
                     double priority = -1;
-                    const int targetIndex = getPriorityTarget( hero, priority );
+                    const int targetIndex = getPriorityTarget( *hero, priority );
 
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;

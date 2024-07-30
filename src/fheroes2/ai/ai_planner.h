@@ -195,7 +195,7 @@ namespace AI
 
         std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
 
-        int getPriorityTarget( Heroes * hero, double & maxPriority );
+        int getPriorityTarget( Heroes & hero, double & maxPriority );
 
         double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
