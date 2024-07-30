@@ -25,7 +25,6 @@
 #define H2BATTLE_ARENA_H
 
 #include <array>
-#include <cstddef>
 #include <cstdint>
 #include <list>
 #include <memory>
