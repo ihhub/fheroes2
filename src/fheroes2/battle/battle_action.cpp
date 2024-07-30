@@ -1580,9 +1580,9 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
         }
 
         const int damage = [this, minDmg = minDamage, maxDmg = maxDamage, target]() {
-            // There is a 0.5 multiplied by a spell power dependent chance to destroy the bridge by the Earthquake spell.
-            // In example, with low spell power there is 25% chance (0.5*0.5=0.25) to destroy the bridge,
-            // with very high spell power it is 50% chance (0.5*1=0.5).
+            // Reduce the chance of bridge demolition by an extra 50% chance to "miss" it by the Earthquake spell.
+            // It is done to be closer to the original game behavior where bridge demolition by this spell
+            // is more rare than the demolition of the other structures.
             if ( target == CastleDefenseStructure::BRIDGE && _randomGenerator.Get( 0, 1 ) == 0 ) {
                 return 0;
             }
