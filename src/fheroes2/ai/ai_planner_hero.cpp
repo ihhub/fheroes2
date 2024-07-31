@@ -683,22 +683,15 @@ namespace
         return false;
     }
 
-    void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
+    void addHeroToMove( Heroes * hero, std::vector<Heroes *> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolDistance() == 0 ) ) {
-            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " stands still due to the patrol settings" )
             return;
         }
 
         if ( hero->MayStillMove( false, false ) ) {
-            availableHeroes.emplace_back();
-            AI::HeroToMove & heroInfo = availableHeroes.back();
-            heroInfo.hero = hero;
-
-            if ( hero->Modes( Heroes::PATROL ) ) {
-                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetPatrolCenter() );
-                heroInfo.patrolDistance = hero->GetPatrolDistance();
-            }
+            availableHeroes.emplace_back( hero );
         }
     }
 
@@ -2186,12 +2179,8 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
     return targetIndex;
 }
 
-int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
+int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 {
-    assert( heroInfo.hero != nullptr );
-
-    Heroes & hero = *heroInfo.hero;
-
     DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
     const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
@@ -2368,14 +2357,7 @@ int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPri
         }
     }
 
-    const bool heroInPatrolMode = ( heroInfo.patrolCenter != -1 );
-
     for ( const IndexObject & node : _mapActionObjects ) {
-        // Skip if hero in patrol mode and object outside of reach
-        if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance ) {
-            continue;
-        }
-
         if ( !objectValidator.isValid( node.first ) ) {
             continue;
         }
@@ -2459,12 +2441,9 @@ int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPri
                        hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
     }
-    else if ( !heroInPatrolMode ) {
+    else {
         priorityTarget = fogDiscoveryTarget;
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
-    }
-    else {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is in Patrol mode. No movement is required." )
     }
 
     return priorityTarget;
@@ -2736,7 +2715,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         return true;
     }
 
-    std::vector<HeroToMove> availableHeroes;
+    std::vector<Heroes *> availableHeroes;
 
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
@@ -2751,7 +2730,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
     while ( !availableHeroes.empty() ) {
         const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
 
-        Heroes * bestHero = availableHeroes.front().hero;
+        Heroes * bestHero = availableHeroes.front();
         int bestTargetIndex = -1;
 
         {
@@ -2768,14 +2747,14 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
                 double maxPriority = 0;
 
-                for ( const HeroToMove & heroInfo : availableHeroes ) {
+                for ( Heroes * hero : availableHeroes ) {
                     double priority = -1;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority );
+                    const int targetIndex = getPriorityTarget( *hero, priority );
 
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;
                         bestTargetIndex = targetIndex;
-                        bestHero = heroInfo.hero;
+                        bestHero = hero;
                     }
                 }
 
@@ -2789,20 +2768,20 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
             // Possibly heroes have nothing to do because one of them is blocking the way. Move a random hero randomly and see what happens.
             Rand::Shuffle( availableHeroes );
 
-            for ( HeroToMove & heroInfo : availableHeroes ) {
-                // Skip heroes who are in castles or on patrol.
-                if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+            for ( Heroes * hero : availableHeroes ) {
+                // Skip heroes located in castles.
+                if ( hero->inCastle() != nullptr ) {
                     continue;
                 }
 
-                if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *hero ) ) {
                     continue;
                 }
 
-                const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
+                const int targetIndex = _pathfinder.getNearestTileToMove( *hero );
                 if ( targetIndex != -1 ) {
                     bestTargetIndex = targetIndex;
-                    bestHero = heroInfo.hero;
+                    bestHero = hero;
 
                     DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
 
@@ -2874,7 +2853,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         }
 
         availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
-                                               []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                               []( const Heroes * hero ) { return !hero->MayStillMove( false, false ); } ),
                                availableHeroes.end() );
 
         // The size of heroes can be increased if a new hero is released from Jail.
