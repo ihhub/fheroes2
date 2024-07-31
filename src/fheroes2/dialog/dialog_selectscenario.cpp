@@ -91,18 +91,18 @@ namespace
         fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
     }
 
-    void PlayersToolTip( [[maybe_unused]] const Maps::FileInfo * info = nullptr )
+    void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
     {
         ShowToolTip( _( "Players Icon" ),
                      _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
     }
 
-    void SizeToolTip( [[maybe_unused]] const Maps::FileInfo * info = nullptr )
+    void SizeToolTip( const Maps::FileInfo * /* info */ = nullptr )
     {
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    void MapTypeToolTip( [[maybe_unused]] const Maps::FileInfo * info = nullptr )
+    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
     {
         ShowToolTip( _( "Map Type" ),
                      _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
