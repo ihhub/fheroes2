@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstddef>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -110,7 +111,7 @@ namespace
 
     void mapInfo( const Maps::FileInfo * info )
     {
-        fheroes2::Text header( info->name, fheroes2::FontType::normalYellow() );
+        const fheroes2::Text header( info->name, fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
 
@@ -231,7 +232,7 @@ namespace
     {
         const Maps::FileInfo * item = listbox.GetFromPosition( mouseLocation );
         if ( item ) {
-            function( item );
+            std::forward<ShowFunction>( function )( item );
         }
     }
 }
