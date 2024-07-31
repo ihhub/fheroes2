@@ -24,7 +24,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
-#include <memory>
 #include <optional>
 #include <ostream>
 #include <string>
@@ -44,7 +43,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"

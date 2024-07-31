@@ -236,7 +236,7 @@ namespace
 
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
     {
-        assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
+        assert( Maps::isValidAbsIndex( targetIndex ) );
 #if !defined( NDEBUG ) || defined( WITH_DEBUG )
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
 #endif
@@ -376,22 +376,49 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks the enemy castle " << castle->GetName() )
 
             Heroes * defender = castle->GetHero();
-            const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();
+            const bool isDefenderHuman = castle->isControlHuman();
+
+            if ( defender && ( defender->isControlHuman() != isDefenderHuman ) ) {
+                assert( 0 );
+
+                if ( isDefenderHuman ) {
+                    DEBUG_LOG( DBG_AI, DBG_WARN, defender->GetName() << " the AI hero is protecting the human castle " << castle->GetName() )
+                }
+                else {
+                    DEBUG_LOG( DBG_AI, DBG_WARN, defender->GetName() << " the human hero is protecting the AI castle " << castle->GetName() )
+                }
+            }
+
+            if ( isDefenderHuman ) {
+                // Sometimes the battle action is performed without attacker movement if the defender is standing close to him.
+                // Update the game area before the battle to show the dueling heroes.
+                Interface::AdventureMap::Get().redraw( Interface::REDRAW_GAMEAREA );
+            }
 
             castle->ActionPreBattle();
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            // Human controlled castle or hero in this castle was in the battle. Update icons.
+            Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_ICONS );
 
             castle->ActionAfterBattle( res.AttackerWins() );
 
             // The defender was defeated
-            if ( !res.DefenderWins() && defender ) {
-                AIBattleLose( *defender, res, false, nullptr, playVanishingHeroSound );
+            if ( !res.DefenderWins() ) {
+                if ( defender ) {
+                    AIBattleLose( *defender, res, false, nullptr, isDefenderHuman );
+                }
+
+                if ( isDefenderHuman ) {
+                    // Update interface heroes and castles icons after the defeat.
+                    Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_ICONS );
+                }
             }
 
             // The attacker was defeated
             if ( !res.AttackerWins() ) {
-                AIBattleLose( hero, res, true, &( castle->GetCenter() ), playVanishingHeroSound );
+                AIBattleLose( hero, res, true, &( castle->GetCenter() ), isDefenderHuman );
             }
 
             // The attacker won
@@ -454,18 +481,32 @@ namespace
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks " << otherHero->GetName() )
 
-        const bool playVanishingHeroSound = otherHero->isControlHuman();
+        const bool isDefenderHuman = otherHero->isControlHuman();
 
-        Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
+        if ( isDefenderHuman ) {
+            // Sometimes the battle action is performed without attacker movement if the defender is standing close to him.
+            // Update the game area before the battle to show the dueling heroes.
+            Interface::AdventureMap::Get().redraw( Interface::REDRAW_GAMEAREA );
+        }
+
+        const Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
+
+        // Human controlled hero could be in the battle. Update icons.
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES );
 
         // The defender was defeated
         if ( !res.DefenderWins() ) {
-            AIBattleLose( *otherHero, res, false, nullptr, playVanishingHeroSound );
+            AIBattleLose( *otherHero, res, false, nullptr, isDefenderHuman );
+
+            if ( isDefenderHuman ) {
+                // Update interface heroes and castles icons after the defeat.
+                Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_HEROES );
+            }
         }
 
         // The attacker was defeated
         if ( !res.AttackerWins() ) {
-            AIBattleLose( hero, res, true, ( otherHero->isActive() ? &( otherHero->GetCenter() ) : nullptr ), playVanishingHeroSound );
+            AIBattleLose( hero, res, true, ( otherHero->isActive() ? &( otherHero->GetCenter() ) : nullptr ), isDefenderHuman );
         }
 
         // The attacker won
@@ -482,7 +523,7 @@ namespace
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        Troop troop = getTroopFromTile( tile );
+        const Troop troop = getTroopFromTile( tile );
 
         const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -537,7 +578,7 @@ namespace
 
             Army army( tile );
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -699,7 +740,7 @@ namespace
             if ( isCaptureObjectProtected( tile ) ) {
                 Army army( tile );
 
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+                const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -757,7 +798,7 @@ namespace
             const Artifact & art = getArtifactFromTile( tile );
 
             if ( !hero.PickupArtifact( art ) ) {
-                uint32_t gold = GoldInsteadArtifact( objectType );
+                const uint32_t gold = GoldInsteadArtifact( objectType );
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
 
@@ -1142,24 +1183,32 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
         switch ( objectType ) {
-        case MP2::OBJ_HILL_FORT:
-            if ( hero.GetArmy().HasMonster( Monster::DWARF ) )
-                hero.GetArmy().UpgradeMonsters( Monster::DWARF );
-            if ( hero.GetArmy().HasMonster( Monster::ORC ) )
-                hero.GetArmy().UpgradeMonsters( Monster::ORC );
-            if ( hero.GetArmy().HasMonster( Monster::OGRE ) )
-                hero.GetArmy().UpgradeMonsters( Monster::OGRE );
+        case MP2::OBJ_HILL_FORT: {
+            Army & army = hero.GetArmy();
+            if ( army.HasMonster( Monster::DWARF ) ) {
+                army.UpgradeMonsters( Monster::DWARF );
+            }
+            if ( army.HasMonster( Monster::ORC ) ) {
+                army.UpgradeMonsters( Monster::ORC );
+            }
+            if ( army.HasMonster( Monster::OGRE ) ) {
+                army.UpgradeMonsters( Monster::OGRE );
+            }
             break;
-
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            if ( hero.GetArmy().HasMonster( Monster::PIKEMAN ) )
-                hero.GetArmy().UpgradeMonsters( Monster::PIKEMAN );
-            if ( hero.GetArmy().HasMonster( Monster::SWORDSMAN ) )
-                hero.GetArmy().UpgradeMonsters( Monster::SWORDSMAN );
-            if ( hero.GetArmy().HasMonster( Monster::IRON_GOLEM ) )
-                hero.GetArmy().UpgradeMonsters( Monster::IRON_GOLEM );
+        }
+        case MP2::OBJ_FREEMANS_FOUNDRY: {
+            Army & army = hero.GetArmy();
+            if ( army.HasMonster( Monster::PIKEMAN ) ) {
+                army.UpgradeMonsters( Monster::PIKEMAN );
+            }
+            if ( army.HasMonster( Monster::SWORDSMAN ) ) {
+                army.UpgradeMonsters( Monster::SWORDSMAN );
+            }
+            if ( army.HasMonster( Monster::IRON_GOLEM ) ) {
+                army.UpgradeMonsters( Monster::IRON_GOLEM );
+            }
             break;
-
+        }
         default:
             break;
         }
@@ -1196,7 +1245,7 @@ namespace
         if ( gold ) {
             Army army( tile );
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 complete = true;
@@ -1246,7 +1295,7 @@ namespace
             // battle
             Army army( tile );
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -1323,7 +1372,7 @@ namespace
         if ( doesTileContainValuableItems( tile ) ) {
             Army army( tile );
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 // Daemon Cave always gives 2500 Gold after a battle
@@ -1480,7 +1529,7 @@ namespace
 
         Army army( tile );
 
-        Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+        const Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
         if ( result.AttackerWins() ) {
             hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -1567,7 +1616,7 @@ namespace
         else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
             Army army( tile );
 
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 result = true;
@@ -1596,14 +1645,13 @@ namespace
 
         hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
-
         // Get the direction of the boat so that the direction of the hero can be set to it after boarding
-        const int boatDirection = world.GetTiles( dst_index ).getBoatDirection();
+        Maps::Tiles & destinationTile = world.GetTiles( dst_index );
+        const int boatDirection = destinationTile.getBoatDirection();
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier(), offset );
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier(), Maps::GetPoint( dst_index ) - hero.GetCenter() );
         }
 
         hero.Scout( dst_index );
@@ -1614,11 +1662,11 @@ namespace
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
         hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-        world.GetTiles( dst_index ).resetObjectSprite();
+        destinationTile.resetObjectSprite();
         hero.SetShipMaster( true );
 
         // Boat is no longer empty so we reset color to default
-        world.GetTiles( dst_index ).resetBoatOwnerColor();
+        destinationTile.resetBoatOwnerColor();
     }
 
     void AIToCoast( Heroes & hero, const int32_t dst_index )
@@ -1634,7 +1682,6 @@ namespace
 
         // Calculate the offset before making the action.
         const fheroes2::Point prevPos = hero.GetCenter();
-        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - prevPos );
 
         hero.Scout( dst_index );
         hero.Move2Dest( dst_index );
@@ -1646,7 +1693,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
-            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier(), offset );
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier(), Maps::GetPoint( dst_index ) - prevPos );
         }
 
         hero.ActionNewPosition( true );
@@ -1848,6 +1895,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     case MP2::OBJ_MERCENARY_CAMP:
     case MP2::OBJ_WITCH_DOCTORS_HUT:
     case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_ARENA:
         AIToPrimarySkillObject( hero, objectType, dst_index );
         break;
 
@@ -1941,6 +1989,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_GENIE_LAMP:
     // loyalty version objects
     case MP2::OBJ_WATER_ALTAR:
     case MP2::OBJ_AIR_ALTAR:
@@ -1957,16 +2006,8 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToDwellingBattleMonster( hero, objectType, dst_index );
         break;
 
-    // recruit genie
-    case MP2::OBJ_GENIE_LAMP:
-        AIToDwellingRecruitMonster( hero, objectType, dst_index );
-        break;
-
     case MP2::OBJ_STABLES:
         AIToStables( hero, objectType, dst_index );
-        break;
-    case MP2::OBJ_ARENA:
-        AIToPrimarySkillObject( hero, objectType, dst_index );
         break;
 
     case MP2::OBJ_BARRIER:

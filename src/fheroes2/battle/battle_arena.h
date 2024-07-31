@@ -37,7 +37,6 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "battle_tower.h"
 #include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
@@ -57,10 +56,13 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Units;
-    class Unit;
     class Interface;
     class Status;
+    class Tower;
+    class Unit;
+    class Units;
+
+    enum class TowerType : uint8_t;
 
     class Actions : public std::list<Command>
     {};

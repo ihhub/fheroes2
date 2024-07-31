@@ -27,11 +27,9 @@
 #include <array>
 #include <cassert>
 #include <limits>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
 #include "ai_planner.h"

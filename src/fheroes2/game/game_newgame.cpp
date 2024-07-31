@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <array>
 #include <cassert>
@@ -52,6 +52,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "screen.h"

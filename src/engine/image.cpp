@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-#include <type_traits>
 
 #include "image_palette.h"
 

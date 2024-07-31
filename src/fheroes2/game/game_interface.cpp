@@ -24,6 +24,7 @@
 #include "game_interface.h"
 
 #include <algorithm>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"

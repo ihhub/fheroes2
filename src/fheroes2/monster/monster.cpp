@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "castle.h"
-#include "color.h"
 #include "icn.h"
 #include "luck.h"
 #include "morale.h"
@@ -122,11 +121,6 @@ uint32_t Monster::GetAttack() const
 uint32_t Monster::GetDefense() const
 {
     return fheroes2::getMonsterData( id ).battleStats.defense;
-}
-
-int Monster::GetColor() const
-{
-    return Color::NONE;
 }
 
 int Monster::GetMorale() const

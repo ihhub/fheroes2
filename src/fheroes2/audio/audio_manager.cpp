@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,13 +28,13 @@
 #include <cstdlib>
 #include <deque>
 #include <list>
-#include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
 #include <utility>
 
 #include "agg_file.h"
+#include "audio.h"
 #include "dir.h"
 #include "logging.h"
 #include "m82.h"
