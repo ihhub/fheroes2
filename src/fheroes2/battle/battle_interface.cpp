@@ -51,6 +51,7 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "color.h"
+#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -1298,7 +1299,7 @@ Battle::Interface::~Interface()
         // the battle results screen (if the battle was quick ended).
         _background.reset();
 
-        fheroes2::fadeInDisplay();
+        Game::setDisplayFadeIn();
     }
 }
 

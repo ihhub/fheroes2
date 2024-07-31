@@ -353,6 +353,16 @@ public:
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
+    uint8_t getWaterPercentage() const
+    {
+        return _waterPercentage;
+    }
+
+    double getLandRoughness() const
+    {
+        return _landRoughness;
+    }
+
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
@@ -417,6 +427,8 @@ private:
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
 
+    uint8_t _waterPercentage{ 0 };
+    double _landRoughness{ 1.0 };
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

@@ -683,22 +683,15 @@ namespace
         return false;
     }
 
-    void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
+    void addHeroToMove( Heroes * hero, std::vector<Heroes *> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolDistance() == 0 ) ) {
-            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " stands still due to the patrol settings" )
             return;
         }
 
         if ( hero->MayStillMove( false, false ) ) {
-            availableHeroes.emplace_back();
-            AI::HeroToMove & heroInfo = availableHeroes.back();
-            heroInfo.hero = hero;
-
-            if ( hero->Modes( Heroes::PATROL ) ) {
-                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetPatrolCenter() );
-                heroInfo.patrolDistance = hero->GetPatrolDistance();
-            }
+            availableHeroes.emplace_back( hero );
         }
     }
 
@@ -875,6 +868,84 @@ namespace
         }
 
         return fogDiscoveryBaseValue;
+    }
+
+    double getSecondarySkillValue( const Heroes & hero, const Skill::Secondary & skill )
+    {
+        const int type = skill.Skill();
+        const int level = skill.Level();
+        if ( hero.GetLevelSkill( type ) >= level ) {
+            return 0;
+        }
+
+        switch ( type ) {
+        case Skill::Secondary::WISDOM:
+            // wouldn't check castles/spell availability since high wisdom drives building priority
+            return level == Skill::Level::BASIC ? 2500.0 : 1000.0;
+        case Skill::Secondary::LOGISTICS:
+            return 1500.0;
+        case Skill::Secondary::LEADERSHIP:
+            return hero.GetArmy().AllTroopsAreUndead() ? 100.0 : 1000.0;
+        case Skill::Secondary::NECROMANCY:
+            return hero.GetArmy().AllTroopsAreUndead() ? 1000.0 : 100.0;
+        case Skill::Secondary::LUCK: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return 500.0;
+        }
+        case Skill::Secondary::BALLISTICS: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 1250.0 : 250.0;
+        }
+        case Skill::Secondary::ARCHERY: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 100.0 : 500.0;
+        }
+        case Skill::Secondary::ESTATES: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return 1000.0;
+        }
+        case Skill::Secondary::PATHFINDING: {
+            const double roughness = world.getLandRoughness();
+            return ( roughness > 1.25 ) ? 1000.0 : ( roughness > 1.1 ) ? 250.0 : 100.0;
+        }
+        case Skill::Secondary::NAVIGATION: {
+            const uint8_t waterPercentage = world.getWaterPercentage();
+            return ( waterPercentage > 60 ) ? 1000.0 : ( waterPercentage > 25 ) ? 100.0 : 0.0;
+        }
+        case Skill::Secondary::SCOUTING: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return hero.getAIRole() == Heroes::Role::SCOUT ? 1250.0 : 100.0;
+        }
+        case Skill::Secondary::MYSTICISM:
+            return hero.HaveSpellBook() ? 500.0 : 100.0;
+        case Skill::Secondary::EAGLE_EYE:
+            return hero.HaveSpellBook() ? 250.0 : 0.0;
+        case Skill::Secondary::DIPLOMACY:
+            // discourage AI picking it up, but if it's already there prioritise leveling to save gold
+            return level == Skill::Level::BASIC ? 100.0 : 1250.0;
+        case Skill::Secondary::UNKNOWN:
+            return 0;
+        default:
+            // If you make a new secondary skill don't forget to update this.
+            assert( 0 );
+            break;
+        }
+        return 0;
     }
 
     uint32_t getTimeoutBeforeFogDiscoveryIntensification( const Heroes & hero )
@@ -2108,12 +2179,8 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
     return targetIndex;
 }
 
-int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
+int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 {
-    assert( heroInfo.hero != nullptr );
-
-    Heroes & hero = *heroInfo.hero;
-
     DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
     const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
@@ -2290,14 +2357,7 @@ int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPri
         }
     }
 
-    const bool heroInPatrolMode = ( heroInfo.patrolCenter != -1 );
-
     for ( const IndexObject & node : _mapActionObjects ) {
-        // Skip if hero in patrol mode and object outside of reach
-        if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance ) {
-            continue;
-        }
-
         if ( !objectValidator.isValid( node.first ) ) {
             continue;
         }
@@ -2381,12 +2441,9 @@ int AI::Planner::getPriorityTarget( const HeroToMove & heroInfo, double & maxPri
                        hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
     }
-    else if ( !heroInPatrolMode ) {
+    else {
         priorityTarget = fogDiscoveryTarget;
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
-    }
-    else {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is in Patrol mode. No movement is required." )
     }
 
     return priorityTarget;
@@ -2506,6 +2563,33 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         assert( 0 );
         break;
     }
+}
+
+Skill::Secondary AI::Planner::pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right )
+{
+    // heroes can get 1 or 0 skill choices depending on a level
+    if ( !right.isValid() ) {
+        // if both left and right are invalid returning either is fine
+        return left;
+    }
+
+    const double leftValue = getSecondarySkillValue( hero, left );
+    const double rightValue = getSecondarySkillValue( hero, right );
+
+    DEBUG_LOG( DBG_AI, DBG_TRACE,
+               hero.GetName() << " picking a skill: " << leftValue << " for " << left.String( left.first ) << " and " << rightValue << " for "
+                              << right.String( right.first ) )
+
+    if ( std::fabs( leftValue - rightValue ) < 0.001 ) {
+        // If skill value is lower than the threshold then it's undesireable. Avoid learning it.
+        if ( leftValue < 300.0 ) {
+            return left.Level() == Skill::Level::BASIC ? right : left;
+        }
+
+        return left.Level() == Skill::Level::BASIC ? left : right;
+    }
+
+    return leftValue > rightValue ? left : right;
 }
 
 void AI::Planner::HeroesBeginMovement( Heroes & hero )
@@ -2631,7 +2715,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         return true;
     }
 
-    std::vector<HeroToMove> availableHeroes;
+    std::vector<Heroes *> availableHeroes;
 
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
@@ -2646,7 +2730,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
     while ( !availableHeroes.empty() ) {
         const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
 
-        Heroes * bestHero = availableHeroes.front().hero;
+        Heroes * bestHero = availableHeroes.front();
         int bestTargetIndex = -1;
 
         {
@@ -2663,14 +2747,14 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
                 double maxPriority = 0;
 
-                for ( const HeroToMove & heroInfo : availableHeroes ) {
+                for ( Heroes * hero : availableHeroes ) {
                     double priority = -1;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority );
+                    const int targetIndex = getPriorityTarget( *hero, priority );
 
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;
                         bestTargetIndex = targetIndex;
-                        bestHero = heroInfo.hero;
+                        bestHero = hero;
                     }
                 }
 
@@ -2684,20 +2768,20 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
             // Possibly heroes have nothing to do because one of them is blocking the way. Move a random hero randomly and see what happens.
             Rand::Shuffle( availableHeroes );
 
-            for ( HeroToMove & heroInfo : availableHeroes ) {
-                // Skip heroes who are in castles or on patrol.
-                if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+            for ( Heroes * hero : availableHeroes ) {
+                // Skip heroes located in castles.
+                if ( hero->inCastle() != nullptr ) {
                     continue;
                 }
 
-                if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *hero ) ) {
                     continue;
                 }
 
-                const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
+                const int targetIndex = _pathfinder.getNearestTileToMove( *hero );
                 if ( targetIndex != -1 ) {
                     bestTargetIndex = targetIndex;
-                    bestHero = heroInfo.hero;
+                    bestHero = hero;
 
                     DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
 
@@ -2769,7 +2853,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         }
 
         availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
-                                               []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                               []( const Heroes * hero ) { return !hero->MayStillMove( false, false ); } ),
                                availableHeroes.end() );
 
         // The size of heroes can be increased if a new hero is released from Jail.
