@@ -2769,8 +2769,8 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
             Rand::Shuffle( availableHeroes );
 
             for ( Heroes * hero : availableHeroes ) {
-                // Skip heroes who are in castles or on patrol.
-                if ( hero->Modes( Heroes::PATROL ) || hero->inCastle() != nullptr ) {
+                // Skip heroes located in castles.
+                if ( hero->inCastle() != nullptr ) {
                     continue;
                 }
 
