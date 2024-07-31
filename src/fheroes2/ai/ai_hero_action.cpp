@@ -236,7 +236,7 @@ namespace
 
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
     {
-        assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
+        assert( Maps::isValidAbsIndex( targetIndex ) );
 #if !defined( NDEBUG ) || defined( WITH_DEBUG )
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
 #endif
