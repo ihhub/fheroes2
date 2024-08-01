@@ -1201,7 +1201,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
 Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 {
-    Maps::Tiles & tile = world.GetTiles( tileId );
+    const Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
         removeMainObjectFromTile( tile );

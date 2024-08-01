@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4215,6 +4215,10 @@ msgid "Unable to create a directory to save the map."
 msgstr "Използва се за изтриване на обекти от картата."
 
 #, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Използва се за изтриване на обекти от картата."
+
+#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
@@ -4569,6 +4573,26 @@ msgid "Run out of time."
 msgstr "Излез от редактора на карти."
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " съюз"
+
+#, fuzzy
 msgid "Special Loss Condition"
 msgstr "Състояние на загуба"
 
@@ -4582,6 +4606,14 @@ msgstr "Условие за победа"
 
 msgid "Allow this condition also for AI"
 msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " съюз"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " съюз"
 
 #, fuzzy
 msgid "Gold:"
@@ -4601,6 +4633,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""

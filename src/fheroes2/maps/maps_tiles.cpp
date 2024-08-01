@@ -29,9 +29,9 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <iostream>
 #include <limits>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
@@ -417,17 +417,6 @@ namespace
     bool isAddonShadow( const Maps::TilesAddon & ta )
     {
         return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
-    }
-
-    bool isAddonResource( const Maps::TilesAddon & ta )
-    {
-        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-    }
-
-    bool isAddonArtifact( const Maps::TilesAddon & ta )
-    {
-        // OBJNARTI (skip ultimate)
-        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
     }
 
     void getAddonInfo( const Maps::TilesAddon & addon, std::ostringstream & os )
@@ -1002,16 +991,6 @@ std::string Maps::Tiles::String() const
     return os.str();
 }
 
-void Maps::Tiles::FixObject()
-{
-    if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonArtifact ) )
-            SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonResource ) )
-            SetObject( MP2::OBJ_RESOURCE );
-    }
-}
-
 bool Maps::Tiles::GoodForUltimateArtifact() const
 {
     if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
@@ -1568,22 +1547,20 @@ void Maps::Tiles::updateObjectType()
 
     // And sometimes even in the bottom layer addons.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
-    if ( objectType == MP2::OBJ_NONE ) {
-        for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
-            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
-            if ( type == MP2::OBJ_NONE ) {
-                continue;
-            }
+    for ( auto iter = _addonBottomLayer.rbegin(); iter != _addonBottomLayer.rend(); ++iter ) {
+        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+        if ( type == MP2::OBJ_NONE ) {
+            continue;
+        }
 
-            if ( MP2::isOffGameActionObject( type ) ) {
-                // Set object type only when this is an interactive object type to make sure that interaction can be done.
-                SetObject( type );
-                return;
-            }
+        if ( MP2::isOffGameActionObject( type ) ) {
+            // Set object type only when this is an interactive object type to make sure that interaction can be done.
+            SetObject( type );
+            return;
+        }
 
-            if ( objectType == MP2::OBJ_NONE ) {
-                objectType = type;
-            }
+        if ( objectType == MP2::OBJ_NONE ) {
+            objectType = type;
         }
     }
 

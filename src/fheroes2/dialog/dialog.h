@@ -23,16 +23,16 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
+#include "math_base.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 244
@@ -45,7 +45,6 @@ class Monster;
 class Troop;
 
 struct ArtifactSetData;
-struct CapturedObject;
 
 namespace fheroes2
 {

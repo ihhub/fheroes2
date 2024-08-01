@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 
-#include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -49,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "profit.h"
@@ -305,8 +305,6 @@ void Kingdom::AddHero( Heroes * hero )
     if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) ) {
         heroes.push_back( hero );
     }
-
-    AI::Get().HeroesAdd( *hero );
 }
 
 void Kingdom::RemoveHero( const Heroes * hero )
@@ -331,10 +329,6 @@ void Kingdom::RemoveHero( const Heroes * hero )
         player->GetFocus().Reset();
     }
 
-    assert( hero != nullptr );
-
-    AI::Get().HeroesRemove( *hero );
-
     if ( isLoss() ) {
         LossPostActions();
     }
@@ -350,8 +344,6 @@ void Kingdom::AddCastle( Castle * castle )
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
             Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
-
-        AI::Get().CastleAdd( *castle );
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
@@ -373,10 +365,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
         }
-
-        assert( castle != nullptr );
-
-        AI::Get().CastleRemove( *castle );
     }
 
     if ( isLoss() )

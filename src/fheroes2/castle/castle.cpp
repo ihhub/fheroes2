@@ -27,10 +27,10 @@
 #include <array>
 #include <cassert>
 #include <iterator>
-#include <ostream>
+#include <sstream>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "audio_manager.h"
@@ -2394,7 +2394,7 @@ void Castle::JoinRNDArmy()
 void Castle::ActionPreBattle()
 {
     if ( isControlAI() ) {
-        AI::Get().CastlePreBattle( *this );
+        AI::Planner::CastlePreBattle( *this );
 
         return;
     }
@@ -2413,9 +2413,6 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         army.Clean();
         ResetModes( CUSTOM_ARMY );
     }
-
-    if ( isControlAI() )
-        AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
 Castle * VecCastles::GetFirstCastle() const

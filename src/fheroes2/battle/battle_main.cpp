@@ -25,18 +25,17 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
-#include "battle.h"
+#include "battle.h" // IWYU pragma: associated
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "campaign_savedata.h"
@@ -300,7 +299,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         commander1->ActionPreBattle();
 
         if ( army1.isControlAI() ) {
-            AI::Get().HeroesPreBattle( *commander1, true );
+            AI::Planner::HeroesPreBattle( *commander1, true );
         }
     }
 
@@ -326,7 +325,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         commander2->ActionPreBattle();
 
         if ( army2.isControlAI() ) {
-            AI::Get().HeroesPreBattle( *commander2, false );
+            AI::Planner::HeroesPreBattle( *commander2, false );
         }
     }
 
@@ -447,21 +446,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         arena.GetForce2().SyncArmyCount();
 
         if ( commander1 ) {
-            if ( army1.isControlAI() ) {
-                AI::Get().HeroesAfterBattle( *commander1, true );
-            }
-            else {
-                commander1->ActionAfterBattle();
-            }
+            commander1->ActionAfterBattle();
         }
-
         if ( commander2 ) {
-            if ( army2.isControlAI() ) {
-                AI::Get().HeroesAfterBattle( *commander2, false );
-            }
-            else {
-                commander2->ActionAfterBattle();
-            }
+            commander2->ActionAfterBattle();
         }
 
         if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLE_EYE ) && loserHero->isHeroes() ) {

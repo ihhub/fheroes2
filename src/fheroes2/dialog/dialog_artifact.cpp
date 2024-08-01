@@ -18,11 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <memory>
+#include <string>
+#include <vector>
 
 #include "artifact.h"
 #include "audio_manager.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "m82.h"
 #include "translations.h"
 #include "ui_dialog.h"
