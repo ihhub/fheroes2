@@ -24,7 +24,7 @@
 #include <cstdint>
 
 #include "agg_image.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"

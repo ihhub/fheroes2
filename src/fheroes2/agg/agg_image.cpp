@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <numeric>
 #include <random>
 #include <set>

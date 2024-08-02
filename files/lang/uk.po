@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 16:33+0000\n"
-"PO-Revision-Date: 2024-07-11 19:03+0300\n"
+"PO-Revision-Date: 2024-07-29 21:26+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -2790,7 +2790,7 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Встановити бойовий порядок \"Згуртованість\""
 
 msgid "Exit Castle Options"
-msgstr "Вийти з налаштувань замку."
+msgstr "Вийти з налаштувань замку"
 
 msgid "Castle Options"
 msgstr "Налаштування замку"
@@ -3609,7 +3609,7 @@ msgid "Accumulate a large amount of gold."
 msgstr "Зібрати певну кількість золота."
 
 msgid "Victory Condition"
-msgstr "Умови перемоги."
+msgstr "Умови перемоги"
 
 msgid "Map difficulty:"
 msgstr "Складність мапи:"
@@ -4097,9 +4097,8 @@ msgstr "Не вдається знайти каталог даних для зб
 msgid "Unable to create a directory to save the map."
 msgstr "Не вдається створити теку для збереження мапи."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
-msgstr "Не вдається знайти каталог даних для збереження мапи."
+msgstr "Не вдається знайти каталог для збереження мапи."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Ви впевнені, що хочете перезаписати існуючу мапу?"
@@ -4424,25 +4423,20 @@ msgstr "Накопичити золота."
 msgid "Run out of time."
 msgstr "Встигнути у відведений час."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " альянс"
+msgstr "1-й"
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " альянс"
+msgstr "2-й"
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " альянс"
+msgstr "3-й"
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " альянс"
+msgstr "4-й"
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " альянс"
+msgstr "5-й"
 
 msgid "Special Loss Condition"
 msgstr "Особливі умови програшу"
@@ -4456,13 +4450,11 @@ msgstr "Дозволити стандартні умови перемоги"
 msgid "Allow this condition also for AI"
 msgstr "Дозволити цю умову для ШІ тажок"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " альянс"
+msgstr "Встановити альянс:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " альянс"
+msgstr "{%number} альянс: "
 
 msgid "Gold:"
 msgstr "Золото:"
@@ -4486,13 +4478,11 @@ msgstr ""
 msgid "Put %{color} player in the %{alliance} alliance"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Якщо цей прапорець встановлено, ця подія спрацює для %{color} гравця, якщо "
-"ним керує людина."
+"Якщо цей прапорець встановлено, %{color} гравець буде в %{alliance} альянсі."
 
 msgid "Days:"
 msgstr "Дні:"
@@ -6388,7 +6378,7 @@ msgid "Drakonia"
 msgstr "Драконія"
 
 msgid "Elderian"
-msgstr "Бузина"
+msgstr "Елдраян"
 
 msgid "Gallavant"
 msgstr "Ґалавант"
@@ -9743,7 +9733,7 @@ msgid "Lightning"
 msgstr "Блискавка"
 
 msgid "% damage from "
-msgstr "% шкоди від"
+msgstr "% шкоди від "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Три артефакти Андурана магічним чином поєднуються в один."
@@ -10895,7 +10885,7 @@ msgstr ""
 "хоч слово, він простягає тобі Чарівну Книгу."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "Перемогти можна, знайшовши будь-який Легендарний артефакт."
 
 msgid "Dummy 2"
 msgstr "Заповнювач 2"
@@ -11323,8 +11313,11 @@ msgstr ""
 "Знімає всі негативні закляття з ваших військ, відновлюючи у кожному загоні "
 "по %{count} ОЗ за кожен рівень Сили Магії."
 
+# Коректніший переклад:
+#  - Resurrect - воскресити, дієслово
+#  - Resurection - воскресіння, іменник
 msgid "Resurrect"
-msgstr "Воскресіння"
+msgstr "Воскресити"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr "Воскрешає істот у пошкодженому або знищеному загоні до кінця битви."
@@ -11423,9 +11416,8 @@ msgstr "Святий Клич"
 msgid "Anti-Magic"
 msgstr "Антимагія"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
-msgstr "Запобігає застосуванню магії проти обраного загону."
+msgstr "Запобігає застосуванню будь-якої магії проти вибраних істот."
 
 msgid "Dispel Magic"
 msgstr "Розсіювання Магії"
@@ -11547,7 +11539,7 @@ msgid "Increases a unit's attack skill."
 msgstr "Збільшує навичку атаки обраного дружнього загону."
 
 msgid "Animate Dead"
-msgstr "Оживлення Мерців"
+msgstr "Оживити мерців"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
@@ -11776,9 +11768,8 @@ msgstr "У вас немає Книги Магії, то ж ви не может
 msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
 
-#, fuzzy
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr "У вашого героя залишилось %{point} оч. мани."
+msgstr "У вашого героя залишилось %{point} оч. мани із %{max}."
 
 msgid "View Adventure Spells"
 msgstr "Показати Небойові Закляття"

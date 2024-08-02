@@ -23,7 +23,6 @@
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
 
 class Heroes;
 
@@ -36,6 +35,11 @@ namespace fheroes2
 namespace Interface
 {
     class GameArea;
+}
+
+namespace MP2
+{
+    enum ObjectIcnType : uint8_t;
 }
 
 namespace Maps

@@ -25,7 +25,7 @@
 #define H2HEROES_H
 
 #include <algorithm>
-#include <cassert>
+#include <cassert> // IWYU pragma: keep
 #include <cmath>
 #include <cstdint>
 #include <exception>

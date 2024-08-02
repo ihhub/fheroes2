@@ -27,7 +27,6 @@
 #include <functional>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <vector>
 
 #include "battle_arena.h"
