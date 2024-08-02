@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstddef>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -228,11 +227,11 @@ namespace
     }
 
     template <class ShowFunction>
-    void ShowIfFound( ScenarioListBox & listbox, const fheroes2::Point & mouseLocation, ShowFunction && function )
+    void ShowIfFound( ScenarioListBox & listbox, const fheroes2::Point & mouseLocation, const ShowFunction & function )
     {
         const Maps::FileInfo * item = listbox.GetFromPosition( mouseLocation );
         if ( item ) {
-            std::forward<ShowFunction>( function )( item );
+            function( item );
         }
     }
 }
@@ -659,34 +658,34 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( countPlayers ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { PlayersToolTip( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), PlayersToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
             PlayersToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { SizeToolTip( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), SizeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapSize ) ) {
             SizeToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( mapTypes ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { MapTypeToolTip( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), MapTypeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
             MapTypeToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { mapInfo( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), mapInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapName ) ) {
             ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( victoryConds ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { VictoryConditionInfo( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), VictoryConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( lossConds ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), []( const Maps::FileInfo * info ) { LossConditionInfo( info ); } );
+            ShowIfFound( listbox, le.getMouseCursorPos(), LossConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curVictoryCond ) ) {
             VictoryConditionInfo( &( listbox.GetCurrent() ) );
