@@ -33,7 +33,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "battle_cell.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"

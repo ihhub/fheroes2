@@ -35,7 +35,6 @@
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "players.h"
 #include "puzzle.h"
@@ -44,6 +43,11 @@
 class StreamBase;
 
 struct EventDate;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Maps
 {

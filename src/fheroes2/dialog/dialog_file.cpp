@@ -22,9 +22,10 @@
  ***************************************************************************/
 
 #include <cstdint>
+#include <string>
 
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "dir.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"

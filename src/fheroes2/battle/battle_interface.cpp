@@ -35,12 +35,11 @@
 #include <iterator>
 #include <ostream>
 #include <set>
-#include <type_traits>
 
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
-#include "battle.h"
+#include "battle.h" // IWYU pragma: associated
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -52,6 +51,7 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "color.h"
+#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -1305,7 +1305,7 @@ Battle::Interface::~Interface()
         // the battle results screen (if the battle was quick ended).
         _background.reset();
 
-        fheroes2::fadeInDisplay();
+        Game::setDisplayFadeIn();
     }
 }
 

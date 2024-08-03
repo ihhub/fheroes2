@@ -23,6 +23,7 @@
 
 #include "battle_army.h"
 
+#include <algorithm>
 #include <cstddef>
 
 #include "army_troop.h"

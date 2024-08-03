@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -37,7 +36,7 @@
 #include "dialog.h"
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"

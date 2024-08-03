@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3645,6 +3645,41 @@ msgstr "Choix d'élément (bonus) :"
 msgid "Select Adventure Object:"
 msgstr "Choix d'élément (aventure) :"
 
+msgid "Players Icon"
+msgstr "Icônes des joueurs"
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Indique combien de joueurs au total sont dans le scenario. Toute position "
+"non occupée par un humain sera occupée par l'ordinateur."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Indique si la carte est\n"
+"petite (36x36), moyenne\n"
+"(72x72), grande (108x108)\n"
+"ou très grande (144x144)."
+
+msgid "Size Icon"
+msgstr "Taille de l'icône"
+
+msgid "Map Type"
+msgstr "Type de carte"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Indique si la carte est faite pour la version du jeu \"The Succession Wars\" "
+"ou \"The Price of Loyalty\"."
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3731,41 +3766,6 @@ msgstr "Toutes les cartes"
 
 msgid "View all maps, regardless of size."
 msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
-
-msgid "Players Icon"
-msgstr "Icônes des joueurs"
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Indique combien de joueurs au total sont dans le scenario. Toute position "
-"non occupée par un humain sera occupée par l'ordinateur."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Indique si la carte est\n"
-"petite (36x36), moyenne\n"
-"(72x72), grande (108x108)\n"
-"ou très grande (144x144)."
-
-msgid "Size Icon"
-msgstr "Taille de l'icône"
-
-msgid "Map Type"
-msgstr "Type de carte"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Indique si la carte est faite pour la version du jeu \"The Succession Wars\" "
-"ou \"The Price of Loyalty\"."
 
 msgid "Selected Name"
 msgstr "Carte sélectionnée"

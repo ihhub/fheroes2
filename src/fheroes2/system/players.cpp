@@ -27,7 +27,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <ostream>
+#include <sstream>
 #include <type_traits>
 
 #include "castle.h"

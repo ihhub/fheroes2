@@ -32,7 +32,7 @@
 #include "artifact.h"
 #include "buildinginfo.h"
 #include "captain.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"

@@ -18,21 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "world_regions.h"
+
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <set>
 #include <utility>
 #include <vector>
 
 #include "castle.h"
+#include "ground.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "world.h"
-#include "world_regions.h"
+#include "world.h" // IWYU pragma: associated
 
 namespace
 {
@@ -200,6 +202,10 @@ void World::ComputeStaticAnalysis()
         obstacles[3].emplace_back( y, 0 ); // ground, rows
     }
 
+    int obstacleCount = 0;
+    int waterCount = 0;
+    uint32_t terrainPenalty = 0;
+
     // Find the terrain
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
@@ -208,23 +214,36 @@ void World::ComputeStaticAnalysis()
             const Maps::Tiles & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
+                ++obstacleCount;
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
                 ++obstacles[2][x].second;
                 ++obstacles[3][y].second;
             }
             else if ( tile.isWater() ) {
+                ++waterCount;
                 // if it's water then ground tiles consider it an obstacle
                 ++obstacles[2][x].second;
                 ++obstacles[3][y].second;
             }
             else {
+                terrainPenalty += Maps::Ground::GetPenalty( tile, 0 );
                 // else then ground is an obstacle for water navigation
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
             }
         }
     }
+
+    const int passableTileCount = ( width * height ) - obstacleCount;
+    assert( passableTileCount > 0 );
+
+    _waterPercentage = static_cast<uint8_t>( waterCount * 100 / passableTileCount );
+
+    const int landTiles = passableTileCount - waterCount;
+    assert( landTiles > 0 );
+
+    _landRoughness = static_cast<double>( terrainPenalty ) / ( landTiles * Maps::Ground::defaultGroundPenalty );
 
     // sort the map rows and columns based on amount of obstacles
     for ( int i = 0; i < 4; ++i )

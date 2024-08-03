@@ -21,12 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdint>
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "dialog.h"
 #include "game_delays.h"
 #include "icn.h"
