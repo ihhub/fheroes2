@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3658,6 +3658,42 @@ msgstr "Океански обекти"
 msgid "Select Adventure Object:"
 msgstr "Океански обекти"
 
+msgid "Players Icon"
+msgstr "Брой на играчи"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Показва колко общо играчи има в сценария. Всички позиции, които не са заети "
+"от хора, ще бъдат заети от компютърни играчи."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Показва дали картата\n"
+"е малък (36 x 36), среден\n"
+"(72 x 72), голям (108 x 108),\n"
+"или изключително голям размер (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Размер на карта"
+
+msgid "Map Type"
+msgstr "Тип на карта"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Показва дали картата е направена за версията на играта \"Наследените войни\" "
+"или за \"Цената на лоялността\"."
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
@@ -3747,42 +3783,6 @@ msgstr "Всички карти"
 
 msgid "View all maps, regardless of size."
 msgstr "Виж всички карти, независимо от размера."
-
-msgid "Players Icon"
-msgstr "Брой на играчи"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Показва колко общо играчи има в сценария. Всички позиции, които не са заети "
-"от хора, ще бъдат заети от компютърни играчи."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Показва дали картата\n"
-"е малък (36 x 36), среден\n"
-"(72 x 72), голям (108 x 108),\n"
-"или изключително голям размер (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Размер на карта"
-
-msgid "Map Type"
-msgstr "Тип на карта"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Показва дали картата е направена за версията на играта \"Наследените войни\" "
-"или за \"Цената на лоялността\"."
 
 msgid "Selected Name"
 msgstr "Избрано име"
