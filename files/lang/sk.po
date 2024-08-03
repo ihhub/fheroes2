@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3637,6 +3637,40 @@ msgstr "Objekty oceánu"
 msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
+msgid "Players Icon"
+msgstr "Ikona hráča"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
+"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
+"alebo extra veľká (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Ikona veľkosti"
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
+"Price of Loyalty\"."
+
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
 
@@ -3726,40 +3760,6 @@ msgstr "Všetky mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Zobraz všetky mapy bez ohľadu na veľkosť."
-
-msgid "Players Icon"
-msgstr "Ikona hráča"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
-"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
-"alebo extra veľká (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Ikona veľkosti"
-
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
-"Price of Loyalty\"."
 
 msgid "Selected Name"
 msgstr "Zvolené meno"

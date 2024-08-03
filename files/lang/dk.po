@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3627,6 +3627,41 @@ msgstr "Vælg Power Up-objekt:"
 msgid "Select Adventure Object:"
 msgstr "Vælg Eventyr-objekt:"
 
+msgid "Players Icon"
+msgstr "Spiller-ikon"
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Angiver, hvor mange spillere der er i alt i scenariet. Alle positioner, der "
+"ikke er besat af menneskelige spillere, vil blive besat af AI-spillere."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Angiver om kortet\n"
+"er lille (36 x 36), mellemstor\n"
+"(72 x 72), stor (108 x 108),\n"
+"eller ekstrastor (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Størrelsesikon"
+
+msgid "Map Type"
+msgstr "Korttype"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Angiver om kortet er lavet til \"Arvefølgekrigene\"- eller \"Prisen for "
+"Loyalitet\"-versionen af spillet."
+
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
 
@@ -3713,41 +3748,6 @@ msgstr "Alle kort"
 
 msgid "View all maps, regardless of size."
 msgstr "Vis alle kort, uanset størrelse."
-
-msgid "Players Icon"
-msgstr "Spiller-ikon"
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Angiver, hvor mange spillere der er i alt i scenariet. Alle positioner, der "
-"ikke er besat af menneskelige spillere, vil blive besat af AI-spillere."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Angiver om kortet\n"
-"er lille (36 x 36), mellemstor\n"
-"(72 x 72), stor (108 x 108),\n"
-"eller ekstrastor (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Størrelsesikon"
-
-msgid "Map Type"
-msgstr "Korttype"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Angiver om kortet er lavet til \"Arvefølgekrigene\"- eller \"Prisen for "
-"Loyalitet\"-versionen af spillet."
 
 msgid "Selected Name"
 msgstr "Valgte navn"

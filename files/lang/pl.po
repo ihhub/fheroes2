@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3647,6 +3647,38 @@ msgstr "Wybierz artefakt:"
 msgid "Select Adventure Object:"
 msgstr "Wybierz artefakt:"
 
+msgid "Players Icon"
+msgstr "Ikona graczy"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Pokazuje ilu graczy bierze udział w tym scenariuszu. Każde miejsce nie "
+"zajęte przez ludzi, zostanie zajęte przez komputer."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Wskazuje czy mapa jest mała (36 x 36), średnia (72 x 72), duża (108 x 108), "
+"czy też bardzo duża (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Ikona wielkości"
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr "Wskazuje czy mapa jest z Wojny o Sukcesję czy z Ceny Lojalności."
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3736,38 +3768,6 @@ msgstr "Wszystkie mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Pokaż wszystkie mapy, niezależnie od wielkości."
-
-msgid "Players Icon"
-msgstr "Ikona graczy"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Pokazuje ilu graczy bierze udział w tym scenariuszu. Każde miejsce nie "
-"zajęte przez ludzi, zostanie zajęte przez komputer."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Wskazuje czy mapa jest mała (36 x 36), średnia (72 x 72), duża (108 x 108), "
-"czy też bardzo duża (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Ikona wielkości"
-
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr "Wskazuje czy mapa jest z Wojny o Sukcesję czy z Ceny Lojalności."
 
 msgid "Selected Name"
 msgstr "Wybrana nazwa"
