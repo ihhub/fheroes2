@@ -1472,6 +1472,12 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         }
         case Spell::FIREBALL:
         case Spell::FIREBLAST: {
+            const std::vector<int32_t> extraDamagePercent
+                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+            for ( const int32_t value : extraDamagePercent ) {
+                dmg = dmg * ( 100 + value ) / 100;
+            }
+
             if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT );
@@ -1479,8 +1485,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                     dmg = dmg * ( 100 - value ) / 100;
                 }
 
-                const std::vector<int32_t> extraDamagePercent
-                    = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
+                extraDamagePercent = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
                 for ( const int32_t value : extraDamagePercent ) {
                     dmg = dmg * ( 100 + value ) / 100;
                 }
@@ -1495,6 +1500,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
             for ( const int32_t value : extraDamagePercent ) {
                 dmg = dmg * ( 100 + value ) / 100;
             }
+
             if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT );
@@ -1534,9 +1540,6 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                 }
             }
 
-            break;
-        }
-        default:
             break;
         }
     }
