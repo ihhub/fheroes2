@@ -72,7 +72,7 @@ namespace
 {
     uint32_t castleAnimationIndex = 0;
 
-    building_t getPressedBuildingHotkey()
+    BuildingType getPressedBuildingHotkey()
     {
         if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
@@ -121,7 +121,7 @@ namespace
     {
         // Check if building is a monster dwelling or its upgraded version
         if ( ( buildingId & DWELLING_MONSTERS ) == 0 && ( buildingId & DWELLING_UPGRADES ) == 0 ) {
-            return fheroes2::getBuildingName( race, static_cast<building_t>( buildingId ) );
+            return fheroes2::getBuildingName( race, static_cast<BuildingType>( buildingId ) );
         }
 
         const Monster monster( race, buildingId );
@@ -511,7 +511,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
 
             // Get pressed hotkey.
-            const building_t hotKeyBuilding = getPressedBuildingHotkey();
+            const BuildingType hotKeyBuilding = getPressedBuildingHotkey();
 
             // Interaction with buildings.
             // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.

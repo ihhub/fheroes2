@@ -257,7 +257,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     dwelling6.Redraw();
 
     // mage guild
-    building_t level = BUILD_NOTHING;
+    BuildingType level = BUILD_NOTHING;
     switch ( GetLevelMageGuild() ) {
     case 0:
         level = BUILD_MAGEGUILD1;

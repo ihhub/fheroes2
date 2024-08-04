@@ -62,7 +62,7 @@ class Heroes;
 class StreamBase;
 class Troop;
 
-enum building_t : uint32_t
+enum BuildingType : uint32_t
 {
     BUILD_NOTHING = 0x00000000,
     BUILD_THIEVESGUILD = 0x00000001,
@@ -416,7 +416,7 @@ namespace CastleDialog
 
     struct BuildingRenderInfo
     {
-        BuildingRenderInfo( building_t b, const fheroes2::Rect & r )
+        BuildingRenderInfo( BuildingType b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -426,7 +426,7 @@ namespace CastleDialog
             return b == static_cast<uint32_t>( id );
         }
 
-        building_t id;
+        BuildingType id;
         fheroes2::Rect coord;
     };
 
