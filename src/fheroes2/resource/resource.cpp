@@ -147,7 +147,7 @@ int32_t Funds::Get( const int type ) const
     return 0;
 }
 
-Funds & Funds::operator=( const cost_t & cost )
+Funds & Funds::operator=( const Cost & cost )
 {
     wood = cost.wood;
     mercury = cost.mercury;

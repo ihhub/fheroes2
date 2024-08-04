@@ -99,7 +99,7 @@ struct BuildingStats
 {
     uint32_t id2;
     uint8_t race;
-    cost_t cost;
+    Cost cost;
 };
 
 const BuildingStats buildingStats[] = {
