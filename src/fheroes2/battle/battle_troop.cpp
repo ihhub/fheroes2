@@ -1472,8 +1472,8 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         }
         case Spell::FIREBALL:
         case Spell::FIREBLAST: {
-            const std::vector<int32_t> extraDamagePercent
-                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+            std::vector<int32_t> extraDamagePercent
+                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
             for ( const int32_t value : extraDamagePercent ) {
                 dmg = dmg * ( 100 + value ) / 100;
             }
