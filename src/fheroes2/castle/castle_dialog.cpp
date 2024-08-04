@@ -56,8 +56,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mus.h"
-#include "payment.h"
-#include "resource.h"
 #include "screen.h"
 #include "statusbar.h"
 #include "tools.h"
@@ -277,9 +275,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         default:
             if ( build != BUILD_NOTHING ) {
-                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, build );
-                remainingFunds.Trim();
-                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                 AudioManager::PlaySound( M82::BUILDTWN );
                 fadeBuilding.StartFadeBuilding( build );
             }
@@ -592,7 +587,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat( true ) ) ) {
                                 BuyBoat();
-                                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
                                 fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }
                             break;
@@ -616,9 +610,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                                 fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
-                                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, BUILD_CASTLE );
-                                remainingFunds.Trim();
-                                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                                 AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
@@ -733,6 +724,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     RedrawIcons( *this, hero, dialogRoi.getPosition() );
                     fheroes2::drawCastleName( *this, fheroes2::Display::instance(), dialogRoi.getPosition() );
                 }
+
+                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
+
                 display.render( dialogRoi );
             }
 
