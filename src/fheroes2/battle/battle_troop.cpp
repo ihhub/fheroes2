@@ -1542,6 +1542,9 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
 
             break;
         }
+        default:
+            break;
+        }
     }
 
     return dmg;
