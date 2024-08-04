@@ -100,7 +100,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     pos.x = box.GetArea().x + box.GetArea().width / 2 + 38;
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
-    text.set( std::to_string( expr ) + " (" + _( "XP Needed: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
+    text.set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
               fheroes2::FontType::smallWhite() );
     text.draw( pos.x + sprite_expr.width() / 2 - text.width() / 2, pos.y + 4, display );
 
