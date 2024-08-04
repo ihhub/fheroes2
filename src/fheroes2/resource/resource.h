@@ -33,7 +33,7 @@
 
 class StreamBase;
 
-struct cost_t
+struct Cost
 {
     uint16_t gold;
     uint8_t wood;
@@ -78,7 +78,7 @@ struct Funds
 
     Funds( const int type, const uint32_t count );
 
-    explicit Funds( const cost_t & cost )
+    explicit Funds( const Cost & cost )
         : wood( cost.wood )
         , mercury( cost.mercury )
         , ore( cost.ore )
@@ -98,7 +98,7 @@ struct Funds
     Funds & operator*=( uint32_t mul );
     Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & pm );
-    Funds & operator=( const cost_t & cost );
+    Funds & operator=( const Cost & cost );
 
     bool operator==( const Funds & other ) const;
     bool operator>=( const Funds & other ) const;
