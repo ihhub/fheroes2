@@ -1011,7 +1011,7 @@ bool Castle::isFortificationBuilt() const
 
 const char * Castle::GetStringBuilding( uint32_t build, int race )
 {
-    return fheroes2::getBuildingName( race, static_cast<building_t>( build ) );
+    return fheroes2::getBuildingName( race, static_cast<BuildingType>( build ) );
 }
 
 bool Castle::AllowBuyHero( std::string * msg ) const
@@ -1310,7 +1310,7 @@ BuildingStatus Castle::CheckBuyBuilding( const uint32_t build ) const
         break;
     }
 
-    const uint32_t requirement = fheroes2::getBuildingRequirement( race, static_cast<building_t>( build ) );
+    const uint32_t requirement = fheroes2::getBuildingRequirement( race, static_cast<BuildingType>( build ) );
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
         if ( ( requirement & itr ) && !( _constructedBuildings & itr ) ) {
@@ -2064,7 +2064,7 @@ uint32_t Castle::GetUpgradeBuilding( const uint32_t buildingId ) const
         return fheroes2::getUpgradeForBuilding( race, DWELLING_UPGRADE6 );
     }
 
-    return fheroes2::getUpgradeForBuilding( race, static_cast<building_t>( buildingId ) );
+    return fheroes2::getUpgradeForBuilding( race, static_cast<BuildingType>( buildingId ) );
 }
 
 bool Castle::PredicateIsCastle( const Castle * castle )
@@ -2611,7 +2611,7 @@ std::string Castle::GetStringBuilding( uint32_t build ) const
 
 std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 {
-    std::string res = fheroes2::getBuildingDescription( GetRace(), static_cast<building_t>( build ) );
+    std::string res = fheroes2::getBuildingDescription( GetRace(), static_cast<BuildingType>( build ) );
 
     switch ( build ) {
     case BUILD_WELL:

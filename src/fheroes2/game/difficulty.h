@@ -30,7 +30,7 @@
 
 class Kingdom;
 
-enum building_t : uint32_t;
+enum BuildingType : uint32_t;
 
 namespace Difficulty
 {
@@ -70,7 +70,7 @@ namespace Difficulty
     bool allowAIToSplitWeakStacks( const int difficulty );
 
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
-    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building );
+    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }
 
 #endif
