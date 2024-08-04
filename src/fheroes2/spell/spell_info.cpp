@@ -374,8 +374,11 @@ namespace fheroes2
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
+            // In the original game, AI could not use the Summon Boat spell at all, and many of the original maps (including the maps of the original campaign) were
+            // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
+            // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone).
             const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+            if ( boatColor != heroColor && ( boatColor != Color::NONE || hero.isControlAI() ) ) {
                 continue;
             }
 
