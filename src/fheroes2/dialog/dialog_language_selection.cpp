@@ -29,7 +29,9 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -246,14 +248,10 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Click to choose the selected language." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to choose the selected language." ), Dialog::ZERO );
             }
 
             if ( !listBox.IsNeedRedraw() ) {

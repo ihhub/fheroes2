@@ -23,26 +23,64 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "color.h"
 #include "icn.h"
 #include "image.h"
-#include "pal.h"
 #include "resource.h"
+#include "screen.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
 namespace Editor
 {
+    Checkbox::Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output )
+        : _color( boxColor )
+        , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
+    {
+        const int32_t icnIndex = ( _color == Color::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
+        const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
+
+        _area = { x, y, playerIcon.width(), playerIcon.height() };
+
+        fheroes2::Copy( playerIcon, 0, 0, output, _area );
+
+        _checkmark.setPosition( _area.x + 2, _area.y + 2 );
+
+        if ( checked ) {
+            _checkmark.show();
+        }
+        else {
+            _checkmark.hide();
+        }
+    }
+
+    bool Checkbox::toggle()
+    {
+        _checkmark.isHidden() ? _checkmark.show() : _checkmark.hide();
+
+        fheroes2::Display::instance().render( _area );
+
+        return !_checkmark.isHidden();
+    }
+
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
+                                const int32_t boxOffsetY, fheroes2::Image & output )
+    {
+        int32_t colorsAdded = 0;
+
+        for ( const int color : Colors( availableColors ) ) {
+            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, output ) );
+            ++colorsAdded;
+        }
+    }
+
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
                                          const bool isEvil )
     {
-        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-        if ( isEvil ) {
-            fheroes2::ApplyPalette( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height(),
-                                    PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-        }
-        else {
-            fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
-        }
+        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
+        fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
 
         fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
         const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
@@ -120,5 +158,19 @@ namespace Editor
 
         text.set( std::to_string( resources.gold ), fontType );
         text.draw( thirdColumnOffset + ( maxWidth * 2 + midElementOffsetX - text.width() ) / 2, offsetY[1] + 1, output );
+    }
+
+    std::string getDateDescription( const int32_t day )
+    {
+        std::string message = _( "Day: %{day} Week: %{week} Month: %{month}" );
+        int32_t days = day - 1;
+        const int32_t month = days / ( 7 * 4 );
+        days -= month * ( 7 * 4 );
+
+        StringReplace( message, "%{day}", ( days % 7 ) + 1 );
+        StringReplace( message, "%{week}", ( days / 7 ) + 1 );
+        StringReplace( message, "%{month}", month + 1 );
+
+        return message;
     }
 }

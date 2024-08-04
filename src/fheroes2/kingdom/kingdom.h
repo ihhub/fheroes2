@@ -35,7 +35,6 @@
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "players.h"
 #include "puzzle.h"
@@ -44,6 +43,11 @@
 class StreamBase;
 
 struct EventDate;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Maps
 {
@@ -88,7 +92,8 @@ public:
     // upgraded to a castle.
     bool canRecruitHeroes() const
     {
-        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+        return std::any_of( castles.begin(), castles.end(),
+                            []( const Castle * castle ) { return ( castle->isCastle() || !castle->isBuildingDisabled( BUILD_CASTLE ) ); } );
     }
 
     // Returns true if this kingdom has any heroes, false otherwise.
@@ -163,7 +168,7 @@ public:
     void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
-    void AddCastle( const Castle * );
+    void AddCastle( Castle * castle );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
@@ -245,7 +250,7 @@ public:
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );
-    void AddCastles( const AllCastles & );
+    void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms

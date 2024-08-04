@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <numeric>
 #include <random>
 #include <set>
@@ -57,6 +56,7 @@
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -182,7 +182,11 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
+                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
+                                                ICN::BUTTON_RUMORS_GOOD,
+                                                ICN::BUTTON_RUMORS_EVIL,
+                                                ICN::BUTTON_EVENTS_GOOD,
+                                                ICN::BUTTON_EVENTS_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -513,33 +517,6 @@ namespace
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-    }
-
-    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
-    {
-        // Evil interface has special elements at each corner of the window.
-        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
-
-        // If this assertion blows up you are using some modded resources. Good luck!
-        assert( original.width() == 321 && original.height() == 304 );
-
-        // Top-left corner.
-        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
-        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
-
-        // Top-right corner.
-        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
-        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
-
-        // Bottom-right corner.
-        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
-
-        // Bottom-left corner.
-        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
-        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
-        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
 
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
@@ -2105,6 +2082,28 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_RUMORS_GOOD:
+            case ICN::BUTTON_RUMORS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_RUMORS_EVIL );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RUMORS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EVENTS_EVIL );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EVENTS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2644,19 +2643,6 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BATTLESKIP:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
-
-                    // add 'skip'
-                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
-                }
-                return true;
             case ICN::BUYMAX:
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
@@ -2765,6 +2751,10 @@ namespace fheroes2
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
+            case ICN::BUTTON_RUMORS_GOOD:
+            case ICN::BUTTON_RUMORS_EVIL:
+            case ICN::BUTTON_EVENTS_GOOD:
+            case ICN::BUTTON_EVENTS_EVIL:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
@@ -2927,6 +2917,21 @@ namespace fheroes2
                         out = Crop( out, 0, 0, out.width() - 1, out.height() );
                     }
                 }
+
+                if ( _icnVsSprite[id].size() == 25 ) {
+                    // Add random town and castle icons for Editor.
+                    // A temporary solution: blurred Wizard castle/town in purple palette.
+                    _icnVsSprite[id].resize( 27 );
+                    _icnVsSprite[id][25] = CreateHolyShoutEffect( _icnVsSprite[id][13], 1, 0 );
+                    _icnVsSprite[id][26] = CreateHolyShoutEffect( _icnVsSprite[id][19], 1, 0 );
+                    ApplyPalette( _icnVsSprite[id][25], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                    ApplyPalette( _icnVsSprite[id][26], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+                    // Add the '?' mark above the image.
+                    const Text text( "? ? ?", FontType::normalWhite() );
+                    text.draw( ( _icnVsSprite[id][25].width() - text.width() ) / 2, 6, _icnVsSprite[id][25] );
+                    text.draw( ( _icnVsSprite[id][26].width() - text.width() ) / 2, 6, _icnVsSprite[id][26] );
+                }
                 return true;
             case ICN::TOWNBKG2:
                 LoadOriginalICN( id );
@@ -2952,12 +2957,6 @@ namespace fheroes2
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                     }
-                }
-                return true;
-            case ICN::LISTBOX_EVIL:
-                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
-                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
-                    ApplyPalette( sprite, 2 );
                 }
                 return true;
             case ICN::MONS32:
@@ -3183,6 +3182,35 @@ namespace fheroes2
                 _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
                 for ( auto & image : _icnVsSprite[id] ) {
                     convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
+                }
+                return true;
+            }
+            case ICN::DROPLISL_EVIL: {
+                loadICN( ICN::DROPLISL );
+                _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+
+                // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+                const std::vector<uint8_t> palette
+                    = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                for ( auto & image : _icnVsSprite[id] ) {
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                }
+                return true;
+            }
+            case ICN::CELLWIN_EVIL: {
+                loadICN( ICN::CELLWIN );
+
+                if ( _icnVsSprite[ICN::CELLWIN].size() > 18 ) {
+                    // Convert to Evil only the first 19 images. The rest are not standard buttons and are player color related settings used in original editor.
+                    _icnVsSprite[ICN::CELLWIN_EVIL].resize( 19 );
+                    std::copy( _icnVsSprite[ICN::CELLWIN].begin(), _icnVsSprite[ICN::CELLWIN].begin() + 19, _icnVsSprite[ICN::CELLWIN_EVIL].begin() );
+
+                    // To convert the yellow borders of some items the combination of good-to-evil and gray palettes is used here.
+                    const std::vector<uint8_t> palette
+                        = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                    for ( Sprite & image : _icnVsSprite[ICN::CELLWIN_EVIL] ) {
+                        fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                    }
                 }
                 return true;
             }
@@ -4089,6 +4117,15 @@ namespace fheroes2
                     Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
                 }
                 return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 82 ) {
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution is below.
+                    const Sprite & originalImage = GetICN( ICN::ARTIFACT, 83 );
+                    SubpixelResize( originalImage, _icnVsSprite[id][82] );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -4102,6 +4139,12 @@ namespace fheroes2
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
                     }
+
+                    // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
+                    // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
+                    Sprite & targetImage = _icnVsSprite[id][83];
+                    targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );
+                    ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
                 }
                 return true;
             case ICN::OBJNARTI:
@@ -4292,28 +4335,6 @@ namespace fheroes2
                 convertToEvilInterface( output, roi );
 
                 _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
-
-                return true;
-            }
-            case ICN::RECR2BKG_EVIL: {
-                GetICN( ICN::RECR2BKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
-
-                return true;
-            }
-            case ICN::RECRBKG_EVIL: {
-                GetICN( ICN::RECRBKG, 0 );
-                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
-                if ( !_icnVsSprite[id].empty() ) {
-                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                    convertToEvilInterface( _icnVsSprite[id][0], roi );
-                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
-                }
 
                 return true;
             }
@@ -4919,6 +4940,48 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() == 131 ) {
                     _icnVsSprite[id].resize( 132 );
                     h2d::readImage( "missing_sphinx_part.image", _icnVsSprite[id][131] );
+                }
+
+                return true;
+            }
+            case ICN::OBJNGRAS: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 151 ) {
+                    _icnVsSprite[id].resize( 153 );
+
+                    loadICN( ICN::OBJNSNOW );
+
+                    if ( _icnVsSprite[ICN::OBJNSNOW].size() > 210 ) {
+                        fheroes2::Sprite temp;
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-01.image", temp );
+                        _icnVsSprite[id][151] = _icnVsSprite[ICN::OBJNSNOW][2];
+                        Blit( temp, _icnVsSprite[id][151] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][151], 255, 1 );
+
+                        h2d::readImage( "adventure-map-grass-cave-diff-02.image", temp );
+                        _icnVsSprite[id][152] = _icnVsSprite[ICN::OBJNSNOW][3];
+                        Blit( temp, _icnVsSprite[id][152] );
+
+                        ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+                    }
+                }
+
+                return true;
+            }
+            case ICN::OBJNMUL2: {
+                LoadOriginalICN( id );
+                auto & images = _icnVsSprite[id];
+                if ( images.size() == 218 ) {
+                    // Add 2 extra river deltas. Each delta has 7 parts.
+                    images.resize( 218 + 14 );
+
+                    for ( size_t i = 0; i < 14; ++i ) {
+                        images[218 + i].resize( images[i].height(), images[i].width() );
+                        fheroes2::Transpose( images[i], images[218 + i] );
+                        images[218 + i].setPosition( images[i].y(), images[i].x() );
+                    }
                 }
 
                 return true;

@@ -25,10 +25,8 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <deque>
 #include <list>
 #include <map>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -37,10 +35,13 @@
 #include "castle.h"
 #include "color.h"
 #include "gamedefs.h"
+#include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
 #include "race.h"
 #include "world.h"
@@ -88,6 +89,33 @@ namespace
             unitCount[i] = static_cast<int32_t>( troop->GetCount() );
         }
     }
+
+    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            for ( const auto & object : map.tiles[i].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( i ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
+                        hero->SetColor( color );
+                    }
+                }
+            }
+        }
+    }
 }
 
 namespace Maps
@@ -101,6 +129,8 @@ namespace Maps
         }
 
         world.updatePassabilities();
+
+        updateWorldCastlesHeroes( map );
 
         return true;
     }
@@ -190,18 +220,24 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        std::deque<const TilesAddon *> roadParts;
-        std::deque<const TilesAddon *> streamParts;
+        // A tile cannot contain an exactly the same road or stream parts.
+        std::set<std::pair<uint32_t, uint8_t>> roadParts;
+        std::set<std::pair<uint32_t, uint8_t>> streamParts;
+
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
+        if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            roadParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+        }
+        else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+            streamParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+        }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.push_back( &addon );
-                }
-                else {
-                    streamParts.push_back( &addon );
-                }
+            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( addon._uid, addon._imageIndex );
+            }
+            else if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace( addon._uid, addon._imageIndex );
             }
         }
 
@@ -210,36 +246,36 @@ namespace Maps
 
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = roadParts.front()->_uid;
-                object.index = roadParts.front()->_imageIndex;
-                roadParts.pop_front();
+                object.id = roadParts.begin()->first;
+                object.index = roadParts.begin()->second;
+                roadParts.erase( roadParts.begin() );
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = streamParts.front()->_uid;
-                object.index = streamParts.front()->_imageIndex;
-                streamParts.pop_front();
+                object.id = streamParts.begin()->first;
+                object.index = streamParts.begin()->second;
+                streamParts.erase( streamParts.begin() );
             }
 
             ++objectIndex;
         }
 
-        for ( const TilesAddon * addon : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
-        for ( const TilesAddon * addon : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, index, uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
@@ -441,20 +477,10 @@ namespace Maps
         // Update map format settings based on the gathered information.
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
-            if ( heroColorsPresent[i] || townColorsPresent[i] ) {
-                assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
+            map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
 
+            if ( map.playerRace[i] != 0 ) {
                 map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
-                map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
-
-                if ( map.playerRace[i] == 0 ) {
-                    map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
-                }
-            }
-            else {
-                assert( heroRacesPresent[i] == 0 && townRacesPresent[i] == 0 );
-
-                map.playerRace[i] = 0;
             }
 
             // Only one race can be present.
@@ -512,11 +538,19 @@ namespace Maps
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
                     uint8_t & allianceColors = *iter;
 
+                    // Only available players should be in the alliances.
+                    allianceColors &= map.availablePlayerColors;
+
                     for ( size_t i = 0; i < mainColors; ++i ) {
                         const uint8_t color = static_cast<uint8_t>( 1 << i );
-                        if ( ( allianceColors & color ) != 0 && usedAllianceColors[i] ) {
-                            // This color is used in another alliance. Remove it from here.
-                            allianceColors = allianceColors & ( ~color );
+                        if ( ( allianceColors & color ) != 0 ) {
+                            if ( usedAllianceColors[i] ) {
+                                // This color is used in another alliance. Remove it from here.
+                                allianceColors = allianceColors & ( ~color );
+                            }
+                            else {
+                                usedAllianceColors[i] = true;
+                            }
                         }
                     }
 
@@ -561,6 +595,101 @@ namespace Maps
         for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
             eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
             eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
+        }
+
+        // Check and update the special victory and loss conditions that depend on player objects.
+
+        // Returns true if all is OK.
+        auto checkSpecialCondition = [&map, &heroObjects, &townObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
+            if ( conditionMetadata.size() != 2 ) {
+                return false;
+            }
+
+            // Verify that this is a valid map object.
+            const uint32_t tileIndex = conditionMetadata[0];
+
+            assert( tileIndex < map.tiles.size() );
+
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != objectGroup ) {
+                    continue;
+                }
+
+                switch ( objectGroup ) {
+                case Maps::ObjectGroup::KINGDOM_TOWNS: {
+                    if ( object.index >= townObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                    if ( color != conditionMetadata[1] ) {
+                        // Current town color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                case Maps::ObjectGroup::KINGDOM_HEROES: {
+                    if ( object.index >= heroObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = 1 << heroObjects[object.index].metadata[0];
+                    if ( color != conditionMetadata[1] ) {
+                        // Current hero color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                default:
+                    // Have you added a new object type for victory or loss conditions? Update the logic!
+                    assert( 0 );
+                    break;
+                }
+            }
+
+            return false;
+        };
+
+        switch ( map.victoryConditionType ) {
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        case Maps::FileInfo::VICTORY_KILL_HERO:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        default:
+            break;
+        }
+
+        switch ( map.lossConditionType ) {
+        case Maps::FileInfo::LOSS_TOWN:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        case Maps::FileInfo::LOSS_HERO:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, Maps::ObjectGroup::KINGDOM_HEROES ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = Maps::FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        default:
+            break;
         }
 
         return true;

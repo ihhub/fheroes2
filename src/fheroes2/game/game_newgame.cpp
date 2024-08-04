@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <array>
 #include <cassert>
@@ -52,6 +52,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "screen.h"
@@ -130,11 +131,10 @@ namespace
 
     void showMissingVideoFilesWindow()
     {
-        fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
-                               fheroes2::Text{ _( "The required video files for the campaign selection window are missing. "
-                                                  "Please make sure that all necessary files are present in the system." ),
-                                               fheroes2::FontType::normalWhite() },
-                               Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning!" ),
+                                           _( "The required video files for the campaign selection window are missing. "
+                                              "Please make sure that all necessary files are present in the system." ),
+                                           Dialog::OK );
     }
 }
 
@@ -144,8 +144,7 @@ fheroes2::GameMode Game::NewStandard()
     if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( {} );
     conf.SetGameType( Game::TYPE_STANDARD );
-    conf.SetPreferablyCountPlayers( 0 );
-    return fheroes2::GameMode::SELECT_SCENARIO;
+    return fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER;
 }
 
 fheroes2::GameMode Game::NewBattleOnly()
@@ -163,8 +162,6 @@ fheroes2::GameMode Game::NewHotSeat()
         conf.SetCurrentFileInfo( {} );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
-        conf.SetPreferablyCountPlayers( 2 );
-
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
         fheroes2::drawMainMenuScreen();
 
@@ -172,10 +169,21 @@ fheroes2::GameMode Game::NewHotSeat()
     }
     else {
         conf.SetGameType( Game::TYPE_HOTSEAT );
-        const uint32_t select = SelectCountPlayers();
-        if ( select > 0 ) {
-            conf.SetPreferablyCountPlayers( select );
-            return fheroes2::GameMode::SELECT_SCENARIO;
+        const uint8_t humanPlayerCount = SelectCountPlayers();
+
+        switch ( humanPlayerCount ) {
+        case 2:
+            return fheroes2::GameMode::SELECT_SCENARIO_TWO_HUMAN_PLAYERS;
+        case 3:
+            return fheroes2::GameMode::SELECT_SCENARIO_THREE_HUMAN_PLAYERS;
+        case 4:
+            return fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS;
+        case 5:
+            return fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS;
+        case 6:
+            return fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS;
+        default:
+            break;
         }
     }
     return fheroes2::GameMode::MAIN_MENU;
@@ -648,7 +656,7 @@ fheroes2::GameMode Game::NewMulti()
     return fheroes2::GameMode::QUIT_GAME;
 }
 
-uint32_t Game::SelectCountPlayers()
+uint8_t Game::SelectCountPlayers()
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

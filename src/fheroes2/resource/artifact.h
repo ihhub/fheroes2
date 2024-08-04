@@ -33,12 +33,16 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "ui_tool.h"
 
 class Heroes;
 class StatusBar;
 class StreamBase;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 class Artifact
 {
@@ -146,10 +150,12 @@ public:
 
         MAGIC_BOOK,
 
+        // This entry is used in Editor for the special victory conditions.
+        EDITOR_ANY_ULTIMATE_ARTIFACT,
+
         // These four artifacts are used in original editor for the Ultimate and Random artifacts.
         // They should not exist and used on the adventure map after the game is properly started.
         // We do not use these or create extra entries for the Ultimate and Random artifacts in editor.
-        UNUSED_83,
         UNUSED_84,
         UNUSED_85,
         UNUSED_86,
@@ -210,7 +216,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < UNUSED_83 || id > UNUSED_86 );
+        return id != UNKNOWN && id != EDITOR_ANY_ULTIMATE_ARTIFACT && id < ARTIFACT_COUNT && ( id < UNUSED_84 || id > UNUSED_86 );
     }
 
     void Reset()

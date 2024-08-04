@@ -28,14 +28,13 @@
 #include <cstddef>
 #include <iterator>
 #include <map>
-#include <memory>
-#include <ostream>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -43,9 +42,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -77,7 +74,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -602,10 +598,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
 
-    if ( isControlAI() ) {
-        AI::Get().HeroesPostLoad( *this );
-    }
-
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
@@ -1034,11 +1026,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
             result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
         }
-    }
-
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
     }
 
     return result;
@@ -1602,8 +1589,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                   Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1613,9 +1599,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         header.append( _( "Do you wish to buy one?" ) );
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } )
-             == Dialog::NO ) {
+        if ( fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
             return false;
         }
     }
@@ -1654,7 +1638,7 @@ void Heroes::SetMove( const bool enable )
         ResetModes( SLEEPER );
 
         if ( isControlAI() ) {
-            AI::Get().HeroesBeginMovement( *this );
+            AI::Planner::Get().HeroesBeginMovement( *this );
         }
 
         SetModes( ENABLEMOVE );
@@ -1665,10 +1649,6 @@ void Heroes::SetMove( const bool enable )
         }
 
         ResetModes( ENABLEMOVE );
-
-        if ( isControlAI() ) {
-            AI::Get().HeroesFinishMovement( *this );
-        }
 
         // Reset the hero sprite
         resetHeroSprite();
@@ -1846,10 +1826,9 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
-    if ( !skipsecondary )
-        LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
-    if ( isControlAI() )
-        AI::Get().HeroesLevelUp( *this );
+    if ( !skipsecondary ) {
+        LevelUpSecondarySkill( seeds, primarySkill, autoselect );
+    }
 }
 
 void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
@@ -1875,6 +1854,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         else {
             selected = sec1.isValid() ? sec1 : sec2;
         }
+    }
+    else if ( isControlAI() ) {
+        selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );
@@ -2030,8 +2012,9 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( isControlAI() )
-        AI::Get().HeroesActionNewPosition( *this );
+    if ( isControlAI() ) {
+        AI::Planner::Get().HeroesActionNewPosition( *this );
+    }
 
     ResetModes( VISIONS );
 }
@@ -2174,8 +2157,6 @@ std::string Heroes::String() const
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl
            << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
-
-        os << AI::Get().HeroesString( *this );
     }
 
     return os.str();

@@ -909,7 +909,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
@@ -920,7 +919,6 @@ namespace ICN
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
-        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
@@ -968,7 +966,6 @@ namespace ICN
         MONO_CURSOR_CMSSBW,
 
         ESPANBKG_EVIL,
-        RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
         UNIFORMBAK_GOOD,
@@ -977,9 +974,10 @@ namespace ICN
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
-        RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
         EDITBTNS_EVIL,
+        DROPLISL_EVIL,
+        CELLWIN_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
@@ -1115,6 +1113,11 @@ namespace ICN
         BUTTON_SAVE_MAP_GOOD,
         BUTTON_LOAD_MAP_EVIL,
         BUTTON_LOAD_MAP_GOOD,
+
+        BUTTON_RUMORS_GOOD,
+        BUTTON_RUMORS_EVIL,
+        BUTTON_EVENTS_GOOD,
+        BUTTON_EVENTS_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

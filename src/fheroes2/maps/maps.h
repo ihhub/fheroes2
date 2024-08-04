@@ -28,11 +28,15 @@
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
 
 #define TILEWIDTH 32
 
 class Heroes;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 using MapsIndexes = std::vector<int32_t>;
 
@@ -91,8 +95,8 @@ namespace Maps
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor );
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scoutingDistance, const int playerColor );
+    void ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
 
     // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
     // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to

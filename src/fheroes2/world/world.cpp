@@ -27,14 +27,12 @@
 #include <array>
 #include <cassert>
 #include <limits>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_planner.h"
 #include "artifact.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -329,7 +327,7 @@ void World::Reset()
     vec_eventsday.clear();
 
     // rumors
-    _rumors.clear();
+    _customRumors.clear();
 
     // castles
     vec_castles.Clear();
@@ -711,7 +709,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 std::string World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
-    const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
+    const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
     switch ( chosenRumorId ) {
@@ -779,7 +777,7 @@ std::string World::getCurrentRumor() const
     }
 
     assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
-    return _rumors[chosenRumorId - standardRumorCount];
+    return _customRumors[chosenRumorId - standardRumorCount];
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -988,7 +986,7 @@ void World::ActionForMagellanMaps( int color )
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             if ( isAIPlayer && tile.isFog( color ) ) {
-                AI::Get().revealFog( tile, kingdom );
+                AI::Planner::Get().revealFog( tile, kingdom );
             }
 
             tile.ClearFog( alliedColors );
@@ -1287,13 +1285,17 @@ std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 void World::resetPathfinder()
 {
     _pathfinder.reset();
-    AI::Get().resetPathfinder();
+    AI::Planner::Get().resetPathfinder();
 }
 
 void World::updatePassabilities()
 {
     for ( Maps::Tiles & tile : vec_tiles ) {
-        tile.updateEmpty();
+        // If tile is empty then update tile's object type if needed.
+        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+            tile.updateObjectType();
+        }
+
         tile.setInitialPassability();
     }
 
@@ -1441,7 +1443,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
+    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._customRumors << w.vec_eventsday << w.map_captureobj
                << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
 }
 
@@ -1460,8 +1462,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         msg >> w.width >> w.height;
     }
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
+        >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {

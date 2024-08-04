@@ -621,7 +621,13 @@ namespace
             return filteredResolutions;
         }
 
-    protected:
+    private:
+        SDL_Window * _window;
+        SDL_Surface * _surface;
+        vita2d_texture * _texBuffer;
+        uint8_t * _palettedTexturePointer;
+        fheroes2::Rect _destRect;
+
         RenderEngine()
             : _window( nullptr )
             , _surface( nullptr )
@@ -738,13 +744,6 @@ namespace
         {
             return true;
         }
-
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        vita2d_texture * _texBuffer;
-        uint8_t * _palettedTexturePointer;
-        fheroes2::Rect _destRect;
 
         void _createPalette()
         {
@@ -1069,7 +1068,7 @@ namespace
 #if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a hint for screen orientation." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_ORIENTATIONS " hint." )
             }
 #endif
 
@@ -1292,13 +1291,13 @@ namespace
             }
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
             }
 
             // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
             // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
             if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
             }
 
             returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );

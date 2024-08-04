@@ -312,13 +312,11 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
         player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
         if ( player != nullptr ) {
-            fheroes2::
-                showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
-                             fheroes2::Text( _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
-                                                "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                "respectively." ),
-                                             fheroes2::FontType::normalWhite() ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Handicap" ),
+                                               _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
+                                                  "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
+                                                  "respectively." ),
+                                               Dialog::ZERO );
             return true;
         }
 
@@ -442,22 +440,15 @@ bool Interface::PlayersInfo::readOnlyEventProcessing()
     if ( player != nullptr ) {
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
-            fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "No Handicap" ), _( "No special restrictions on starting resources and resource income per turn." ), Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:
-            fheroes2::showMessage( fheroes2::Text( _( "Mild Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Mild Handicap" ), _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
+                                               Dialog::ZERO );
             break;
         case Player::HandicapStatus::SEVERE:
-            fheroes2::showMessage( fheroes2::Text( _( "Severe Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Severe Handicap" ),
+                                               _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ), Dialog::ZERO );
             break;
         default:
             // Did you add a new handicap status? Add the logic above!

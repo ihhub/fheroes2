@@ -25,7 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <ostream>
+#include <sstream>
 
 #include "agg_image.h"
 #include "army.h"

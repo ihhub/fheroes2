@@ -29,10 +29,10 @@ CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 endif
 
 SOURCEROOT := ../fheroes2
-SOURCEDIR  := $(filter %/,$(wildcard $(SOURCEROOT)/*/)) $(filter %/,$(wildcard $(SOURCEROOT)/*/*/))
+SOURCEDIR  := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
 POT        := $(TARGET).pot
 
-SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
+SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp)
 
 .PHONY: all clean pot
 

@@ -37,6 +37,71 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-07-13" version="v1.1.1">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.1</url>
+      <description>
+        <p>Changes in v1.1.1 (13 July 2024):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>properly set tile information upon placing a new object</li>
+          <li>update the Hungarian translation</li>
+          <li>implement special victory and loss conditions for heroes and towns</li>
+          <li>add Evil theme for ADD, EDIT and DELETE buttons in the Editor</li>
+          <li>fix object UID restoration after Redo operation in the Editor</li>
+          <li>add support for double click within Sphinx, Daily Events and Rumors lists</li>
+          <li>show date description for daily events</li>
+          <li>allow to disable any building in castles and towns in the Editor</li>
+          <li>add Find Artifact victory condition in Editor</li>
+          <li>add popup messages for right clicking on special map conditions</li>
+          <li>restrict obelisk placement to 48 objects</li>
+          <li>update logic related to human player selection for maps</li>
+          <li>fix crash when entering an empty line in text boxes</li>
+          <li>fix town placement over action objects</li>
+          <li>allow normal victory for "Accumulate gold" condition</li>
+          <li>fix the display of identical artifacts captured in battle</li>
+          <li>Magic Book window: show the maximum number of spell points</li>
+          <li>add "Out of Time" and "Accumulate Gold" map conditions within the Editor</li>
+          <li>add support of editing daily events within the Editor</li>
+          <li>show pressed monster button on Editor panel while clicking on it</li>
+          <li>add hotkey for passability within the Editor</li>
+          <li>add color names to Traveller's Tent and Barrier objects within object selection window</li>
+          <li>reduce castle area for mouse right clicking inside Editor's castle selection window</li>
+          <li>update map type popup message by right clicking to include Resurrection maps</li>
+          <li>add a new variation of Cave object on the Adventure Map</li>
+          <li>change hero selection dialog in the Editor</li>
+          <li>add an ability in the Editor to edit Rumors for maps</li>
+          <li>bring the logic of the Summon Boat spell for the human player in line with its logic of operation in the case of AI</li>
+          <li>AI: fix the assertion failure when visiting an object that is impossible to stand on</li>
+          <li>fix castle and hero radar rendering in the Editor</li>
+          <li>fix Magic Garden being shown without animation within the Editor</li>
+          <li>speed up save file loading and saving operations</li>
+          <li>add '?' symbol to Virtual Keyboard</li>
+          <li>properly check the Price of Loyalty resources in order to enable the Editor</li>
+          <li>move an existing object in front while trying to place an exact one on the same tile in the Editor</li>
+          <li>generate a random hero portrait for the Editor</li>
+          <li>fix crash when a hero is killed defending a castle</li>
+          <li>differentiate Random Castle and Town names in the Editor</li>
+          <li>update the Swedish translation</li>
+          <li>fix invalid logic for setting random artifacts</li>
+          <li>put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites</li>
+          <li>remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels</li>
+          <li>limit the minimum slider length to 15 pixels</li>
+          <li>update the Portuguese translation</li>
+          <li>fix hero editing assertion</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix random artifact types</li>
+          <li>implement the file manager for FH2M maps in Android</li>
+          <li>force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts</li>
+          <li>fix Editor instruments' buttons rendering</li>
+          <li>AI: properly handle the Spell Book artifacts on the Adventure Map</li>
+          <li>add missing checks for Miscellaneous objects in the Editor</li>
+          <li>add missing Sphinx part</li>
+          <li>fix text editing crash</li>
+          <li>fix crash when using quick switch to hero when castle is current object</li>
+          <li>fix the evaluation of the DOUBLE_SHOOTING and DOUBLE_MELEE_ATTACK abilities</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-05-22" version="v1.1.0">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.0</url>
       <description>

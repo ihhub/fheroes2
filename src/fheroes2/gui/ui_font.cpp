@@ -24,8 +24,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
-#include <memory>
 
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -2345,6 +2345,7 @@ namespace
             updateSmallFontLetterShadow( font[255 - 32] );
         }
     }
+
     // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
@@ -2365,7 +2366,7 @@ namespace
             font[161 - 32].reset();
             fheroes2::Copy( font[33 - 32], 1, 0, font[161 - 32], 1, 3, font[33 - 32].width(), font[33 - 32].height() );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[161 - 32], false, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[161 - 32], false, true );
                 fheroes2::Copy( temp, 0, 2, font[161 - 32], 1, 2, temp.width(), temp.height() );
             }
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
@@ -2400,7 +2401,7 @@ namespace
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 11 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[191 - 32], true, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[191 - 32], true, true );
                 fheroes2::Copy( temp, 1, 2, font[191 - 32], 0, 0, temp.width(), temp.height() );
             }
             // Remove old shadows
@@ -2925,7 +2926,7 @@ namespace
             font[161 - 32].reset();
             fheroes2::Copy( font[33 - 32], 1, 0, font[161 - 32], 1, 0, font[33 - 32].width(), 7 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[161 - 32], false, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[161 - 32], false, true );
                 fheroes2::Copy( temp, 0, 1, font[161 - 32], 0, 0, temp.width(), temp.height() );
             }
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
@@ -2936,7 +2937,7 @@ namespace
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 7 );
             {
-                fheroes2::Sprite temp = fheroes2::Flip( font[191 - 32], true, true );
+                const fheroes2::Image temp = fheroes2::Flip( font[191 - 32], true, true );
                 fheroes2::Copy( temp, 0, 1, font[191 - 32], 0, 0, temp.width(), temp.height() );
             }
             // Remove old shadows
@@ -5248,6 +5249,7 @@ namespace
         // Offset symbols that either have diacritics or need less space to neighboring symbols.
         released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[129].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[133].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
@@ -5289,6 +5291,14 @@ namespace
         // J
         released[131] = released[42];
 
+        // GHE with upturn.
+        released[133].resize( 8 + offset * 2, 12 + offset * 2 );
+        released[133].reset();
+        fheroes2::DrawLine( released[133], { offset + 0, offset + 2 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 7, offset + 0 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 0, offset + 11 }, { offset + 2, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 1, offset + 3 }, { offset + 1, offset + 10 }, buttonGoodReleasedColor );
+
         // E with two dots above.
         released[136].resize( released[37].width() - 1, released[37].height() + 3 );
         released[136].reset();
@@ -5296,6 +5306,8 @@ namespace
                         released[37].height() - offset * 2 );
         fheroes2::SetPixel( released[136], offset + 3, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[136], offset + 6, offset + 1, buttonGoodReleasedColor );
+
+        // Ukrainian IE (index 138) is made after the letter with index 189.
 
         // I with two dots above, Cyrillic YI
         released[143].resize( released[41].width(), released[41].height() + 3 );
@@ -5590,6 +5602,11 @@ namespace
         fheroes2::SetPixel( released[189], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 6, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 6, offset + 8, buttonGoodReleasedColor );
+
+        // Ukrainian IE. Make it by mirroring horizontally the previous letter.
+        released[138].resize( 8 + offset * 2, 10 + offset * 2 );
+        released[138].reset();
+        fheroes2::Blit( released[189], released[138], true );
 
         // IO, Cyrillic YU
         released[190].resize( 11 + offset * 2, 10 + offset * 2 );
@@ -5931,6 +5948,13 @@ namespace fheroes2
         icnVsSprite[13].setPosition( icnVsSprite[13].x(), icnVsSprite[13].y() + 1 );
         updateNormalFontLetterShadow( icnVsSprite[13] );
 
+        // Add the '\' character.
+        icnVsSprite[60].resize( 8, 14 );
+        icnVsSprite[60].reset();
+        fheroes2::Blit( icnVsSprite[15], 0, 0, icnVsSprite[60], 1, 0, 7, 12, true );
+        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
+        updateNormalFontLetterShadow( icnVsSprite[60] );
+
         // Proper lowercase k.
         fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
         fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
@@ -5957,6 +5981,16 @@ namespace fheroes2
         fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
         fheroes2::FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
         updateNormalFontLetterShadow( icnVsSprite[5] );
+
+        // Add the '\' character.
+        icnVsSprite[60].resize( 5, 9 );
+        icnVsSprite[60].reset();
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 1, 0, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 2, 2, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 3, 4, 1, 2 );
+        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 4, 6, 1, 2 );
+        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
+        updateSmallFontLetterShadow( icnVsSprite[60] );
 
         // Proper lowercase k.
         icnVsSprite[75].resize( 6, 8 );

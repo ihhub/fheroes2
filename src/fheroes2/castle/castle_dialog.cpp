@@ -35,7 +35,7 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "captain.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "castle_building_info.h"
 #include "color.h"
 #include "cursor.h"
@@ -612,7 +612,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                         case BUILD_TENT: {
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( !Modes( ALLOWCASTLE ) ) {
+                            if ( isBuildingDisabled( BUILD_CASTLE ) ) {
                                 fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {

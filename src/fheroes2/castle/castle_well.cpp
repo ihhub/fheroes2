@@ -33,7 +33,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "battle_cell.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -177,15 +177,14 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         }
         if ( isCreaturePresent ) {
             if ( !canAffordOneCreature ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to recruit creatures." ), normalWhite ), Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "Not enough resources to recruit creatures." ), Dialog::OK );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "You are unable to recruit at this time, your ranks are full." ), normalWhite ),
-                                       Dialog::OK );
+                fheroes2::showStandardTextMessage( {}, _( "You are unable to recruit at this time, your ranks are full." ), Dialog::OK );
             }
         }
         else {
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ), Dialog::OK );
+            fheroes2::showStandardTextMessage( {}, _( "No creatures available for purchase." ), Dialog::OK );
         }
     }
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit Creatures" ), fheroes2::FontType::normalYellow() ),
@@ -267,7 +266,7 @@ void Castle::OpenWell()
         }
 
         for ( size_t dwellingId = 0; dwellingId < CASTLEMAXMONSTER; ++dwellingId ) {
-            if ( building & castleDwellings[dwellingId] ) {
+            if ( _constructedBuildings & castleDwellings[dwellingId] ) {
                 if ( le.MouseClickLeft( rectMonster[dwellingId] ) || pressedHotkeyBuildingID == castleDwellings[dwellingId] ) {
                     if ( RecruitMonster( Dialog::RecruitMonster( castleMonster[dwellingId], dwelling[dwellingId], true, 2 ) ) ) {
                         // Update available monster count on background.
@@ -297,20 +296,18 @@ void Castle::OpenWell()
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Max" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Hire all creatures in the town." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Max" ), _( "Hire all creatures in the town." ), Dialog::ZERO );
         }
     }
 }
 
 void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const
 {
-    if ( !( building & dwellingType ) ) {
+    if ( !( _constructedBuildings & dwellingType ) ) {
         // This building has not been built.
         return;
     }
@@ -404,25 +401,25 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
             break;
         case DWELLING_MONSTER2:
             offset.y = 151;
-            icnIndex = DWELLING_UPGRADE2 & building ? 25 : 20;
+            icnIndex = DWELLING_UPGRADE2 & _constructedBuildings ? 25 : 20;
             break;
         case DWELLING_MONSTER3:
             offset.y = 301;
-            icnIndex = DWELLING_UPGRADE3 & building ? 26 : 21;
+            icnIndex = DWELLING_UPGRADE3 & _constructedBuildings ? 26 : 21;
             break;
         case DWELLING_MONSTER4:
             offset.x = 314;
-            icnIndex = DWELLING_UPGRADE4 & building ? 27 : 22;
+            icnIndex = DWELLING_UPGRADE4 & _constructedBuildings ? 27 : 22;
             break;
         case DWELLING_MONSTER5:
             offset.x = 314;
             offset.y = 151;
-            icnIndex = DWELLING_UPGRADE5 & building ? 28 : 23;
+            icnIndex = DWELLING_UPGRADE5 & _constructedBuildings ? 28 : 23;
             break;
         case DWELLING_MONSTER6:
             offset.x = 314;
             offset.y = 301;
-            icnIndex = DWELLING_UPGRADE7 & building ? 30 : ( DWELLING_UPGRADE6 & building ? 29 : 24 );
+            icnIndex = DWELLING_UPGRADE7 & _constructedBuildings ? 30 : ( DWELLING_UPGRADE6 & _constructedBuildings ? 29 : 24 );
             break;
         default:
             // Have you added a new dwelling?
@@ -514,12 +511,12 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
         renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 
         // If dwelling is built show growth and available population.
-        if ( building & dwellingType ) {
+        if ( _constructedBuildings & dwellingType ) {
             uint32_t monsterGrown = monster.GetGrown();
-            monsterGrown += building & BUILD_WELL ? GetGrownWell() : 0;
+            monsterGrown += _constructedBuildings & BUILD_WELL ? GetGrownWell() : 0;
 
             if ( DWELLING_MONSTER1 & dwellingType ) {
-                monsterGrown += building & BUILD_WEL2 ? GetGrownWel2() : 0;
+                monsterGrown += _constructedBuildings & BUILD_WEL2 ? GetGrownWel2() : 0;
             }
 
             text.set( _( "Growth" ), statsFontType );

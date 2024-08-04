@@ -24,8 +24,8 @@
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <ostream>
+#include <string>
 #include <utility>
 
 #include "agg.h"

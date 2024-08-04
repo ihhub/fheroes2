@@ -29,15 +29,14 @@
 #include <cstdlib>
 #include <ostream>
 
-#include "ai.h"
-#include "difficulty.h"
+#include "ai_planner.h"
 #include "direction.h"
-#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "mp2.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
@@ -344,26 +343,21 @@ MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
     return monsters;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor )
+void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
         return;
     }
 
-    const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-    // AI is cheating!
     const Kingdom & kingdom = world.GetKingdom( playerColor );
-    const bool isAIPlayer = kingdom.isControlAI();
-    if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
-    }
 
-    const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isAIPlayer = kingdom.isControlAI();
     const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
+    const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
+    const int alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
@@ -384,7 +378,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
             if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                 Maps::Tiles & tile = world.GetTiles( x, y );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
-                    AI::Get().revealFog( tile, kingdom );
+                    AI::Planner::Get().revealFog( tile, kingdom );
                 }
 
                 if ( tile.isFog( alliedColors ) ) {
@@ -412,20 +406,13 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scoutingDistance, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         return 0;
     }
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-    // AI is cheating!
-    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
-    if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
-    }
-
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
@@ -708,9 +695,11 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
                                            { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
+    const uint8_t indexOffset = isCastle ? 0 : 16;
+
     for ( uint8_t index = 0; index < 16; ++index ) {
-        const uint8_t fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
-        const uint8_t lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
+        const uint8_t fullTownIndex = index + indexOffset + raceIndex * 32;
+        const uint8_t lookupID = isRandom ? index + indexOffset : fullTownIndex;
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {

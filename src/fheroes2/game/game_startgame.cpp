@@ -21,20 +21,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -46,7 +46,7 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -158,8 +158,6 @@ fheroes2::GameMode Game::StartBattleOnly()
 
 fheroes2::GameMode Game::StartGame()
 {
-    AI::Get().Reset();
-
     const Settings & conf = Settings::Get();
 
     // setup cursor
@@ -205,8 +203,7 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
@@ -862,7 +859,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Get().KingdomTurn( kingdom );
+                    AI::Planner::Get().KingdomTurn( kingdom );
 
 #if defined( WITH_DEBUG )
                     if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {

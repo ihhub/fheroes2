@@ -23,10 +23,11 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -53,7 +54,7 @@ void DialogPrimaryOnly( const std::string & name, const int primarySkillType )
 
     const fheroes2::PrimarySkillDialogElement primarySkillUI( primarySkillType, "+1" );
 
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &primarySkillUI } );
+    fheroes2::showStandardTextMessage( {}, std::move( message ), Dialog::OK, { &primarySkillUI } );
 }
 
 int DialogOneSecondary( const Heroes & hero, const std::string & name, const int primarySkillType, const Skill::Secondary & sec )
@@ -70,7 +71,7 @@ int DialogOneSecondary( const Heroes & hero, const std::string & name, const int
 
     const fheroes2::SecondarySkillDialogElement secondarySkillUI( sec, hero );
 
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &secondarySkillUI } );
+    fheroes2::showStandardTextMessage( {}, std::move( message ), Dialog::OK, { &secondarySkillUI } );
 
     return sec.Skill();
 }

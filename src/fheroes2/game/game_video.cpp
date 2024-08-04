@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "game_delays.h"
+#include "game_video_type.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
