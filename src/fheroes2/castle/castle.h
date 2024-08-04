@@ -435,8 +435,8 @@ namespace CastleDialog
         CacheBuildings( const Castle & castle, const fheroes2::Point & top );
     };
 
-    void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
-                            const uint32_t animationIndex );
+    void RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
+                             const uint32_t animationIndex );
 }
 
 struct VecCastles : public std::vector<Castle *>

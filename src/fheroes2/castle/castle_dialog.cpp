@@ -364,7 +364,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     const CastleDialog::CacheBuildings cacheBuildings( *this, dialogRoi.getPosition() );
 
     // Render castle buildings.
-    CastleDialog::RedrawAllBuilding( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+    CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -758,7 +758,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         // Castle dialog animation.
         if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) || needRedraw ) {
-            CastleDialog::RedrawAllBuilding( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+            CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
             display.render( dialogRoi );
 

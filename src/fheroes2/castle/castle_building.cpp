@@ -269,8 +269,8 @@ namespace
         }
     }
 
-    void redrawCurrentCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
-                                      const CastleDialog::FadeBuilding & fadeBuilding, const uint32_t animationIndex )
+    void redrawCastleBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+                                const CastleDialog::FadeBuilding & fadeBuilding, const uint32_t animationIndex )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -394,9 +394,9 @@ bool CastleDialog::FadeBuilding::UpdateFade()
     return false;
 }
 
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
-                                      const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex )
+void CastleDialog::RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
+                                       const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex )
 {
-    redrawCurrentCastleBuilding( castle, dst_pt, orders, alphaBuilding, animationIndex );
+    redrawCastleBuildings( castle, dst_pt, orders, alphaBuilding, animationIndex );
     fheroes2::drawCastleName( castle, fheroes2::Display::instance(), dst_pt );
 }
