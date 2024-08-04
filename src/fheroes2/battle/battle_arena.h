@@ -64,6 +64,12 @@ namespace Battle
 
     enum class TowerType : uint8_t;
 
+    enum class SiegeWeaponType
+    {
+        Catapult,
+        EarthquakeSpell
+    };
+
     class Actions : public std::list<Command>
     {};
 
@@ -211,8 +217,6 @@ namespace Battle
             return _covrIcnId;
         }
 
-        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
-
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
         static Board * GetBoard();
@@ -242,9 +246,14 @@ namespace Battle
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
-
-        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
+
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
+        // structure still has enough hitpoints.
+        void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
@@ -254,8 +263,6 @@ namespace Battle
 
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
-
-        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
         void ApplyActionRetreat( const Command & cmd );
         void ApplyActionSurrender( const Command & cmd );
@@ -272,7 +279,7 @@ namespace Battle
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
         void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellEarthquake( const Command & cmd );
         void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
