@@ -570,34 +570,24 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         dmg /= 2;
     }
 
-    switch ( GetID() ) {
-    case Monster::CRUSADER:
-        if ( enemy.isUndead() ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    default:
-        break;
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_AIR ) ) {
+        dmg *= 2;
+    }
+
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH ) ) {
+        dmg *= 2;
     }
 
     int r = GetAttack() - enemy.GetDefense();
@@ -1359,11 +1349,11 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
-    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, applyingHero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPower, applyingHero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1372,52 +1362,37 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
     }
 }
 
-uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                              const bool ignoreDefendingHero ) const
 {
     assert( spell.isDamage() );
 
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spellPoints;
+    uint32_t dmg = spell.Damage() * spellPower;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
     case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
-            // 50% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::ARMAGEDDON:
+        if ( spell.isElementalSpell() || spell.GetID() == Spell::ARMAGEDDON ) {
             dmg /= 2;
-            break;
-        default:
-            break;
         }
+
         break;
 
     case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
+        if ( spell.isFire() ) {
             // 200% damage
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
             dmg *= 2;
-            break;
-        default:
-            break;
         }
+
         break;
 
     case Monster::AIR_ELEMENT:
         switch ( spell.GetID() ) {
             // 200% damage
+        case Spell::CHAINLIGHTNING:
         case Spell::ELEMENTALSTORM:
         case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
             dmg *= 2;
             break;
         default:
@@ -1426,15 +1401,11 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         break;
 
     case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
+        if ( spell.isCold() ) {
             // 200% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
             dmg *= 2;
-            break;
-        default:
-            break;
         }
+
         break;
 
     default:
