@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+
 "POT-Creation-Date: 2024-07-26 16:33+0000\n"
 "PO-Revision-Date: 2024-08-01 09:59+0200\n"
-
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -3560,6 +3560,39 @@ msgstr "Välj Kraftökningsföremål:"
 msgid "Select Adventure Object:"
 msgstr "Välj Äventyrsföremål:"
 
+msgid "Players Icon"
+msgstr "Spelarikon"
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Anger hur många spelare totalt det är i kartan. Platser som inte upptas av "
+"en människa kommer spelas av datorkontrollerade spelare."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Anger om kartan är liten (36 x 36),\n"
+"medel (72 x 72), stor (108 x 108)\n"
+"eller extrastor (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Ikonstorlek"
+
+msgid "Map Type"
+msgstr "Karttyp"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
+"Loyalty-\" eller \"Resurrection\"-versionen av spelet."
+
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
@@ -3646,39 +3679,6 @@ msgstr "Alla Kartor"
 
 msgid "View all maps, regardless of size."
 msgstr "Visa alla kartor, oavsett storlek."
-
-msgid "Players Icon"
-msgstr "Spelarikon"
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Anger hur många spelare totalt det är i kartan. Platser som inte upptas av "
-"en människa kommer spelas av datorkontrollerade spelare."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Anger om kartan är liten (36 x 36),\n"
-"medel (72 x 72), stor (108 x 108)\n"
-"eller extrastor (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Ikonstorlek"
-
-msgid "Map Type"
-msgstr "Karttyp"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
-"Loyalty-\" eller \"Resurrection\"-versionen av spelet."
 
 msgid "Selected Name"
 msgstr "Valt Namn"

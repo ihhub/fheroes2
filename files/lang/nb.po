@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-08-03 09:23+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3698,6 +3698,42 @@ msgstr "Sjøting"
 msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
+msgid "Players Icon"
+msgstr "Spillerikon"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Viser hvor mange spillere som totalt er med på kartet. Hver plass som ikke "
+"er tatt av et menneske vil bli tatt av en computerspiller."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Viser om kartet er\n"
+"smått (36 x 36), middels\n"
+"(72 x 72), stort (108 x 108)\n"
+"eller veldig stort (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Størrelsesikon"
+
+msgid "Map Type"
+msgstr "Kart-type"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
+"\"Prisen for trofasthet\"."
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
@@ -3789,42 +3825,6 @@ msgstr "Alle kart"
 
 msgid "View all maps, regardless of size."
 msgstr "Vis alle kart, uavhengig av størrelse."
-
-msgid "Players Icon"
-msgstr "Spillerikon"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Viser hvor mange spillere som totalt er med på kartet. Hver plass som ikke "
-"er tatt av et menneske vil bli tatt av en computerspiller."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Viser om kartet er\n"
-"smått (36 x 36), middels\n"
-"(72 x 72), stort (108 x 108)\n"
-"eller veldig stort (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Størrelsesikon"
-
-msgid "Map Type"
-msgstr "Kart-type"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
-"\"Prisen for trofasthet\"."
 
 msgid "Selected Name"
 msgstr "Navn"
