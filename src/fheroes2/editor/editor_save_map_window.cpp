@@ -96,7 +96,7 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -283,7 +283,7 @@ namespace Editor
 
         MapsFileInfoList::iterator it = lists.begin();
         for ( ; it != lists.end(); ++it ) {
-            if ( System::truncateFileExtensionAndPath( ( *it ).filename ) == fileName ) {
+            if ( System::GetStem( ( *it ).filename ) == fileName ) {
                 break;
             }
         }
@@ -454,7 +454,7 @@ namespace Editor
             }
 
             if ( needFileNameRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;

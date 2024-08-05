@@ -1704,7 +1704,7 @@ namespace Interface
             return false;
         }
 
-        _loadedFileName = System::truncateFileExtensionAndPath( filePath );
+        _loadedFileName = System::GetStem( filePath );
 
         // Set the loaded map as a default map for the new Standard Game.
         Maps::FileInfo fi;

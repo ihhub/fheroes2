@@ -136,7 +136,7 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -189,17 +189,10 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
-        std::string savname( System::GetBasename( info.filename ) );
+        std::string savname( System::GetStem( info.filename ) );
 
         if ( savname.empty() ) {
             return;
-        }
-
-        const std::string saveExtension = Game::GetSaveFileExtension();
-        const size_t dotPos = savname.size() - saveExtension.size();
-
-        if ( StringLower( savname.substr( dotPos ) ) == saveExtension ) {
-            savname.erase( dotPos );
         }
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
@@ -337,7 +330,7 @@ namespace
         size_t charInsertPos = 0;
 
         if ( !lastfile.empty() ) {
-            filename = System::truncateFileExtensionAndPath( lastfile );
+            filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
 
             MapsFileInfoList::iterator it = lists.begin();
@@ -360,7 +353,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = System::truncateFileExtensionAndPath( listbox.GetCurrent().filename );
+            filename = System::GetStem( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -459,11 +452,11 @@ namespace
             }
             else if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                       || listbox.isDoubleClicked() ) {
-                if ( !filename.empty() ) {
-                    result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
-                }
-                else if ( isListboxSelected ) {
+                if ( isListboxSelected ) {
                     result = listbox.GetCurrent().filename;
+                }
+                else if ( !filename.empty() ) {
+                    result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
             }
             else if ( isEditing ) {
@@ -529,7 +522,7 @@ namespace
             }
 
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
