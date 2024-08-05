@@ -215,7 +215,7 @@ namespace
             for ( const Maps::FileInfo & mapInfo : lists ) {
                 if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.filename ) == mapFileName ) ) {
                     if ( mapInfo.filename == conf.getCurrentMapInfo().filename ) {
-                        conf.SetCurrentFileInfo( mapInfo );
+                        conf.setCurrentMapInfo( mapInfo );
                         updatePlayers( players, humanPlayerCount );
                         Game::LoadPlayers( mapInfo.filename, players );
                         resetStartingSettings = false;
@@ -227,7 +227,7 @@ namespace
 
         // set first map's settings
         if ( resetStartingSettings ) {
-            conf.SetCurrentFileInfo( lists.front() );
+            conf.setCurrentMapInfo( lists.front() );
             updatePlayers( players, humanPlayerCount );
             Game::LoadPlayers( lists.front().filename, players );
         }
@@ -316,7 +316,7 @@ namespace
 
                 if ( fi && fi->filename != currentMapName ) {
                     Game::SavePlayers( currentMapName, conf.GetPlayers() );
-                    conf.SetCurrentFileInfo( *fi );
+                    conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
                     RedrawMapTitle( scenarioBoxRoi );

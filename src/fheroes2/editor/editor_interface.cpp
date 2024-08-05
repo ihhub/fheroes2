@@ -1709,7 +1709,7 @@ namespace Interface
         // Set the loaded map as a default map for the new Standard Game.
         Maps::FileInfo fi;
         if ( fi.loadResurrectionMap( _mapFormat, filePath ) ) {
-            Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+            Settings::Get().setCurrentMapInfo( std::move( fi ) );
         }
         else {
             assert( 0 );
@@ -1774,7 +1774,7 @@ namespace Interface
             // Set the saved map as a default map for the new Standard Game.
             Maps::FileInfo fi;
             if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
-                Settings::Get().SetCurrentFileInfo( std::move( fi ) );
+                Settings::Get().setCurrentMapInfo( std::move( fi ) );
             }
             else {
                 assert( 0 );
