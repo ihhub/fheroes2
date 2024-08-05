@@ -58,10 +58,10 @@ namespace
     uint32_t calculateHash( const std::string_view str )
     {
         uint32_t hash = 0;
-        int32_t sum = 0;
+        uint32_t sum = 0;
 
         for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const char c = static_cast<char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
+            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
 
             hash = ( hash << 5 ) + ( hash >> 25 );
 
