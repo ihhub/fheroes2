@@ -190,10 +190,7 @@ namespace
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
         std::string savname( System::GetStem( info.filename ) );
-
-        if ( savname.empty() ) {
-            return;
-        }
+        assert( !savname.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
         fheroes2::Display & display = fheroes2::Display::instance();
