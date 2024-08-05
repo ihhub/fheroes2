@@ -135,13 +135,6 @@ uint32_t Skill::Secondary::GetValues() const
     return 0;
 }
 
-Skill::Primary::Primary()
-    : attack( 0 )
-    , defense( 0 )
-    , power( 0 )
-    , knowledge( 0 )
-{}
-
 void Skill::Primary::LoadDefaults( int type, int race )
 {
     const stats_t * ptr = GameStatic::GetSkillStats( race );
@@ -192,7 +185,7 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
         }
     }
 
-    return skill == POWER ? 1 : 0;
+    return ( skill == POWER || skill == KNOWLEDGE ) ? 1 : 0;
 }
 
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
