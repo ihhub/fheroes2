@@ -427,14 +427,9 @@ namespace
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
+
                     if ( lists.empty() ) {
                         listbox.Redraw();
-
-                        if ( !isEditing ) {
-                            textInputAndDateBackground.restore();
-                            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
-                            return {};
-                        }
 
                         isListboxSelected = false;
                         charInsertPos = 0;
@@ -542,7 +537,7 @@ namespace
                     isTextLimit = redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
                     redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
-                else {
+                else if ( isListboxSelected ) {
                     redrawTextInputField( filename, textInputRoi, false );
                     redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
                 }
