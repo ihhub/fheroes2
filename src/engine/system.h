@@ -48,7 +48,7 @@ namespace System
 
     std::string GetDirname( std::string_view path );
     std::string GetBasename( std::string_view path );
-    std::string truncateFileExtensionAndPath( std::string_view path );
+    std::string GetStem( std::string_view path );
 
     bool IsFile( const std::string & path, bool writable = false );
     bool IsDirectory( const std::string & path, bool writable = false );

@@ -79,16 +79,17 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( Maps::FileInfo fi );
+
+    void setCurrentMapInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     Maps::FileInfo & getCurrentMapInfo()
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     int HeroesMoveSpeed() const
@@ -366,7 +367,7 @@ private:
     // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 
-    Maps::FileInfo current_maps_file;
+    Maps::FileInfo _currentMapInfo;
 
     int sound_volume;
     int music_volume;

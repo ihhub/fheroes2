@@ -196,12 +196,12 @@ namespace
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
     {
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+        const Maps::FileInfo & currentMapinfo = Settings::Get().getCurrentMapInfo();
 
-        const std::string & mapFileName = System::GetBasename( mapInfo.filename );
         size_t mapId = 0;
+
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapInfo.name ) && ( System::GetBasename( mapIter->filename ) == mapFileName ) ) {
+            if ( mapIter->name == currentMapinfo.name && mapIter->filename == currentMapinfo.filename ) {
                 return mapId;
             }
         }

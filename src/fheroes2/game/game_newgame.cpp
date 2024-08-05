@@ -142,7 +142,7 @@ fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( {} );
+        conf.setCurrentMapInfo( {} );
     conf.SetGameType( Game::TYPE_STANDARD );
     return fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER;
 }
@@ -159,7 +159,7 @@ fheroes2::GameMode Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( {} );
+        conf.setCurrentMapInfo( {} );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
