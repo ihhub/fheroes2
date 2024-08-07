@@ -832,7 +832,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
     }
 
-    // Resume the channel as soon as its parameters are settled
+    // Resume the channel as soon as all its parameters are settled
     Mix_Resume( channel );
 
     // There can be a maximum of two items in the sample queue for a channel:
