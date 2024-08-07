@@ -850,19 +850,17 @@ int Mixer::PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int ch
     return channel;
 }
 
-int Mixer::applyAngle( const int channelId, const int16_t angle )
+void Mixer::applyAngle( const int channelId, const int16_t angle )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return -1;
+        return;
     }
 
     if ( Mix_SetPosition( channelId, angle, 0 ) == 0 ) {
         ERROR_LOG( "Failed to set the position of channel " << channelId << ". The error: " << Mix_GetError() )
     }
-
-    return channelId;
 }
 
 void Mixer::setVolume( const int channelId, const int volumePercentage )
