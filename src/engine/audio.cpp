@@ -802,9 +802,9 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     }
 
     // Before starting playback, it is usually unknown what volume is set on the channel to be used
-    // (especially if we are going to use the first available channel for playback). To avoid arbitrary
-    // volume spikes, we will temporarily mute the audio chunk itself until we can properly adjust the
-    // channel parameters.
+    // (especially if we are going to use the first available channel for playback, because SDL does
+    // all the internal bookkeeping itself). To avoid arbitrary volume spikes, we will temporarily
+    // mute the audio chunk itself until we can properly adjust the channel parameters.
     const int chunkVolume = Mix_VolumeChunk( sample.get(), 0 );
     if ( chunkVolume < 0 ) {
         ERROR_LOG( "Failed to mute the audio chunk. The error: " << Mix_GetError() )
@@ -817,6 +817,9 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return channel;
     }
 
+    // Immediately pause the channel so as not to continue playing while it is being set up
+    Mix_Pause( channel );
+
     setVolume( channel, volumePercentage );
 
     if ( angle ) {
@@ -824,10 +827,13 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     }
 
     // When restoring the volume of an audio chunk, the only correct result of the call is zero,
-    // because this is exactly what the volume of the muted chunk should be.
+    // because this is exactly what the volume of the muted chunk should be
     if ( Mix_VolumeChunk( sample.get(), chunkVolume ) != 0 ) {
         ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
     }
+
+    // Resume the channel as soon as its parameters are settled
+    Mix_Resume( channel );
 
     // There can be a maximum of two items in the sample queue for a channel:
     // the previous sample (if it hasn't been freed yet) and the current one
