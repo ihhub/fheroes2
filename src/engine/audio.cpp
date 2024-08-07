@@ -801,6 +801,10 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return -1;
     }
 
+    // Before starting playback, it is usually unknown what volume is set on the channel to be used
+    // (especially if we are going to use the first available channel for playback). To avoid arbitrary
+    // volume spikes, we will temporarily mute the audio chunk itself until we can properly adjust the
+    // channel parameters.
     const int chunkVolume = Mix_VolumeChunk( sample.get(), 0 );
     if ( chunkVolume < 0 ) {
         ERROR_LOG( "Failed to mute the audio chunk. The error: " << Mix_GetError() )
@@ -819,6 +823,8 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         setAngle( channel, *angle );
     }
 
+    // When restoring the volume of an audio chunk, the only correct result of the call is zero,
+    // because this is exactly what the volume of the muted chunk should be.
     if ( Mix_VolumeChunk( sample.get(), chunkVolume ) != 0 ) {
         ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
     }
