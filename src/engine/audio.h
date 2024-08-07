@@ -51,9 +51,9 @@ namespace Mixer
 
     // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
     int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
-    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, const uint8_t volumePercentage );
+    int PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle );
 
-    int applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage );
+    int applyAngle( const int channelId, const int16_t angle );
 
     void setVolume( const int channelId, const int volumePercentage );
 

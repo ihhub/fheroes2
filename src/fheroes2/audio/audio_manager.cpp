@@ -744,7 +744,7 @@ namespace
                 Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
 
                 if ( is3DAudioEnabled ) {
-                    Mixer::applySoundEffect( currentInfo.channelId, currentInfo.angle, currentInfo.volumePercentage );
+                    Mixer::applyAngle( currentInfo.channelId, currentInfo.angle );
                 }
             }
 
@@ -787,7 +787,7 @@ namespace
 
                 int channelId = -1;
                 if ( is3DAudioEnabled ) {
-                    channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle, info.volumePercentage );
+                    channelId = Mixer::PlayFromAngle( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle );
                 }
                 else {
                     channelId = Mixer::Play( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true );

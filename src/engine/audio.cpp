@@ -221,20 +221,6 @@ namespace
         return channel;
     }
 
-    void addSoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage )
-    {
-        if ( volumePercentage > 100 ) {
-            volumePercentage = 100;
-        }
-
-        const long distance = std::lround( 255 * ( ( 100 - volumePercentage ) / 100.0 ) );
-        assert( distance >= 0 && distance <= 255 );
-
-        if ( Mix_SetPosition( channelId, angle, static_cast<Uint8>( distance ) ) == 0 ) {
-            ERROR_LOG( "Failed to apply a sound effect for channel " << channelId << ". The error: " << Mix_GetError() )
-        }
-    }
-
     class MusicInfo
     {
     public:
@@ -838,7 +824,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     return playSound( ptr, size, channelId, loop );
 }
 
-int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, const uint8_t volumePercentage )
+int Mixer::PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle )
 {
     if ( ptr == nullptr || size == 0 ) {
         // You are trying to play an empty sound. Check your logic!
@@ -857,12 +843,14 @@ int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int
         return channel;
     }
 
-    addSoundEffect( channel, angle, volumePercentage );
+    if ( Mix_SetPosition( channel, angle, 0 ) == 0 ) {
+        ERROR_LOG( "Failed to set the position of channel " << channel << ". The error: " << Mix_GetError() )
+    }
 
     return channel;
 }
 
-int Mixer::applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage )
+int Mixer::applyAngle( const int channelId, const int16_t angle )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -870,7 +858,9 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, const uin
         return -1;
     }
 
-    addSoundEffect( channelId, angle, volumePercentage );
+    if ( Mix_SetPosition( channelId, angle, 0 ) == 0 ) {
+        ERROR_LOG( "Failed to set the position of channel " << channelId << ". The error: " << Mix_GetError() )
+    }
 
     return channelId;
 }
