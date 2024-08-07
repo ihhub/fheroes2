@@ -482,8 +482,8 @@ namespace
         const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
         assert( track );
 
-        Mix_Music * mus = track->createMusic();
-        if ( mus == nullptr ) {
+        std::unique_ptr<Mix_Music, std::function<void( Mix_Music * )>> mus( track->createMusic(), Mix_FreeMusic );
+        if ( !mus ) {
             musicTrackManager.resetCurrentTrack();
 
             return;
@@ -493,7 +493,7 @@ namespace
         bool autoLoop = false;
 
         if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-            if ( isMusicResumeSupported( mus ) ) {
+            if ( isMusicResumeSupported( mus.get() ) ) {
                 resumePlayback = true;
             }
             else {
@@ -516,7 +516,7 @@ namespace
 
         // Resume the music only if at least 1 second of the track has been played.
         if ( resumePlayback && track->getPosition() > 1 ) {
-            returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, track->getPosition() );
+            returnCode = Mix_FadeInMusicPos( mus.get(), loopCount, musicFadeInMs, track->getPosition() );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
@@ -526,7 +526,7 @@ namespace
         // Either there is no need to resume music playback, or the resumption failed. Let's try to
         // start the playback from the beginning.
         if ( returnCode != 0 ) {
-            returnCode = Mix_FadeInMusic( mus, loopCount, musicFadeInMs );
+            returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to play a music track. The error: " << Mix_GetError() )
@@ -534,8 +534,6 @@ namespace
         }
 
         if ( returnCode != 0 ) {
-            Mix_FreeMusic( mus );
-
             // Since the music playback failed, the Mix_HookMusicFinished()'s callback cannot be called
             // here, so we can safely reset the current track information
             musicTrackManager.resetCurrentTrack();
@@ -548,7 +546,7 @@ namespace
 
         // There can be no more than one element in the music queue - the current track, the previous
         // one should already be freed
-        musicTrackManager.musicStarted( mus );
+        musicTrackManager.musicStarted( mus.release() );
     }
 
     // By the Weber-Fechner law, humans subjective sound sensation is proportional logarithm of sound intensity.
@@ -805,7 +803,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
 
     const int chunkVolume = Mix_VolumeChunk( sample.get(), 0 );
     if ( chunkVolume < 0 ) {
-        ERROR_LOG( "Failed to set the volume of the audio chunk. The error: " << Mix_GetError() )
+        ERROR_LOG( "Failed to mute the audio chunk. The error: " << Mix_GetError() )
         return -1;
     }
 
