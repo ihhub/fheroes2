@@ -51,8 +51,7 @@ namespace Mixer
     int getChannelCount();
 
     // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
-    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const std::optional<int> volumePercentage = {},
-              const std::optional<int16_t> angle = {} );
+    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int volumePercentage, const std::optional<int16_t> angle = {} );
 
     void setVolume( const int channelId, const int volumePercentage );
     void setAngle( const int channelId, const int16_t angle );

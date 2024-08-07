@@ -774,7 +774,7 @@ int Mixer::getChannelCount()
     return mixerChannelCount;
 }
 
-int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const std::optional<int> volumePercentage /* = {} */,
+int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int volumePercentage,
                  const std::optional<int16_t> angle /* = {} */ )
 {
     if ( ptr == nullptr || size == 0 ) {
@@ -815,9 +815,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return channel;
     }
 
-    if ( volumePercentage ) {
-        setVolume( channel, *volumePercentage );
-    }
+    setVolume( channel, volumePercentage );
 
     if ( angle ) {
         setAngle( channel, *angle );
