@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
@@ -796,7 +797,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return -1;
     }
 
-    std::unique_ptr<Mix_Chunk, decltype( &Mix_FreeChunk )> sample( Mix_LoadWAV_RW( rwops, 1 ), Mix_FreeChunk );
+    std::unique_ptr<Mix_Chunk, std::function<void( Mix_Chunk * )>> sample( Mix_LoadWAV_RW( rwops, 1 ), Mix_FreeChunk );
     if ( !sample ) {
         ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
         return -1;
