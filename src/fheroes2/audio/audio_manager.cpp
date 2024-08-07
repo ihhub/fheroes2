@@ -521,7 +521,7 @@ namespace
             return -1;
         }
 
-        const int channelId = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
+        const int channelId = Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false );
         if ( channelId < 0 ) {
             // Failed to get a free channel.
             return -1;
@@ -787,10 +787,10 @@ namespace
 
                 int channelId = -1;
                 if ( is3DAudioEnabled ) {
-                    channelId = Mixer::PlayFromAngle( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle );
+                    channelId = Mixer::PlayFromAngle( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true, info.angle );
                 }
                 else {
-                    channelId = Mixer::Play( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true );
+                    channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true );
                 }
 
                 if ( channelId < 0 ) {

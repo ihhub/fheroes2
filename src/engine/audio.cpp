@@ -251,7 +251,7 @@ namespace
             if ( std::holds_alternative<std::vector<uint8_t>>( _source ) ) {
                 const std::vector<uint8_t> & v = std::get<std::vector<uint8_t>>( _source );
 
-                SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
+                SDL_RWops * rwops = SDL_RWFromConstMem( v.data(), static_cast<int>( v.size() ) );
                 if ( rwops == nullptr ) {
                     ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
                 }
