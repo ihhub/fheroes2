@@ -870,24 +870,6 @@ void Mixer::setVolume( const int channelId, const int volumePercentage )
     }
 }
 
-void Mixer::Pause( const int channelId /* = -1 */ )
-{
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
-
-    if ( isInitialized ) {
-        Mix_Pause( channelId );
-    }
-}
-
-void Mixer::Resume( const int channelId /* = -1 */ )
-{
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
-
-    if ( isInitialized ) {
-        Mix_Resume( channelId );
-    }
-}
-
 void Mixer::Stop( const int channelId /* = -1 */ )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );

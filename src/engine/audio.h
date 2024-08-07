@@ -59,8 +59,6 @@ namespace Mixer
     void setVolume( const int channelId, const int volumePercentage );
     void setAngle( const int channelId, const int16_t angle );
 
-    void Pause( const int channelId = -1 );
-    void Resume( const int channelId = -1 );
     void Stop( const int channelId = -1 );
 
     bool isPlaying( const int channelId );
