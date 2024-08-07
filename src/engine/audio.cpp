@@ -880,9 +880,11 @@ void Mixer::Stop( const int channelId /* = -1 */ )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    if ( isInitialized ) {
-        Mix_HaltChannel( channelId );
+    if ( !isInitialized ) {
+        return;
     }
+
+    Mix_HaltChannel( channelId );
 }
 
 bool Mixer::isPlaying( const int channelId )
