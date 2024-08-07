@@ -790,7 +790,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
 
     soundSampleManager.clearFinishedSamples();
 
-    SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
+    SDL_RWops * rwops = SDL_RWFromConstMem( ptr, static_cast<int>( size ) );
     if ( rwops == nullptr ) {
         ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
         return -1;
