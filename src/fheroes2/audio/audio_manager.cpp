@@ -744,7 +744,7 @@ namespace
                 Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
 
                 if ( is3DAudioEnabled ) {
-                    Mixer::applyAngle( currentInfo.channelId, currentInfo.angle );
+                    Mixer::setAngle( currentInfo.channelId, currentInfo.angle );
                 }
             }
 

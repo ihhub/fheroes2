@@ -53,7 +53,7 @@ namespace Mixer
     int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
     int PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle );
 
-    void applyAngle( const int channelId, const int16_t angle );
+    void setAngle( const int channelId, const int16_t angle );
 
     void setVolume( const int channelId, const int volumePercentage );
 

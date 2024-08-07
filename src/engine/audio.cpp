@@ -850,7 +850,7 @@ int Mixer::PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int ch
     return channel;
 }
 
-void Mixer::applyAngle( const int channelId, const int16_t angle )
+void Mixer::setAngle( const int channelId, const int16_t angle )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
