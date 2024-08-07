@@ -227,7 +227,10 @@ namespace
             volumePercentage = 100;
         }
 
-        if ( Mix_SetPosition( channelId, angle, 255 * ( volumePercentage - 100 ) ) == 0 ) {
+        const long distance = std::lround( 255 * ( ( 100 - volumePercentage ) / 100.0 ) );
+        assert( distance >= 0 && distance <= 255 );
+
+        if ( Mix_SetPosition( channelId, angle, static_cast<Uint8>( distance ) ) == 0 ) {
             ERROR_LOG( "Failed to apply a sound effect for channel " << channelId << ". The error: " << Mix_GetError() )
         }
     }
