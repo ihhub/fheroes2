@@ -638,7 +638,6 @@ namespace
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
-                    Mixer::setVolume( info.channelId, 0 );
                     Mixer::Stop( info.channelId );
                 }
             }
@@ -760,7 +759,6 @@ namespace
             const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                Mixer::setVolume( info.channelId, 0 );
                 Mixer::Stop( info.channelId );
             }
         }
@@ -802,8 +800,6 @@ namespace AudioManager
     {
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
-            // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
-            Mixer::setVolume( -1, 0 );
 
             // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
             if ( !midiSoundFonts.empty() ) {
