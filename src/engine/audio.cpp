@@ -187,40 +187,6 @@ namespace
         soundSampleManager.channelFinished( channelId );
     }
 
-    int playSound( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
-    {
-        assert( ptr != nullptr && size != 0 );
-
-        soundSampleManager.clearFinishedSamples();
-
-        SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
-        if ( rwops == nullptr ) {
-            ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
-            return -1;
-        }
-
-        Mix_Chunk * sample = Mix_LoadWAV_RW( rwops, 1 );
-        if ( sample == nullptr ) {
-            ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
-            return -1;
-        }
-
-        const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
-        if ( channel < 0 ) {
-            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
-
-            Mix_FreeChunk( sample );
-
-            return channel;
-        }
-
-        // There can be a maximum of two items in the sample queue for a channel:
-        // the previous sample (if it hasn't been freed yet) and the current one
-        soundSampleManager.channelStarted( channel, sample );
-
-        return channel;
-    }
-
     class MusicInfo
     {
     public:
@@ -807,7 +773,8 @@ int Mixer::getChannelCount()
     return mixerChannelCount;
 }
 
-int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
+int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const std::optional<int> volumePercentage /* = {} */,
+                 const std::optional<int16_t> angle /* = {} */ )
 {
     if ( ptr == nullptr || size == 0 ) {
         // You are trying to play an empty sound. Check your logic!
@@ -821,31 +788,47 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return -1;
     }
 
-    return playSound( ptr, size, channelId, loop );
-}
+    soundSampleManager.clearFinishedSamples();
 
-int Mixer::PlayFromAngle( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle )
-{
-    if ( ptr == nullptr || size == 0 ) {
-        // You are trying to play an empty sound. Check your logic!
-        assert( 0 );
+    SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
+    if ( rwops == nullptr ) {
+        ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
         return -1;
     }
 
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
-
-    if ( !isInitialized ) {
+    std::unique_ptr<Mix_Chunk, decltype( &Mix_FreeChunk )> sample( Mix_LoadWAV_RW( rwops, 1 ), Mix_FreeChunk );
+    if ( !sample ) {
+        ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
         return -1;
     }
 
-    const int channel = playSound( ptr, size, channelId, loop );
+    const int chunkVolume = Mix_VolumeChunk( sample.get(), 0 );
+    if ( chunkVolume < 0 ) {
+        ERROR_LOG( "Failed to set the volume of the audio chunk. The error: " << Mix_GetError() )
+        return -1;
+    }
+
+    const int channel = Mix_PlayChannel( channelId, sample.get(), loop ? -1 : 0 );
     if ( channel < 0 ) {
+        ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
         return channel;
     }
 
-    if ( Mix_SetPosition( channel, angle, 0 ) == 0 ) {
-        ERROR_LOG( "Failed to set the position of channel " << channel << ". The error: " << Mix_GetError() )
+    if ( volumePercentage ) {
+        setVolume( channel, *volumePercentage );
     }
+
+    if ( angle ) {
+        setAngle( channel, *angle );
+    }
+
+    if ( Mix_VolumeChunk( sample.get(), chunkVolume ) != 0 ) {
+        ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+    }
+
+    // There can be a maximum of two items in the sample queue for a channel:
+    // the previous sample (if it hasn't been freed yet) and the current one
+    soundSampleManager.channelStarted( channel, sample.release() );
 
     return channel;
 }

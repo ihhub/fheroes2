@@ -521,15 +521,11 @@ namespace
             return -1;
         }
 
-        const int channelId = Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false );
+        const int channelId = Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false, 100 * soundVolume / 10 );
         if ( channelId < 0 ) {
-            // Failed to get a free channel.
+            // Unable to play this sound.
             return -1;
         }
-
-        Mixer::Pause( channelId );
-        Mixer::setVolume( channelId, 100 * soundVolume / 10 );
-        Mixer::Resume( channelId );
 
         return channelId;
     }
@@ -785,29 +781,12 @@ namespace
                     continue;
                 }
 
-                int channelId = -1;
-                if ( is3DAudioEnabled ) {
-                    channelId = Mixer::PlayFromAngle( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true, info.angle );
-                }
-                else {
-                    channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true );
-                }
-
+                const int channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true, info.volumePercentage * soundVolume / 10,
+                                                   is3DAudioEnabled ? info.angle : std::optional<uint16_t>{} );
                 if ( channelId < 0 ) {
-                    // Unable to play this audio. It is probably an invalid audio sample.
+                    // Unable to play this sound.
                     continue;
                 }
-
-                // Adjust channel based on given parameters.
-
-                // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds
-                // TODO: are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
-                // TODO: start playing. Such logic must be implemented within Audio related code.
-                // TODO: As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
-                // TODO: access.
-                Mixer::Pause( channelId );
-                Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
-                Mixer::Resume( channelId );
 
                 currentAudioLoopEffects[soundType].emplace_back( info, channelId );
 
