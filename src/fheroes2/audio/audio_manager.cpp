@@ -250,7 +250,7 @@ namespace
         return v;
     }
 
-    // Returns sound Channel ID, when error - returns `-1`.
+    // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
     int PlaySoundImpl( const int m82, const int soundVolume );
     void PlayMusicImpl( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
@@ -521,13 +521,7 @@ namespace
             return -1;
         }
 
-        const int channelId = Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false, 100 * soundVolume / 10 );
-        if ( channelId < 0 ) {
-            // Unable to play this sound.
-            return -1;
-        }
-
-        return channelId;
+        return Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false, 100 * soundVolume / 10 );
     }
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
