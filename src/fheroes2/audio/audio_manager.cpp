@@ -254,7 +254,7 @@ namespace
     // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
     int PlaySoundImpl( const int m82 );
     void PlayMusicImpl( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
-    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
+    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const bool is3DAudioEnabled );
 
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
@@ -284,13 +284,13 @@ namespace
             notifyWorker();
         }
 
-        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
+        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const bool is3DAudioEnabled )
         {
             createWorker();
 
             const std::scoped_lock<std::mutex> lock( _mutex );
 
-            _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+            _loopSoundTask.emplace( std::move( effects ), is3DAudioEnabled );
 
             notifyWorker();
         }
@@ -394,16 +394,14 @@ namespace
         {
             LoopSoundTask() = default;
 
-            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const int soundVolume_, const bool is3DAudioOn )
+            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const bool is3DAudioOn )
                 : soundEffects( std::move( effects ) )
-                , soundVolume( soundVolume_ )
                 , is3DAudioEnabled( is3DAudioOn )
             {
                 // Do nothing.
             }
 
             std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects;
-            int soundVolume{ 0 };
             bool is3DAudioEnabled{ false };
         };
 
@@ -473,7 +471,7 @@ namespace
                 PlaySoundImpl( _currentSoundTask.m82Sound );
                 return;
             case TaskType::PlayLoopSound:
-                playLoopSoundsImpl( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
+                playLoopSoundsImpl( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.is3DAudioEnabled );
                 return;
             default:
                 // How is it even possible? Did you add a new task?
@@ -608,18 +606,20 @@ namespace
                 const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
                 const int distanceDiff
                     = std::abs( static_cast<int>( soundToAdd[soundToAddId].distance ) - static_cast<int>( soundToReplace[soundToReplaceId].distance ) );
-                if ( bestAngleDiff >= angleDiff ) {
-                    if ( bestAngleDiff == angleDiff && distanceDiff > bestDistanceDiff ) {
-                        // The existing best pair has lower volume difference.
-                        continue;
-                    }
 
-                    bestAngleDiff = angleDiff;
-                    bestDistanceDiff = distanceDiff;
-
-                    bestSoundToAddId = soundToAddId;
-                    bestSoundToReplaceId = soundToReplaceId;
+                if ( bestAngleDiff < angleDiff ) {
+                    continue;
                 }
+
+                if ( bestAngleDiff == angleDiff && bestDistanceDiff < distanceDiff ) {
+                    continue;
+                }
+
+                bestAngleDiff = angleDiff;
+                bestDistanceDiff = distanceDiff;
+
+                bestSoundToAddId = soundToAddId;
+                bestSoundToReplaceId = soundToReplaceId;
             }
         }
     }
@@ -639,15 +639,9 @@ namespace
         currentAudioLoopEffects.clear();
     }
 
-    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled )
+    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const bool is3DAudioEnabled )
     {
         const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
-
-        if ( soundVolume == 0 ) {
-            // The volume is 0. Remove all existing sound effects.
-            clearAllAudioLoopEffects();
-            return;
-        }
 
         if ( is3DAudioLoopEffectsEnabled != is3DAudioEnabled ) {
             is3DAudioLoopEffectsEnabled = is3DAudioEnabled;
@@ -695,7 +689,7 @@ namespace
 
             std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = foundSoundTypeIter->second;
 
-            // Search for an existing sound which has the exact volume and angle.
+            // Search for an existing sound which has the exact distance and angle.
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
@@ -839,9 +833,7 @@ namespace AudioManager
             return;
         }
 
-        const Settings & conf = Settings::Get();
-
-        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), Settings::Get().is3DAudioEnabled() );
     }
 
     int PlaySound( const int m82 )
