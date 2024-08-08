@@ -49,11 +49,9 @@ namespace
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
-        const int volumePercentage = 100 * Settings::Get().SoundVolume() / 10;
-
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
-                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), -1, false, volumePercentage );
+                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), false );
             }
         }
     }

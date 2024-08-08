@@ -24,6 +24,7 @@
 #include <array>
 #include <atomic>
 #include <cassert>
+#include <climits>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
@@ -251,7 +252,7 @@ namespace
     }
 
     // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
-    int PlaySoundImpl( const int m82, const int soundVolume );
+    int PlaySoundImpl( const int m82 );
     void PlayMusicImpl( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
@@ -272,13 +273,13 @@ namespace
             notifyWorker();
         }
 
-        void pushSound( const int m82Sound, const int soundVolume )
+        void pushSound( const int m82Sound )
         {
             createWorker();
 
             const std::scoped_lock<std::mutex> lock( _mutex );
 
-            _soundTasks.emplace_back( m82Sound, soundVolume );
+            _soundTasks.emplace_back( m82Sound );
 
             notifyWorker();
         }
@@ -380,15 +381,13 @@ namespace
         {
             SoundTask() = default;
 
-            SoundTask( const int m82Sound_, const int soundVolume_ )
+            SoundTask( const int m82Sound_ )
                 : m82Sound( m82Sound_ )
-                , soundVolume( soundVolume_ )
             {
                 // Do nothing.
             }
 
             int m82Sound{ 0 };
-            int soundVolume{ 0 };
         };
 
         struct LoopSoundTask
@@ -471,7 +470,7 @@ namespace
                 PlayMusicImpl( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
                 return;
             case TaskType::PlaySound:
-                PlaySoundImpl( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
+                PlaySoundImpl( _currentSoundTask.m82Sound );
                 return;
             case TaskType::PlayLoopSound:
                 playLoopSoundsImpl( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
@@ -510,7 +509,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    int PlaySoundImpl( const int m82, const int soundVolume )
+    int PlaySoundImpl( const int m82 )
     {
         const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -521,7 +520,7 @@ namespace
             return -1;
         }
 
-        return Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), -1, false, 100 * soundVolume / 10 );
+        return Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), false );
     }
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
@@ -601,22 +600,22 @@ namespace
 
         bestSoundToAddId = 0;
         bestSoundToReplaceId = 0;
-        int bestAngleDiff = 360;
-        int bestVolumeDiff = 100;
+        int bestAngleDiff = INT_MAX;
+        int bestDistanceDiff = INT_MAX;
 
         for ( size_t soundToAddId = 0; soundToAddId < soundToAdd.size(); ++soundToAddId ) {
             for ( size_t soundToReplaceId = 0; soundToReplaceId < soundToReplace.size(); ++soundToReplaceId ) {
                 const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
-                const int volumeDiff
-                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage ) - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
+                const int distanceDiff
+                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].distance ) - static_cast<int>( soundToReplace[soundToReplaceId].distance ) );
                 if ( bestAngleDiff >= angleDiff ) {
-                    if ( bestAngleDiff == angleDiff && volumeDiff > bestVolumeDiff ) {
+                    if ( bestAngleDiff == angleDiff && distanceDiff > bestDistanceDiff ) {
                         // The existing best pair has lower volume difference.
                         continue;
                     }
 
                     bestAngleDiff = angleDiff;
-                    bestVolumeDiff = volumeDiff;
+                    bestDistanceDiff = distanceDiff;
 
                     bestSoundToAddId = soundToAddId;
                     bestSoundToReplaceId = soundToReplaceId;
@@ -700,9 +699,6 @@ namespace
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
-                    // Even when no angle and sound effect volume have been changed the overall sound volume might have. Set the volume.
-                    Mixer::setVolume( exactSoundEffect->channelId, exactSoundEffect->volumePercentage * soundVolume / 10 );
-
                     currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
                     effectsToReplace.erase( exactSoundEffect );
 
@@ -730,11 +726,9 @@ namespace
                 currentInfo = { effectsToAdd[soundToAddId], currentInfo.channelId };
                 effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
 
-                Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
+                assert( is3DAudioEnabled || currentInfo.angle == 0 );
 
-                if ( is3DAudioEnabled ) {
-                    Mixer::setAngle( currentInfo.channelId, currentInfo.angle );
-                }
+                Mixer::setPosition( currentInfo.channelId, currentInfo.angle, currentInfo.distance );
             }
 
             if ( effectsToReplace.empty() ) {
@@ -773,8 +767,9 @@ namespace
                     continue;
                 }
 
-                const int channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), -1, true, info.volumePercentage * soundVolume / 10,
-                                                   is3DAudioEnabled ? info.angle : std::optional<uint16_t>{} );
+                assert( is3DAudioEnabled || info.angle == 0 );
+
+                const int channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), true, std::pair{ info.angle, info.distance } );
                 if ( channelId < 0 ) {
                     // Unable to play this sound.
                     continue;
@@ -799,6 +794,8 @@ namespace AudioManager
             if ( !midiSoundFonts.empty() ) {
                 Music::SetMidiSoundFonts( midiSoundFonts );
             }
+
+            Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );
 
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
@@ -859,7 +856,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeSoundTasks();
 
-        return PlaySoundImpl( m82, Settings::Get().SoundVolume() );
+        return PlaySoundImpl( m82 );
     }
 
     void PlaySoundAsync( const int m82 )
@@ -872,7 +869,7 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
+        g_asyncSoundManager.pushSound( m82 );
     }
 
     bool isExternalMusicFileAvailable( const int trackId )

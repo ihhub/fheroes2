@@ -519,7 +519,7 @@ namespace
             returnCode = Mix_FadeInMusicPos( mus.get(), loopCount, musicFadeInMs, track->getPosition() );
 
             if ( returnCode != 0 ) {
-                ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
+                ERROR_LOG( "Failed to resume the music track. The error: " << Mix_GetError() )
             }
         }
 
@@ -529,7 +529,7 @@ namespace
             returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
 
             if ( returnCode != 0 ) {
-                ERROR_LOG( "Failed to play a music track. The error: " << Mix_GetError() )
+                ERROR_LOG( "Failed to play the music track. The error: " << Mix_GetError() )
             }
         }
 
@@ -753,8 +753,8 @@ void Mixer::SetChannels( const int num )
 
     mixerChannelCount = Mix_AllocateChannels( num );
     if ( num != mixerChannelCount ) {
-        ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only "
-                                                                                                                    << mixerChannelCount )
+        ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels is " << num << " but allocated only "
+                                                                                                                       << mixerChannelCount )
     }
 
     if ( isMuted ) {
@@ -772,8 +772,7 @@ int Mixer::getChannelCount()
     return mixerChannelCount;
 }
 
-int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int volumePercentage,
-                 const std::optional<int16_t> angle /* = {} */ )
+int Mixer::Play( const uint8_t * ptr, const uint32_t size, const bool loop, const std::optional<std::pair<int16_t, uint8_t>> position /* = {} */ )
 {
     if ( ptr == nullptr || size == 0 ) {
         // You are trying to play an empty sound. Check your logic!
@@ -801,39 +800,37 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return -1;
     }
 
-    // Before starting playback, it is usually unknown what volume is set on the channel to be used
-    // (especially if we are going to use the first available channel for playback, because SDL does
-    // all the internal bookkeeping itself). To avoid arbitrary volume spikes, we will temporarily
-    // mute the audio chunk itself until we can properly adjust the channel parameters.
-    const int chunkVolume = Mix_VolumeChunk( sample.get(), 0 );
+    // SDL itself maintains all internal channel bookkeeping, so when using the "first free channel"
+    // for playback, it is not known in advance which channel will be used. If additional channel
+    // setup is needed, then, to avoid arbitrary volume fluctuations, we will temporarily mute the
+    // audio chunk itself until we can properly adjust the channel parameters.
+    const int chunkVolume = position ? Mix_VolumeChunk( sample.get(), 0 ) : 0;
     if ( chunkVolume < 0 ) {
         ERROR_LOG( "Failed to mute the audio chunk. The error: " << Mix_GetError() )
         return -1;
     }
 
-    const int channel = Mix_PlayChannel( channelId, sample.get(), loop ? -1 : 0 );
+    const int channel = Mix_PlayChannel( -1, sample.get(), loop ? -1 : 0 );
     if ( channel < 0 ) {
-        ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
+        ERROR_LOG( "Failed to play the audio chunk. The error: " << Mix_GetError() )
         return channel;
     }
 
-    // Immediately pause the channel so as not to continue playing while it is being set up
-    Mix_Pause( channel );
+    if ( position ) {
+        // Immediately pause the channel so as not to continue playing while it is being set up
+        Mix_Pause( channel );
 
-    setVolume( channel, volumePercentage );
+        setPosition( channel, position->first, position->second );
 
-    if ( angle ) {
-        setAngle( channel, *angle );
+        // When restoring the volume of an audio chunk, the only correct result of the call is zero,
+        // because this is exactly what the volume of the muted chunk should be
+        if ( Mix_VolumeChunk( sample.get(), chunkVolume ) != 0 ) {
+            ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+        }
+
+        // Resume the channel as soon as all its parameters are settled
+        Mix_Resume( channel );
     }
-
-    // When restoring the volume of an audio chunk, the only correct result of the call is zero,
-    // because this is exactly what the volume of the muted chunk should be
-    if ( Mix_VolumeChunk( sample.get(), chunkVolume ) != 0 ) {
-        ERROR_LOG( "Failed to restore the volume of the audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
-    }
-
-    // Resume the channel as soon as all its parameters are settled
-    Mix_Resume( channel );
 
     // There can be a maximum of two items in the sample queue for a channel:
     // the previous sample (if it hasn't been freed yet) and the current one
@@ -842,7 +839,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     return channel;
 }
 
-void Mixer::setAngle( const int channelId, const int16_t angle )
+void Mixer::setPosition( const int channelId, const int16_t angle, const uint8_t distance )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -850,12 +847,12 @@ void Mixer::setAngle( const int channelId, const int16_t angle )
         return;
     }
 
-    if ( Mix_SetPosition( channelId, angle, 0 ) == 0 ) {
+    if ( Mix_SetPosition( channelId, angle, distance ) == 0 ) {
         ERROR_LOG( "Failed to set the position of channel " << channelId << ". The error: " << Mix_GetError() )
     }
 }
 
-void Mixer::setVolume( const int channelId, const int volumePercentage )
+void Mixer::setVolume( const int volumePercentage, const int channelId /* = -1 */ )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 

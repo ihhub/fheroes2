@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 struct ListFiles;
@@ -50,14 +51,17 @@ namespace Mixer
 
     int getChannelCount();
 
-    // Starts playback of the given sound on the channel 'channelId' with the given volume and
-    // (optionally) the angle of the direction to the sound source. If the 'channelId' is -1,
-    // then the sound will be played on the first available channel. Returns the ID of the channel
-    // on which the sound is being played, or -1 in case of an error.
-    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int volumePercentage, const std::optional<int16_t> angle = {} );
+    // Starts playback of the given sound with the ability of looping it, as well as (optionally)
+    // the ability to specify the position of the sound source relative to the listener (the angle
+    // of direction to the sound source in degrees and the distance to the sound source).
+    int Play( const uint8_t * ptr, const uint32_t size, const bool loop, const std::optional<std::pair<int16_t, uint8_t>> position = {} );
 
-    void setVolume( const int channelId, const int volumePercentage );
-    void setAngle( const int channelId, const int16_t angle );
+    // Sets the playback volume for the given channel or for all channels at once (if 'channelId' is set to -1).
+    void setVolume( const int volumePercentage, const int channelId = -1 );
+
+    // Sets the position of the sound source relative to the listener (the angle of direction to
+    // the sound source in degrees and the distance to the sound source) for the given channel.
+    void setPosition( const int channelId, const int16_t angle, const uint8_t distance );
 
     void Stop( const int channelId = -1 );
 

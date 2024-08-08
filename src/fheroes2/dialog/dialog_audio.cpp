@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_audio.h"
+
 #include <algorithm>
 #include <cassert>
 #include <string>
@@ -27,7 +29,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
-#include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -199,8 +200,12 @@ namespace Dialog
                     saveSoundVolume = true;
                 }
 
-                if ( saveSoundVolume && fromAdventureMap ) {
-                    Game::EnvironmentSoundMixer();
+                if ( saveSoundVolume ) {
+                    Mixer::setVolume( 100 * conf.SoundVolume() / 10 );
+
+                    if ( fromAdventureMap ) {
+                        Game::EnvironmentSoundMixer();
+                    }
                 }
             }
 
