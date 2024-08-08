@@ -153,7 +153,6 @@ namespace Dialog
 
         bool saveConfig = false;
 
-        // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -162,55 +161,56 @@ namespace Dialog
                 break;
             }
 
-            // set music or sound volume
-            bool saveMusicVolume = false;
-            bool saveSoundVolume = false;
+            bool haveSettingsChanged = false;
+
             if ( Audio::isValid() ) {
-                if ( le.MouseClickLeft( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
-                    saveMusicVolume = true;
+                {
+                    bool haveMusicSettingsChanged = false;
+
+                    if ( le.MouseClickLeft( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() + 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() - 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+
+                    if ( haveMusicSettingsChanged ) {
+                        Music::setVolume( 100 * conf.MusicVolume() / 10 );
+
+                        haveSettingsChanged = true;
+                    }
                 }
 
-                if ( saveMusicVolume ) {
-                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
-                }
+                {
+                    bool haveSoundSettingsChanged = false;
 
-                if ( le.MouseClickLeft( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
-                    saveSoundVolume = true;
-                }
-                if ( le.MouseClickLeft( audio3D ) ) {
-                    conf.set3DAudio( !conf.is3DAudioEnabled() );
-                    saveSoundVolume = true;
-                }
+                    if ( le.MouseClickLeft( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() + 1 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() - 1 );
+                        haveSoundSettingsChanged = true;
+                    }
 
-                if ( saveSoundVolume ) {
-                    Mixer::setVolume( 100 * conf.SoundVolume() / 10 );
+                    if ( haveSoundSettingsChanged ) {
+                        Mixer::setVolume( 100 * conf.SoundVolume() / 10 );
 
-                    if ( fromAdventureMap ) {
-                        Game::EnvironmentSoundMixer();
+                        haveSettingsChanged = true;
                     }
                 }
             }
 
-            // set music type
-            bool saveMusicType = false;
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
@@ -222,7 +222,17 @@ namespace Dialog
 
                 AudioManager::PlayCurrentMusic();
 
-                saveMusicType = true;
+                haveSettingsChanged = true;
+            }
+
+            if ( le.MouseClickLeft( audio3D ) ) {
+                conf.set3DAudio( !conf.is3DAudioEnabled() );
+
+                if ( fromAdventureMap ) {
+                    Game::EnvironmentSoundMixer();
+                }
+
+                haveSettingsChanged = true;
             }
 
             if ( le.isMouseRightButtonPressedInArea( musicVolumeRoi ) ) {
@@ -242,8 +252,7 @@ namespace Dialog
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( saveMusicVolume || saveSoundVolume || saveMusicType ) {
-                // redraw
+            if ( haveSettingsChanged ) {
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
                 drawDialog( roi );
                 buttonOkay.draw();
