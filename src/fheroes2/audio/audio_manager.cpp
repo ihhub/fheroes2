@@ -51,13 +51,13 @@ namespace
 {
     struct MusicFileType
     {
-        explicit MusicFileType( const MUS::EXTERNAL_MUSIC_TYPE type_ )
-            : type( type_ )
+        explicit MusicFileType( const MUS::ExternalMusicNamingScheme scheme )
+            : namingScheme( scheme )
         {
             // Do nothing.
         }
 
-        MUS::EXTERNAL_MUSIC_TYPE type = MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION;
+        MUS::ExternalMusicNamingScheme namingScheme = MUS::ExternalMusicNamingScheme::WIN_VERSION;
 
         std::array<std::string, 3> extension{ ".ogg", ".mp3", ".flac" };
     };
@@ -120,7 +120,7 @@ namespace
         const auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
             std::string fullPath;
 
-            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );
+            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.namingScheme, musicFileType.extension[0].c_str() );
             if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
                 return fullPath;
             }
@@ -144,9 +144,9 @@ namespace
         };
 
         // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
-        thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
-                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ),
-                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
+        thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::ExternalMusicNamingScheme::DOS_VERSION ),
+                                                                  MusicFileType( MUS::ExternalMusicNamingScheme::WIN_VERSION ),
+                                                                  MusicFileType( MUS::ExternalMusicNamingScheme::MAPPED ) };
 
         for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
             std::string filePath = tryMusicFileType( musicFileTypes[i] );
@@ -174,9 +174,9 @@ namespace
 
     struct ChannelAudioLoopEffectInfo : public AudioManager::AudioLoopEffectInfo
     {
-        ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
+        ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int chan )
             : AudioLoopEffectInfo( info )
-            , channelId( channelId_ )
+            , channelId( chan )
         {
             // Do nothing.
         }
@@ -364,10 +364,10 @@ namespace
         {
             MusicTask() = default;
 
-            MusicTask( const int musicId_, const MusicSource musicType_, const Music::PlaybackMode playbackMode_ )
-                : musicId( musicId_ )
-                , musicType( musicType_ )
-                , playbackMode( playbackMode_ )
+            MusicTask( const int id, const MusicSource type, const Music::PlaybackMode mode )
+                : musicId( id )
+                , musicType( type )
+                , playbackMode( mode )
             {
                 // Do nothing.
             }
@@ -381,8 +381,8 @@ namespace
         {
             SoundTask() = default;
 
-            SoundTask( const int m82Sound_ )
-                : m82Sound( m82Sound_ )
+            SoundTask( const int m82 )
+                : m82Sound( m82 )
             {
                 // Do nothing.
             }
@@ -562,7 +562,7 @@ namespace
 
                 currentMusicTrackId = trackId;
 
-                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::ExternalMusicNamingScheme::MAPPED, " " ) )
 
                 return;
             }
