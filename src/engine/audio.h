@@ -56,8 +56,7 @@ namespace Mixer
     // of direction to the sound source in degrees and the distance to the sound source).
     int Play( const uint8_t * ptr, const uint32_t size, const bool loop, const std::optional<std::pair<int16_t, uint8_t>> position = {} );
 
-    // Sets the playback volume for the given channel or for all channels at once (if 'channelId' is set to -1).
-    void setVolume( const int volumePercentage, const int channelId = -1 );
+    void setVolume( const int volumePercentage );
 
     // Sets the position of the sound source relative to the listener (the angle of direction to
     // the sound source in degrees and the distance to the sound source) for the given channel.

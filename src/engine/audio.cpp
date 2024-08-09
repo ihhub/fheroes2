@@ -73,14 +73,14 @@ namespace
     };
 
     std::atomic<bool> isInitialized{ false };
-    bool isMuted = false;
-
-    int musicFadeInMs{ 0 };
-
-    std::vector<int> savedMixerVolumes;
-    int savedMusicVolume = 0;
 
     std::atomic<int> mixerChannelCount{ 0 };
+
+    bool isMuted{ false };
+    int savedMixerVolume{ 0 };
+    int savedMusicVolume{ 0 };
+
+    int musicFadeInMs{ 0 };
 
     // This mutex protects all operations with audio. In order to avoid deadlocks, it shouldn't
     // be acquired in any callback functions that can be called by SDL_Mixer.
@@ -569,6 +569,38 @@ namespace
         // MIX_MAX_VOLUME is divided by 10.6, not 10 to reserve an extra 0.5 dB for possible sound overloads in SDL_mixer.
         return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10.6 * MIX_MAX_VOLUME );
     }
+
+    // Synchronizes the volume settings of all active mixer channels
+    void syncChannelsVolume()
+    {
+        const int channelsCount = Mix_AllocateChannels( -1 );
+        if ( channelsCount < 2 ) {
+            return;
+        }
+
+        Mix_Volume( -1, Mix_Volume( 0, -1 ) );
+    }
+
+#ifndef NDEBUG
+    // Checks whether the volume settings of all active mixer channels are synchronized
+    bool checkChannelsVolumeSync()
+    {
+        const int channelsCount = Mix_AllocateChannels( -1 );
+        if ( channelsCount < 2 ) {
+            return true;
+        }
+
+        const int vol = Mix_Volume( 0, -1 );
+
+        for ( int i = 0; i < channelsCount; ++i ) {
+            if ( Mix_Volume( i, -1 ) != vol ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+#endif
 }
 
 void Audio::Init()
@@ -616,9 +648,6 @@ void Audio::Init()
         return;
     }
 
-    // By default this value should be MIX_CHANNELS.
-    mixerChannelCount = Mix_AllocateChannels( -1 );
-
     int frequency = 0;
     uint16_t format = 0;
     int channels = 0;
@@ -647,6 +676,16 @@ void Audio::Init()
     if ( audioSpec.channels != channels ) {
         ERROR_LOG( "Number of audio channels is initialized as " << channels << " instead of " << audioSpec.channels )
     }
+
+    // Make sure that all mixer channels have the same volume settings.
+    syncChannelsVolume();
+
+    // By default this value should be MIX_CHANNELS.
+    mixerChannelCount = Mix_AllocateChannels( -1 );
+
+    isMuted = false;
+    savedMixerVolume = 0;
+    savedMusicVolume = 0;
 
     musicRestartManager.createWorker();
 
@@ -706,16 +745,13 @@ void Audio::Mute()
         return;
     }
 
+    assert( checkChannelsVolumeSync() );
+
     isMuted = true;
 
-    const size_t channelsCount = static_cast<size_t>( Mix_AllocateChannels( -1 ) );
-
-    savedMixerVolumes.resize( channelsCount );
-
-    for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        savedMixerVolumes[channel] = Mix_Volume( static_cast<int>( channel ), 0 );
-    }
-
+    // Mix_Volume( -1, X ) returns the average of all channels' volumes, but since they all have to have the same volume (and we just checked that their volume settings
+    // are in sync) it is safe to use its result here.
+    savedMixerVolume = ( Mix_AllocateChannels( -1 ) > 0 ? Mix_Volume( -1, 0 ) : 0 );
     savedMusicVolume = Mix_VolumeMusic( 0 );
 }
 
@@ -729,12 +765,9 @@ void Audio::Unmute()
 
     isMuted = false;
 
-    const size_t channelsCount = std::min( static_cast<size_t>( Mix_AllocateChannels( -1 ) ), savedMixerVolumes.size() );
+    assert( savedMixerVolume >= 0 && savedMusicVolume >= 0 );
 
-    for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        Mix_Volume( static_cast<int>( channel ), savedMixerVolumes[channel] );
-    }
-
+    Mix_Volume( -1, savedMixerVolume );
     Mix_VolumeMusic( savedMusicVolume );
 }
 
@@ -745,11 +778,19 @@ bool Audio::isValid()
 
 void Mixer::SetChannels( const int num )
 {
+    if ( num <= 0 ) {
+        // When trying to allocate zero channels, an attempt to call Mix_Volume( -1, X ) results in division by zero when calculating the average volume
+        assert( 0 );
+        return;
+    }
+
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
         return;
     }
+
+    assert( checkChannelsVolumeSync() );
 
     mixerChannelCount = Mix_AllocateChannels( num );
     if ( num != mixerChannelCount ) {
@@ -758,9 +799,12 @@ void Mixer::SetChannels( const int num )
     }
 
     if ( isMuted ) {
-        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), MIX_MAX_VOLUME );
-
+        // Make sure that all mixer channels (including the ones that have just been allocated) are muted.
         Mix_Volume( -1, 0 );
+    }
+    else {
+        // Make sure that all mixer channels (including the ones that have just been allocated) have the same volume settings.
+        syncChannelsVolume();
     }
 
     // Just to verify that we are synced with SDL.
@@ -852,7 +896,7 @@ void Mixer::setPosition( const int channelId, const int16_t angle, const uint8_t
     }
 }
 
-void Mixer::setVolume( const int volumePercentage, const int channelId /* = -1 */ )
+void Mixer::setVolume( const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
@@ -862,21 +906,14 @@ void Mixer::setVolume( const int volumePercentage, const int channelId /* = -1 *
         return;
     }
 
-    if ( !isMuted ) {
-        Mix_Volume( channelId, volume );
+    assert( checkChannelsVolumeSync() );
+
+    if ( isMuted ) {
+        savedMixerVolume = volume;
         return;
     }
 
-    if ( channelId < 0 ) {
-        std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), volume );
-        return;
-    }
-
-    const size_t channel = static_cast<size_t>( channelId );
-
-    if ( channel < savedMixerVolumes.size() ) {
-        savedMixerVolumes[channel] = volume;
-    }
+    Mix_Volume( -1, volume );
 }
 
 void Mixer::Stop( const int channelId /* = -1 */ )
