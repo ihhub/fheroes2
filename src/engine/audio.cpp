@@ -572,8 +572,7 @@ namespace
     // Synchronizes the volume settings of all active mixer channels
     void syncChannelsVolume()
     {
-        const int channelsCount = Mix_AllocateChannels( -1 );
-        if ( channelsCount < 2 ) {
+        if ( Mix_AllocateChannels( -1 ) < 2 ) {
             return;
         }
 
@@ -744,13 +743,13 @@ void Audio::Mute()
         return;
     }
 
-    assert( checkChannelsVolumeSync() );
+    assert( Mix_AllocateChannels( -1 ) > 0 && checkChannelsVolumeSync() );
 
     isMuted = true;
 
     // Mix_Volume( -1, X ) returns the average of all channels' volumes, but since they all have to have the same volume (and we just checked that their volume settings
     // are in sync) it is safe to use its result here.
-    savedMixerVolume = ( Mix_AllocateChannels( -1 ) > 0 ? Mix_Volume( -1, 0 ) : 0 );
+    savedMixerVolume = Mix_Volume( -1, 0 );
     savedMusicVolume = Mix_VolumeMusic( 0 );
 }
 
@@ -762,9 +761,9 @@ void Audio::Unmute()
         return;
     }
 
-    isMuted = false;
+    assert( Mix_AllocateChannels( -1 ) > 0 && savedMixerVolume >= 0 && savedMusicVolume >= 0 );
 
-    assert( savedMixerVolume >= 0 && savedMusicVolume >= 0 );
+    isMuted = false;
 
     Mix_Volume( -1, savedMixerVolume );
     Mix_VolumeMusic( savedMusicVolume );
@@ -797,6 +796,8 @@ void Mixer::SetChannels( const int num )
                                                                                                                      << mixerChannelCount )
     }
 
+    assert( mixerChannelCount > 0 );
+
     if ( isMuted ) {
         // Make sure that all mixer channels (including the ones that have just been allocated) are muted.
         Mix_Volume( -1, 0 );
@@ -805,9 +806,6 @@ void Mixer::SetChannels( const int num )
         // Make sure that all mixer channels (including the ones that have just been allocated) have the same volume settings.
         syncChannelsVolume();
     }
-
-    // Just to verify that we are synced with SDL.
-    assert( Mix_AllocateChannels( -1 ) == mixerChannelCount );
 }
 
 int Mixer::getChannelCount()
@@ -905,7 +903,7 @@ void Mixer::setVolume( const int volumePercentage )
         return;
     }
 
-    assert( checkChannelsVolumeSync() );
+    assert( Mix_AllocateChannels( -1 ) > 0 && checkChannelsVolumeSync() );
 
     if ( isMuted ) {
         savedMixerVolume = volume;
