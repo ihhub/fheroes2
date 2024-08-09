@@ -74,20 +74,20 @@ namespace AudioManager
     {
         AudioLoopEffectInfo() = default;
 
-        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
+        AudioLoopEffectInfo( const int16_t angle_, const uint8_t distance_ )
             : angle( angle_ )
-            , volumePercentage( volumePercentage_ )
+            , distance( distance_ )
         {
             // Do nothing.
         }
 
         bool operator==( const AudioLoopEffectInfo & other ) const
         {
-            return other.angle == angle && other.volumePercentage == volumePercentage;
+            return other.angle == angle && other.distance == distance;
         }
 
         int16_t angle{ 0 };
-        uint8_t volumePercentage{ 0 };
+        uint8_t distance{ 0 };
     };
 
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
