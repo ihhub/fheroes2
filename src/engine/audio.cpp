@@ -591,7 +591,7 @@ namespace
 
         const int vol = Mix_Volume( 0, -1 );
 
-        for ( int i = 0; i < channelsCount; ++i ) {
+        for ( int i = 1; i < channelsCount; ++i ) {
             if ( Mix_Volume( i, -1 ) != vol ) {
                 return false;
             }
