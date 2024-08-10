@@ -71,18 +71,15 @@ namespace
         return { top.x, top.y, townbkg.width(), townbkg.height() };
     }
 
-    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
+    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t buildId )
     {
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
             if ( buildId & BUILD_MAGEGUILD ) {
                 const int mageGuildLevel = castle.GetLevelMageGuild();
-                if ( constructionInProgress ) {
-                    return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
-                }
-
                 assert( mageGuildLevel > 0 );
+
                 return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
 
@@ -100,17 +97,16 @@ namespace
     void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 )
     {
         const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
-        const bool constructionInProgress = alpha < 255;
 
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
             if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
-                if ( buildId & BUILD_MAGEGUILD && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_SPEC ) ) ) ) {
+                if ( buildId & BUILD_MAGEGUILD && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_SPEC ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_SPEC && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_MAGEGUILD1 ) ) ) ) {
+                if ( buildId == BUILD_SPEC && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_MAGEGUILD1 ) ) ) {
                     return;
                 }
 
@@ -118,11 +114,11 @@ namespace
             }
 
             if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
-                if ( buildId == DWELLING_MONSTER3 && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_THIEVESGUILD ) ) ) ) {
+                if ( buildId == DWELLING_MONSTER3 && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_THIEVESGUILD ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_THIEVESGUILD && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( DWELLING_MONSTER3 ) ) ) ) {
+                if ( buildId == BUILD_THIEVESGUILD && ( !castle.isBuild( buildId ) || !castle.isBuild( DWELLING_MONSTER3 ) ) ) {
                     return;
                 }
 
@@ -130,11 +126,11 @@ namespace
             }
         }
         else if ( race == Race::NECR ) {
-            if ( buildId == BUILD_CAPTAIN && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CASTLE ) ) ) ) {
+            if ( buildId == BUILD_CAPTAIN && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_CASTLE ) ) ) {
                 return;
             }
 
-            if ( buildId == BUILD_CASTLE && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CAPTAIN ) ) ) ) {
+            if ( buildId == BUILD_CASTLE && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_CAPTAIN ) ) ) {
                 return;
             }
 
@@ -149,39 +145,46 @@ namespace
             return;
         }
 
-        const int race = castle.GetRace();
-        uint32_t index = 0;
+        while ( building & BUILD_MAGEGUILD ) {
+            const int mageGuildLevel = castle.GetLevelMageGuild();
 
-        switch ( building ) {
-        case BUILD_MAGEGUILD1:
-            if ( castle.GetLevelMageGuild() > 1 ) {
-                return;
+            // If we are going to draw a Mage Guild building, then the castle should have a Mage Guild
+            assert( mageGuildLevel > 0 );
+
+            // The drawing of the Mage Guild building of the currently built level is allowed
+            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 1 ) ) ) {
+                break;
             }
-            break;
-        case BUILD_MAGEGUILD2:
-            if ( castle.GetLevelMageGuild() > 2 ) {
-                return;
+
+            // If we are going to draw a Mage Guild building not of the currently built level, then the castle should have at least a Level 2 Mage Guild
+            assert( mageGuildLevel > 1 );
+
+            // The drawing of the Mage Guild building of the previous level is allowed as well, so that we can draw the "upgrade" animation
+            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 2 ) ) ) {
+                break;
             }
-            index = ( Race::NECR == race ) ? 6 : 1;
-            break;
-        case BUILD_MAGEGUILD3:
-            if ( castle.GetLevelMageGuild() > 3 ) {
-                return;
-            }
-            index = ( Race::NECR == race ) ? 12 : 2;
-            break;
-        case BUILD_MAGEGUILD4:
-            if ( castle.GetLevelMageGuild() > 4 ) {
-                return;
-            }
-            index = ( Race::NECR == race ) ? 18 : 3;
-            break;
-        case BUILD_MAGEGUILD5:
-            index = ( Race::NECR == race ) ? 24 : 4;
-            break;
-        default:
-            break;
+
+            // In all other cases, we should not draw this Mage Guild building
+            return;
         }
+
+        const int race = castle.GetRace();
+        const uint32_t index = [building, race]() -> uint32_t {
+            switch ( building ) {
+            case BUILD_MAGEGUILD2:
+                return ( race == Race::NECR ? 6 : 1 );
+            case BUILD_MAGEGUILD3:
+                return ( race == Race::NECR ? 12 : 2 );
+            case BUILD_MAGEGUILD4:
+                return ( race == Race::NECR ? 18 : 3 );
+            case BUILD_MAGEGUILD5:
+                return ( race == Race::NECR ? 24 : 4 );
+            default:
+                break;
+            }
+
+            return 0;
+        }();
 
         const int icn = Castle::GetICNBuilding( building, race );
         if ( icn == ICN::UNKNOWN ) {
@@ -326,7 +329,7 @@ namespace
                 redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
                 redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, false ) ) {
+                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
                     redrawBuildingConnection( castle, dst_pt, currentBuild.id );
                 }
             }
@@ -343,7 +346,7 @@ namespace
                 redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
                 redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, true ) ) {
+                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
                     redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetAlpha() );
                 }
 
@@ -360,7 +363,7 @@ namespace
                     redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
                 }
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, false ) ) {
+                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
                     redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
                     redrawBuildingConnection( castle, dst_pt, currentBuild.id );
                 }
