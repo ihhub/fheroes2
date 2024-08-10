@@ -446,7 +446,7 @@ namespace
 
         if ( fheroes2::FitToRoi( monsterSprite, inPos, display, outPos, inSize, roi ) ) {
             fheroes2::Sprite outMonsterSprite = monsterSprite;
-            if (isMirror)
+            if ( isMirror )
                 fheroes2::ApplyPalette( outMonsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
             fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
         }
