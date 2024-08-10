@@ -254,7 +254,7 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
     return true;
 }
 
-bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
