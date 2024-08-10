@@ -8948,7 +8948,7 @@ msgid "Random Monster - weak"
 msgstr "Slumpad Varelse - svag"
 
 msgid "Random Monster - medium"
-msgstr "Slumpad Varelse- medel"
+msgstr "Slumpad Varelse - medel"
 
 msgid "Random Monster - strong"
 msgstr "Slumpad Varelse - starkt"
