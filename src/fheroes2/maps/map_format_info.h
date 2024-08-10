@@ -234,7 +234,7 @@ namespace Maps::Map_Format
         bool operator==( const AdventureMapEventMetadata & anotherMetadata ) const
         {
             return message == anotherMetadata.message && humanPlayerColors == anotherMetadata.humanPlayerColors
-                   &&  computerPlayerColors == anotherMetadata.computerPlayerColors && isRecurringEvent == anotherMetadata.isRecurringEvent
+                   && computerPlayerColors == anotherMetadata.computerPlayerColors && isRecurringEvent == anotherMetadata.isRecurringEvent
                    && artifact == anotherMetadata.artifact && artifactMetadata == anotherMetadata.artifactMetadata && resources == anotherMetadata.resources
                    && attack == anotherMetadata.attack && defense == anotherMetadata.defense && knowledge == anotherMetadata.knowledge
                    && spellPower == anotherMetadata.spellPower && experience == anotherMetadata.experience && secondarySkill == anotherMetadata.secondarySkill
