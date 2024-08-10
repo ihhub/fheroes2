@@ -41,13 +41,13 @@ namespace fheroes2
 class Castle;
 class StatusBar;
 
-enum building_t : uint32_t;
+enum BuildingType : uint32_t;
 enum class BuildingStatus : int32_t;
 
 class BuildingInfo
 {
 public:
-    BuildingInfo( const Castle & c, const building_t b );
+    BuildingInfo( const Castle & c, const BuildingType b );
 
     uint32_t getBuilding() const
     {

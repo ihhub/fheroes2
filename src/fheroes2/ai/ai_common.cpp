@@ -44,7 +44,7 @@
 #include "resource.h"
 #include "resource_trading.h"
 
-bool AI::BuildIfPossible( Castle & castle, const building_t building )
+bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
     switch ( castle.CheckBuyBuilding( building ) ) {
     case BuildingStatus::LACK_RESOURCES: {
@@ -68,7 +68,7 @@ bool AI::BuildIfPossible( Castle & castle, const building_t building )
     return result;
 }
 
-bool AI::BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier )
+bool AI::BuildIfEnoughFunds( Castle & castle, const BuildingType building, const uint32_t fundsMultiplier )
 {
     if ( fundsMultiplier < 1 || fundsMultiplier > 99 ) {
         return false;

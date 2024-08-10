@@ -150,7 +150,7 @@ namespace fheroes2
         uint32_t race;
         uint32_t level;
 
-        cost_t cost;
+        Cost cost;
     };
 
     struct MonsterSound
