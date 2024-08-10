@@ -85,6 +85,20 @@ namespace Maps::Map_Format
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.
         std::array<int32_t, 6> availableToHireMonsterCount{ -1 };
+
+        bool operator==( const CastleMetadata & anotherCastleMetadata ) const
+        {
+            return customName == anotherCastleMetadata.customName && defenderMonsterType == anotherCastleMetadata.defenderMonsterType
+                   && defenderMonsterCount == anotherCastleMetadata.defenderMonsterCount && customBuildings == anotherCastleMetadata.customBuildings
+                   && builtBuildings == anotherCastleMetadata.builtBuildings && bannedBuildings == anotherCastleMetadata.bannedBuildings
+                   && mustHaveSpells == anotherCastleMetadata.mustHaveSpells && bannedSpells == anotherCastleMetadata.bannedSpells
+                   && availableToHireMonsterCount == anotherCastleMetadata.availableToHireMonsterCount;
+        }
+
+        bool operator!=( const CastleMetadata & anotherCastleMetadata ) const
+        {
+            return !( *this == anotherCastleMetadata );
+        }
     };
 
     struct HeroMetadata

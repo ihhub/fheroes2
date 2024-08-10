@@ -1162,7 +1162,15 @@ namespace Interface
 
                     const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
                     const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
-                    Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
+
+                    auto & castleMetadata = _mapFormat.castleMetadata[object.id];
+                    const auto castleMetadataBackup = castleMetadata;
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    Editor::castleDetailsDialog( castleMetadata, race, color );
+                    if ( castleMetadata != castleMetadataBackup ) {
+                        action.commit();
+                    }
                 }
                 else if ( objectType == MP2::OBJ_SIGN || objectType == MP2::OBJ_BOTTLE ) {
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
