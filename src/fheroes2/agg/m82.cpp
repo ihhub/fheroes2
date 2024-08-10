@@ -225,7 +225,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
     case MP2::OBJ_VOLCANO:
-        switch ( tile.getObjectIcnType() ) {
+        switch ( tile.getMainObjectPart()._objectIcnType ) {
         // Tile with volcanic steam only
         case MP2::OBJ_ICN_TYPE_UNKNOWN:
             return UNKNOWN;

@@ -791,7 +791,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     }
 
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -826,10 +826,10 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     }
 
     // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.getHero() != nullptr ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.getHero() != nullptr ) {
             continue;
         }
 
@@ -1315,14 +1315,14 @@ void World::PostLoad( const bool setTilePassabilities )
     _allTeleports.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
     }
 
     resetPathfinder();

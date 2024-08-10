@@ -1314,7 +1314,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const uint32_t uid = tile.GetObjectUID();
+    const uint32_t uid = tile.getMainObjectPart()._uid;
     int wide = 0;
 
     switch ( objectType ) {
@@ -1333,7 +1333,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 
     if ( tile.GetObject( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
     }
 }

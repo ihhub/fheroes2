@@ -124,39 +124,14 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        MP2::ObjectIcnType getObjectIcnType() const
+        const TilesAddon & getMainObjectPart() const
         {
-            return _mainAddon._objectIcnType;
+            return _mainAddon;
         }
 
-        void setObjectIcnType( const MP2::ObjectIcnType type )
+        TilesAddon & getMainObjectPart()
         {
-            _mainAddon._objectIcnType = type;
-        }
-
-        uint8_t GetObjectSpriteIndex() const
-        {
-            return _mainAddon._imageIndex;
-        }
-
-        void setObjectSpriteIndex( const uint8_t index )
-        {
-            _mainAddon._imageIndex = index;
-        }
-
-        uint32_t GetObjectUID() const
-        {
-            return _mainAddon._uid;
-        }
-
-        void setObjectUID( const uint32_t uid )
-        {
-            _mainAddon._uid = uid;
-        }
-
-        uint8_t getLayerType() const
-        {
-            return _mainAddon._layerType;
+            return _mainAddon;
         }
 
         uint16_t GetPassable() const
@@ -356,10 +331,10 @@ namespace Maps
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixMP2MapTileObjectType( Tiles & tile );
 
-        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
+        static int32_t getIndexOfMainTile( const Tiles & tile );
 
         // Update tile or bottom layer object image index.
-        static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+        static void updateTileObjectIcnIndex( Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
     private:
         bool isShadow() const;
