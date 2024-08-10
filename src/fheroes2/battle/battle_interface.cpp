@@ -3244,12 +3244,12 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     const Unit * unitOnCell = cell.GetUnit();
 
     if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect(), 0, unitOnCell->Modes(CAP_MIRRORIMAGE) );
+        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect(), 0, unitOnCell->Modes( CAP_MIRRORIMAGE ) );
     }
     else {
         unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
         if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect(), 0, unitOnCell->Modes(CAP_MIRRORIMAGE) );
+            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect(), 0, unitOnCell->Modes( CAP_MIRRORIMAGE ) );
         }
     }
 }
@@ -3324,7 +3324,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
 
         case Cursor::WAR_INFO: {
             if ( unitOnCell ) {
-                Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect(), 0, unitOnCell->Modes(CAP_MIRRORIMAGE) );
+                Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect(), 0, unitOnCell->Modes( CAP_MIRRORIMAGE ) );
 
                 humanturn_redraw = true;
             }
