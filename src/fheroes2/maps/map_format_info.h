@@ -181,6 +181,17 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        bool operator==( const SphinxMetadata & anotherMetadata ) const
+        {
+            return riddle == anotherMetadata.riddle && answers == anotherMetadata.answers && artifact == anotherMetadata.artifact
+                   && artifactMetadata == anotherMetadata.artifactMetadata && resources == anotherMetadata.resources;
+        }
+
+        bool operator!=( const SphinxMetadata & anotherMetadata ) const
+        {
+            return !( *this == anotherMetadata );
+        }
     };
 
     struct SignMetadata
@@ -219,6 +230,22 @@ namespace Maps::Map_Format
 
         int32_t monsterType{ 0 };
         int32_t monsterCount{ 0 };
+
+        bool operator==( const AdventureMapEventMetadata & anotherMetadata ) const
+        {
+            return message == anotherMetadata.message && humanPlayerColors == anotherMetadata.humanPlayerColors
+                   &&  computerPlayerColors == anotherMetadata.computerPlayerColors && isRecurringEvent == anotherMetadata.isRecurringEvent
+                   && artifact == anotherMetadata.artifact && artifactMetadata == anotherMetadata.artifactMetadata && resources == anotherMetadata.resources
+                   && attack == anotherMetadata.attack && defense == anotherMetadata.defense && knowledge == anotherMetadata.knowledge
+                   && spellPower == anotherMetadata.spellPower && experience == anotherMetadata.experience && secondarySkill == anotherMetadata.secondarySkill
+                   && secondarySkillLevel == anotherMetadata.secondarySkillLevel && monsterType == anotherMetadata.monsterType
+                   && monsterCount == anotherMetadata.monsterCount;
+        }
+
+        bool operator!=( const AdventureMapEventMetadata & anotherMetadata ) const
+        {
+            return !( *this == anotherMetadata );
+        }
     };
 
     struct ShrineMetadata
