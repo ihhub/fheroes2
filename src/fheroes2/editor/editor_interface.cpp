@@ -1164,11 +1164,12 @@ namespace Interface
                     const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
 
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
-                    const auto castleMetadataBackup = castleMetadata;
+                    auto castleMetadataBackup = castleMetadata;
 
-                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    Editor::castleDetailsDialog( castleMetadata, race, color );
+                    Editor::castleDetailsDialog( castleMetadataBackup, race, color );
                     if ( castleMetadata != castleMetadataBackup ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        castleMetadata = std::move( castleMetadataBackup );
                         action.commit();
                     }
                 }
