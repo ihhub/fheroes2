@@ -47,6 +47,7 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
+#include "pal.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -428,7 +429,7 @@ namespace
     }
 
     void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
-                      const fheroes2::Rect & roi )
+                      const fheroes2::Rect & roi, bool isMirror )
     {
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
         fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
@@ -444,7 +445,10 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( fheroes2::FitToRoi( monsterSprite, inPos, display, outPos, inSize, roi ) ) {
-            fheroes2::Blit( monsterSprite, inPos, display, outPos, inSize, isReflected );
+            fheroes2::Sprite outMonsterSprite = monsterSprite;
+            if (isMirror)
+                fheroes2::ApplyPalette( outMonsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+            fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
         }
 
         if ( isAnimated )
@@ -452,7 +456,7 @@ namespace
     }
 }
 
-int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const int32_t windowOffsetY )
+int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const int32_t windowOffsetY, bool isMirror )
 {
     // Unit cannot be dismissed or upgraded during combat
     assert( !troop.isBattle() || !( flags & BUTTONS ) || !( flags & ( UPGRADE | DISMISS ) ) );
@@ -509,7 +513,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     }
 
     const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + SHADOWWIDTH, sprite_dialog.width(), sprite_dialog.height() - 2 * SHADOWWIDTH );
-    DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
+    DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi, isMirror );
 
     const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
@@ -632,7 +636,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             }
 
             DrawMonsterInfo( pos_rt.getPosition(), troop );
-            DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
+            DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi, isMirror );
 
             if ( buttonUpgrade.isEnabled() ) {
                 buttonUpgrade.draw();
