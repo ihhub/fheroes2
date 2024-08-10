@@ -204,7 +204,7 @@ public:
     static uint32_t GetMaxHeroes();
 
 private:
-    cost_t _getKingdomStartingResources( const int difficulty ) const;
+    Cost _getKingdomStartingResources( const int difficulty ) const;
 
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
