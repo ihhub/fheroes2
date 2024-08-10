@@ -164,7 +164,8 @@ namespace
                 break;
             }
 
-            // In all other cases, we should not draw this Mage Guild building
+            // In all other cases, we should never draw this Mage Guild building
+            assert( 0 );
             return;
         }
 
@@ -286,8 +287,9 @@ namespace
             fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
         }
 
-        // Bay animation
-        if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HasSeaAccess() ) ) {
+        // Bay animation. The Wizard's castle is "special": its "bay" is not actually a bay, but a river flowing through a gorge in the wastelands, which must be drawn
+        // and animated, even if the castle itself is not located on the seashore.
+        if ( castle.GetRace() == Race::WZRD || ( castle.HasSeaAccess() && ( !castle.isBuild( BUILD_SHIPYARD ) || fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) ) ) {
             int bayIcnId = 0;
             const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
@@ -326,6 +328,12 @@ namespace
                     continue;
                 }
 
+                // Only draw this building if an upgraded version of this building has not yet been built
+                const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
+                if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding ) ) {
+                    continue;
+                }
+
                 redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
                 redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
 
@@ -342,6 +350,17 @@ namespace
         }
 
         for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
+            if ( !castle.isBuild( currentBuild.id ) ) {
+                continue;
+            }
+
+            // Only draw this building if an upgraded version of this building has either not been built yet, or is still under construction at the moment
+            const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
+            if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding )
+                 && upgradeForCurrentBuilding != fadeBuilding.GetBuilding() ) {
+                continue;
+            }
+
             if ( currentBuild.id == fadeBuilding.GetBuilding() && !fadeBuilding.isOnlyBoat() ) {
                 redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
                 redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
@@ -353,20 +372,18 @@ namespace
                 continue;
             }
 
-            if ( castle.isBuild( currentBuild.id ) ) {
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
+            redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
 
-                if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
-                    redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
-                }
-                else {
-                    redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
-                }
+            if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
+            }
+            else {
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
+            }
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                    redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id );
-                }
+            if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
+                redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                redrawBuildingConnection( castle, dst_pt, currentBuild.id );
             }
         }
     }
