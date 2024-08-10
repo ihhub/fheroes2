@@ -8310,7 +8310,7 @@ msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
 msgstr ""
-"%{skill} sänker kostnaden för kapitulation med %{count} procent av "
+"%{percent} sänker kostnaden för kapitulation med %{count} procent av "
 "totalkostnaden för trupperna i hjältens armé."
 
 msgid ""
