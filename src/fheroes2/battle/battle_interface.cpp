@@ -1020,7 +1020,7 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
         }
 
-        bool isMirror = unit->Modes( CAP_MIRRORIMAGE );
+        const bool isMirror = unit->Modes( CAP_MIRRORIMAGE );
         if ( le.MouseClickLeft( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect(), 0, isMirror );
         }
