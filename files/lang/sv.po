@@ -4387,7 +4387,7 @@ msgid "Warning"
 msgstr "Varning"
 
 msgid "[%{pos}]: %{race} hero"
-msgstr "%[%{pos}]: %{race}hjälte"
+msgstr "[%{pos}]: %{race}hjälte"
 
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race}hjälte"
