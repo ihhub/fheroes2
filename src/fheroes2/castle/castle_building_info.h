@@ -30,20 +30,20 @@ enum class GameVersion : int;
 
 namespace fheroes2
 {
-    Rect getCastleBuildingArea( const int race, const building_t buildingId );
+    Rect getCastleBuildingArea( const int race, const BuildingType buildingId );
 
-    const char * getBuildingName( const int race, const building_t buildingId );
+    const char * getBuildingName( const int race, const BuildingType buildingId );
 
-    const char * getBuildingDescription( const int race, const building_t buildingId );
+    const char * getBuildingDescription( const int race, const BuildingType buildingId );
 
     // Returns the upgraded building ID for the given one or the input building if no upgrade is available.
-    building_t getUpgradeForBuilding( const int race, const building_t buildingId );
+    BuildingType getUpgradeForBuilding( const int race, const BuildingType buildingId );
 
-    building_t getBuildingRequirement( const int race, const building_t building );
+    BuildingType getBuildingRequirement( const int race, const BuildingType building );
 
-    std::string getBuildingRequirementString( const int race, const building_t building );
+    std::string getBuildingRequirementString( const int race, const BuildingType building );
 
-    int getIndexBuildingSprite( const building_t build );
+    int getIndexBuildingSprite( const BuildingType build );
 
-    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version );
+    std::vector<BuildingType> getBuildingDrawingPriorities( const int race, const GameVersion version );
 }
