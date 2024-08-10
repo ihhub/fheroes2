@@ -1819,6 +1819,7 @@ namespace Interface
 
     void EditorInterface::openMapSpecificationsDialog()
     {
+        // TODO: avoid creation of an action for cases when no changes are being done in the map format.
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
         if ( Editor::mapSpecificationsDialog( _mapFormat ) ) {
