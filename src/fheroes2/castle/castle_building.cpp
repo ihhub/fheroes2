@@ -94,7 +94,13 @@ namespace
         return false;
     }
 
-    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 )
+    bool isBuildingFullyBuilt( const Castle & castle, const uint32_t building, const uint32_t buildingCurrentlyUnderConstruction )
+    {
+        return castle.isBuild( building ) && building != buildingCurrentlyUnderConstruction;
+    }
+
+    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint32_t buildingCurrentlyUnderConstruction,
+                                   const uint8_t alpha = 255 )
     {
         const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
 
@@ -102,11 +108,11 @@ namespace
 
         if ( race == Race::BARB ) {
             if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
-                if ( buildId & BUILD_MAGEGUILD && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_SPEC ) ) ) {
+                if ( buildId & BUILD_MAGEGUILD && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_SPEC, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_SPEC && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_MAGEGUILD1 ) ) ) {
+                if ( buildId == BUILD_SPEC && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_MAGEGUILD1, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
@@ -114,11 +120,13 @@ namespace
             }
 
             if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
-                if ( buildId == DWELLING_MONSTER3 && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_THIEVESGUILD ) ) ) {
+                if ( buildId == DWELLING_MONSTER3
+                     && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_THIEVESGUILD, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_THIEVESGUILD && ( !castle.isBuild( buildId ) || !castle.isBuild( DWELLING_MONSTER3 ) ) ) {
+                if ( buildId == BUILD_THIEVESGUILD
+                     && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, DWELLING_MONSTER3, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
@@ -126,11 +134,11 @@ namespace
             }
         }
         else if ( race == Race::NECR ) {
-            if ( buildId == BUILD_CAPTAIN && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_CASTLE ) ) ) {
+            if ( buildId == BUILD_CAPTAIN && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
-            if ( buildId == BUILD_CASTLE && ( !castle.isBuild( buildId ) || !castle.isBuild( BUILD_CAPTAIN ) ) ) {
+            if ( buildId == BUILD_CASTLE && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_CAPTAIN, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
@@ -138,7 +146,8 @@ namespace
         }
     }
 
-    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame, const uint8_t alpha = 255 )
+    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+                               const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
             // We don't need to draw a tent because it's on the background image.
@@ -200,7 +209,8 @@ namespace
         fheroes2::drawCastleDialogBuilding( icn, index, castle, dst_pt, max, alpha );
 
         // Special case: Knight castle's flags are overlapped by Right Turret so we need to draw flags after drawing the Turret.
-        const bool knightCastleCase = ( race == Race::KNGT && castle.isBuild( BUILD_RIGHTTURRET ) && castle.isBuild( BUILD_CASTLE ) );
+        const bool knightCastleCase = ( race == Race::KNGT && isBuildingFullyBuilt( castle, BUILD_RIGHTTURRET, buildingCurrentlyUnderConstruction )
+                                        && isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) );
         if ( knightCastleCase && building == BUILD_CASTLE ) {
             // Do not draw flags.
             return;
@@ -221,7 +231,8 @@ namespace
         }
     }
 
-    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame, const uint8_t alpha = 255 )
+    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+                                       const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
             // We don't need to draw a tent because it's on the background image.
@@ -248,7 +259,7 @@ namespace
             }
         }
         else if ( building == BUILD_WEL2 && Race::SORC == castle.GetRace() ) {
-            const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
+            const int icn2 = isBuildingFullyBuilt( castle, BUILD_STATUE, buildingCurrentlyUnderConstruction ) ? ICN::TWNSEXT1 : icn;
 
             fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
@@ -256,19 +267,19 @@ namespace
                 fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
             }
         }
-        else if ( building == BUILD_WEL2 && castle.GetRace() == Race::KNGT && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_WEL2 && castle.GetRace() == Race::KNGT && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
             const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
             fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y() }, max,
                                                 alpha );
         }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::BARB && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::BARB && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
             const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
             fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
                                                 { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
         }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::SORC && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::SORC && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, dst_pt, max, alpha );
         }
     }
@@ -334,11 +345,11 @@ namespace
                     continue;
                 }
 
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
+                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
 
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id );
+                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
                 }
             }
 
@@ -362,28 +373,28 @@ namespace
             }
 
             if ( currentBuild.id == fadeBuilding.GetBuilding() && !fadeBuilding.isOnlyBoat() ) {
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
+                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
 
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetAlpha() );
+                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
                 }
 
                 continue;
             }
 
-            redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
+            redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
 
             if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
             }
             else {
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
             }
 
             if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
-                redrawBuildingConnection( castle, dst_pt, currentBuild.id );
+                redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
             }
         }
     }
