@@ -71,23 +71,23 @@ namespace
         return { top.x, top.y, townbkg.width(), townbkg.height() };
     }
 
-    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t buildId )
+    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t building )
     {
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
-            if ( buildId & BUILD_MAGEGUILD ) {
+            if ( building & BUILD_MAGEGUILD ) {
                 const int mageGuildLevel = castle.GetLevelMageGuild();
                 assert( mageGuildLevel > 0 );
 
-                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+                return building == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
 
-            if ( buildId == BUILD_THIEVESGUILD ) {
+            if ( building == BUILD_THIEVESGUILD ) {
                 return true;
             }
         }
-        else if ( race == Race::NECR && buildId == BUILD_CAPTAIN ) {
+        else if ( race == Race::NECR && building == BUILD_CAPTAIN ) {
             return true;
         }
 
@@ -99,7 +99,7 @@ namespace
         return castle.isBuild( building ) && building != buildingCurrentlyUnderConstruction;
     }
 
-    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint32_t buildingCurrentlyUnderConstruction,
+    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t building, const uint32_t buildingCurrentlyUnderConstruction,
                                    const uint8_t alpha = 255 )
     {
         const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
@@ -107,26 +107,27 @@ namespace
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
-            if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
-                if ( buildId & BUILD_MAGEGUILD && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_SPEC, buildingCurrentlyUnderConstruction ) ) ) {
+            if ( building & BUILD_MAGEGUILD || building == BUILD_SPEC ) {
+                if ( building & BUILD_MAGEGUILD && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_SPEC, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_SPEC && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_MAGEGUILD1, buildingCurrentlyUnderConstruction ) ) ) {
+                if ( building == BUILD_SPEC
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_MAGEGUILD1, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
                 fheroes2::drawCastleDialogBuilding( ICN::TWNBEXT2, 0, castle, position, roi, alpha );
             }
 
-            if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
-                if ( buildId == DWELLING_MONSTER3
-                     && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_THIEVESGUILD, buildingCurrentlyUnderConstruction ) ) ) {
+            if ( building == DWELLING_MONSTER3 || building == BUILD_THIEVESGUILD ) {
+                if ( building == DWELLING_MONSTER3
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_THIEVESGUILD, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_THIEVESGUILD
-                     && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, DWELLING_MONSTER3, buildingCurrentlyUnderConstruction ) ) ) {
+                if ( building == BUILD_THIEVESGUILD
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, DWELLING_MONSTER3, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
@@ -134,11 +135,11 @@ namespace
             }
         }
         else if ( race == Race::NECR ) {
-            if ( buildId == BUILD_CAPTAIN && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) ) {
+            if ( building == BUILD_CAPTAIN && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
-            if ( buildId == BUILD_CASTLE && ( !castle.isBuild( buildId ) || !isBuildingFullyBuilt( castle, BUILD_CAPTAIN, buildingCurrentlyUnderConstruction ) ) ) {
+            if ( building == BUILD_CASTLE && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_CAPTAIN, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
