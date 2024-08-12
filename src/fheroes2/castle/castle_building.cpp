@@ -71,58 +71,63 @@ namespace
         return { top.x, top.y, townbkg.width(), townbkg.height() };
     }
 
-    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
+    bool isBuildingConnectionNeeded( const Castle & castle, const uint32_t building )
     {
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
-            if ( buildId & BUILD_MAGEGUILD ) {
+            if ( building & BUILD_MAGEGUILD ) {
                 const int mageGuildLevel = castle.GetLevelMageGuild();
-                if ( constructionInProgress ) {
-                    return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
-                }
-
                 assert( mageGuildLevel > 0 );
-                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+
+                return building == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
 
-            if ( buildId == BUILD_THIEVESGUILD ) {
+            if ( building == BUILD_THIEVESGUILD ) {
                 return true;
             }
         }
-        else if ( race == Race::NECR && buildId == BUILD_CAPTAIN ) {
+        else if ( race == Race::NECR && building == BUILD_CAPTAIN ) {
             return true;
         }
 
         return false;
     }
 
-    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 )
+    bool isBuildingFullyBuilt( const Castle & castle, const uint32_t building, const uint32_t buildingCurrentlyUnderConstruction )
+    {
+        return castle.isBuild( building ) && building != buildingCurrentlyUnderConstruction;
+    }
+
+    void redrawBuildingConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t building, const uint32_t buildingCurrentlyUnderConstruction,
+                                   const uint8_t alpha = 255 )
     {
         const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
-        const bool constructionInProgress = alpha < 255;
 
         const int race = castle.GetRace();
 
         if ( race == Race::BARB ) {
-            if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
-                if ( buildId & BUILD_MAGEGUILD && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_SPEC ) ) ) ) {
+            if ( building & BUILD_MAGEGUILD || building == BUILD_SPEC ) {
+                if ( building & BUILD_MAGEGUILD && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_SPEC, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_SPEC && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_MAGEGUILD1 ) ) ) ) {
+                if ( building == BUILD_SPEC
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_MAGEGUILD1, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
                 fheroes2::drawCastleDialogBuilding( ICN::TWNBEXT2, 0, castle, position, roi, alpha );
             }
 
-            if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
-                if ( buildId == DWELLING_MONSTER3 && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_THIEVESGUILD ) ) ) ) {
+            if ( building == DWELLING_MONSTER3 || building == BUILD_THIEVESGUILD ) {
+                if ( building == DWELLING_MONSTER3
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_THIEVESGUILD, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
-                if ( buildId == BUILD_THIEVESGUILD && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( DWELLING_MONSTER3 ) ) ) ) {
+                if ( building == BUILD_THIEVESGUILD
+                     && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, DWELLING_MONSTER3, buildingCurrentlyUnderConstruction ) ) ) {
                     return;
                 }
 
@@ -130,11 +135,11 @@ namespace
             }
         }
         else if ( race == Race::NECR ) {
-            if ( buildId == BUILD_CAPTAIN && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CASTLE ) ) ) ) {
+            if ( building == BUILD_CAPTAIN && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
-            if ( buildId == BUILD_CASTLE && ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_CAPTAIN ) ) ) ) {
+            if ( building == BUILD_CASTLE && ( !castle.isBuild( building ) || !isBuildingFullyBuilt( castle, BUILD_CAPTAIN, buildingCurrentlyUnderConstruction ) ) ) {
                 return;
             }
 
@@ -142,46 +147,55 @@ namespace
         }
     }
 
-    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame, const uint8_t alpha = 255 )
+    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+                               const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
             // We don't need to draw a tent because it's on the background image.
             return;
         }
 
-        const int race = castle.GetRace();
-        uint32_t index = 0;
+        while ( building & BUILD_MAGEGUILD ) {
+            const int mageGuildLevel = castle.GetLevelMageGuild();
 
-        switch ( building ) {
-        case BUILD_MAGEGUILD1:
-            if ( castle.GetLevelMageGuild() > 1 ) {
-                return;
+            // If we are going to draw a Mage Guild building, then the castle should have a Mage Guild
+            assert( mageGuildLevel > 0 );
+
+            // The drawing of the Mage Guild building of the currently built level is allowed
+            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 1 ) ) ) {
+                break;
             }
-            break;
-        case BUILD_MAGEGUILD2:
-            if ( castle.GetLevelMageGuild() > 2 ) {
-                return;
+
+            // If we are going to draw a Mage Guild building not of the currently built level, then the castle should have at least a Level 2 Mage Guild
+            assert( mageGuildLevel > 1 );
+
+            // The drawing of the Mage Guild building of the previous level is allowed as well, so that we can draw the "upgrade" animation
+            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 2 ) ) ) {
+                break;
             }
-            index = ( Race::NECR == race ) ? 6 : 1;
-            break;
-        case BUILD_MAGEGUILD3:
-            if ( castle.GetLevelMageGuild() > 3 ) {
-                return;
-            }
-            index = ( Race::NECR == race ) ? 12 : 2;
-            break;
-        case BUILD_MAGEGUILD4:
-            if ( castle.GetLevelMageGuild() > 4 ) {
-                return;
-            }
-            index = ( Race::NECR == race ) ? 18 : 3;
-            break;
-        case BUILD_MAGEGUILD5:
-            index = ( Race::NECR == race ) ? 24 : 4;
-            break;
-        default:
-            break;
+
+            // In all other cases, we should never draw this Mage Guild building
+            assert( 0 );
+            return;
         }
+
+        const int race = castle.GetRace();
+        const uint32_t index = [building, race]() -> uint32_t {
+            switch ( building ) {
+            case BUILD_MAGEGUILD2:
+                return ( race == Race::NECR ? 6 : 1 );
+            case BUILD_MAGEGUILD3:
+                return ( race == Race::NECR ? 12 : 2 );
+            case BUILD_MAGEGUILD4:
+                return ( race == Race::NECR ? 18 : 3 );
+            case BUILD_MAGEGUILD5:
+                return ( race == Race::NECR ? 24 : 4 );
+            default:
+                break;
+            }
+
+            return 0;
+        }();
 
         const int icn = Castle::GetICNBuilding( building, race );
         if ( icn == ICN::UNKNOWN ) {
@@ -196,7 +210,8 @@ namespace
         fheroes2::drawCastleDialogBuilding( icn, index, castle, dst_pt, max, alpha );
 
         // Special case: Knight castle's flags are overlapped by Right Turret so we need to draw flags after drawing the Turret.
-        const bool knightCastleCase = ( race == Race::KNGT && castle.isBuild( BUILD_RIGHTTURRET ) && castle.isBuild( BUILD_CASTLE ) );
+        const bool knightCastleCase = ( race == Race::KNGT && isBuildingFullyBuilt( castle, BUILD_RIGHTTURRET, buildingCurrentlyUnderConstruction )
+                                        && isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) );
         if ( knightCastleCase && building == BUILD_CASTLE ) {
             // Do not draw flags.
             return;
@@ -217,7 +232,8 @@ namespace
         }
     }
 
-    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame, const uint8_t alpha = 255 )
+    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+                                       const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
             // We don't need to draw a tent because it's on the background image.
@@ -244,7 +260,7 @@ namespace
             }
         }
         else if ( building == BUILD_WEL2 && Race::SORC == castle.GetRace() ) {
-            const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
+            const int icn2 = isBuildingFullyBuilt( castle, BUILD_STATUE, buildingCurrentlyUnderConstruction ) ? ICN::TWNSEXT1 : icn;
 
             fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
@@ -252,19 +268,19 @@ namespace
                 fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
             }
         }
-        else if ( building == BUILD_WEL2 && castle.GetRace() == Race::KNGT && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_WEL2 && castle.GetRace() == Race::KNGT && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
             const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
             fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y() }, max,
                                                 alpha );
         }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::BARB && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::BARB && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
             const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
             fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
                                                 { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
         }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::SORC && !castle.isBuild( BUILD_CASTLE ) ) {
+        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::SORC && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
             fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, dst_pt, max, alpha );
         }
     }
@@ -283,8 +299,9 @@ namespace
             fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
         }
 
-        // Bay animation
-        if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HasSeaAccess() ) ) {
+        // Bay animation. The Wizard's castle is "special": its "bay" is not actually a bay, but a river flowing through a gorge in the wastelands, which must be drawn
+        // and animated, even if the castle itself is not located on the seashore.
+        if ( castle.GetRace() == Race::WZRD || ( castle.HasSeaAccess() && ( !castle.isBuild( BUILD_SHIPYARD ) || fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) ) ) {
             int bayIcnId = 0;
             const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
@@ -323,11 +340,17 @@ namespace
                     continue;
                 }
 
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
+                // Only draw this building if an upgraded version of this building has not yet been built
+                const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
+                if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding ) ) {
+                    continue;
+                }
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, false ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id );
+                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+
+                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
+                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
                 }
             }
 
@@ -339,31 +362,40 @@ namespace
         }
 
         for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
-            if ( currentBuild.id == fadeBuilding.GetBuilding() && !fadeBuilding.isOnlyBoat() ) {
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
+            if ( !castle.isBuild( currentBuild.id ) ) {
+                continue;
+            }
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, true ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetAlpha() );
+            // Only draw this building if an upgraded version of this building has either not been built yet, or is still under construction at the moment
+            const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
+            if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding )
+                 && upgradeForCurrentBuilding != fadeBuilding.GetBuilding() ) {
+                continue;
+            }
+
+            if ( currentBuild.id == fadeBuilding.GetBuilding() && !fadeBuilding.isOnlyBoat() ) {
+                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+
+                if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
+                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
                 }
 
                 continue;
             }
 
-            if ( castle.isBuild( currentBuild.id ) ) {
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex );
+            redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
 
-                if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
-                    redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetAlpha() );
-                }
-                else {
-                    redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
-                }
+            if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+            }
+            else {
+                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+            }
 
-                if ( isBuildingConnectionNeeded( castle, currentBuild.id, false ) ) {
-                    redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id );
-                }
+            if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
+                redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
             }
         }
     }

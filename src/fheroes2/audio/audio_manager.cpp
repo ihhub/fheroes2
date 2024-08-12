@@ -381,7 +381,7 @@ namespace
         {
             SoundTask() = default;
 
-            SoundTask( const int m82 )
+            explicit SoundTask( const int m82 )
                 : m82Sound( m82 )
             {
                 // Do nothing.
