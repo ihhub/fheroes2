@@ -88,6 +88,7 @@ namespace Battle
         uint32_t GetAffectedDuration( uint32_t mod ) const override;
         uint32_t GetSpeed() const override;
         int GetMorale() const override;
+        bool IsMirror() const override;
 
         Unit * GetMirror()
         {

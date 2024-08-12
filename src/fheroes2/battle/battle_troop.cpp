@@ -321,6 +321,11 @@ int Battle::Unit::GetMorale() const
     return armyTroopMorale;
 }
 
+bool Battle::Unit::IsMirror() const
+{
+    return isModes( CAP_MIRRORIMAGE );
+}
+
 int32_t Battle::Unit::GetHeadIndex() const
 {
     return position.GetHead() ? position.GetHead()->GetIndex() : -1;

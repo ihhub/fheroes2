@@ -47,6 +47,7 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
+#include "pal.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -444,7 +445,10 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( fheroes2::FitToRoi( monsterSprite, inPos, display, outPos, inSize, roi ) ) {
-            fheroes2::Blit( monsterSprite, inPos, display, outPos, inSize, isReflected );
+            fheroes2::Sprite outMonsterSprite = monsterSprite;
+            if ( troop.IsMirror() )
+                fheroes2::ApplyPalette( outMonsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+            fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
         }
 
         if ( isAnimated )

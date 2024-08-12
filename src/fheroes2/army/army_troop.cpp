@@ -192,6 +192,11 @@ uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
     return 0;
 }
 
+bool Troop::IsMirror() const
+{
+    return false;
+}
+
 ArmyTroop::ArmyTroop( const Army * a )
     : army( a )
 {}
