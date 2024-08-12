@@ -31,7 +31,6 @@
 #include <utility>
 #include <vector>
 
-#include "battle.h"
 #include "battle_animation.h"
 #include "battle_board.h"
 #include "battle_troop.h"
@@ -40,6 +39,7 @@
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
+#include "screen.h"
 #include "spell.h"
 #include "ui_button.h"
 #include "ui_text.h"
@@ -63,6 +63,11 @@ namespace Battle
     class StatusListBox;
     class Tower;
     class Units;
+
+    struct TargetInfo;
+    struct TargetsInfo;
+
+    enum class CastleDefenseStructure : int;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
@@ -119,7 +124,7 @@ namespace Battle
 
         const fheroes2::Rect & GetArea() const
         {
-            return pos;
+            return _area;
         }
 
         fheroes2::Point GetCastPosition() const;
@@ -129,7 +134,7 @@ namespace Battle
         bool updateAnimationState();
 
         void SetAnimation( const int rule );
-        void IncreaseAnimFrame( const bool loop = false );
+        void IncreaseAnimFrame();
 
         bool isFinishFrame() const
         {
@@ -138,7 +143,7 @@ namespace Battle
 
         const HeroBase * GetHero() const
         {
-            return base;
+            return _heroBase;
         }
 
         fheroes2::Point Offset() const
@@ -157,22 +162,23 @@ namespace Battle
         };
 
     private:
-        const HeroBase * base;
+        const HeroBase * _heroBase;
         AnimationSequence _currentAnim;
-        int _animationType;
-        RandomizedDelay _idleTimer;
+        int _animationType{ OP_STATIC };
+        RandomizedDelay _idleTimer{ 8000 };
 
-        int _heroIcnId;
-        bool reflect;
-        fheroes2::Rect pos;
+        int _heroIcnId{ ICN::UNKNOWN };
+        bool _isFlippedHorizontally;
+        fheroes2::Rect _area;
         fheroes2::Point _offset;
     };
 
-    class Status : public fheroes2::Rect
+    class Status final : public fheroes2::Rect
     {
     public:
         Status();
         Status( const Status & ) = delete;
+        ~Status() = default;
 
         Status & operator=( const Status & ) = delete;
 
@@ -180,7 +186,7 @@ namespace Battle
 
         void SetLogs( StatusListBox * logs )
         {
-            listlog = logs;
+            _battleStatusLog = logs;
         }
 
         void SetMessage( const std::string & messageString, const bool top = false );
@@ -196,17 +202,18 @@ namespace Battle
     private:
         fheroes2::Text _upperText;
         fheroes2::Text _lowerText;
-        const fheroes2::Sprite & back1;
-        const fheroes2::Sprite & back2;
+        const fheroes2::Sprite & _upperBackground;
+        const fheroes2::Sprite & _lowerBackground;
         std::string _lastMessage;
-        StatusListBox * listlog;
+        StatusListBox * _battleStatusLog{ nullptr };
     };
 
-    class TurnOrder : public fheroes2::Rect
+    class TurnOrder final : public fheroes2::Rect
     {
     public:
-        TurnOrder();
+        TurnOrder() = default;
         TurnOrder( const TurnOrder & ) = delete;
+        ~TurnOrder() = default;
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
@@ -233,7 +240,7 @@ namespace Battle
                          fheroes2::Image & output ) const;
 
         std::weak_ptr<const Units> _orders;
-        int _army2Color;
+        int _army2Color{ 0 };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
     };
@@ -312,10 +319,11 @@ namespace Battle
         void RedrawActionLuck( const Unit & unit );
         void RedrawActionTowerPart1( const Tower & tower, const Unit & defender );
         void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
-        void RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit );
-        void RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget );
+        void RedrawActionCatapultPart1( const CastleDefenseStructure catapultTarget, const bool isHit );
+        void RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget );
         void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets );
+        void redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets );
+        void redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );
@@ -408,7 +416,7 @@ namespace Battle
         Dialog::FrameBorder border;
 
         fheroes2::Rect _interfacePosition;
-        fheroes2::Rect _surfaceInnerArea;
+        fheroes2::Rect _surfaceInnerArea{ 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
         fheroes2::Image _mainSurface;
         fheroes2::Image _battleGround;
         fheroes2::Image _hexagonGrid;
@@ -416,8 +424,8 @@ namespace Battle
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
 
-        int icn_cbkg;
-        int icn_frng;
+        int _battleGroundIcn{ ICN::UNKNOWN };
+        int _borderObjectsIcn{ ICN::UNKNOWN };
 
         fheroes2::Button btn_auto;
         fheroes2::Button btn_settings;
@@ -427,32 +435,34 @@ namespace Battle
         std::unique_ptr<OpponentSprite> _opponent1;
         std::unique_ptr<OpponentSprite> _opponent2;
 
-        Spell humanturn_spell;
-        bool humanturn_exit;
-        bool humanturn_redraw;
-        uint32_t animation_flags_frame;
-        int catapult_frame;
+        Spell humanturn_spell{ Spell::NONE };
+        bool humanturn_exit{ true };
+        bool humanturn_redraw{ true };
+        uint32_t animation_flags_frame{ 0 };
+        int catapult_frame{ 0 };
 
-        int _interruptAutoBattleForColor;
+        int _interruptAutoBattleForColor{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
 
-        uint8_t _contourColor;
-        bool _brightLandType; // used to determine current monster contour cycling colors
-        uint32_t _contourCycle;
+        uint8_t _contourColor{ 110 };
 
-        const Unit * _currentUnit;
-        const Unit * _movingUnit;
-        const Unit * _flyingUnit;
-        const fheroes2::Sprite * b_current_sprite;
+        // True if background is bright. It is done to determine current unit contour cycling colors.
+        bool _brightLandType{ false };
+        uint32_t _contourCycle{ 0 };
+
+        const Unit * _currentUnit{ nullptr };
+        const Unit * _movingUnit{ nullptr };
+        const Unit * _flyingUnit{ nullptr };
+        const fheroes2::Sprite * b_current_sprite{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
 
-        int32_t index_pos;
+        int32_t _curentCellIndex{ -1 };
         // Index of the cell selected as the source for the Teleport spell
-        int32_t _teleportSpellSrcIdx;
-        fheroes2::Rect main_tower;
+        int32_t _teleportSpellSrcIdx{ -1 };
+        fheroes2::Rect _ballistaTowerRect;
 
         std::unique_ptr<StatusListBox> listlog;
 
@@ -475,7 +485,7 @@ namespace Battle
             uint32_t currentFrameId;
         };
 
-        BridgeMovementAnimation _bridgeAnimation;
+        BridgeMovementAnimation _bridgeAnimation{ false, BridgeMovementAnimation::UP_POSITION };
 
         struct SwipeAttack
         {

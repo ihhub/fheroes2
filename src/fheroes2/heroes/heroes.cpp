@@ -28,9 +28,8 @@
 #include <cstddef>
 #include <iterator>
 #include <map>
-#include <memory>
-#include <ostream>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
@@ -1828,7 +1827,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
     if ( !skipsecondary ) {
-        LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
+        LevelUpSecondarySkill( seeds, primarySkill, autoselect );
     }
 }
 
@@ -1855,6 +1854,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         else {
             selected = sec1.isValid() ? sec1 : sec2;
         }
+    }
+    else if ( isControlAI() ) {
+        selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );

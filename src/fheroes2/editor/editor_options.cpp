@@ -22,6 +22,8 @@
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -282,7 +284,7 @@ namespace Editor
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
 
                 action = DialogAction::Configuration;
                 break;

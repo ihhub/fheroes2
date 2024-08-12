@@ -168,7 +168,6 @@ public:
 
     virtual uint32_t GetAttack() const;
     virtual uint32_t GetDefense() const;
-    virtual int GetColor() const;
     virtual int GetMorale() const;
     virtual int GetLuck() const;
     virtual int GetRace() const;

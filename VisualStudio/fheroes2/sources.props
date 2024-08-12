@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
+    <ClCompile Include="src\engine\audio_xmi2mid.cpp" />
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\h2d_file.cpp" />
@@ -23,7 +24,6 @@
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
     <ClCompile Include="src\engine\translations.cpp" />
-    <ClCompile Include="src\engine\xmi2mid.cpp" />
     <ClCompile Include="src\engine\zzlib.cpp" />
     <ClCompile Include="src\fheroes2\agg\agg.cpp" />
     <ClCompile Include="src\fheroes2\agg\agg_image.cpp" />

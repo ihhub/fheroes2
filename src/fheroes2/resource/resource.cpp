@@ -26,8 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
-#include <ostream>
+#include <sstream>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -148,7 +147,7 @@ int32_t Funds::Get( const int type ) const
     return 0;
 }
 
-Funds & Funds::operator=( const cost_t & cost )
+Funds & Funds::operator=( const Cost & cost )
 {
     wood = cost.wood;
     mercury = cost.mercury;

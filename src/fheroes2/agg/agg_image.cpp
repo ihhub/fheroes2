@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <numeric>
 #include <random>
 #include <set>
@@ -3281,24 +3280,27 @@ namespace fheroes2
                     Blit( GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
                 }
                 return true;
+            case ICN::TWNWUP_5:
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // Fix the cycling colors in original editor main menu background.
-                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    // Fix the cycling colors in original editor main menu background and Red Tower (Warlock castle screen).
+                    ApplyPalette( _icnVsSprite[id].front(), PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 return true;
             case ICN::MINIHERO:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 42 ) {
+                    const auto & noCyclePalette = PAL::GetPalette( PAL::PaletteType::NO_CYCLE );
+
                     // Fix cycling colors on the Green heroes' flag for Knight, Sorceress and Warlock.
-                    ApplyPalette( _icnVsSprite[id][7], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
-                    ApplyPalette( _icnVsSprite[id][9], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
-                    ApplyPalette( _icnVsSprite[id][10], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                    ApplyPalette( _icnVsSprite[id][7], noCyclePalette );
+                    ApplyPalette( _icnVsSprite[id][9], noCyclePalette );
+                    ApplyPalette( _icnVsSprite[id][10], noCyclePalette );
 
                     // Fix cycling colors on the Yellow heroes' flag.
                     for ( size_t i = 21; i < 28; ++i ) {
-                        ApplyPalette( _icnVsSprite[id][i], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                        ApplyPalette( _icnVsSprite[id][i], noCyclePalette );
                     }
 
                     // Fix Blue Random hero flag.
@@ -3489,6 +3491,10 @@ namespace fheroes2
                         imageData[5159] = 108;
                         imageData[5294] = 108;
                     }
+                }
+                if ( _icnVsSprite[id].size() > 22 ) {
+                    // Cliff nest image has a glowing pixel.
+                    ApplyPalette( _icnVsSprite[id][22], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
@@ -3982,15 +3988,6 @@ namespace fheroes2
                     // Copy red central part.
                     const fheroes2::Sprite goodBox = GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
                     Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
-                }
-
-                return true;
-            }
-            case ICN::TWNWUP_5: {
-                LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
-                    // Fix glowing red pixel.
-                    Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
                 }
 
                 return true;

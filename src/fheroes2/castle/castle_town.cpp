@@ -32,7 +32,7 @@
 #include "artifact.h"
 #include "buildinginfo.h"
 #include "captain.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -257,7 +257,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     dwelling6.Redraw();
 
     // mage guild
-    building_t level = BUILD_NOTHING;
+    BuildingType level = BUILD_NOTHING;
     switch ( GetLevelMageGuild() ) {
     case 0:
         level = BUILD_MAGEGUILD1;

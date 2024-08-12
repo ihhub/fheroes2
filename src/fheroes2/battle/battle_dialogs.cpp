@@ -35,9 +35,9 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
-#include "battle_arena.h"
+#include "battle_arena.h" // IWYU pragma: associated
 #include "battle_army.h"
-#include "battle_interface.h"
+#include "battle_interface.h" // IWYU pragma: associated
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -647,7 +647,12 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         = allowToRestart ? fheroes2::StandardWindow::Padding::BOTTOM_LEFT : fheroes2::StandardWindow::Padding::BOTTOM_CENTER;
     background.renderButton( buttonOk, buttonOkICN, 0, 1, { buttonHorizontalMargin, buttonVerticalMargin }, buttonOkPadding );
 
-    display.render( background.totalArea() );
+    if ( Game::validateDisplayFadeIn() ) {
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        display.render( background.totalArea() );
+    }
 
     LocalEvent & le = LocalEvent::Get();
 

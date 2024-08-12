@@ -64,7 +64,7 @@ namespace
     class BuildingData
     {
     public:
-        explicit BuildingData( building_t buildingType, const int race, const building_t builtBuildings, const building_t restrictedBuildings )
+        explicit BuildingData( BuildingType buildingType, const int race, const BuildingType builtBuildings, const BuildingType restrictedBuildings )
             : _mainBuildingType( buildingType )
             , _race( race )
         {
@@ -75,7 +75,7 @@ namespace
                 _restrictedId = 0;
             }
 
-            for ( building_t upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, _mainBuildingType ); upgradedBuildingType != buildingType;
+            for ( BuildingType upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, _mainBuildingType ); upgradedBuildingType != buildingType;
                   upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, upgradedBuildingType ) ) {
                 if ( builtBuildings & upgradedBuildingType ) {
                     _builtId = _buildingVariants;
@@ -110,14 +110,14 @@ namespace
             return _area;
         }
 
-        std::vector<building_t> getBuildLevel() const
+        std::vector<BuildingType> getBuildLevel() const
         {
             if ( _builtId < 0 ) {
                 return {};
             }
 
             const int8_t levelsBuilt = _builtId + 1;
-            std::vector<building_t> buildings;
+            std::vector<BuildingType> buildings;
             buildings.reserve( levelsBuilt );
             for ( int8_t i = 0; i < levelsBuilt; ++i ) {
                 buildings.push_back( _getBuildingType( i ) );
@@ -125,7 +125,7 @@ namespace
             return buildings;
         }
 
-        building_t getRestrictLevel() const
+        BuildingType getRestrictLevel() const
         {
             return _getBuildingType( _restrictedId );
         }
@@ -161,7 +161,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressed() ) {
-                const building_t building = _getBuildindTypeForRender();
+                const BuildingType building = _getBuildindTypeForRender();
                 std::string description = BuildingInfo::getBuildingDescription( _race, building );
                 const std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
 
@@ -257,7 +257,7 @@ namespace
         }
 
     private:
-        building_t _getBuildindTypeForRender() const
+        BuildingType _getBuildindTypeForRender() const
         {
             if ( _builtId < 1 ) {
                 return _mainBuildingType;
@@ -266,13 +266,13 @@ namespace
             return _getBuildingType( _builtId );
         }
 
-        building_t _getBuildingType( const int8_t level ) const
+        BuildingType _getBuildingType( const int8_t level ) const
         {
             if ( level < 0 ) {
                 return BUILD_NOTHING;
             }
 
-            building_t building = _mainBuildingType;
+            BuildingType building = _mainBuildingType;
             for ( int8_t i = 0; i < level; ++i ) {
                 building = fheroes2::getUpgradeForBuilding( _race, building );
             }
@@ -280,7 +280,7 @@ namespace
             return building;
         }
 
-        building_t _mainBuildingType{ BUILD_NOTHING };
+        BuildingType _mainBuildingType{ BUILD_NOTHING };
         int _race{ Race::NONE };
         int8_t _builtId{ -1 };
         int8_t _restrictedId{ -1 };
@@ -399,8 +399,8 @@ namespace Editor
         armyBar.setRenderingOffset( { dialogRoi.x + rightPartOffsetX + 33, dialogRoi.y + 332 } );
         armyBar.Redraw( display );
 
-        const building_t metadataBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.builtBuildings ) );
-        const building_t metadataRestrictedBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.bannedBuildings ) );
+        const BuildingType metadataBuildings = static_cast<BuildingType>( Maps::getBuildingsFromVector( castleMetadata.builtBuildings ) );
+        const BuildingType metadataRestrictedBuildings = static_cast<BuildingType>( Maps::getBuildingsFromVector( castleMetadata.bannedBuildings ) );
 
         assert( ( metadataBuildings & metadataRestrictedBuildings ) == 0 );
 
@@ -648,10 +648,10 @@ namespace Editor
 
         if ( castleMetadata.customBuildings ) {
             for ( const BuildingData & building : buildings ) {
-                std::vector<building_t> buildingLevels = building.getBuildLevel();
+                std::vector<BuildingType> buildingLevels = building.getBuildLevel();
                 std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
 
-                if ( const building_t buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
+                if ( const BuildingType buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
                     castleMetadata.bannedBuildings.push_back( buildId );
                 }
             }

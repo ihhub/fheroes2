@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "game_video_type.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
@@ -36,6 +35,8 @@ namespace fheroes2
 
 namespace Video
 {
+    enum class VideoAction : int;
+
     class Subtitle
     {
     public:

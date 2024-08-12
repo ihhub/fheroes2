@@ -23,26 +23,27 @@
 #include <cstdint>
 #include <optional>
 
-#include "castle.h"
-
 class Army;
+class Castle;
 class Heroes;
 class Kingdom;
 
 struct Funds;
+
+enum BuildingType : uint32_t;
 
 namespace AI
 {
     // Builds the given building in the given castle if possible. If possible and necessary, obtains the resources
     // that are missing for construction through trading on the marketplace. Returns true if the construction was
     // successful, otherwise returns false.
-    bool BuildIfPossible( Castle & castle, const building_t building );
+    bool BuildIfPossible( Castle & castle, const BuildingType building );
 
     // Builds the given building in the given castle if possible and if there is a sufficient supply of resources
     // (see the implementation for details). If possible and necessary, obtains the resources that are missing for
     // construction through trading on the marketplace. Returns true if the construction was successful, otherwise
     // returns false.
-    bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier );
+    bool BuildIfEnoughFunds( Castle & castle, const BuildingType building, const uint32_t fundsMultiplier );
 
     // Performs the pre-battle arrangement of the given army, see the implementation for details
     void OptimizeTroopsOrder( Army & army );

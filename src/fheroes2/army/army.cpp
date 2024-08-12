@@ -27,11 +27,10 @@
 #include <cassert>
 #include <cmath>
 #include <map>
-#include <memory>
 #include <numeric>
-#include <ostream>
 #include <random>
 #include <set>
+#include <sstream>
 #include <utility>
 
 #include "army_troop.h"

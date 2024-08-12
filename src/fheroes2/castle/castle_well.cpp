@@ -33,7 +33,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "battle_cell.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -97,7 +97,7 @@ namespace
         return count;
     }
 
-    building_t getPressedBuildingHotkey()
+    BuildingType getPressedBuildingHotkey()
     {
         if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
@@ -249,7 +249,7 @@ void Castle::OpenWell()
         le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
-        const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
+        const BuildingType pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;

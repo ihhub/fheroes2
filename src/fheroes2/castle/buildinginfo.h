@@ -28,7 +28,6 @@
 #include <string>
 #include <vector>
 
-#include "castle.h"
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
@@ -39,12 +38,16 @@ namespace fheroes2
     class ButtonBase;
 }
 
+class Castle;
 class StatusBar;
+
+enum BuildingType : uint32_t;
+enum class BuildingStatus : int32_t;
 
 class BuildingInfo
 {
 public:
-    BuildingInfo( const Castle & c, const building_t b );
+    BuildingInfo( const Castle & c, const BuildingType b );
 
     uint32_t getBuilding() const
     {

@@ -24,8 +24,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
-#include <memory>
 
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"

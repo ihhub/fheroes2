@@ -47,6 +47,11 @@ namespace Maps
     class Tiles;
 }
 
+namespace Skill
+{
+    class Secondary;
+}
+
 namespace AI
 {
     // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
@@ -108,13 +113,6 @@ namespace AI
             priority = false;
             recurringCost = false;
         }
-    };
-
-    struct HeroToMove
-    {
-        Heroes * hero = nullptr;
-        int patrolCenter = -1;
-        uint32_t patrolDistance = 0;
     };
 
     struct EnemyArmy
@@ -180,6 +178,8 @@ namespace AI
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
 
+        static Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
+
     private:
         Planner() = default;
 
@@ -195,7 +195,7 @@ namespace AI
 
         std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
 
-        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
+        int getPriorityTarget( Heroes & hero, double & maxPriority );
 
         double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;

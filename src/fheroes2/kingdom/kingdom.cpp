@@ -48,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "profit.h"
@@ -957,7 +958,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
+Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() ) {
         switch ( difficulty ) {

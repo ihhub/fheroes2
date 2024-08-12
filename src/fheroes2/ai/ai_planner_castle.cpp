@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "ai_common.h"
-#include "ai_planner.h"
+#include "ai_planner.h" // IWYU pragma: associated
 #include "army.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -45,11 +45,11 @@ namespace
 {
     struct BuildOrder
     {
-        const building_t building = BUILD_NOTHING;
+        const BuildingType building = BUILD_NOTHING;
         const uint32_t priority = 1;
 
         BuildOrder() = default;
-        BuildOrder( const building_t b, const uint32_t p )
+        BuildOrder( const BuildingType b, const uint32_t p )
             : building( b )
             , priority( p )
         {}

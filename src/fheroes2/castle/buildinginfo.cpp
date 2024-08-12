@@ -30,6 +30,7 @@
 #include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -98,7 +99,7 @@ struct BuildingStats
 {
     uint32_t id2;
     uint8_t race;
-    cost_t cost;
+    Cost cost;
 };
 
 const BuildingStats buildingStats[] = {
@@ -224,7 +225,7 @@ Funds BuildingInfo::GetCost( uint32_t build, int race )
     return payment;
 }
 
-BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
+BuildingInfo::BuildingInfo( const Castle & c, const BuildingType b )
     : castle( c )
     , _buildingType( b )
     , area( 0, 0, 135, 70 )
@@ -300,7 +301,7 @@ std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t
         }
     }
     else {
-        description = fheroes2::getBuildingDescription( race, static_cast<building_t>( buildingId ) );
+        description = fheroes2::getBuildingDescription( race, static_cast<BuildingType>( buildingId ) );
 
         switch ( buildingId ) {
         case BUILD_WELL:
@@ -364,7 +365,7 @@ void BuildingInfo::Redraw() const
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int index = fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) );
+    const int index = fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
@@ -465,7 +466,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     std::string requirement;
 
     if ( _status != BuildingStatus::BUILD_DISABLE ) {
-        requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( _buildingType ) );
+        requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<BuildingType>( _buildingType ) );
     }
 
     const bool requirementsPresent = !requirement.empty();
@@ -509,7 +510,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
     const fheroes2::Sprite & buildingImage
-        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<building_t>( _buildingType ) ) );
+        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
@@ -719,7 +720,7 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( BuildingStatus::NEED_CASTLE ), Dialog::OK );
     else {
-        const BuildingInfo dwelling( castle, static_cast<building_t>( dwType ) );
+        const BuildingInfo dwelling( castle, static_cast<BuildingType>( dwType ) );
 
         if ( dwelling.DialogBuyBuilding( true ) ) {
             AudioManager::PlaySound( M82::BUILDTWN );

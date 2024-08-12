@@ -26,8 +26,10 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    enum class FontSize : uint8_t;
+
     struct FontType;
+
+    enum class FontSize : uint8_t;
     enum class SupportedLanguage : uint8_t;
 
     namespace AGG
