@@ -28,7 +28,6 @@
 #include <utility>
 #include <vector>
 
-#include "color.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
