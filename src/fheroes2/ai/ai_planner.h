@@ -119,16 +119,14 @@ namespace AI
     {
         EnemyArmy() = default;
 
-        EnemyArmy( const int32_t index_, const int color_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+        EnemyArmy( const int32_t index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
             : index( index_ )
-            , color( color_ )
             , hero( hero_ )
             , strength( strength_ )
             , movePoints( movePoints_ )
         {}
 
         int32_t index{ -1 };
-        int color{ Color::NONE };
         const Heroes * hero{ nullptr };
         double strength{ 0 };
         uint32_t movePoints{ 0 };
