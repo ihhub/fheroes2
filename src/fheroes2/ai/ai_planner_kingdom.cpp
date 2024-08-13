@@ -597,7 +597,13 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         return false;
     }
 
-    const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, enemyArmy.color, enemyArmy.strength );
+    // When estimating the distance using the pathfinder, it should be taken into account that although the enemy army may be close to the castle, the castle
+    // may still be invisible to the enemy army due to the fog of war, therefore, it is necessary to use an assessment of the path from the castle owner's point
+    // of view, who obviously sees both the castle and the enemy army at the same time.
+    //
+    // Of course, on the other hand, it may be the other way around - the enemy army may have access to some path that is not yet visible to the castle owner,
+    // but since the castle owner doesn't know about this for sure, using this option smacks of cheating.
+    const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
     if ( dist == 0 || dist >= threatDistanceLimit ) {
         return false;
     }
