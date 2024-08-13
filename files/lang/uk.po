@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 09:23+0000\n"
-"PO-Revision-Date: 2024-08-11 17:25+0300\n"
+"PO-Revision-Date: 2024-08-13 09:01+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1061,7 +1061,7 @@ msgstr "Вийти"
 msgid "Reset"
 msgstr "Скинути"
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з .... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Reset to default settings."
 msgstr "Скинути до усталених налаштувань."
@@ -4976,10 +4976,10 @@ msgid "View High Scores for Campaigns."
 msgstr "Переглянути рекорди у кампаніях."
 
 msgid "hotkey|default okay event"
-msgstr "Підтвердити подію"
+msgstr "підтвердити подію"
 
 msgid "hotkey|default cancel event"
-msgstr "Скасувати подію"
+msgstr "скасувати подію"
 
 msgid "hotkey|default left"
 msgstr "ліворуч"
@@ -4994,10 +4994,10 @@ msgid "hotkey|default down"
 msgstr "вниз"
 
 msgid "hotkey|toggle fullscreen"
-msgstr "Повноекранний режим увімк/вимк"
+msgstr "повноекранний режим увімк/вимк"
 
 msgid "hotkey|toggle text support mode"
-msgstr "Текстовий опис увімк/вимк"
+msgstr "текстовий опис увімк/вимк"
 
 msgid "hotkey|new game"
 msgstr "нова гра"
@@ -5111,10 +5111,10 @@ msgid "hotkey|select third campaign bonus"
 msgstr "вибрати тртій бонус кампанії"
 
 msgid "hotkey|view campaign intro"
-msgstr "Дивитися вступ кампанії"
+msgstr "дивитися вступ кампанії"
 
 msgid "hotkey|select campaign difficulty"
-msgstr "Обрати складність кампанії"
+msgstr "обрати складність кампанії"
 
 msgid "hotkey|restart campaign scenario"
 msgstr "перезапуск сценарію кампанії"
@@ -5171,22 +5171,22 @@ msgid "hotkey|file options"
 msgstr "параметри файлу"
 
 msgid "hotkey|adventure options"
-msgstr "Пригодницькі налаштування"
+msgstr "пригодницькі налаштування"
 
 msgid "hotkey|puzzle map"
 msgstr "мапа-пазл"
 
 msgid "hotkey|scenario information"
-msgstr "Інформація про сценарій"
+msgstr "інформація про сценарій"
 
 msgid "hotkey|dig for artifact"
 msgstr "відкопати артефакт"
 
 msgid "hotkey|view world"
-msgstr "Оглянути світ"
+msgstr "оглянути світ"
 
 msgid "hotkey|kingdom summary"
-msgstr "Загальна інформація по королівству"
+msgstr "загальна інформація по королівству"
 
 msgid "hotkey|default action"
 msgstr "дії за налаштуванням"
@@ -5319,7 +5319,7 @@ msgstr ""
 "Ви хочете передати управління від вас до ШІ? Ефект відбудеться лише на "
 "наступний хід."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Default Actions"
 msgstr "Дії як усталено"
@@ -5346,13 +5346,13 @@ msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
 msgid "Unsupported save format: "
-msgstr "Непідтримуваний формат збереження:"
+msgstr "Непідтримуваний формат збереження: "
 
 msgid "Current game version: "
-msgstr "Поточна версія гри:"
+msgstr "Поточна версія гри: "
 
 msgid "Last supported version: "
-msgstr "Остання підтримувана версія:"
+msgstr "Остання підтримувана версія: "
 
 msgid "This file contains a save with an invalid game type."
 msgstr "Цей файл містить збереження з хибим типом гри."
@@ -6134,7 +6134,7 @@ msgstr ""
 "Гравці зі значим обмеженнями починають з меншою кількістю ресурсів і "
 "заробляють на 30% менше ресурсів за хід."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid ""
 "Default\n"
@@ -7902,12 +7902,12 @@ msgstr "Клас героя:"
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ви впевнені, що хочете звільнити цього героя?"
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set custom Experience value. Current value is default."
 msgstr "Задати певний обсяг досвіду. Поточна кількість як усталено."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
@@ -7920,12 +7920,12 @@ msgstr "Задати кількість досвіду"
 msgid "View Experience Info"
 msgstr "Переглянути інформацію про досвід"
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set custom Spell Points value. Current value is default."
 msgstr "Задати власну кількість очок заклинань. Поточний обсяг як усталено."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
@@ -7999,14 +7999,14 @@ msgid "Set hero's Army. Right-click to reset unit."
 msgstr ""
 "Встановити армію героя. Тицьніть правою кнопкою миші, щоб скинути юніта."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set hero's portrait. Right-click to reset to default."
 msgstr ""
 "Встановити портрет героя. Тицьніть правою кнопкою миші, щоб відновити "
 "значення як усталено."
 
-# By default - перекладають як "За замовчуванням", але це калька з московської мови.
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
