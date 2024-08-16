@@ -155,28 +155,33 @@ namespace
             return;
         }
 
-        while ( building & BUILD_MAGEGUILD ) {
-            const int mageGuildLevel = castle.GetLevelMageGuild();
+        if ( building & BUILD_MAGEGUILD ) {
+            assert( ( [&castle, building]() {
+                const int mageGuildLevel = castle.GetLevelMageGuild();
 
-            // If we are going to draw a Mage Guild building, then the castle should have a Mage Guild
-            assert( mageGuildLevel > 0 );
+                // If we are going to draw a Mage Guild building, then the castle should have a Mage Guild
+                if ( mageGuildLevel < 1 ) {
+                    return false;
+                }
 
-            // The drawing of the Mage Guild building of the currently built level is allowed
-            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 1 ) ) ) {
-                break;
-            }
+                // The drawing of the Mage Guild building of the currently built level is allowed
+                if ( building == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    return true;
+                }
 
-            // If we are going to draw a Mage Guild building not of the currently built level, then the castle should have at least a Level 2 Mage Guild
-            assert( mageGuildLevel > 1 );
+                // If we are going to draw a Mage Guild building not of the currently built level, then the castle should have at least a Level 2 Mage Guild
+                if ( mageGuildLevel < 2 ) {
+                    return false;
+                }
 
-            // The drawing of the Mage Guild building of the previous level is allowed as well, so that we can draw the "upgrade" animation
-            if ( building == ( BUILD_MAGEGUILD1 << ( castle.GetLevelMageGuild() - 2 ) ) ) {
-                break;
-            }
+                // The drawing of the Mage Guild building of the previous level is allowed as well, so that we can draw the "upgrade" animation
+                if ( building == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 2 ) ) ) {
+                    return true;
+                }
 
-            // In all other cases, we should never draw this Mage Guild building
-            assert( 0 );
-            return;
+                // In all other cases, we should never draw this Mage Guild building
+                return false;
+            }() ) );
         }
 
         const int race = castle.GetRace();
