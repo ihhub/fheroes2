@@ -445,11 +445,14 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( fheroes2::FitToRoi( monsterSprite, inPos, display, outPos, inSize, roi ) ) {
-            fheroes2::Sprite outMonsterSprite = monsterSprite;
             if ( troop.isModes( Battle::CAP_MIRRORIMAGE ) ) {
+                fheroes2::Sprite outMonsterSprite = monsterSprite;
                 fheroes2::ApplyPalette( outMonsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+                fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
             }
-            fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
+            else {
+                fheroes2::Blit( monsterSprite, inPos, display, outPos, inSize, isReflected );
+            }
         }
 
         if ( isAnimated )
