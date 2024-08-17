@@ -38,6 +38,7 @@ FHEROES2_C_WARN_OPTIONS := \
 FHEROES2_CPP_WARN_OPTIONS := \
     -Wctor-dtor-privacy \
     -Wextra-semi \
+    -Wmissing-declarations \
     -Woverloaded-virtual \
     -Wsuggest-override
 
