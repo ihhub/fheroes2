@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2991,17 +2991,14 @@ msgstr "Összesen: "
 msgid "Need: "
 msgstr "Szükséges: "
 
-msgid "Load Game"
-msgstr "Játék betöltése"
-
-msgid "No save files to load."
-msgstr "Nincsenek mentések a betöltéshez."
-
 msgid "New Game"
 msgstr "Új játék"
 
 msgid "Start a single or multi-player game."
 msgstr "Egy- vagy többszemélyes játék indítása."
+
+msgid "Load Game"
+msgstr "Játék betöltése"
 
 msgid "Load a previously saved game."
 msgstr "Mentett játék betöltése."
@@ -5345,6 +5342,9 @@ msgstr "Ez a mentett játék lokalizált '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' nyelvre, azonban a játék jelenlegi nyelve '"
+
+msgid "No save files to load."
+msgstr "Nincsenek mentések a betöltéshez."
 
 msgid "Hot Seat"
 msgstr "Helycserés"
