@@ -33,6 +33,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
