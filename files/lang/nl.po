@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -2959,16 +2959,13 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr ""
-
-msgid "No save files to load."
-msgstr ""
-
 msgid "New Game"
 msgstr ""
 
 msgid "Start a single or multi-player game."
+msgstr ""
+
+msgid "Load Game"
 msgstr ""
 
 msgid "Load a previously saved game."
@@ -5265,6 +5262,9 @@ msgid "This saved game is localized to '"
 msgstr ""
 
 msgid "' language, but the current language of the game is '"
+msgstr ""
+
+msgid "No save files to load."
 msgstr ""
 
 msgid "Hot Seat"

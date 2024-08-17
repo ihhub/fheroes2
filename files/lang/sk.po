@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3051,17 +3051,14 @@ msgstr "Celkovo: "
 msgid "Need: "
 msgstr "Potreba: "
 
-msgid "Load Game"
-msgstr "Nahraj hru"
-
-msgid "No save files to load."
-msgstr "Žiadne uložené hry."
-
 msgid "New Game"
 msgstr "Nová hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Začni hru jedného alebo viac hráčov."
+
+msgid "Load Game"
+msgstr "Nahraj hru"
 
 msgid "Load a previously saved game."
 msgstr "Nahraj predtým uloženú hru."
@@ -5519,6 +5516,9 @@ msgstr "Táto uložená hra je zlokalizovaná na jazyk '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "', ale aktuálny jazyk hry je '"
+
+msgid "No save files to load."
+msgstr "Žiadne uložené hry."
 
 msgid "Hot Seat"
 msgstr "Horúce kreslo"
