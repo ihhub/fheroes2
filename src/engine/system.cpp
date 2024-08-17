@@ -366,13 +366,13 @@ std::string System::GetBasename( std::string_view path )
     return std::string{ path.substr( pos + 1 ) };
 }
 
-std::string System::truncateFileExtensionAndPath( std::string_view path )
+std::string System::GetStem( std::string_view path )
 {
     std::string res = GetBasename( path );
 
     const size_t pos = res.rfind( '.' );
 
-    if ( pos != std::string::npos ) {
+    if ( pos != 0 && pos != std::string::npos ) {
         res.resize( pos );
     }
 

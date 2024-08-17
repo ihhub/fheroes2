@@ -22,14 +22,11 @@
  ***************************************************************************/
 
 #include <cstdint>
-#include <string>
 
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
-#include "dir.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "game_io.h"
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "icn.h"
@@ -103,10 +100,7 @@ namespace
                 }
             }
             else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
-                if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
-                    fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
-                }
-                else if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
+                if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
                     break;
                 }
