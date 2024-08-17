@@ -1591,7 +1591,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             Maps::FileInfo mapInfo = scenario.loadMap();
             Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
 
-            conf.SetCurrentFileInfo( mapInfo );
+            conf.setCurrentMapInfo( mapInfo );
 
             assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
 
@@ -1633,7 +1633,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                                    Dialog::OK );
 
                 // TODO: find a way to restore world for the current game after a failure.
-                conf.SetCurrentFileInfo( {} );
+                conf.setCurrentMapInfo( {} );
                 continue;
             }
 
