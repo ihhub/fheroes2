@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-10 04:32+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2024-08-01 09:59+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2994,17 +2994,14 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Behöver: "
 
-msgid "Load Game"
-msgstr "Ladda Spel"
-
-msgid "No save files to load."
-msgstr "Inga sparfiler att ladda."
-
 msgid "New Game"
 msgstr "Nytt Spel"
 
 msgid "Start a single or multi-player game."
 msgstr "Starta ett spel med en eller flera spelare."
+
+msgid "Load Game"
+msgstr "Ladda Spel"
 
 msgid "Load a previously saved game."
 msgstr "Ladda ett tidigare sparat spel."
@@ -5353,6 +5350,9 @@ msgstr "Denna spelomgång är översatt till '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' men nuvarande spelspråk är "
+
+msgid "No save files to load."
+msgstr "Inga sparfiler att ladda."
 
 msgid "Hot Seat"
 msgstr "Heta stolen"

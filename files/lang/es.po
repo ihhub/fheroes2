@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2986,17 +2986,14 @@ msgstr "Total: "
 msgid "Need: "
 msgstr "Necesita: "
 
-msgid "Load Game"
-msgstr "Cargar Partida"
-
-msgid "No save files to load."
-msgstr "No hay partidas para cargar."
-
 msgid "New Game"
 msgstr "Nueva Partida"
 
 msgid "Start a single or multi-player game."
 msgstr "Comenzar una partida simple o multijugador."
+
+msgid "Load Game"
+msgstr "Cargar Partida"
 
 msgid "Load a previously saved game."
 msgstr "Cargar una partida previamente guardada."
@@ -5443,6 +5440,9 @@ msgstr ""
 
 msgid "' language, but the current language of the game is '"
 msgstr ""
+
+msgid "No save files to load."
+msgstr "No hay partidas para cargar."
 
 msgid "Hot Seat"
 msgstr "Asiento caliente"

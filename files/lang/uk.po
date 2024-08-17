@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2024-08-13 09:01+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3013,17 +3013,14 @@ msgstr "Загалом: "
 msgid "Need: "
 msgstr "Потрібно: "
 
-msgid "Load Game"
-msgstr "Завантажити Гру"
-
-msgid "No save files to load."
-msgstr "Немає файлів збереження для завантаження."
-
 msgid "New Game"
 msgstr "Нова Гра"
 
 msgid "Start a single or multi-player game."
 msgstr "Почати одно або багато користувацьку гру."
+
+msgid "Load Game"
+msgstr "Завантажити Гру"
 
 msgid "Load a previously saved game."
 msgstr "Завантажити раніше збережену гру."
@@ -5369,6 +5366,9 @@ msgstr "Ця збережена гра знаходиться в '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' мовою, але поточна мова гри - це '"
+
+msgid "No save files to load."
+msgstr "Немає файлів збереження для завантаження."
 
 msgid "Hot Seat"
 msgstr "Гаряче сидіння"
