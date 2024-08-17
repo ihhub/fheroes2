@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-03 09:23+0000\n"
-"PO-Revision-Date: 2024-07-29 21:26+0300\n"
+"PO-Revision-Date: 2024-08-13 09:01+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -442,7 +442,7 @@ msgstr "Наявність невмерлих в армії -1"
 msgid ""
 "Default\n"
 "troop"
-msgstr "Війська по замовчуванню"
+msgstr "Війська за налаштуванням"
 
 msgid "View %{name}"
 msgstr "Переглянути %{name}"
@@ -1061,8 +1061,10 @@ msgstr "Вийти"
 msgid "Reset"
 msgstr "Скинути"
 
+# By default - перекладають як "За замовчуванням", але це калька з .... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Reset to default settings."
-msgstr "Скинути до налаштувань за замовчуванням."
+msgstr "Скинути до усталених налаштувань."
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
@@ -3694,7 +3696,7 @@ msgid "Selected Name"
 msgstr "Назва"
 
 msgid "The name of the currently selected map."
-msgstr "Назва обраної мапи"
+msgstr "Назва обраної мапи."
 
 msgid "Selected Map Difficulty"
 msgstr "Складність обраної мапи"
@@ -3809,13 +3811,13 @@ msgid "Gold in Treasury:"
 msgstr "Золота у скарбниці:"
 
 msgid "Wood & Ore:"
-msgstr "Дерево та Руда"
+msgstr "Дерево та Руда:"
 
 msgid "Gems, Cr, Slf & Mer:"
 msgstr "Цінні Ресурси:"
 
 msgid "Obelisks Found:"
-msgstr "Знайдено Обелісків:"
+msgstr "Знайдено обелісків:"
 
 msgid "Artifacts:"
 msgstr "Артефакти:"
@@ -3827,10 +3829,10 @@ msgid "Income:"
 msgstr "Прибутки:"
 
 msgid "Best Hero:"
-msgstr "Найсильніший Герой:"
+msgstr "Найсильніший герой:"
 
 msgid "Best Hero Stats:"
-msgstr "Хар-ки найсильнішого Героя:"
+msgstr "Хар-ки найсильнішого героя:"
 
 msgid "Personality:"
 msgstr "Особистість:"
@@ -4058,7 +4060,7 @@ msgid "Save Map"
 msgstr "Зберегти мапу"
 
 msgid "Save the current map."
-msgstr "Збережіть поточну мапу."
+msgstr "Зберегти поточну мапу."
 
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
@@ -4089,7 +4091,7 @@ msgid "Failed to update player information."
 msgstr "Не вдалося оновити інформацію по гравцю."
 
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "На карті можна розмістити лише один випадковий Легендарний артефакт."
+msgstr "На мапі можна розмістити лише один випадковий Легендарний артефакт."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
@@ -4113,7 +4115,7 @@ msgid "Map saved to: "
 msgstr "Мапу збережено в: "
 
 msgid "Failed to save the map."
-msgstr "Не вдалося зберегти карту."
+msgstr "Не вдалося зберегти мапу."
 
 msgid "Used to place %{object}."
 msgstr "Використовується для розміщення %{object}."
@@ -4160,7 +4162,7 @@ msgid "Artifacts"
 msgstr "Артефакти"
 
 msgid "Dwellings"
-msgstr "Житло"
+msgstr "Житла"
 
 msgid "Mines"
 msgstr "Копальні"
@@ -4181,13 +4183,13 @@ msgid "editorErasure|Landscape objects"
 msgstr "Ландшафтні об'єкти"
 
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "пригодницькі статичні об'єкти"
+msgstr "Пригодницькі статичні об'єкти"
 
 msgid "editorErasure|Castles"
 msgstr "Замки"
 
 msgid "editorErasure|Adventure pickable objects"
-msgstr "подорожні збиральні об'єкти"
+msgstr "Подорожні збиральні об'єкти"
 
 msgid "editorErasure|Monsters"
 msgstr "Монстри"
@@ -4347,7 +4349,7 @@ msgid "Undo your last action."
 msgstr "Скасуйте останню дію."
 
 msgid "Edit map title, description, and other general information."
-msgstr "Редагуйте назву мапи, опис та іншу загальну інформацію."
+msgstr "Редагувати назву мапи, опис та іншу загальну інформацію."
 
 msgid "Specifications"
 msgstr "Налаштування"
@@ -4974,10 +4976,10 @@ msgid "View High Scores for Campaigns."
 msgstr "Переглянути рекорди у кампаніях."
 
 msgid "hotkey|default okay event"
-msgstr "Підтвердити подію"
+msgstr "підтвердити подію"
 
 msgid "hotkey|default cancel event"
-msgstr "Скасувати подію"
+msgstr "скасувати подію"
 
 msgid "hotkey|default left"
 msgstr "ліворуч"
@@ -4992,10 +4994,10 @@ msgid "hotkey|default down"
 msgstr "вниз"
 
 msgid "hotkey|toggle fullscreen"
-msgstr "Повноекранний режим увімк/вимк"
+msgstr "повноекранний режим увімк/вимк"
 
 msgid "hotkey|toggle text support mode"
-msgstr "Текстовий опис увімк/вимк"
+msgstr "текстовий опис увімк/вимк"
 
 msgid "hotkey|new game"
 msgstr "нова гра"
@@ -5055,7 +5057,7 @@ msgid "hotkey|choose the expansion campaign"
 msgstr "вибрати кампанію доповнення"
 
 msgid "hotkey|map editor main menu"
-msgstr "головне меню редактора карт"
+msgstr "головне меню редактора мап"
 
 msgid "hotkey|new map menu"
 msgstr "нова гра"
@@ -5109,10 +5111,10 @@ msgid "hotkey|select third campaign bonus"
 msgstr "вибрати тртій бонус кампанії"
 
 msgid "hotkey|view campaign intro"
-msgstr "Дивитися вступ кампанії"
+msgstr "дивитися вступ кампанії"
 
 msgid "hotkey|select campaign difficulty"
-msgstr "Обрати складність кампанії"
+msgstr "обрати складність кампанії"
 
 msgid "hotkey|restart campaign scenario"
 msgstr "перезапуск сценарію кампанії"
@@ -5169,22 +5171,22 @@ msgid "hotkey|file options"
 msgstr "параметри файлу"
 
 msgid "hotkey|adventure options"
-msgstr "Пригодницькі налаштування"
+msgstr "пригодницькі налаштування"
 
 msgid "hotkey|puzzle map"
 msgstr "мапа-пазл"
 
 msgid "hotkey|scenario information"
-msgstr "Інформація про сценарій"
+msgstr "інформація про сценарій"
 
 msgid "hotkey|dig for artifact"
 msgstr "відкопати артефакт"
 
 msgid "hotkey|view world"
-msgstr "Оглянути світ"
+msgstr "оглянути світ"
 
 msgid "hotkey|kingdom summary"
-msgstr "Загальна інформація по королівству"
+msgstr "загальна інформація по королівству"
 
 msgid "hotkey|default action"
 msgstr "дії за налаштуванням"
@@ -5317,8 +5319,10 @@ msgstr ""
 "Ви хочете передати управління від вас до ШІ? Ефект відбудеться лише на "
 "наступний хід."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Default Actions"
-msgstr "Дії по замовчуванню"
+msgstr "Дії як усталено"
 
 msgid "Global Actions"
 msgstr "Глобальні дії"
@@ -5342,13 +5346,13 @@ msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
 msgid "Unsupported save format: "
-msgstr "Непідтримуваний формат збереження:"
+msgstr "Непідтримуваний формат збереження: "
 
 msgid "Current game version: "
-msgstr "Поточна версія гри:"
+msgstr "Поточна версія гри: "
 
 msgid "Last supported version: "
-msgstr "Остання підтримувана версія:"
+msgstr "Остання підтримувана версія: "
 
 msgid "This file contains a save with an invalid game type."
 msgstr "Цей файл містить збереження з хибим типом гри."
@@ -5377,13 +5381,13 @@ msgstr ""
 "комп'ютером, пересідаючи на \"гаряче місце\", коли настає їхня черга."
 
 msgid "A single player game playing out a single map."
-msgstr "Гра для одного гравця на одній карті."
+msgstr "Гра для одного гравця на одній мапі."
 
 msgid "Standard Game"
 msgstr "Стандартна Гра"
 
 msgid "A single player game playing through a series of maps."
-msgstr "Гра для одного гравця, що проходить через серію карт."
+msgstr "Гра для одного гравця, що проходить через серію мап."
 
 msgid "Campaign Game"
 msgstr "Кампанія"
@@ -5396,7 +5400,7 @@ msgid ""
 "other on a single map."
 msgstr ""
 "Багатокористувацька гра, в якій кілька гравців змагаються один проти одного "
-"на одній карті."
+"на одній мапі."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Команда fheroes2 Resurrection представляє"
@@ -5529,7 +5533,7 @@ msgid ""
 "on a single map."
 msgstr ""
 "Багатокористувацька гра, в якій кілька гравців змагаються один проти одного "
-"на одній карті."
+"на одній мапі."
 
 msgid "Battle Only"
 msgstr "Лише битва"
@@ -6130,12 +6134,14 @@ msgstr ""
 "Гравці зі значим обмеженнями починають з меншою кількістю ресурсів і "
 "заробляють на 30% менше ресурсів за хід."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid ""
 "Default\n"
 "value"
 msgstr ""
-"Значенння\n"
-"по замовчуванню"
+"Значення\n"
+"як усталено"
 
 msgid "Set %{skill} Skill"
 msgstr "Задати навичку %{skill}"
@@ -6143,7 +6149,7 @@ msgstr "Задати навичку %{skill}"
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
 "Задати базове значення %{skill}. Тицьніть правою кнопкою миші, щоб скинути "
-"всі навички до значень за замовчуванням."
+"всі навички до значень як усталено."
 
 msgid "View %{skill} Info"
 msgstr "Переглянути %{skill} інформацію"
@@ -6152,8 +6158,8 @@ msgid ""
 "Default\n"
 "skill"
 msgstr ""
-"По замовчуванню\n"
-"Захист"
+"Усталена\n"
+"навичка"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7407,7 +7413,7 @@ msgid ""
 "\"You already have all the maps I know about. Let me fish in peace now.\""
 msgstr ""
 "Капітан здивовано дивиться на вас і каже:\n"
-"\"У вас вже є всі карти, про які я знаю. Дайте мені спокійно порибалити\"."
+"\"У вас вже є всі мапи, про які я знаю. Дайте мені спокійно порибалити\"."
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -7416,7 +7422,7 @@ msgid ""
 msgstr ""
 "Капітан у відставці, який живе на відремонтованій рибальській платформі, "
 "пропонує вам продати мапи моря, які він склав у молоді роки, за 1000 "
-"золотих. Бажаєте купити карти?"
+"золотих. Бажаєте купити мапи?"
 
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
@@ -7896,13 +7902,17 @@ msgstr "Клас героя:"
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ви впевнені, що хочете звільнити цього героя?"
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set custom Experience value. Current value is default."
-msgstr "Задати певний обсяг досвіду. Поточна кількість за замовчуванням."
+msgstr "Задати певний обсяг досвіду. Поточна кількість як усталено."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 "Встановити обсяг досвіду. Тицьніть правою кнопкою миші, щоб відновити "
-"значення за замовчуванням."
+"значення як усталено."
 
 msgid "Set Experience value"
 msgstr "Задати кількість досвіду"
@@ -7910,14 +7920,17 @@ msgstr "Задати кількість досвіду"
 msgid "View Experience Info"
 msgstr "Переглянути інформацію про досвід"
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set custom Spell Points value. Current value is default."
-msgstr ""
-"Задати власну кількість очок заклинань. Поточний обсяг за замовчуванням."
+msgstr "Задати власну кількість очок заклинань. Поточний обсяг як усталено."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 "Змінити значення очок заклинань. Тицьніть правою кнопкою миші, щоб відновити "
-"значення за замовчуванням."
+"значення як усталено."
 
 msgid "Set Spell Points value"
 msgstr "Задати кількість очок мани."
@@ -7986,15 +7999,19 @@ msgid "Set hero's Army. Right-click to reset unit."
 msgstr ""
 "Встановити армію героя. Тицьніть правою кнопкою миші, щоб скинути юніта."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set hero's portrait. Right-click to reset to default."
 msgstr ""
-"Встановити портрет героя. Клацніть правою кнопкою миші, щоб відновити "
-"значення за замовчуванням."
+"Встановити портрет героя. Тицьніть правою кнопкою миші, щоб відновити "
+"значення як усталено."
 
+# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
 "Тицьніть для зміни імені героя. Тицьніть правою кнопкою миші, щоб відновити "
-"значення за замовчуванням."
+"значення як усталено."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
@@ -10556,8 +10573,8 @@ msgid ""
 "control from holy word spells."
 msgstr ""
 "У швидкій і смертельній сутичці з некромантом ви виграєте його магічний "
-"кулон. Пізніше чарівник розповідає вам, що кулон захищає підконтрольну вам "
-"нежить від заклинань святого слова."
+"кулон. Пізніше чарівник розповідає вам, що кулон захищає підконтрольних вам "
+"немертвих від заклинань святого слова."
 
 msgid "Wand of Negation"
 msgstr "Жезл Заперечення"
@@ -11637,7 +11654,7 @@ msgid "View Towns"
 msgstr "Огляд міст"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr "Показує всіх героїв на карті."
+msgstr "Показує всіх героїв на мапі."
 
 msgid "View Heroes"
 msgstr "Показати героїв"
@@ -11793,7 +11810,7 @@ msgid "Close Spellbook"
 msgstr "Закрити Книгу Заклять"
 
 msgid "View %{spell}"
-msgstr "Показати %{spell}"
+msgstr "Переглянути %{spell}"
 
 msgid "This spell does %{damage} points of damage."
 msgstr "Це закляття завдає %{damage} очок шкоди."
