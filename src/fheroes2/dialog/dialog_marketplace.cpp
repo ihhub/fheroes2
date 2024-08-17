@@ -114,16 +114,19 @@ namespace
             text.draw( pos_rt.x, pos_rt.y + 32, pos_rt.width, fheroes2::Display::instance() );
 
             const Players & players = conf.GetPlayers();
-            int playerCount = 0;
-            for ( const Player * player : players ) {
-                if ( player != nullptr ) {
-                    const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-                    if ( kingdom.isPlay() )
-                        ++playerCount;
-                }
-            }
 
-            _singlePlayer = playerCount == 1;
+            // If there are less than two active players in the game, then there is no one to give resources to
+            const bool isGiftDisabled = ( std::count_if( players.begin(), players.end(),
+                                                         []( const Player * player ) {
+                                                             if ( player == nullptr ) {
+                                                                 return false;
+                                                             }
+
+                                                             return world.GetKingdom( player->GetColor() ).isPlay();
+                                                         } )
+                                          < 2 );
+
+            isGiftDisabled ? buttonGift.disable() : buttonGift.enable();
         }
 
         void RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy, uint32_t max_sell, uint32_t orig_buy );
@@ -145,7 +148,6 @@ namespace
 
         fheroes2::MovableText textSell;
         fheroes2::MovableText textBuy;
-        bool _singlePlayer{ false };
     };
 
     void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, uint32_t max_buy, uint32_t max_sell, uint32_t count_buy,
@@ -165,13 +167,12 @@ namespace
             const fheroes2::Text displayMessage( std::move( message ), fheroes2::FontType::normalWhite() );
             displayMessage.draw( dst_rt.x, dst_rt.y + 2, dst_rt.width, display );
 
-            if ( !_singlePlayer ) {
-                buttonGift.enable();
-            }
             buttonTrade.disable();
             buttonLeft.disable();
             buttonRight.disable();
+
             buttonGift.draw();
+
             buttonMax = fheroes2::Rect();
             buttonMin = fheroes2::Rect();
         }
@@ -235,7 +236,6 @@ namespace
             dst_pt.y = pos_rt.y + 115;
             text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-            buttonGift.enable();
             buttonTrade.enable();
             buttonLeft.enable();
             buttonRight.enable();
@@ -432,9 +432,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
+    buttonTrade.disable();
+
     buttonGift.draw();
     buttonExit.draw();
-    buttonTrade.disable();
+
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
