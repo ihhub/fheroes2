@@ -27,6 +27,41 @@
 #include "serialize.h"
 #include "zzlib.h"
 
+namespace Maps::Map_Format
+{
+    // The following operators are used only inside this module, but they cannot be declared in an anonymous namespace due to the way ADL works
+
+    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object );
+    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object );
+
+    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
+    StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
+
+    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo );
+    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo );
+
+    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata );
+
+    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata );
+}
+
 namespace
 {
     const std::array<uint8_t, 6> magicWord{ 'h', '2', 'm', 'a', 'p', '\0' };
@@ -124,6 +159,117 @@ namespace
                 }
             }
         }
+    }
+
+    bool saveToStream( StreamBase & msg, const Maps::Map_Format::BaseMapFormat & map )
+    {
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+
+        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
+            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
+            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
+            << map.name << map.description;
+
+        return !msg.fail();
+    }
+
+    bool loadFromStream( StreamBase & msg, Maps::Map_Format::BaseMapFormat & map )
+    {
+        msg >> map.version;
+        if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
+            return false;
+        }
+
+        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
+            >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
+            >> map.lossConditionMetadata >> map.size;
+
+        if ( map.size <= 0 ) {
+            // This is not a correct map size.
+            return false;
+        }
+
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
+        LanguageUnderlyingType language;
+
+        msg >> language;
+        map.language = static_cast<fheroes2::SupportedLanguage>( language );
+
+        msg >> map.name >> map.description;
+
+        return !msg.fail();
+    }
+
+    bool saveToStream( StreamBase & msg, const Maps::Map_Format::MapFormat & map )
+    {
+        // Only the base map information is not encoded.
+        // The rest of data must be compressed to prevent manual corruption of the file.
+        if ( !saveToStream( msg, static_cast<const Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
+            return false;
+        }
+
+        StreamBuf compressed;
+        compressed.setbigendian( true );
+
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
+
+        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+
+        msg.putRaw( temp.data(), temp.size() );
+
+        return !msg.fail();
+    }
+
+    bool loadFromStream( StreamBase & msg, Maps::Map_Format::MapFormat & map )
+    {
+        // TODO: verify the correctness of metadata.
+        if ( !loadFromStream( msg, static_cast<Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
+            map = {};
+            return false;
+        }
+
+        StreamBuf decompressed;
+        decompressed.setbigendian( true );
+
+        {
+            std::vector<uint8_t> temp = msg.getRaw();
+            if ( temp.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return false;
+            }
+
+            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            if ( decompressedData.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return false;
+            }
+
+            // Let's try to free up some memory
+            temp = std::vector<uint8_t>{};
+
+            decompressed.putRaw( decompressedData.data(), decompressedData.size() );
+        }
+
+        decompressed >> map.additionalInfo >> map.tiles;
+
+        if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+            map = {};
+            return false;
+        }
+
+        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
+            >> map.adventureMapEventMetadata >> map.shrineMetadata;
+
+        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
+        convertFromV2ToV3( map );
+        convertFromV3ToV4( map );
+        convertFromV4ToV5( map );
+
+        return !msg.fail();
     }
 }
 
@@ -251,117 +397,6 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata )
     {
         return msg >> metadata.allowedSpells;
-    }
-
-    bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
-    {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-
-        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
-            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-            << map.name << map.description;
-
-        return !msg.fail();
-    }
-
-    bool loadFromStream( StreamBase & msg, BaseMapFormat & map )
-    {
-        msg >> map.version;
-        if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
-            return false;
-        }
-
-        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
-            >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
-            >> map.lossConditionMetadata >> map.size;
-
-        if ( map.size <= 0 ) {
-            // This is not a correct map size.
-            return false;
-        }
-
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
-        LanguageUnderlyingType language;
-
-        msg >> language;
-        map.language = static_cast<fheroes2::SupportedLanguage>( language );
-
-        msg >> map.name >> map.description;
-
-        return !msg.fail();
-    }
-
-    bool saveToStream( StreamBase & msg, const MapFormat & map )
-    {
-        // Only the base map information is not encoded.
-        // The rest of data must be compressed to prevent manual corruption of the file.
-        if ( !saveToStream( msg, static_cast<const BaseMapFormat &>( map ) ) ) {
-            return false;
-        }
-
-        StreamBuf compressed;
-        compressed.setbigendian( true );
-
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
-
-        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
-
-        msg.putRaw( temp.data(), temp.size() );
-
-        return !msg.fail();
-    }
-
-    bool loadFromStream( StreamBase & msg, MapFormat & map )
-    {
-        // TODO: verify the correctness of metadata.
-        if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
-            map = {};
-            return false;
-        }
-
-        StreamBuf decompressed;
-        decompressed.setbigendian( true );
-
-        {
-            std::vector<uint8_t> temp = msg.getRaw();
-            if ( temp.empty() ) {
-                // This is a corrupted file.
-                map = {};
-                return false;
-            }
-
-            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
-            if ( decompressedData.empty() ) {
-                // This is a corrupted file.
-                map = {};
-                return false;
-            }
-
-            // Let's try to free up some memory
-            temp = std::vector<uint8_t>{};
-
-            decompressed.putRaw( decompressedData.data(), decompressedData.size() );
-        }
-
-        decompressed >> map.additionalInfo >> map.tiles;
-
-        if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
-            map = {};
-            return false;
-        }
-
-        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.shrineMetadata;
-
-        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
-        convertFromV2ToV3( map );
-        convertFromV3ToV4( map );
-        convertFromV4ToV5( map );
-
-        return !msg.fail();
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
