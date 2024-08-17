@@ -2606,8 +2606,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     }
                     else {
                         // First search clockwise.
-                        direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
-                        direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+                        CellDirection clockWiseDirection = static_cast<CellDirection>( currentDirection );
+                        CellDirection antiClockWiseDirection = static_cast<CellDirection>( currentDirection );
 
                         while ( true ) {
                             ++clockWiseDirection;
