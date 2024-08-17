@@ -63,10 +63,11 @@ namespace
 
         for ( size_t i = 0; i < rects.size(); ++i ) {
             if ( rects[i] & position ) {
-                if ( le.MouseClickLeft() )
+                if ( le.MouseClickLeft() ) {
                     return static_cast<int32_t>( i );
-                else
-                    return -1;
+                }
+
+                return -1;
             }
         }
 
@@ -77,12 +78,11 @@ namespace
     {
         static constexpr int recipientSpacing = 22;
         const Colors colors;
-        int recipients;
+        int recipients{ 0 };
         std::vector<fheroes2::Rect> positions;
 
         SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
             : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
-            , recipients( 0 )
         {
             positions.reserve( colors.size() );
             const fheroes2::Display & display = fheroes2::Display::instance();
@@ -159,7 +159,7 @@ namespace
         static void RedrawResource( int type, int32_t count, int32_t posx, int32_t posy )
         {
             fheroes2::Display & display = fheroes2::Display::instance();
-            fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
             fheroes2::Blit( sprite, display, posx, posy );
             text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
@@ -186,10 +186,10 @@ namespace
             const int32_t index = GetIndexClick();
 
             if ( index >= 0 ) {
-                int rs = Resource::getResourceTypeFromIconIndex( index );
+                const int rs = Resource::getResourceTypeFromIconIndex( index );
                 const int32_t step = ( rs == Resource::GOLD ) ? 100 : 1;
 
-                int32_t cur = resource.Get( rs );
+                const int32_t cur = resource.Get( rs );
                 int32_t sel = cur;
                 const int32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / static_cast<int32_t>( mul ) : funds.Get( rs ) + resource.Get( rs );
                 if ( 0 == mul ) {
@@ -209,7 +209,7 @@ namespace
                         int32_t * to = resource.GetPtr( rs );
 
                         if ( from && to ) {
-                            int32_t count = sel - cur;
+                            const int32_t count = sel - cur;
 
                             *from -= mul > 1 ? count * static_cast<int32_t>( mul ) : count;
                             *to += count;

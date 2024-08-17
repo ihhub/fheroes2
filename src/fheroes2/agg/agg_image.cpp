@@ -2062,8 +2062,8 @@ namespace
                 buttonText = gettext_noop( "E\nX\nI\nT" );
             }
 
-            ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-            ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+            const ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+            const ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
             renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 21, 124 }, fheroes2::FontColor::WHITE );
 
             break;
@@ -3608,7 +3608,7 @@ namespace
         case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
             _icnVsSprite[id].resize( 1 );
 
-            int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
 
             const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
             const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
@@ -5119,193 +5119,190 @@ namespace
     }
 }
 
-namespace fheroes2
+namespace fheroes2::AGG
 {
-    namespace AGG
+    const Sprite & GetICN( int icnId, uint32_t index )
     {
-        const Sprite & GetICN( int icnId, uint32_t index )
-        {
-            if ( !IsValidICNId( icnId ) ) {
-                return errorImage;
-            }
-
-            if ( index >= GetMaximumICNIndex( icnId ) ) {
-                return errorImage;
-            }
-
-            if ( IsScalableICN( icnId ) ) {
-                return GetScaledICN( icnId, index );
-            }
-
-            return _icnVsSprite[icnId][index];
-        }
-
-        uint32_t GetICNCount( int icnId )
-        {
-            if ( !IsValidICNId( icnId ) ) {
-                return 0;
-            }
-
-            return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
-        }
-
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
-        {
-            if ( shapeId > 3 ) {
-                return errorImage;
-            }
-
-            if ( !IsValidTILId( tilId ) ) {
-                return errorImage;
-            }
-
-            const size_t maxTILIndex = GetMaximumTILIndex( tilId );
-            if ( index >= maxTILIndex ) {
-                return errorImage;
-            }
-
-            return _tilVsImage[tilId][shapeId][index];
-        }
-
-        int32_t GetAbsoluteICNHeight( int icnId )
-        {
-            const uint32_t frameCount = GetICNCount( icnId );
-            if ( frameCount == 0 ) {
-                return 0;
-            }
-
-            int32_t height = 0;
-            for ( uint32_t i = 0; i < frameCount; ++i ) {
-                const int32_t offset = -GetICN( icnId, i ).y();
-                if ( offset > height ) {
-                    height = offset;
-                }
-            }
-
-            return height;
-        }
-
-        uint32_t getCharacterLimit( const FontSize fontSize )
-        {
-            switch ( fontSize ) {
-            case FontSize::SMALL:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-            case FontSize::NORMAL:
-            case FontSize::LARGE:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-            case FontSize::BUTTON_RELEASED:
-            case FontSize::BUTTON_PRESSED:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
-            default:
-                assert( 0 ); // Did you add a new font size? Please add implementation.
-            }
-
-            return 0;
-        }
-
-        const Sprite & getChar( const uint8_t character, const FontType & fontType )
-        {
-            if ( character < 0x21 ) {
-                return errorImage;
-            }
-
-            switch ( fontType.size ) {
-            case FontSize::SMALL:
-                switch ( fontType.color ) {
-                case FontColor::WHITE:
-                    return GetICN( ICN::SMALFONT, character - 0x20 );
-                case FontColor::GRAY:
-                    return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
-                case FontColor::YELLOW:
-                    return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
-                default:
-                    // Did you add a new font color? Add the corresponding logic for it!
-                    assert( 0 );
-                    break;
-                }
-                break;
-            case FontSize::NORMAL:
-                switch ( fontType.color ) {
-                case FontColor::WHITE:
-                    return GetICN( ICN::FONT, character - 0x20 );
-                case FontColor::GRAY:
-                    return GetICN( ICN::GRAY_FONT, character - 0x20 );
-                case FontColor::YELLOW:
-                    return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-                default:
-                    // Did you add a new font color? Add the corresponding logic for it!
-                    assert( 0 );
-                    break;
-                }
-                break;
-            case FontSize::LARGE:
-                switch ( fontType.color ) {
-                case FontColor::WHITE:
-                    return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
-                default:
-                    // Did you add a new font color? Add the corresponding logic for it!
-                    assert( 0 );
-                    break;
-                }
-                break;
-            case FontSize::BUTTON_RELEASED:
-                switch ( fontType.color ) {
-                case FontColor::WHITE:
-                    return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
-                case FontColor::GRAY:
-                    return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
-                default:
-                    // Did you add a new font color? Add the corresponding logic for it!
-                    assert( 0 );
-                    break;
-                }
-                break;
-            case FontSize::BUTTON_PRESSED:
-                switch ( fontType.color ) {
-                case FontColor::WHITE:
-                    return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
-                case FontColor::GRAY:
-                    return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
-                default:
-                    // Did you add a new font color? Add the corresponding logic for it!
-                    assert( 0 );
-                    break;
-                }
-                break;
-            default:
-                // Did you add a new font size? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-
-            assert( 0 ); // Did you add a new font size? Please add implementation.
-
+        if ( !IsValidICNId( icnId ) ) {
             return errorImage;
         }
 
-        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
-        {
-            if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
-                if ( !alphabetPreserver.isPreserved() ) {
-                    // This can happen when we try to change a language without loading assets.
-                    alphabetPreserver.preserve();
-                }
-                else {
-                    alphabetPreserver.restore();
-                }
+        if ( index >= GetMaximumICNIndex( icnId ) ) {
+            return errorImage;
+        }
+
+        if ( IsScalableICN( icnId ) ) {
+            return GetScaledICN( icnId, index );
+        }
+
+        return _icnVsSprite[icnId][index];
+    }
+
+    uint32_t GetICNCount( int icnId )
+    {
+        if ( !IsValidICNId( icnId ) ) {
+            return 0;
+        }
+
+        return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
+    }
+
+    const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
+    {
+        if ( shapeId > 3 ) {
+            return errorImage;
+        }
+
+        if ( !IsValidTILId( tilId ) ) {
+            return errorImage;
+        }
+
+        const size_t maxTILIndex = GetMaximumTILIndex( tilId );
+        if ( index >= maxTILIndex ) {
+            return errorImage;
+        }
+
+        return _tilVsImage[tilId][shapeId][index];
+    }
+
+    int32_t GetAbsoluteICNHeight( int icnId )
+    {
+        const uint32_t frameCount = GetICNCount( icnId );
+        if ( frameCount == 0 ) {
+            return 0;
+        }
+
+        int32_t height = 0;
+        for ( uint32_t i = 0; i < frameCount; ++i ) {
+            const int32_t offset = -GetICN( icnId, i ).y();
+            if ( offset > height ) {
+                height = offset;
+            }
+        }
+
+        return height;
+    }
+
+    uint32_t getCharacterLimit( const FontSize fontSize )
+    {
+        switch ( fontSize ) {
+        case FontSize::SMALL:
+            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+        case FontSize::NORMAL:
+        case FontSize::LARGE:
+            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+        case FontSize::BUTTON_RELEASED:
+        case FontSize::BUTTON_PRESSED:
+            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
+        default:
+            assert( 0 ); // Did you add a new font size? Please add implementation.
+        }
+
+        return 0;
+    }
+
+    const Sprite & getChar( const uint8_t character, const FontType & fontType )
+    {
+        if ( character < 0x21 ) {
+            return errorImage;
+        }
+
+        switch ( fontType.size ) {
+        case FontSize::SMALL:
+            switch ( fontType.color ) {
+            case FontColor::WHITE:
+                return GetICN( ICN::SMALFONT, character - 0x20 );
+            case FontColor::GRAY:
+                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+            case FontColor::YELLOW:
+                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case FontSize::NORMAL:
+            switch ( fontType.color ) {
+            case FontColor::WHITE:
+                return GetICN( ICN::FONT, character - 0x20 );
+            case FontColor::GRAY:
+                return GetICN( ICN::GRAY_FONT, character - 0x20 );
+            case FontColor::YELLOW:
+                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case FontSize::LARGE:
+            switch ( fontType.color ) {
+            case FontColor::WHITE:
+                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case FontSize::BUTTON_RELEASED:
+            switch ( fontType.color ) {
+            case FontColor::WHITE:
+                return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
+            case FontColor::GRAY:
+                return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case FontSize::BUTTON_PRESSED:
+            switch ( fontType.color ) {
+            case FontColor::WHITE:
+                return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
+            case FontColor::GRAY:
+                return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        default:
+            // Did you add a new font size? Add the corresponding logic for it!
+            assert( 0 );
+            break;
+        }
+
+        assert( 0 ); // Did you add a new font size? Please add implementation.
+
+        return errorImage;
+    }
+
+    void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
+    {
+        if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
+            if ( !alphabetPreserver.isPreserved() ) {
+                // This can happen when we try to change a language without loading assets.
+                alphabetPreserver.preserve();
             }
             else {
-                alphabetPreserver.preserve();
-                // Restore original letters when changing language to avoid changes to them being carried over.
                 alphabetPreserver.restore();
-                generateAlphabet( language, _icnVsSprite );
             }
-            generateButtonAlphabet( language, _icnVsSprite );
+        }
+        else {
+            alphabetPreserver.preserve();
+            // Restore original letters when changing language to avoid changes to them being carried over.
+            alphabetPreserver.restore();
+            generateAlphabet( language, _icnVsSprite );
+        }
+        generateButtonAlphabet( language, _icnVsSprite );
 
-            // Clear language dependent resources.
-            for ( const int id : languageDependentIcnId ) {
-                _icnVsSprite[id].clear();
-            }
+        // Clear language dependent resources.
+        for ( const int id : languageDependentIcnId ) {
+            _icnVsSprite[id].clear();
         }
     }
 }

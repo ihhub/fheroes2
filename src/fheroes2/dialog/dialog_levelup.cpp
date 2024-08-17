@@ -97,11 +97,11 @@ namespace
         StringReplace( message, "%{skill1}", sec1.GetName() );
         StringReplace( message, "%{skill2}", sec2.GetName() );
 
-        fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
         const int spacer = 10;
 
-        Dialog::FrameBox box( box1.height( BOXAREA_WIDTH ) + spacer + box2.height( BOXAREA_WIDTH ) + 10 + sprite_frame.height(), true );
+        const Dialog::FrameBox box( box1.height( BOXAREA_WIDTH ) + spacer + box2.height( BOXAREA_WIDTH ) + 10 + sprite_frame.height(), true );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
@@ -128,7 +128,7 @@ namespace
         pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;
         fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
         pos.x += 3;
-        fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
+        const fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
         fheroes2::Blit( sprite_skill1, display, pos.x, pos.y + 3 );
 
         fheroes2::Text text{ Skill::Secondary::String( sec1.Skill() ), fheroes2::FontType::smallWhite() };
@@ -141,12 +141,12 @@ namespace
         fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
         pos.x += 3;
 
-        fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
+        const fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
         fheroes2::Blit( sprite_skill2, display, pos.x, pos.y + 3 );
         // text
-        fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
         name_skill2.draw( pos.x + ( sprite_skill2.width() - name_skill2.width() ) / 2, pos.y + 7, display );
-        fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
         name_level2.draw( pos.x + ( sprite_skill2.width() - name_level2.width() ) / 2, pos.y + sprite_skill2.height() - 10, display );
 
         // hero button

@@ -83,7 +83,6 @@ namespace
             , tradpostIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST )
             , textSell( fheroes2::Display::instance() )
             , textBuy( fheroes2::Display::instance() )
-            , _singlePlayer( false )
         {
             Settings & conf = Settings::Get();
 
@@ -146,19 +145,19 @@ namespace
 
         fheroes2::MovableText textSell;
         fheroes2::MovableText textBuy;
-        bool _singlePlayer;
+        bool _singlePlayer{ false };
     };
 
     void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, uint32_t max_buy, uint32_t max_sell, uint32_t count_buy,
                                         uint32_t count_sell, const bool fromTradingPost, const bool firstExchange )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        bool disable = kingdom.GetFunds().Get( resourceFrom ) <= 0;
+        const bool disable = kingdom.GetFunds().Get( resourceFrom ) <= 0;
 
         if ( disable || resourceFrom == resourceTo || ( Resource::GOLD != resourceTo && 0 == max_buy ) ) {
             _scrollbar.hide();
             back.restore();
-            fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
+            const fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
             std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
                                       ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
                                       : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );

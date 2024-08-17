@@ -378,7 +378,7 @@ namespace
         const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 );
         fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-        int32_t offsetY = dst.y + 3;
+        const int32_t offsetY = dst.y + 3;
 
         fheroes2::Text text( _( "Hero/Stats" ), fheroes2::FontType::smallWhite() );
         text.draw( dst.x + 130 - text.width() / 2, offsetY, display );
@@ -669,7 +669,7 @@ namespace
         const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 );
         fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-        int32_t offsetY = dst.y + 3;
+        const int32_t offsetY = dst.y + 3;
 
         fheroes2::Text text( _( "Town/Castle" ), fheroes2::FontType::smallWhite() );
         text.draw( dst.x + 105 - text.width() / 2, offsetY, display );
