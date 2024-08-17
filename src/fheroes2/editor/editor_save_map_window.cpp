@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_save_map_window.h"
+
 #include <algorithm>
 #include <cstdint>
 #include <ctime>
