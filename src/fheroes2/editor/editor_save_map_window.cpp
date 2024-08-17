@@ -21,6 +21,7 @@
 #include "editor_save_map_window.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <ctime>
 #include <iterator>
@@ -98,7 +99,7 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -146,10 +147,7 @@ namespace
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
         std::string mapFileName( System::GetBasename( info.filename ) );
-
-        if ( mapFileName.empty() ) {
-            return;
-        }
+        assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
@@ -285,7 +283,7 @@ namespace Editor
 
         MapsFileInfoList::iterator it = lists.begin();
         for ( ; it != lists.end(); ++it ) {
-            if ( System::truncateFileExtensionAndPath( ( *it ).filename ) == fileName ) {
+            if ( System::GetStem( ( *it ).filename ) == fileName ) {
                 break;
             }
         }
@@ -402,13 +400,15 @@ namespace Editor
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
                 msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
+
                     if ( lists.empty() ) {
                         isListboxSelected = false;
-                        fileName.clear();
                         charInsertPos = 0;
+                        fileName.clear();
 
                         buttonOk.disable();
                         buttonOk.draw();
@@ -456,7 +456,7 @@ namespace Editor
             }
 
             if ( needFileNameRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;

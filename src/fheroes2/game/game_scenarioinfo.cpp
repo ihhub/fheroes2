@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -53,7 +54,6 @@
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
-#include "system.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -147,6 +147,8 @@ namespace
 
     fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists, const int humanPlayerCount )
     {
+        assert( !lists.empty() );
+
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -204,34 +206,30 @@ namespace
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
-        bool resetStartingSettings = conf.getCurrentMapInfo().filename.empty();
-        Players & players = conf.GetPlayers();
-        Interface::PlayersInfo playersInfo;
-
-        if ( !resetStartingSettings ) { // verify that current map really exists in map's list
-            resetStartingSettings = true;
-            const std::string & mapName = conf.getCurrentMapInfo().name;
-            const std::string & mapFileName = System::GetBasename( conf.getCurrentMapInfo().filename );
-            for ( const Maps::FileInfo & mapInfo : lists ) {
-                if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.filename ) == mapFileName ) ) {
-                    if ( mapInfo.filename == conf.getCurrentMapInfo().filename ) {
-                        conf.SetCurrentFileInfo( mapInfo );
-                        updatePlayers( players, humanPlayerCount );
-                        Game::LoadPlayers( mapInfo.filename, players );
-                        resetStartingSettings = false;
-                        break;
-                    }
-                }
+        const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
+            const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
+            if ( currentMapinfo.filename.empty() ) {
+                return lists.front();
             }
-        }
 
-        // set first map's settings
-        if ( resetStartingSettings ) {
-            conf.SetCurrentFileInfo( lists.front() );
-            updatePlayers( players, humanPlayerCount );
-            Game::LoadPlayers( lists.front().filename, players );
-        }
+            // Make sure that the current map actually exists in the map's list
+            const auto iter = std::find_if( lists.begin(), lists.end(), [&currentMapinfo]( const Maps::FileInfo & info ) {
+                return info.name == currentMapinfo.name && info.filename == currentMapinfo.filename;
+            } );
+            if ( iter == lists.end() ) {
+                return lists.front();
+            }
 
+            return *iter;
+        }();
+
+        Players & players = conf.GetPlayers();
+
+        conf.setCurrentMapInfo( mapInfo );
+        updatePlayers( players, humanPlayerCount );
+        Game::LoadPlayers( mapInfo.filename, players );
+
+        Interface::PlayersInfo playersInfo;
         playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
         DrawScenarioStaticInfo( roi );
@@ -316,7 +314,7 @@ namespace
 
                 if ( fi && fi->filename != currentMapName ) {
                     Game::SavePlayers( currentMapName, conf.GetPlayers() );
-                    conf.SetCurrentFileInfo( *fi );
+                    conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
                     RedrawMapTitle( scenarioBoxRoi );
