@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3103,17 +3103,14 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Trenger: "
 
-msgid "Load Game"
-msgstr "Last inn et parti"
-
-msgid "No save files to load."
-msgstr "Ingen lagrede spill å laste inn."
-
 msgid "New Game"
 msgstr "Nytt parti"
 
 msgid "Start a single or multi-player game."
 msgstr "Start et enkelt- eller flerspillerparti."
+
+msgid "Load Game"
+msgstr "Last inn et parti"
 
 msgid "Load a previously saved game."
 msgstr "Last inn et tidligere lagret parti."
@@ -5605,6 +5602,9 @@ msgstr "Dette lagrede spillet er satt opp for språket '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "', men det gjeldende språket for spillet er '"
+
+msgid "No save files to load."
+msgstr "Ingen lagrede spill å laste inn."
 
 msgid "Hot Seat"
 msgstr "Byttespilling"
