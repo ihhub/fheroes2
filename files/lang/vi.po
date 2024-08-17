@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-17 15:24+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3050,17 +3050,14 @@ msgstr "Tổng: "
 msgid "Need: "
 msgstr "Cần: "
 
-msgid "Load Game"
-msgstr "Tải Trò chơi"
-
-msgid "No save files to load."
-msgstr "Không có tệp lưu để tải."
-
 msgid "New Game"
 msgstr "Trò chơi Mới"
 
 msgid "Start a single or multi-player game."
 msgstr "Bắt đầu một trò chơi đơn hoặc nhiều người chơi."
+
+msgid "Load Game"
+msgstr "Tải Trò chơi"
 
 msgid "Load a previously saved game."
 msgstr "Tải một trò chơi đã lưu trước đó."
@@ -5514,6 +5511,9 @@ msgstr "Trò chơi đã lưu này được bản địa hóa thành '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' ngôn ngữ, nhưng ngôn ngữ hiện tại của trò chơi là '"
+
+msgid "No save files to load."
+msgstr "Không có tệp lưu để tải."
 
 msgid "Hot Seat"
 msgstr "Ghế Nóng"
