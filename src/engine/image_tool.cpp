@@ -195,7 +195,7 @@ namespace fheroes2
         image.resize( surface->w, surface->h );
         image.reset();
 
-        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        const uint8_t * inY = static_cast<uint8_t *>( surface->pixels );
         uint8_t * outY = image.image();
         uint8_t * transformY = image.transform();
 
