@@ -357,15 +357,337 @@ namespace
 
         return result;
     }
+
+    int matchHeroType( const HeroBase * base )
+    {
+        if ( base->isCaptain() ) {
+            return Battle::CAPTAIN;
+        }
+
+        switch ( base->GetRace() ) {
+        case Race::KNGT:
+            return Battle::KNIGHT;
+        case Race::BARB:
+            return Battle::BARBARIAN;
+        case Race::SORC:
+            return Battle::SORCERESS;
+        case Race::WRLK:
+            return Battle::WARLOCK;
+        case Race::WZRD:
+            return Battle::WIZARD;
+        case Race::NECR:
+            return Battle::NECROMANCER;
+        default:
+            break;
+        }
+
+        // Have you added a new race? Update the logic above!
+        assert( 0 );
+
+        return Battle::KNIGHT;
+    }
+
+    const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
+    {
+        static std::vector<int> staticAnim;
+        if ( staticAnim.empty() ) {
+            staticAnim.push_back( 1 );
+        }
+
+        if ( !hero || animation == Battle::OP_STATIC )
+            return staticAnim;
+
+        const int heroType = matchHeroType( hero );
+
+        if ( animation == Battle::OP_SORROW ) {
+            static const std::vector<int> sorrowAnim{ 2, 3, 4, 5, 4, 5, 4, 3, 2 };
+
+            return ( heroType == Battle::CAPTAIN ) ? staticAnim : sorrowAnim;
+        }
+
+        static std::vector<int> heroTypeAnim[7][9];
+
+        if ( heroTypeAnim[heroType][animation].empty() ) {
+            const int sourceArray[7][9][9] = {
+                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
+                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+                { { 6, 7, 6, 7, 6, 7 },
+                  { 7, 8, 9, 10, 11 },
+                  { 10, 9, 7 },
+                  { 7, 12, 13, 14, 15 },
+                  { 7 },
+                  { 7, 12, 13, 14, 16 },
+                  { 7 },
+                  { 17 },
+                  { 18, 19 } }, // NECROMANCER
+                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
+            };
+
+            for ( const int frame : sourceArray[heroType][animation] ) {
+                if ( frame == 0 ) {
+                    break;
+                }
+
+                heroTypeAnim[heroType][animation].push_back( frame );
+            }
+        }
+
+        return heroTypeAnim[heroType][animation];
+    }
+
+    bool CursorAttack( uint32_t theme )
+    {
+        switch ( theme ) {
+        case Cursor::WAR_ARROW:
+        case Cursor::WAR_BROKENARROW:
+        case Cursor::SWORD_TOPRIGHT:
+        case Cursor::SWORD_RIGHT:
+        case Cursor::SWORD_BOTTOMRIGHT:
+        case Cursor::SWORD_BOTTOMLEFT:
+        case Cursor::SWORD_LEFT:
+        case Cursor::SWORD_TOPLEFT:
+        case Cursor::SWORD_TOP:
+        case Cursor::SWORD_BOTTOM:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    fheroes2::Image DrawHexagon( const uint8_t colorId )
+    {
+        const int32_t r = 22;
+        const int32_t l = 10;
+        const int32_t w = CELLW;
+        const int32_t h = CELLH;
+
+        fheroes2::Image sf( w + 1, h + 1 );
+        sf.reset();
+
+        fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
+        fheroes2::SetPixel( sf, r, 1, colorId );
+        fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
+
+        fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
+        fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
+
+        fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
+        fheroes2::SetPixel( sf, r, h, colorId );
+        fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
+
+        return sf;
+    }
+
+    fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
+    {
+        const int32_t l = 13;
+        const int32_t w = CELLW;
+        const int32_t h = CELLH;
+
+        fheroes2::Image sf( w, h );
+        sf.reset();
+        fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, 2 * l + 4 );
+        for ( int32_t i = 0; i < w / 2; i += 2 ) {
+            for ( int32_t x = 0; x < rt.width; ++x ) {
+                for ( int32_t y = 0; y < rt.height; ++y ) {
+                    fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
+                }
+            }
+            --rt.y;
+            rt.height += 2;
+            rt.x += ( i == 0 ) ? 1 : 2;
+            rt.width -= ( i == 0 ) ? 2 : 4;
+        }
+
+        return sf;
+    }
+
+    fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Sprite & sprite )
+    {
+        const fheroes2::Rect & rt = unit.GetRectPosition();
+
+        int32_t offsetX = 0;
+        if ( unit.isReflect() ) {
+            if ( unit.isWide() ) {
+                offsetX = rt.x + ( rt.width / 2 + rt.width / 4 ) - sprite.width() - sprite.x() + 1;
+            }
+            else {
+                offsetX = rt.x + ( rt.width / 2 ) - sprite.width() - sprite.x() + 1;
+            }
+        }
+        else {
+            if ( unit.isWide() ) {
+                offsetX = rt.x + ( rt.width / 4 ) + sprite.x();
+            }
+            else {
+                offsetX = rt.x + ( rt.width / 2 ) + sprite.x();
+            }
+        }
+
+        const int32_t offsetY = rt.y + rt.height + sprite.y() + cellYOffset;
+
+        return { offsetX, offsetY };
+    }
+
+    int GetIndexIndicator( const Battle::Unit & unit )
+    {
+        if ( unit.Modes( Battle::IS_GOOD_MAGIC | Battle::SP_ANTIMAGIC ) ) {
+            if ( unit.Modes( Battle::IS_BAD_MAGIC ) ) {
+                // ICN::TEXTBAR index for yellow indicator background color.
+                return 13;
+            }
+
+            // ICN::TEXTBAR index for green indicator background color.
+            return 12;
+        }
+
+        if ( unit.Modes( Battle::IS_BAD_MAGIC ) ) {
+            // ICN::TEXTBAR index for red indicator background color.
+            return 14;
+        }
+
+        // ICN::TEXTBAR index for purple indicator background color.
+        return 10;
+    }
+
+    int GetCursorFromSpell( const int spell )
+    {
+        switch ( spell ) {
+        case Spell::SLOW:
+            return Cursor::SP_SLOW;
+        case Spell::CURSE:
+            return Cursor::SP_CURSE;
+        case Spell::CURE:
+            return Cursor::SP_CURE;
+        case Spell::BLESS:
+            return Cursor::SP_BLESS;
+        case Spell::FIREBALL:
+            return Cursor::SP_FIREBALL;
+        case Spell::FIREBLAST:
+            return Cursor::SP_FIREBLAST;
+        case Spell::TELEPORT:
+            return Cursor::SP_TELEPORT;
+        case Spell::RESURRECT:
+            return Cursor::SP_RESURRECT;
+        case Spell::HASTE:
+            return Cursor::SP_HASTE;
+        case Spell::SHIELD:
+            return Cursor::SP_SHIELD;
+        case Spell::ARMAGEDDON:
+            return Cursor::SP_ARMAGEDDON;
+        case Spell::ANTIMAGIC:
+            return Cursor::SP_ANTIMAGIC;
+        case Spell::BERSERKER:
+            return Cursor::SP_BERSERKER;
+        case Spell::PARALYZE:
+            return Cursor::SP_PARALYZE;
+        case Spell::BLIND:
+            return Cursor::SP_BLIND;
+
+        case Spell::LIGHTNINGBOLT:
+            return Cursor::SP_LIGHTNINGBOLT;
+        case Spell::CHAINLIGHTNING:
+            return Cursor::SP_CHAINLIGHTNING;
+        case Spell::ELEMENTALSTORM:
+            return Cursor::SP_ELEMENTALSTORM;
+        case Spell::RESURRECTTRUE:
+            return Cursor::SP_RESURRECTTRUE;
+        case Spell::DISPEL:
+            return Cursor::SP_DISPEL;
+        case Spell::HOLYWORD:
+            return Cursor::SP_HOLYWORD;
+        case Spell::HOLYSHOUT:
+            return Cursor::SP_HOLYSHOUT;
+        case Spell::METEORSHOWER:
+            return Cursor::SP_METEORSHOWER;
+
+        case Spell::ANIMATEDEAD:
+            return Cursor::SP_ANIMATEDEAD;
+        case Spell::MIRRORIMAGE:
+            return Cursor::SP_MIRRORIMAGE;
+        case Spell::BLOODLUST:
+            return Cursor::SP_BLOODLUST;
+        case Spell::DEATHRIPPLE:
+            return Cursor::SP_DEATHRIPPLE;
+        case Spell::DEATHWAVE:
+            return Cursor::SP_DEATHWAVE;
+        case Spell::STEELSKIN:
+            return Cursor::SP_STEELSKIN;
+        case Spell::STONESKIN:
+            return Cursor::SP_STONESKIN;
+        case Spell::DRAGONSLAYER:
+            return Cursor::SP_DRAGONSLAYER;
+        case Spell::EARTHQUAKE:
+            return Cursor::SP_EARTHQUAKE;
+        case Spell::DISRUPTINGRAY:
+            return Cursor::SP_DISRUPTINGRAY;
+        case Spell::COLDRING:
+            return Cursor::SP_COLDRING;
+        case Spell::COLDRAY:
+            return Cursor::SP_COLDRAY;
+        case Spell::HYPNOTIZE:
+            return Cursor::SP_HYPNOTIZE;
+        case Spell::ARROW:
+            return Cursor::SP_ARROW;
+
+        default:
+            break;
+        }
+        return Cursor::WAR_NONE;
+    }
+
+    int GetSwordCursorDirection( const int direction )
+    {
+        switch ( direction ) {
+        case Battle::BOTTOM_RIGHT:
+            return Cursor::SWORD_TOPLEFT;
+        case Battle::BOTTOM_LEFT:
+            return Cursor::SWORD_TOPRIGHT;
+        case Battle::RIGHT:
+            return Cursor::SWORD_LEFT;
+        case Battle::TOP_RIGHT:
+            return Cursor::SWORD_BOTTOMLEFT;
+        case Battle::TOP_LEFT:
+            return Cursor::SWORD_BOTTOMRIGHT;
+        case Battle::LEFT:
+            return Cursor::SWORD_RIGHT;
+        default:
+            break;
+        }
+        return 0;
+    }
+
+    int GetDirectionFromCursorSword( const uint32_t sword )
+    {
+        switch ( sword ) {
+        case Cursor::SWORD_TOPLEFT:
+            return Battle::BOTTOM_RIGHT;
+        case Cursor::SWORD_TOPRIGHT:
+            return Battle::BOTTOM_LEFT;
+        case Cursor::SWORD_LEFT:
+            return Battle::RIGHT;
+        case Cursor::SWORD_BOTTOMLEFT:
+            return Battle::TOP_RIGHT;
+        case Cursor::SWORD_BOTTOMRIGHT:
+            return Battle::TOP_LEFT;
+        case Cursor::SWORD_RIGHT:
+            return Battle::LEFT;
+        default:
+            break;
+        }
+
+        return Battle::UNKNOWN;
+    }
 }
 
 namespace Battle
 {
-    int GetIndexIndicator( const Unit & unit );
-    int GetSwordCursorDirection( const int direction );
-    int GetDirectionFromCursorSword( const uint32_t sword );
-    int GetCursorFromSpell( const int spell );
-
     class StatusListBox final : public ::Interface::ListBox<std::string>
     {
     public:
@@ -504,290 +826,11 @@ namespace Battle
         int32_t _scrollbarSliderAreaLength{ 0 };
         bool _isLogOpened{ false };
     };
-
-    int matchHeroType( const HeroBase * base )
-    {
-        if ( base->isCaptain() ) {
-            return CAPTAIN;
-        }
-
-        switch ( base->GetRace() ) {
-        case Race::KNGT:
-            return KNIGHT;
-        case Race::BARB:
-            return BARBARIAN;
-        case Race::SORC:
-            return SORCERESS;
-        case Race::WRLK:
-            return WARLOCK;
-        case Race::WZRD:
-            return WIZARD;
-        case Race::NECR:
-            return NECROMANCER;
-        default:
-            break;
-        }
-
-        // Have you added a new race? Update the logic above!
-        assert( 0 );
-
-        return KNIGHT;
-    }
-
-    const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
-    {
-        static std::vector<int> staticAnim;
-        if ( staticAnim.empty() ) {
-            staticAnim.push_back( 1 );
-        }
-
-        if ( !hero || animation == OP_STATIC )
-            return staticAnim;
-
-        const int heroType = matchHeroType( hero );
-
-        if ( animation == OP_SORROW ) {
-            static const std::vector<int> sorrowAnim{ 2, 3, 4, 5, 4, 5, 4, 3, 2 };
-
-            return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
-        }
-
-        static std::vector<int> heroTypeAnim[7][9];
-
-        if ( heroTypeAnim[heroType][animation].empty() ) {
-            const int sourceArray[7][9][9] = {
-                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
-                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
-                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
-                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
-                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
-                { { 6, 7, 6, 7, 6, 7 },
-                  { 7, 8, 9, 10, 11 },
-                  { 10, 9, 7 },
-                  { 7, 12, 13, 14, 15 },
-                  { 7 },
-                  { 7, 12, 13, 14, 16 },
-                  { 7 },
-                  { 17 },
-                  { 18, 19 } }, // NECROMANCER
-                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
-            };
-
-            for ( const int frame : sourceArray[heroType][animation] ) {
-                if ( frame == 0 ) {
-                    break;
-                }
-
-                heroTypeAnim[heroType][animation].push_back( frame );
-            }
-        }
-
-        return heroTypeAnim[heroType][animation];
-    }
-}
-
-bool CursorAttack( uint32_t theme )
-{
-    switch ( theme ) {
-    case Cursor::WAR_ARROW:
-    case Cursor::WAR_BROKENARROW:
-    case Cursor::SWORD_TOPRIGHT:
-    case Cursor::SWORD_RIGHT:
-    case Cursor::SWORD_BOTTOMRIGHT:
-    case Cursor::SWORD_BOTTOMLEFT:
-    case Cursor::SWORD_LEFT:
-    case Cursor::SWORD_TOPLEFT:
-    case Cursor::SWORD_TOP:
-    case Cursor::SWORD_BOTTOM:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
-fheroes2::Image DrawHexagon( const uint8_t colorId )
-{
-    const int32_t r = 22;
-    const int32_t l = 10;
-    const int32_t w = CELLW;
-    const int32_t h = CELLH;
-
-    fheroes2::Image sf( w + 1, h + 1 );
-    sf.reset();
-
-    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
-    fheroes2::SetPixel( sf, r, 1, colorId );
-    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
-
-    fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
-    fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
-
-    fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
-    fheroes2::SetPixel( sf, r, h, colorId );
-    fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
-
-    return sf;
-}
-
-fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
-{
-    const int32_t l = 13;
-    const int32_t w = CELLW;
-    const int32_t h = CELLH;
-
-    fheroes2::Image sf( w, h );
-    sf.reset();
-    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, 2 * l + 4 );
-    for ( int32_t i = 0; i < w / 2; i += 2 ) {
-        for ( int32_t x = 0; x < rt.width; ++x ) {
-            for ( int32_t y = 0; y < rt.height; ++y ) {
-                fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
-            }
-        }
-        --rt.y;
-        rt.height += 2;
-        rt.x += ( i == 0 ) ? 1 : 2;
-        rt.width -= ( i == 0 ) ? 2 : 4;
-    }
-
-    return sf;
 }
 
 bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
 {
     return info.defender && info.defender->isFinishAnimFrame();
-}
-
-int Battle::GetCursorFromSpell( const int spell )
-{
-    switch ( spell ) {
-    case Spell::SLOW:
-        return Cursor::SP_SLOW;
-    case Spell::CURSE:
-        return Cursor::SP_CURSE;
-    case Spell::CURE:
-        return Cursor::SP_CURE;
-    case Spell::BLESS:
-        return Cursor::SP_BLESS;
-    case Spell::FIREBALL:
-        return Cursor::SP_FIREBALL;
-    case Spell::FIREBLAST:
-        return Cursor::SP_FIREBLAST;
-    case Spell::TELEPORT:
-        return Cursor::SP_TELEPORT;
-    case Spell::RESURRECT:
-        return Cursor::SP_RESURRECT;
-    case Spell::HASTE:
-        return Cursor::SP_HASTE;
-    case Spell::SHIELD:
-        return Cursor::SP_SHIELD;
-    case Spell::ARMAGEDDON:
-        return Cursor::SP_ARMAGEDDON;
-    case Spell::ANTIMAGIC:
-        return Cursor::SP_ANTIMAGIC;
-    case Spell::BERSERKER:
-        return Cursor::SP_BERSERKER;
-    case Spell::PARALYZE:
-        return Cursor::SP_PARALYZE;
-    case Spell::BLIND:
-        return Cursor::SP_BLIND;
-
-    case Spell::LIGHTNINGBOLT:
-        return Cursor::SP_LIGHTNINGBOLT;
-    case Spell::CHAINLIGHTNING:
-        return Cursor::SP_CHAINLIGHTNING;
-    case Spell::ELEMENTALSTORM:
-        return Cursor::SP_ELEMENTALSTORM;
-    case Spell::RESURRECTTRUE:
-        return Cursor::SP_RESURRECTTRUE;
-    case Spell::DISPEL:
-        return Cursor::SP_DISPEL;
-    case Spell::HOLYWORD:
-        return Cursor::SP_HOLYWORD;
-    case Spell::HOLYSHOUT:
-        return Cursor::SP_HOLYSHOUT;
-    case Spell::METEORSHOWER:
-        return Cursor::SP_METEORSHOWER;
-
-    case Spell::ANIMATEDEAD:
-        return Cursor::SP_ANIMATEDEAD;
-    case Spell::MIRRORIMAGE:
-        return Cursor::SP_MIRRORIMAGE;
-    case Spell::BLOODLUST:
-        return Cursor::SP_BLOODLUST;
-    case Spell::DEATHRIPPLE:
-        return Cursor::SP_DEATHRIPPLE;
-    case Spell::DEATHWAVE:
-        return Cursor::SP_DEATHWAVE;
-    case Spell::STEELSKIN:
-        return Cursor::SP_STEELSKIN;
-    case Spell::STONESKIN:
-        return Cursor::SP_STONESKIN;
-    case Spell::DRAGONSLAYER:
-        return Cursor::SP_DRAGONSLAYER;
-    case Spell::EARTHQUAKE:
-        return Cursor::SP_EARTHQUAKE;
-    case Spell::DISRUPTINGRAY:
-        return Cursor::SP_DISRUPTINGRAY;
-    case Spell::COLDRING:
-        return Cursor::SP_COLDRING;
-    case Spell::COLDRAY:
-        return Cursor::SP_COLDRAY;
-    case Spell::HYPNOTIZE:
-        return Cursor::SP_HYPNOTIZE;
-    case Spell::ARROW:
-        return Cursor::SP_ARROW;
-
-    default:
-        break;
-    }
-    return Cursor::WAR_NONE;
-}
-
-int Battle::GetSwordCursorDirection( const int direction )
-{
-    switch ( direction ) {
-    case BOTTOM_RIGHT:
-        return Cursor::SWORD_TOPLEFT;
-    case BOTTOM_LEFT:
-        return Cursor::SWORD_TOPRIGHT;
-    case RIGHT:
-        return Cursor::SWORD_LEFT;
-    case TOP_RIGHT:
-        return Cursor::SWORD_BOTTOMLEFT;
-    case TOP_LEFT:
-        return Cursor::SWORD_BOTTOMRIGHT;
-    case LEFT:
-        return Cursor::SWORD_RIGHT;
-    default:
-        break;
-    }
-    return 0;
-}
-
-int Battle::GetDirectionFromCursorSword( const uint32_t sword )
-{
-    switch ( sword ) {
-    case Cursor::SWORD_TOPLEFT:
-        return BOTTOM_RIGHT;
-    case Cursor::SWORD_TOPRIGHT:
-        return BOTTOM_LEFT;
-    case Cursor::SWORD_LEFT:
-        return RIGHT;
-    case Cursor::SWORD_BOTTOMLEFT:
-        return TOP_RIGHT;
-    case Cursor::SWORD_BOTTOMRIGHT:
-        return TOP_LEFT;
-    case Cursor::SWORD_RIGHT:
-        return LEFT;
-    default:
-        break;
-    }
-
-    return UNKNOWN;
 }
 
 Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect )
@@ -1781,33 +1824,6 @@ void Battle::Interface::RedrawOpponentsFlags()
     }
 }
 
-fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Sprite & sprite )
-{
-    const fheroes2::Rect & rt = unit.GetRectPosition();
-
-    int32_t offsetX = 0;
-    if ( unit.isReflect() ) {
-        if ( unit.isWide() ) {
-            offsetX = rt.x + ( rt.width / 2 + rt.width / 4 ) - sprite.width() - sprite.x() + 1;
-        }
-        else {
-            offsetX = rt.x + ( rt.width / 2 ) - sprite.width() - sprite.x() + 1;
-        }
-    }
-    else {
-        if ( unit.isWide() ) {
-            offsetX = rt.x + ( rt.width / 4 ) + sprite.x();
-        }
-        else {
-            offsetX = rt.x + ( rt.width / 2 ) + sprite.x();
-        }
-    }
-
-    const int32_t offsetY = rt.y + rt.height + sprite.y() + cellYOffset;
-
-    return { offsetX, offsetY };
-}
-
 void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 {
     if ( b_current_sprite && _currentUnit == &unit ) {
@@ -2590,8 +2606,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     }
                     else {
                         // First search clockwise.
-                        direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
-                        direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+                        CellDirection clockWiseDirection = static_cast<CellDirection>( currentDirection );
+                        CellDirection antiClockWiseDirection = static_cast<CellDirection>( currentDirection );
 
                         while ( true ) {
                             ++clockWiseDirection;
@@ -3129,27 +3145,6 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
 
     display.render();
-}
-
-int Battle::GetIndexIndicator( const Unit & unit )
-{
-    if ( unit.Modes( IS_GOOD_MAGIC | SP_ANTIMAGIC ) ) {
-        if ( unit.Modes( IS_BAD_MAGIC ) ) {
-            // ICN::TEXTBAR index for yellow indicator background color.
-            return 13;
-        }
-
-        // ICN::TEXTBAR index for green indicator background color.
-        return 12;
-    }
-
-    if ( unit.Modes( IS_BAD_MAGIC ) ) {
-        // ICN::TEXTBAR index for red indicator background color.
-        return 14;
-    }
-
-    // ICN::TEXTBAR index for purple indicator background color.
-    return 10;
 }
 
 void Battle::Interface::_openBattleSettingsDialog()

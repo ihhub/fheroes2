@@ -46,13 +46,13 @@ namespace Battle
 {
     class Unit;
 
-    inline direction_t & operator++( direction_t & d )
+    inline CellDirection & operator++( CellDirection & d )
     {
-        return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );
+        return d = ( CENTER == d ? TOP_LEFT : CellDirection( d << 1 ) );
     }
-    inline direction_t & operator--( direction_t & d )
+    inline CellDirection & operator--( CellDirection & d )
     {
-        return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
+        return d = ( TOP_LEFT == d ? CENTER : CellDirection( d >> 1 ) );
     }
 
     using Indexes = std::vector<int32_t>;

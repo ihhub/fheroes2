@@ -72,200 +72,198 @@ namespace
         // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
-}
 
-class SelectEnumMonster final : public Dialog::ItemSelectionWindow
-{
-public:
-    explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+    class SelectEnumMonster final : public Dialog::ItemSelectionWindow
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
-
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Monster mons( index );
-        const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-
-        renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        const Monster monster( index );
-        if ( !monster.isValid() ) {
-            fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
-            return;
+    public:
+        explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
         }
 
-        Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
-    }
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-private:
-    static const int32_t _offsetY{ 43 };
-};
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
-class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
-{
-public:
-    explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+            renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            const Monster monster( index );
+            if ( !monster.isValid() ) {
+                fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+                return;
+            }
+
+            Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 43 };
+    };
+
+    class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+    public:
+        explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+
+            renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            Dialog::QuickInfo( *world.GetHeroes( index ) );
+        }
+
+    private:
+        static const int32_t _offsetY{ 35 };
+    };
+
+    class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
     {
-        const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+    public:
+        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-        renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void ActionListPressRight( int & index ) override
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Artifact art( index );
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+
+            renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class SelectEnumSpell final : public Dialog::ItemSelectionWindow
     {
-        Dialog::QuickInfo( *world.GetHeroes( index ) );
-    }
+    public:
+        explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-private:
-    static const int32_t _offsetY{ 35 };
-};
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
-{
-public:
-    explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Spell spell( index );
+            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+
+            renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 55 };
+    };
+
+    class SelectEnumSecSkill final : public Dialog::ItemSelectionWindow
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+    public:
+        static int getSkillFromListIndex( int index )
+        {
+            return 1 + index / 3;
+        }
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+        static int getLevelFromListIndex( int index )
+        {
+            return 1 + ( index % 3 );
+        }
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
+            const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
+
+            renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() )
+                .showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class SelectKingdomCastle final : public Dialog::ItemSelectionWindow
     {
-        const Artifact art( index );
-        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+    public:
+        explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+            , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
+        {
+            SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
+        }
 
-        renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
-    }
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
-private:
-    static const int32_t _offsetY{ 42 };
-};
+            assert( castle != nullptr );
 
-class SelectEnumSpell final : public Dialog::ItemSelectionWindow
-{
-public:
-    explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
-    {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+            fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
+            fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
 
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
+            renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
+        }
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Spell spell( index );
-        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+        void ActionListPressRight( int & index ) override
+        {
+            Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
+        }
 
-        renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
-    }
+        static const int32_t itemsOffsetY{ 35 };
 
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
-    }
+    private:
+        const int _townFrameIcnId;
+    };
 
-private:
-    static const int32_t _offsetY{ 55 };
-};
-
-class SelectEnumSecSkill final : public Dialog::ItemSelectionWindow
-{
-public:
-    static int getSkillFromListIndex( int index )
-    {
-        return 1 + index / 3;
-    }
-
-    static int getLevelFromListIndex( int index )
-    {
-        return 1 + ( index % 3 );
-    }
-
-    explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ) )
-    {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
-
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
-        const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
-
-        renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
-    }
-
-private:
-    static const int32_t _offsetY{ 42 };
-};
-
-class SelectKingdomCastle final : public Dialog::ItemSelectionWindow
-{
-public:
-    explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
-        : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
-        , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
-    {
-        SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
-    }
-
-    using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-
-        assert( castle != nullptr );
-
-        fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
-        fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
-
-        renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
-    }
-
-    static const int32_t itemsOffsetY{ 35 };
-
-private:
-    const int _townFrameIcnId;
-};
-
-namespace
-{
     // This is a base class for items used in the Editor and they rely on Maps::ObjectInfo structures.
     class ObjectTypeSelection : public Dialog::ItemSelectionWindow
     {
