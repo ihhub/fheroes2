@@ -89,8 +89,8 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
-        if ( surface == nullptr ) {
+        const std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 ), SDL_FreeSurface );
+        if ( !surface ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
         }
@@ -125,20 +125,18 @@ namespace
 #if defined( ENABLE_PNG )
         int res = 0;
         if ( isPNGFilePath( path ) ) {
-            res = IMG_SavePNG( surface, path.c_str() );
+            res = IMG_SavePNG( surface.get(), path.c_str() );
         }
         else {
-            res = SDL_SaveBMP( surface, path.c_str() );
+            res = SDL_SaveBMP( surface.get(), path.c_str() );
         }
 #else
         if ( isPNGFilePath( path ) ) {
             memcpy( path.data() + path.size() - 3, "bmp", 3 );
         }
 
-        const int res = SDL_SaveBMP( surface, path.c_str() );
+        const int res = SDL_SaveBMP( surface.get(), path.c_str() );
 #endif
-
-        SDL_FreeSurface( surface );
 
         return res == 0;
     }
