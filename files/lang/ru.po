@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-17 15:24+0000\n"
+"POT-Creation-Date: 2024-08-18 01:49+0000\n"
 "PO-Revision-Date: 2024-07-14 13:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3269,6 +3269,9 @@ msgstr ""
 "или\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "н/д"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3305,9 +3308,6 @@ msgstr "Ваши ресурсы"
 
 msgid "Available Trades"
 msgstr "Доступно к обмену"
-
-msgid "n/a"
-msgstr "н/д"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняет %{count} %{monster}"
