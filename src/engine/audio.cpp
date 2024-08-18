@@ -236,12 +236,10 @@ namespace
                     ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
                 }
                 else {
-                    result = Mix_LoadMUS_RW( rwops, 0 );
+                    result = Mix_LoadMUS_RW( rwops, 1 );
                     if ( result == nullptr ) {
                         ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
                     }
-
-                    SDL_FreeRW( rwops );
                 }
             }
             else if ( std::holds_alternative<std::string>( _source ) ) {
