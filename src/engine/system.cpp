@@ -74,6 +74,9 @@
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
+#include <functional>
+#include <memory>
+
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
@@ -131,13 +134,9 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        char * path = SDL_GetPrefPath( "", prog.c_str() );
+        const std::unique_ptr<char, std::function<void( void * )>> path( SDL_GetPrefPath( "", prog.c_str() ), SDL_free );
         if ( path ) {
-            const std::string result{ path };
-
-            SDL_free( path );
-
-            return result;
+            return path.get();
         }
 #endif
 
