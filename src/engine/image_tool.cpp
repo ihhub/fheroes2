@@ -44,7 +44,6 @@
 #include <SDL_version.h>
 
 #if defined( WITH_IMAGE )
-#define ENABLE_PNG
 #include <SDL_image.h>
 #endif
 
@@ -77,7 +76,7 @@ namespace
         return palette;
     }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
 #else
     bool SaveImage( const fheroes2::Image & image, std::string path )
@@ -122,8 +121,9 @@ namespace
             memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height ) );
         }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         int res = 0;
+
         if ( isPNGFilePath( path ) ) {
             res = IMG_SavePNG( surface.get(), path.c_str() );
         }
@@ -176,7 +176,7 @@ namespace fheroes2
         std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
         std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         loadedSurface.reset( IMG_Load( path.c_str() ) );
 #else
         loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
@@ -368,7 +368,7 @@ namespace fheroes2
 
     bool isPNGFormatSupported()
     {
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         return true;
 #else
         return false;
