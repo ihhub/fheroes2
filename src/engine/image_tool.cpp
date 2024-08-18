@@ -28,6 +28,15 @@
 #include <string_view>
 #include <vector>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_error.h>
 #include <SDL_pixels.h>
 #include <SDL_stdinc.h>
@@ -37,6 +46,11 @@
 #if defined( WITH_IMAGE )
 #define ENABLE_PNG
 #include <SDL_image.h>
+#endif
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
 #include "image_palette.h"

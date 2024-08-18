@@ -32,9 +32,23 @@
 #include <string>
 #include <vector>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 #if defined( _WIN32 )
 #include <cassert>

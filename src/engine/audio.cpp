@@ -36,11 +36,25 @@
 #include <utility>
 #include <variant>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_audio.h>
 #include <SDL_error.h>
 #include <SDL_mixer.h>
 #include <SDL_rwops.h>
 #include <SDL_stdinc.h>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 #include "core.h"
 #include "dir.h"
