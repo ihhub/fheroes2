@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-18 01:49+0000\n"
-"PO-Revision-Date: 2024-08-01 09:59+0200\n"
+"PO-Revision-Date: 2024-08-19 15:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -4089,9 +4089,8 @@ msgstr "Kunde inte hitta sökvägen för att spara kartan."
 msgid "Unable to create a directory to save the map."
 msgstr "Kunde inte skapa en sökväg för att spara kartan."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
-msgstr "Kunde inte hitta sökvägen för att spara kartan."
+msgstr "Kunde inte hitta en sökväg för att spara kartan."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Är du säker på att du vill skriva över existerande karta?"
@@ -4412,25 +4411,20 @@ msgstr "Samla ihop guld."
 msgid "Run out of time."
 msgstr "Få slut på tid."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr "allians"
+msgstr "1:a"
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr "allians"
+msgstr "2:a"
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr "allians"
+msgstr "3:e"
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr "allians"
+msgstr "4:e"
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr "allians"
+msgstr "5:e"
 
 msgid "Special Loss Condition"
 msgstr "Särskilt Förlustvillkor"
@@ -4444,13 +4438,11 @@ msgstr "Tillåt standardsegervillkor"
 msgid "Allow this condition also for AI"
 msgstr "Tillåt detta villkor även för Datorn"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr "allians"
+msgstr "Ange allianser:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr "allians"
+msgstr "{%number} allians: "
 
 msgid "Gold:"
 msgstr "Guld:"
@@ -4468,15 +4460,14 @@ msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Klicka för att ändra Hjälten som måste besegras för att uppnå seger."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "Lägg till %{color} spelare i %{alliance} allians."
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Om denna checkruta är ifylld så kommer händelsen bara aktiveras för %{color} "
-"spelare om de är styrda av en mänsklig spelare."
+"Om denna ruta är ifylld så kommer %{color} spelare vara med i %{alliance} "
+"allians."
 
 msgid "Days:"
 msgstr "Dagar:"
@@ -11403,9 +11394,8 @@ msgstr "Heligt Rop"
 msgid "Anti-Magic"
 msgstr "Antimagi"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
-msgstr "Förhindrar onda besvärjelser mot vald varelse."
+msgstr "Förhindrar besvärjelser mot vald varelse."
 
 msgid "Dispel Magic"
 msgstr "Skingra Magi"
