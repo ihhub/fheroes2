@@ -224,37 +224,40 @@ namespace
 
         // Mix_Music objects should never be cached because they store the state of the music decoder's backend,
         // and should be passed to functions like Mix_PlayMusic() only once, otherwise weird things can happen.
-        Mix_Music * createMusic() const
+        std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> createMusic() const
         {
-            Mix_Music * result = nullptr;
-
             if ( std::holds_alternative<std::vector<uint8_t>>( _source ) ) {
                 const std::vector<uint8_t> & v = std::get<std::vector<uint8_t>>( _source );
 
-                const std::unique_ptr<SDL_RWops, std::function<void( SDL_RWops * )>> rwops( SDL_RWFromConstMem( v.data(), static_cast<int>( v.size() ) ), SDL_FreeRW );
+                const std::unique_ptr<SDL_RWops, void ( * )( SDL_RWops * )> rwops( SDL_RWFromConstMem( v.data(), static_cast<int>( v.size() ) ), SDL_FreeRW );
                 if ( !rwops ) {
                     ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
+
+                    return { nullptr, Mix_FreeMusic };
                 }
-                else {
-                    result = Mix_LoadMUS_RW( rwops.get(), 0 );
-                    if ( result == nullptr ) {
-                        ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
-                    }
+
+                std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> result( Mix_LoadMUS_RW( rwops.get(), 0 ), Mix_FreeMusic );
+                if ( !result ) {
+                    ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
                 }
+
+                return result;
             }
-            else if ( std::holds_alternative<std::string>( _source ) ) {
+
+            if ( std::holds_alternative<std::string>( _source ) ) {
                 const std::string & file = std::get<std::string>( _source );
 
-                result = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
-                if ( result == nullptr ) {
+                std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> result( Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() ), Mix_FreeMusic );
+                if ( !result ) {
                     ERROR_LOG( "Failed to create a music track from file " << file << ". The error: " << Mix_GetError() )
                 }
-            }
-            else {
-                assert( 0 );
+
+                return result;
             }
 
-            return result;
+            assert( 0 );
+
+            return { nullptr, Mix_FreeMusic };
         }
 
         double getPosition() const
@@ -493,7 +496,7 @@ namespace
         const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
         assert( track );
 
-        std::unique_ptr<Mix_Music, std::function<void( Mix_Music * )>> mus( track->createMusic(), Mix_FreeMusic );
+        std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> mus = track->createMusic();
         if ( !mus ) {
             musicTrackManager.resetCurrentTrack();
 
@@ -841,13 +844,13 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const bool loop, cons
 
     soundSampleManager.clearFinishedSamples();
 
-    const std::unique_ptr<SDL_RWops, std::function<void( SDL_RWops * )>> rwops( SDL_RWFromConstMem( ptr, static_cast<int>( size ) ), SDL_FreeRW );
+    const std::unique_ptr<SDL_RWops, void ( * )( SDL_RWops * )> rwops( SDL_RWFromConstMem( ptr, static_cast<int>( size ) ), SDL_FreeRW );
     if ( !rwops ) {
         ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
         return -1;
     }
 
-    std::unique_ptr<Mix_Chunk, std::function<void( Mix_Chunk * )>> sample( Mix_LoadWAV_RW( rwops.get(), 0 ), Mix_FreeChunk );
+    std::unique_ptr<Mix_Chunk, void ( * )( Mix_Chunk * )> sample( Mix_LoadWAV_RW( rwops.get(), 0 ), Mix_FreeChunk );
     if ( !sample ) {
         ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
         return -1;

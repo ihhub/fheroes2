@@ -88,7 +88,7 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        const std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 ), SDL_FreeSurface );
+        const std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 ), SDL_FreeSurface );
         if ( !surface ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
@@ -173,8 +173,8 @@ namespace fheroes2
             return false;
         }
 
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
 
 #if defined( WITH_IMAGE )
         loadedSurface.reset( IMG_Load( path.c_str() ) );
@@ -192,7 +192,7 @@ namespace fheroes2
 
         // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
         // processing
-        const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+        const std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
         if ( !pixelFormat ) {
             return false;
         }

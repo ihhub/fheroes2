@@ -134,7 +134,7 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        const std::unique_ptr<char, std::function<void( void * )>> path( SDL_GetPrefPath( "", prog.c_str() ), SDL_free );
+        const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", prog.c_str() ), SDL_free );
         if ( path ) {
             return path.get();
         }
