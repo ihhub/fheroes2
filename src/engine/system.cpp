@@ -74,7 +74,6 @@
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
-#include <functional>
 #include <memory>
 
 #include <SDL_filesystem.h>

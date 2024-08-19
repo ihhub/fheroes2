@@ -22,7 +22,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
-#include <functional>
 #include <memory>
 #include <ostream>
 #include <string_view>

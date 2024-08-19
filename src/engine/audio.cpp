@@ -27,7 +27,6 @@
 #include <atomic>
 #include <cassert>
 #include <cmath>
-#include <functional>
 #include <list>
 #include <map>
 #include <memory>
