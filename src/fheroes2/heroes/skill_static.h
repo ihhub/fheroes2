@@ -28,7 +28,7 @@
 
 namespace Skill
 {
-    struct level_t
+    struct ValuesPerLevel
     {
         uint16_t basic;
         uint16_t advanced;
@@ -78,7 +78,7 @@ namespace Skill
     struct values_t
     {
         const char * id;
-        level_t values;
+        ValuesPerLevel values;
     };
 }
 
