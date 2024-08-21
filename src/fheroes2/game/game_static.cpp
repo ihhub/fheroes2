@@ -224,7 +224,7 @@ int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType 
     return 0;
 }
 
-const Skill::FactionProperties * GameStatic::GetFactionProperties( int race )
+const Skill::FactionProperties * GameStatic::GetFactionProperties( const int race )
 {
     switch ( race ) {
     case Race::KNGT:
@@ -246,9 +246,9 @@ const Skill::FactionProperties * GameStatic::GetFactionProperties( int race )
     return nullptr;
 }
 
-const Skill::SecondarySkillValuesPerLevel * GameStatic::GetSecondarySkillValuesPerLevel( int type )
+const Skill::SecondarySkillValuesPerLevel * GameStatic::GetSecondarySkillValuesPerLevel( const int skill )
 {
-    switch ( type ) {
+    switch ( skill ) {
     case Skill::Secondary::PATHFINDING:
         return &secondarySkillValuesPerLevel[0];
     case Skill::Secondary::ARCHERY:

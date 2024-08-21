@@ -69,8 +69,8 @@ namespace GameStatic
     // Returns the percentage penalty for the damage dealt by shooters firing at targets protected by castle walls.
     uint32_t getCastleWallRangedPenalty();
 
-    const Skill::FactionProperties * GetFactionProperties( int race );
-    const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( int skill );
+    const Skill::FactionProperties * GetFactionProperties( const int race );
+    const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
     const Skill::SecondarySkillValues * GetSecondarySkillValuesForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
