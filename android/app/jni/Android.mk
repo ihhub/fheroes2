@@ -27,10 +27,12 @@ FHEROES2_C_WARN_OPTIONS := \
     -Wextra \
     -Wcast-align \
     -Wcast-qual \
+    -Wdouble-promotion \
     -Wfloat-conversion \
     -Wfloat-equal \
     -Wredundant-decls \
     -Wshadow \
+    -Wswitch-default \
     -Wundef \
     -Wunused
 
@@ -39,6 +41,7 @@ FHEROES2_CPP_WARN_OPTIONS := \
     -Wctor-dtor-privacy \
     -Wextra-semi \
     -Wmissing-declarations \
+    -Wold-style-cast \
     -Woverloaded-virtual \
     -Wsuggest-override
 

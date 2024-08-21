@@ -23,7 +23,6 @@
 
 #include "zzlib.h"
 
-#include <algorithm>
 #include <cstring>
 #include <ostream>
 

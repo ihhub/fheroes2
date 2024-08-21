@@ -20,13 +20,13 @@
 
 set(
 	GNU_CC_WARN_OPTS
-	-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wfloat-conversion -Wfloat-equal -Wredundant-decls
-	-Wshadow -Wundef -Wunused
+	-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdouble-promotion -Wfloat-conversion -Wfloat-equal
+	-Wredundant-decls -Wshadow -Wswitch-default -Wundef -Wunused
 	)
 set(
 	GNU_CXX_WARN_OPTS
-	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Woverloaded-virtual
-	-Wsuggest-override
+	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast
+	-Woverloaded-virtual -Wsuggest-override
 	)
 set(
 	MSVC_CC_WARN_OPTS
