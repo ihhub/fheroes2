@@ -35,7 +35,7 @@ namespace Skill
         uint16_t expert;
     };
 
-    struct primary_t
+    struct PrimarySkillValues
     {
         uint8_t attack;
         uint8_t defense;
@@ -43,7 +43,7 @@ namespace Skill
         uint8_t knowledge;
     };
 
-    struct secondary_t
+    struct SecondarySkillValues
     {
         uint8_t archery;
         uint8_t ballistics;
@@ -61,21 +61,21 @@ namespace Skill
         uint8_t wisdom;
     };
 
-    struct stats_t
+    struct FactionProperties
     {
         const char * id;
-        primary_t captain_primary;
-        primary_t initial_primary;
-        uint8_t initial_book;
-        uint8_t initial_spell;
-        secondary_t initial_secondary;
-        uint8_t over_level;
-        primary_t mature_primary_under;
-        primary_t mature_primary_over;
-        secondary_t mature_secondary;
+        PrimarySkillValues captainPrimarySkills;
+        PrimarySkillValues heroInitialPrimarySkills;
+        uint8_t heroInitiallyHaveSpellBook;
+        uint8_t initialSpell;
+        SecondarySkillValues heroInitialSecondarySkills;
+        uint8_t boundaryBetweenLowAndHighLevels;
+        PrimarySkillValues weightsOfPrimarySkillsForLowLevels;
+        PrimarySkillValues weightsOfPrimarySkillsForHighLevels;
+        SecondarySkillValues weightsOfSecondarySkills;
     };
 
-    struct values_t
+    struct SecondarySkillValuesPerLevel
     {
         const char * id;
         ValuesPerLevel values;
