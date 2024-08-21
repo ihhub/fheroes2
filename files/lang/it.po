@@ -603,7 +603,7 @@ msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Quando il tuo nemico raggiunge %{name}, questo scompare misteriosamente."
 
 msgid "Necromancy!"
-msgstr "Necromanzia!"
+msgstr "!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
@@ -887,19 +887,16 @@ msgstr "L'%{spell} infligge %{damage} danni a una creatura vivente."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Il %{spell} infligge %{damage} danni a tutte le creature viventi."
 
-#, fuzzy
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
 msgstr[0] "%{name} lancia %{spell} al gruppo di %{troop}."
 msgstr[1] "%{name} lancia %{spell} al gruppo di %{troop}."
 
-#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr[0] "%{name} lancia %{spell} al gruppo di %{troop}."
 msgstr[1] "%{name} lancia %{spell} al gruppo di %{troop}."
 
-#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
 msgstr[0] "%{name} lancia %{spell} al gruppo di %{troop}."
@@ -910,13 +907,11 @@ msgid_plural "The %{target} are paralyzed by the %{attacker}!"
 msgstr[0] "Il %{target} è paralizzato dall'%{attaccante}!"
 msgstr[1] "I %{target} sono paralizzati dall'%{attaccante}!"
 
-#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] "%{name} lancia %{spell} al gruppo di %{troop}."
 msgstr[1] "%{name} lancia %{spell} al gruppo di %{troop}."
 
-#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
 msgstr[0] "%{name} lancia %{spell} al gruppo di %{troop}."
@@ -943,7 +938,6 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr "L'immagine speculare viene creata."
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Sei sicuro di voler fuggire?"
 
@@ -990,9 +984,8 @@ msgstr "Computer"
 msgid "Start"
 msgstr ""
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Torna al combattimento."
+msgstr "Inizia il combattimento."
 
 msgid "Exit"
 msgstr "Esci"
@@ -1006,7 +999,6 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Per favore, scegli un altro eroe."
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{name1} incontra %{name2}"
 
@@ -1028,9 +1020,8 @@ msgstr "Il %{name} spara con la forza di %{count} Arcieri"
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "ciascuno con un bonus di +%{attack} alla propria abilità di attacco."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "%{name} incrementa il morale delle tue truppe."
+msgstr "%{name} e'stato distrutto"
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1360,7 +1351,7 @@ msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
-“Le maghe del nord-est si stanno ribellando! Per il bene dell’impero”
+"Le maghe del nord-est si stanno ribellando! Per il bene dell'impero"
 "devi reprimere la loro debole rivolta mentre ti dirigi verso le montagne."
 
 msgid ""
@@ -1620,9 +1611,8 @@ msgstr ""
 msgid "campaignBonus|Animate Dead"
 msgstr "Anima i Morti"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
-msgstr "Fulmini in Serie"
+msgstr "Catena di fulmini"
 
 msgid "campaignBonus|Fireblast"
 msgstr ""
@@ -1850,7 +1840,7 @@ msgstr "Navigazione Esperta"
 msgid "campaignBonus|Basic Necromancy"
 msgstr "La Perla Nera"
 
-#, fuzzy
+
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "necromanzia Avanzata"
 
@@ -1944,19 +1934,17 @@ msgstr ""
 msgid "Wizard's Isle"
 msgstr "Mago"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Burini"
+msgstr "Eredi"
 
-#, fuzzy
 msgid "Cannot build. You have already built here today."
-msgstr "Costruzione impossibile. Già costruito qua questo turno."
+msgstr "Costruzione impossibile. Hai gia' costruito qua questo turno."
 
 msgid "For this action it is necessary to build a castle first."
 msgstr "Per fare questo bisogna prima costruire il castello."
 
 msgid "The %{building} produces %{monster}."
-msgstr "Il/la %{building} produce %{monster}."
+msgstr "%{building} produce %{monster}."
 
 msgid "Requires:"
 msgstr "Richiede:"
@@ -1964,24 +1952,20 @@ msgstr "Richiede:"
 msgid "Exit this menu without doing anything."
 msgstr "Esci dal menù senza far nulla."
 
-#, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr ""
-"Non si può costruire il %{name}. Troppo lontano dall'acqua per costruire il "
+"Non si può costruire %{name}. Troppo lontano dall'acqua per costruire "
 "%{name}."
 
 msgid "This building has been disabled."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
 msgstr "Mancano delle risorse per %{name}."
 
-#, fuzzy
 msgid "The %{name} is already built."
 msgstr "Questo castello ha già %{name}."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
 msgstr "Impossibile costruire %{name}."
 
