@@ -47,7 +47,7 @@ namespace MP2
 class Artifact
 {
 public:
-    enum level_t
+    enum ArtLevel
     {
         ART_NONE = 0,
         ART_LEVEL_TREASURE = 0x01,
@@ -61,7 +61,7 @@ public:
 
     // All artifact IDs are by value 1 bigger than in the original game.
     // This is done to support new artifact addition and also align with the rest of object types.
-    enum type_t : int
+    enum : int
     {
         UNKNOWN = 0,
 
@@ -256,7 +256,7 @@ public:
         return fheroes2::getArtifactData( id ).getDescription( ext );
     }
 
-    static int Rand( level_t );
+    static int Rand( ArtLevel );
     static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
