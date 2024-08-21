@@ -430,7 +430,7 @@ msgid ""
 "combat spells."
 msgstr ""
 "L'artefatto Sfera della Negazione è attivo per questa battaglia, disabilitando tutti"
-"incantesimi di combattimento".
+"incantesimi di combattimento."
 
 msgid "You have already cast a spell this round."
 msgstr "Hai già lanciato una magia questo round."
@@ -1119,7 +1119,7 @@ msgid ""
 msgstr ""
 "Il tuo compito è difendere i Nani dalle forze di Archibald. Cattura tutti "
 "delle città e dei castelli nemici da vincere, e assicurati di non perdere tutte le "
-"città dei Nani, altrimenti il ​​nemico avrà vinto."
+"citta' dei Nani, altrimenti il ​​nemico avra' vinto."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resources "
