@@ -24,7 +24,7 @@
 #ifndef H2SKILL_STATIC_H
 #define H2SKILL_STATIC_H
 
-#include "gamedefs.h"
+#include <cstdint>
 
 namespace Skill
 {
