@@ -524,14 +524,14 @@ public:
     }
 
     // set visited cell
-    void SetVisited( int32_t, Visit::type_t = Visit::LOCAL );
+    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
 
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::type_t = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tiles &, Visit::Type = Visit::LOCAL ) const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;

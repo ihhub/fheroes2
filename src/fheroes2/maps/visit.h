@@ -28,7 +28,7 @@ class IndexObject;
 
 namespace Visit
 {
-    enum type_t
+    enum Type
     {
         LOCAL,
         GLOBAL
