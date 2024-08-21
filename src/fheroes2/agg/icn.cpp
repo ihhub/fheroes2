@@ -32,14 +32,14 @@
 
 namespace ICN
 {
-    struct icnmap_t
+    struct ICNMapItem
     {
         int type;
         const char * string;
     };
 
     // Make sure that each item ID has exactly the same location ID!
-    const icnmap_t icnmap[LAST_VALID_FILE_ICN]
+    const ICNMapItem icnmap[LAST_VALID_FILE_ICN]
         = { { UNKNOWN, "UNKNOWN" },       { ADVBORDE, "ADVBORDE.ICN" }, { ADVBORD, "ADVBORD.ICN" },   { ADVBTNS, "ADVBTNS.ICN" },   { ADVEBTNS, "ADVEBTNS.ICN" },
             { ADVMCO, "ADVMCO.ICN" },     { AELEM, "AELEM.ICN" },       { APANBKGE, "APANBKGE.ICN" }, { APANBKG, "APANBKG.ICN" },   { APANELE, "APANELE.ICN" },
             { APANEL, "APANEL.ICN" },     { ARCHER2, "ARCHER2.ICN" },   { ARCHER, "ARCHER.ICN" },     { ARCH_MSL, "ARCH_MSL.ICN" }, { ART32, "ART32.ICN" },
