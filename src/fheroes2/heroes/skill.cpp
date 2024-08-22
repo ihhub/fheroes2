@@ -39,6 +39,7 @@
 #include "rand.h"
 #include "serialize.h"
 #include "skill_static.h"
+#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
