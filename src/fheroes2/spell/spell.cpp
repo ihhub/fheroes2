@@ -24,6 +24,7 @@
 #include "spell.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <vector>
 
@@ -51,7 +52,7 @@ namespace
 
     // The original resources don't have most of sprites for Mass Spells
     // so we made some tricks in AGG source file. All modified sprite IDs start from 60
-    const SpellStats spells[Spell::SPELL_COUNT] = {
+    const std::array<SpellStats, Spell::SPELL_COUNT> spells = { {
         //  name | spell points | movement points | min movement points | image id | extra value | description
         { "Unknown", 0, 0, 0, 0, 0, "Unknown spell." },
         { gettext_noop( "Fireball" ), 9, 0, 0, 8, 10, gettext_noop( "Causes a giant fireball to strike the selected area, damaging all nearby creatures." ) },
@@ -143,7 +144,7 @@ namespace
         { gettext_noop( "Random 5th Level Spell" ), 0, 0, 0, 72, 0, gettext_noop( "Randomly selected 5th level spell." ) },
         { gettext_noop( "Petrification" ), 0, 0, 0, 66, 0,
           gettext_noop( "Turns the affected creature into stone. A petrified creature receives half damage from a direct attack." ) },
-    };
+    } };
 }
 
 const char * Spell::GetName() const
