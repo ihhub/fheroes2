@@ -111,7 +111,7 @@ namespace Skill
         std::string GetName() const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        uint32_t GetValues() const;
+        uint32_t GetValue() const;
 
         // Returns the sprite index from SECSKILL
         int GetIndexSprite1() const;
@@ -139,7 +139,7 @@ namespace Skill
         int Count() const;
         int GetLevel( int skill ) const;
         int GetTotalLevel() const;
-        uint32_t GetValues( int skill ) const;
+        uint32_t GetValue( int skill ) const;
 
         Secondary * FindSkill( int );
 

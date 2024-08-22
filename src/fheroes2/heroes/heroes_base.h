@@ -92,7 +92,7 @@ public:
     virtual uint32_t GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
-    virtual uint32_t GetSecondaryValues( int skill ) const = 0;
+    virtual uint32_t GetSecondarySkillValue( int skill ) const = 0;
 
     virtual void ActionAfterBattle() = 0;
     virtual void ActionPreBattle() = 0;

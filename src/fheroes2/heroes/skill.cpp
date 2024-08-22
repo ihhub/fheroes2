@@ -117,7 +117,7 @@ namespace
     }
 }
 
-uint32_t Skill::Secondary::GetValues() const
+uint32_t Skill::Secondary::GetValue() const
 {
     const SecondarySkillValuesPerLevel * ptr = GameStatic::GetSecondarySkillValuesPerLevel( Skill() );
     if ( ptr == nullptr ) {
@@ -527,7 +527,7 @@ std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
 
 std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 {
-    uint32_t count = GetValues();
+    uint32_t count = GetValue();
     std::string name = GetName();
     std::string str = "unknown";
 
@@ -644,7 +644,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case NECROMANCY: {
-        count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+        count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondarySkillValue( Skill::Secondary::NECROMANCY );
         name = GetNameWithBonus( hero );
         str = _( "%{skill} allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." );
         break;
@@ -729,16 +729,22 @@ Skill::SecSkills::SecSkills( int race )
 
 int Skill::SecSkills::GetLevel( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    if ( iter == end() ) {
+        return Level::NONE;
+    }
 
-    return it == end() ? Level::NONE : ( *it ).Level();
+    return iter->Level();
 }
 
-uint32_t Skill::SecSkills::GetValues( int skill ) const
+uint32_t Skill::SecSkills::GetValue( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    if ( iter == end() ) {
+        return 0;
+    }
 
-    return it == end() ? 0 : ( *it ).GetValues();
+    return iter->GetValue();
 }
 
 int Skill::SecSkills::Count() const
@@ -894,26 +900,26 @@ int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    if ( skill.GetValues() && strs ) {
+    if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValues() );
+        StringAppendModifiers( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
-    return skill.GetValues();
+    return skill.GetValue();
 }
 
 int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    if ( skill.GetValues() && strs ) {
+    if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValues() );
+        StringAppendModifiers( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
-    return skill.GetValues();
+    return skill.GetValue();
 }
 
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
@@ -926,7 +932,7 @@ uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
 
 uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
 {
-    uint32_t percent = hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+    uint32_t percent = hero.GetSecondarySkillValue( Skill::Secondary::NECROMANCY );
     percent += 10 * GetNecromancyBonus( hero );
     // cap at 100% bonus
     return std::min( percent, 100u );

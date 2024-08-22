@@ -1200,7 +1200,7 @@ uint32_t Heroes::getDailyRestoredSpellPoints() const
     // Spell points from artifacts.
     points += static_cast<uint32_t>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION ) );
 
-    points += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+    points += GetSecondarySkillValue( Skill::Secondary::MYSTICISM );
 
     return points;
 }
@@ -1696,9 +1696,9 @@ bool Heroes::HasSecondarySkill( int skill ) const
     return Skill::Level::NONE != secondary_skills.GetLevel( skill );
 }
 
-uint32_t Heroes::GetSecondaryValues( int skill ) const
+uint32_t Heroes::GetSecondarySkillValue( int skill ) const
 {
-    return secondary_skills.GetValues( skill );
+    return secondary_skills.GetValue( skill );
 }
 
 bool Heroes::HasMaxSecondarySkill() const
@@ -1741,7 +1741,7 @@ void Heroes::Scout( const int tileIndex ) const
 int Heroes::GetScoutingDistance() const
 {
     return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
+                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondarySkillValue( Skill::Secondary::SCOUTING ) );
 }
 
 fheroes2::Rect Heroes::GetScoutRoi() const
@@ -1758,7 +1758,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
     if ( level == Skill::Level::NONE )
         return movePoints;
 
-    const uint32_t skillValue = GetSecondaryValues( skill );
+    const uint32_t skillValue = GetSecondarySkillValue( skill );
 
     if ( skillValue == 33 ) {
         return movePoints * 4 / 3;

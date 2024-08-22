@@ -693,7 +693,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         // estates skill bonus
         for ( const Heroes * hero : heroes ) {
             assert( hero != nullptr );
-            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
+            totalIncome.gold += hero->GetSecondarySkillValue( Skill::Secondary::ESTATES );
         }
     }
 
