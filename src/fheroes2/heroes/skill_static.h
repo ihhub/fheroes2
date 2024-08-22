@@ -66,7 +66,6 @@ namespace Skill
         const char * id;
         PrimarySkillValues captainPrimarySkills;
         PrimarySkillValues heroInitialPrimarySkills;
-        uint8_t heroInitiallyHaveSpellBook;
         uint8_t initialSpell;
         SecondarySkillValues heroInitialSecondarySkills;
         uint8_t boundaryBetweenLowAndHighLevels;
