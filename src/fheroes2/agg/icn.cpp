@@ -31,16 +31,19 @@
 #include "race.h"
 #include "settings.h"
 
-namespace ICN
+namespace
 {
     struct ICNMapItem
     {
         int type;
         const char * string;
     };
+}
 
+namespace ICN
+{
     // Make sure that each item ID has exactly the same location ID!
-    const std::array<ICNMapItem, LAST_VALID_FILE_ICN> icnmap
+    const std::array<ICNMapItem, LAST_VALID_FILE_ICN> icnMap
         = { { { UNKNOWN, "UNKNOWN" },       { ADVBORDE, "ADVBORDE.ICN" }, { ADVBORD, "ADVBORD.ICN" },   { ADVBTNS, "ADVBTNS.ICN" },   { ADVEBTNS, "ADVEBTNS.ICN" },
               { ADVMCO, "ADVMCO.ICN" },     { AELEM, "AELEM.ICN" },       { APANBKGE, "APANBKGE.ICN" }, { APANBKG, "APANBKG.ICN" },   { APANELE, "APANELE.ICN" },
               { APANEL, "APANEL.ICN" },     { ARCHER2, "ARCHER2.ICN" },   { ARCHER, "ARCHER.ICN" },     { ARCH_MSL, "ARCH_MSL.ICN" }, { ART32, "ART32.ICN" },
@@ -220,7 +223,7 @@ namespace ICN
 
 const char * ICN::GetString( int icn )
 {
-    return UNKNOWN <= icn && icn < LAST_VALID_FILE_ICN ? icnmap[icn].string : "CUSTOM";
+    return UNKNOWN <= icn && icn < LAST_VALID_FILE_ICN ? icnMap[icn].string : "CUSTOM";
 }
 
 uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity )
