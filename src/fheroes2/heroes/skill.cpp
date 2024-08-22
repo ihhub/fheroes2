@@ -729,7 +729,7 @@ Skill::SecSkills::SecSkills( int race )
 
 int Skill::SecSkills::GetLevel( int skill ) const
 {
-    const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
     if ( iter == end() ) {
         return Level::NONE;
     }
@@ -739,7 +739,7 @@ int Skill::SecSkills::GetLevel( int skill ) const
 
 uint32_t Skill::SecSkills::GetValue( int skill ) const
 {
-    const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
     if ( iter == end() ) {
         return 0;
     }
