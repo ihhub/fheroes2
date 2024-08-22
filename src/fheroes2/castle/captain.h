@@ -63,7 +63,7 @@ public:
         return 0;
     }
 
-    uint32_t GetSecondarySkillValue( int ) const override
+    uint32_t GetSecondarySkillValue( int /* skill */ ) const override
     {
         return 0;
     }
