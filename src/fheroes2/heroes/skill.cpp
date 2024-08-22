@@ -174,7 +174,11 @@ void Skill::Primary::LoadDefaults( int type, int race )
 int Skill::Primary::GetInitialSpell( int race )
 {
     const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
-    return ptr ? ptr->initialSpell : 0;
+    if ( ptr == nullptr ) {
+        return Spell::NONE;
+    }
+
+    return ptr->initialSpell;
 }
 
 int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
