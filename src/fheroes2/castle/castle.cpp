@@ -2134,7 +2134,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
         }
     }
 
@@ -2156,7 +2156,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_TAVERN, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2167,7 +2167,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2184,7 +2184,7 @@ int Castle::GetLuckModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( Castle::GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }

@@ -133,7 +133,7 @@ namespace
                         break;
                     }
 
-                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    fheroes2::appendModifierToString( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
                     strs->append( "\n" );
                 }
             }

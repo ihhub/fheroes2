@@ -29,8 +29,6 @@
 #include <utility>
 #include <vector>
 
-void StringAppendModifiers( std::string &, int );
-
 class Heroes;
 class HeroBase;
 class StreamBase;

@@ -886,23 +886,13 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-void StringAppendModifiers( std::string & str, int value )
-{
-    if ( value < 0 )
-        str.append( " " ); // '-' present
-    else if ( value > 0 )
-        str.append( " +" );
-
-    str.append( std::to_string( value ) );
-}
-
 int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
     if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
@@ -915,7 +905,7 @@ int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 
     if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
