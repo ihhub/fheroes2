@@ -91,6 +91,9 @@ struct Focus : std::pair<int, void *>
     }
 };
 
+StreamBase & operator<<( StreamBase &, const Focus & );
+StreamBase & operator>>( StreamBase &, Focus & );
+
 struct Control
 {
     virtual int GetControl() const = 0;

@@ -57,6 +57,15 @@
 #include <strings.h>
 #endif
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_version.h>
 
 #if defined( ANDROID )
@@ -65,8 +74,15 @@
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
+#include <memory>
+
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
+#endif
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
 #if defined( _WIN32 )
@@ -117,13 +133,9 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        char * path = SDL_GetPrefPath( "", prog.c_str() );
+        const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", prog.c_str() ), SDL_free );
         if ( path ) {
-            const std::string result{ path };
-
-            SDL_free( path );
-
-            return result;
+            return path.get();
         }
 #endif
 

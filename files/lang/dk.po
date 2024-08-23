@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-17 15:24+0000\n"
+"POT-Creation-Date: 2024-08-18 01:49+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3309,6 +3309,9 @@ msgstr ""
 "eller\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "i/t"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3343,9 +3346,6 @@ msgstr "Dine resurser"
 
 msgid "Available Trades"
 msgstr "Handlemuligheder"
-
-msgid "n/a"
-msgstr "i/t"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "Bevogtet af %{count} %{monster}"
