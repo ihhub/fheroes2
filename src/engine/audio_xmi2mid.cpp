@@ -615,8 +615,8 @@ namespace
     struct MidData
     {
         IFFChunkHeader mthd{ TAG_MTHD, 6 };
-        int format{ 0 };
-        int ppqn{ 60 };
+        uint16_t format{ 0 };
+        uint16_t ppqn{ 60 };
         // MIDI format 0 can contain only one track.
         MidTrack track;
 
@@ -625,7 +625,7 @@ namespace
         {
             // XMI files play MIDI at a fixed clock rate of 120 Hz
             if ( track.events.trackTempo > 0 ) {
-                ppqn = static_cast<int>( track.events.trackTempo * 3 / 25000 );
+                ppqn = static_cast<uint16_t>( track.events.trackTempo * 3 / 25000 );
             }
         }
 
@@ -639,10 +639,10 @@ namespace
     StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
     {
         sb << st.mthd;
-        sb.putBE16( static_cast<uint16_t>( st.format ) );
+        sb.putBE16( st.format );
         // Write that there is one track in midi file.
         sb.putBE16( static_cast<uint16_t>( 1 ) );
-        sb.putBE16( static_cast<uint16_t>( st.ppqn ) );
+        sb.putBE16( st.ppqn );
         sb << st.track;
 
         return sb;
