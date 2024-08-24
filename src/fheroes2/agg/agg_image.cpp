@@ -601,39 +601,38 @@ namespace
 
         _icnVsSprite[id].resize( count );
 
-        fheroes2::ICNHeader header;
-        imageStream >> header;
-
         for ( uint32_t i = 0; i < count; ++i ) {
-            fheroes2::ICNHeader nextHeader;
+            imageStream.seek( headerSize + i * 13 );
+
+            fheroes2::ICNHeader header1;
+            imageStream >> header1;
 
             uint32_t sizeData = 0;
-
             if ( i + 1 != count ) {
-                imageStream >> nextHeader;
-                sizeData = nextHeader.offsetData - header.offsetData;
+                fheroes2::ICNHeader header2;
+                imageStream >> header2;
+                sizeData = header2.offsetData - header1.offsetData;
             }
             else {
-                sizeData = blockSize - header.offsetData;
+                sizeData = blockSize - header1.offsetData;
             }
 
-            if ( headerSize + header.offsetData + sizeData > body.size() ) {
+            if ( headerSize + header1.offsetData + sizeData > body.size() ) {
                 // This is a corrupted AGG file.
                 throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
                                                       + " is being corrupted. "
                                                         "Make sure that you own an official version of the game." );
             }
 
-            const uint8_t * data = body.data() + headerSize + header.offsetData;
+            const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
             // When animationFrames is equal to 32 then it is Monochromatic ICN image.
             // See: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
-            const bool isMonochromatic = ( header.animationFrames == 32 );
+            const bool isMonochromatic = ( header1.animationFrames == 32 );
 
-            _icnVsSprite[id][i] = isMonochromatic ? fheroes2::decodeMonochromaticICNSprite( data, sizeData, header.width, header.height, header.offsetX, header.offsetY )
-                                                  : fheroes2::decodeICNSprite( data, sizeData, header.width, header.height, header.offsetX, header.offsetY );
-
-            header = std::move( nextHeader );
+            _icnVsSprite[id][i] = isMonochromatic
+                                      ? fheroes2::decodeMonochromaticICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY )
+                                      : fheroes2::decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
         }
     }
 
