@@ -325,11 +325,11 @@ namespace
             }
 
             // Mark the begin of EVNT data.
-            trackEvents.data = buf.cbegin() + sb.capacity() - sb.size();
+            trackEvents.data = buf.cbegin() + static_cast<ptrdiff_t>( sb.capacity() - sb.size() );
             trackEvents.dataEnd = buf.cend();
 
             // The single track XMI files does not have any data after the EVNT data.
-            if ( trackEvents.dataEnd - trackEvents.data != iff.length ) {
+            if ( ( trackEvents.data + iff.length ) != trackEvents.dataEnd ) {
                 trackEvents.data = buf.cend();
                 ERROR_LOG( "XMI parse error: EVNT data is out of range" )
                 return;
