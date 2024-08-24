@@ -219,7 +219,8 @@ namespace
             // Do nothing.
         }
 
-        size_t headerSize() const
+        // Returns the size in bytes that this structure will occupy in serialized binary form inside an XMI or MIDI file
+        size_t sizeInBytes() const
         {
             // This header contains of two 4-byte integers.
             return sizeof( ID ) + sizeof( length );
@@ -384,9 +385,10 @@ namespace
             }
         }
 
-        size_t size() const
+        // Returns the size in bytes that this structure will occupy in serialized binary form inside a MIDI file
+        size_t sizeInBytes() const
         {
-            return _binaryTime.size() + 1 + _data.size();
+            return _binaryTime.size() + sizeof( _type ) + _data.size();
         }
     };
 
@@ -583,9 +585,10 @@ namespace
             }
         }
 
-        size_t size() const
+        // Returns the size in bytes that this structure will occupy in serialized binary form inside a MIDI file
+        size_t sizeInBytes() const
         {
-            return std::accumulate( begin(), end(), static_cast<size_t>( 0 ), []( const size_t total, const MidiChunk & chunk ) { return total + chunk.size(); } );
+            return std::accumulate( begin(), end(), static_cast<size_t>( 0 ), []( const size_t total, const MidiChunk & chunk ) { return total + chunk.sizeInBytes(); } );
         }
     };
 
@@ -605,7 +608,7 @@ namespace
 
         explicit MidTrack( const subVectorIters & trackEvents )
             : events( trackEvents )
-            , mtrk( TAG_MTRK, static_cast<uint32_t>( events.size() ) )
+            , mtrk( TAG_MTRK, static_cast<uint32_t>( events.sizeInBytes() ) )
         {
             // Do nothing.
         }
@@ -635,10 +638,11 @@ namespace
             }
         }
 
-        size_t size() const
+        // Returns the size in bytes that this structure will occupy in serialized binary form inside a MIDI file
+        size_t sizeInBytes() const
         {
             // The total MIDI data size is: MThd header and data length plus MTrk header and data length.
-            return mthd.headerSize() + mthd.length + track.mtrk.headerSize() + track.mtrk.length;
+            return mthd.sizeInBytes() + mthd.length + track.mtrk.sizeInBytes() + track.mtrk.length;
         }
     };
 
@@ -665,7 +669,7 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
     const MidData mid( xmi.trackEvents );
 
     // Create a buffer for the midi data.
-    StreamBuf sb( mid.size() );
+    StreamBuf sb( mid.sizeInBytes() );
 
     sb << mid;
 
