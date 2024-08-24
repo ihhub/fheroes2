@@ -36,6 +36,7 @@
 #include <utility>
 #include <vector>
 
+#include "agg_file.h"
 #include "serialize.h"
 #include "system.h"
 #include "tools.h"

@@ -21,9 +21,8 @@
 #include "agg_file.h"
 
 #include <cstdint>
+#include <iterator>
 #include <string>
-
-#include "tools.h"
 
 namespace fheroes2
 {
@@ -50,7 +49,7 @@ namespace fheroes2
             std::string name = nameEntries.toString( _maxFilenameSize );
 
             // Check 32-bit filename hash.
-            if ( fileEntries.getLE32() != fheroes2::calculateAggFilenameHash( name ) ) {
+            if ( fileEntries.getLE32() != calculateAggFilenameHash( name ) ) {
                 // Hash check failed. AGG file is corrupted.
                 _files.clear();
                 return false;
@@ -84,6 +83,24 @@ namespace fheroes2
 
         return {};
     }
+
+    uint32_t calculateAggFilenameHash( const std::string_view str )
+    {
+        uint32_t hash = 0;
+        uint32_t sum = 0;
+
+        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
+            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
+
+            hash = ( hash << 5 ) + ( hash >> 25 );
+
+            sum += c;
+            hash += sum + c;
+        }
+
+        return hash;
+    }
+
 }
 
 StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )

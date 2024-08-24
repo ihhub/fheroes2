@@ -29,7 +29,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include <iterator>
 #include <limits>
 #include <system_error>
 
@@ -379,22 +378,5 @@ namespace fheroes2
         }
 
         return std::to_string( num );
-    }
-
-    uint32_t calculateAggFilenameHash( const std::string_view str )
-    {
-        uint32_t hash = 0;
-        uint32_t sum = 0;
-
-        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
-
-            hash = ( hash << 5 ) + ( hash >> 25 );
-
-            sum += c;
-            hash += sum + c;
-        }
-
-        return hash;
     }
 }

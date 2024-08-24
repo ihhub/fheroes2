@@ -32,7 +32,6 @@
 #include <optional>
 #include <sstream>
 #include <string>
-#include <string_view>
 #include <type_traits>
 #include <vector>
 
@@ -117,8 +116,6 @@ namespace fheroes2
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 
     std::string abbreviateNumber( const int num );
-
-    uint32_t calculateAggFilenameHash( const std::string_view str );
 
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.
