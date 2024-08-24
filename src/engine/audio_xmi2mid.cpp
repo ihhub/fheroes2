@@ -218,6 +218,12 @@ namespace
         {
             // Do nothing.
         }
+
+        size_t headerSize() const
+        {
+            // This header contains of two 4-byte integers.
+            return sizeof( ID ) + sizeof( length );
+        }
     };
 
     StreamBuf & operator>>( StreamBuf & sb, IFFChunkHeader & st )
@@ -629,10 +635,10 @@ namespace
             }
         }
 
-        uint32_t size() const
+        size_t size() const
         {
-            // Every header has 2*uint8_t
-            return 8U + mthd.length + 8U + track.mtrk.length;
+            // The total MIDI data size is: MThd header and data length plus MTrk header and data length.
+            return mthd.headerSize() + mthd.length + track.mtrk.headerSize() + track.mtrk.length;
         }
     };
 
