@@ -49,7 +49,7 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
                   << std::endl
@@ -148,7 +148,12 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            // When animationFrames is equal to 32 then it is Monochromatic ICN image.
+            // See: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
+            const bool isMonochromatic = ( header.animationFrames == 32 );
+            const fheroes2::Sprite sprite
+                = isMonochromatic ? fheroes2::decodeMonochromaticICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY )
+                                  : fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
             std::ostringstream spriteIdxStream;
             spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;

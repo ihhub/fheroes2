@@ -462,26 +462,18 @@ namespace
 
     fheroes2::Image DrawHexagon( const uint8_t colorId )
     {
-        const int32_t r = 22;
-        const int32_t l = 10;
-        const int32_t w = CELLW;
-        const int32_t h = CELLH;
+        const fheroes2::Sprite & originalGrid = fheroes2::AGG::GetICN( ICN::CMBTMISC, 0 );
 
-        fheroes2::Image sf( w + 1, h + 1 );
-        sf.reset();
+        // Move hexagon by 1 pixel down to match the original game's grid.
+        fheroes2::Image hexagonSprite( originalGrid.width(), originalGrid.height() + 1 );
 
-        fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
-        fheroes2::SetPixel( sf, r, 1, colorId );
-        fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
+        // Make the upper image line transparent. The other part will be filled with the copied image.
+        fheroes2::FillTransform( hexagonSprite, 0, 0, originalGrid.width(), 1, 1 );
+        fheroes2::Copy( originalGrid, 0, 0, hexagonSprite, 0, 1, originalGrid.width(), originalGrid.height() );
 
-        fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
-        fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
+        fheroes2::ReplaceColorId( hexagonSprite, 0, colorId );
 
-        fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
-        fheroes2::SetPixel( sf, r, h, colorId );
-        fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
-
-        return sf;
+        return hexagonSprite;
     }
 
     fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )

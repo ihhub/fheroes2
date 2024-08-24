@@ -53,21 +53,16 @@ namespace fheroes2
 
     struct ICNHeader
     {
-        ICNHeader()
-            : offsetX( 0 )
-            , offsetY( 0 )
-            , width( 0 )
-            , height( 0 )
-            , animationFrames( 0 )
-            , offsetData( 0 )
-        {}
+        ICNHeader() = default;
 
-        int16_t offsetX;
-        int16_t offsetY;
-        uint16_t width;
-        uint16_t height;
-        uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-        uint32_t offsetData;
+        int16_t offsetX{ 0 };
+        int16_t offsetY{ 0 };
+        uint16_t width{ 0 };
+        uint16_t height{ 0 };
+        // Used for adventure map animations, this can replace ICN::AnimationFrame.
+        // When it is equal to 32 then it is Monochromatic ICN image.
+        uint8_t animationFrames{ 0 };
+        uint32_t offsetData{ 0 };
     };
 }
 
