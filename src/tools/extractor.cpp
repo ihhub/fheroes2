@@ -22,18 +22,15 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include <iterator>
 #include <map>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
