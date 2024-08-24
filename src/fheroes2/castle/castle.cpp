@@ -2326,8 +2326,8 @@ void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 
 int Castle::GetControl() const
 {
-    /* gray towns: AI control */
-    return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
+    // Neutral castles & towns are always controlled by AI
+    return ( GetColor() & Color::ALL ) ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
 bool Castle::isNecromancyShrineBuild() const

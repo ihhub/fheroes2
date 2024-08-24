@@ -29,7 +29,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
-#include <functional>
 #include <iterator>
 #include <list>
 #include <map>
@@ -428,7 +427,7 @@ private:
         }
     }
 
-    std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> _file{ nullptr, std::fclose };
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, std::fclose };
 };
 
 namespace fheroes2

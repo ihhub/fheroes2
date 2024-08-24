@@ -228,7 +228,7 @@ int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
         return CENTER;
     }
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
         if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) ) {
             return dir;
         }
@@ -729,7 +729,7 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const int32_t center )
     Indexes result;
     result.reserve( 6 );
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
         if ( !isValidDirection( center, dir ) ) {
             continue;
         }

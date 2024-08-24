@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-18 01:49+0000\n"
 "PO-Revision-Date: 2024-07-14 13:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3014,17 +3014,14 @@ msgstr "В казне: "
 msgid "Need: "
 msgstr "Необходимо: "
 
-msgid "Load Game"
-msgstr "Загрузка игры"
-
-msgid "No save files to load."
-msgstr "Нет сохранённых игр."
-
 msgid "New Game"
 msgstr "Новая игра"
 
 msgid "Start a single or multi-player game."
 msgstr "Начало одиночной или сетевой игры."
+
+msgid "Load Game"
+msgstr "Загрузка игры"
 
 msgid "Load a previously saved game."
 msgstr "Загрузка ранее сохранённой игры."
@@ -3272,6 +3269,9 @@ msgstr ""
 "или\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "н/д"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3308,9 +3308,6 @@ msgstr "Ваши ресурсы"
 
 msgid "Available Trades"
 msgstr "Доступно к обмену"
-
-msgid "n/a"
-msgstr "н/д"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняет %{count} %{monster}"
@@ -5387,6 +5384,9 @@ msgstr "Эта сохранённая игра локализована на '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' языке, но текущий язык игры - "
+
+msgid "No save files to load."
+msgstr "Нет сохранённых игр."
 
 msgid "Hot Seat"
 msgstr "За одним компьютером"

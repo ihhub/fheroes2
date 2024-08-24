@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-18 01:49+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3069,17 +3069,14 @@ msgstr "Insgesamt: "
 msgid "Need: "
 msgstr "Bedarf: "
 
-msgid "Load Game"
-msgstr "Spiel laden"
-
-msgid "No save files to load."
-msgstr "Keine Speicherdateien vorhanden."
-
 msgid "New Game"
 msgstr "Neues Spiel"
 
 msgid "Start a single or multi-player game."
 msgstr "Einzel- oder Multi-Player Spiel starten."
+
+msgid "Load Game"
+msgstr "Spiel laden"
 
 msgid "Load a previously saved game."
 msgstr "Zuvor gespeichertes Spiel laden."
@@ -3329,6 +3326,9 @@ msgstr ""
 "oder\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3365,9 +3365,6 @@ msgstr "Eure Ressourcen"
 
 msgid "Available Trades"
 msgstr "Verfügbarer Handel"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bewacht von %{count} %{monster}"
@@ -5578,6 +5575,9 @@ msgstr "Dieses gespeicherte Spiel ist lokalisiert in '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' Sprache, aber die aktuelle Sprache des Spiels ist '"
+
+msgid "No save files to load."
+msgstr "Keine Speicherdateien vorhanden."
 
 msgid "Hot Seat"
 msgstr "Heißer Stuhl"

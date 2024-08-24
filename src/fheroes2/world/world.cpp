@@ -372,7 +372,7 @@ void World::generateBattleOnlyMap()
         fi.version = GameVersion::PRICE_OF_LOYALTY;
     }
 
-    conf.SetCurrentFileInfo( std::move( fi ) );
+    conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
@@ -407,7 +407,7 @@ void World::generateForEditor( const int32_t size )
 
     fi.version = GameVersion::PRICE_OF_LOYALTY;
 
-    conf.SetCurrentFileInfo( std::move( fi ) );
+    conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 

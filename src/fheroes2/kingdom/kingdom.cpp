@@ -96,11 +96,11 @@ namespace
 
         return corrected;
     }
-}
 
-bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
-{
-    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
+    {
+        return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    }
 }
 
 Kingdom::Kingdom()

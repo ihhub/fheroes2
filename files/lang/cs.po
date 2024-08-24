@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-08-18 01:49+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3035,17 +3035,14 @@ msgstr "Celkem: "
 msgid "Need: "
 msgstr "Potřeba: "
 
-msgid "Load Game"
-msgstr "Načíst Hru"
-
-msgid "No save files to load."
-msgstr "Žádné uložené hry k načtení."
-
 msgid "New Game"
 msgstr "Nová Hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Spusti hru jednoho nebo více hráčů."
+
+msgid "Load Game"
+msgstr "Načíst Hru"
 
 msgid "Load a previously saved game."
 msgstr "Načti dříve uloženou hru."
@@ -3287,6 +3284,9 @@ msgid ""
 "%{skill2}"
 msgstr "Můžeš se naučit:"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3321,9 +3321,6 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možno zaměnit"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "hlídáno %{count} %{monster}"
@@ -5486,6 +5483,9 @@ msgstr "Tato hra je uložena s lokalizací pro '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
+
+msgid "No save files to load."
+msgstr "Žádné uložené hry k načtení."
 
 msgid "Hot Seat"
 msgstr "Horké křeslo"
