@@ -396,5 +396,4 @@ namespace fheroes2
 
         return hash;
     }
-
 }
