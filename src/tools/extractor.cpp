@@ -47,7 +47,7 @@ namespace
 
     struct AGGItemInfo
     {
-        // Hash of this item's name, see calculateHash() for details
+        // Hash of this item's name, see fheroes2::calculateAggFilenameHash() for details
         uint32_t hash;
         uint32_t offset;
         uint32_t size;
