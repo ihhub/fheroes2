@@ -117,6 +117,8 @@ namespace fheroes2
 
     std::string abbreviateNumber( const int num );
 
+    uint32_t calculateAggFilenameHash( const std::string_view str );
+
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.
     template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>

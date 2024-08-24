@@ -23,25 +23,7 @@
 #include <cstdint>
 #include <string>
 
-namespace
-{
-    uint32_t aggFilenameHash( const std::string & fileName )
-    {
-        // You can read about this here: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
-
-        uint32_t a = 0;
-        uint32_t b = 0;
-
-        for ( size_t i = fileName.size(); i > 0; ) {
-            --i;
-            const uint32_t c = fileName[i];
-            b += c;
-            a = ( a << 5 ) + ( a >> 25 ) + b + c;
-        }
-
-        return a;
-    }
-}
+#include "tools.h"
 
 namespace fheroes2
 {
@@ -68,7 +50,7 @@ namespace fheroes2
             std::string name = nameEntries.toString( _maxFilenameSize );
 
             // Check 32-bit filename hash.
-            if ( fileEntries.getLE32() != aggFilenameHash( name ) ) {
+            if ( fileEntries.getLE32() != fheroes2::calculateAggFilenameHash( name ) ) {
                 // Hash check failed. AGG file is corrupted.
                 _files.clear();
                 return false;
