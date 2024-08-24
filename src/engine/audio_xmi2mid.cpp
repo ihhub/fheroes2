@@ -329,13 +329,13 @@ namespace
             trackEvents.dataEnd = buf.cend();
 
             // The single track XMI files does not have any data after the EVNT data.
-            if ( ( trackEvents.data + iff.length ) != trackEvents.dataEnd ) {
+            if ( trackEvents.dataEnd - trackEvents.data != static_cast<ptrdiff_t>( iff.length ) ) {
                 trackEvents.data = buf.cend();
                 ERROR_LOG( "XMI parse error: EVNT data is out of range" )
                 return;
             }
 
-            isValid = trackEvents.data != trackEvents.dataEnd;
+            isValid = ( trackEvents.data != trackEvents.dataEnd );
         }
     };
 
