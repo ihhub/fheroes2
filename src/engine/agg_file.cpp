@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,24 +18,46 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "agg_file.h"
+
 #include <cstdint>
 #include <string>
 
-#include "agg_file.h"
+namespace
+{
+    uint32_t aggFilenameHash( const std::string & fileName )
+    {
+        // You can read about this here: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
+
+        uint32_t a = 0;
+        uint32_t b = 0;
+
+        for ( size_t i = fileName.size(); i > 0; ) {
+            --i;
+            const uint32_t c = fileName[i];
+            b += c;
+            a = ( a << 5 ) + ( a >> 25 ) + b + c;
+        }
+
+        return a;
+    }
+}
 
 namespace fheroes2
 {
     bool AGGFile::open( const std::string & fileName )
     {
-        if ( !_stream.open( fileName, "rb" ) )
+        if ( !_stream.open( fileName, "rb" ) ) {
             return false;
+        }
 
         const size_t size = _stream.size();
         const size_t count = _stream.getLE16();
         const size_t fileRecordSize = sizeof( uint32_t ) * 3;
 
-        if ( count * ( fileRecordSize + _maxFilenameSize ) >= size )
+        if ( count * ( fileRecordSize + _maxFilenameSize ) >= size ) {
             return false;
+        }
 
         StreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
         const size_t nameEntriesSize = _maxFilenameSize * count;
@@ -44,37 +66,48 @@ namespace fheroes2
 
         for ( size_t i = 0; i < count; ++i ) {
             std::string name = nameEntries.toString( _maxFilenameSize );
-            fileEntries.getLE32(); // skip CRC (?) part
+
+            // Check 32-bit filename hash.
+            if ( fileEntries.getLE32() != aggFilenameHash( name ) ) {
+                // Hash check failed. AGG file is corrupted.
+                _files.clear();
+                return false;
+            }
+
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
             _files.try_emplace( std::move( name ), std::make_pair( fileSize, fileOffset ) );
         }
+
         if ( _files.size() != count ) {
             _files.clear();
             return false;
         }
+
         return !_stream.fail();
     }
 
     std::vector<uint8_t> AGGFile::read( const std::string & fileName )
     {
         auto it = _files.find( fileName );
-        if ( it != _files.end() ) {
-            const auto & fileParams = it->second;
-            if ( fileParams.first > 0 ) {
-                _stream.seek( fileParams.second );
-                return _stream.getRaw( fileParams.first );
-            }
+        if ( it == _files.end() ) {
+            return {};
         }
 
-        return std::vector<uint8_t>();
+        const auto [fileSize, fileOffset] = it->second;
+        if ( fileSize > 0 ) {
+            _stream.seek( fileOffset );
+            return _stream.getRaw( fileSize );
+        }
+
+        return {};
     }
 }
 
 StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )
 {
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
+    icn.offsetX = static_cast<int16_t>( st.getLE16() );
+    icn.offsetY = static_cast<int16_t>( st.getLE16() );
     icn.width = st.getLE16();
     icn.height = st.getLE16();
     icn.animationFrames = st.get();
