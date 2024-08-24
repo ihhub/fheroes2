@@ -20,6 +20,7 @@
 
 #include "agg_file.h"
 
+#include <cctype>
 #include <cstdint>
 #include <iterator>
 #include <string>
