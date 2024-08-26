@@ -274,6 +274,8 @@ class StreamBufTmpl : public StreamBuf
 public:
     StreamBufTmpl( const StreamBufTmpl & ) = delete;
 
+    ~StreamBufTmpl() override = default;
+
     StreamBufTmpl & operator=( const StreamBufTmpl & ) = delete;
 
     const uint8_t * data() const override
@@ -475,6 +477,8 @@ public:
 
     ROStreamBuf( const ROStreamBuf & ) = delete;
     ROStreamBuf( ROStreamBuf && stream ) = default;
+
+    ~ROStreamBuf() override = default;
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
     ROStreamBuf & operator=( ROStreamBuf && stream ) = default;
