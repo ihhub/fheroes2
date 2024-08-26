@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,9 +29,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include <fstream> // IWYU pragma: keep
 #include <limits>
-#include <memory>
 #include <system_error>
 
 #include <zconf.h>
@@ -82,17 +80,6 @@ std::string StringUpper( std::string str )
 {
     std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::toupper( c ) ); } );
     return str;
-}
-
-int CountBits( uint32_t val )
-{
-    int res = 0;
-
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( val & itr )
-            ++res;
-
-    return res;
 }
 
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )

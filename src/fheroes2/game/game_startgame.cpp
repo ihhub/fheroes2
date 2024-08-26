@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,20 +21,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -46,7 +46,7 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -128,6 +128,63 @@ namespace
 
         return friendColors;
     }
+
+    void ShowNewWeekDialog()
+    {
+        // restore the original music on exit
+        const AudioManager::MusicRestorer musicRestorer;
+
+        const bool isNewMonth = world.BeginMonth();
+
+        AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
+
+        const Week & week = world.GetWeekType();
+
+        // head
+        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
+        StringReplace( message, "%{name}", week.GetName() );
+        message += "\n\n";
+
+        if ( week.GetType() == WeekName::MONSTERS ) {
+            const Monster monster( week.GetMonster() );
+            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+
+            if ( monster.isValid() && count ) {
+                if ( isNewMonth )
+                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
+                else
+                    message += _( "%{monster} growth +%{count}." );
+                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
+                StringReplace( message, "%{count}", count );
+                message += "\n\n";
+            }
+        }
+
+        if ( week.GetType() == WeekName::PLAGUE )
+            message += _( " All populations are halved." );
+        else
+            message += _( " All dwellings increase population." );
+
+        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+    }
+
+    void ShowWarningLostTownsDialog()
+    {
+        const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+        const uint32_t lostTownDays = myKingdom.GetLostTownDays();
+
+        if ( lostTownDays == 1 ) {
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                                 _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        }
+        else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
+            std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
+            StringReplace( str, "%{day}", lostTownDays );
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
+        }
+    }
 }
 
 fheroes2::GameMode Game::StartBattleOnly()
@@ -158,8 +215,6 @@ fheroes2::GameMode Game::StartBattleOnly()
 
 fheroes2::GameMode Game::StartGame()
 {
-    AI::Get().Reset();
-
     const Settings & conf = Settings::Get();
 
     // setup cursor
@@ -205,8 +260,7 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
@@ -307,7 +361,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false );
 
         if ( needFade ) {
             needFade = false;
@@ -383,63 +437,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     }
 }
 
-void ShowNewWeekDialog()
-{
-    // restore the original music on exit
-    const AudioManager::MusicRestorer musicRestorer;
-
-    const bool isNewMonth = world.BeginMonth();
-
-    AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
-
-    const Week & week = world.GetWeekType();
-
-    // head
-    std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-    StringReplace( message, "%{name}", week.GetName() );
-    message += "\n\n";
-
-    if ( week.GetType() == WeekName::MONSTERS ) {
-        const Monster monster( week.GetMonster() );
-        const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
-
-        if ( monster.isValid() && count ) {
-            if ( isNewMonth )
-                message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                            : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                  "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-            else
-                message += _( "%{monster} growth +%{count}." );
-            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-            StringReplace( message, "%{count}", count );
-            message += "\n\n";
-        }
-    }
-
-    if ( week.GetType() == WeekName::PLAGUE )
-        message += _( " All populations are halved." );
-    else
-        message += _( " All dwellings increase population." );
-
-    fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
-}
-
-void ShowWarningLostTownsDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const uint32_t lostTownDays = myKingdom.GetLostTownDays();
-
-    if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
-                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
-    }
-    else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
-        std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
-        StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
-    }
-}
-
 int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
@@ -454,7 +451,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
 
         if ( hero ) {
@@ -491,7 +488,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -552,7 +549,7 @@ int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
         }
         break;
     }
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
         if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
             return Cursor::HEROES;
@@ -613,7 +610,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -622,6 +619,9 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                    return Cursor::HEROES;
+                }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
@@ -640,7 +640,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
@@ -748,27 +748,27 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        bool isFirstAIPlayer = true;
-
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            const int playerColor = player->GetColor();
-
-            Kingdom & kingdom = world.GetKingdom( playerColor );
-
-            if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
-                if ( kingdom.isPlay() && kingdom.GetControl() == CONTROL_AI ) {
-                    // Only the first AI player can trigger AI bonuses.
-                    // Since this player is the one the bonuses have been applied.
-                    isFirstAIPlayer = false;
+            if ( skipTurns ) {
+                // Game saves can only be performed during a human player's turn (including when it is under temporary AI control
+                // in the case of a debug build), and human players always go first in the turn queue. If we skipped all the human
+                // players and still haven't found the current player, then something is clearly wrong here.
+                if ( player->GetControl() == CONTROL_AI ) {
+                    break;
                 }
 
-                continue;
+                if ( !player->isColor( conf.CurrentColor() ) ) {
+                    continue;
+                }
             }
 
             // player with conf.CurrentColor() was found, there is no need for further skips
             skipTurns = false;
+
+            const int playerColor = player->GetColor();
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
@@ -823,13 +823,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
-                    if ( isFirstAIPlayer ) {
-                        isFirstAIPlayer = false;
-                        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
-                        // This prevents human players to abuse AI bonuses.
-                        world.NewDayAI();
-                    }
-
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
                     conf.SetCurrentColor( playerColor );
@@ -866,7 +859,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Get().KingdomTurn( kingdom );
+                    AI::Planner::Get().KingdomTurn( kingdom );
 
 #if defined( WITH_DEBUG )
                     if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -1032,7 +1025,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         _statusWindow.TimerEventProcessing();
 
         // hotkeys
-        if ( le.KeyPress() ) {
+        if ( le.isAnyKeyPressed() ) {
             // if the hero is currently moving, pressing any key should stop him
             if ( isMovingHero ) {
                 stopHero = true;
@@ -1116,6 +1109,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
+            else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() );
+                // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
+                if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
+                    cursor.SetThemes( GetCursorTileIndex( index ) );
+                }
+                if ( le.MouseClickLeft() ) {
+                    EventSwitchFocusedHero( index );
+                }
+            }
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -1125,16 +1128,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
-            if ( isScrollLeft( le.GetMouseCursor() ) )
+            if ( isScrollLeft( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_LEFT;
-            else if ( isScrollRight( le.GetMouseCursor() ) )
+            else if ( isScrollRight( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_RIGHT;
-            if ( isScrollTop( le.GetMouseCursor() ) )
+            if ( isScrollTop( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_TOP;
-            else if ( isScrollBottom( le.GetMouseCursor() ) )
+            else if ( isScrollBottom( le.getMouseCursorPos() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE ) {
+            if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1153,6 +1156,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             fastScrollRepeatCount = 0;
         }
 
+        // Re-enable fast scroll if the cursor movement indicates the need
+        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.getMouseCursorPos() ) ) {
+            _gameArea.setFastScrollStatus( true );
+        }
+
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
@@ -1163,44 +1171,45 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             cursor.SetThemes( Cursor::WAIT );
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            if ( le.MouseClickLeft() || le.MousePressRight() ) {
+            if ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) {
                 stopHero = true;
             }
         }
+        // cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() )
+                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            iconsPanel.QueueEventProcessing();
+        }
         // cursor is over the status window
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
-        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( buttonsArea.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
-        // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
-            iconsPanel.QueueEventProcessing();
-        }
         // cursor is over the radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             if ( !_gameArea.isDragScroll() )
                 _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
-        else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
+        else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
-        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
+        else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
         // cursor is somewhere else
@@ -1214,7 +1223,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !_radar.isDragRadar() )
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.MousePressLeft() )
+            else if ( !le.isMouseLeftButtonPressed() )
                 _radar.QueueEventProcessing();
         }
 
@@ -1321,11 +1330,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 _gameArea.SetUpdateCursor();
                             }
                             else {
-                                if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                                if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
                                     // We do not use '_gameArea.SetUpdateCursor()' here because we need to update the cursor before rendering the current frame
                                     // and '_gameArea.QueueEventProcessing()' was called earlier in this loop and will only be able to update the cursor in the
                                     // next loop for the next frame.
-                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() ) ) );
                                 }
                                 else {
                                     // When the cursor is not over the game area we use the Pointer cursor.
@@ -1353,8 +1362,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         // fast scroll
         if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                       || isScrollBottom( le.GetMouseCursor() ) )
+                if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
+                       || isScrollBottom( le.getMouseCursorPos() ) )
                      && !_gameArea.isDragScroll() ) {
                     cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
@@ -1403,8 +1412,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
-                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+                    Game::DialogPlayers(
+                        conf.CurrentColor(), _( "Beware!" ),
+                        _( "%{color} player, you have lost your last town. If you do not conquer another town in the next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
                     Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
@@ -1520,7 +1530,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
@@ -1535,4 +1545,9 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
     }
+}
+
+void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
+{
+    EventSwitchFocusedHero( tileIndex );
 }

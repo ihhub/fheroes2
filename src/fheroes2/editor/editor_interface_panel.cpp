@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cstddef>
 #include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -32,8 +31,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "dialog_system_options.h"
 #include "editor_interface.h"
+#include "editor_options.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
@@ -117,8 +116,9 @@ namespace
 
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
     {
-        fheroes2::Image background( width, height );
+        fheroes2::Image background;
         background._disableTransformLayer();
+        background.resize( width, height );
         fheroes2::StandardWindow::renderBackgroundImage( background, { 0, 0, width, height }, 0, Settings::Get().isEvilInterfaceEnabled() );
 
         // Make background borders: it consists of rectangles with different transform shading.
@@ -194,41 +194,19 @@ namespace
 
 namespace Interface
 {
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::LandscapeObjectBrush::LANDSCAPE_COUNT>
+        EditorPanel::_selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                                    Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::AdventureObjectBrush::ADVENTURE_COUNT>
+        EditorPanel::_selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,    Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES,
+                                                    Maps::ObjectGroup::ADVENTURE_POWER_UPS,    Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER,
+                                                    Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS };
+    const std::array<Maps::ObjectGroup, Interface::EditorPanel::KingdomObjectBrush::KINGDOM_OBJECTS_COUNT>
+        EditorPanel::_selectedKingdomObjectGroup{ Maps::ObjectGroup::KINGDOM_HEROES, Maps::ObjectGroup::KINGDOM_TOWNS };
+
     EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
     {
-        uint32_t icnIndex = 0;
-
-        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::EDITBTNS_EVIL : ICN::EDITBTNS;
-
-        // Editor Instruments go in this order in ICN: TERRAIN, LANDSCAPE_OBJECTS, DETAIL, ADVENTURE_OBJECTS, KINGDOM_OBJECTS, MONSTERS, STREAM, ROAD, ERASE.
-        for ( size_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
-            if ( i == Instrument::ADVENTURE_OBJECTS ) {
-                // Second row buttons ICN index starts from 53.
-                icnIndex = 35;
-            }
-            else if ( i == Instrument::STREAM ) {
-                // Third row buttons ICN index starts from 53.
-                icnIndex = 6;
-            }
-            _instrumentButtons[i].setICNInfo( icnId, icnIndex, icnIndex + 1 );
-            icnIndex += 2;
-        }
-
-        _buttonMagnify.setICNInfo( icnId, 12, 13 );
-        _buttonUndo.setICNInfo( icnId, 14, 15 );
-        _buttonNew.setICNInfo( icnId, 16, 17 );
-        _buttonSpecs.setICNInfo( icnId, 18, 19 );
-        _buttonFile.setICNInfo( icnId, 20, 21 );
-        _buttonSystem.setICNInfo( icnId, 22, 23 );
-
-        // Brush Size buttons go in this order in ICN: SMALL (1x), MEDIUM (2x), LARGE (4x), AREA.
-        icnIndex = 24;
-        for ( fheroes2::Button & button : _brushSizeButtons ) {
-            button.setICNInfo( icnId, icnIndex, icnIndex + 1 );
-            icnIndex += 2;
-        }
-
         _instrumentButtons[_selectedInstrument].press();
         _brushSizeButtons[_selectedBrushSize].press();
 
@@ -283,6 +261,51 @@ namespace Interface
         return {};
     }
 
+    std::set<Maps::ObjectGroup> EditorPanel::getEraseObjectGroups() const
+    {
+        if ( _eraseTypes == ObjectErasureType::ERASE_NONE ) {
+            return {};
+        }
+
+        std::set<Maps::ObjectGroup> objectGroups;
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_LANDSCAPE ) {
+            objectGroups.insert( { Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                   Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE ) {
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES, Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                   Maps::ObjectGroup::ADVENTURE_WATER, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_TOWNS ) {
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_TOWNS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_PICKABLE ) {
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_MONSTERS ) {
+            objectGroups.insert( Maps::ObjectGroup::MONSTERS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_HEROES ) {
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_HEROES );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_STREAMS ) {
+            objectGroups.insert( Maps::ObjectGroup::STREAMS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ROADS ) {
+            objectGroups.insert( Maps::ObjectGroup::ROADS );
+        }
+
+        return objectGroups;
+    }
+
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
     {
         int32_t offsetX = displayX;
@@ -295,6 +318,38 @@ namespace Interface
         const int32_t instrumentPanelHeight = display.height() - displayY - fheroes2::AGG::GetICN( ICN::EDITBTNS, 0 ).height() * 5 - bottomBorderOffset;
 
         _instrumentPanelBackground = makeInstrumentPanelBackground( instrumentPanelWidth, instrumentPanelHeight );
+
+        uint32_t icnIndex = 0;
+
+        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::EDITBTNS_EVIL : ICN::EDITBTNS;
+
+        // Editor Instruments go in this order in ICN: TERRAIN, LANDSCAPE_OBJECTS, DETAIL, ADVENTURE_OBJECTS, KINGDOM_OBJECTS, MONSTERS, STREAM, ROAD, ERASE.
+        for ( size_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
+            if ( i == Instrument::ADVENTURE_OBJECTS ) {
+                // Second row buttons ICN index starts from 53.
+                icnIndex = 35;
+            }
+            else if ( i == Instrument::STREAM ) {
+                // Third row buttons ICN index starts from 53.
+                icnIndex = 6;
+            }
+            _instrumentButtons[i].setICNInfo( icnId, icnIndex, icnIndex + 1 );
+            icnIndex += 2;
+        }
+
+        _buttonMagnify.setICNInfo( icnId, 12, 13 );
+        _buttonUndo.setICNInfo( icnId, 14, 15 );
+        _buttonNew.setICNInfo( icnId, 16, 17 );
+        _buttonSpecs.setICNInfo( icnId, 18, 19 );
+        _buttonFile.setICNInfo( icnId, 20, 21 );
+        _buttonSystem.setICNInfo( icnId, 22, 23 );
+
+        // Brush Size buttons go in this order in ICN: SMALL (1x), MEDIUM (2x), LARGE (4x), AREA.
+        icnIndex = 24;
+        for ( fheroes2::Button & button : _brushSizeButtons ) {
+            button.setICNInfo( icnId, icnIndex, icnIndex + 1 );
+            icnIndex += 2;
+        }
 
         for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
@@ -359,11 +414,10 @@ namespace Interface
         }
 
         // Erase tool object type buttons.
-        offsetX -= 28;
-        offsetY += 20;
+        offsetY += 13;
         for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-            _eraseButtonsRect[i]
-                = { offsetX + static_cast<int32_t>( i % 4 ) * buttonStepX, offsetY + static_cast<int32_t>( i / 4 ) * buttonStepY, buttonWidth, buttonHeight };
+            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * buttonStepX + ( i > 5 ? buttonHalfStepX : 0 ),
+                                     offsetY + static_cast<int32_t>( i / 3 ) * ( buttonStepY - ( display.height() < 500 ? 3 : 0 ) ), buttonWidth, buttonHeight };
         }
 
         displayY += _rectInstrumentPanel.height;
@@ -475,7 +529,7 @@ namespace Interface
                                        { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, display );
         }
         else if ( _selectedInstrument == Instrument::MONSTERS ) {
-            const fheroes2::Text instrumentName( _( "Monsters" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::MONSTERS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             if ( _selectedMonsterType < 0 ) {
@@ -500,11 +554,11 @@ namespace Interface
             instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
         }
         else if ( _selectedInstrument == Instrument::ROAD ) {
-            const fheroes2::Text instrumentName( _( "Roads" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::ROADS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::STREAM ) {
-            const fheroes2::Text instrumentName( _( "Streams" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::STREAMS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
@@ -513,21 +567,28 @@ namespace Interface
 
             // Object type to erase buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
-            const int32_t originalArtifactsImageOffsetX{ 15 };
             const int32_t originalTownsImageOffsetX{ 44 };
             const int32_t originalMonstersImageOffsetX{ 73 };
             const int32_t originalHeroesTreasuresImageOffsetX{ 102 };
             const int32_t originalTownsMonstersHeroesOffsetY{ 68 };
             const int32_t originalArtifactsTreasresOffsetY{ 96 };
 
+            // Landscape objects icon.
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 8 ), 0, 0, display, _eraseButtonsRect[0] );
-            fheroes2::Copy( originalPanel, originalTownsImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[1] );
-            fheroes2::Copy( originalPanel, originalMonstersImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[2] );
-            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[3] );
-            fheroes2::Copy( originalPanel, originalArtifactsImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[4] );
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[5] );
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[6] );
-            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[7] );
+            // Adventure non pickable objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 13 ), 0, 0, display, _eraseButtonsRect[1] );
+            // Castle objects icon.
+            fheroes2::Copy( originalPanel, originalTownsImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[2] );
+            // Adventure pickable objects icon.
+            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[3] );
+            // Monster objects icon.
+            fheroes2::Copy( originalPanel, originalMonstersImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[4] );
+            // Hero objects icon.
+            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[5] );
+            // Road objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[6] );
+            // Stream objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[7] );
 
             // Object type to erase selection marks.
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
@@ -545,8 +606,6 @@ namespace Interface
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
-
-        display.render( _rectInstrumentPanel );
     }
 
     int32_t EditorPanel::getSelectedObjectType() const
@@ -597,6 +656,56 @@ namespace Interface
         }
     }
 
+    const char * EditorPanel::getObjectGroupName( const Maps::ObjectGroup groupName )
+    {
+        switch ( groupName ) {
+        case Maps::ObjectGroup::ROADS:
+            return _( "Roads" );
+        case Maps::ObjectGroup::STREAMS:
+            return _( "Streams" );
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+            return _( "Mountains" );
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+            return _( "Rocks" );
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+            return _( "Trees" );
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+            return _( "Water Objects" );
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+            return _( "Miscellaneous" );
+        case Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS:
+            // You shouldn't call this path!
+            assert( 0 );
+            return "Towns";
+        case Maps::ObjectGroup::LANDSCAPE_FLAGS:
+            // You shouldn't call this path!
+            assert( 0 );
+            return "Flags";
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+            return _( "Artifacts" );
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+            return _( "Dwellings" );
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+            return _( "Mines" );
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+            return _( "Power-ups" );
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+            return _( "Treasures" );
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+            return _( "Heroes" );
+        case Maps::ObjectGroup::KINGDOM_TOWNS:
+            return _( "Towns" );
+        case Maps::ObjectGroup::MONSTERS:
+            return _( "Monsters" );
+        default:
+            // Did you add a new group? Add the logic for it!
+            assert( 0 );
+            return "Unknown objects";
+        }
+    }
+
     int EditorPanel::_getGroundId( const uint8_t brushId )
     {
         switch ( brushId ) {
@@ -628,87 +737,50 @@ namespace Interface
 
     const char * EditorPanel::_getLandscapeObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case LandscapeObjectBrush::MOUNTAINS:
-            return _( "Mountains" );
-        case LandscapeObjectBrush::ROCKS:
-            return _( "Rocks" );
-        case LandscapeObjectBrush::TREES:
-            return _( "Trees" );
-        case LandscapeObjectBrush::WATER_OBJECTS:
-            return _( "Water Objects" );
-        case LandscapeObjectBrush::LANDSCAPE_MISC:
-            return _( "Miscellaneous" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedLandscapeObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedLandscapeObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getAdventureObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case AdventureObjectBrush::ARTIFACTS:
-            return _( "Artifacts" );
-        case AdventureObjectBrush::DWELLINGS:
-            return _( "Dwellings" );
-        case AdventureObjectBrush::MINES:
-            return _( "Mines" );
-        case AdventureObjectBrush::POWER_UPS:
-            return _( "Power-ups" );
-        case AdventureObjectBrush::TREASURES:
-            return _( "Treasures" );
-        case AdventureObjectBrush::WATER_ADVENTURE:
-            return _( "Water Objects" );
-        case AdventureObjectBrush::ADVENTURE_MISC:
-            return _( "Miscellaneous" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedAdventureObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedAdventureObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getKingdomObjectTypeName( const uint8_t brushId )
     {
-        switch ( brushId ) {
-        case KingdomObjectBrush::TOWNS:
-            return _( "Towns" );
-        case KingdomObjectBrush::HEROES:
-            return _( "Heroes" );
-        default:
-            // Have you added a new object type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( brushId >= _selectedKingdomObjectGroup.size() ) {
+            return "Unknown object type";
         }
 
-        return "Unknown object type";
+        return getObjectGroupName( _selectedKingdomObjectGroup[brushId] );
     }
 
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
     {
         switch ( eraseObjectType ) {
-        case Maps::ObjectErasureType::TERRAIN_OBJECTS:
-            return _( "Terrain" );
-        case Maps::ObjectErasureType::CASTLES:
-            return _( "Castles" );
-        case Maps::ObjectErasureType::MONSTERS:
-            return _( "Monsters" );
-        case Maps::ObjectErasureType::HEROES:
-            return _( "Heroes" );
-        case Maps::ObjectErasureType::ARTIFACTS:
-            return _( "Artifacts" );
-        case Maps::ObjectErasureType::ROADS:
-            return _( "Roads" );
-        case Maps::ObjectErasureType::STREAMS:
-            return _( "Streams" );
-        case Maps::ObjectErasureType::TREASURES:
-            return _( "Treasures" );
+        case ObjectErasureType::ERASE_LANDSCAPE:
+            return _( "editorErasure|Landscape objects" );
+        case ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE:
+            return _( "editorErasure|Adventure non pickable objects" );
+        case ObjectErasureType::ERASE_TOWNS:
+            return _( "editorErasure|Castles" );
+        case ObjectErasureType::ERASE_ADVENTURE_PICKABLE:
+            return _( "editorErasure|Adventure pickable objects" );
+        case ObjectErasureType::ERASE_MONSTERS:
+            return _( "editorErasure|Monsters" );
+        case ObjectErasureType::ERASE_HEROES:
+            return _( "editorErasure|Heroes" );
+        case ObjectErasureType::ERASE_ROADS:
+            return _( "editorErasure|Roads" );
+        case ObjectErasureType::ERASE_STREAMS:
+            return _( "editorErasure|Streams" );
         default:
             // Have you added a new object type to erase? Add the logic above!
             assert( 0 );
@@ -751,7 +823,7 @@ namespace Interface
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
                 return;
             case AdventureObjectBrush::MINES:
-                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
                     int32_t type = -1;
                     int32_t color = -1;
                     getMineObjectProperties( type, color );
@@ -759,13 +831,6 @@ namespace Interface
                     if ( type == -1 || color == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
-                        // Mines cannot be placed on water.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
                         return;
                     }
 
@@ -834,41 +899,46 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-        if ( le.MousePressLeft( _rectInstruments ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( _rectInstruments ) ) {
             for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
-                    if ( _instrumentButtons[i].drawOnPress() ) {
-                        _selectedInstrument = static_cast<uint8_t>( i );
+                if ( i != _selectedInstrument && ( _instrumentButtonsRect[i] & le.getMouseLeftButtonPressedPos() ) ) {
+                    _selectedInstrument = static_cast<uint8_t>( i );
 
-                        // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
-                        if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
-                            // Update panel image and then open the Select Monster dialog.
-                            _redraw();
-                            handleObjectMouseClick( Dialog::selectMonsterType );
-                        }
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
 
-                        // Reset cursor updater since this UI element was clicked.
-                        _setCursor();
-
-                        setRedraw();
-                        return res;
+                    // Redraw all instrument buttons.
+                    for ( size_t index = 0; index < _instrumentButtonsRect.size(); ++index ) {
+                        _instrumentButtons[index].drawOnState( index == _selectedInstrument );
                     }
-                }
-                else {
-                    _instrumentButtons[i].drawOnRelease();
+
+                    // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
+                    if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
+                        // Update panel image and then open the Select Monster dialog.
+                        _redraw();
+                        handleObjectMouseClick( Dialog::selectMonsterType );
+                    }
+
+                    setRedraw();
+
+                    break;
                 }
             }
+
+            return res;
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
-                if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
-                    if ( _brushSizeButtons[i].drawOnPress() ) {
-                        _selectedBrushSize = static_cast<uint8_t>( i );
+                if ( i != _selectedBrushSize && le.isMouseLeftButtonPressedInArea( _brushSizeButtonsRect[i] ) ) {
+                    _selectedBrushSize = static_cast<uint8_t>( i );
+
+                    // Redraw all brush size buttons.
+                    for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+                        _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
                     }
-                }
-                else if ( i != _selectedBrushSize ) {
-                    _brushSizeButtons[i].drawOnRelease();
+
+                    break;
                 }
             }
 
@@ -880,16 +950,16 @@ namespace Interface
                 return text;
             };
 
-            if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
+            if ( le.isMouseRightButtonPressedInArea( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
                 fheroes2::showStandardTextMessage( _( "Small Brush" ), brushSizeText( 1, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
                 fheroes2::showStandardTextMessage( _( "Medium Brush" ), brushSizeText( 2, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::LARGE] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _brushSizeButtonsRect[BrushSize::LARGE] ) ) {
                 fheroes2::showStandardTextMessage( _( "Large Brush" ), brushSizeText( 4, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
                 if ( _selectedInstrument == Instrument::TERRAIN ) {
                     fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for filling in large areas." ), Dialog::ZERO );
                 }
@@ -901,7 +971,7 @@ namespace Interface
 
         if ( _selectedInstrument == Instrument::TERRAIN ) {
             for ( size_t i = 0; i < _terrainButtonsRect.size(); ++i ) {
-                if ( ( _selectedTerrain != i ) && le.MousePressLeft( _terrainButtonsRect[i] ) ) {
+                if ( ( _selectedTerrain != i ) && le.isMouseLeftButtonPressedInArea( _terrainButtonsRect[i] ) ) {
                     _selectedTerrain = static_cast<uint8_t>( i );
                     setRedraw();
 
@@ -916,37 +986,37 @@ namespace Interface
                 return text;
             };
 
-            if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::WATER] ) ) {
+            if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::WATER] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::GRASS] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::GRASS] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::SNOW] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::SNOW] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::SWAMP] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::SWAMP] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::LAVA] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::LAVA] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::DESERT] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::DESERT] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::DIRT] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::DIRT] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::WASTELAND] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::WASTELAND] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::BEACH] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _terrainButtonsRect[TerrainBrush::BEACH] ) ) {
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
             for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedLandscapeObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _landscapeObjectButtonsRect[i] ) ) {
+                if ( ( _selectedLandscapeObject != static_cast<int8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _landscapeObjectButtonsRect[i] ) ) {
                     _selectedLandscapeObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
@@ -958,20 +1028,40 @@ namespace Interface
             }
 
             for ( uint8_t objectId = LandscapeObjectBrush::MOUNTAINS; objectId < LandscapeObjectBrush::LANDSCAPE_COUNT; ++objectId ) {
-                if ( le.MousePressRight( _landscapeObjectButtonsRect[objectId] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( _landscapeObjectButtonsRect[objectId] ) ) {
                     showObjectTypeInfoText( _getLandscapeObjectTypeName( objectId ) );
                     break;
                 }
+            }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::MOUNTAINS] ) ) {
+                handleObjectMouseClick( Dialog::selectMountainType );
+                return res;
+            }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::ROCKS] ) ) {
+                handleObjectMouseClick( Dialog::selectRockType );
+                return res;
+            }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::TREES] ) ) {
+                handleObjectMouseClick( Dialog::selectTreeType );
+                return res;
             }
 
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;
             }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::LANDSCAPE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectLandscapeMiscellaneousObjectType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedAdventureObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _adventureObjectButtonsRect[i] ) ) {
+                if ( ( _selectedAdventureObject != static_cast<int8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _adventureObjectButtonsRect[i] ) ) {
                     _selectedAdventureObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
@@ -983,7 +1073,7 @@ namespace Interface
             }
 
             for ( uint8_t objectId = AdventureObjectBrush::ARTIFACTS; objectId < AdventureObjectBrush::ADVENTURE_COUNT; ++objectId ) {
-                if ( le.MousePressRight( _adventureObjectButtonsRect[objectId] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( _adventureObjectButtonsRect[objectId] ) ) {
                     showObjectTypeInfoText( _getAdventureObjectTypeName( objectId ) );
                     break;
                 }
@@ -1021,10 +1111,14 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectPowerUpObjectType );
                 return res;
             }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::ADVENTURE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectAdventureMiscellaneousObjectType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedKingdomObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _kingdomObjectButtonsRect[i] ) ) {
+                if ( ( _selectedKingdomObject != static_cast<int8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _kingdomObjectButtonsRect[i] ) ) {
                     _selectedKingdomObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
@@ -1036,7 +1130,7 @@ namespace Interface
             }
 
             for ( uint8_t objectId = KingdomObjectBrush::HEROES; objectId < KingdomObjectBrush::KINGDOM_OBJECTS_COUNT; ++objectId ) {
-                if ( le.MousePressRight( _kingdomObjectButtonsRect[objectId] ) ) {
+                if ( le.isMouseRightButtonPressedInArea( _kingdomObjectButtonsRect[objectId] ) ) {
                     showObjectTypeInfoText( _getKingdomObjectTypeName( objectId ) );
                     break;
                 }
@@ -1070,7 +1164,7 @@ namespace Interface
                     _eraseTypes ^= _eraseButtonObjectTypes[i];
                     setRedraw();
                 }
-                else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( _eraseButtonsRect[i] ) ) {
                     std::string header = _( "Toggle the erasure of %{type} objects." );
                     StringReplaceWithLowercase( header, "%{type}", _getEraseObjectTypeName( _eraseButtonObjectTypes[i] ) );
 
@@ -1085,18 +1179,18 @@ namespace Interface
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
                     _eraseTypes = ( _eraseButtonObjectTypes[i] & _eraseTypes ) ? _eraseButtonObjectTypes[i]
-                                                                               : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                                                                               : ( ObjectErasureType::ERASE_ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }
         }
 
-        le.MousePressLeft( _rectMagnify ) ? _buttonMagnify.drawOnPress() : _buttonMagnify.drawOnRelease();
-        le.MousePressLeft( _rectUndo ) ? _buttonUndo.drawOnPress() : _buttonUndo.drawOnRelease();
-        le.MousePressLeft( _rectNew ) ? _buttonNew.drawOnPress() : _buttonNew.drawOnRelease();
-        le.MousePressLeft( _rectSpecs ) ? _buttonSpecs.drawOnPress() : _buttonSpecs.drawOnRelease();
-        le.MousePressLeft( _rectFile ) ? _buttonFile.drawOnPress() : _buttonFile.drawOnRelease();
-        le.MousePressLeft( _rectSystem ) ? _buttonSystem.drawOnPress() : _buttonSystem.drawOnRelease();
+        _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedInArea( _rectMagnify ) );
+        _buttonUndo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectUndo ) );
+        _buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( _rectNew ) );
+        _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSpecs ) );
+        _buttonFile.drawOnState( le.isMouseLeftButtonPressedInArea( _rectFile ) );
+        _buttonSystem.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSystem ) );
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
@@ -1109,62 +1203,62 @@ namespace Interface
             res = EditorInterface::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            // TODO: Make the scenario info editor.
-            Dialog::GameInfo();
+            EditorInterface::Get().openMapSpecificationsDialog();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = Interface::EditorInterface::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
-            // Replace this with Editor options dialog.
-            fheroes2::showSystemOptionsDialog();
+            Editor::openEditorSettings();
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::LANDSCAPE_OBJECTS] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::LANDSCAPE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Landscape Objects Mode" ), _( "Used to place landscape objects (mountains, rocks, trees, etc.) on the map." ),
                                                Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
-            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of monsters, heroes and towns." ), Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
+            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of action objects." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Adventure Objects Mode" ),
                                                _( "Used to place adventure objects (artifacts, dwellings, mines, treasures, etc.) on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::KINGDOM_OBJECTS] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::KINGDOM_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Kingdom Objects Mode" ), _( "Used to place kingdom objects (towns, castles and heroes) on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::MONSTERS] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::MONSTERS] ) ) {
             fheroes2::showStandardTextMessage( _( "Monsters Mode" ), _( "Used to place monsters on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::STREAM] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::STREAM] ) ) {
             fheroes2::showStandardTextMessage( _( "Stream Mode" ), _( "Allows you to draw streams by clicking and dragging." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ROAD] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::ROAD] ) ) {
             fheroes2::showStandardTextMessage( _( "Road Mode" ), _( "Allows you to draw roads by clicking and dragging." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ERASE] ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::ERASE] ) ) {
             fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects from the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectMagnify ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _rectMagnify ) ) {
             fheroes2::showStandardTextMessage( _( "Magnify" ), _( "Change between zoom and normal view." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectUndo ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _rectUndo ) ) {
             fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectNew ) ) {
-            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( _rectNew ) ) {
+            // TODO: update this text once random map generator is ready.
+            //       The original text should be "Create a new map, either from scratch or using the random map generator."
+            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectSpecs ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _rectSpecs ) ) {
             fheroes2::showStandardTextMessage( _( "Specifications" ), _( "Edit map title, description, and other general information." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectFile ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _rectFile ) ) {
             fheroes2::showStandardTextMessage( _( "File Options" ), _( "Open the file options menu, where you can save or load maps, or quit out of the editor." ),
                                                Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _rectSystem ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( _rectSystem ) ) {
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "View the editor system options, which let you customize the editor." ), Dialog::ZERO );
         }
 

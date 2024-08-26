@@ -34,7 +34,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_battle.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -54,7 +54,6 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
-#include "kingdom.h"
 #include "localevent.h"
 #include "logging.h"
 #include "maps.h"
@@ -160,8 +159,8 @@ namespace
 
     Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const int preferredColor )
     {
-        Battle::Units units1( army1.getUnits(), true );
-        Battle::Units units2( army2.getUnits(), true );
+        Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
@@ -181,8 +180,8 @@ namespace
     {
         orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
 
-        Battle::Units units1( army1.getUnits(), true );
-        Battle::Units units2( army2.getUnits(), true );
+        Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
@@ -203,6 +202,35 @@ namespace
 
             orderOfUnits.push_back( unit );
         }
+    }
+
+    size_t getPositionOfCastleDefenseStructure( const Battle::CastleDefenseStructure structure )
+    {
+        switch ( structure ) {
+        case Battle::CastleDefenseStructure::BRIDGE:
+            return Battle::Arena::CASTLE_GATE_POS;
+        case Battle::CastleDefenseStructure::TOWER1:
+            return Battle::Arena::CASTLE_TOP_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::TOWER2:
+            return Battle::Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::WALL1:
+            return Battle::Arena::CASTLE_FIRST_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL2:
+            return Battle::Arena::CASTLE_SECOND_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL3:
+            return Battle::Arena::CASTLE_THIRD_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL4:
+            return Battle::Arena::CASTLE_FOURTH_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_TOP_GATE_TOWER_POS;
+        case Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_BOTTOM_GATE_TOWER_POS;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 0;
     }
 }
 
@@ -271,13 +299,8 @@ bool Battle::Arena::isAnyTowerPresent()
 }
 
 Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator )
-    : _currentColor( Color::NONE )
-    , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
-    , castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
+    : castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
     , _isTown( castle != nullptr )
-    , icn_covr( ICN::UNKNOWN )
-    , current_turn( 0 )
-    , _autoBattleColors( 0 )
     , _randomGenerator( randomGenerator )
 {
     usage_spells.reserve( 20 );
@@ -333,17 +356,21 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        const int wallObject = castle->isFortificationBuilt() ? 3 : 2;
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
-        // tower
+        // NOTE: All towers can be destroyed but can not be passable.
+        // Initially their condition is 2 and becomes 1 after their upper part is destroyed.
+        // The tower's condition should not be 0 to keep them non-passable by the troops.
+
+        // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
         board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
 
-        // archers tower
+        // Turret towers with small ballista.
         board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
         board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( 2 );
 
@@ -355,15 +382,16 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
-        if ( icn_covr != ICN::UNKNOWN )
-            board.SetCovrObjects( icn_covr );
+        if ( _covrIcnId != ICN::UNKNOWN ) {
+            board.SetCovrObjects( _covrIcnId );
+        }
 
         board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
-    AI::Get().battleBegins();
+    AI::BattlePlanner::Get().battleBegins();
 
     if ( _interface ) {
         _interface->fullRedraw();
@@ -371,7 +399,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
         while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
-            if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
+            if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 // Cancel waiting for M82::PREBATTL to over and start the battle.
                 break;
             }
@@ -385,15 +413,17 @@ Battle::Arena::~Arena()
     arena = nullptr;
 }
 
-void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
+void Battle::Arena::UnitTurn( const Units & orderHistory )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
+    assert( _currentUnit && _currentUnit->isValid() );
 
-    if ( troop->isAffectedByMorale() ) {
-        troop->SetRandomMorale( _randomGenerator );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, _currentUnit->String( true ) )
+
+    if ( _currentUnit->isAffectedByMorale() ) {
+        _currentUnit->SetRandomMorale( _randomGenerator );
     }
 
-    assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
+    assert( !_currentUnit->AllModes( MORALE_GOOD | MORALE_BAD ) );
 
     bool endOfTurn = false;
 
@@ -411,27 +441,32 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
             // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
-        else if ( !troop->isValid() ) {
-            // Looks like the unit is dead
+        else if ( _currentUnit->GetSpeed() == Speed::STANDING ) {
+            // Unit has either finished its turn, is dead, or has become immovable due to some spell. Even if the
+            // unit died or has become immovable during its turn without performing any action, its turn is still
+            // considered completed.
+            _currentUnit->SetModes( TR_MOVED );
+
             endOfTurn = true;
         }
-        else if ( troop->Modes( MORALE_BAD ) ) {
-            // Bad morale
-            actions.emplace_back( Command::MORALE, troop->GetUID(), false );
+        else if ( _currentUnit->Modes( MORALE_BAD ) ) {
+            actions.emplace_back( Command::MORALE, _currentUnit->GetUID(), false );
         }
         else {
             // This unit will certainly perform at least one full-fledged action
-            _lastActiveUnitArmyColor = troop->GetArmyColor();
+            _lastActiveUnitArmyColor = _currentUnit->GetArmyColor();
 
             if ( _bridge ) {
-                _bridge->SetPassability( *troop );
+                _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
-                AI::Get().BattleTurn( *this, *troop, actions );
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
+                AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
-                HumanTurn( *troop, actions );
+                assert( _interface != nullptr );
+
+                _interface->HumanTurn( *_currentUnit, actions );
             }
         }
 
@@ -447,28 +482,21 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
-                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                UpdateOrderOfUnits( *_army1, *_army2, _currentUnit, GetOppositeColor( _currentUnit->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
-            // Check if the battle is over
             if ( !BattleValid() ) {
                 endOfTurn = true;
                 break;
             }
 
-            const bool isSkipsMove = troop->Modes( TR_SKIP );
-
-            // Good morale
-            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !troop->isImmovable() && !isSkipsMove ) {
-                actions.emplace_back( Command::MORALE, troop->GetUID(), true );
+            if ( _currentUnit->AllModes( TR_MOVED | MORALE_GOOD ) && !_currentUnit->Modes( TR_SKIP ) && _currentUnit->GetSpeed( false, true ) > Speed::STANDING ) {
+                actions.emplace_back( Command::MORALE, _currentUnit->GetUID(), true );
             }
         }
 
-        if ( troop->Modes( TR_MOVED ) ) {
-            endOfTurn = true;
-        }
-
-        board.removeDeadUnits();
+        // There should be no dead units on the board at the end of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
     }
 }
 
@@ -479,9 +507,9 @@ bool Battle::Arena::BattleValid() const
 
 void Battle::Arena::Turns()
 {
-    ++current_turn;
+    ++_turnNumber;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, _turnNumber )
 
     if ( _interface ) {
         _interface->RedrawActionNewTurn();
@@ -506,20 +534,23 @@ void Battle::Arena::Turns()
 
         while ( BattleValid() ) {
             // We can get the nullptr here if there are no units left waiting for their turn
-            Unit * troop = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            _currentUnit = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
 
-            if ( _orderOfUnits && troop ) {
+            if ( _orderOfUnits ) {
                 // Add unit to the history
-                orderHistory.push_back( troop );
+                if ( _currentUnit ) {
+                    orderHistory.push_back( _currentUnit );
+                }
 
                 // Update the order of units
-                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                UpdateOrderOfUnits( *_army1, *_army2, _currentUnit, GetOppositeColor( _currentUnit ? _currentUnit->GetArmyColor() : _lastActiveUnitArmyColor ),
+                                    orderHistory, *_orderOfUnits );
             }
 
             if ( castle ) {
                 // Catapult acts either during the turn of the first unit from the attacking army, or at the end of the
                 // turn if none of the units from the attacking army are able to act (for example, all are blinded)
-                if ( !catapultActed && ( troop == nullptr || troop->GetColor() == _army1->GetColor() ) ) {
+                if ( !catapultActed && ( _currentUnit == nullptr || _currentUnit->GetColor() == _army1->GetColor() ) ) {
                     CatapultAction();
 
                     catapultActed = true;
@@ -527,8 +558,8 @@ void Battle::Arena::Turns()
 
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
                 // the turn if none of the units from the defending army are able to act (for example, all are blinded)
-                if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
-                    const auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                if ( !towersActed && ( _currentUnit == nullptr || _currentUnit->GetColor() == _army2->GetColor() ) ) {
+                    const auto towerAction = [this, &orderHistory]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
                         if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {
@@ -537,9 +568,11 @@ void Battle::Arena::Turns()
 
                         TowerAction( *_towers[idx] );
 
-                        if ( _orderOfUnits && troop ) {
+                        if ( _orderOfUnits ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                            UpdateOrderOfUnits( *_army1, *_army2, _currentUnit,
+                                                GetOppositeColor( _currentUnit ? _currentUnit->GetArmyColor() : _lastActiveUnitArmyColor ), orderHistory,
+                                                *_orderOfUnits );
                         }
                     };
 
@@ -556,14 +589,12 @@ void Battle::Arena::Turns()
                 }
             }
 
-            if ( troop == nullptr ) {
+            if ( _currentUnit == nullptr ) {
                 // There are no units left waiting for their turn
                 break;
             }
 
-            _currentColor = troop->GetCurrentOrArmyColor();
-
-            TurnTroop( troop, orderHistory );
+            UnitTurn( orderHistory );
         }
     }
 
@@ -603,12 +634,6 @@ void Battle::Arena::Turns()
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
-}
-
-void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
-{
-    if ( _interface )
-        _interface->HumanTurn( b, a );
 }
 
 void Battle::Arena::TowerAction( const Tower & twr )
@@ -651,42 +676,42 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
 void Battle::Arena::CatapultAction()
 {
-    if ( _catapult ) {
-        uint32_t shots = _catapult->GetShots();
-
-        std::map<CastleDefenseElement, uint32_t> stateOfCatapultTargets
-            = { { CastleDefenseElement::WALL1, GetCastleTargetValue( CastleDefenseElement::WALL1 ) },
-                { CastleDefenseElement::WALL2, GetCastleTargetValue( CastleDefenseElement::WALL2 ) },
-                { CastleDefenseElement::WALL3, GetCastleTargetValue( CastleDefenseElement::WALL3 ) },
-                { CastleDefenseElement::WALL4, GetCastleTargetValue( CastleDefenseElement::WALL4 ) },
-                { CastleDefenseElement::TOWER1, GetCastleTargetValue( CastleDefenseElement::TOWER1 ) },
-                { CastleDefenseElement::TOWER2, GetCastleTargetValue( CastleDefenseElement::TOWER2 ) },
-                { CastleDefenseElement::BRIDGE, GetCastleTargetValue( CastleDefenseElement::BRIDGE ) },
-                { CastleDefenseElement::CENTRAL_TOWER, GetCastleTargetValue( CastleDefenseElement::CENTRAL_TOWER ) } };
-
-        Command cmd( Command::CATAPULT );
-
-        cmd << shots;
-
-        while ( shots-- ) {
-            const CastleDefenseElement target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
-            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
-            const bool hit = _catapult->IsNextShotHit( _randomGenerator );
-
-            using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
-
-            cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
-
-            if ( hit ) {
-                stateOfCatapultTargets[target] -= damage;
-            }
-        }
-
-        // Preserve the order of shots - command arguments will be extracted in reverse order
-        std::reverse( cmd.begin(), cmd.end() );
-
-        ApplyAction( cmd );
+    if ( !_catapult ) {
+        return;
     }
+
+    uint32_t shots = _catapult->GetShots();
+
+    std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
+    for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
+        const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+        if ( !inserted ) {
+            assert( 0 );
+        }
+    }
+
+    Command cmd( Command::CATAPULT );
+
+    cmd << shots;
+
+    while ( shots-- ) {
+        const CastleDefenseStructure target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
+        const int damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
+        const bool hit = _catapult->IsNextShotHit( _randomGenerator );
+
+        using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+        cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
+
+        if ( hit ) {
+            stateOfCatapultTargets[target] -= damage;
+        }
+    }
+
+    // Preserve the order of shots - command arguments will be extracted in reverse order
+    std::reverse( cmd.begin(), cmd.end() );
+
+    ApplyAction( cmd );
 }
 
 Battle::Indexes Battle::Arena::GetPath( const Unit & unit, const Position & position )
@@ -740,7 +765,13 @@ int Battle::Arena::GetArmy2Color() const
 
 int Battle::Arena::GetCurrentColor() const
 {
-    return _currentColor;
+    // This method should never be called in cases where there may not be an active unit
+    if ( _currentUnit == nullptr ) {
+        assert( 0 );
+        return Color::NONE;
+    }
+
+    return _currentUnit->GetCurrentOrArmyColor();
 }
 
 int Battle::Arena::GetOppositeColor( const int col ) const
@@ -815,7 +846,7 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
     const HeroBase * hero = getCommander( color );
     const HeroBase * enemyHero = getEnemyCommander( color );
-    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() ) && !world.GetKingdom( hero->GetColor() ).GetCastles().empty();
+    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() );
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
@@ -878,7 +909,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
                 return true;
             }
 
-            if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
+            if ( 0 > GetFreePositionNearHero( GetCurrentColor() ) ) {
                 if ( msg ) {
                     *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
@@ -983,103 +1014,203 @@ Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
     return graveyard.GetOccupiedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value )
+void Battle::Arena::applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage )
 {
+    assert( castle != nullptr );
+
     switch ( target ) {
-    case CastleDefenseElement::WALL1:
-        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL2:
-        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL3:
-        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL4:
-        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
-        break;
+    // Sections of the castle wall can be completely destroyed and it will be possible to pass through the corresponding cells.
+    case CastleDefenseStructure::WALL1:
+    case CastleDefenseStructure::WALL2:
+    case CastleDefenseStructure::WALL3:
+    case CastleDefenseStructure::WALL4: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
 
-    case CastleDefenseElement::TOWER1:
-        if ( _towers[0] && _towers[0]->isValid() ) {
-            _towers[0]->SetDestroy();
-        }
-        break;
-    case CastleDefenseElement::TOWER2:
-        if ( _towers[2] && _towers[2]->isValid() ) {
-            _towers[2]->SetDestroy();
-        }
-        break;
-    case CastleDefenseElement::CENTRAL_TOWER:
-        if ( _towers[1] && _towers[1]->isValid() ) {
-            _towers[1]->SetDestroy();
-        }
-        break;
+        assert( damage > 0 && damage <= condition );
 
-    case CastleDefenseElement::BRIDGE:
-        if ( _bridge->isValid() ) {
-            _bridge->SetDestroyed();
-        }
+        board[position].SetObject( condition - damage );
         break;
+    }
+
+    // Tete-de-pont towers can be damaged, but not fully demolished (it is still impossible to pass through the corresponding cells).
+    case CastleDefenseStructure::TOP_BRIDGE_TOWER:
+    case CastleDefenseStructure::BOTTOM_BRIDGE_TOWER: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        assert( damage == 1 && damage < condition );
+
+        board[position].SetObject( condition - damage );
+        break;
+    }
+
+    // Wall towers (with or without built turret) can be damaged (and they will stop shooting in this case), but not fully demolished
+    // (it is still impossible to pass through the corresponding cells).
+    case CastleDefenseStructure::TOWER1:
+    case CastleDefenseStructure::TOWER2:
+    case CastleDefenseStructure::CENTRAL_TOWER: {
+        const size_t towerIdx = [target]() -> size_t {
+            switch ( target ) {
+            case CastleDefenseStructure::TOWER1:
+                return 0;
+            case CastleDefenseStructure::TOWER2:
+                return 2;
+            case CastleDefenseStructure::CENTRAL_TOWER:
+                return 1;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return 0;
+        }();
+
+        assert( ( [this, target, damage, towerIdx]() {
+            if ( damage != 1 ) {
+                return false;
+            }
+
+            if ( target == CastleDefenseStructure::CENTRAL_TOWER ) {
+                return _towers[towerIdx] && _towers[towerIdx]->isValid();
+            }
+
+            const size_t position = getPositionOfCastleDefenseStructure( target );
+            const int condition = board[position].GetObject();
+
+            if ( damage >= condition ) {
+                return false;
+            }
+
+            if ( !_towers[towerIdx] ) {
+                return ( condition == 1 || condition == 2 );
+            }
+
+            if ( _towers[towerIdx]->isValid() ) {
+                return condition == 2;
+            }
+
+            return condition == 1;
+        }() ) );
+
+        if ( _towers[towerIdx] ) {
+            _towers[towerIdx]->SetDestroyed();
+            break;
+        }
+
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        board[position].SetObject( condition - damage );
+        break;
+    }
+
+    // Castle bridge can be completely destroyed and it will be possible to pass through the corresponding cell.
+    case CastleDefenseStructure::BRIDGE: {
+        assert( damage == 1 && _bridge && _bridge->isValid() );
+
+        _bridge->SetDestroyed();
+        break;
+    }
 
     default:
+        assert( 0 );
         break;
     }
 }
 
-uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target ) const
+int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const
 {
+    assert( castle != nullptr );
+
     switch ( target ) {
-    case CastleDefenseElement::WALL1:
-        return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL2:
-        return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL3:
-        return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL4:
-        return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
+    case CastleDefenseStructure::WALL1:
+    case CastleDefenseStructure::WALL2:
+    case CastleDefenseStructure::WALL3:
+    case CastleDefenseStructure::WALL4: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
 
-    case CastleDefenseElement::TOWER1:
-        return _towers[0] && _towers[0]->isValid() ? 1 : 0;
-    case CastleDefenseElement::TOWER2:
-        return _towers[2] && _towers[2]->isValid() ? 1 : 0;
-    case CastleDefenseElement::CENTRAL_TOWER:
-        return _towers[1] && _towers[1]->isValid() ? 1 : 0;
+        assert( condition >= 0 );
 
-    case CastleDefenseElement::BRIDGE:
+        return condition;
+    }
+
+    case CastleDefenseStructure::TOP_BRIDGE_TOWER:
+    case CastleDefenseStructure::BOTTOM_BRIDGE_TOWER: {
+        assert( siegeWeapon == SiegeWeaponType::EarthquakeSpell );
+
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        assert( condition == 1 || condition == 2 );
+
+        return condition - 1;
+    }
+
+    case CastleDefenseStructure::TOWER1:
+    case CastleDefenseStructure::TOWER2:
+    case CastleDefenseStructure::CENTRAL_TOWER: {
+        const size_t towerIdx = [target]() -> size_t {
+            switch ( target ) {
+            case CastleDefenseStructure::TOWER1:
+                return 0;
+            case CastleDefenseStructure::TOWER2:
+                return 2;
+            case CastleDefenseStructure::CENTRAL_TOWER:
+                return 1;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return 0;
+        }();
+
+        assert( ( [this, target, siegeWeapon, towerIdx]() {
+            if ( target == CastleDefenseStructure::CENTRAL_TOWER ) {
+                return ( siegeWeapon == SiegeWeaponType::Catapult );
+            }
+
+            const size_t position = getPositionOfCastleDefenseStructure( target );
+            const int condition = board[position].GetObject();
+
+            if ( !_towers[towerIdx] ) {
+                return ( condition == 1 || condition == 2 );
+            }
+
+            if ( _towers[towerIdx]->isValid() ) {
+                return condition == 2;
+            }
+
+            return condition == 1;
+        }() ) );
+
+        switch ( siegeWeapon ) {
+        case SiegeWeaponType::Catapult:
+            return _towers[towerIdx] && _towers[towerIdx]->isValid() ? 1 : 0;
+        case SiegeWeaponType::EarthquakeSpell:
+            return board[getPositionOfCastleDefenseStructure( target )].GetObject() - 1;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        break;
+    }
+
+    case CastleDefenseStructure::BRIDGE: {
+        assert( _bridge );
+
         return _bridge->isValid() ? 1 : 0;
+    }
 
     default:
+        assert( 0 );
         break;
     }
+
     return 0;
-}
-
-std::vector<Battle::CastleDefenseElement> Battle::Arena::GetEarthQuakeTargets() const
-{
-    std::vector<CastleDefenseElement> targets;
-    targets.reserve( 8 );
-
-    if ( board[CASTLE_FIRST_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL1 );
-    }
-    if ( board[CASTLE_SECOND_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL2 );
-    }
-    if ( board[CASTLE_THIRD_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL3 );
-    }
-    if ( board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL4 );
-    }
-
-    if ( _towers[0] && _towers[0]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER1 );
-    }
-    if ( _towers[2] && _towers[2]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER2 );
-    }
-
-    return targets;
 }
 
 const HeroBase * Battle::Arena::getCommander( const int color ) const
@@ -1094,7 +1225,7 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
 
 const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
-    return getCommander( _currentColor );
+    return getCommander( GetCurrentColor() );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
@@ -1105,7 +1236,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const HeroBase * hero = GetCurrentCommander();
     assert( hero != nullptr );
 
-    const int32_t idx = GetFreePositionNearHero( _currentColor );
+    const int32_t idx = GetFreePositionNearHero( GetCurrentColor() );
     assert( Board::isValidIndex( idx ) );
 
     const Monster mons( spell );
@@ -1217,7 +1348,7 @@ Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 
 Battle::Force & Battle::Arena::GetCurrentForce() const
 {
-    return getForce( _currentColor );
+    return getForce( GetCurrentColor() );
 }
 
 Battle::Result & Battle::Arena::GetResult()
@@ -1227,7 +1358,11 @@ Battle::Result & Battle::Arena::GetResult()
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    if ( _autoBattleColors & _currentColor ) {
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( _autoBattleColors & GetCurrentColor() ) {
         // Auto battle mode cannot be enabled for a player controlled by AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
@@ -1237,7 +1372,30 @@ bool Battle::Arena::AutoBattleInProgress() const
     return false;
 }
 
+bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+{
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( !( GetCurrentForce().GetControl() & CONTROL_AI ) ) {
+        return false;
+    }
+
+    const Force & enemyForce = getEnemyForce( GetCurrentColor() );
+
+    if ( enemyForce.GetControl() & CONTROL_AI ) {
+        return false;
+    }
+
+    return ( _autoBattleColors & enemyForce.GetColor() );
+}
+
 bool Battle::Arena::CanToggleAutoBattle() const
 {
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
     return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }

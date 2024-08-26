@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -321,6 +321,8 @@ Interface::GameArea::GameArea( BaseInterface & interface )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
     , _needRedrawByMouseDragging( false )
+    , _isFastScrollEnabled( false )
+    , _resetMousePositionForFastScroll( false )
 {
     // Do nothing.
 }
@@ -482,6 +484,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
+    const bool isEditor = _interface.isEditor();
+
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
@@ -492,9 +496,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
-                if ( _interface.isEditor() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+            case MP2::OBJ_HERO: {
+                if ( isEditor ) {
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
@@ -540,8 +544,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = getMonsterSpritesPerTile( tile, _interface.isEditor() );
-                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, _interface.isEditor() );
+                auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -734,52 +738,50 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    const bool drawTowns = ( flag & LEVEL_TOWNS );
+    bool drawPassabilities = ( flag & LEVEL_PASSABILITIES );
 
 #ifdef WITH_DEBUG
-    if ( IS_DEVEL() ) {
-        // redraw grid
-        if ( flag & LEVEL_ALL ) {
-            const int32_t friendColors = Players::FriendColors();
+    if ( IS_DEVEL() && ( flag & LEVEL_ALL ) ) {
+        drawPassabilities = true;
+    }
+#endif
 
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
-                }
+    if ( drawPassabilities ) {
+        const int32_t friendColors = Players::FriendColors();
+
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this, isEditor );
             }
         }
     }
-    else {
-#endif
-        // redraw fog
-        if ( renderFog ) {
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    const Maps::Tiles & tile = world.GetTiles( x, y );
+    else if ( renderFog ) {
+        const bool drawTowns = ( flag & LEVEL_TOWNS );
 
-                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                        drawFog( tile, dst, *this );
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                        if ( drawTowns ) {
-                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                    drawFog( tile, dst, *this );
 
-                            const MP2::MapObjectType objectType = tile.GetObject( false );
-                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
-                            }
+                    if ( drawTowns ) {
+                        drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+
+                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
             }
         }
-#ifdef WITH_DEBUG
     }
-#endif
 
     updateObjectAnimationInfo();
 }
 
-void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const
+void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const
 {
     if ( startTile < 0 || endTile < 0 ) {
         return;
@@ -799,10 +801,12 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
     const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
 
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
+    const uint8_t color = ( isActionObject ? 115 : 181 );
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, color );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, color );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, color );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, color );
 }
 
 void Interface::GameArea::updateMapFogDirections()
@@ -855,8 +859,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448 );
+    fheroes2::Image result;
     result._disableTransformLayer();
+    result.resize( 448, 448 );
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
@@ -874,7 +879,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-    result._disableTransformLayer();
 
     return result;
 }
@@ -936,12 +940,81 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
+void Interface::GameArea::setFastScrollStatus( const bool enable )
+{
+    _isFastScrollEnabled = enable;
+    _resetMousePositionForFastScroll = true;
+}
+
+bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
+{
+    const fheroes2::Display & display = fheroes2::Display::instance();
+    constexpr int32_t deadZone = 3;
+
+    // Remember the initial reference point for re-enabling checks later on.
+    if ( _resetMousePositionForFastScroll ) {
+        _mousePositionForFastScroll = mousePosition;
+        _resetMousePositionForFastScroll = false;
+    }
+
+    if ( Interface::BaseInterface::isScrollLeft( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x > _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x < _mousePositionForFastScroll.x || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > deadZone && mousePosition.x <= 0 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollRight( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x < _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x > _mousePositionForFastScroll.x
+                  || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > deadZone && mousePosition.x >= display.width() - 1 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollTop( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y > _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y < _mousePositionForFastScroll.y || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > deadZone && mousePosition.y <= 0 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollBottom( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y < _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y > _mousePositionForFastScroll.y
+                  || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > deadZone && mousePosition.y >= display.height() - 1 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else {
+        // We have left the scroll borders, fast scrolling can definitely be re-enabled.
+        return true;
+    }
+
+    // We haven't left the borders, but the direction of the mouse movement within the borders
+    // does not indicate that the user wants to perform the fast scroll right now.
+    return false;
+}
+
 void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Point & mousePosition = le.GetMouseCursor();
+    const fheroes2::Point & mousePosition = le.getMouseCursorPos();
 
-    if ( !le.MousePressLeft() ) {
+    if ( !le.isMouseLeftButtonPressed() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -956,7 +1029,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = true;
     }
 
-    if ( _mouseDraggingMovement ) {
+    if ( _mouseDraggingMovement && le.isMouseLeftButtonPressedInArea( GetROI() ) ) {
         if ( _lastMouseDragPosition == mousePosition ) {
             _needRedrawByMouseDragging = false;
         }
@@ -988,7 +1061,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
 
@@ -1001,12 +1074,15 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
     }
-    else if ( le.MousePressRight( tileROI ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+    else if ( le.MouseLongPressLeft( tileROI ) ) {
+        _interface.mouseCursorAreaLongPressLeft( index );
     }
 
     // The cursor may have moved after mouse click events.
-    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+    index = GetValidTileIdFromPoint( le.getMouseCursorPos() );
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
@@ -1125,10 +1201,9 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
 Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 {
-    Maps::Tiles & tile = world.GetTiles( tileId );
+    const Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        removeObjectSprite( tile );
-        tile.setAsEmpty();
+        removeMainObjectFromTile( tile );
     }
 }

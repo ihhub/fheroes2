@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,8 +153,9 @@ namespace
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         assert( background.height() < fheroes2::Display::DEFAULT_HEIGHT );
 
-        fheroes2::Sprite output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
+        fheroes2::Sprite output;
         output._disableTransformLayer();
+        output.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
         output.fill( 0 );
 
         const fheroes2::Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", fheroes2::FontType::normalYellow() );
@@ -257,9 +258,6 @@ namespace
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
 
-        fheroes2::Image resizedOutput( 640, 480 );
-        fheroes2::Resize( output, 0, 0, output.width(), output.height(), resizedOutput, 0, 0, resizedOutput.width(), resizedOutput.height() );
-
         return output;
     }
 
@@ -268,10 +266,10 @@ namespace
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
+        const int32_t columnStep = 210;
         const int32_t textInitialOffsetX = output.width() / 2;
         const int32_t textInitialOffsetY = 60;
         const int32_t textWidth = 300;
-        const int32_t textOffsetX = ( textInitialOffsetX - textWidth ) / 2;
 
         int32_t offsetY = textInitialOffsetY;
 
@@ -286,53 +284,62 @@ namespace
                                   "a1exsh\n"
                                   "vincent-grosbois\n"
                                   "eos428\n"
+                                  "Mr-Bajs\n"
                                   "Arthusppp\n"
                                   "felix642\n"
                                   "Vasilenko Alexey\n"
                                   "Andrii Kurdiumov\n"
-                                  "Mr-Bajs\n"
+                                  "Stisen1\n"
                                   "dimag0g\n"
                                   "Effektus\n"
                                   "Laserlicht\n"
-                                  "Stisen1\n"
                                   "Mauri Mustonen\n"
                                   "tau3\n" );
 
         fheroes2::Text name( std::move( contributors ), fheroes2::FontType::normalWhite() );
         const int32_t constributorsHeight = name.height( textWidth );
-        const int32_t contributorCount = name.rows( textWidth );
-        name.draw( textOffsetX, offsetY, textWidth, output );
+        name.draw( ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
         std::string supporters( "Aimi Lindschouw\n"
                                 "Aleksei Mazur\n"
+                                "Alex Perry\n"
+                                "Andrei Dyldin\n"
+                                "Andrew Lasinskiy\n"
                                 "Andrew Szucs\n"
                                 "Benjamin Hughes\n"
+                                "Bolsch\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
-                                "Hajler\n"
-                                "Kiril Lipatov\n"
-                                "Kresimir Condic\n"
-                                "Kuza\n"
-                                "Matt Taylor\n"
-                                "slvclw\n"
-                                "TechnoCore\n"
-                                "William Hoskinson\n" );
+                                "Christophe Didion\n"
+                                "Christopher Elliott" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
-        const int32_t supportersHeight = name.height( textWidth );
-        const int32_t supporterCount = name.rows( textWidth );
-        const int32_t countDifference = ( contributorCount - supporterCount );
-        const int32_t supportersOffset = ( countDifference / 2 ) * ( supportersHeight / supporterCount );
+        name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
-        name.draw( textInitialOffsetX + textOffsetX, offsetY + supportersOffset, textWidth, output );
+        supporters = "David C Jernberg\n"
+                     "domoyega\n"
+                     "Grigoris Papadourakis\n"
+                     "Hajler\n"
+                     "Hakon\n"
+                     "hommaddict\n"
+                     "Kiril Lipatov\n"
+                     "Kresimir Condic\n"
+                     "Kuza\n"
+                     "Matt Taylor\n"
+                     "Matthew Pfluger\n"
+                     "Michael Van Wambeke\n"
+                     "Siarzuk Piatrouski\n"
+                     "slvclw\n"
+                     "TechnoCore\n"
+                     "William Hoskinson\n";
+
+        name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
+        name.draw( columnStep * 2 + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
         offsetY += constributorsHeight;
 
-        name.set( _( "and many other contributors!" ), fheroes2::FontType::normalWhite() );
-        name.draw( 10, offsetY, textWidth, output );
-
-        name.set( _( "and many-many other supporters!" ), fheroes2::FontType::normalWhite() );
-        name.draw( textInitialOffsetX + textOffsetX, offsetY, textWidth, output );
+        name.set( _( "and many-many other contributors and supporters!" ), fheroes2::FontType::normalWhite() );
+        name.draw( output.width() / 2 - name.width() / 2, offsetY, output );
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
 
@@ -694,7 +701,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     const fheroes2::Rect creditsRoi( mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() );
 
     // Hide mouse cursor.
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    const CursorRestorer cursorRestorer( false );
 
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
 
@@ -728,15 +735,17 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     // Resize the credits pages. 'creditsRoi' is made using Main Menu background parameters that were already properly calculated for the current resolution.
     const int32_t resizedPageHeight = creditsRoi.width * pages.front().height() / pages.front().width();
     for ( fheroes2::Sprite & page : pages ) {
-        fheroes2::Sprite resizedPage( creditsRoi.width, resizedPageHeight );
+        fheroes2::Sprite resizedPage;
         resizedPage._disableTransformLayer();
-        fheroes2::Resize( page, resizedPage, false );
+        resizedPage.resize( creditsRoi.width, resizedPageHeight );
+        fheroes2::Resize( page, resizedPage );
         page = std::move( resizedPage );
     }
 
-    fheroes2::Sprite header( creditsRoi.width, creditsRoi.height - resizedPageHeight );
+    fheroes2::Sprite header;
     header._disableTransformLayer();
-    fheroes2::Resize( generateHeader(), header, false );
+    header.resize( creditsRoi.width, creditsRoi.height - resizedPageHeight );
+    fheroes2::Resize( generateHeader(), header );
 
     AnimationSequence sequence( static_cast<int32_t>( pages.size() ) );
 
@@ -749,7 +758,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
             break;
         }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -463,10 +463,10 @@ bool Interface::BorderWindow::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    if ( conf.isHideInterfaceEnabled() && le.MousePressLeft( border.GetTop() ) ) {
+    if ( conf.isHideInterfaceEnabled() && le.isMouseLeftButtonPressedInArea( border.GetTop() ) ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Point & mp = le.GetMouseCursor();
+        const fheroes2::Point & mp = le.getMouseCursorPos();
         const fheroes2::Rect & pos = GetRect();
 
         fheroes2::MovableSprite moveIndicator( pos.width, pos.height, pos.x, pos.y );
@@ -480,8 +480,8 @@ bool Interface::BorderWindow::QueueEventProcessing()
         moveIndicator.redraw();
         display.render();
 
-        while ( le.HandleEvents() && le.MousePressLeft() ) {
-            if ( le.MouseMotion() ) {
+        while ( le.HandleEvents() && le.isMouseLeftButtonPressed() ) {
+            if ( le.hasMouseMoved() ) {
                 moveIndicator.setPosition( mp.x - ox, mp.y - oy );
                 display.render();
             }

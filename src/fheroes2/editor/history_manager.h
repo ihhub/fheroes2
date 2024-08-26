@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,11 +52,19 @@ namespace fheroes2
     public:
         explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
 
-        ~ActionCreator();
+        ~ActionCreator()
+        {
+            if ( _action ) {
+                // The action wasn't committed. Undo all the changes.
+                _action->undo();
+            }
+        }
 
         ActionCreator( const ActionCreator & ) = delete;
 
         ActionCreator & operator=( const ActionCreator & ) = delete;
+
+        void commit();
 
     private:
         HistoryManager & _manager;
@@ -111,16 +119,6 @@ namespace fheroes2
             ++_lastActionId;
 
             return result;
-        }
-
-        bool isUndoAvailable() const
-        {
-            return ( _lastActionId > 0 );
-        }
-
-        bool isRedoAvailable() const
-        {
-            return ( _lastActionId < _actions.size() );
         }
 
     private:

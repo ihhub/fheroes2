@@ -39,6 +39,7 @@ namespace PAL
         MIRROR_IMAGE,
         DARKENING, // for disabled buttons
         GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
+        PURPLE, // For random object images.
         CUSTOM
     };
 

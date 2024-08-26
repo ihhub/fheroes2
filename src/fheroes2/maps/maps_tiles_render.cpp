@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <list>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -46,6 +45,7 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "monster_anim.h"
+#include "mp2.h"
 #include "race.h"
 #include "spell.h"
 #include "til.h"
@@ -165,7 +165,6 @@ namespace
         }
     }
 
-#ifdef WITH_DEBUG
     const fheroes2::Image & PassableViewSurface( const int passable, const bool isActionObject )
     {
         static std::map<std::pair<int, bool>, fheroes2::Image> imageMap;
@@ -257,6 +256,7 @@ namespace
         return imageMap.try_emplace( std::move( key ), std::move( sf ) ).first->second;
     }
 
+#ifdef WITH_DEBUG
     const fheroes2::Image & getDebugFogImage()
     {
         static const fheroes2::Image fog = []() {
@@ -276,7 +276,7 @@ namespace
 
         // scan for a hero around
         if ( !isEditorMode ) {
-            for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
+            for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HERO, false ) ) {
                 const Heroes * hero = world.GetTiles( idx ).getHero();
                 assert( hero != nullptr );
 
@@ -911,23 +911,20 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
+    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
+#else
+        (void)friendColors;
+#endif
 
-        const bool isActionObject = MP2::isActionObject( tile.GetObject() );
+        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.GetObject() ) : MP2::isInGameActionObject( tile.GetObject() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
-#else
-        (void)tile;
-        (void)dst;
-        (void)area;
-        (void)friendColors;
-#endif
     }
 
     void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
@@ -1297,7 +1294,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_HEROES );
+        assert( tile.GetObject() == MP2::OBJ_HERO );
 
         const uint32_t icnIndex = tile.GetObjectSpriteIndex();
         const int icnId{ ICN::MINIHERO };

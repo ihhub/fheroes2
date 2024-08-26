@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -37,7 +37,7 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "battle_tower.h"
+#include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
 
@@ -56,10 +56,19 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Units;
-    class Unit;
     class Interface;
     class Status;
+    class Tower;
+    class Unit;
+    class Units;
+
+    enum class TowerType : uint8_t;
+
+    enum class SiegeWeaponType
+    {
+        Catapult,
+        EarthquakeSpell
+    };
 
     class Actions : public std::list<Command>
     {};
@@ -97,11 +106,12 @@ namespace Battle
         bool BattleValid() const;
 
         bool AutoBattleInProgress() const;
+        bool EnemyOfAIHasAutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        uint32_t GetCurrentTurn() const
+        uint32_t GetTurnNumber() const
         {
-            return current_turn;
+            return _turnNumber;
         }
 
         Result & GetResult();
@@ -133,7 +143,7 @@ namespace Battle
 
         const SpellStorage & GetUsageSpells() const;
 
-        bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
+        bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
@@ -204,10 +214,8 @@ namespace Battle
 
         int GetICNCovr() const
         {
-            return icn_covr;
+            return _covrIcnId;
         }
-
-        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
@@ -235,13 +243,17 @@ namespace Battle
         };
 
     private:
-        void HumanTurn( const Unit &, Actions & );
+        void UnitTurn( const Units & orderHistory );
 
-        void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
-
-        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
+
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
+        // structure still has enough hitpoints.
+        void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
@@ -251,8 +263,6 @@ namespace Battle
 
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
-
-        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
         void ApplyActionRetreat( const Command & cmd );
         void ApplyActionSurrender( const Command & cmd );
@@ -269,7 +279,7 @@ namespace Battle
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
         void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellEarthquake( const Command & cmd );
         void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
@@ -296,11 +306,12 @@ namespace Battle
         std::unique_ptr<Force> _army2;
         std::shared_ptr<Units> _orderOfUnits;
 
-        // The color of the army, whose turn it is to perform an action
-        int _currentColor;
+        // The unit that is currently active. Please note that some battle actions (e.g. catapult or castle tower shots) can be performed without an active unit.
+        Unit * _currentUnit{ nullptr };
+
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
-        // bad morale is not considered as such)
-        int _lastActiveUnitArmyColor;
+        // bad morale is not considered as such).
+        int _lastActiveUnitArmyColor{ -1 };
 
         const Castle * castle;
         // Is the battle taking place in a town or a castle
@@ -318,11 +329,11 @@ namespace Battle
 
         Board board;
         BattlePathfinder _battlePathfinder;
-        int icn_covr;
+        int _covrIcnId{ ICN::UNKNOWN };
 
-        uint32_t current_turn;
+        uint32_t _turnNumber{ 0 };
         // A set of colors of players for whom the auto-battle mode is enabled
-        int _autoBattleColors;
+        int _autoBattleColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other

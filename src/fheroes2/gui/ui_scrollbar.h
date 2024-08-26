@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@ namespace fheroes2
     class Scrollbar : public fheroes2::MovableSprite
     {
     public:
-        Scrollbar();
+        Scrollbar() = default;
         Scrollbar( const Scrollbar & ) = delete;
         Scrollbar & operator=( const Scrollbar & ) = delete;
 
@@ -81,16 +81,16 @@ namespace fheroes2
             return _area;
         }
 
-    private:
-        Rect _area;
-        int _minIndex;
-        int _maxIndex;
-        int _currentIndex;
-
-        bool _isVertical() const
+        bool isVertical() const
         {
             return _area.width < _area.height;
         }
+
+    private:
+        Rect _area;
+        int _minIndex{ 0 };
+        int _maxIndex{ 0 };
+        int _currentIndex{ 0 };
     };
 
     // The original scrollbar slider has fixed size. This is a not user-friendly solution as on big screens it might look extremely tiny.

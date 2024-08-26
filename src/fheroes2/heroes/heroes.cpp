@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,13 +28,13 @@
 #include <cstddef>
 #include <iterator>
 #include <map>
-#include <ostream>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -42,9 +42,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -55,6 +53,8 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -74,7 +74,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -117,14 +116,14 @@ namespace
                     case MP2::OBJ_NON_ACTION_SHIPWRECK:
                     case MP2::OBJ_DERELICT_SHIP:
                     case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "%{object} robber" );
+                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
                     case MP2::OBJ_NON_ACTION_PYRAMID: {
-                        std::string modRaided = _( "%{object} raided" );
+                        std::string modRaided = _( "pyramid|%{object} raided" );
                         StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
                         break;
@@ -492,7 +491,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( doesHeroHaveCustomPortrait ) {
         SetModes( CUSTOM );
 
-        // Portrait sprite index. In should be increased by 1 as in the original game hero IDs start from 0.
+        // Portrait sprite index. It should be increased by 1 as in the original game hero IDs start from 0.
         portrait = dataStream.get() + 1;
 
         if ( !isValidId( portrait ) ) {
@@ -528,7 +527,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( doesHeroHaveCustomSecondarySkills ) {
         SetModes( CUSTOM );
 
-        std::vector<Skill::Secondary> secs( 8 );
+        std::array<Skill::Secondary, 8> secs;
 
         for ( Skill::Secondary & skill : secs ) {
             // Secondary Skill IDs in the MP2 format start from 0, while in the engine they start from 1 due to presence of UNKNOWN skill type.
@@ -599,11 +598,230 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
 
-    if ( isControlAI() ) {
-        AI::Get().HeroesPostLoad( *this );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
+}
+
+void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor )
+{
+    modes = 0;
+
+    if ( isInJail ) {
+        SetModes( JAIL );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
+    if ( _race != heroMetadata.race ) {
+        SetModes( CUSTOM );
+
+        _race = heroMetadata.race;
+    }
+
+    if ( !isEditor ) {
+        // Reset primary skills and initial spell to defaults.
+        HeroBase::LoadDefaults( HeroBase::HEROES, _race );
+    }
+
+    if ( !Maps::loadHeroArmy( army, heroMetadata ) && !isEditor ) {
+        // Reset the army to default
+        army.Reset( true );
+    }
+
+    // Hero's portrait.
+    if ( heroMetadata.customPortrait > 0 ) {
+        SetModes( CUSTOM );
+
+        assert( isValidId( heroMetadata.customPortrait ) );
+
+        // Portrait sprite index.
+        portrait = heroMetadata.customPortrait;
+    }
+
+    const bool doesHeroHaveCustomArtifacts
+        = isEditor || std::any_of( heroMetadata.artifact.begin(), heroMetadata.artifact.end(), []( const int32_t artifact ) { return artifact != 0; } );
+    if ( doesHeroHaveCustomArtifacts ) {
+        // Clear the initial spells and a possible spellBook.
+        SpellBookDeactivate();
+
+        const size_t artifactCount = heroMetadata.artifact.size();
+        assert( artifactCount == 14 );
+        for ( size_t i = 0; i < artifactCount; ++i ) {
+            Artifact art( heroMetadata.artifact[i] );
+            if ( !art.isValid() ) {
+                continue;
+            }
+
+            if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
+                assert( heroMetadata.artifactMetadata[i] != Spell::NONE );
+
+                art.SetSpell( heroMetadata.artifactMetadata[i] );
+            }
+
+            if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
+                SpellBookActivate();
+
+                // Add spells to the spell book.
+                for ( const int32_t spellId : heroMetadata.availableSpells ) {
+                    if ( spellId == Spell::NONE ) {
+                        continue;
+                    }
+
+                    AppendSpellToBook( spellId, true );
+                }
+            }
+            else {
+                PickupArtifact( art );
+            }
+        }
+    }
+
+    const bool doesHeroHaveCustomSecondarySkills
+        = std::any_of( heroMetadata.secondarySkill.begin(), heroMetadata.secondarySkill.end(), []( const int32_t skill ) { return skill != 0; } );
+    if ( doesHeroHaveCustomSecondarySkills ) {
+        SetModes( CUSTOM );
+
+        secondary_skills = {};
+
+        for ( size_t i = 0; i < heroMetadata.secondarySkill.size(); ++i ) {
+            secondary_skills.AddSkill( Skill::Secondary{ heroMetadata.secondarySkill[i], heroMetadata.secondarySkillLevel[i] } );
+        }
+    }
+    else if ( !isEditor ) {
+        // Reset secondary skills to defaults
+        secondary_skills = Skill::SecSkills( _race );
+    }
+
+    // For Editor we need to fill all the rest of the 8 skills with the empty ones.
+    if ( isEditor ) {
+        GetSecondarySkills().FillMax( Skill::Secondary() );
+    }
+
+    if ( isEditor || !heroMetadata.customName.empty() ) {
+        SetModes( CUSTOM );
+        name = heroMetadata.customName;
+    }
+
+    if ( heroMetadata.isOnPatrol ) {
+        SetModes( PATROL );
+
+        _patrolCenter = GetCenter();
+        _patrolDistance = heroMetadata.patrolRadius;
+    }
+
+    // Hero's experience.
+    if ( heroMetadata.customExperience > -1 ) {
+        experience = heroMetadata.customExperience;
+    }
+    else if ( isEditor ) {
+        // There is no way to set "default experience" condition, so we will consider 'UINT32_MAX' as it.
+        experience = UINT32_MAX;
+    }
+
+    // Level up if needed.
+    if ( !isEditor ) {
+        const int16_t level = heroMetadata.customLevel > -1 ? heroMetadata.customLevel : static_cast<int16_t>( GetLevel() );
+        if ( level > 1 ) {
+            SetModes( CUSTOM );
+
+            for ( int16_t i = 1; i < level; ++i ) {
+                LevelUp( doesHeroHaveCustomSecondarySkills, true );
+            }
+        }
+    }
+
+    // Apply custom primary Skill values.
+    if ( isEditor || heroMetadata.customAttack > -1 ) {
+        attack = heroMetadata.customAttack;
+    }
+    if ( isEditor || heroMetadata.customDefense > -1 ) {
+        defense = heroMetadata.customDefense;
+    }
+    if ( isEditor || heroMetadata.customSpellPower > -1 ) {
+        power = heroMetadata.customSpellPower;
+    }
+    if ( isEditor || heroMetadata.customKnowledge > -1 ) {
+        knowledge = heroMetadata.customKnowledge;
+    }
+
+    if ( heroMetadata.magicPoints < 0 ) {
+        // Default Spell points.
+        if ( isEditor ) {
+            // There is no way to set "default spell points" condition, so we will consider 'UINT32_MAX' as it.
+            magic_point = UINT32_MAX;
+        }
+        else {
+            magic_point = GetMaxSpellPoints();
+        }
+    }
+    else {
+        magic_point = static_cast<uint32_t>( heroMetadata.magicPoints );
+    }
+
+    move_point = GetMaxMovePoints();
+}
+
+Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
+{
+    Maps::Map_Format::HeroMetadata heroMetadata;
+
+    Maps::saveHeroArmy( army, heroMetadata );
+
+    // Hero's portrait.
+    heroMetadata.customPortrait = portrait;
+
+    // Hero's artifacts.
+    const size_t artifactCount = bag_artifacts.size();
+    assert( artifactCount == heroMetadata.artifactMetadata.size() );
+    for ( size_t i = 0; i < artifactCount; ++i ) {
+        heroMetadata.artifact[i] = bag_artifacts[i].GetID();
+        // The spell scroll may contain a spell.
+
+        if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
+            const int32_t artifactSpellId = bag_artifacts[i].getSpellId();
+
+            assert( artifactSpellId != Spell::NONE );
+
+            heroMetadata.artifactMetadata[i] = artifactSpellId;
+        }
+    }
+
+    // Hero's spells.
+    const size_t bookSize = spell_book.size();
+    heroMetadata.availableSpells.reserve( bookSize );
+    for ( size_t i = 0; i < bookSize; ++i ) {
+        heroMetadata.availableSpells.push_back( spell_book[i].GetID() );
+    }
+
+    // Hero's secondary skills.
+    const std::vector<Skill::Secondary> & skills = secondary_skills.ToVector();
+    const size_t skillsSize = skills.size();
+    assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
+    for ( size_t i = 0; i < skillsSize; ++i ) {
+        heroMetadata.secondarySkill[i] = static_cast<int8_t>( skills[i].Skill() );
+        heroMetadata.secondarySkillLevel[i] = static_cast<uint8_t>( skills[i].Level() );
+    }
+
+    // Hero's name.
+    heroMetadata.customName = name;
+
+    // Patrol mode.
+    heroMetadata.isOnPatrol = Modes( PATROL );
+    heroMetadata.patrolRadius = static_cast<uint8_t>( _patrolDistance );
+
+    // Hero's experience.
+    heroMetadata.customExperience = ( experience == UINT32_MAX ) ? -1 : static_cast<int32_t>( experience );
+
+    // Primary Skill base values.
+    heroMetadata.customAttack = static_cast<int16_t>( attack );
+    heroMetadata.customDefense = static_cast<int16_t>( defense );
+    heroMetadata.customSpellPower = static_cast<int16_t>( power );
+    heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
+
+    // Hero's spell points.
+    heroMetadata.magicPoints = ( magic_point == UINT32_MAX ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
+
+    // Hero's race.
+    heroMetadata.race = static_cast<uint8_t>( _race );
+
+    return heroMetadata;
 }
 
 int Heroes::GetRace() const
@@ -653,7 +871,7 @@ int Heroes::GetManaIndexSprite() const
 int Heroes::getStatsValue() const
 {
     // experience and artifacts don't matter here, only natural stats
-    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+    return getTotalPrimarySkillLevel() + secondary_skills.GetTotalLevel();
 }
 
 double Heroes::getRecruitValue() const
@@ -808,11 +1026,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
             result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
         }
-    }
-
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
     }
 
     return result;
@@ -1128,7 +1341,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( isValidId( heroID ) && !hasMetWithHero( heroID ) ) {
-        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
+        visit_object.emplace_front( heroID, MP2::OBJ_HERO );
     }
 }
 
@@ -1140,14 +1353,14 @@ void Heroes::unmarkHeroMeeting()
             continue;
         }
 
-        hero->visit_object.remove( IndexObject( _id, MP2::OBJ_HEROES ) );
-        visit_object.remove( IndexObject( hero->_id, MP2::OBJ_HEROES ) );
+        hero->visit_object.remove( IndexObject( _id, MP2::OBJ_HERO ) );
+        visit_object.remove( IndexObject( hero->_id, MP2::OBJ_HERO ) );
     }
 }
 
 bool Heroes::hasMetWithHero( int heroID ) const
 {
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HERO ) );
 }
 
 bool Heroes::isLosingGame() const
@@ -1173,12 +1386,26 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art.GetID() == Artifact::MAGIC_BOOK ? fheroes2::showStandardTextMessage(
-                GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Dialog::OK )
-                                                : fheroes2::showStandardTextMessage( art.GetName(),
-                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+                if ( HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    // In theory, there should be no other reason not to pick up the artifact
+                    assert( IsFullBagArtifacts() );
+
+                    fheroes2::showStandardTextMessage(
+                        art.GetName(),
+                        _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                        Dialog::OK );
+                }
+            }
+            else {
+                // In theory, there should be no other reason not to pick up the artifact
+                assert( IsFullBagArtifacts() );
+
+                fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
+            }
         }
 
         return false;
@@ -1362,8 +1589,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                   Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1373,9 +1599,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         header.append( _( "Do you wish to buy one?" ) );
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } )
-             == Dialog::NO ) {
+        if ( fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
             return false;
         }
     }
@@ -1414,7 +1638,7 @@ void Heroes::SetMove( const bool enable )
         ResetModes( SLEEPER );
 
         if ( isControlAI() ) {
-            AI::Get().HeroesBeginMovement( *this );
+            AI::Planner::Get().HeroesBeginMovement( *this );
         }
 
         SetModes( ENABLEMOVE );
@@ -1426,33 +1650,34 @@ void Heroes::SetMove( const bool enable )
 
         ResetModes( ENABLEMOVE );
 
-        if ( isControlAI() ) {
-            AI::Get().HeroesFinishMovement( *this );
-        }
-
         // Reset the hero sprite
-        switch ( direction ) {
-        case Direction::TOP:
-            sprite_index = 0;
-            break;
-        case Direction::BOTTOM:
-            sprite_index = 36;
-            break;
-        case Direction::TOP_RIGHT:
-        case Direction::TOP_LEFT:
-            sprite_index = 9;
-            break;
-        case Direction::BOTTOM_RIGHT:
-        case Direction::BOTTOM_LEFT:
-            sprite_index = 27;
-            break;
-        case Direction::RIGHT:
-        case Direction::LEFT:
-            sprite_index = 18;
-            break;
-        default:
-            break;
-        }
+        resetHeroSprite();
+    }
+}
+
+void Heroes::resetHeroSprite()
+{
+    switch ( direction ) {
+    case Direction::TOP:
+        sprite_index = 0;
+        break;
+    case Direction::BOTTOM:
+        sprite_index = 36;
+        break;
+    case Direction::TOP_RIGHT:
+    case Direction::TOP_LEFT:
+        sprite_index = 9;
+        break;
+    case Direction::BOTTOM_RIGHT:
+    case Direction::BOTTOM_LEFT:
+        sprite_index = 27;
+        break;
+    case Direction::RIGHT:
+    case Direction::LEFT:
+        sprite_index = 18;
+        break;
+    default:
+        break;
     }
 }
 
@@ -1601,18 +1826,14 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
-    if ( !skipsecondary )
-        LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
-    if ( isControlAI() )
-        AI::Get().HeroesLevelUp( *this );
+    if ( !skipsecondary ) {
+        LevelUpSecondarySkill( seeds, primarySkill, autoselect );
+    }
 }
 
 void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
 {
-    Skill::Secondary sec1;
-    Skill::Secondary sec2;
-
-    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2, sec1, sec2 );
+    const auto [sec1, sec2] = secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )
@@ -1633,6 +1854,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         else {
             selected = sec1.isValid() ? sec1 : sec2;
         }
+    }
+    else if ( isControlAI() ) {
+        selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );
@@ -1788,8 +2012,9 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( isControlAI() )
-        AI::Get().HeroesActionNewPosition( *this );
+    if ( isControlAI() ) {
+        AI::Planner::Get().HeroesActionNewPosition( *this );
+    }
 
     ResetModes( VISIONS );
 }
@@ -1849,12 +2074,12 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
 
     if ( !port.empty() ) {
         if ( PORT_BIG == type ) {
-            fheroes2::Blit( port, dstsf, px, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
             mp.y = 2;
             mp.x = port.width() - 12;
         }
         else if ( PORT_MEDIUM == type ) {
-            fheroes2::Blit( port, dstsf, px, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
@@ -1868,13 +2093,13 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             fheroes2::Blit( background, dstsf, px, py );
 
             // Draw mobility.
-            fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
+            fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
 
             // Draw hero's portrait.
-            fheroes2::Blit( port, dstsf, px + barw + 1, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px + barw + 1, py, port.width(), port.height() );
 
             // Draw mana.
-            fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
+            fheroes2::Copy( mana, 0, 0, dstsf, px + barw + port.width() + 2, py + mana.y(), mana.width(), mana.height() );
 
             mp.x = 35;
         }
@@ -1919,8 +2144,10 @@ std::string Heroes::String() const
 
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
-        for ( std::list<IndexObject>::const_iterator it = visit_object.begin(); it != visit_object.end(); ++it )
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( ( *it ).second ) ) << "(" << ( *it ).first << "), ";
+        for ( const auto & info : visit_object ) {
+            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
+        }
+
         os << std::endl;
     }
 
@@ -1930,8 +2157,6 @@ std::string Heroes::String() const
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl
            << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
-
-        os << AI::Get().HeroesString( *this );
     }
 
     return os.str();
@@ -2286,9 +2511,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
-        // Before FORMAT_VERSION_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
+        // Before FORMAT_VERSION_PRE1_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
         // This leads to assertion rise while rendering text. Also, it is incorrect to have a hero with no name.
         if ( hero.name.empty() ) {
             hero.name = Heroes::GetName( hero._id );
@@ -2309,14 +2534,24 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     }
 
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint8_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
+    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
-        int temp = 0;
-        msg >> temp;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
+            int temp = 0;
+            msg >> temp;
 
-        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+            hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        }
+        else {
+            uint8_t temp = 0;
+
+            msg >> temp;
+
+            hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        }
     }
     else {
         ObjectTypeUnderHeroType temp = 0;

@@ -44,6 +44,7 @@ namespace Skill
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
+    uint32_t GetDiplomacySurrenderCostDiscount( const int level );
 
     namespace Level
     {
@@ -143,8 +144,9 @@ namespace Skill
         Secondary * FindSkill( int );
 
         void AddSkill( const Skill::Secondary & );
-        void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
+
+        std::pair<Secondary, Secondary> FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed, uint32_t const secondSkillSeed ) const;
 
         std::string String() const;
 
@@ -184,9 +186,16 @@ namespace Skill
 
         int LevelUp( int race, int level, uint32_t seed );
 
+        // Returns the sum of the values of the four primary skills (attack, defense, power and knowledge), belonging directly to the hero (i.e. excluding artifacts)
+        int getTotalPrimarySkillLevel() const
+        {
+            return attack + defense + power + knowledge;
+        }
+
         static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
+        static int getHeroDefaultSkillValue( const int skill, const int race );
 
     protected:
         void LoadDefaults( int type, int race );

@@ -26,6 +26,12 @@
 #include <cstdint>
 #include <string>
 
+#include "resource.h"
+
+class Kingdom;
+
+enum BuildingType : uint32_t;
+
 namespace Difficulty
 {
     // !!! IMPORTANT !!!
@@ -41,30 +47,30 @@ namespace Difficulty
 
     std::string String( int );
 
-    int GetScoutingBonus( int difficulty );
+    // Returns an extra resource bonus for AI based on difficulty level.
+    Funds getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom );
 
-    // Returns an extra gold bonus modifier for AI based on difficulty level.
+    // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );
 
-    // Returns an extra growth bonus modifier for AI based on difficulty level.
-    double GetUnitGrowthBonusForAI( const int difficulty );
-
-    int GetHeroMovementBonus( int difficulty );
-
-    // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to retreat from the battlefield
+    // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
 
-    // Returns the minimum ratio of the AI kingdom's gold reserve to the cost of surrender, at which the AI will prefer surrender to retreat from the battlefield
-    uint32_t getGoldReserveRatioForAISurrender( const int difficulty );
-
-    uint32_t GetDimensionDoorLimit( int difficulty );
+    // Returns the limit on the number of times the Dimension Door spell can be cast, which is applied to each of the AI-controlled heroes individually during one AI
+    // turn
+    uint32_t GetDimensionDoorLimitForAI( int difficulty );
 
     bool areAIHeroRolesAllowed( const int difficulty );
 
-    int getMinStatDiffBetweenAIRoles( const int difficulty );
+    // Returns the minimum advantage in stats (i.e. the sum of the levels of primary and secondary skills) that a hero must have in order to allow another hero with the
+    // same role to meet on his own initiative with this hero to exchange armies and artifacts
+    int getMinStatDiffForAIHeroesMeeting( const int difficulty );
 
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
+
+    bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
+    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }
 
 #endif

@@ -24,15 +24,13 @@
 #include "army.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <map>
-#include <memory>
 #include <numeric>
-#include <ostream>
 #include <random>
 #include <set>
+#include <sstream>
 #include <utility>
 
 #include "army_troop.h"
@@ -239,17 +237,19 @@ Troops::~Troops()
     } );
 }
 
-void Troops::Assign( const Troop * it1, const Troop * it2 )
+void Troops::Assign( const Troop * itbeg, const Troop * itend )
 {
     Clean();
 
     iterator it = begin();
 
-    while ( it != end() && it1 != it2 ) {
-        if ( it1->isValid() )
-            ( *it )->Set( *it1 );
+    while ( it != end() && itbeg != itend ) {
+        if ( itbeg->isValid() ) {
+            ( *it )->Set( *itbeg );
+        }
+
         ++it;
-        ++it1;
+        ++itbeg;
     }
 }
 
@@ -281,10 +281,13 @@ void Troops::PushBack( const Monster & mons, uint32_t count )
 
 void Troops::PopBack()
 {
-    if ( !empty() ) {
-        delete back();
-        pop_back();
+    if ( empty() ) {
+        return;
     }
+
+    delete back();
+
+    pop_back();
 }
 
 Troop * Troops::GetTroop( size_t pos )
@@ -407,31 +410,45 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
            || std::any_of( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 }
 
-bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst )
+bool Troops::JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst )
 {
     if ( !mons.isValid() || count == 0 ) {
         return false;
     }
 
-    const auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-    const auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
+    const auto findBestMatch = [this]( const auto higherPriorityPredicate, const auto lowerPriorityPredicate ) {
+        const auto iter = std::find_if( begin(), end(), higherPriorityPredicate );
+        if ( iter != end() ) {
+            return iter;
+        }
 
-    iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
-    if ( it == end() ) {
-        it = emptySlotFirst ? std::find_if( begin(), end(), findMonster ) : std::find_if( begin(), end(), findEmptySlot );
+        return std::find_if( begin(), end(), lowerPriorityPredicate );
+    };
+
+    const auto isSlotEmpty = []( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isEmpty();
+    };
+    const auto isSameMonster = [&mons]( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isValid() && troop->isMonster( mons.GetID() );
+    };
+
+    const auto iter = emptySlotFirst ? findBestMatch( isSlotEmpty, isSameMonster ) : findBestMatch( isSameMonster, isSlotEmpty );
+    if ( iter == end() ) {
+        return false;
     }
 
-    if ( it != end() ) {
-        if ( ( *it )->isValid() )
-            ( *it )->SetCount( ( *it )->GetCount() + count );
-        else
-            ( *it )->Set( mons, count );
-
-        DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() )
-        return true;
+    if ( ( *iter )->isValid() ) {
+        ( *iter )->SetCount( ( *iter )->GetCount() + count );
+    }
+    else {
+        ( *iter )->Set( mons, count );
     }
 
-    return false;
+    return true;
 }
 
 bool Troops::JoinTroop( const Troop & troop )
@@ -1217,7 +1234,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
             ++result;
             if ( strs ) {
                 std::string str = _( "All %{race} troops +1" );
-                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "Multiple" ) : Race::String( *races.begin() ) );
+                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "NeutralRaceTroops|Neutral" ) : Race::String( *races.begin() ) );
                 strs->append( str );
                 *strs += '\n';
             }
@@ -1292,26 +1309,6 @@ double Army::GetStrength() const
     return result;
 }
 
-double Army::getStrengthOfAverageStartingArmy( const Heroes * hero )
-{
-    assert( hero != nullptr );
-
-    const int race = hero->GetRace();
-
-    double result = 0.0;
-
-    for ( uint32_t dwelling : std::array<uint32_t, 2>{ DWELLING_MONSTER1, DWELLING_MONSTER2 } ) {
-        const Monster monster{ race, dwelling };
-        assert( monster.isValid() );
-
-        const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
-
-        result += Troop{ monster, ( min + max ) / 2 }.GetStrength();
-    }
-
-    return result;
-}
-
 void Army::Reset( const bool defaultArmy /* = false */ )
 {
     Troops::Clean();
@@ -1321,6 +1318,10 @@ void Army::Reset( const bool defaultArmy /* = false */ )
     }
 
     const int race = commander->GetRace();
+    // Sometimes heroes created solely for the purpose of showing an avatar may not have a race
+    if ( race == Race::NONE ) {
+        return;
+    }
 
     if ( !defaultArmy ) {
         JoinTroop( { race, DWELLING_MONSTER1 }, 1, false );

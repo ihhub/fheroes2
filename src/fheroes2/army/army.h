@@ -56,7 +56,7 @@ public:
 
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop *, const Troop * );
+    void Assign( const Troop * itbeg, const Troop * itend );
     void Assign( const Troops & );
     void Insert( const Troops & );
     void PushBack( const Monster &, uint32_t );
@@ -86,7 +86,7 @@ public:
     bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & troop );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
+    bool JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
     virtual double GetStrength() const;
@@ -172,9 +172,6 @@ public:
     static void SwapTroops( Troop &, Troop & );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
-
-    // Returns the strength of the average starting army for a given hero (not taking into account the hero's bonuses)
-    static double getStrengthOfAverageStartingArmy( const Heroes * hero );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,

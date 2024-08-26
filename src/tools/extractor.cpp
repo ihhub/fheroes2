@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,13 +26,12 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -59,10 +58,10 @@ namespace
     uint32_t calculateHash( const std::string_view str )
     {
         uint32_t hash = 0;
-        int32_t sum = 0;
+        uint32_t sum = 0;
 
         for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const char c = static_cast<char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
+            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
 
             hash = ( hash << 5 ) + ( hash >> 25 );
 

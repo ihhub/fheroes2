@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
@@ -113,13 +113,21 @@ public:
     int GetLuckModificator( std::string * = nullptr ) const;
     double GetMagicStrategicValue( const double armyStrength ) const;
 
-    uint32_t GetSpellPoints() const;
+    uint32_t GetSpellPoints() const
+    {
+        return magic_point;
+    }
+
     bool HaveSpellPoints( const Spell & spell ) const;
     bool haveMovePoints( const Spell & spell ) const;
     bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
     void SpellCasted( const Spell & spell );
-    void SetSpellPoints( const uint32_t points );
+    void SetSpellPoints( const uint32_t points )
+    {
+        magic_point = points;
+    }
+
     bool isPotentSpellcaster() const;
 
     // Returns all spells that the hero can cast (including spells from the spell book and spell scrolls)
@@ -132,7 +140,7 @@ public:
 
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
-                         const std::function<void( const std::string & )> * statusCallback ) const;
+                         const std::function<void( const std::string & )> & statusCallback ) const;
 
     bool HaveSpellBook() const
     {

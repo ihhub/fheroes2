@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,7 +126,7 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
     if ( le.MouseClickLeft( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator._area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::ZERO );
     }
 }
@@ -177,7 +177,7 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
     if ( le.MouseClickLeft( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator._area ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( indicator._area ) ) {
         fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::ZERO );
     }
 }
@@ -202,7 +202,7 @@ void ExperienceIndicator::Redraw() const
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text text( _isDefault ? "-" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
     text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
 }
 
@@ -210,12 +210,12 @@ void ExperienceIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
+    if ( le.MouseClickLeft( _area ) || le.isMouseRightButtonPressedInArea( _area ) ) {
         std::string message = _( "Level %{level}" );
 
         StringReplace( message, "%{level}", _hero->GetLevel() );
 
-        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
 
@@ -226,7 +226,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * hero )
     _area.height = 36;
 
     _description = _(
-        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times your knowledge. It is occasionally possible to have more than your maximum spell points via special events." );
+        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times the hero's knowledge. It is occasionally possible for the hero to have more than their maximum spell points via special events." );
 
     StringReplace( _description, "%{name}", _hero->GetName() );
     StringReplace( _description, "%{point}", _hero->GetSpellPoints() );
@@ -240,7 +240,9 @@ void SpellPointsIndicator::Redraw() const
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text text( _isDefault ? std::to_string( _hero->GetMaxSpellPoints() )
+                                          : std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ),
+                               fheroes2::FontType::smallWhite() );
     text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
 }
 
@@ -248,7 +250,7 @@ void SpellPointsIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
-        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+    if ( le.MouseClickLeft( _area ) || le.isMouseRightButtonPressedInArea( _area ) ) {
+        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK ) );
     }
 }

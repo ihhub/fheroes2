@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,6 +60,8 @@ namespace
         case MP2::OBJ_DUNE:
         case MP2::OBJ_LAVAPOOL:
         case MP2::OBJ_SHRUB:
+        case MP2::OBJ_SWAMPY_LAKE:
+        case MP2::OBJ_FROZEN_LAKE:
             return false;
         default:
             break;
@@ -336,7 +338,7 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Random Monster - strong" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG:
         return _( "Random Monster - very strong" );
-    case OBJ_NON_ACTION_HEROES:
+    case OBJ_NON_ACTION_HERO:
         return _( "Hero" );
     case OBJ_NOTHING_SPECIAL:
         return _( "Nothing Special" );
@@ -482,6 +484,10 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
         return _( "Water Summoning Altar" );
+    case OBJ_SWAMPY_LAKE:
+        return _( "Swampy Lake" );
+    case OBJ_FROZEN_LAKE:
+        return _( "Frozen Lake" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -532,7 +538,7 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_CITY_OF_DEAD:
     case OBJ_TROLL_BRIDGE:
     // for AI
-    case OBJ_HEROES:
+    case OBJ_HERO:
         return true;
     default:
         break;
@@ -571,13 +577,13 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFromWater )
+bool MP2::isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
     if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
 bool MP2::isWaterActionObject( const MapObjectType objectType )
@@ -592,7 +598,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
     // Heroes cannot be placed on water by the original editor, but they can board a boat
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
     case OBJ_SEA_CHEST:
@@ -612,10 +618,10 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
 
     // Here we would have to return false, but some map editors allow to place arbitrary objects
     // on water tiles, so we have to work with this.
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
-bool MP2::isActionObject( const MapObjectType objectType )
+bool MP2::isInGameActionObject( const MapObjectType objectType )
 {
     if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) != OBJ_ACTION_OBJECT_TYPE ) {
         // It is not an action object.
@@ -628,6 +634,11 @@ bool MP2::isActionObject( const MapObjectType objectType )
     }
 
     return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
+}
+
+bool MP2::isOffGameActionObject( const MapObjectType objectType )
+{
+    return ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE;
 }
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
@@ -763,7 +774,7 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
     // Action objects in general should be avoided for fog discovery purposes, because
     // they may be guarded or may require wasting resources
-    return !isActionObject( objectType );
+    return !isInGameActionObject( objectType );
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
@@ -773,7 +784,7 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     case OBJ_BARRIER:
     case OBJ_BOAT:
     case OBJ_BUOY:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_MERMAID:
     case OBJ_MONSTER:
@@ -798,9 +809,10 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_BUOY:
     case OBJ_CAMPFIRE:
     case OBJ_COAST:
+    case OBJ_EVENT:
     case OBJ_FLOTSAM:
     case OBJ_GENIE_LAMP:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_MONSTER:
     case OBJ_RANDOM_ARTIFACT:
@@ -975,7 +987,7 @@ bool MP2::doesObjectNeedExtendedMetadata( const MP2::MapObjectType type )
     case OBJ_BOTTLE:
     case OBJ_CASTLE:
     case OBJ_EVENT:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_RANDOM_CASTLE:
     case OBJ_RANDOM_TOWN:

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,11 +24,13 @@
 #define H2MAPS_OBJECTS_H
 
 #include <cstdint>
+#include <initializer_list>
 #include <list>
 #include <string>
 #include <vector>
 
 #include "artifact.h"
+#include "mp2.h"
 #include "position.h"
 #include "resource.h"
 
@@ -37,10 +39,13 @@ class StreamBase;
 class MapObjectSimple : public MapPosition
 {
 public:
-    explicit MapObjectSimple( int v = 0 )
+    explicit MapObjectSimple( const int objectType = MP2::OBJ_NONE )
         : uid( 0 )
-        , type( v )
-    {}
+        , type( objectType )
+    {
+        // Do nothing.
+    }
+
     ~MapObjectSimple() override = default;
 
     int GetType() const
@@ -58,68 +63,125 @@ public:
         uid = v;
     }
 
+    void setUIDAndIndex( const int32_t mapIndex )
+    {
+        SetUID( mapIndex );
+        SetIndex( mapIndex );
+    }
+
 protected:
-    friend StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-    friend StreamBase & operator>>( StreamBase &, MapObjectSimple & );
+    friend StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
+    friend StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
 
     uint32_t uid;
     int type;
 };
 
-StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-StreamBase & operator>>( StreamBase &, MapObjectSimple & );
-
 struct MapEvent : public MapObjectSimple
 {
-    MapEvent();
+    MapEvent()
+        : MapObjectSimple( MP2::OBJ_EVENT )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
-    bool isAllow( int color ) const;
-    void SetVisited( int color );
+    bool isAllow( const int color ) const
+    {
+        return ( color & colors ) != 0;
+    }
+
+    void SetVisited()
+    {
+        if ( isSingleTimeEvent ) {
+            colors = 0;
+        }
+    }
 
     Funds resources;
     Artifact artifact;
-    bool computer;
-    bool cancel;
-    int colors;
+    bool computer{ false };
+    bool isSingleTimeEvent{ true };
+    int colors{ 0 };
     std::string message;
 };
-
-StreamBase & operator<<( StreamBase &, const MapEvent & );
-StreamBase & operator>>( StreamBase &, MapEvent & );
-
-using RiddleAnswers = std::list<std::string>;
 
 struct MapSphinx : public MapObjectSimple
 {
-    MapSphinx();
+    MapSphinx()
+        : MapObjectSimple( MP2::OBJ_SPHINX )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
-    bool AnswerCorrect( const std::string & answer );
-    void SetQuiet();
+    bool isCorrectAnswer( std::string answer );
+
+    void reset()
+    {
+        riddle = {};
+        answers = {};
+
+        valid = false;
+        artifact = Artifact::UNKNOWN;
+        resources.Reset();
+    }
+
+    void validate()
+    {
+        if ( artifact == Artifact::UNKNOWN && resources.GetValidItemsCount() == 0 ) {
+            // No reward so nothing to ask.
+            valid = false;
+            return;
+        }
+
+        if ( riddle.empty() || answers.empty() ) {
+            // No question or no answers then nothing to do.
+            valid = false;
+            return;
+        }
+
+        valid = true;
+    }
 
     Funds resources;
     Artifact artifact;
-    RiddleAnswers answers;
-    std::string message;
-    bool valid;
-};
+    std::list<std::string> answers;
+    std::string riddle;
+    bool valid{ false };
 
-StreamBase & operator<<( StreamBase &, const MapSphinx & );
-StreamBase & operator>>( StreamBase &, MapSphinx & );
+    // This is the behavior of the original game when each answer was cut only to 4 characters.
+    // This is not the case for new map format.
+    bool isTruncatedAnswer{ true };
+};
 
 struct MapSign : public MapObjectSimple
 {
-    MapSign();
+    MapSign()
+        : MapObjectSimple( MP2::OBJ_SIGN )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
+
+    void setDefaultMessage();
 
     std::string message;
 };
 
-StreamBase & operator<<( StreamBase &, const MapSign & );
-StreamBase & operator>>( StreamBase &, MapSign & );
+StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
+StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapEvent & obj );
+StreamBase & operator>>( StreamBase & msg, MapEvent & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj );
+StreamBase & operator>>( StreamBase & msg, MapSphinx & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapSign & obj );
+StreamBase & operator>>( StreamBase & msg, MapSign & obj );
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,10 +23,10 @@ class StreamBase;
 
 namespace MP2
 {
-    struct mp2tile_t;
-    struct mp2addon_t;
+    struct MP2TileInfo;
+    struct MP2AddonInfo;
 
-    void loadTile( StreamBase & stream, mp2tile_t & tile );
+    void loadTile( StreamBase & stream, MP2TileInfo & tile );
 
-    void loadAddon( StreamBase & stream, mp2addon_t & addon );
+    void loadAddon( StreamBase & stream, MP2AddonInfo & addon );
 }

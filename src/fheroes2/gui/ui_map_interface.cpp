@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,12 +54,12 @@ namespace Interface
 
     void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        const CursorRestorer cursorRestorer( false );
 
         const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 
         LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Rect windowRoi = Interface::getPopupWindowPosition( le.GetMouseCursor(), interfaceArea, { windowImage.width(), windowImage.height() } );
+        const fheroes2::Rect windowRoi = Interface::getPopupWindowPosition( le.getMouseCursorPos(), interfaceArea, { windowImage.width(), windowImage.height() } );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer restorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -71,7 +71,7 @@ namespace Interface
 
         display.render( restorer.rect() );
 
-        while ( le.HandleEvents() && le.MousePressRight() ) {
+        while ( le.HandleEvents() && le.isMouseRightButtonPressed() ) {
             // Do nothing and wait till the user releases the button.
         }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_audio.h"
+
 #include <algorithm>
 #include <cassert>
 #include <string>
@@ -27,7 +29,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
-#include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -104,7 +105,7 @@ namespace
 
 namespace Dialog
 {
-    void openAudioSettingsDialog( const bool fromAdventureMap )
+    bool openAudioSettingsDialog( const bool fromAdventureMap )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -152,60 +153,64 @@ namespace Dialog
 
         bool saveConfig = false;
 
-        // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
-            // set music or sound volume
-            bool saveMusicVolume = false;
-            bool saveSoundVolume = false;
+            bool haveSettingsChanged = false;
+
             if ( Audio::isValid() ) {
-                if ( le.MouseClickLeft( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelUp( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelDn( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
-                    saveMusicVolume = true;
+                {
+                    bool haveMusicSettingsChanged = false;
+
+                    if ( le.MouseClickLeft( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() + 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() - 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+
+                    if ( haveMusicSettingsChanged ) {
+                        Music::setVolume( 100 * conf.MusicVolume() / 10 );
+
+                        haveSettingsChanged = true;
+                    }
                 }
 
-                if ( saveMusicVolume ) {
-                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
-                }
+                {
+                    bool haveSoundSettingsChanged = false;
 
-                if ( le.MouseClickLeft( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelUp( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelDn( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
-                    saveSoundVolume = true;
-                }
-                if ( le.MouseClickLeft( audio3D ) ) {
-                    conf.set3DAudio( !conf.is3DAudioEnabled() );
-                    saveSoundVolume = true;
-                }
+                    if ( le.MouseClickLeft( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() + 1 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() - 1 );
+                        haveSoundSettingsChanged = true;
+                    }
 
-                if ( saveSoundVolume && fromAdventureMap ) {
-                    Game::EnvironmentSoundMixer();
+                    if ( haveSoundSettingsChanged ) {
+                        Mixer::setVolume( 100 * conf.SoundVolume() / 10 );
+
+                        haveSettingsChanged = true;
+                    }
                 }
             }
 
-            // set music type
-            bool saveMusicType = false;
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
@@ -217,28 +222,37 @@ namespace Dialog
 
                 AudioManager::PlayCurrentMusic();
 
-                saveMusicType = true;
+                haveSettingsChanged = true;
             }
 
-            if ( le.MousePressRight( musicVolumeRoi ) ) {
+            if ( le.MouseClickLeft( audio3D ) ) {
+                conf.set3DAudio( !conf.is3DAudioEnabled() );
+
+                if ( fromAdventureMap ) {
+                    Game::EnvironmentSoundMixer();
+                }
+
+                haveSettingsChanged = true;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( musicVolumeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Music" ), _( "Toggle ambient music level." ), 0 );
             }
 
-            else if ( le.MousePressRight( soundVolumeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( soundVolumeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Effects" ), _( "Toggle foreground sounds level." ), 0 );
             }
-            else if ( le.MousePressRight( musicTypeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( musicTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Music Type" ), _( "Change the type of music." ), 0 );
             }
-            else if ( le.MousePressRight( audio3D ) ) {
-                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle 3D effects of foreground sounds." ), 0 );
+            else if ( le.isMouseRightButtonPressedInArea( audio3D ) ) {
+                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
-            else if ( le.MousePressRight( buttonOkay.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( saveMusicVolume || saveSoundVolume || saveMusicType ) {
-                // redraw
+            if ( haveSettingsChanged ) {
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
                 drawDialog( roi );
                 buttonOkay.draw();
@@ -248,8 +262,6 @@ namespace Dialog
             }
         }
 
-        if ( saveConfig ) {
-            Settings::Get().Save( Settings::configFileName );
-        }
+        return saveConfig;
     }
 }

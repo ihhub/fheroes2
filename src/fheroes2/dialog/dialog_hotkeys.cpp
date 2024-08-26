@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -80,8 +81,8 @@ namespace
         void processEvents( const fheroes2::Point & /*offset*/ ) const override
         {
             const LocalEvent & le = LocalEvent::Get();
-            if ( le.KeyPress() ) {
-                _key = le.KeyValue();
+            if ( le.isAnyKeyPressed() ) {
+                _key = le.getPressedKeyValue();
                 _keyChanged = true;
             }
         }
@@ -298,7 +299,7 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
             listbox.QueueEventProcessing();
 
@@ -306,10 +307,8 @@ namespace fheroes2
                 return;
             }
 
-            if ( le.MousePressRight( buttonOk.area() ) ) {
-                const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
 
                 continue;
             }

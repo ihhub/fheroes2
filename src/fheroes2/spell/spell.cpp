@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,7 +36,7 @@
 #include "serialize.h"
 #include "translations.h"
 
-struct spellstats_t
+struct SpellStats
 {
     const char * name;
     uint8_t spellPoints; // The number of spell points consumed/required by this spell
@@ -50,7 +50,7 @@ struct spellstats_t
 // The original resources don't have most of sprites for Mass Spells
 // so we made some tricks in AGG source file. All modified sprite IDs start from 60
 
-spellstats_t spells[] = {
+const SpellStats spells[Spell::SPELL_COUNT] = {
     //  name | spell points | movement points | min movement points | image id | extra value | description
     { "Unknown", 0, 0, 0, 0, 0, "Unknown spell." },
     { gettext_noop( "Fireball" ), 9, 0, 0, 8, 10, gettext_noop( "Causes a giant fireball to strike the selected area, damaging all nearby creatures." ) },
@@ -80,7 +80,7 @@ spellstats_t spells[] = {
     { gettext_noop( "Mass Curse" ), 12, 0, 0, 64, 0, gettext_noop( "Causes all enemy troops to inflict minimum damage." ) },
     { gettext_noop( "Holy Word" ), 9, 0, 0, 22, 10, gettext_noop( "Damages all undead in the battle." ) },
     { gettext_noop( "Holy Shout" ), 12, 0, 0, 23, 20, gettext_noop( "Damages all undead in the battle. This is an improved version of Holy Word." ) },
-    { gettext_noop( "Anti-Magic" ), 7, 0, 0, 17, 0, gettext_noop( "Prevents harmful magic against the selected creatures." ) },
+    { gettext_noop( "Anti-Magic" ), 7, 0, 0, 17, 0, gettext_noop( "Prevents any magic against the selected creatures." ) },
     { gettext_noop( "Dispel Magic" ), 5, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from a single target." ) },
     { gettext_noop( "Mass Dispel" ), 12, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from all creatures." ) },
     { gettext_noop( "Magic Arrow" ), 3, 0, 0, 38, 10, gettext_noop( "Causes a magic arrow to strike the selected target." ) },

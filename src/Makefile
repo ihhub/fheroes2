@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -66,9 +66,6 @@ ifndef OS
 OS := $(shell uname)
 endif
 
-ifeq ($(OS),Windows_NT)
-PLATFORM := mingw
-endif
 ifeq ($(OS),FreeBSD)
 PLATFORM := bsd
 endif
@@ -104,6 +101,9 @@ CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
 CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++17
 CPPFLAGS := $(CPPFLAGS) $(CPPFLAGS_FH2)
 
+ifdef FHEROES2_WITH_SYSTEM_SMACKER
+LIBS := $(LIBS) -lsmacker
+endif
 LIBS := $(LIBS) -lz $(LDLIBS)
 
 ifdef FHEROES2_WITH_DEBUG
@@ -117,11 +117,11 @@ CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"
 endif
 
 # TODO: Add -Wconversion -Wsign-conversion flags once we fix all the corresponding code smells
-# TODO: Add -Wdouble-promotion -Wold-style-cast -Wswitch-default flags once SDL headers can be compiled with them
-CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal \
-              -Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
+              -Wredundant-decls -Wshadow -Wswitch-default -Wundef -Wunused
 CFLAGS := $(CFLAGS) $(CCWARNOPTS)
-CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Woverloaded-virtual
+CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast \
+                                      -Woverloaded-virtual -Wsuggest-override
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
@@ -142,9 +142,7 @@ endif
 
 # SDL_LIBS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_LIBS),undefined)
-SDL_LIBS := $(shell sdl2-config --libs)
-# Insert -lSDL2_mixer before -lSDL2, but after any previous -L/path/to/lib entries
-SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL2_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
+SDL_LIBS := -lSDL2_mixer $(shell sdl2-config --libs)
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
@@ -154,12 +152,14 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR WINDRES CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
 
 .PHONY: all clean
 
 all:
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)" CPPFLAGS="$(CPPFLAGS_TP)"
+endif
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef FHEROES2_WITH_TOOLS
@@ -168,7 +168,9 @@ endif
 	$(MAKE) -C dist pot
 
 clean:
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker clean
+endif
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean

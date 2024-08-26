@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,9 +23,9 @@
 #include <algorithm>
 #include <array>
 #include <ctime>
-#include <memory>
 
 #include "campaign_scenariodata.h"
+#include "game_language.h"
 #include "serialize.h"
 #include "translations.h"
 #include "ui_language.h"
@@ -128,12 +128,19 @@ namespace fheroes2
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        ZStreamBuf hdata;
-        if ( !hdata.read( fileName ) ) {
+        StreamFile fileStream;
+        fileStream.setbigendian( true );
+        if ( !fileStream.open( fileName, "rb" ) ) {
             return false;
         }
 
+        StreamBuf hdata;
         hdata.setbigendian( true );
+
+        if ( !Compression::readFromFileStream( fileStream, hdata ) ) {
+            return false;
+        }
+
         uint32_t magicValue = 0;
 
         hdata >> magicValue;
@@ -193,11 +200,18 @@ namespace fheroes2
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
-        ZStreamBuf hdata;
+        StreamFile fileStream;
+        fileStream.setbigendian( true );
+
+        if ( !fileStream.open( fileName, "wb" ) ) {
+            return false;
+        }
+
+        StreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
-        return !hdata.fail() && hdata.write( fileName );
+        return !hdata.fail() && Compression::writeIntoFileStream( fileStream, hdata );
     }
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )

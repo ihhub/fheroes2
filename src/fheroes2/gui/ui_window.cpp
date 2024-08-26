@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -278,32 +278,36 @@ namespace fheroes2
     {
         const Rect shadingRoi = roi ^ _activeArea;
 
+        applyTextBackgroundShading( _output, shadingRoi );
+    }
+
+    void StandardWindow::applyTextBackgroundShading( Image & output, const Rect & roi )
+    {
         // The text background is darker than original background. The shadow strength 2 is too much so we do two shading transforms: 3 and 5.
-        ApplyTransform( _output, shadingRoi.x + 2, shadingRoi.y + 2, shadingRoi.width - 4, shadingRoi.height - 4, 3 );
-        ApplyTransform( _output, shadingRoi.x + 2, shadingRoi.y + 2, shadingRoi.width - 4, shadingRoi.height - 4, 5 );
+        ApplyTransform( output, roi.x + 2, roi.y + 2, roi.width - 4, roi.height - 4, 3 );
+        ApplyTransform( output, roi.x + 2, roi.y + 2, roi.width - 4, roi.height - 4, 5 );
 
         // Make text background borders: it consists of rectangles with different transform shading.
-        auto applyRectTransform = [&shadingRoi]( Image & output, const int32_t offset, const int32_t size, const uint8_t transformId ) {
+        auto applyRectTransform = [&roi, &output]( const int32_t offset, const int32_t size, const uint8_t transformId ) {
             // Top horizontal line.
-            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + offset, shadingRoi.width - 2 * offset, size, transformId );
+            ApplyTransform( output, roi.x + offset, roi.y + offset, roi.width - 2 * offset, size, transformId );
             // Left vertical line without pixels that are parts of horizontal lines.
-            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + offset + size, size, shadingRoi.height - 2 * ( offset + size ), transformId );
+            ApplyTransform( output, roi.x + offset, roi.y + offset + size, size, roi.height - 2 * ( offset + size ), transformId );
             // Bottom horizontal line.
-            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + shadingRoi.height - 1 - offset - size + 1, shadingRoi.width - 2 * offset, size, transformId );
+            ApplyTransform( output, roi.x + offset, roi.y + roi.height - offset - size, roi.width - 2 * offset, size, transformId );
             // Right vertical line without pixels that are parts of horizontal lines.
-            ApplyTransform( output, shadingRoi.x + shadingRoi.width - 1 - offset - size + 1, shadingRoi.y + offset + size, size,
-                            shadingRoi.height - 2 * ( offset + size ), transformId );
+            ApplyTransform( output, roi.x + roi.width - offset - size, roi.y + offset + size, size, roi.height - 2 * ( offset + size ), transformId );
         };
 
         // Outer rectangle is slightly bright.
-        applyRectTransform( _output, 0, 1, 9 );
+        applyRectTransform( 0, 1, 9 );
         // Next shaded rectangles have these shadow strengths: 4, 3, 2, 2, 2, 3, 4, 5.
-        applyRectTransform( _output, 1, 1, 4 );
-        applyRectTransform( _output, 2, 1, 3 );
-        applyRectTransform( _output, 3, 3, 2 );
-        applyRectTransform( _output, 6, 1, 3 );
-        applyRectTransform( _output, 7, 1, 4 );
-        applyRectTransform( _output, 8, 1, 5 );
+        applyRectTransform( 1, 1, 4 );
+        applyRectTransform( 2, 1, 3 );
+        applyRectTransform( 3, 3, 2 );
+        applyRectTransform( 6, 1, 3 );
+        applyRectTransform( 7, 1, 4 );
+        applyRectTransform( 8, 1, 5 );
     }
 
     void StandardWindow::renderScrollbarBackground( const Rect & roi, const bool isEvilInterface )

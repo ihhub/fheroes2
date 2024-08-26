@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <map>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -72,18 +74,27 @@ namespace Game
     void AnimateDelaysInitialize();
 }
 
-// Returns the difficulty level based on the type of game.
+bool Game::isCampaign()
+{
+    return Settings::Get().isCampaignGameType();
+}
+
 int Game::getDifficulty()
 {
     const Settings & configuration = Settings::Get();
-    if ( configuration.isCampaignGameType() ) {
-        int difficulty = configuration.getCurrentMapInfo().difficulty;
-        const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
-        difficulty += difficultyAdjustment;
-        return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
+
+    // Difficulty of non-campaign games depends only on the difficulty settings set by the player
+    if ( !configuration.isCampaignGameType() ) {
+        return configuration.GameDifficulty();
     }
 
-    return configuration.GameDifficulty();
+    // Difficulty of campaign games depends on both the difficulty of a particular campaign map and the difficulty settings set by the player
+    int difficulty = Campaign::getCurrentScenarioDifficultyLevel().value_or( configuration.getCurrentMapInfo().difficulty );
+    const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
+
+    difficulty += difficultyAdjustment;
+
+    return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
@@ -200,7 +211,6 @@ void Game::updateAdventureMapAnimationIndex()
     ++maps_animation_frame;
 }
 
-// play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
     int availableChannels = Mixer::getChannelCount();
@@ -276,17 +286,17 @@ void Game::EnvironmentSoundMixer()
 
         actualPosition -= tilePixelOffset;
 
-        const double distance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
-        if ( distance >= maxDistance ) {
+        const double dblDistance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
+        if ( dblDistance >= maxDistance ) {
             continue;
         }
 
-        const uint8_t volumePercentage = static_cast<uint8_t>( ( maxDistance - distance ) * 100 / maxDistance );
+        const uint8_t distance = [maxDistance, dblDistance]() {
+            const long dist = std::lround( dblDistance * 255 / maxDistance );
+            assert( dist >= 0 && dist <= 255 );
 
-        assert( volumePercentage <= 100 );
-        if ( volumePercentage == 0 ) {
-            continue;
-        }
+            return static_cast<uint8_t>( dist );
+        }();
 
         int16_t angle = 0;
 
@@ -306,20 +316,24 @@ void Game::EnvironmentSoundMixer()
         }
 
         std::vector<AudioManager::AudioLoopEffectInfo> & effects = soundEffects[soundType];
-        bool doesEffectExist = false;
-        for ( AudioManager::AudioLoopEffectInfo & info : effects ) {
-            if ( info.angle == angle ) {
-                info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
-                doesEffectExist = true;
-                break;
-            }
-        }
 
-        if ( doesEffectExist ) {
+        // If there is already a source of the same sound in this direction, then choose the one that is closer.
+        if ( std::find_if( effects.begin(), effects.end(),
+                           [distance, angle]( AudioManager::AudioLoopEffectInfo & info ) {
+                               if ( info.angle != angle ) {
+                                   return false;
+                               }
+
+                               info.distance = std::min( distance, info.distance );
+
+                               return true;
+                           } )
+             != effects.end() ) {
             continue;
         }
 
-        effects.emplace_back( angle, volumePercentage );
+        // Otherwise, use the current one for now.
+        effects.emplace_back( angle, distance );
 
         --availableChannels;
         if ( availableChannels == 0 ) {

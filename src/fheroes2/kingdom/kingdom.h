@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,7 +35,6 @@
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "players.h"
 #include "puzzle.h"
@@ -44,6 +43,11 @@
 class StreamBase;
 
 struct EventDate;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Maps
 {
@@ -74,7 +78,7 @@ public:
     Kingdom();
     ~Kingdom() override = default;
 
-    void Init( int color );
+    void Init( const int clr );
     void clear();
 
     void openOverviewDialog();
@@ -84,22 +88,19 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
-    // Return true if this kingdom can recruit heroes, false otherwise. For
-    // example this function will return false when kingdom has one town that
-    // cannot be upgraded to a castle.
+    // Returns true if this kingdom can recruit heroes, false otherwise. For example, this function returns false if there is only one town in the kingdom that cannot be
+    // upgraded to a castle.
     bool canRecruitHeroes() const
     {
-        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+        return std::any_of( castles.begin(), castles.end(),
+                            []( const Castle * castle ) { return ( castle->isCastle() || !castle->isBuildingDisabled( BUILD_CASTLE ) ); } );
     }
 
-    // Return true if this kingdom has any heroes, false otherwise.
+    // Returns true if this kingdom has any heroes, false otherwise.
     bool hasHeroes() const
     {
         return !heroes.empty();
     }
-
-    void SetLastBattleWinHero( const Heroes & hero );
-    Heroes * GetLastBattleWinHero() const;
 
     void appendSurrenderedHero( Heroes & hero );
 
@@ -115,6 +116,7 @@ public:
     {
         return resource;
     }
+
     Funds GetIncome( int type = INCOME_ALL ) const;
 
     double GetArmiesStrength() const;
@@ -166,7 +168,7 @@ public:
     void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
-    void AddCastle( const Castle * );
+    void AddCastle( Castle * castle );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
@@ -202,13 +204,12 @@ public:
     static uint32_t GetMaxHeroes();
 
 private:
-    cost_t _getKingdomStartingResources( const int difficulty ) const;
+    Cost _getKingdomStartingResources( const int difficulty ) const;
 
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
-    int _lastBattleWinHeroID;
     Funds resource;
 
     uint32_t lost_town_days;
@@ -249,7 +250,7 @@ public:
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );
-    void AddCastles( const AllCastles & );
+    void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,7 +99,7 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -117,7 +117,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow()
@@ -165,7 +165,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
                 okayButton.drawOnPress();
             }
             else {
@@ -188,19 +188,19 @@ namespace
                 return SelectedWindow::SystemInfo;
             }
 
-            if ( le.MousePressRight( windowResolutionRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowResolutionRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Resolution" ), _( "Change the resolution of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowModeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "window|Mode" ), _( "Toggle between fullscreen and windowed modes." ), 0 );
             }
-            else if ( le.MousePressRight( windowVSyncRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
-            if ( le.MousePressRight( windowSystemInfoRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -221,9 +221,11 @@ namespace
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
+    bool openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
+
+        bool saveConfiguration = false;
 
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
@@ -233,29 +235,31 @@ namespace fheroes2
                 break;
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
-                    conf.Save( Settings::configFileName );
+                    saveConfiguration = true;
                 }
                 updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:
                 conf.setFullScreen( !conf.FullScreen() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::VSync:
                 conf.setVSync( !conf.isVSyncEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::SystemInfo:
                 conf.setSystemInfo( !conf.isSystemInfoEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
-                return;
+                return saveConfiguration;
             }
         }
+
+        return saveConfiguration;
     }
 }

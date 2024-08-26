@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -20,10 +20,10 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-# Script to determine if source code in Pull Request has proper copyright headers.
-# Exits with non-zero exit code if formatting is needed.
+# Script to determine whether the source code in the Pull Request has correct copyright headers.
+# Exits with a non-zero exit code if copyright headers need to be updated.
 #
-# This script assumes to be invoked at the project root directory.
+# It is assumed that this script is called from the project root directory.
 
 set -e -o pipefail
 
@@ -33,14 +33,13 @@ HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
-                                                   | (grep -v "^script/tools/check_code_format.sh$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true) \
                                                    | (grep -v "^android/gradlew.bat$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 
 if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ] && [ -z "$WINBAT_FILES_TO_CHECK" ]; then
-  echo "No source code to check if the copyright headers are correct."
+  echo "There is no source code to check the correctness of the copyright headers."
   exit 0
 fi
 
@@ -62,10 +61,10 @@ if [ -n "$WINBAT_FILES_TO_CHECK" ]; then
 fi
 
 if [ -z "$C_LIKE_FORMAT_DIFF" ] && [ -z "$SCRIPT_FORMAT_DIFF" ] && [ -z "$WINBAT_FORMAT_DIFF" ]; then
-  echo "All source code in PR has proper copyright headers."
+  echo "All the source code in the PR has the correct copyright headers."
   exit 0
 else
-  echo "Found invalid copyright headers!"
+  echo "Invalid copyright headers found!"
   [ -n "$C_LIKE_FORMAT_DIFF" ] && echo "$C_LIKE_FORMAT_DIFF"
   [ -n "$SCRIPT_FORMAT_DIFF" ] && echo "$SCRIPT_FORMAT_DIFF"
   [ -n "$WINBAT_FORMAT_DIFF" ] && echo "$WINBAT_FORMAT_DIFF"

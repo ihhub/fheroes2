@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,16 +24,13 @@
 #include <cassert>
 #include <cmath>
 
+namespace
+{
+    const int32_t minimumSliderLength = 15;
+}
+
 namespace fheroes2
 {
-    Scrollbar::Scrollbar()
-        : _minIndex( 0 )
-        , _maxIndex( 0 )
-        , _currentIndex( 0 )
-    {
-        // Do nothing.
-    }
-
     void Scrollbar::setImage( const Image & image )
     {
         Copy( image, *this );
@@ -56,7 +53,7 @@ namespace fheroes2
             setPosition( _area.x + ( _area.width - width() ) / 2, _area.y + ( _area.height - height() ) / 2 );
         }
         else {
-            if ( _isVertical() ) {
+            if ( isVertical() ) {
                 setPosition( _area.x + ( _area.width - width() ) / 2, _area.y );
             }
             else {
@@ -103,7 +100,7 @@ namespace fheroes2
 
         Point newPosition;
 
-        if ( _isVertical() ) {
+        if ( isVertical() ) {
             newPosition.x = _area.x + roiWidth / 2;
             newPosition.y = _area.y + ( _currentIndex - _minIndex ) * roiHeight / ( _maxIndex - _minIndex );
         }
@@ -129,7 +126,7 @@ namespace fheroes2
         const int roiWidth = _area.width - width();
         const int roiHeight = _area.height - height();
 
-        if ( _isVertical() ) {
+        if ( isVertical() ) {
             const int32_t scrollbarImageMiddle = height() / 2;
             const int32_t minYPos = _area.y + scrollbarImageMiddle;
             const int32_t maxYPos = _area.y + roiHeight + scrollbarImageMiddle;
@@ -203,8 +200,8 @@ namespace fheroes2
 
         const int32_t currentSliderLength = horizontalSlider ? originalSlider.width() : originalSlider.height();
 
-        if ( sliderAreaLength * elementCountPerView < currentSliderLength * totalElementCount ) {
-            // Slider is too big.
+        if ( sliderAreaLength * elementCountPerView == currentSliderLength * totalElementCount ) {
+            // There is no need change the slider image.
             return originalSlider;
         }
 
@@ -213,17 +210,42 @@ namespace fheroes2
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
+
         if ( horizontalSlider ) {
-            width += middleLength;
+            width = std::max( minimumSliderLength, std::max( width + middleLength, startSliderArea.width * 2 ) );
         }
         else {
-            height += middleLength;
+            height = std::max( minimumSliderLength, std::max( height + middleLength, startSliderArea.height * 2 ) );
         }
 
         Image output( width, height );
+
+        if ( originalSlider.singleLayer() ) {
+            output._disableTransformLayer();
+        }
+
         output.reset();
 
+        // Copy the start slider part.
         Copy( originalSlider, startSliderArea.x, startSliderArea.y, output, startSliderArea.x, startSliderArea.y, startSliderArea.width, startSliderArea.height );
+
+        if ( middleLength < 0 ) {
+            // The slider is shortened. Copy the rest slider part from the end.
+            if ( horizontalSlider ) {
+                const int32_t copyWidth = width - startSliderArea.width;
+                Copy( originalSlider, startSliderArea.x + originalSlider.width() - copyWidth, startSliderArea.y, output, startSliderArea.width, startSliderArea.y,
+                      copyWidth, startSliderArea.height );
+            }
+            else {
+                const int32_t copyHeight = height - startSliderArea.height;
+                Copy( originalSlider, startSliderArea.x, startSliderArea.y + originalSlider.height() - copyHeight, output, startSliderArea.x, startSliderArea.height,
+                      startSliderArea.width, copyHeight );
+            }
+
+            return output;
+        }
+
+        // The slider should be extended.
 
         int32_t offset = 0;
         if ( horizontalSlider ) {
@@ -233,6 +255,7 @@ namespace fheroes2
             offset = startSliderArea.y + startSliderArea.height;
         }
 
+        // Draw the middle slider part.
         const int32_t middleChunkCount = middleLength / step;
         for ( int32_t i = 0; i < middleChunkCount; ++i ) {
             if ( horizontalSlider ) {
@@ -247,7 +270,7 @@ namespace fheroes2
             }
         }
 
-        // Draw leftovers.
+        // Draw leftovers of the middle part.
         const int32_t leftover = middleLength - middleChunkCount * step;
         if ( leftover > 0 ) {
             if ( horizontalSlider ) {
@@ -262,6 +285,7 @@ namespace fheroes2
             }
         }
 
+        // Copy the end part.
         if ( horizontalSlider ) {
             Copy( originalSlider, startSliderArea.x + startSliderArea.width, startSliderArea.y, output, offset, startSliderArea.y,
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );

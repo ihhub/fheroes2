@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,17 +20,23 @@
 #pragma once
 
 #include <cstdint>
+#include <set>
 #include <utility>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
 class Monster;
 class Spell;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+    enum ObjectIcnType : uint8_t;
+}
 
 namespace Maps
 {
@@ -76,22 +82,6 @@ namespace Maps
         FIGHT_15_GHOSTS_AND_GET_2000_GOLD = 2,
         FIGHT_25_GHOSTS_AND_GET_5000_GOLD = 3,
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
-    };
-
-    enum ObjectErasureType : uint32_t
-    {
-        NONE = 0x00,
-        // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
-        TERRAIN_OBJECTS = 0x01,
-        CASTLES = 0x02,
-        MONSTERS = 0x04,
-        HEROES = 0x08,
-        ARTIFACTS = 0x10,
-        STREAMS = 0x20,
-        ROADS = 0x40,
-        TREASURES = 0x80,
-
-        ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
     };
 
     // Only for MP2::OBJ_MINE.
@@ -144,8 +134,6 @@ namespace Maps
 
     void resetObjectMetadata( Tiles & tile );
 
-    void resetObjectInfoOnTile( Tiles & tile );
-
     uint32_t getMonsterCountFromTile( const Tiles & tile );
     void setMonsterCountOnTile( Tiles & tile, uint32_t count );
 
@@ -169,7 +157,9 @@ namespace Maps
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
-    void removeObjectSprite( Tiles & tile );
+    void removeMainObjectFromTile( const Tiles & tile );
+
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType );
 
     bool isClearGround( const Tiles & tile );
 
@@ -182,11 +172,11 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    // Removes object and all its parts in around tiles by UID. Returns true is object is found and removed.
-    bool removeObject( Tiles & tile, const uint32_t uid );
-    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
-    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
-    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
+    // Update the existing streams to connect them to the river delta.
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection );
 
-    void setObjectOnTile( Tiles & tile, const ObjectInfo & info );
+    bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
+
+    // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
+    std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }
