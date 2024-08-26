@@ -458,7 +458,7 @@ private:
     void reallocBuf( size_t size );
 
     // After using this method to write data, update the cursor by calling the advance() method.
-    uint8_t * dataForWriting()
+    uint8_t * rwData()
     {
         return itput;
     }

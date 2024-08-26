@@ -599,7 +599,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
 
     RWStreamBuf buffer( chunkSize );
 
-    if ( std::fread( buffer.dataForWriting(), chunkSize, 1, _file.get() ) != 1 ) {
+    if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
 
         return RWStreamBuf{};
