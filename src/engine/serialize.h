@@ -29,6 +29,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <iterator>
 #include <list>
 #include <map>
