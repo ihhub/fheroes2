@@ -492,8 +492,6 @@ public:
 
 private:
     void put8( const uint8_t v ) override;
-
-    void reallocBuf( size_t size );
 };
 
 class StreamFile final : public StreamBase
