@@ -133,7 +133,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
         return false;
     }
 
-    StreamBuf dataStream;
+    RWStreamBuf dataStream;
     dataStream.setbigendian( true );
 
     dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
@@ -225,7 +225,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    StreamBuf dataStream;
+    RWStreamBuf dataStream;
     dataStream.setbigendian( true );
 
     if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {

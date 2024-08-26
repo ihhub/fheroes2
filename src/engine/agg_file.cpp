@@ -37,10 +37,10 @@ namespace fheroes2
         if ( count * ( fileRecordSize + _maxFilenameSize ) >= size )
             return false;
 
-        StreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
+        RWStreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
         const size_t nameEntriesSize = _maxFilenameSize * count;
         _stream.seek( size - nameEntriesSize );
-        StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
+        RWStreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
             std::string name = nameEntries.toString( _maxFilenameSize );

@@ -102,7 +102,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     // - string
     //    Null terminated string containing the event text.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     dataStream.skip( 1 );
 
@@ -222,7 +222,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     // - string
     //    Question itself.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
     const uint8_t magicNumber = dataStream.get();
     if ( magicNumber != 0 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx data magic number " << static_cast<int>( magicNumber ) << " is incorrect." )
@@ -295,7 +295,7 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
     // - string
     //    Null terminated string.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
     dataStream.skip( 9 );
     message = dataStream.toString();
 

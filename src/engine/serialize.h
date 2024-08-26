@@ -70,11 +70,6 @@ public:
 
     void setbigendian( bool f );
 
-    bool isconstbuf() const
-    {
-        return ( _flags & CONST_BUF ) != 0;
-    }
-
     bool fail() const
     {
         return ( _flags & FAILURE ) != 0;
@@ -250,40 +245,42 @@ protected:
     virtual size_t tellg() = 0;
     virtual size_t tellp() = 0;
 
-    void setconstbuf( bool f );
     void setfail( bool f );
 
 private:
     enum : uint32_t
     {
         FAILURE = 0x00000001,
-        CONST_BUF = 0x00000002,
-        BIGENDIAN = 0x00000004
+        BIGENDIAN = 0x00000002
     };
 
     uint32_t _flags{ 0 };
 };
 
-class StreamBuf final : public StreamBase
+class StreamBuf : public StreamBase
 {
 public:
-    explicit StreamBuf( const size_t sz = 0 );
-    explicit StreamBuf( const std::vector<uint8_t> & buf );
+    virtual const uint8_t * data() const = 0;
+    virtual size_t size() = 0;
 
-    StreamBuf( const StreamBuf & ) = delete;
-    StreamBuf( StreamBuf && stream ) noexcept;
+protected:
+    StreamBuf() = default;
+};
 
-    ~StreamBuf() override;
+template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
+class StreamBufTmpl : public StreamBuf
+{
+public:
+    StreamBufTmpl( const StreamBufTmpl & ) = delete;
 
-    StreamBuf & operator=( const StreamBuf & ) = delete;
-    StreamBuf & operator=( StreamBuf && stream ) noexcept;
+    StreamBufTmpl & operator=( const StreamBufTmpl & ) = delete;
 
-    const uint8_t * data() const
+    const uint8_t * data() const override
     {
         return itget;
     }
 
-    size_t size()
+    size_t size() override
     {
         return sizeg();
     }
@@ -295,40 +292,167 @@ public:
 
     void seek( size_t sz )
     {
-        itget = itbeg + sz < itend ? itbeg + sz : itend;
+        itget = ( itbeg + sz < itend ? itbeg + sz : itend );
     }
 
-    void skip( size_t sz ) override;
+    void skip( size_t sz ) override
+    {
+        itget += ( sz <= sizeg() ? sz : sizeg() );
+    }
 
-    uint16_t getBE16() override;
-    uint16_t getLE16() override;
-    uint32_t getBE32() override;
-    uint32_t getLE32() override;
+    uint16_t getBE16() override
+    {
+        uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
+
+        result |= get8();
+
+        return result;
+    }
+
+    uint16_t getLE16() override
+    {
+        uint16_t result = get8();
+
+        result |= ( static_cast<uint16_t>( get8() ) << 8 );
+
+        return result;
+    }
+
+    uint32_t getBE32() override
+    {
+        uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
+
+        result |= ( static_cast<uint32_t>( get8() ) << 16 );
+        result |= ( static_cast<uint32_t>( get8() ) << 8 );
+        result |= get8();
+
+        return result;
+    }
+
+    uint32_t getLE32() override
+    {
+        uint32_t result = get8();
+
+        result |= ( static_cast<uint32_t>( get8() ) << 8 );
+        result |= ( static_cast<uint32_t>( get8() ) << 16 );
+        result |= ( static_cast<uint32_t>( get8() ) << 24 );
+
+        return result;
+    }
+
+    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override
+    {
+        const size_t actualSize = sizeg();
+        const size_t resultSize = sz > 0 ? sz : actualSize;
+        const size_t sizeToCopy = std::min( resultSize, actualSize );
+
+        std::vector<uint8_t> result( resultSize, 0 );
+        memcpy( result.data(), itget, sizeToCopy );
+
+        itget += sizeToCopy;
+
+        return result;
+    }
+
+    std::string toString( const size_t sz = 0 )
+    {
+        const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
+
+        T * strBeg = itget;
+        itget += length;
+
+        return { strBeg, std::find( strBeg, itget, 0 ) };
+    }
+
+protected:
+    StreamBufTmpl() = default;
+
+    StreamBufTmpl( StreamBufTmpl && stream ) noexcept
+        : StreamBuf( std::move( stream ) )
+    {
+        std::swap( itbeg, stream.itbeg );
+        std::swap( itget, stream.itget );
+        std::swap( itput, stream.itput );
+        std::swap( itend, stream.itend );
+    }
+
+    StreamBufTmpl & operator=( StreamBufTmpl && stream ) noexcept
+    {
+        if ( this == &stream ) {
+            return *this;
+        }
+
+        StreamBase::operator=( std::move( stream ) );
+
+        std::swap( itbeg, stream.itbeg );
+        std::swap( itget, stream.itget );
+        std::swap( itput, stream.itput );
+        std::swap( itend, stream.itend );
+
+        return *this;
+    }
+
+    size_t tellg() override
+    {
+        return itget - itbeg;
+    }
+
+    size_t tellp() override
+    {
+        return itput - itbeg;
+    }
+
+    size_t sizeg() override
+    {
+        return itput - itget;
+    }
+
+    size_t sizep() override
+    {
+        return itend - itput;
+    }
+
+    uint8_t get8() override
+    {
+        if ( sizeg() > 0 ) {
+            return *( itget++ );
+        }
+
+        return 0;
+    }
+
+    T * itbeg{ nullptr };
+    T * itget{ nullptr };
+    T * itput{ nullptr };
+    T * itend{ nullptr };
+};
+
+class RWStreamBuf final : public StreamBufTmpl<uint8_t>
+{
+public:
+    explicit RWStreamBuf( const size_t sz = 0 );
+
+    RWStreamBuf( const RWStreamBuf & ) = delete;
+    RWStreamBuf( RWStreamBuf && stream ) = default;
+
+    ~RWStreamBuf() override;
+
+    RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
+    RWStreamBuf & operator=( RWStreamBuf && stream ) = default;
 
     void putBE32( uint32_t v ) override;
     void putLE32( uint32_t v ) override;
     void putBE16( uint16_t v ) override;
     void putLE16( uint16_t v ) override;
 
-    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
     void putRaw( const void * ptr, size_t sz ) override;
-
-    std::string toString( const size_t size = 0 );
 
 private:
     friend class StreamFile;
 
-    void reset();
-
-    size_t tellg() override;
-    size_t tellp() override;
-    size_t sizeg() override;
-    size_t sizep() override;
-
-    void reallocbuf( size_t size );
-
-    uint8_t get8() override;
     void put8( const uint8_t v ) override;
+
+    void reallocBuf( size_t size );
 
     // After using this method to write data, update the cursor by calling the advance() method.
     uint8_t * dataForWriting()
@@ -341,11 +465,30 @@ private:
     {
         itput += size;
     }
+};
 
-    uint8_t * itbeg{ nullptr };
-    uint8_t * itget{ nullptr };
-    uint8_t * itput{ nullptr };
-    uint8_t * itend{ nullptr };
+class ROStreamBuf final : public StreamBufTmpl<const uint8_t>
+{
+public:
+    explicit ROStreamBuf( const std::vector<uint8_t> & buf );
+
+    ROStreamBuf( const ROStreamBuf & ) = delete;
+    ROStreamBuf( ROStreamBuf && stream ) = default;
+
+    ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
+    ROStreamBuf & operator=( ROStreamBuf && stream ) = default;
+
+    void putBE32( uint32_t v ) override;
+    void putLE32( uint32_t v ) override;
+    void putBE16( uint16_t v ) override;
+    void putLE16( uint16_t v ) override;
+
+    void putRaw( const void * ptr, size_t sz ) override;
+
+private:
+    void put8( const uint8_t v ) override;
+
+    void reallocBuf( size_t size );
 };
 
 class StreamFile final : public StreamBase
@@ -366,7 +509,7 @@ public:
     void close();
 
     // 0 stands for full data.
-    StreamBuf toStreamBuf( const size_t size = 0 );
+    RWStreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
     void skip( size_t ) override;

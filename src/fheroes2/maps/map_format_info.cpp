@@ -209,7 +209,7 @@ namespace
             return false;
         }
 
-        StreamBuf compressed;
+        RWStreamBuf compressed;
         compressed.setbigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
@@ -230,7 +230,7 @@ namespace
             return false;
         }
 
-        StreamBuf decompressed;
+        RWStreamBuf decompressed;
         decompressed.setbigendian( true );
 
         {

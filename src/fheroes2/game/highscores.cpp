@@ -134,7 +134,7 @@ namespace fheroes2
             return false;
         }
 
-        StreamBuf hdata;
+        RWStreamBuf hdata;
         hdata.setbigendian( true );
 
         if ( !Compression::readFromFileStream( fileStream, hdata ) ) {
@@ -207,7 +207,7 @@ namespace fheroes2
             return false;
         }
 
-        StreamBuf hdata;
+        RWStreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 

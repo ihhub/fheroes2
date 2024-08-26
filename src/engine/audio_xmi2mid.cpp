@@ -265,7 +265,7 @@ namespace
         explicit XMIData( const std::vector<uint8_t> & buf )
         {
             // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
-            StreamBuf sb( buf );
+            ROStreamBuf sb( buf );
 
             GroupChunkHeader group;
             sb >> group;
@@ -684,7 +684,7 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
         return {};
     }
 
-    StreamBuf sb( 16 * 4096 );
+    RWStreamBuf sb( 16 * 4096 );
 
     const MidData mid( xmi.tracks );
     sb << mid;

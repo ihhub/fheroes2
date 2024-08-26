@@ -1551,7 +1551,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     // - string
     //    Null terminated string containing the event text.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     dataStream.skip( 1 );
 

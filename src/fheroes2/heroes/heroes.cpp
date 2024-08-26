@@ -456,7 +456,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // Reset the army to default
     army.Reset( true );
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     // Skip first unused byte.
     dataStream.skip( 1 );

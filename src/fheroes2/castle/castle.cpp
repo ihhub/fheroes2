@@ -233,7 +233,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     // - unused 29 bytes
     //    Always zeros.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {

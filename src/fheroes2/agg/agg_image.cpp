@@ -272,7 +272,7 @@ namespace
             return {};
         }
 
-        StreamBuf imageStream( data );
+        ROStreamBuf imageStream( data );
 
         const uint8_t blackColor = imageStream.get();
         const uint8_t whiteColor = 11;
@@ -591,7 +591,7 @@ namespace
             return;
         }
 
-        StreamBuf imageStream( body );
+        ROStreamBuf imageStream( body );
 
         const uint32_t count = imageStream.getLE16();
         const uint32_t blockSize = imageStream.getLE32();
@@ -5025,7 +5025,7 @@ namespace
                 return 0;
             }
 
-            StreamBuf buffer( data );
+            ROStreamBuf buffer( data );
 
             const size_t count = buffer.getLE16();
             const int32_t width = buffer.getLE16();
