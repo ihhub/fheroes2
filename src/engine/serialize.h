@@ -436,7 +436,11 @@ protected:
 class RWStreamBuf final : public StreamBufTmpl<uint8_t>
 {
 public:
-    explicit RWStreamBuf( const size_t sz = 0 );
+    RWStreamBuf()
+        : RWStreamBuf( 0 )
+    {}
+
+    explicit RWStreamBuf( const size_t sz );
 
     RWStreamBuf( const RWStreamBuf & ) = delete;
     RWStreamBuf( RWStreamBuf && stream ) = default;

@@ -592,7 +592,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
 {
     const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
-        return RWStreamBuf{};
+        return {};
     }
 
     RWStreamBuf buffer( chunkSize );
@@ -600,7 +600,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
     if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
 
-        return RWStreamBuf{};
+        return {};
     }
 
     buffer.advance( chunkSize );
