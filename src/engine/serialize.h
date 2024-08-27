@@ -29,7 +29,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
-#include <cstring>
 #include <iterator>
 #include <list>
 #include <map>
@@ -352,7 +351,8 @@ public:
         const size_t sizeToCopy = std::min( resultSize, actualSize );
 
         std::vector<uint8_t> result( resultSize, 0 );
-        memcpy( result.data(), _itget, sizeToCopy );
+
+        std::copy( _itget, _itget + sizeToCopy, result.data() );
 
         _itget += sizeToCopy;
 
