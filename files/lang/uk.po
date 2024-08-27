@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-18 01:49+0000\n"
-"PO-Revision-Date: 2024-08-13 09:01+0300\n"
+"PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -75,7 +75,8 @@ msgstr ""
 "ТАЖИТИ\n"
 "МАПУ"
 
-# Скасувати - правильний варіант перекладу, адже відміняють лише дієслова як частину мови.
+# Скасувати - правильний варіант перекладу слова CANCEL
+# Відміна - відміняють лише дієслова як частину мови.
 msgid "CANCEL"
 msgstr "СКАСУВАТИ"
 
@@ -448,7 +449,7 @@ msgid "View %{name}"
 msgstr "Переглянути %{name}"
 
 msgid "Move the %{name} "
-msgstr "Перемістити загін %{name}"
+msgstr "Перемістити загін %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Перемістити %{name}, правий клік щоб поділити"
@@ -490,14 +491,14 @@ msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
-"На поле бою діє артефакт \"Сфера Заперечення. Використання бойової магії "
+"На полі бою діє артефакт Сфера Заперечення. Використання бойової магії "
 "заборонене."
 
 msgid "You have already cast a spell this round."
-msgstr "Ви вже використали чари протягом цього раунду."
+msgstr "Ви вже використали чари у цьому раунді."
 
 msgid "That spell will have no effect!"
-msgstr "Ці чари не матимуть ефекту!"
+msgstr "Це закляття не матиме ефекту!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Ви можете викликати елементалів лиш одного типу протягом битви."
@@ -521,22 +522,22 @@ msgid "Speed"
 msgstr "Швидкість"
 
 msgid "Off"
-msgstr "Вимк."
+msgstr "Вимк"
 
 msgid "On"
-msgstr "Увімк."
+msgstr "Увімк"
 
 msgid "Turn Order"
-msgstr "Порядок Ходів"
+msgstr "Порядок ходів"
 
 msgid "Auto Spell Casting"
-msgstr "Автоматичне Чаклування"
+msgstr "Автоматичне чаклування"
 
 msgid "Grid"
 msgstr "Сітка"
 
 msgid "Shadow Movement"
-msgstr "Затінення Сітки"
+msgstr "Затінення сітки"
 
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
@@ -703,7 +704,7 @@ msgid "Spell Points"
 msgstr "Мана"
 
 msgid "Hero's Options"
-msgstr "Дії Героя"
+msgstr "Налаштування героя"
 
 msgid "Cast Spell"
 msgstr "Накласти чари"
@@ -718,10 +719,10 @@ msgid "Cancel"
 msgstr "Скасувати"
 
 msgid "Hero Screen"
-msgstr "Вікно Героя"
+msgstr "Вікно героя"
 
 msgid "Captain's Options"
-msgstr "Дії Капітана"
+msgstr "Налаштування капітана"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -874,7 +875,7 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
 
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Ви впевнені, що хочете ввімкнути автобитву?"
+msgstr "Ви впевнені, що хочете увімкнути автобитву?"
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
@@ -1062,7 +1063,7 @@ msgid "Reset"
 msgstr "Скинути"
 
 # By default - перекладають як "За замовчуванням", але це калька з .... мови.
-# Олександр Авраменко надає коректний переклад: "як усталено"
+# Мовознавець Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Reset to default settings."
 msgstr "Скинути до усталених налаштувань."
 
@@ -1727,7 +1728,7 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Гномогубець!!!! Рятуйтесь хто може!\""
 
 msgid "campaignBonus|Animate Dead"
-msgstr "Оживлення Мерців"
+msgstr "Оживити Мерців"
 
 msgid "campaignBonus|Chain Lightning"
 msgstr "Ланцюгова Блискавка"
@@ -2038,13 +2039,13 @@ msgid "Cannot afford the %{name}."
 msgstr "Не можна дозволити %{name}."
 
 msgid "The %{name} is already built."
-msgstr "У місті вже є %{name}."
+msgstr "%{name} вже збудовано."
 
 msgid "Cannot build the %{name}."
 msgstr "%{name} - будівництво неможливе."
 
 msgid "Build %{name}."
-msgstr "Звести споруду: %{name}"
+msgstr "Будувати: %{name}."
 
 msgid "Blackridge"
 msgstr "Блекрідж"
@@ -2065,7 +2066,7 @@ msgid "Blackwind"
 msgstr "Блеквінд"
 
 msgid "Bloodreign"
-msgstr "Блодрейн"
+msgstr "Бладрейн"
 
 msgid "Dragontooth"
 msgstr "Драгонтуф"
@@ -2317,7 +2318,7 @@ msgid "Coliseum"
 msgstr "Колізей"
 
 msgid "Garbage Heap"
-msgstr "Смітник"
+msgstr "Сміттєва купа"
 
 msgid "Hut"
 msgstr "Хата"
@@ -2727,10 +2728,10 @@ msgid "Town"
 msgstr "Місто"
 
 msgid "Exit Castle"
-msgstr "Вийти з Замку"
+msgstr "Вийти з замку"
 
 msgid "Exit Town"
-msgstr "Вийти з Міста"
+msgstr "Вийти з міста"
 
 msgid "Show Income"
 msgstr "Показати надходження"
@@ -2748,7 +2749,7 @@ msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрі чайові для бармена породжують такі чутки:"
 
 msgid "Recruit Hero"
-msgstr "Найняти Героя"
+msgstr "Найняти героя"
 
 msgid "%{name} is a level %{value} %{race} "
 msgstr "%{name} - %{race} рівня %{value} "
@@ -2813,7 +2814,7 @@ msgid "No creatures available for purchase."
 msgstr "Нема істот доступних для найму."
 
 msgid "Recruit Creatures"
-msgstr "Найняти Створінь"
+msgstr "Найняти створінь"
 
 msgid "Hire all creatures in the town."
 msgstr "Найняти усіх істот в місті."
@@ -2966,7 +2967,7 @@ msgid "(Rate: %{percent})"
 msgstr "(Ставка: %{percent})"
 
 msgid "off"
-msgstr "вимк."
+msgstr "вимк"
 
 msgid "Music"
 msgstr "Музика"
@@ -2990,10 +2991,10 @@ msgid "3D Audio"
 msgstr "3Д звук"
 
 msgid "Toggle ambient music level."
-msgstr "Регулятор гучності фонової музики."
+msgstr "Гучність музики."
 
 msgid "Toggle foreground sounds level."
-msgstr "Регулятор гучності звуків."
+msgstr "Гучність звуків."
 
 msgid "Change the type of music."
 msgstr "Змінити тип музики."
@@ -6427,10 +6428,10 @@ msgid "%{count} / day"
 msgstr "%{count} / день"
 
 msgid "one"
-msgstr " один "
+msgstr "один "
 
 msgid "two"
-msgstr " два "
+msgstr "два "
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr "Вир поглинає ваш корабель. Частина вашої армії випала за борт."
@@ -6948,7 +6949,7 @@ msgstr ""
 "і ігнорує вас."
 
 msgid "You've found the artifact: "
-msgstr "Ви знайшли артефакт:"
+msgstr "Ви знайшли артефакт: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
@@ -7471,7 +7472,7 @@ msgstr ""
 "протягом століть, всього за %{count} %{res}\"."
 
 msgid "(Just bury it around my roots.)"
-msgstr "(Просто закопайте його навколо мого коріння)."
+msgstr "(Просто закопайте його навколо мого коріння.)"
 
 msgid "Tears brim in the eyes of the tree."
 msgstr "О очах дерева з'являються сльози."
@@ -7480,7 +7481,7 @@ msgid "\"I need %{count} %{res}.\""
 msgstr "\"Мені потрібно %{count} %{res}.\""
 
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
-msgstr "Воно шепче шморгаючи \"Приходь, коли зможеш мені заплатити\"."
+msgstr "Воно шепче шморгаючи \"Приходь, коли зможеш мені заплатити.\""
 
 msgid ""
 "Nestled among the trees sits a blind seer. After you explain the intent of "
@@ -7532,7 +7533,7 @@ msgid ""
 "battle, you slay the monster and find the %{art} in the back of the cave."
 msgstr ""
 "Демон вигукує свій клич і нападає! Після короткої, відчайдушної битви ви "
-"долаєте монстра і знаходите %{арт} в глибині печери."
+"долаєте монстра і знаходите %{art} в глибині печери."
 
 msgid ""
 "Seeing that you do not have %{count} gold, the demon slashes you with its "
@@ -7933,7 +7934,7 @@ msgstr ""
 "значення як усталено."
 
 msgid "Set Spell Points value"
-msgstr "Задати кількість очок мани."
+msgstr "Задати кількість очок мани"
 
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
@@ -7965,7 +7966,7 @@ msgid "Exit Hero Screen"
 msgstr "Вийти з екрану героя"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr "Ви не можете звільнити героя в замку."
+msgstr "Ви не можете звільнити героя в замку"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr "Звільнення %{name} %{race} заборонено сценарієм"
@@ -8823,10 +8824,10 @@ msgid "Burma shave."
 msgstr "Здоровенькі були"
 
 msgid "Next sign 50 miles."
-msgstr "Наступний знак за 50 миль"
+msgstr "Наступний знак за 50 миль."
 
 msgid "See Rock City."
-msgstr "Нехай щастить"
+msgstr "Нехай щастить."
 
 msgid "This space for rent."
 msgstr "Це місце для оренди."
@@ -11792,7 +11793,7 @@ msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
 
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr "У вашого героя залишилось %{point} оч. мани із %{max}."
+msgstr "У вашого героя залишилось %{sp} оч. мани із %{max}."
 
 msgid "View Adventure Spells"
 msgstr "Показати Небойові Закляття"
@@ -11879,7 +11880,7 @@ msgid "The truth is out there."
 msgstr "Правда десь там."
 
 msgid "The dark side is stronger."
-msgstr "Темний бік сильніший."
+msgstr "Темна сторона сильніша."
 
 msgid "The end of the world is near."
 msgstr "Скоро настане кінець світу."
@@ -11893,7 +11894,7 @@ msgstr "Чорний Дракон залюбки здолає Титана."
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 "Вона сказала йому: \"Бла-бла-бла...\" А тоді він відповів: Я не кажу: \"Бла-"
-"бла-бла!\""
+"бла-бла!\"."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."

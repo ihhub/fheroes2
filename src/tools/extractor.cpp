@@ -22,23 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include <iterator>
 #include <map>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include "agg_file.h"
 #include "serialize.h"
 #include "system.h"
 #include "tools.h"
@@ -49,28 +47,11 @@ namespace
 
     struct AGGItemInfo
     {
-        // Hash of this item's name, see calculateHash() for details
+        // Hash of this item's name, see fheroes2::calculateAggFilenameHash() for details
         uint32_t hash;
         uint32_t offset;
         uint32_t size;
     };
-
-    uint32_t calculateHash( const std::string_view str )
-    {
-        uint32_t hash = 0;
-        uint32_t sum = 0;
-
-        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
-
-            hash = ( hash << 5 ) + ( hash >> 25 );
-
-            sum += c;
-            hash += sum + c;
-        }
-
-        return hash;
-    }
 }
 
 int main( int argc, char ** argv )
@@ -145,7 +126,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const uint32_t hash = calculateHash( name );
+            const uint32_t hash = fheroes2::calculateAggFilenameHash( name );
             if ( hash != info.hash ) {
                 ++itemsFailed;
 
