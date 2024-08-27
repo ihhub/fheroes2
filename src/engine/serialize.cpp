@@ -287,7 +287,7 @@ void RWStreamBuf::reallocBuf( size_t size )
 
         size = std::max( size, minBufferCapacity );
 
-        _buf.reset( new uint8_t[size]{} );
+        _buf = std::make_unique<uint8_t[]>( size );
 
         _itbeg = _buf.get();
         _itend = _itbeg + size;
@@ -303,7 +303,7 @@ void RWStreamBuf::reallocBuf( size_t size )
     if ( sizep() < size ) {
         size = std::max( size, minBufferCapacity );
 
-        std::unique_ptr<uint8_t[]> newBuf( new uint8_t[size]{} );
+        std::unique_ptr<uint8_t[]> newBuf = std::make_unique<uint8_t[]>( size );
 
         std::copy( _itbeg, _itput, newBuf.get() );
 
