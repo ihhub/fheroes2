@@ -281,7 +281,7 @@ public:
 
     const uint8_t * data() const override
     {
-        return itget;
+        return _itget;
     }
 
     size_t size() override
@@ -291,17 +291,17 @@ public:
 
     size_t capacity() const
     {
-        return itend - itbeg;
+        return _itend - _itbeg;
     }
 
     void seek( size_t sz )
     {
-        itget = ( itbeg + sz < itend ? itbeg + sz : itend );
+        _itget = ( _itbeg + sz < _itend ? _itbeg + sz : _itend );
     }
 
     void skip( size_t sz ) override
     {
-        itget += ( sz <= sizeg() ? sz : sizeg() );
+        _itget += ( sz <= sizeg() ? sz : sizeg() );
     }
 
     uint16_t getBE16() override
@@ -352,9 +352,9 @@ public:
         const size_t sizeToCopy = std::min( resultSize, actualSize );
 
         std::vector<uint8_t> result( resultSize, 0 );
-        memcpy( result.data(), itget, sizeToCopy );
+        memcpy( result.data(), _itget, sizeToCopy );
 
-        itget += sizeToCopy;
+        _itget += sizeToCopy;
 
         return result;
     }
@@ -364,10 +364,10 @@ public:
     {
         const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
 
-        T * strBeg = itget;
-        itget += length;
+        T * strBeg = _itget;
+        _itget += length;
 
-        return { strBeg, std::find( strBeg, itget, 0 ) };
+        return { strBeg, std::find( strBeg, _itget, 0 ) };
     }
 
 protected:
@@ -376,10 +376,10 @@ protected:
     StreamBufTmpl( StreamBufTmpl && stream ) noexcept
         : StreamBuf( std::move( stream ) )
     {
-        std::swap( itbeg, stream.itbeg );
-        std::swap( itget, stream.itget );
-        std::swap( itput, stream.itput );
-        std::swap( itend, stream.itend );
+        std::swap( _itbeg, stream._itbeg );
+        std::swap( _itget, stream._itget );
+        std::swap( _itput, stream._itput );
+        std::swap( _itend, stream._itend );
     }
 
     StreamBufTmpl & operator=( StreamBufTmpl && stream ) noexcept
@@ -390,47 +390,47 @@ protected:
 
         StreamBase::operator=( std::move( stream ) );
 
-        std::swap( itbeg, stream.itbeg );
-        std::swap( itget, stream.itget );
-        std::swap( itput, stream.itput );
-        std::swap( itend, stream.itend );
+        std::swap( _itbeg, stream._itbeg );
+        std::swap( _itget, stream._itget );
+        std::swap( _itput, stream._itput );
+        std::swap( _itend, stream._itend );
 
         return *this;
     }
 
     size_t tellg() override
     {
-        return itget - itbeg;
+        return _itget - _itbeg;
     }
 
     size_t tellp() override
     {
-        return itput - itbeg;
+        return _itput - _itbeg;
     }
 
     size_t sizeg() override
     {
-        return itput - itget;
+        return _itput - _itget;
     }
 
     size_t sizep() override
     {
-        return itend - itput;
+        return _itend - _itput;
     }
 
     uint8_t get8() override
     {
         if ( sizeg() > 0 ) {
-            return *( itget++ );
+            return *( _itget++ );
         }
 
         return 0;
     }
 
-    T * itbeg{ nullptr };
-    T * itget{ nullptr };
-    T * itput{ nullptr };
-    T * itend{ nullptr };
+    T * _itbeg{ nullptr };
+    T * _itget{ nullptr };
+    T * _itput{ nullptr };
+    T * _itend{ nullptr };
 };
 
 class RWStreamBuf final : public StreamBufTmpl<uint8_t>
@@ -441,7 +441,7 @@ public:
     RWStreamBuf( const RWStreamBuf & ) = delete;
     RWStreamBuf( RWStreamBuf && stream ) = default;
 
-    ~RWStreamBuf() override;
+    ~RWStreamBuf() override = default;
 
     RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
     RWStreamBuf & operator=( RWStreamBuf && stream ) = default;
@@ -463,14 +463,16 @@ private:
     // After using this method to write data, update the cursor by calling the advance() method.
     uint8_t * rwData()
     {
-        return itput;
+        return _itput;
     }
 
     // Advances the cursor intended for writing data forward by a specified number of bytes.
     void advance( const size_t size )
     {
-        itput += size;
+        _itput += size;
     }
+
+    std::unique_ptr<uint8_t[]> _buf;
 };
 
 class ROStreamBuf final : public StreamBufTmpl<const uint8_t>

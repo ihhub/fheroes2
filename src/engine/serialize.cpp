@@ -212,15 +212,6 @@ RWStreamBuf::RWStreamBuf( const size_t sz )
     setbigendian( IS_BIGENDIAN );
 }
 
-RWStreamBuf::~RWStreamBuf()
-{
-    if ( itbeg == nullptr ) {
-        return;
-    }
-
-    delete[] itbeg;
-}
-
 void RWStreamBuf::putBE16( uint16_t v )
 {
     put8( v >> 8 );
@@ -269,8 +260,9 @@ void RWStreamBuf::putRaw( const void * ptr, size_t sz )
         return;
     }
 
-    memcpy( itput, ptr, sz );
-    itput = itput + sz;
+    memcpy( _itput, ptr, sz );
+
+    _itput = _itput + sz;
 }
 
 void RWStreamBuf::put8( const uint8_t v )
@@ -284,47 +276,53 @@ void RWStreamBuf::put8( const uint8_t v )
         return;
     }
 
-    *itput = v;
-    ++itput;
+    *_itput = v;
+    ++_itput;
 }
 
 void RWStreamBuf::reallocBuf( size_t size )
 {
-    if ( itbeg == nullptr ) {
+    if ( !_buf ) {
+        assert( _itbeg == nullptr && _itget == nullptr && _itput == nullptr && _itend == nullptr );
+
         size = std::max( size, minBufferCapacity );
 
-        itbeg = new uint8_t[size]{};
-        itend = itbeg + size;
+        _buf.reset( new uint8_t[size]{} );
 
-        itput = itbeg;
-        itget = itbeg;
+        _itbeg = _buf.get();
+        _itend = _itbeg + size;
+
+        _itput = _itbeg;
+        _itget = _itbeg;
 
         return;
     }
 
+    assert( _itbeg != nullptr && _itget != nullptr && _itput != nullptr && _itend != nullptr );
+
     if ( sizep() < size ) {
         size = std::max( size, minBufferCapacity );
 
-        uint8_t * ptr = new uint8_t[size]{};
+        std::unique_ptr<uint8_t[]> newBuf( new uint8_t[size]{} );
 
-        std::copy( itbeg, itput, ptr );
+        std::copy( _itbeg, _itput, newBuf.get() );
 
-        itput = ptr + tellp();
-        itget = ptr + tellg();
+        _itput = newBuf.get() + tellp();
+        _itget = newBuf.get() + tellg();
 
-        delete[] itbeg;
+        _buf = std::move( newBuf );
 
-        itbeg = ptr;
-        itend = itbeg + size;
+        _itbeg = _buf.get();
+        _itend = _itbeg + size;
     }
 }
 
 ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
 {
-    itbeg = buf.data();
-    itend = itbeg + buf.size();
-    itget = itbeg;
-    itput = itend;
+    _itbeg = buf.data();
+    _itend = _itbeg + buf.size();
+    _itget = _itbeg;
+    _itput = _itend;
 
     setbigendian( IS_BIGENDIAN );
 }
@@ -614,7 +612,5 @@ std::string StreamFile::toString( const size_t size /* = 0 */ )
 {
     const std::vector<uint8_t> buf = getRaw( size );
 
-    const auto itend = std::find( buf.begin(), buf.end(), 0 );
-
-    return { buf.begin(), itend };
+    return { buf.begin(), std::find( buf.begin(), buf.end(), 0 ) };
 }
