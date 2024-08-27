@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-18 01:49+0000\n"
-"PO-Revision-Date: 2024-08-27 11:40+0200\n"
+"PO-Revision-Date: 2024-08-27 14:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -382,37 +382,37 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "army|Pochi/e"
+msgstr "Pochi/e"
 
 msgid "army|Several"
-msgstr "army|Alcuni/e"
+msgstr "Alcuni/e"
 
 msgid "army|Pack"
-msgstr "army|Banda"
+msgstr "Banda"
 
 msgid "army|Lots"
-msgstr "army|Molti/e"
+msgstr "Molti/e"
 
 msgid "army|Horde"
-msgstr "army|Orda"
+msgstr "Orda"
 
 msgid "army|Throng"
-msgstr "army|Folla"
+msgstr "Folla"
 
 msgid "army|Swarm"
-msgstr "army|Plotone"
+msgstr "Plotone"
 
 msgid "army|Zounds"
-msgstr "army|Esercito"
+msgstr "Esercito"
 
 msgid "army|Legion"
-msgstr "army|Legione"
+msgstr "Legione"
 
 msgid "All %{race} troops +1"
 msgstr "Tutte le forze da %{race}: +1"
 
 msgid "NeutralRaceTroops|Neutral"
-msgstr "NeutralRaceTroops|Neutro"
+msgstr "Neutro"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Truppe da %{count} fazioni -%{penalty}"
@@ -1115,7 +1115,7 @@ msgid "Turning Point"
 msgstr "Punto di Svolta"
 
 msgid "scenarioName|Defender"
-msgstr "scenarioName|Difensore"
+msgstr "Difensore"
 
 msgid "Corlagon's Defense"
 msgstr "A difesa di Corlagon"
@@ -1711,229 +1711,229 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Dwarfbane!!!! Si salvi chi può!\""
 
 msgid "campaignBonus|Animate Dead"
-msgstr "campaignBonus|Anima i Morti"
+msgstr "Anima i Morti"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr "campaignBonus|Fulmini in Serie"
+msgstr "Fulmini in Serie"
 
 msgid "campaignBonus|Fireblast"
-msgstr "campaignBonus|Palla di Fuoco"
+msgstr "Palla di Fuoco"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "campaignBonus|Maledizione di Massa"
+msgstr "Maledizione di Massa"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "campaignBonus|Velocità di Massa"
+msgstr "Velocità di Massa"
 
 msgid "campaignBonus|Mirror Image"
-msgstr "campaignBonus|Immagine Riflessa"
+msgstr "Immagine Riflessa"
 
 msgid "campaignBonus|Resurrect"
-msgstr "campaignBonus|Resuscita"
+msgstr "Resuscita"
 
 msgid "campaignBonus|Steelskin"
-msgstr "campaignBonus|Pelle di ferro"
+msgstr "Pelle di ferro"
 
 msgid "campaignBonus|Summon Earth"
-msgstr "campaignBonus|Evoca Terra"
+msgstr "Evoca Terra"
 
 msgid "campaignBonus|View Heroes"
-msgstr "campaignBonus|Mostra Eroi"
+msgstr "Mostra Eroi"
 
 msgid "campaignBonus|Ballista"
-msgstr "campaignBonus|Ballista"
+msgstr "Ballista"
 
 msgid "campaignBonus|Black Pearl"
-msgstr "campaignBonus|La Perla Nera"
+msgstr "La Perla Nera"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr "campaignBonus|Bracciale del mago"
+msgstr "Bracciale del mago"
 
 msgid "campaignBonus|Defender Helm"
-msgstr "campaignBonus|Elmo del protettore"
+msgstr "Elmo del protettore"
 
 msgid "campaignBonus|Breastplate"
-msgstr "campaignBonus|Corazza"
+msgstr "Corazza"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr "campaignBonus|Spada del Drago"
+msgstr "Spada del Drago"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr "campaignBonus|Medaglia Fizbin"
+msgstr "Medaglia Fizbin"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr "campaignBonus|Pergamena Massiam"
+msgstr "Pergamena Massiam"
 
 msgid "campaignBonus|Gauntlets"
-msgstr "campaignBonus|Guanti"
+msgstr "Guanti"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr "campaignBonus|Maschera spaventosa"
+msgstr "Maschera spaventosa"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr "campaignBonus|Anello del mago"
+msgstr "Anello del mago"
 
 msgid "campaignBonus|Major Scroll"
-msgstr "campaignBonus|Pergamena superiore"
+msgstr "Pergamena superiore"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "campaignBonus|Medaglia all'onore"
+msgstr "Medaglia all'onore"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "campaignBonus|Medaglia al valore"
+msgstr "Medaglia al valore"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr "campaignBonus|Pergamena minore"
+msgstr "Pergamena minore"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr "campaignBonus|Stivali del nomade"
+msgstr "Stivali del nomade"
 
 msgid "campaignBonus|Power Axe"
-msgstr "campaignBonus|Ascia del potere"
+msgstr "Ascia del potere"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr "campaignBonus|Scudo chiodato"
+msgstr "Scudo chiodato"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr "campaignBonus|Scudo dell'invisibilità"
+msgstr "Scudo dell'invisibilità"
 
 msgid "campaignBonus|Tax Lien"
-msgstr "campaignBonus|Aggravio Fiscale"
+msgstr "Aggravio Fiscale"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "campaignBonus|Mazza del Tuono"
+msgstr "Mazza del Tuono"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "campaignBonus|Scarpe del viaggiatore"
+msgstr "Scarpe del viaggiatore"
 
 msgid "campaignBonus|White Pearl"
-msgstr "campaignBonus|La Perla Bianca"
+msgstr "La Perla Bianca"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "campaignBonus|Tiro con L'Arco base"
+msgstr "Tiro con L'Arco base"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "campaignBonus|Tiro con L'Arco Avanzato"
+msgstr "Tiro con L'Arco Avanzato"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "campaignBonus|Tiro con L'Arco Esperto"
+msgstr "Tiro con L'Arco Esperto"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "campaignBonus|Balistica di Base"
+msgstr "Balistica di Base"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "campaignBonus|Balistica Avanzata"
+msgstr "Balistica Avanzata"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "campaignBonus|Balistica Esperto"
+msgstr "Balistica Esperto"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "campaignBonus|Diplomazia Base"
+msgstr "Diplomazia Base"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "campaignBonus|Diplomazia Avanzata"
+msgstr "Diplomazia Avanzata"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "campaignBonus|Diplomazia Esperto"
+msgstr "Diplomazia Esperto"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "campaignBonus|Occhio di Falco Base"
+msgstr "Occhio di Falco Base"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "campaignBonus|Occhio di Falco Avanzato"
+msgstr "Occhio di Falco Avanzato"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "campaignBonus|Occhio di Falo Esperto"
+msgstr "Occhio di Falo Esperto"
 
 msgid "campaignBonus|Basic Estates"
-msgstr "campaignBonus|Rendita Base"
+msgstr "Rendita Base"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr "campaignBonus|Rendita Avanzata"
+msgstr "Rendita Avanzata"
 
 msgid "campaignBonus|Expert Estates"
-msgstr "campaignBonus|Rendita Esperto"
+msgstr "Rendita Esperto"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "campaignBonus|Comando Base"
+msgstr "Comando Base"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr "campaignBonus|Comando Avanzato"
+msgstr "Comando Avanzato"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr "campaignBonus|Comando Esperto"
+msgstr "Comando Esperto"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "campaignBonus|Logistica Base"
+msgstr "Logistica Base"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr "campaignBonus|Logistica Avanzata"
+msgstr "Logistica Avanzata"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr "campaignBonus|Logistica Esperto"
+msgstr "Logistica Esperto"
 
 msgid "campaignBonus|Basic Luck"
-msgstr "campaignBonus|Fortuna Base"
+msgstr "Fortuna Base"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr "campaignBonus|Fortuna Avanzato"
+msgstr "Fortuna Avanzato"
 
 msgid "campaignBonus|Expert Luck"
-msgstr "campaignBonus|Fortuna Esperto"
+msgstr "Fortuna Esperto"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "campaignBonus|Misticismo Base"
+msgstr "Misticismo Base"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "campaignBonus|Misticismo Avanzato"
+msgstr "Misticismo Avanzato"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr "campaignBonus|Misticismo Esperto"
+msgstr "Misticismo Esperto"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "campaignBonus|Navigazione di Base"
+msgstr "Navigazione di Base"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr "campaignBonus|Navigazione Avanzata"
+msgstr "Navigazione Avanzata"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr "campaignBonus|Navigazione Esperta"
+msgstr "Navigazione Esperta"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "campaignBonus|Necromanzia Base"
+msgstr "Necromanzia Base"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "campaignBonus|Necromanzia Avanzata"
+msgstr "Necromanzia Avanzata"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "campaignBonus|Necromanzia Esperto"
+msgstr "Necromanzia Esperto"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "campaignBonus|Esplorazione Base"
+msgstr "Esplorazione Base"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "campaignBonus|Esplorazione Avanzata"
+msgstr "Esplorazione Avanzata"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "campaignBonus|Esplorazione Esperto"
+msgstr "Esplorazione Esperto"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "campaignBonus|Ricognizione Base"
+msgstr "Ricognizione Base"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "campaignBonus|Ricognizione Avanzata"
+msgstr "Ricognizione Avanzata"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr "campaignBonus|Ricognizione Esperta"
+msgstr "Ricognizione Esperta"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr "campaignBonus|Saggezza Base"
+msgstr "Saggezza Base"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "campaignBonus|Saggezza Avanzata"
+msgstr "Saggezza Avanzata"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr "campaignBonus|Saggezza Esperta"
+msgstr "Saggezza Esperta"
 
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
@@ -2034,8 +2034,9 @@ msgstr "Impossibile costruire %{name}."
 msgid "Build %{name}."
 msgstr "Costruisci %{name}."
 
+#, fuzzy
 msgid "Blackridge"
-msgstr ""
+msgstr "Ponte"
 
 msgid "Hillstone"
 msgstr ""
@@ -2081,14 +2082,16 @@ msgstr ""
 msgid "Tundara"
 msgstr ""
 
+#, fuzzy
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulcano"
 
 msgid "Baywatch"
 msgstr ""
 
+#, fuzzy
 msgid "Fountainhead"
-msgstr ""
+msgstr "Fontana"
 
 msgid "Vertigo"
 msgstr ""
@@ -2117,11 +2120,13 @@ msgstr ""
 msgid "Alamar"
 msgstr ""
 
+#, fuzzy
 msgid "Burlock"
-msgstr ""
+msgstr "Guerriero"
 
+#, fuzzy
 msgid "Dragadune"
-msgstr ""
+msgstr "Drago"
 
 msgid "Kalindra"
 msgstr ""
@@ -2135,11 +2140,13 @@ msgstr ""
 msgid "Basenji"
 msgstr ""
 
+#, fuzzy
 msgid "Blackfang"
-msgstr ""
+msgstr "Drago Nero"
 
+#, fuzzy
 msgid "New Dawn"
-msgstr ""
+msgstr "Nuova Partita"
 
 msgid "Sorpigal"
 msgstr ""
@@ -2159,8 +2166,9 @@ msgstr ""
 msgid "Hampshire"
 msgstr ""
 
+#, fuzzy
 msgid "Antioch"
-msgstr ""
+msgstr "Attenzione"
 
 msgid "Avalon"
 msgstr ""
@@ -2171,14 +2179,17 @@ msgstr ""
 msgid "South Mill"
 msgstr ""
 
+#, fuzzy
 msgid "Weed Patch"
-msgstr ""
+msgstr "L'Orologio d'Oro"
 
+#, fuzzy
 msgid "Brownston"
-msgstr ""
+msgstr "Marrone"
 
+#, fuzzy
 msgid "Hilltop"
-msgstr ""
+msgstr "Forte in Collina"
 
 msgid "Weddington"
 msgstr ""
@@ -2204,11 +2215,13 @@ msgstr ""
 msgid "Yorksford"
 msgstr ""
 
+#, fuzzy
 msgid "Blackburn"
-msgstr ""
+msgstr "Drago Nero"
 
+#, fuzzy
 msgid "Blacksford"
-msgstr ""
+msgstr "Torre Nera"
 
 msgid "Burton"
 msgstr ""
@@ -2222,8 +2235,9 @@ msgstr ""
 msgid "Fenton"
 msgstr ""
 
+#, fuzzy
 msgid "Lankershire"
-msgstr ""
+msgstr "Carisma"
 
 msgid "Lombard"
 msgstr ""
@@ -2246,8 +2260,9 @@ msgstr ""
 msgid "Westmoor"
 msgstr ""
 
+#, fuzzy
 msgid "Willow"
-msgstr ""
+msgstr "Giallo"
 
 msgid "Corackston"
 msgstr ""
@@ -2364,7 +2379,7 @@ msgid "Fenced Meadow"
 msgstr "Prato Recintato"
 
 msgid "sorceress|Red Tower"
-msgstr "sorceress|Torre Rossa"
+msgstr "Torre Rossa"
 
 msgid "Dungeon"
 msgstr "Sotterraneo"
@@ -2394,7 +2409,7 @@ msgid "Green Tower"
 msgstr "Torre Verde"
 
 msgid "warlock|Red Tower"
-msgstr "warlock|Torre Rossa"
+msgstr "Torre Rossa"
 
 msgid "Black Tower"
 msgstr "Torre Nera"
@@ -2468,8 +2483,9 @@ msgstr "Laboratorio"
 msgid "Shrine"
 msgstr "Altare Oscuro"
 
+#, fuzzy
 msgid "Special"
-msgstr ""
+msgstr "Niente particolare"
 
 msgid "Horde Building"
 msgstr ""
@@ -3351,7 +3367,7 @@ msgid "already learned"
 msgstr "già appreso/a"
 
 msgid "treeOfKnowledge|free"
-msgstr "treeOfKnowledge|libero"
+msgstr "libero"
 
 msgid "already claimed"
 msgstr "già appreso/a"
@@ -3529,7 +3545,7 @@ msgid "Select Hero:"
 msgstr "Scegli eroe:"
 
 msgid "race|Random"
-msgstr "race|Casuale"
+msgstr "Casuale"
 
 msgid "Click to start placing the selected hero."
 msgstr "Clicca per posizionare l'eroe selezionato"
@@ -3561,7 +3577,7 @@ msgid "Castle/town placing"
 msgstr "Opzioni Castello"
 
 msgid "doubleLinedRace|Neutral"
-msgstr "doubleLinedRace|Neutro"
+msgstr "Neutro"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3580,7 +3596,7 @@ msgid "%{color} %{race} %{townOrCastle}"
 msgstr "Giocatore %{color}"
 
 msgid "race|Neutral"
-msgstr "race|Neutro"
+msgstr "Neutro"
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3802,7 +3818,7 @@ msgid "Battles"
 msgstr "Battaglie"
 
 msgid "autoBattle|Manual"
-msgstr "autoBattle|Manuali"
+msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -4790,19 +4806,19 @@ msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr "difficulty|Facile"
+msgstr "Facile"
 
 msgid "difficulty|Normal"
-msgstr "difficulty|Normale"
+msgstr "Normale"
 
 msgid "difficulty|Hard"
-msgstr "difficulty|Duro"
+msgstr "Duro"
 
 msgid "difficulty|Expert"
-msgstr "difficulty|Esperto"
+msgstr "Esperto"
 
 msgid "difficulty|Impossible"
-msgstr "difficulty|Impossibile"
+msgstr "Impossibile"
 
 msgid "and more..."
 msgstr ""
@@ -5047,7 +5063,7 @@ msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
-msgstr "credits|Manuale"
+msgstr "Manuale"
 
 msgid "German Consultant"
 msgstr ""
@@ -7811,7 +7827,7 @@ msgid "skill|Advanced"
 msgstr "Avanzato/a"
 
 msgid "skill|Expert"
-msgstr "skill|Esperto"
+msgstr "Esperto"
 
 msgid "Pathfinding"
 msgstr "Orientamento"
@@ -8352,7 +8368,7 @@ msgid "week|Badger"
 msgstr "Tasso"
 
 msgid "week|Rat"
-msgstr "week|Topo"
+msgstr "Topo"
 
 msgid "week|Eagle"
 msgstr "Aquila"
@@ -8367,7 +8383,7 @@ msgid "week|Mongoose"
 msgstr "Mangusta"
 
 msgid "week|Dog"
-msgstr "week|Cane"
+msgstr "Cane"
 
 msgid "week|Aardvark"
 msgstr "Formichiere"
@@ -8418,7 +8434,7 @@ msgid "week|PLAGUE"
 msgstr "PESTE"
 
 msgid "week|Unnamed"
-msgstr "week|senza nome"
+msgstr "senza nome"
 
 msgid "Desert"
 msgstr "Deserto"
@@ -10903,7 +10919,7 @@ msgstr ""
 "a lungo creduta persa dai mortali."
 
 msgid "spellBonus|selected by user"
-msgstr "spellBonus|Scelto dall'utente"
+msgstr "Scelto dall'utente"
 
 msgid "Wood"
 msgstr "Legno"
@@ -11035,7 +11051,7 @@ msgid "Slows target to half movement rate."
 msgstr "Dimezza la distanza di spostamento e la velocità del bersaglio."
 
 msgid "spell|Slow"
-msgstr "spell|Rallenta"
+msgstr "Rallenta"
 
 msgid "Mass Slow"
 msgstr "Pianissimo"
