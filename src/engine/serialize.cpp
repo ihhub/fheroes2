@@ -283,7 +283,7 @@ void RWStreamBuf::put8( const uint8_t v )
 void RWStreamBuf::reallocBuf( size_t size )
 {
     if ( !_buf ) {
-        assert( _itbeg == nullptr && _itget == nullptr && _itput == nullptr && _itend == nullptr );
+        assert( ( []( const auto... args ) { return ( ( args == nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) );
 
         size = std::max( size, minBufferCapacity );
 
@@ -298,7 +298,7 @@ void RWStreamBuf::reallocBuf( size_t size )
         return;
     }
 
-    assert( _itbeg != nullptr && _itget != nullptr && _itput != nullptr && _itend != nullptr );
+    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) );
 
     if ( sizep() < size ) {
         size = std::max( size, minBufferCapacity );
