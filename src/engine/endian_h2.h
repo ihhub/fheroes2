@@ -21,10 +21,7 @@
 #ifndef ENDIAN_H2_H
 #define ENDIAN_H2_H
 
-#if defined( __linux__ )
-#include <endian.h> // IWYU pragma: export
-
-#elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
+#if defined( __FreeBSD__ ) || defined( __OpenBSD__ )
 #include <sys/endian.h> // IWYU pragma: export
 
 #elif defined( _WIN32 )
@@ -83,7 +80,7 @@
 #define le32toh( x ) ( x )
 
 #else
-#error "Unsupported platform"
+#include <endian.h> // IWYU pragma: export
 #endif
 
 #define IS_BIGENDIAN ( BYTE_ORDER == BIG_ENDIAN )
