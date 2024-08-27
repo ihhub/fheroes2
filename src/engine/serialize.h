@@ -93,7 +93,8 @@ public:
     virtual void putBE16( uint16_t ) = 0;
     virtual void putLE16( uint16_t ) = 0;
 
-    virtual std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) = 0;
+    // 0 stands for all data.
+    virtual std::vector<uint8_t> getRaw( size_t = 0 ) = 0;
     virtual void putRaw( const void *, size_t ) = 0;
 
     uint16_t get16();
@@ -343,7 +344,8 @@ public:
         return result;
     }
 
-    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override
+    // 0 stands for all data.
+    std::vector<uint8_t> getRaw( size_t sz = 0 ) override
     {
         const size_t actualSize = sizeg();
         const size_t resultSize = sz > 0 ? sz : actualSize;
@@ -357,6 +359,7 @@ public:
         return result;
     }
 
+    // 0 stands for all data.
     std::string toString( const size_t sz = 0 )
     {
         const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
@@ -511,7 +514,7 @@ public:
     bool open( const std::string & fn, const std::string & mode );
     void close();
 
-    // 0 stands for full data.
+    // 0 stands for all data.
     RWStreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
@@ -527,11 +530,12 @@ public:
     void putBE32( uint32_t ) override;
     void putLE32( uint32_t ) override;
 
-    // 0 stands for full data.
+    // 0 stands for all data.
     std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
 
     void putRaw( const void * ptr, size_t sz ) override;
 
+    // 0 stands for all data.
     std::string toString( const size_t size = 0 );
 
 private:
