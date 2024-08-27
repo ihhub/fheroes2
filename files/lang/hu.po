@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-08-27 20:23+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4087,9 +4087,8 @@ msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
 msgid "Unable to create a directory to save the map."
 msgstr "Nem hozható létre könyvtár a térkép mentéséhez."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
-msgstr "Nem található az adatkönyvtár a térkép mentéséhez."
+msgstr "Nem található könyvtár a térkép mentéséhez."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Biztosan felülírod a meglévő térképet?"
@@ -4382,29 +4381,23 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} %{race} hős"
+msgstr "[%{pos}]: %{race} hős"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "%[%{pos}]: %{name}, %{race} hős"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} hős"
+msgstr "[%{pos}]: %{race} város"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} %{race} %{townOrCastle}"
+msgstr "[%{pos}]: %{race} vár"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "[%{pos}]: %{name}, %{race} város"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
+msgstr "[%{pos}]: %{name}, %{race} vár"
 
 msgid "None."
 msgstr "Nincs."
@@ -4418,25 +4411,20 @@ msgstr "Arany összegyűjtése."
 msgid "Run out of time."
 msgstr "Kifutás az időből."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " szövetség"
+msgstr "1."
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " szövetség"
+msgstr "2."
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " szövetség"
+msgstr "3."
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " szövetség"
+msgstr "4."
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " szövetség"
+msgstr "5."
 
 msgid "Special Loss Condition"
 msgstr "Speciális vesztési feltétel"
@@ -4448,61 +4436,60 @@ msgid "Allow standard victory conditions"
 msgstr "Normál győzelmi feltételek engedélyezése"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "A gépi játékos számára is megengedett ez a feltétel"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " szövetség"
+msgstr "Szövetségesek beállítása:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " szövetség"
+msgstr "{%number} szövetséges: "
 
 msgid "Gold:"
 msgstr "Arany:"
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
-msgstr "Válaszd ki, melyik városba szeretnél menni."
+msgstr "Válaszd ki a várost, melynek elfoglalása a győzelem feltétele"
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr ""
+"Kattints a győzelem kivívásához szükséges elfoglalandó vár "
+"megváltoztatásához."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Válaszd ki a hőst, akinek legyőzése a győzelem feltétele"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr ""
+"Kattints a győzelem kivívásához szükséges legyőzendő hős megváltoztatásához."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "%{color} játékos felvétele %{alliance} szövetségbe"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény %{color} emberi "
-"játékos számára ki fog váltódni."
+"Ha ez a jelölőnégyzet meg van jelölve, akkor %{color} játékos %{alliance}"
+"szövetség tagja lesz."
 
 msgid "Days:"
 msgstr "Napok:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Válaszd ki a várost, melynek elvesztése teljes bukással jár"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr ""
+"Kattints annak a városnak a megváltoztatásához, melynek elvesztése teljes "
+"bukással jár."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Válaszd ki a hőst, akinek elvesztése teljes bukással jár"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Kattints az esemény üzenetének megváltoztatásához."
+msgstr ""
+"Kattints annak a hősnek a megváltoztatásához, akinek elvesztése teljes "
+"bukással jár."
 
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
@@ -10881,7 +10868,7 @@ msgstr ""
 "megszólalhatnál, kezedbe nyom egy Varázskönyvet."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "A győzelem elnyeréséhez meg kell találni a Szent Varázstárgyat."
 
 msgid "Dummy 2"
 msgstr "Próba 2"
@@ -11407,10 +11394,8 @@ msgstr "Szent kiáltás"
 msgid "Anti-Magic"
 msgstr "Antimágia"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
-msgstr ""
-"Megakadályozza a kártékony varázslatok idézését a kiválasztott egységeken."
+msgstr "Megakadályoz bármely varázslatot a kiválasztott lények ellen."
 
 msgid "Dispel Magic"
 msgstr "Varázslatűzés"
