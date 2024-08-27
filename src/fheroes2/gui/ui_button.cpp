@@ -51,7 +51,7 @@ namespace
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
             fheroes2::Copy( original, output );
         }
-        // TODO: Add assertions that in the vein of assert( offsetX + rightPartWidth == width );
+        // TODO: Add assertions in the vein of assert( offsetX + rightPartWidth == width );
         // Buttons that only are wider.
         else if ( buttonSize.width > originalWidth && buttonSize.height == originalHeight ) {
             const int32_t middleWidth = originalWidth / 3;
