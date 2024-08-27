@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,17 +24,18 @@
 #include <array>
 #include <atomic>
 #include <cassert>
+#include <climits>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
 #include <list>
-#include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
 #include <utility>
 
 #include "agg_file.h"
+#include "audio.h"
 #include "dir.h"
 #include "logging.h"
 #include "m82.h"
@@ -50,13 +51,13 @@ namespace
 {
     struct MusicFileType
     {
-        explicit MusicFileType( const MUS::EXTERNAL_MUSIC_TYPE type_ )
-            : type( type_ )
+        explicit MusicFileType( const MUS::ExternalMusicNamingScheme scheme )
+            : namingScheme( scheme )
         {
             // Do nothing.
         }
 
-        MUS::EXTERNAL_MUSIC_TYPE type = MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION;
+        MUS::ExternalMusicNamingScheme namingScheme = MUS::ExternalMusicNamingScheme::WIN_VERSION;
 
         std::array<std::string, 3> extension{ ".ogg", ".mp3", ".flac" };
     };
@@ -119,7 +120,7 @@ namespace
         const auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
             std::string fullPath;
 
-            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );
+            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.namingScheme, musicFileType.extension[0].c_str() );
             if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
                 return fullPath;
             }
@@ -143,9 +144,9 @@ namespace
         };
 
         // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
-        thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
-                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ),
-                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
+        thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::ExternalMusicNamingScheme::DOS_VERSION ),
+                                                                  MusicFileType( MUS::ExternalMusicNamingScheme::WIN_VERSION ),
+                                                                  MusicFileType( MUS::ExternalMusicNamingScheme::MAPPED ) };
 
         for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
             std::string filePath = tryMusicFileType( musicFileTypes[i] );
@@ -173,9 +174,9 @@ namespace
 
     struct ChannelAudioLoopEffectInfo : public AudioManager::AudioLoopEffectInfo
     {
-        ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
+        ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int chan )
             : AudioLoopEffectInfo( info )
-            , channelId( channelId_ )
+            , channelId( chan )
         {
             // Do nothing.
         }
@@ -250,10 +251,10 @@ namespace
         return v;
     }
 
-    // Returns sound Channel ID, when error - returns `-1`.
-    int PlaySoundImp( const int m82, const int soundVolume );
-    void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
-    void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
+    // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
+    int PlaySoundImpl( const int m82 );
+    void PlayMusicImpl( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
+    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const bool is3DAudioEnabled );
 
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
@@ -272,24 +273,24 @@ namespace
             notifyWorker();
         }
 
-        void pushSound( const int m82Sound, const int soundVolume )
+        void pushSound( const int m82Sound )
         {
             createWorker();
 
             const std::scoped_lock<std::mutex> lock( _mutex );
 
-            _soundTasks.emplace_back( m82Sound, soundVolume );
+            _soundTasks.emplace_back( m82Sound );
 
             notifyWorker();
         }
 
-        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
+        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const bool is3DAudioEnabled )
         {
             createWorker();
 
             const std::scoped_lock<std::mutex> lock( _mutex );
 
-            _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+            _loopSoundTask.emplace( std::move( effects ), is3DAudioEnabled );
 
             notifyWorker();
         }
@@ -363,10 +364,10 @@ namespace
         {
             MusicTask() = default;
 
-            MusicTask( const int musicId_, const MusicSource musicType_, const Music::PlaybackMode playbackMode_ )
-                : musicId( musicId_ )
-                , musicType( musicType_ )
-                , playbackMode( playbackMode_ )
+            MusicTask( const int id, const MusicSource type, const Music::PlaybackMode mode )
+                : musicId( id )
+                , musicType( type )
+                , playbackMode( mode )
             {
                 // Do nothing.
             }
@@ -380,31 +381,27 @@ namespace
         {
             SoundTask() = default;
 
-            SoundTask( const int m82Sound_, const int soundVolume_ )
-                : m82Sound( m82Sound_ )
-                , soundVolume( soundVolume_ )
+            explicit SoundTask( const int m82 )
+                : m82Sound( m82 )
             {
                 // Do nothing.
             }
 
             int m82Sound{ 0 };
-            int soundVolume{ 0 };
         };
 
         struct LoopSoundTask
         {
             LoopSoundTask() = default;
 
-            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const int soundVolume_, const bool is3DAudioOn )
+            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const bool is3DAudioOn )
                 : soundEffects( std::move( effects ) )
-                , soundVolume( soundVolume_ )
                 , is3DAudioEnabled( is3DAudioOn )
             {
                 // Do nothing.
             }
 
             std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects;
-            int soundVolume{ 0 };
             bool is3DAudioEnabled{ false };
         };
 
@@ -468,13 +465,13 @@ namespace
                 // Nothing to do.
                 return;
             case TaskType::PlayMusic:
-                PlayMusicImp( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
+                PlayMusicImpl( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
                 return;
             case TaskType::PlaySound:
-                PlaySoundImp( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
+                PlaySoundImpl( _currentSoundTask.m82Sound );
                 return;
             case TaskType::PlayLoopSound:
-                playLoopSoundsImp( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
+                playLoopSoundsImpl( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.is3DAudioEnabled );
                 return;
             default:
                 // How is it even possible? Did you add a new task?
@@ -510,7 +507,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    int PlaySoundImp( const int m82, const int soundVolume )
+    int PlaySoundImpl( const int m82 )
     {
         const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -521,17 +518,7 @@ namespace
             return -1;
         }
 
-        const int channelId = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
-        if ( channelId < 0 ) {
-            // Failed to get a free channel.
-            return -1;
-        }
-
-        Mixer::Pause( channelId );
-        Mixer::setVolume( channelId, 100 * soundVolume / 10 );
-        Mixer::Resume( channelId );
-
-        return channelId;
+        return Mixer::Play( v.data(), static_cast<uint32_t>( v.size() ), false );
     }
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
@@ -542,7 +529,7 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
-    void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
+    void PlayMusicImpl( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
     {
         // Make sure that the music track is valid.
         assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
@@ -575,7 +562,7 @@ namespace
 
                 currentMusicTrackId = trackId;
 
-                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::ExternalMusicNamingScheme::MAPPED, " " ) )
 
                 return;
             }
@@ -611,26 +598,28 @@ namespace
 
         bestSoundToAddId = 0;
         bestSoundToReplaceId = 0;
-        int bestAngleDiff = 360;
-        int bestVolumeDiff = 100;
+        int bestAngleDiff = INT_MAX;
+        int bestDistanceDiff = INT_MAX;
 
         for ( size_t soundToAddId = 0; soundToAddId < soundToAdd.size(); ++soundToAddId ) {
             for ( size_t soundToReplaceId = 0; soundToReplaceId < soundToReplace.size(); ++soundToReplaceId ) {
                 const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
-                const int volumeDiff
-                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage ) - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
-                if ( bestAngleDiff >= angleDiff ) {
-                    if ( bestAngleDiff == angleDiff && volumeDiff > bestVolumeDiff ) {
-                        // The existing best pair has lower volume difference.
-                        continue;
-                    }
+                const int distanceDiff
+                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].distance ) - static_cast<int>( soundToReplace[soundToReplaceId].distance ) );
 
-                    bestAngleDiff = angleDiff;
-                    bestVolumeDiff = volumeDiff;
-
-                    bestSoundToAddId = soundToAddId;
-                    bestSoundToReplaceId = soundToReplaceId;
+                if ( bestAngleDiff < angleDiff ) {
+                    continue;
                 }
+
+                if ( bestAngleDiff == angleDiff && bestDistanceDiff < distanceDiff ) {
+                    continue;
+                }
+
+                bestAngleDiff = angleDiff;
+                bestDistanceDiff = distanceDiff;
+
+                bestSoundToAddId = soundToAddId;
+                bestSoundToReplaceId = soundToReplaceId;
             }
         }
     }
@@ -642,7 +631,6 @@ namespace
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
-                    Mixer::setVolume( info.channelId, 0 );
                     Mixer::Stop( info.channelId );
                 }
             }
@@ -651,15 +639,9 @@ namespace
         currentAudioLoopEffects.clear();
     }
 
-    void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled )
+    void playLoopSoundsImpl( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const bool is3DAudioEnabled )
     {
         const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
-
-        if ( soundVolume == 0 ) {
-            // The volume is 0. Remove all existing sound effects.
-            clearAllAudioLoopEffects();
-            return;
-        }
 
         if ( is3DAudioLoopEffectsEnabled != is3DAudioEnabled ) {
             is3DAudioLoopEffectsEnabled = is3DAudioEnabled;
@@ -707,13 +689,10 @@ namespace
 
             std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = foundSoundTypeIter->second;
 
-            // Search for an existing sound which has the exact volume and angle.
+            // Search for an existing sound which has the exact distance and angle.
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
-                    // Even when no angle and sound effect volume have been changed the overall sound volume might have. Set the volume.
-                    Mixer::setVolume( exactSoundEffect->channelId, exactSoundEffect->volumePercentage * soundVolume / 10 );
-
                     currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
                     effectsToReplace.erase( exactSoundEffect );
 
@@ -741,11 +720,9 @@ namespace
                 currentInfo = { effectsToAdd[soundToAddId], currentInfo.channelId };
                 effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
 
-                Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
+                assert( is3DAudioEnabled || currentInfo.angle == 0 );
 
-                if ( is3DAudioEnabled ) {
-                    Mixer::applySoundEffect( currentInfo.channelId, currentInfo.angle, currentInfo.volumePercentage );
-                }
+                Mixer::setPosition( currentInfo.channelId, currentInfo.angle, currentInfo.distance );
             }
 
             if ( effectsToReplace.empty() ) {
@@ -764,7 +741,6 @@ namespace
             const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                Mixer::setVolume( info.channelId, 0 );
                 Mixer::Stop( info.channelId );
             }
         }
@@ -785,29 +761,13 @@ namespace
                     continue;
                 }
 
-                int channelId = -1;
-                if ( is3DAudioEnabled ) {
-                    channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle, info.volumePercentage );
-                }
-                else {
-                    channelId = Mixer::Play( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true );
-                }
+                assert( is3DAudioEnabled || info.angle == 0 );
 
+                const int channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), true, std::pair{ info.angle, info.distance } );
                 if ( channelId < 0 ) {
-                    // Unable to play this audio. It is probably an invalid audio sample.
+                    // Unable to play this sound.
                     continue;
                 }
-
-                // Adjust channel based on given parameters.
-
-                // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds
-                // TODO: are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
-                // TODO: start playing. Such logic must be implemented within Audio related code.
-                // TODO: As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
-                // TODO: access.
-                Mixer::Pause( channelId );
-                Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
-                Mixer::Resume( channelId );
 
                 currentAudioLoopEffects[soundType].emplace_back( info, channelId );
 
@@ -823,13 +783,13 @@ namespace AudioManager
     {
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
-            // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
-            Mixer::setVolume( -1, 0 );
 
             // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
             if ( !midiSoundFonts.empty() ) {
                 Music::SetMidiSoundFonts( midiSoundFonts );
             }
+
+            Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );
 
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
@@ -873,9 +833,7 @@ namespace AudioManager
             return;
         }
 
-        const Settings & conf = Settings::Get();
-
-        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), Settings::Get().is3DAudioEnabled() );
     }
 
     int PlaySound( const int m82 )
@@ -890,7 +848,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeSoundTasks();
 
-        return PlaySoundImp( m82, Settings::Get().SoundVolume() );
+        return PlaySoundImpl( m82 );
     }
 
     void PlaySoundAsync( const int m82 )
@@ -903,7 +861,7 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
+        g_asyncSoundManager.pushSound( m82 );
     }
 
     bool isExternalMusicFileAvailable( const int trackId )
@@ -925,7 +883,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeMusicTask();
 
-        PlayMusicImp( trackId, Settings::Get().MusicType(), playbackMode );
+        PlayMusicImpl( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
@@ -959,7 +917,7 @@ namespace AudioManager
 
         const int trackId = std::exchange( currentMusicTrackId, MUS::UNKNOWN );
 
-        PlayMusicImp( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        PlayMusicImpl( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
     void stopSounds()

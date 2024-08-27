@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 
-#include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -49,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "profit.h"
@@ -83,7 +83,9 @@ namespace
     Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
     {
         const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
+
         Funds corrected( original );
+
         corrected.wood = std::min( corrected.wood, ( corrected.wood * handicapPercentage + 99 ) / 100 );
         corrected.mercury = std::min( corrected.mercury, ( corrected.mercury * handicapPercentage + 99 ) / 100 );
         corrected.ore = std::min( corrected.ore, ( corrected.ore * handicapPercentage + 99 ) / 100 );
@@ -94,11 +96,11 @@ namespace
 
         return corrected;
     }
-}
 
-bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
-{
-    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
+    {
+        return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    }
 }
 
 Kingdom::Kingdom()
@@ -176,25 +178,30 @@ bool Kingdom::isPlay() const
 
 void Kingdom::LossPostActions()
 {
-    if ( isPlay() ) {
-        Players::SetPlayerInGame( color, false );
-
-        // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
-        while ( !heroes.empty() ) {
-            Heroes * hero = heroes.back();
-
-            assert( hero->GetColor() == GetColor() );
-
-            hero->Dismiss( static_cast<int>( Battle::RESULT_LOSS ) );
-        }
-
-        if ( !castles.empty() ) {
-            castles.ChangeColors( GetColor(), Color::NONE );
-            castles.clear();
-        }
-
-        world.ResetCapturedObjects( GetColor() );
+    if ( !isPlay() ) {
+        return;
     }
+
+    Players::SetPlayerInGame( color, false );
+
+    // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
+    while ( !heroes.empty() ) {
+        Heroes * hero = heroes.back();
+
+        assert( hero->GetColor() == GetColor() );
+
+        hero->Dismiss( static_cast<int>( Battle::RESULT_LOSS ) );
+    }
+
+    for ( Castle * castle : castles ) {
+        assert( castle != nullptr && castle->GetColor() == GetColor() );
+
+        castle->ChangeColor( Color::NONE );
+    }
+
+    castles.clear();
+
+    world.ResetCapturedObjects( GetColor() );
 }
 
 void Kingdom::ActionBeforeTurn()
@@ -298,8 +305,6 @@ void Kingdom::AddHero( Heroes * hero )
     if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) ) {
         heroes.push_back( hero );
     }
-
-    AI::Get().HeroesAdd( *hero );
 }
 
 void Kingdom::RemoveHero( const Heroes * hero )
@@ -324,26 +329,21 @@ void Kingdom::RemoveHero( const Heroes * hero )
         player->GetFocus().Reset();
     }
 
-    assert( hero != nullptr );
-
-    AI::Get().HeroesRemove( *hero );
-
     if ( isLoss() ) {
         LossPostActions();
     }
 }
 
-void Kingdom::AddCastle( const Castle * castle )
+void Kingdom::AddCastle( Castle * castle )
 {
     if ( castle ) {
-        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) )
-            castles.push_back( const_cast<Castle *>( castle ) );
+        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
+            castles.push_back( castle );
+        }
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
             Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
-
-        AI::Get().CastleAdd( *castle );
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
@@ -365,10 +365,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
         }
-
-        assert( castle != nullptr );
-
-        AI::Get().CastleRemove( *castle );
     }
 
     if ( isLoss() )
@@ -453,7 +449,7 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isActionObject( objectType ) )
+    if ( !MP2::isInGameActionObject( objectType ) )
         return false;
 
     if ( isVisited( tile.GetIndex(), objectType ) )
@@ -596,20 +592,22 @@ bool Kingdom::AllowRecruitHero( bool check_payment ) const
 
 void Kingdom::ApplyPlayWithStartingHero()
 {
-    if ( !isPlay() || castles.empty() )
+    if ( !isPlay() || castles.empty() ) {
         return;
+    }
 
     bool foundHeroes = false;
 
     for ( const Castle * castle : castles ) {
-        if ( castle == nullptr )
+        if ( castle == nullptr ) {
             continue;
+        }
 
-        // check manual set hero (castle position + point(0, 1))?
+        // Check if there is a hero placed by the map creator near the castle entrance (castle position + point(0, 1))
         const fheroes2::Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
 
-        // and move manual set hero to castle
+        // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {
             const bool patrol = hero->Modes( Heroes::PATROL );
             if ( hero->isValid() ) {
@@ -624,19 +622,25 @@ void Kingdom::ApplyPlayWithStartingHero()
                 hero->SetModes( Heroes::PATROL );
                 hero->SetPatrolCenter( cp );
             }
+
             foundHeroes = true;
         }
     }
 
-    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInEachCastle ) {
+    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInFirstCastle ) {
         // get first castle
         const Castle * first = castles.GetFirstCastle();
-        if ( nullptr == first )
+        if ( first == nullptr ) {
             first = castles.front();
+        }
+
+        // If no heroes exist and at least one castle / town must be.
+        assert( first != nullptr );
 
         Heroes * hero = world.GetHeroForHire( first->GetRace() );
-        if ( hero && AllowRecruitHero( false ) )
+        if ( hero && AllowRecruitHero( false ) ) {
             hero->Recruit( *first );
+        }
     }
 }
 
@@ -645,7 +649,7 @@ uint32_t Kingdom::GetMaxHeroes()
     return GameStatic::GetKingdomMaxHeroes();
 }
 
-Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
+Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
 {
     Funds totalIncome;
 
@@ -704,15 +708,28 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         }
     }
 
-    if ( isControlAI() && totalIncome.gold > 0 ) {
-        const int32_t bonusGold = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
+    if ( isControlAI() ) {
+        const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty(), *this );
+        if ( incomeBonus.GetValidItemsCount() != 0 ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() )
 
-        totalIncome.gold += bonusGold;
+            totalIncome += incomeBonus;
+        }
+
+        const int32_t goldBonus = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
+        if ( goldBonus != 0 ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE,
+                       "AI bonus to the gold income has been applied to " << Color::String( color ) << ", original income: " << totalIncome.gold
+                                                                          << ", bonus income: " << goldBonus )
+
+            totalIncome.gold += goldBonus;
+        }
     }
 
-    // Some human players can have handicap for resources.
     const Player * player = Players::Get( color );
     assert( player != nullptr );
+
+    // Some human players can have handicap for resources.
     return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
@@ -880,7 +897,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( const Castle * castle : castles ) {
+    for ( Castle * castle : castles ) {
         assert( castle != nullptr );
 
         // Skip neutral castles and towns.
@@ -941,7 +958,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
+Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() ) {
         switch ( difficulty ) {
@@ -992,8 +1009,8 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
         >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1100_RELEASE ) {
         int dummy;
 
         msg >> dummy;

@@ -102,9 +102,9 @@ protected:
     std::vector<WorldNode> _cache;
     std::vector<int> _mapOffset;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
     int _pathStart{ -1 };
     int _color{ Color::NONE };
     uint32_t _remainingMovePoints{ 0 };
@@ -138,18 +138,16 @@ private:
     // surface on which the hero is currently located is used.
     uint32_t getMaxMovePoints( const bool onWater ) const override;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
     uint32_t _maxMovePoints{ 0 };
 };
 
 class AIWorldPathfinder final : public WorldPathfinder
 {
 public:
-    explicit AIWorldPathfinder( double advantage )
-        : _minimalArmyStrengthAdvantage( advantage )
-    {}
+    AIWorldPathfinder() = default;
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
 
@@ -182,7 +180,7 @@ public:
     std::list<Route::Step> buildPath( const int targetIndex ) const;
 
     // Used for non-hero armies, like castles or monsters
-    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
+    uint32_t getDistance( const int start, const int targetIndex, const int color, const double armyStrength, const uint8_t skill = Skill::Level::EXPERT );
     // Faster, but does not re-evaluate the map (exposed method of the base class)
     using WorldPathfinder::getDistance;
 
@@ -227,13 +225,17 @@ private:
     // this hero and it should also have a valid information about the hero's remaining movement points.
     uint32_t getMovementPenalty( const int from, const int to, const int direction ) const override;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
+    int32_t _patrolCenter{ -1 };
+    uint32_t _patrolDistance{ 0 };
     uint32_t _maxMovePointsOnLand{ 0 };
     uint32_t _maxMovePointsOnWater{ 0 };
     double _armyStrength{ -1 };
+    bool _isOnPatrol{ false };
     bool _isArtifactsBagFull{ false };
+    bool _isEquippedWithSpellBook{ false };
     bool _isSummonBoatSpellAvailable{ false };
 
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can

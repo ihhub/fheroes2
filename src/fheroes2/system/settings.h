@@ -79,16 +79,17 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( const Maps::FileInfo & );
+
+    void setCurrentMapInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     Maps::FileInfo & getCurrentMapInfo()
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     int HeroesMoveSpeed() const
@@ -187,7 +188,9 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
-    bool isEditorEnabled() const;
+
+    bool isEditorAnimationEnabled() const;
+    bool isEditorPassabilityEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -260,6 +263,9 @@ public:
 
     bool setGameLanguage( const std::string & language );
 
+    void setEditorAnimation( const bool enable );
+    void setEditorPassability( const bool enable );
+
     int SoundVolume() const
     {
         return sound_volume;
@@ -313,13 +319,6 @@ public:
         players.setCurrentColor( color );
     }
 
-    int PreferablyCountPlayers() const
-    {
-        return preferably_count_players;
-    }
-
-    void SetPreferablyCountPlayers( int );
-
     int controllerPointerSpeed() const
     {
         return _controllerPointerSpeed;
@@ -353,8 +352,11 @@ private:
 
     static void setDebug( int debug );
 
-    // Global game options (GLOBAL_)
-    BitModes _optGlobal;
+    // Game related options.
+    BitModes _gameOptions;
+
+    // Editor related options.
+    BitModes _editorOptions;
 
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
@@ -365,7 +367,7 @@ private:
     // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 
-    Maps::FileInfo current_maps_file;
+    Maps::FileInfo _currentMapInfo;
 
     int sound_volume;
     int music_volume;
@@ -377,7 +379,6 @@ private:
     int battle_speed;
 
     int game_type;
-    int preferably_count_players;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
@@ -388,7 +389,7 @@ private:
     Players players;
 };
 
-StreamBase & operator<<( StreamBase &, const Settings & );
-StreamBase & operator>>( StreamBase &, Settings & );
+StreamBase & operator<<( StreamBase & msg, const Settings & conf );
+StreamBase & operator>>( StreamBase & msg, Settings & conf );
 
 #endif

@@ -24,15 +24,13 @@
 #include "army.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <map>
-#include <memory>
 #include <numeric>
-#include <ostream>
 #include <random>
 #include <set>
+#include <sstream>
 #include <utility>
 
 #include "army_troop.h"
@@ -239,17 +237,19 @@ Troops::~Troops()
     } );
 }
 
-void Troops::Assign( const Troop * it1, const Troop * it2 )
+void Troops::Assign( const Troop * itbeg, const Troop * itend )
 {
     Clean();
 
     iterator it = begin();
 
-    while ( it != end() && it1 != it2 ) {
-        if ( it1->isValid() )
-            ( *it )->Set( *it1 );
+    while ( it != end() && itbeg != itend ) {
+        if ( itbeg->isValid() ) {
+            ( *it )->Set( *itbeg );
+        }
+
         ++it;
-        ++it1;
+        ++itbeg;
     }
 }
 
@@ -281,10 +281,13 @@ void Troops::PushBack( const Monster & mons, uint32_t count )
 
 void Troops::PopBack()
 {
-    if ( !empty() ) {
-        delete back();
-        pop_back();
+    if ( empty() ) {
+        return;
     }
+
+    delete back();
+
+    pop_back();
 }
 
 Troop * Troops::GetTroop( size_t pos )
@@ -1231,7 +1234,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
             ++result;
             if ( strs ) {
                 std::string str = _( "All %{race} troops +1" );
-                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "Multiple" ) : Race::String( *races.begin() ) );
+                StringReplace( str, "%{race}", *races.begin() == Race::NONE ? _( "NeutralRaceTroops|Neutral" ) : Race::String( *races.begin() ) );
                 strs->append( str );
                 *strs += '\n';
             }
@@ -1301,26 +1304,6 @@ double Army::GetStrength() const
 
     if ( commander != nullptr && troopsExist ) {
         result += commander->GetMagicStrategicValue( result );
-    }
-
-    return result;
-}
-
-double Army::getStrengthOfAverageStartingArmy( const Heroes * hero )
-{
-    assert( hero != nullptr );
-
-    const int race = hero->GetRace();
-
-    double result = 0.0;
-
-    for ( uint32_t dwelling : std::array<uint32_t, 2>{ DWELLING_MONSTER1, DWELLING_MONSTER2 } ) {
-        const Monster monster{ race, dwelling };
-        assert( monster.isValid() );
-
-        const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
-
-        result += Troop{ monster, ( min + max ) / 2 }.GetStrength();
     }
 
     return result;

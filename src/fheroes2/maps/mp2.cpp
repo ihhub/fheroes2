@@ -60,6 +60,8 @@ namespace
         case MP2::OBJ_DUNE:
         case MP2::OBJ_LAVAPOOL:
         case MP2::OBJ_SHRUB:
+        case MP2::OBJ_SWAMPY_LAKE:
+        case MP2::OBJ_FROZEN_LAKE:
             return false;
         default:
             break;
@@ -482,6 +484,10 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
         return _( "Water Summoning Altar" );
+    case OBJ_SWAMPY_LAKE:
+        return _( "Swampy Lake" );
+    case OBJ_FROZEN_LAKE:
+        return _( "Frozen Lake" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -571,13 +577,13 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFromWater )
+bool MP2::isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
     if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
 bool MP2::isWaterActionObject( const MapObjectType objectType )
@@ -612,10 +618,10 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
 
     // Here we would have to return false, but some map editors allow to place arbitrary objects
     // on water tiles, so we have to work with this.
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
-bool MP2::isActionObject( const MapObjectType objectType )
+bool MP2::isInGameActionObject( const MapObjectType objectType )
 {
     if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) != OBJ_ACTION_OBJECT_TYPE ) {
         // It is not an action object.
@@ -628,6 +634,11 @@ bool MP2::isActionObject( const MapObjectType objectType )
     }
 
     return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
+}
+
+bool MP2::isOffGameActionObject( const MapObjectType objectType )
+{
+    return ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE;
 }
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
@@ -763,7 +774,7 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
     // Action objects in general should be avoided for fog discovery purposes, because
     // they may be guarded or may require wasting resources
-    return !isActionObject( objectType );
+    return !isInGameActionObject( objectType );
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
@@ -798,6 +809,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_BUOY:
     case OBJ_CAMPFIRE:
     case OBJ_COAST:
+    case OBJ_EVENT:
     case OBJ_FLOTSAM:
     case OBJ_GENIE_LAMP:
     case OBJ_HERO:

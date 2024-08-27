@@ -173,6 +173,28 @@ int Skill::Primary::GetInitialSpell( int race )
     return ptr ? ptr->initial_spell : 0;
 }
 
+int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
+{
+    if ( const stats_t * ptr = GameStatic::GetSkillStats( race ) ) {
+        switch ( skill ) {
+        case ATTACK:
+            return ptr->initial_primary.attack;
+        case DEFENSE:
+            return ptr->initial_primary.defense;
+        case POWER:
+            return ptr->initial_primary.power;
+        case KNOWLEDGE:
+            return ptr->initial_primary.knowledge;
+        default:
+            // Are you sure that you are passing the correct skill type?
+            assert( 0 );
+            break;
+        }
+    }
+
+    return skill == POWER ? 1 : 0;
+}
+
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
     Rand::Queue percents( MAXPRIMARYSKILL );
@@ -298,7 +320,7 @@ const char * Skill::Level::String( int level )
 
 std::string Skill::Level::StringWithBonus( const Heroes & hero, const Secondary & skill )
 {
-    const std::string levelStr = String( skill.Level() );
+    std::string levelStr = String( skill.Level() );
     if ( skill.Skill() == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
         return levelStr + "+" + std::to_string( Skill::GetNecromancyBonus( hero ) );
     }

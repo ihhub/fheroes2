@@ -186,9 +186,16 @@ namespace Skill
 
         int LevelUp( int race, int level, uint32_t seed );
 
+        // Returns the sum of the values of the four primary skills (attack, defense, power and knowledge), belonging directly to the hero (i.e. excluding artifacts)
+        int getTotalPrimarySkillLevel() const
+        {
+            return attack + defense + power + knowledge;
+        }
+
         static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
+        static int getHeroDefaultSkillValue( const int skill, const int race );
 
     protected:
         void LoadDefaults( int type, int race );

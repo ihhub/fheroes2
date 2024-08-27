@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -56,6 +56,8 @@ namespace Maps
 
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
+
+        const uint32_t fastestMovePenalty = roadPenalty;
         const uint32_t slowestMovePenalty = 200;
 
         const char * String( int groundId );

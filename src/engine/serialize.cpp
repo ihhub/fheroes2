@@ -89,6 +89,12 @@ StreamBase & StreamBase::operator>>( char & v )
     return *this;
 }
 
+StreamBase & StreamBase::operator>>( int8_t & v )
+{
+    v = static_cast<int8_t>( get8() );
+    return *this;
+}
+
 StreamBase & StreamBase::operator>>( uint8_t & v )
 {
     v = get8();
@@ -154,6 +160,12 @@ StreamBase & StreamBase::operator<<( const bool v )
 StreamBase & StreamBase::operator<<( const char v )
 {
     put8( v );
+    return *this;
+}
+
+StreamBase & StreamBase::operator<<( const int8_t v )
+{
+    put8( static_cast<uint8_t>( v ) );
     return *this;
 }
 
@@ -416,7 +428,7 @@ std::vector<uint8_t> StreamBuf::getRaw( size_t sz )
     return v;
 }
 
-void StreamBuf::putRaw( const char * ptr, size_t sz )
+void StreamBuf::putRaw( const void * ptr, size_t sz )
 {
     if ( sz == 0 ) {
         return;
@@ -671,8 +683,13 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     return v;
 }
 
-void StreamFile::putRaw( const char * ptr, size_t sz )
+void StreamFile::putRaw( const void * ptr, size_t sz )
 {
+    if ( sz == 0 ) {
+        // Nothing to write. Ignore it.
+        return;
+    }
+
     if ( !_file ) {
         return;
     }
@@ -682,7 +699,7 @@ void StreamFile::putRaw( const char * ptr, size_t sz )
     }
 }
 
-StreamBuf StreamFile::toStreamBuf( const size_t size )
+StreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
 {
     const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
@@ -691,7 +708,7 @@ StreamBuf StreamFile::toStreamBuf( const size_t size )
 
     StreamBuf buffer( chunkSize );
 
-    if ( std::fread( buffer.data(), chunkSize, 1, _file.get() ) != 1 ) {
+    if ( std::fread( buffer.dataForWriting(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
 
         return StreamBuf{};

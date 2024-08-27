@@ -24,7 +24,6 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
-#include <algorithm> // IWYU pragma: keep
 #include <cassert>
 #include <cstdint>
 #include <iterator>
@@ -141,9 +140,6 @@ namespace Battle
 
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield
         uint32_t GetSurrenderCost() const;
-
-        // Returns the strength of the army that will remain in case of surrender (not taking into account the hero's bonuses)
-        double getStrengthOfArmyRemainingInCaseOfSurrender() const;
 
         Troops GetKilledTroops() const;
 

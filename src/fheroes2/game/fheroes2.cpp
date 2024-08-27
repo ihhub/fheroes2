@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -31,9 +32,23 @@
 #include <string>
 #include <vector>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 #if defined( _WIN32 )
 #include <cassert>
@@ -122,7 +137,7 @@ namespace
     void displayMissingResourceWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+        const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
         display.fill( 0 );
         fheroes2::Resize( image, display );
@@ -141,7 +156,7 @@ namespace
                 break;
             }
 
-            if ( le.KeyPress() || le.MouseClickLeft() ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
                 closeWindow = true;
             }
         }
@@ -190,7 +205,7 @@ namespace
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #if !defined( MACOS_APP_BUNDLE )
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            const fheroes2::Image & appIcon = Compression::CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
         }

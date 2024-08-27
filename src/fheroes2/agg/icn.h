@@ -909,7 +909,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
@@ -920,7 +919,6 @@ namespace ICN
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
-        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
@@ -968,7 +966,6 @@ namespace ICN
         MONO_CURSOR_CMSSBW,
 
         ESPANBKG_EVIL,
-        RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
         UNIFORMBAK_GOOD,
@@ -977,9 +974,10 @@ namespace ICN
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
-        RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
         EDITBTNS_EVIL,
+        DROPLISL_EVIL,
+        CELLWIN_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
@@ -1071,6 +1069,9 @@ namespace ICN
         BUTTON_TOWN_GOOD,
         BUTTON_TOWN_EVIL,
 
+        BUTTON_RESTRICT_GOOD,
+        BUTTON_RESTRICT_EVIL,
+
         BUTTON_KINGDOM_EXIT,
         BUTTON_KINGDOM_HEROES,
         BUTTON_KINGDOM_TOWNS,
@@ -1090,6 +1091,7 @@ namespace ICN
 
         BUTTON_VERTICAL_DISMISS,
         BUTTON_VERTICAL_EXIT,
+        BUTTON_VERTICAL_PATROL,
         BUTTON_HSCORES_VERTICAL_CAMPAIGN,
         BUTTON_HSCORES_VERTICAL_EXIT,
         BUTTON_HSCORES_VERTICAL_STANDARD,
@@ -1104,6 +1106,18 @@ namespace ICN
 
         METALLIC_BORDERED_TEXTBOX_GOOD,
         METALLIC_BORDERED_TEXTBOX_EVIL,
+
+        BUTTON_NEW_MAP_EVIL,
+        BUTTON_NEW_MAP_GOOD,
+        BUTTON_SAVE_MAP_EVIL,
+        BUTTON_SAVE_MAP_GOOD,
+        BUTTON_LOAD_MAP_EVIL,
+        BUTTON_LOAD_MAP_GOOD,
+
+        BUTTON_RUMORS_GOOD,
+        BUTTON_RUMORS_EVIL,
+        BUTTON_EVENTS_GOOD,
+        BUTTON_EVENTS_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

@@ -53,7 +53,10 @@ namespace Interface
         // The next value is base for Map Editor interface.
         REDRAW_PANEL = 0x100,
 
-        REDRAW_ALL = 0x1FF
+        REDRAW_ALL = 0x1FF,
+
+        // This option is only for the Editor.
+        REDRAW_PASSABILITIES = 0x200
     };
 
     class BaseInterface
@@ -140,6 +143,10 @@ namespace Interface
         {
             return _isEditor;
         }
+
+        // Call this function to plan (set) redraw if fade in is not set
+        // or redraw the given interface items and do fade in with them rendered.
+        void renderWithFadeInOrPlanRender( const uint32_t redrawMask );
 
     protected:
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.

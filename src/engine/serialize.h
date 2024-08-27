@@ -29,13 +29,11 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
-#include <functional>
 #include <iterator>
 #include <list>
 #include <map>
 #include <memory>
 #include <string>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -100,7 +98,7 @@ public:
     virtual void putLE16( uint16_t ) = 0;
 
     virtual std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) = 0;
-    virtual void putRaw( const char *, size_t ) = 0;
+    virtual void putRaw( const void *, size_t ) = 0;
 
     uint16_t get16();
     uint32_t get32();
@@ -120,6 +118,7 @@ public:
 
     StreamBase & operator>>( bool & v );
     StreamBase & operator>>( char & v );
+    StreamBase & operator>>( int8_t & v );
     StreamBase & operator>>( uint8_t & v );
     StreamBase & operator>>( uint16_t & v );
     StreamBase & operator>>( int16_t & v );
@@ -131,6 +130,7 @@ public:
 
     StreamBase & operator<<( const bool v );
     StreamBase & operator<<( const char v );
+    StreamBase & operator<<( const int8_t v );
     StreamBase & operator<<( const uint8_t v );
     StreamBase & operator<<( const uint16_t v );
     StreamBase & operator<<( const int16_t v );
@@ -264,7 +264,7 @@ private:
     uint32_t _flags{ 0 };
 };
 
-class StreamBuf : public StreamBase
+class StreamBuf final : public StreamBase
 {
 public:
     explicit StreamBuf( const size_t sz = 0 );
@@ -281,17 +281,6 @@ public:
     const uint8_t * data() const
     {
         return itget;
-    }
-
-    // If you use this method to write data update the cursor by calling advance() method.
-    uint8_t * data()
-    {
-        return itget;
-    }
-
-    void advance( const size_t size )
-    {
-        itput += size;
     }
 
     size_t size()
@@ -322,11 +311,13 @@ public:
     void putLE16( uint16_t v ) override;
 
     std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
-    void putRaw( const char * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t sz ) override;
 
     std::string toString( const size_t size = 0 );
 
-protected:
+private:
+    friend class StreamFile;
+
     void reset();
 
     size_t tellg() override;
@@ -339,7 +330,17 @@ protected:
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
-    friend class ZStreamBuf;
+    // After using this method to write data, update the cursor by calling the advance() method.
+    uint8_t * dataForWriting()
+    {
+        return itput;
+    }
+
+    // Advances the cursor intended for writing data forward by a specified number of bytes.
+    void advance( const size_t size )
+    {
+        itput += size;
+    }
 
     uint8_t * itbeg{ nullptr };
     uint8_t * itget{ nullptr };
@@ -347,7 +348,7 @@ protected:
     uint8_t * itend{ nullptr };
 };
 
-class StreamFile : public StreamBase
+class StreamFile final : public StreamBase
 {
 public:
     StreamFile() = default;
@@ -383,11 +384,11 @@ public:
     // 0 stands for full data.
     std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
 
-    void putRaw( const char *, size_t ) override;
+    void putRaw( const void * ptr, size_t sz ) override;
 
     std::string toString( const size_t size = 0 );
 
-protected:
+private:
     size_t sizeg() override;
     size_t sizep() override;
     size_t tellg() override;
@@ -395,9 +396,6 @@ protected:
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
-
-private:
-    std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> _file{ nullptr, std::fclose };
 
     template <typename T>
     T getUint()
@@ -428,6 +426,8 @@ private:
             setfail( true );
         }
     }
+
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, std::fclose };
 };
 
 namespace fheroes2

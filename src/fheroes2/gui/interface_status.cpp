@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -443,7 +443,7 @@ void Interface::StatusWindow::QueueEventProcessing()
         NextState();
         SetRedraw();
     }
-    if ( le.MousePressRight( GetRect() ) ) {
+    if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
         const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
