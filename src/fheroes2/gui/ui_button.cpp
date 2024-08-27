@@ -36,142 +36,140 @@
 
 namespace
 {
-    // TODO: Replace the other resizeButton() function with this one.
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width, const int32_t height )
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size buttonSize, const bool isReleasedState )
     {
-        assert( height > 0 );
+        assert( buttonSize.height > 0 );
 
         fheroes2::Image output;
-        output.resize( width, height );
+
+        output.resize( buttonSize.width, buttonSize.height );
         output.reset();
 
         const int32_t originalWidth = original.width();
         const int32_t originalHeight = original.height();
-        if ( originalHeight == height && originalWidth == width ) {
+
+        if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
             fheroes2::Copy( original, output );
         }
-        else if ( originalHeight >= height && originalWidth >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height / 2 );
-            const int32_t secondHalfHeight = height - height / 2;
-            const int32_t secondHalfWidth = width - width / 2;
-            fheroes2::Copy( original, 0, originalHeight - secondHalfHeight, output, 0, height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
-            fheroes2::Copy( original, originalWidth - secondHalfWidth, 0, output, width - secondHalfWidth, 0, secondHalfWidth, secondHalfHeight );
-            fheroes2::Copy( original, originalWidth - secondHalfWidth, originalHeight - secondHalfHeight, output, width - secondHalfWidth, height - secondHalfHeight,
-                            secondHalfWidth, secondHalfHeight );
-        }
-        // TODO: Add if condition for no change in height but change in width, or vice-versa, compared to original button.
-        else {
+        // TODO: Add assertions that in the vein of assert( offsetX + rightPartWidth == width );
+        // Buttons that only are wider.
+        else if ( buttonSize.width > originalWidth && buttonSize.height == originalHeight ) {
             const int32_t middleWidth = originalWidth / 3;
-            const int32_t overallMiddleWidth = width - middleWidth * 2;
+            const int32_t overallMiddleWidth = buttonSize.width - middleWidth * 2;
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
             const int32_t middleWidthLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
 
-            const int32_t middleHeight = originalHeight / 3;
-            const int32_t overallMiddleHeight = height - middleHeight * 2;
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, originalHeight );
+
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, originalHeight );
+                offsetX += middleWidth;
+            }
+
+            if ( middleWidthLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidthLeftOver, originalHeight );
+                offsetX += middleWidthLeftOver;
+            }
+
+            fheroes2::Copy( original, originalWidth - middleWidth, 0, output, offsetX, 0, middleWidth, originalHeight );
+        }
+        // Buttons that only are taller.
+        else if ( buttonSize.height > originalHeight && buttonSize.width == originalWidth ) {
+            // TODO: fix empty vertical button having height of 121 pixels -> Not evenly dividable by 5
+            const int32_t middleHeight = originalHeight / 5;
+            const int32_t overallMiddleHeight = buttonSize.height - middleHeight * 2;
+            const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
+            const int32_t middleHeightLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, originalWidth, middleHeight );
+
+            int32_t offsetY = middleHeight;
+            for ( int32_t i = 0; i < middleHeightCount; ++i ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, originalWidth, middleHeight );
+                offsetY += middleHeight;
+            }
+
+            if ( middleHeightLeftOver > 0 ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, originalWidth, middleHeightLeftOver );
+                offsetY += middleHeightLeftOver;
+            }
+
+            fheroes2::Copy( original, 0, originalHeight - middleHeight, output, 0, offsetY, originalWidth, middleHeight );
+        }
+        // Buttons that have shrunk in any direction.
+        else if ( originalHeight >= buttonSize.height && originalWidth >= buttonSize.width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, buttonSize.width / 2, buttonSize.height / 2 );
+
+            const int32_t secondHalfHeight = buttonSize.height - buttonSize.height / 2;
+            const int32_t secondHalfWidth = buttonSize.width - buttonSize.width / 2;
+
+            fheroes2::Copy( original, 0, originalHeight - secondHalfHeight, output, 0, buttonSize.height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
+            fheroes2::Copy( original, originalWidth - secondHalfWidth, 0, output, buttonSize.width - secondHalfWidth, 0, secondHalfWidth, secondHalfHeight );
+            fheroes2::Copy( original, originalWidth - secondHalfWidth, originalHeight - secondHalfHeight, output, buttonSize.width - secondHalfWidth,
+                            buttonSize.height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
+        }
+        // Buttons that are both wider and taller.
+        else {
+            const int32_t middleWidth = originalWidth / 3;
+            const int32_t overallMiddleWidth = buttonSize.width - middleWidth * 2;
+            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
+            const int32_t middleWidthLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+
+            // TODO: guildWell and map_select should be forced to keep their heights - they don't need to be dividable by 5, for now.
+            const int32_t middleHeight = originalHeight / 5;
+            const int32_t overallMiddleHeight = buttonSize.height - middleHeight * 2;
             const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
             const int32_t middleHeightLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
 
             fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, middleHeight );
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, buttonSize.width - rightPartWidth, 0, middleWidth, middleHeight );
 
             int32_t offsetY = middleHeight;
             for ( int32_t i = 0; i < middleHeightCount; ++i ) {
                 fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeight );
+                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, buttonSize.width - rightPartWidth, offsetY, middleWidth, middleHeight );
                 offsetY += middleHeight;
             }
 
             if ( middleHeightLeftOver > 0 ) {
                 fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeightLeftOver );
+                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, buttonSize.width - rightPartWidth, offsetY, middleWidth,
+                                middleHeightLeftOver );
                 offsetY += middleHeightLeftOver;
             }
 
-            const int32_t leftBottomPart = originalHeight - middleHeight * 2;
+            const int32_t bottomPartHeight = originalHeight - middleHeight * 4;
 
-            fheroes2::Copy( original, 0, originalHeight - leftBottomPart, output, 0, offsetY, middleWidth, leftBottomPart );
+            fheroes2::Copy( original, 0, originalHeight - bottomPartHeight, output, 0, offsetY, middleWidth, bottomPartHeight );
+            fheroes2::Copy( original, originalWidth - rightPartWidth, originalHeight - bottomPartHeight, output, buttonSize.width - rightPartWidth, offsetY, middleWidth,
+                            bottomPartHeight );
 
             int32_t offsetX = middleWidth;
             for ( int32_t i = 0; i < middleWidthCount; ++i ) {
                 fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, middleHeight );
+                fheroes2::Copy( original, middleWidth, originalHeight - bottomPartHeight, output, offsetX, offsetY, middleWidth, middleHeight );
                 offsetX += middleWidth;
             }
 
             if ( middleWidthLeftOver > 0 ) {
                 fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidthLeftOver, middleHeight );
+                fheroes2::Copy( original, middleWidth, originalHeight - bottomPartHeight, output, offsetX, offsetY, middleWidthLeftOver, middleHeight );
                 offsetX += middleWidthLeftOver;
             }
 
-            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, middleHeight );
-
-            // TODO: Rename this variable, or better unify the for loops.
-            int32_t offsetY2 = middleHeight;
-            for ( int32_t i = 0; i < middleHeightCount; ++i ) {
-                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, offsetX, offsetY2, middleWidth, middleHeight );
-                offsetY2 += middleHeight;
+            // TODO: This is copied straight from getButtonFillingColor() in agg_image.cpp. When all uses of that function has
+            // been removed from agg_image.cpp, this function can be moved to ui_button.cpp.
+            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+            uint8_t colorID;
+            if ( isEvilInterface ) {
+                colorID = isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
             }
-
-            if ( middleHeightLeftOver > 0 ) {
-                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, offsetX, offsetY2, middleWidth, middleHeightLeftOver );
+            else {
+                colorID = isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
             }
-
-            const int32_t rightPartHeight = originalHeight - middleHeight * 2;
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, originalHeight - rightPartHeight, output, offsetX, offsetY, rightPartWidth, rightPartHeight );
-            // TODO: Rename this variable, or better unify the for loops.
-            int32_t offsetX2 = middleWidth;
-            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
-                fheroes2::Copy( original, middleWidth, originalHeight - rightPartHeight, output, offsetX2, offsetY, middleWidth, originalHeight - rightPartHeight );
-                offsetX2 += middleWidth;
-            }
-
-            if ( middleWidthLeftOver > 0 ) {
-                fheroes2::Copy( original, middleWidth, originalHeight - rightPartHeight, output, offsetX2, offsetY, middleWidthLeftOver,
-                                originalHeight - rightPartHeight );
-            }
-
-            // Step 9 Todo: Get the button filling color according to Evil/Good interface setting and according to pressed and released state.
-            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, fheroes2::GetColorId( 216, 184, 152 ) );
-        }
-
-        return output;
-    }
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
-    {
-        const int32_t height = original.height();
-        assert( height > 0 );
-
-        fheroes2::Image output;
-        output.resize( width, height );
-        output.reset();
-
-        const int32_t originalWidth = original.width();
-        if ( originalWidth >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
-            const int32_t secondHalf = width - width / 2;
-            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
-        }
-        else {
-            const int32_t middleWidth = originalWidth / 3;
-            const int32_t overallMiddleWidth = width - middleWidth * 2;
-            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
-            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
-
-            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
-            int32_t offsetX = middleWidth;
-            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
-                offsetX += middleWidth;
-            }
-
-            if ( middleLeftOver > 0 ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
-                offsetX += middleLeftOver;
-            }
-
-            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
-            assert( offsetX + rightPartWidth == width );
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
+            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, colorID );
         }
 
         return output;
@@ -199,6 +197,7 @@ namespace
             releasedOffset = { 6, 5 };
             pressedOffset = { 5, 6 };
             break;
+        //TODO: POL buttons are just EVIL theme buttons so this can be removed.
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textMargin = 4 + 4;
@@ -740,8 +739,8 @@ namespace fheroes2
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        released = resizeButton( originalReleased, width );
-        pressed = resizeButton( originalPressed, width );
+        released = resizeButton( originalReleased, { width, originalReleased.height() }, true );
+        pressed = resizeButton( originalPressed, { width, originalPressed.height() }, false );
 
         if ( !isTransparentBackground ) {
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
@@ -792,8 +791,8 @@ namespace fheroes2
 
         assert( textAreaHeight + backgroundBordersY > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY );
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY }, true );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY }, false );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
@@ -805,7 +804,7 @@ namespace fheroes2
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align.
         releasedText.draw( releasedOffset.x + 1, ( released.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
-        pressedText.draw( pressedOffset.x + 1, ( pressed.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
+        pressedText.draw( pressedOffset.x + 1, ( pressed.height() - pressedTextSize.height ) / 2 + 1, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
