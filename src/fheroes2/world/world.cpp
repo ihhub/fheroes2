@@ -1375,15 +1375,15 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 
             switch ( obj.GetType() ) {
             case MP2::OBJ_EVENT:
-                stream << static_cast<const MapEvent &>( obj );
+                stream << dynamic_cast<const MapEvent &>( obj );
                 break;
 
             case MP2::OBJ_SPHINX:
-                stream << static_cast<const MapSphinx &>( obj );
+                stream << dynamic_cast<const MapSphinx &>( obj );
                 break;
 
             case MP2::OBJ_SIGN:
-                stream << static_cast<const MapSign &>( obj );
+                stream << dynamic_cast<const MapSign &>( obj );
                 break;
 
             default:
