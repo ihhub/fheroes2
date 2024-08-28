@@ -51,7 +51,6 @@ namespace
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
             fheroes2::Copy( original, output );
         }
-        // TODO: Add assertions in the vein of assert( offsetX + rightPartWidth == width );
         // Buttons that only are wider.
         else if ( buttonSize.width > originalWidth && buttonSize.height == originalHeight ) {
             const int32_t middleWidth = originalWidth / 3;
@@ -71,12 +70,12 @@ namespace
                 fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidthLeftOver, originalHeight );
                 offsetX += middleWidthLeftOver;
             }
+            assert( offsetX + originalWidth - middleWidth * 2 == buttonSize.width );
 
             fheroes2::Copy( original, originalWidth - middleWidth, 0, output, offsetX, 0, middleWidth, originalHeight );
         }
         // Buttons that only are taller.
         else if ( buttonSize.height > originalHeight && buttonSize.width == originalWidth ) {
-            // TODO: fix empty vertical button having height of 121 pixels -> Not evenly dividable by 5
             const int32_t middleHeight = originalHeight / 5;
             const int32_t overallMiddleHeight = buttonSize.height - middleHeight * 2;
             const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
@@ -94,6 +93,7 @@ namespace
                 fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, originalWidth, middleHeightLeftOver );
                 offsetY += middleHeightLeftOver;
             }
+            assert( offsetY + originalHeight - middleHeight * 4 == buttonSize.height );
 
             fheroes2::Copy( original, 0, originalHeight - middleHeight, output, 0, offsetY, originalWidth, middleHeight );
         }
@@ -116,7 +116,6 @@ namespace
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
             const int32_t middleWidthLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
 
-            // TODO: guildWell and map_select should be forced to keep their heights - they don't need to be dividable by 5, for now.
             const int32_t middleHeight = originalHeight / 5;
             const int32_t overallMiddleHeight = buttonSize.height - middleHeight * 2;
             const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
@@ -159,6 +158,8 @@ namespace
                 offsetX += middleWidthLeftOver;
             }
 
+            assert( offsetX + rightPartWidth == buttonSize.width );
+            assert( offsetY + bottomPartHeight == buttonSize.height );
             // TODO: This is copied straight from getButtonFillingColor() in agg_image.cpp. When all uses of that function has
             // been removed from agg_image.cpp, this function can be moved to ui_button.cpp.
             const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
