@@ -187,7 +187,7 @@ namespace
             font = fheroes2::FontColor::WHITE;
             textAreaBorders.x = 4 + 4;
             textAreaBorders.y = 1 + 1;
-            // The minimum text area width for campaign buttons is 86 judging from the shared widths of the
+            // The minimum text area width for Good campaign buttons is 86 judging from the shared widths of the
             // original OKAY and the CANCEL buttons even though OKAY is a shorter word
             minimumTextArea.width = 86;
             maximumTextArea.height = 50;
@@ -199,11 +199,11 @@ namespace
         case ICN::EMPTY_EVIL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
-            textAreaBorders.y = 2 + 1;
+            textAreaBorders.y = 1 + 1;
             minimumTextArea.width = 87;
             maximumTextArea.height = 50;
             backgroundBorders.width = 6 + 3;
-            backgroundBorders.height = 3 + 4;
+            backgroundBorders.height = 4 + 4;
             releasedOffset = { 6, 4 };
             pressedOffset = { 5, 5 };
             break;
