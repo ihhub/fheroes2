@@ -98,7 +98,7 @@ namespace
             fheroes2::Copy( original, 0, originalHeight - middleHeight, output, 0, offsetY, originalWidth, middleHeight );
         }
         // Buttons that have shrunk in any direction.
-        else if ( originalHeight >= buttonSize.height && originalWidth >= buttonSize.width ) {
+        else if ( buttonSize.height <= originalHeight && buttonSize.width <= originalWidth ) {
             fheroes2::Copy( original, 0, 0, output, 0, 0, buttonSize.width / 2, buttonSize.height / 2 );
 
             const int32_t secondHalfHeight = buttonSize.height - buttonSize.height / 2;
@@ -109,8 +109,8 @@ namespace
             fheroes2::Copy( original, originalWidth - secondHalfWidth, originalHeight - secondHalfHeight, output, buttonSize.width - secondHalfWidth,
                             buttonSize.height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
         }
-        // Buttons that are both wider and taller.
-        else {
+        // Buttons that have increased width and height.
+        else if ( buttonSize.height > originalHeight && buttonSize.width > originalWidth ) {
             const int32_t middleWidth = originalWidth / 3;
             const int32_t overallMiddleWidth = buttonSize.width - middleWidth * 2;
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
@@ -171,6 +171,10 @@ namespace
             }
             fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, colorID );
         }
+        else {
+            // You are trying to modify the size of the button in an unexpected way. 
+            assert( 0 );
+        }
 
         return output;
     }
@@ -195,19 +199,25 @@ namespace
         case ICN::EMPTY_EVIL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
+            textAreaBorders.y = 2 + 1;
             minimumTextArea.width = 87;
+            maximumTextArea.height = 30;
             backgroundBorders.width = 6 + 3;
-            releasedOffset = { 6, 5 };
-            pressedOffset = { 5, 6 };
+            backgroundBorders.height = 3 + 4;
+            releasedOffset = { 6, 4 };
+            pressedOffset = { 5, 5 };
             break;
         // TODO: POL buttons are just EVIL campaign theme buttons. With some changes, their specific button code can be removed.
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
+            textAreaBorders.y = 2 + 1;
             minimumTextArea.width = 87;
+            maximumTextArea.height = 18;
             backgroundBorders.width = 4 + 3;
-            releasedOffset = { 4, 5 };
-            pressedOffset = { 3, 6 };
+            backgroundBorders.height = 3 + 3;
+            releasedOffset = { 4, 4 };
+            pressedOffset = { 3, 5 };
             break;
         case ICN::EMPTY_GUILDWELL_BUTTON:
             font = fheroes2::FontColor::WHITE;
