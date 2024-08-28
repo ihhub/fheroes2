@@ -19,14 +19,14 @@
  ***************************************************************************/
 #pragma once
 
-class StreamBase;
+class IStreamBase;
 
 namespace MP2
 {
     struct MP2TileInfo;
     struct MP2AddonInfo;
 
-    void loadTile( StreamBase & stream, MP2TileInfo & tile );
+    void loadTile( IStreamBase & stream, MP2TileInfo & tile );
 
-    void loadAddon( StreamBase & stream, MP2AddonInfo & addon );
+    void loadAddon( IStreamBase & stream, MP2AddonInfo & addon );
 }

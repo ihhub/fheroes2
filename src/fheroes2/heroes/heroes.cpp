@@ -2428,28 +2428,28 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
     return nullptr;
 }
 
-StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
+OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes )
 {
-    msg << static_cast<uint32_t>( heroes.size() );
+    stream << static_cast<uint32_t>( heroes.size() );
 
     for ( const Heroes * hero : heroes ) {
         assert( hero != nullptr );
-        msg << hero->GetID();
+        stream << hero->GetID();
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
+IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
 {
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     heroes.clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
         int32_t hid;
-        msg >> hid;
+        stream >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
@@ -2481,35 +2481,35 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
         }
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
+OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero )
 {
     const HeroBase & base = hero;
     const ColorBase & col = hero;
 
     // HeroBase
-    msg << base;
+    stream << base;
 
     // Heroes
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
 
-    return msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
-               << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
-               << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
+    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
+                  << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
+                  << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 }
 
-StreamBase & operator>>( StreamBase & msg, Heroes & hero )
+IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
 {
     HeroBase & base = hero;
     ColorBase & col = hero;
 
     // HeroBase
-    msg >> base;
+    stream >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
+    stream >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
@@ -2541,14 +2541,14 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
             int temp = 0;
-            msg >> temp;
+            stream >> temp;
 
             hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
         }
         else {
             uint8_t temp = 0;
 
-            msg >> temp;
+            stream >> temp;
 
             hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
         }
@@ -2556,46 +2556,46 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     else {
         ObjectTypeUnderHeroType temp = 0;
 
-        msg >> temp;
+        stream >> temp;
 
         hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
     }
 
-    msg >> hero.path >> hero.direction >> hero.sprite_index;
+    stream >> hero.path >> hero.direction >> hero.sprite_index;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         int16_t patrolX = 0;
         int16_t patrolY = 0;
 
-        msg >> patrolX >> patrolY;
+        stream >> patrolX >> patrolY;
         hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
     }
     else {
-        msg >> hero._patrolCenter;
+        stream >> hero._patrolCenter;
     }
 
-    msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
+    stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
+OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 {
-    msg << static_cast<uint32_t>( heroes.size() );
+    stream << static_cast<uint32_t>( heroes.size() );
 
     for ( Heroes * const & hero : heroes ) {
-        msg << *hero;
+        stream << *hero;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
+IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     heroes.clear();
     heroes.resize( size, nullptr );
@@ -2606,18 +2606,18 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
         // In order to preserve the original order of heroes we have to do the below trick.
         for ( size_t i = 1; i < heroes.size(); ++i ) {
             heroes[i] = new Heroes();
-            msg >> *heroes[i];
+            stream >> *heroes[i];
         }
 
         heroes[0] = new Heroes();
-        msg >> *heroes[0];
+        stream >> *heroes[0];
     }
     else {
         for ( Heroes *& hero : heroes ) {
             hero = new Heroes();
-            msg >> *hero;
+            stream >> *hero;
         }
     }
 
-    return msg;
+    return stream;
 }

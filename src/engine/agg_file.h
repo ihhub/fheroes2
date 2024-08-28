@@ -74,6 +74,6 @@ namespace fheroes2
     uint32_t calculateAggFilenameHash( const std::string_view str );
 }
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
+IStreamBase & operator>>( IStreamBase & stream, fheroes2::ICNHeader & icn );
 
 #endif

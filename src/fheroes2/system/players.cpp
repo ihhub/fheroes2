@@ -229,29 +229,29 @@ void Player::commitAIAutoControlMode()
 }
 #endif
 
-StreamBase & operator<<( StreamBase & msg, const Focus & focus )
+OStreamBase & operator<<( OStreamBase & stream, const Focus & focus )
 {
-    msg << focus.first;
+    stream << focus.first;
 
     switch ( focus.first ) {
     case FOCUS_HEROES:
-        msg << static_cast<Heroes *>( focus.second )->GetIndex();
+        stream << static_cast<Heroes *>( focus.second )->GetIndex();
         break;
     case FOCUS_CASTLE:
-        msg << static_cast<Castle *>( focus.second )->GetIndex();
+        stream << static_cast<Castle *>( focus.second )->GetIndex();
         break;
     default:
-        msg << static_cast<int32_t>( -1 );
+        stream << static_cast<int32_t>( -1 );
         break;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Focus & focus )
+IStreamBase & operator>>( IStreamBase & stream, Focus & focus )
 {
     int32_t index;
-    msg >> focus.first >> index;
+    stream >> focus.first >> index;
 
     switch ( focus.first ) {
     case FOCUS_HEROES:
@@ -265,48 +265,48 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
         break;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Player & player )
+OStreamBase & operator<<( OStreamBase & stream, const Player & player )
 {
     using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
 
     const BitModes & modes = player;
 
-    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
-        << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
-    return msg;
+    stream << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
+           << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Player & player )
+IStreamBase & operator>>( IStreamBase & stream, Player & player )
 {
     BitModes & modes = player;
 
-    msg >> modes;
+    stream >> modes;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
         uint32_t temp;
-        msg >> temp;
+        stream >> temp;
     }
 
-    msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    stream >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
     using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
     static_assert( std::is_same_v<AIPersonalityUnderlyingType, int>, "Type of _aiPersonality has been changed, check the logic below" );
 
     AIPersonalityUnderlyingType aiPersonality;
-    msg >> aiPersonality;
+    stream >> aiPersonality;
 
     player._aiPersonality = static_cast<AI::Personality>( aiPersonality );
 
     uint8_t handicapStatusInt;
-    msg >> handicapStatusInt;
+    stream >> handicapStatusInt;
 
     player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
 
-    return msg;
+    return stream;
 }
 
 Players::Players()
@@ -585,21 +585,21 @@ std::string Players::String() const
     return os.str();
 }
 
-StreamBase & operator<<( StreamBase & msg, const Players & players )
+OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 {
-    msg << players.GetColors() << players.getCurrentColor();
+    stream << players.GetColors() << players.getCurrentColor();
 
     for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
-        msg << ( **it );
+        stream << ( **it );
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Players & players )
+IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
     int colors;
     int current;
-    msg >> colors >> current;
+    stream >> colors >> current;
 
     players.clear();
     players.setCurrentColor( current );
@@ -607,10 +607,10 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
 
     for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
         Player * player = new Player();
-        msg >> *player;
+        stream >> *player;
         Players::Set( Color::GetIndex( player->GetColor() ), player );
         players.push_back( player );
     }
 
-    return msg;
+    return stream;
 }

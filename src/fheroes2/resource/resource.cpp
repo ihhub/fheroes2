@@ -684,12 +684,12 @@ void Resource::BoxSprite::Redraw() const
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Funds & res )
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res )
 {
-    return msg << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
+    return stream << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
 }
 
-StreamBase & operator>>( StreamBase & msg, Funds & res )
+IStreamBase & operator>>( IStreamBase & stream, Funds & res )
 {
-    return msg >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
+    return stream >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
 }

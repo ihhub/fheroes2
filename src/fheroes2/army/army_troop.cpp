@@ -262,12 +262,12 @@ std::string ArmyTroop::GetDefenseString() const
     return output;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Troop & troop )
+OStreamBase & operator<<( OStreamBase & stream, const Troop & troop )
 {
-    return msg << troop.id << troop.count;
+    return stream << troop.id << troop.count;
 }
 
-StreamBase & operator>>( StreamBase & msg, Troop & troop )
+IStreamBase & operator>>( IStreamBase & stream, Troop & troop )
 {
-    return msg >> troop.id >> troop.count;
+    return stream >> troop.id >> troop.count;
 }

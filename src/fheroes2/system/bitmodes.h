@@ -26,7 +26,8 @@
 
 #include <cstdint>
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class BitModes
 {
@@ -58,13 +59,10 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const BitModes & );
-    friend StreamBase & operator>>( StreamBase &, BitModes & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const BitModes & b );
+    friend IStreamBase & operator>>( IStreamBase & stream, BitModes & b );
 
     uint32_t modes;
 };
-
-StreamBase & operator<<( StreamBase &, const BitModes & );
-StreamBase & operator>>( StreamBase &, BitModes & );
 
 #endif

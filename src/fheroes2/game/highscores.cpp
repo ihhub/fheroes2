@@ -109,21 +109,21 @@ namespace fheroes2
         return static_cast<uint32_t>( std::time( nullptr ) );
     }
 
-    void HighscoreData::loadV1( StreamBase & msg )
+    void HighscoreData::loadV1( IStreamBase & stream )
     {
         languageAbbreviation = fheroes2::getLanguageAbbreviation( fheroes2::SupportedLanguage::English );
 
-        msg >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
+        stream >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const HighscoreData & data )
+    OStreamBase & operator<<( OStreamBase & stream, const HighscoreData & data )
     {
-        return msg << data.languageAbbreviation << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
+        return stream << data.languageAbbreviation << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HighscoreData & data )
+    IStreamBase & operator>>( IStreamBase & stream, HighscoreData & data )
     {
-        return msg >> data.languageAbbreviation >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
+        return stream >> data.languageAbbreviation >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
     }
 
     bool HighScoreDataContainer::load( const std::string & fileName )

@@ -29,7 +29,8 @@
 
 #include "game_mode.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace GameOver
 {
@@ -82,8 +83,8 @@ namespace GameOver
         fheroes2::GameMode checkGameOver();
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const Result & );
-        friend StreamBase & operator>>( StreamBase &, Result & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Result & res );
+        friend IStreamBase & operator>>( IStreamBase & stream, Result & res );
 
         Result();
 
@@ -91,8 +92,8 @@ namespace GameOver
         uint32_t result;
     };
 
-    StreamBase & operator<<( StreamBase &, const Result & );
-    StreamBase & operator>>( StreamBase &, Result & );
+    OStreamBase & operator<<( OStreamBase & stream, const Result & res );
+    IStreamBase & operator>>( IStreamBase & stream, Result & res );
 }
 
 #endif

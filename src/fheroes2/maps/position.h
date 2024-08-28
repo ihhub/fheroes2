@@ -28,7 +28,8 @@
 
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class MapPosition
 {
@@ -56,13 +57,10 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const MapPosition & );
-    friend StreamBase & operator>>( StreamBase &, MapPosition & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapPosition & st );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapPosition & st );
 
     fheroes2::Point center;
 };
-
-StreamBase & operator<<( StreamBase &, const MapPosition & );
-StreamBase & operator>>( StreamBase &, MapPosition & );
 
 #endif

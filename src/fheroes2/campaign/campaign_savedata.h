@@ -28,7 +28,8 @@
 #include "army_troop.h"
 #include "campaign_scenariodata.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Troops;
 
@@ -122,8 +123,8 @@ namespace Campaign
         static CampaignSaveData & Get();
 
     private:
-        friend StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data );
-        friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
+        friend OStreamBase & operator<<( OStreamBase & stream, const CampaignSaveData & data );
+        friend IStreamBase & operator>>( IStreamBase & stream, CampaignSaveData & data );
 
         CampaignSaveData() = default;
 

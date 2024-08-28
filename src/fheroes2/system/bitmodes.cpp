@@ -22,14 +22,15 @@
  ***************************************************************************/
 
 #include "bitmodes.h"
+
 #include "serialize.h"
 
-StreamBase & operator<<( StreamBase & msg, const BitModes & b )
+OStreamBase & operator<<( OStreamBase & stream, const BitModes & b )
 {
-    return msg << b.modes;
+    return stream << b.modes;
 }
 
-StreamBase & operator>>( StreamBase & msg, BitModes & b )
+IStreamBase & operator>>( IStreamBase & stream, BitModes & b )
 {
-    return msg >> b.modes;
+    return stream >> b.modes;
 }

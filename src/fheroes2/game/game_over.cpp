@@ -604,12 +604,12 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     return res;
 }
 
-StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
+OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
 {
-    return msg << res.colors << res.result;
+    return stream << res.colors << res.result;
 }
 
-StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
+IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
-    return msg >> res.colors >> res.result;
+    return stream >> res.colors >> res.result;
 }

@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "artifact_ultimate.h"
+
 #include "interface_gamearea.h"
 #include "rand.h"
 #include "serialize.h"
@@ -68,13 +69,13 @@ void UltimateArtifact::Reset()
     _isFound = false;
 }
 
-StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
+OStreamBase & operator<<( OStreamBase & stream, const UltimateArtifact & ultimate )
 {
-    return msg << static_cast<const Artifact &>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
+    return stream << static_cast<const Artifact &>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
 }
 
-StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
+IStreamBase & operator>>( IStreamBase & stream, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
-    return msg >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
+    return stream >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
 }

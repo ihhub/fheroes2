@@ -92,14 +92,14 @@ namespace
         int gameType;
     };
 
-    StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
+    OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )
     {
-        return msg << hdr.status << hdr.info << hdr.gameType;
+        return stream << hdr.status << hdr.info << hdr.gameType;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
+    IStreamBase & operator>>( IStreamBase & stream, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info >> hdr.gameType;
+        return stream >> hdr.status >> hdr.info >> hdr.gameType;
     }
 }
 

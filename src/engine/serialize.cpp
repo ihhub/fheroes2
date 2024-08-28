@@ -57,65 +57,65 @@ void StreamBase::setfail( bool f )
     }
 }
 
-uint16_t StreamBase::get16()
+uint16_t IStreamBase::get16()
 {
     return bigendian() ? getBE16() : getLE16();
 }
 
-uint32_t StreamBase::get32()
+uint32_t IStreamBase::get32()
 {
     return bigendian() ? getBE32() : getLE32();
 }
 
-StreamBase & StreamBase::operator>>( bool & v )
+IStreamBase & IStreamBase::operator>>( bool & v )
 {
     v = ( get8() != 0 );
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( char & v )
+IStreamBase & IStreamBase::operator>>( char & v )
 {
     v = get8();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int8_t & v )
+IStreamBase & IStreamBase::operator>>( int8_t & v )
 {
     v = static_cast<int8_t>( get8() );
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint8_t & v )
+IStreamBase & IStreamBase::operator>>( uint8_t & v )
 {
     v = get8();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint16_t & v )
+IStreamBase & IStreamBase::operator>>( int16_t & v )
 {
     v = get16();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int16_t & v )
+IStreamBase & IStreamBase::operator>>( uint16_t & v )
 {
     v = get16();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint32_t & v )
+IStreamBase & IStreamBase::operator>>( int32_t & v )
 {
     v = get32();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int32_t & v )
+IStreamBase & IStreamBase::operator>>( uint32_t & v )
 {
     v = get32();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( std::string & v )
+IStreamBase & IStreamBase::operator>>( std::string & v )
 {
     uint32_t size = get32();
     v.resize( size );
@@ -126,70 +126,70 @@ StreamBase & StreamBase::operator>>( std::string & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( fheroes2::Point & point_ )
+IStreamBase & IStreamBase::operator>>( fheroes2::Point & v )
 {
-    return *this >> point_.x >> point_.y;
+    return *this >> v.x >> v.y;
 }
 
-void StreamBase::put16( uint16_t v )
+void OStreamBase::put16( uint16_t v )
 {
     bigendian() ? putBE16( v ) : putLE16( v );
 }
 
-void StreamBase::put32( uint32_t v )
+void OStreamBase::put32( uint32_t v )
 {
     bigendian() ? putBE32( v ) : putLE32( v );
 }
 
-StreamBase & StreamBase::operator<<( const bool v )
+OStreamBase & OStreamBase::operator<<( const bool v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const char v )
+OStreamBase & OStreamBase::operator<<( const char v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int8_t v )
+OStreamBase & OStreamBase::operator<<( const int8_t v )
 {
     put8( static_cast<uint8_t>( v ) );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint8_t v )
+OStreamBase & OStreamBase::operator<<( const uint8_t v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint16_t v )
+OStreamBase & OStreamBase::operator<<( const int16_t v )
 {
     put16( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int16_t v )
+OStreamBase & OStreamBase::operator<<( const uint16_t v )
 {
     put16( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int32_t v )
+OStreamBase & OStreamBase::operator<<( const int32_t v )
 {
     put32( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint32_t v )
+OStreamBase & OStreamBase::operator<<( const uint32_t v )
 {
     put32( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const std::string & v )
+OStreamBase & OStreamBase::operator<<( const std::string & v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
     // A string is a container of bytes so it doesn't matter which endianess is being used.
@@ -198,9 +198,9 @@ StreamBase & StreamBase::operator<<( const std::string & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
+OStreamBase & OStreamBase::operator<<( const fheroes2::Point & v )
 {
-    return *this << point_.x << point_.y;
+    return *this << v.x << v.y;
 }
 
 RWStreamBuf::RWStreamBuf( const size_t sz )
@@ -280,6 +280,16 @@ void RWStreamBuf::put8( const uint8_t v )
     ++_itput;
 }
 
+size_t RWStreamBuf::tellp()
+{
+    return _itput - _itbeg;
+}
+
+size_t RWStreamBuf::sizep()
+{
+    return _itend - _itput;
+}
+
 void RWStreamBuf::reallocBuf( size_t size )
 {
     if ( !_buf ) {
@@ -325,36 +335,6 @@ ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
     _itput = _itend;
 
     setbigendian( IS_BIGENDIAN );
-}
-
-void ROStreamBuf::putBE16( uint16_t /* v */ )
-{
-    assert( 0 );
-}
-
-void ROStreamBuf::putLE16( uint16_t /* v */ )
-{
-    assert( 0 );
-}
-
-void ROStreamBuf::putBE32( uint32_t /* v */ )
-{
-    assert( 0 );
-}
-
-void ROStreamBuf::putLE32( uint32_t /* v */ )
-{
-    assert( 0 );
-}
-
-void ROStreamBuf::putRaw( const void * /* ptr */, size_t /* sz */ )
-{
-    assert( 0 );
-}
-
-void ROStreamBuf::put8( const uint8_t /* v */ )
-{
-    assert( 0 );
 }
 
 bool StreamFile::open( const std::string & fn, const std::string & mode )

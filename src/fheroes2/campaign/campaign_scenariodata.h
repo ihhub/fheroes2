@@ -27,7 +27,8 @@
 
 #include "maps_fileinfo.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace Video
 {
@@ -81,8 +82,8 @@ namespace Campaign
             return !operator==( info );
         }
 
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data );
-        friend StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data );
+        friend OStreamBase & operator<<( OStreamBase & stream, const ScenarioInfoId & data );
+        friend IStreamBase & operator>>( IStreamBase & stream, ScenarioInfoId & data );
 
         int campaignId{ -1 };
 

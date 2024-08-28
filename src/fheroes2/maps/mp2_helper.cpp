@@ -19,12 +19,13 @@
  ***************************************************************************/
 
 #include "mp2_helper.h"
+
 #include "mp2.h"
 #include "serialize.h"
 
 namespace MP2
 {
-    void loadTile( StreamBase & stream, MP2TileInfo & tile )
+    void loadTile( IStreamBase & stream, MP2TileInfo & tile )
     {
         tile.terrainImageIndex = stream.getLE16();
         tile.objectName1 = stream.get();
@@ -40,7 +41,7 @@ namespace MP2
         tile.level2ObjectUID = stream.getLE32();
     }
 
-    void loadAddon( StreamBase & stream, MP2AddonInfo & addon )
+    void loadAddon( IStreamBase & stream, MP2AddonInfo & addon )
     {
         addon.nextAddonIndex = stream.getLE16();
         addon.objectNameN1 = stream.get() * 2; // TODO: why we multiply by 2 here?

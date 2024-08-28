@@ -80,6 +80,22 @@ public:
         return ( _flags & BIGENDIAN ) != 0;
     }
 
+protected:
+    void setfail( bool f );
+
+private:
+    enum : uint32_t
+    {
+        FAILURE = 0x00000001,
+        BIGENDIAN = 0x00000002
+    };
+
+    uint32_t _flags{ 0 };
+};
+
+class IStreamBase : public virtual StreamBase
+{
+public:
     virtual void skip( size_t ) = 0;
 
     virtual uint16_t getBE16() = 0;
@@ -87,63 +103,37 @@ public:
     virtual uint32_t getBE32() = 0;
     virtual uint32_t getLE32() = 0;
 
-    virtual void putBE32( uint32_t ) = 0;
-    virtual void putLE32( uint32_t ) = 0;
-    virtual void putBE16( uint16_t ) = 0;
-    virtual void putLE16( uint16_t ) = 0;
-
     // 0 stands for all data.
     virtual std::vector<uint8_t> getRaw( size_t = 0 ) = 0;
-    virtual void putRaw( const void *, size_t ) = 0;
 
     uint16_t get16();
     uint32_t get32();
-
-    void put16( uint16_t );
-    void put32( uint32_t );
 
     uint8_t get()
     {
         return get8();
     }
 
-    void put( const uint8_t ch )
-    {
-        put8( ch );
-    }
+    IStreamBase & operator>>( bool & v );
+    IStreamBase & operator>>( char & v );
+    IStreamBase & operator>>( int8_t & v );
+    IStreamBase & operator>>( uint8_t & v );
+    IStreamBase & operator>>( int16_t & v );
+    IStreamBase & operator>>( uint16_t & v );
+    IStreamBase & operator>>( int32_t & v );
+    IStreamBase & operator>>( uint32_t & v );
+    IStreamBase & operator>>( std::string & v );
 
-    StreamBase & operator>>( bool & v );
-    StreamBase & operator>>( char & v );
-    StreamBase & operator>>( int8_t & v );
-    StreamBase & operator>>( uint8_t & v );
-    StreamBase & operator>>( uint16_t & v );
-    StreamBase & operator>>( int16_t & v );
-    StreamBase & operator>>( uint32_t & v );
-    StreamBase & operator>>( int32_t & v );
-    StreamBase & operator>>( std::string & v );
-
-    StreamBase & operator>>( fheroes2::Point & point_ );
-
-    StreamBase & operator<<( const bool v );
-    StreamBase & operator<<( const char v );
-    StreamBase & operator<<( const int8_t v );
-    StreamBase & operator<<( const uint8_t v );
-    StreamBase & operator<<( const uint16_t v );
-    StreamBase & operator<<( const int16_t v );
-    StreamBase & operator<<( const uint32_t v );
-    StreamBase & operator<<( const int32_t v );
-    StreamBase & operator<<( const std::string & v );
-
-    StreamBase & operator<<( const fheroes2::Point & point_ );
+    IStreamBase & operator>>( fheroes2::Point & v );
 
     template <class Type1, class Type2>
-    StreamBase & operator>>( std::pair<Type1, Type2> & p )
+    IStreamBase & operator>>( std::pair<Type1, Type2> & p )
     {
         return *this >> p.first >> p.second;
     }
 
     template <class Type>
-    StreamBase & operator>>( std::vector<Type> & v )
+    IStreamBase & operator>>( std::vector<Type> & v )
     {
         const uint32_t size = get32();
         v.resize( size );
@@ -153,7 +143,7 @@ public:
     }
 
     template <class Type>
-    StreamBase & operator>>( std::list<Type> & v )
+    IStreamBase & operator>>( std::list<Type> & v )
     {
         const uint32_t size = get32();
         v.resize( size );
@@ -163,7 +153,7 @@ public:
     }
 
     template <class Type1, class Type2>
-    StreamBase & operator>>( std::map<Type1, Type2> & v )
+    IStreamBase & operator>>( std::map<Type1, Type2> & v )
     {
         const uint32_t size = get32();
         v.clear();
@@ -176,7 +166,7 @@ public:
     }
 
     template <class Type, size_t Count>
-    StreamBase & operator>>( std::array<Type, Count> & data )
+    IStreamBase & operator>>( std::array<Type, Count> & data )
     {
         const uint32_t size = get32();
         if ( size != data.size() ) {
@@ -194,14 +184,51 @@ public:
         return *this;
     }
 
+protected:
+    virtual uint8_t get8() = 0;
+
+    virtual size_t sizeg() = 0;
+    virtual size_t tellg() = 0;
+};
+
+class OStreamBase : public virtual StreamBase
+{
+public:
+    virtual void putBE16( uint16_t ) = 0;
+    virtual void putLE16( uint16_t ) = 0;
+    virtual void putBE32( uint32_t ) = 0;
+    virtual void putLE32( uint32_t ) = 0;
+
+    virtual void putRaw( const void *, size_t ) = 0;
+
+    void put16( uint16_t );
+    void put32( uint32_t );
+
+    void put( const uint8_t ch )
+    {
+        put8( ch );
+    }
+
+    OStreamBase & operator<<( const bool v );
+    OStreamBase & operator<<( const char v );
+    OStreamBase & operator<<( const int8_t v );
+    OStreamBase & operator<<( const uint8_t v );
+    OStreamBase & operator<<( const int16_t v );
+    OStreamBase & operator<<( const uint16_t v );
+    OStreamBase & operator<<( const int32_t v );
+    OStreamBase & operator<<( const uint32_t v );
+    OStreamBase & operator<<( const std::string & v );
+
+    OStreamBase & operator<<( const fheroes2::Point & v );
+
     template <class Type1, class Type2>
-    StreamBase & operator<<( const std::pair<Type1, Type2> & p )
+    OStreamBase & operator<<( const std::pair<Type1, Type2> & p )
     {
         return *this << p.first << p.second;
     }
 
     template <class Type>
-    StreamBase & operator<<( const std::vector<Type> & v )
+    OStreamBase & operator<<( const std::vector<Type> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -210,7 +237,7 @@ public:
     }
 
     template <class Type>
-    StreamBase & operator<<( const std::list<Type> & v )
+    OStreamBase & operator<<( const std::list<Type> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -219,7 +246,7 @@ public:
     }
 
     template <class Type1, class Type2>
-    StreamBase & operator<<( const std::map<Type1, Type2> & v )
+    OStreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -228,7 +255,7 @@ public:
     }
 
     template <class Type, size_t Count>
-    StreamBase & operator<<( const std::array<Type, Count> & data )
+    OStreamBase & operator<<( const std::array<Type, Count> & data )
     {
         put32( static_cast<uint32_t>( data.size() ) );
         for ( const auto & value : data ) {
@@ -238,27 +265,13 @@ public:
     }
 
 protected:
-    virtual uint8_t get8() = 0;
     virtual void put8( const uint8_t ) = 0;
 
-    virtual size_t sizeg() = 0;
     virtual size_t sizep() = 0;
-    virtual size_t tellg() = 0;
     virtual size_t tellp() = 0;
-
-    void setfail( bool f );
-
-private:
-    enum : uint32_t
-    {
-        FAILURE = 0x00000001,
-        BIGENDIAN = 0x00000002
-    };
-
-    uint32_t _flags{ 0 };
 };
 
-class StreamBuf : public StreamBase
+class StreamBuf : public IStreamBase
 {
 public:
     virtual const uint8_t * data() const = 0;
@@ -403,19 +416,9 @@ protected:
         return _itget - _itbeg;
     }
 
-    size_t tellp() override
-    {
-        return _itput - _itbeg;
-    }
-
     size_t sizeg() override
     {
         return _itput - _itget;
-    }
-
-    size_t sizep() override
-    {
-        return _itend - _itput;
     }
 
     uint8_t get8() override
@@ -433,7 +436,7 @@ protected:
     T * _itend{ nullptr };
 };
 
-class RWStreamBuf final : public StreamBufTmpl<uint8_t>
+class RWStreamBuf final : public StreamBufTmpl<uint8_t>, public OStreamBase
 {
 public:
     RWStreamBuf()
@@ -461,6 +464,9 @@ private:
     friend class StreamFile;
 
     void put8( const uint8_t v ) override;
+
+    size_t sizep() override;
+    size_t tellp() override;
 
     void reallocBuf( size_t size );
 
@@ -491,19 +497,9 @@ public:
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
     ROStreamBuf & operator=( ROStreamBuf && stream ) = default;
-
-    void putBE32( uint32_t v ) override;
-    void putLE32( uint32_t v ) override;
-    void putBE16( uint16_t v ) override;
-    void putLE16( uint16_t v ) override;
-
-    void putRaw( const void * ptr, size_t sz ) override;
-
-private:
-    void put8( const uint8_t v ) override;
 };
 
-class StreamFile final : public StreamBase
+class StreamFile final : public IStreamBase, public OStreamBase
 {
 public:
     StreamFile() = default;

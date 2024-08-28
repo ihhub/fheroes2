@@ -198,12 +198,12 @@ void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) 
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )
+OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild )
 {
-    return msg << guild.general << guild.library;
+    return stream << guild.general << guild.library;
 }
 
-StreamBase & operator>>( StreamBase & msg, MageGuild & guild )
+IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild )
 {
-    return msg >> guild.general >> guild.library;
+    return stream >> guild.general >> guild.library;
 }

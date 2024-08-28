@@ -239,12 +239,12 @@ Kingdom & ColorBase::GetKingdom() const
     return world.GetKingdom( color );
 }
 
-StreamBase & operator<<( StreamBase & msg, const ColorBase & col )
+OStreamBase & operator<<( OStreamBase & stream, const ColorBase & col )
 {
-    return msg << col.color;
+    return stream << col.color;
 }
 
-StreamBase & operator>>( StreamBase & msg, ColorBase & col )
+IStreamBase & operator>>( IStreamBase & stream, ColorBase & col )
 {
-    return msg >> col.color;
+    return stream >> col.color;
 }

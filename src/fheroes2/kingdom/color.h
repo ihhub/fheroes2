@@ -27,7 +27,8 @@
 #include <string>
 #include <vector>
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
@@ -73,8 +74,8 @@ class ColorBase
 {
     int color;
 
-    friend StreamBase & operator<<( StreamBase &, const ColorBase & );
-    friend StreamBase & operator>>( StreamBase &, ColorBase & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const ColorBase & col );
+    friend IStreamBase & operator>>( IStreamBase & stream, ColorBase & col );
 
 public:
     explicit ColorBase( int col = Color::NONE )
@@ -91,8 +92,5 @@ public:
         return color;
     }
 };
-
-StreamBase & operator<<( StreamBase &, const ColorBase & );
-StreamBase & operator>>( StreamBase &, ColorBase & );
 
 #endif

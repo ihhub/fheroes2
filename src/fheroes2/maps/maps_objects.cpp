@@ -314,52 +314,52 @@ void MapSign::setDefaultMessage()
     message = Rand::Get( randomMessage );
 }
 
-StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj )
 {
-    return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
+    return stream << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
 }
 
-StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
 {
-    return msg >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
+    return stream >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
 }
 
-StreamBase & operator<<( StreamBase & msg, const MapEvent & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
+    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
 }
 
-StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
 }
 
-StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
+    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
 }
 
-StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 {
-    msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+    stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
         obj.isTruncatedAnswer = true;
     }
     else {
-        msg >> obj.isTruncatedAnswer;
+        stream >> obj.isTruncatedAnswer;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const MapSign & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.message;
+    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.message;
 }
 
-StreamBase & operator>>( StreamBase & msg, MapSign & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
+    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
 }

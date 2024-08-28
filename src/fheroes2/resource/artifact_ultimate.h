@@ -30,7 +30,8 @@
 #include "image.h"
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class UltimateArtifact : public Artifact
 {
@@ -61,15 +62,12 @@ public:
     const Artifact & GetArtifact() const;
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
-    friend StreamBase & operator>>( StreamBase &, UltimateArtifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const UltimateArtifact & ultimate );
+    friend IStreamBase & operator>>( IStreamBase & stream, UltimateArtifact & ultimate );
 
     fheroes2::Point _offset;
     int32_t _index;
     bool _isFound;
 };
-
-StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
-StreamBase & operator>>( StreamBase &, UltimateArtifact & );
 
 #endif
