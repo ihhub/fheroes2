@@ -200,7 +200,7 @@ namespace
             releasedOffset = { 6, 5 };
             pressedOffset = { 5, 6 };
             break;
-        // TODO: POL buttons are just EVIL theme buttons. With some changes their specific buttons can be removed.
+        // TODO: POL buttons are just EVIL campaign theme buttons. With some changes, their specific button code can be removed.
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
