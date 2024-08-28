@@ -31,6 +31,7 @@
 #include "image.h"
 
 class StreamBuf;
+class RWStreamBuf;
 class StreamFile;
 
 namespace Compression
@@ -46,7 +47,7 @@ namespace Compression
 
     // Reads & unzips the zipped chunk from the specified file stream and appends
     // it to the end of the buffer. Returns true on success or false on error.
-    bool readFromFileStream( StreamFile & fileStream, StreamBuf & output );
+    bool readFromFileStream( StreamFile & fileStream, RWStreamBuf & output );
 
     // Zips the contents of the buffer from the current read position to the end of the buffer and writes
     // it to the specified file stream. The current read position of the buffer does not change. Returns

@@ -134,7 +134,7 @@ namespace Compression
         return res;
     }
 
-    bool readFromFileStream( StreamFile & fileStream, StreamBuf & output )
+    bool readFromFileStream( StreamFile & fileStream, RWStreamBuf & output )
     {
         const uint32_t rawSize = fileStream.get32();
         const uint32_t zipSize = fileStream.get32();

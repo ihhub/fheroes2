@@ -228,7 +228,7 @@ namespace
         return sb;
     }
 
-    StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const IFFChunkHeader & st )
     {
         sb.putBE32( st.ID );
         sb.putBE32( st.length );
@@ -398,7 +398,7 @@ namespace
         return left._time < right._time;
     }
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidiChunk & event )
     {
         for ( const uint8_t binaryTimeByte : event._binaryTime ) {
             sb << binaryTimeByte;
@@ -589,7 +589,7 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidiEvents & st )
     {
         for ( const MidiChunk & chunk : st ) {
             sb << chunk;
@@ -611,7 +611,7 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidTrack & st )
     {
         sb << st.mtrk;
         sb << st.events;
@@ -635,7 +635,7 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidTracks & st )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidTracks & st )
     {
         for ( const MidTrack & track : st ) {
             sb << track;
@@ -665,7 +665,7 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
+    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidData & st )
     {
         sb << st.mthd;
         sb.putBE16( static_cast<uint16_t>( st.format ) );
