@@ -172,15 +172,16 @@ namespace
             fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, colorID );
         }
         else {
-            // You are trying to modify the size of the button in an unexpected way. 
+            // You are trying to modify the size of the button in an unexpected way.
             assert( 0 );
         }
 
         return output;
     }
 
-    void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, fheroes2::Point & textAreaBorders, fheroes2::Size & minimumTextArea, fheroes2::Size & maximumTextArea,
-                                  fheroes2::Size & backgroundBorders, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
+    void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, fheroes2::Point & textAreaBorders, fheroes2::Size & minimumTextArea,
+                                  fheroes2::Size & maximumTextArea, fheroes2::Size & backgroundBorders, fheroes2::Point & releasedOffset,
+                                  fheroes2::Point & pressedOffset )
     {
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
@@ -214,7 +215,7 @@ namespace
             textAreaBorders.y = 2 + 1;
             minimumTextArea.width = 87;
             // The empty POL button is 24 pixels tall. This does not divide evenly by 5, so we force it to be 24 pixels tall.
-            // (2 + 1) + 15 = 18 -> 18 + (3 + 3) = 24 
+            // (2 + 1) + 15 = 18 -> 18 + (3 + 3) = 24
             minimumTextArea.height = 18;
             maximumTextArea.height = 18;
             backgroundBorders.width = 4 + 3;
@@ -778,15 +779,14 @@ namespace fheroes2
         fheroes2::Point textAreaMargins = { 0, 3 };
 
         fheroes2::Size minimumTextArea = { 0, 15 };
-        fheroes2::Size maximumTextArea = { 200, 200 };// Why is such a wide button needed?
+        fheroes2::Size maximumTextArea = { 200, 200 }; // Why is such a wide button needed?
 
         fheroes2::Size backgroundBorders = { 0, 7 };
 
         fheroes2::Point releasedOffset = {};
         fheroes2::Point pressedOffset = {};
 
-        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset,
-                                 pressedOffset );
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
 

@@ -4753,8 +4753,7 @@ namespace
                 Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() - 7 );
                 Copy( originalReleased, 0, originalReleased.height() - 7, released, 1, originalReleased.height() - 8, originalReleased.width(),
                       originalReleased.height() - 7 );
-                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(),
-                      originalPressed.height() - 7 );
+                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(), originalPressed.height() - 7 );
 
                 FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
 
