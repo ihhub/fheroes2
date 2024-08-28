@@ -388,7 +388,7 @@ protected:
             return *this;
         }
 
-        StreamBase::operator=( std::move( stream ) );
+        StreamBuf::operator=( std::move( stream ) );
 
         std::swap( _itbeg, stream._itbeg );
         std::swap( _itget, stream._itget );
