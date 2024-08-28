@@ -190,7 +190,7 @@ namespace
             // The minimum text area width for campaign buttons is 86 judging from the shared widths of the
             // original OKAY and the CANCEL buttons even though OKAY is a shorter word
             minimumTextArea.width = 86;
-            maximumTextArea.height = 30;
+            maximumTextArea.height = 50;
             backgroundBorders.width = 6 + 4;
             backgroundBorders.height = 4 + 4;
             releasedOffset = { 6, 4 };
@@ -201,18 +201,21 @@ namespace
             textAreaBorders.x = 4 + 4;
             textAreaBorders.y = 2 + 1;
             minimumTextArea.width = 87;
-            maximumTextArea.height = 30;
+            maximumTextArea.height = 50;
             backgroundBorders.width = 6 + 3;
             backgroundBorders.height = 3 + 4;
             releasedOffset = { 6, 4 };
             pressedOffset = { 5, 5 };
             break;
-        // TODO: POL buttons are just EVIL campaign theme buttons. With some changes, their specific button code can be removed.
+        // TODO: POL buttons are just EVIL campaign theme buttons. With some adjustments, the POL button code can be removed.
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
             textAreaBorders.y = 2 + 1;
             minimumTextArea.width = 87;
+            // The empty POL button is 24 pixels tall. This does not divide evenly by 5, so we force it to be 24 pixels tall.
+            // (2 + 1) + 15 = 18 -> 18 + (3 + 3) = 24 
+            minimumTextArea.height = 18;
             maximumTextArea.height = 18;
             backgroundBorders.width = 4 + 3;
             backgroundBorders.height = 3 + 3;
