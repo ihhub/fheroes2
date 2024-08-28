@@ -175,61 +175,72 @@ namespace
         return output;
     }
 
-    void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, int32_t & textMargin, int32_t & minimumTextAreaWidth,
-                                  int32_t & backgroundBorders, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
+    void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, fheroes2::Point & textAreaBorders, fheroes2::Size & minimumTextArea, fheroes2::Size & maximumTextArea,
+                                  fheroes2::Size & backgroundBorders, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
     {
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textMargin = 4 + 4;
+            textAreaBorders.x = 4 + 4;
+            textAreaBorders.y = 1 + 1;
             // The minimum text area width for campaign buttons is 86 judging from the shared widths of the
             // original OKAY and the CANCEL buttons even though OKAY is a shorter word
-            minimumTextAreaWidth = 86;
-            backgroundBorders = 6 + 4;
-            releasedOffset = { 5, 5 };
-            pressedOffset = { 4, 6 };
+            minimumTextArea.width = 86;
+            maximumTextArea.height = 30;
+            backgroundBorders.width = 6 + 4;
+            backgroundBorders.height = 4 + 4;
+            releasedOffset = { 6, 4 };
+            pressedOffset = { 5, 5 };
             break;
         case ICN::EMPTY_EVIL_BUTTON:
             font = fheroes2::FontColor::GRAY;
-            textMargin = 4 + 4;
-            minimumTextAreaWidth = 87;
-            backgroundBorders = 6 + 3;
+            textAreaBorders.x = 4 + 4;
+            minimumTextArea.width = 87;
+            backgroundBorders.width = 6 + 3;
             releasedOffset = { 6, 5 };
             pressedOffset = { 5, 6 };
             break;
-        // TODO: POL buttons are just EVIL theme buttons so this can be removed.
+        // TODO: POL buttons are just EVIL theme buttons. With some changes their specific buttons can be removed.
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
-            textMargin = 4 + 4;
-            minimumTextAreaWidth = 87;
-            backgroundBorders = 4 + 3;
+            textAreaBorders.x = 4 + 4;
+            minimumTextArea.width = 87;
+            backgroundBorders.width = 4 + 3;
             releasedOffset = { 4, 5 };
             pressedOffset = { 3, 6 };
             break;
         case ICN::EMPTY_GUILDWELL_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textMargin = 2 + 2;
-            minimumTextAreaWidth = 53;
-            backgroundBorders = 5 + 3;
+            textAreaBorders.x = 2 + 2;
+            textAreaBorders.y = 0 + 0;
+            minimumTextArea.width = 53;
+            minimumTextArea.height = 13;
+            maximumTextArea.height = 14;
+            backgroundBorders.width = 5 + 3;
+            backgroundBorders.height = 2 + 3;
             releasedOffset = { 4, 2 };
             pressedOffset = { 3, 3 };
             break;
         case ICN::EMPTY_VERTICAL_GOOD_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textMargin = 0 + 0;
-            minimumTextAreaWidth = 19;
-            backgroundBorders = 5 + 4;
-            // TODO: The center of the button will change according to the height of it when we can resize it.
-            // The height offsets will need to be adjusted when this is possible, now they point to the
-            // center of the empty button.
-            releasedOffset = { 5, 52 };
-            pressedOffset = { 4, 53 };
+            textAreaBorders.x = 0 + 0;
+            textAreaBorders.y = 2 + 2;
+            minimumTextArea.width = 19;
+            minimumTextArea.height = 111;
+            backgroundBorders.width = 5 + 4;
+            backgroundBorders.height = 4 + 6;
+            releasedOffset = { 5, 5 };
+            pressedOffset = { 4, 6 };
             break;
         case ICN::EMPTY_MAP_SELECT_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textMargin = 2 + 2;
-            minimumTextAreaWidth = 60;
-            backgroundBorders = 6 + 3;
+            textAreaBorders.x = 2 + 2;
+            textAreaBorders.y = 1 + 0;
+            minimumTextArea.width = 60;
+            minimumTextArea.height = 13;
+            maximumTextArea.height = 14;
+            backgroundBorders.width = 6 + 3;
+            backgroundBorders.height = 2 + 3;
             releasedOffset = { 6, 3 };
             pressedOffset = { 5, 4 };
             break;
@@ -751,17 +762,18 @@ namespace fheroes2
     void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
         fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
-        // TODO: Change the pairs below to fheroes2::Point or fheroes2::Size
-        int32_t textAreaXBorder = 0;
-        int32_t textAreaYBorder = 3;
-        int32_t minimumTextAreaWidth = 0;
-        int32_t minimumTextAreaHeight = 15;
-        int32_t backgroundBordersX = 0;
-        int32_t backgroundBordersY = 7;
+        fheroes2::Point textAreaMargins = { 0, 3 };
+
+        fheroes2::Size minimumTextArea = { 0, 15 };
+        fheroes2::Size maximumTextArea = { 200, 200 };// Why is such a wide button needed?
+
+        fheroes2::Size backgroundBorders = { 0, 7 };
+
         fheroes2::Point releasedOffset = {};
         fheroes2::Point pressedOffset = {};
 
-        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaXBorder, minimumTextAreaWidth, backgroundBordersX, releasedOffset, pressedOffset );
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset,
+                                 pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
 
@@ -771,28 +783,26 @@ namespace fheroes2
         const fheroes2::Text releasedText( supportedText, releasedButtonFont );
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
 
-        const int32_t maximumTextAreaWidth = 200; // Why is such a wide button needed?
         // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
         // TODO: Remove the need for the argument once width() has been improved to handle this.
-        const int32_t textWidth = releasedText.width( maximumTextAreaWidth );
+        const int32_t textWidth = releasedText.width( maximumTextArea.width );
         assert( textWidth > 0 );
 
-        const int32_t borderedTextWidth = textWidth + textAreaXBorder;
+        const int32_t borderedTextWidth = textWidth + textAreaMargins.x;
 
-        const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
-        assert( textAreaWidth + backgroundBordersX > 0 );
+        const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextArea.width, maximumTextArea.width );
+        assert( textAreaWidth + backgroundBorders.width > 0 );
 
         const int32_t textHeight = releasedText.height( textAreaWidth );
         assert( textHeight > 0 );
 
-        const int32_t borderedTextHeight = textHeight + textAreaYBorder;
-        const int32_t maximumTextAreaHeight = 200; // Placeholder maximum height. Not sure what height is meaningful.
-        const int32_t textAreaHeight = std::clamp( borderedTextHeight, minimumTextAreaHeight, maximumTextAreaHeight );
+        const int32_t borderedTextHeight = textHeight + textAreaMargins.y;
+        const int32_t textAreaHeight = std::clamp( borderedTextHeight, minimumTextArea.height, maximumTextArea.height );
 
-        assert( textAreaHeight + backgroundBordersY > 0 );
+        assert( textAreaHeight + backgroundBorders.height > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY }, true );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY }, false );
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height }, true );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height }, false );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
@@ -803,8 +813,8 @@ namespace fheroes2
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align.
-        releasedText.draw( releasedOffset.x + 1, ( released.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
-        pressedText.draw( pressedOffset.x + 1, ( pressed.height() - pressedTextSize.height ) / 2 + 1, textAreaWidth, pressed );
+        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( textAreaHeight - releasedTextSize.height ) / 2, textAreaWidth, released );
+        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( textAreaHeight - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
