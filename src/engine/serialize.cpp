@@ -97,48 +97,56 @@ uint32_t IStreamBase::get32()
 IStreamBase & IStreamBase::operator>>( bool & v )
 {
     v = ( get8() != 0 );
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( char & v )
 {
     v = get8();
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( int8_t & v )
 {
     v = static_cast<int8_t>( get8() );
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( uint8_t & v )
 {
     v = get8();
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( int16_t & v )
 {
     v = get16();
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( uint16_t & v )
 {
     v = get16();
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( int32_t & v )
 {
     v = get32();
+
     return *this;
 }
 
 IStreamBase & IStreamBase::operator>>( uint32_t & v )
 {
     v = get32();
+
     return *this;
 }
 
@@ -177,48 +185,56 @@ void OStreamBase::put32( uint32_t v )
 OStreamBase & OStreamBase::operator<<( const bool v )
 {
     put8( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const char v )
 {
     put8( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const int8_t v )
 {
     put8( static_cast<uint8_t>( v ) );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const uint8_t v )
 {
     put8( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const int16_t v )
 {
     put16( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const uint16_t v )
 {
     put16( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const int32_t v )
 {
     put32( v );
+
     return *this;
 }
 
 OStreamBase & OStreamBase::operator<<( const uint32_t v )
 {
     put32( v );
+
     return *this;
 }
 
