@@ -40,6 +40,7 @@
 #include "endian_h2.h"
 #include "math_base.h"
 
+// Base class for all I/O facilities
 class StreamBase
 {
 public:
@@ -80,6 +81,7 @@ private:
     uint32_t _flags{ 0 };
 };
 
+// Interface that describes the methods needed to read from a stream
 class IStreamBase : virtual public StreamBase
 {
 public:
@@ -193,6 +195,7 @@ protected:
     virtual size_t tellg() = 0;
 };
 
+// Interface that describes the methods needed to write to a stream
 class OStreamBase : virtual public StreamBase
 {
 public:
@@ -286,6 +289,7 @@ protected:
     virtual size_t tellp() = 0;
 };
 
+// Interface that describes a stream with an in-memory storage backend that can be read from
 class IStreamBuf : public IStreamBase
 {
 public:
@@ -296,6 +300,7 @@ protected:
     IStreamBuf() = default;
 };
 
+// Class template for a stream with an in-memory storage backend that can store either const or non-const data as desired
 template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
 class StreamBufTmpl : public IStreamBuf
 {
@@ -453,6 +458,7 @@ protected:
     T * _itend{ nullptr };
 };
 
+// Stream with a dynamically-sized in-memory storage backend that supports both reading and writing
 class RWStreamBuf final : public StreamBufTmpl<uint8_t>, public OStreamBase
 {
 public:
@@ -502,6 +508,7 @@ private:
     std::unique_ptr<uint8_t[]> _buf;
 };
 
+// Stream with read-only in-memory storage backed by a const vector instance
 class ROStreamBuf final : public StreamBufTmpl<const uint8_t>
 {
 public:
@@ -516,6 +523,7 @@ public:
     ROStreamBuf & operator=( ROStreamBuf && ) = default;
 };
 
+// Stream with a file storage backend that supports both reading and writing
 class StreamFile final : public IStreamBase, public OStreamBase
 {
 public:
