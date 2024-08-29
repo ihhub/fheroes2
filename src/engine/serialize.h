@@ -80,7 +80,7 @@ private:
     uint32_t _flags{ 0 };
 };
 
-class IStreamBase : public virtual StreamBase
+class IStreamBase : virtual public StreamBase
 {
 public:
     IStreamBase( const IStreamBase & ) = delete;
@@ -193,7 +193,7 @@ protected:
     virtual size_t tellg() = 0;
 };
 
-class OStreamBase : public virtual StreamBase
+class OStreamBase : virtual public StreamBase
 {
 public:
     OStreamBase( const OStreamBase & ) = delete;
