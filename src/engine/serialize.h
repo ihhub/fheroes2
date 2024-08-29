@@ -187,6 +187,11 @@ protected:
 
     IStreamBase( IStreamBase && ) = default;
 
+    // All this operator does is call the corresponding base class operator. It is not recommended to
+    // declare these operators as default in the case of a virtual base, even if they are trivial, to
+    // catch a situation where, in the case of the diamond inheritance, the corresponding operator of
+    // the base class will be called multiple times. GCC has a special warning for this case (see the
+    // description of the -Wno-virtual-move-assign switch).
     IStreamBase & operator=( IStreamBase && stream ) noexcept;
 
     virtual uint8_t get8() = 0;
