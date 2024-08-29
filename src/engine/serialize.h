@@ -120,9 +120,9 @@ public:
     IStreamBase & operator>>( fheroes2::Point & v );
 
     template <class Type1, class Type2>
-    IStreamBase & operator>>( std::pair<Type1, Type2> & p )
+    IStreamBase & operator>>( std::pair<Type1, Type2> & v )
     {
-        return *this >> p.first >> p.second;
+        return *this >> v.first >> v.second;
     }
 
     template <class Type>
@@ -230,9 +230,9 @@ public:
     OStreamBase & operator<<( const fheroes2::Point & v );
 
     template <class Type1, class Type2>
-    OStreamBase & operator<<( const std::pair<Type1, Type2> & p )
+    OStreamBase & operator<<( const std::pair<Type1, Type2> & v )
     {
-        return *this << p.first << p.second;
+        return *this << v.first << v.second;
     }
 
     template <class Type>

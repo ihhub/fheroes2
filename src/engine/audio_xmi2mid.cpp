@@ -221,18 +221,20 @@ namespace
         {}
     };
 
-    StreamBuf & operator>>( StreamBuf & sb, IFFChunkHeader & st )
+    StreamBuf & operator>>( StreamBuf & stream, IFFChunkHeader & st )
     {
-        st.ID = sb.getBE32();
-        st.length = sb.getBE32();
-        return sb;
+        st.ID = stream.getBE32();
+        st.length = stream.getBE32();
+
+        return stream;
     }
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const IFFChunkHeader & st )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const IFFChunkHeader & st )
     {
-        sb.putBE32( st.ID );
-        sb.putBE32( st.length );
-        return sb;
+        stream.putBE32( st.ID );
+        stream.putBE32( st.length );
+
+        return stream;
     }
 
     struct GroupChunkHeader
@@ -242,12 +244,13 @@ namespace
         uint32_t type{ 0 }; // 4 byte ASCII string
     };
 
-    StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
+    StreamBuf & operator>>( StreamBuf & stream, GroupChunkHeader & st )
     {
-        st.ID = sb.getBE32();
-        st.length = sb.getBE32();
-        st.type = sb.getBE32();
-        return sb;
+        st.ID = stream.getBE32();
+        st.length = stream.getBE32();
+        st.type = stream.getBE32();
+
+        return stream;
     }
 
     struct XMITrack
@@ -398,19 +401,19 @@ namespace
         return left._time < right._time;
     }
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidiChunk & event )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const MidiChunk & event )
     {
         for ( const uint8_t binaryTimeByte : event._binaryTime ) {
-            sb << binaryTimeByte;
+            stream << binaryTimeByte;
         }
 
-        sb << event._type;
+        stream << event._type;
 
         for ( const uint8_t dataByte : event._data ) {
-            sb << dataByte;
+            stream << dataByte;
         }
 
-        return sb;
+        return stream;
     }
 
     struct MidiEvents : public std::vector<MidiChunk>
@@ -589,13 +592,13 @@ namespace
         }
     };
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidiEvents & st )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const MidiEvents & st )
     {
         for ( const MidiChunk & chunk : st ) {
-            sb << chunk;
+            stream << chunk;
         }
 
-        return sb;
+        return stream;
     }
 
     struct MidTrack
@@ -611,11 +614,12 @@ namespace
         }
     };
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidTrack & st )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const MidTrack & st )
     {
-        sb << st.mtrk;
-        sb << st.events;
-        return sb;
+        stream << st.mtrk;
+        stream << st.events;
+
+        return stream;
     }
 
     struct MidTracks : std::list<MidTrack>
@@ -635,13 +639,13 @@ namespace
         }
     };
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidTracks & st )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const MidTracks & st )
     {
         for ( const MidTrack & track : st ) {
-            sb << track;
+            stream << track;
         }
 
-        return sb;
+        return stream;
     }
 
     struct MidData
@@ -665,15 +669,15 @@ namespace
         }
     };
 
-    RWStreamBuf & operator<<( RWStreamBuf & sb, const MidData & st )
+    RWStreamBuf & operator<<( RWStreamBuf & stream, const MidData & st )
     {
-        sb << st.mthd;
-        sb.putBE16( static_cast<uint16_t>( st.format ) );
-        sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
-        sb.putBE16( static_cast<uint16_t>( st.ppqn ) );
-        sb << st.tracks;
+        stream << st.mthd;
+        stream.putBE16( static_cast<uint16_t>( st.format ) );
+        stream.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
+        stream.putBE16( static_cast<uint16_t>( st.ppqn ) );
+        stream << st.tracks;
 
-        return sb;
+        return stream;
     }
 }
 
