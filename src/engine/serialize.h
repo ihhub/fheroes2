@@ -44,29 +44,11 @@
 class StreamBase
 {
 public:
-    StreamBase() = default;
-
     StreamBase( const StreamBase & ) = delete;
-
-    StreamBase( StreamBase && stream ) noexcept
-    {
-        std::swap( _flags, stream._flags );
-    }
 
     virtual ~StreamBase() = default;
 
     StreamBase & operator=( const StreamBase & ) = delete;
-
-    StreamBase & operator=( StreamBase && stream ) noexcept
-    {
-        if ( this == &stream ) {
-            return *this;
-        }
-
-        std::swap( _flags, stream._flags );
-
-        return *this;
-    }
 
     void setBigendian( bool f );
 
@@ -81,6 +63,12 @@ public:
     }
 
 protected:
+    StreamBase() = default;
+
+    StreamBase( StreamBase && stream ) noexcept;
+
+    StreamBase & operator=( StreamBase && stream ) noexcept;
+
     void setFail( bool f );
 
 private:
@@ -96,6 +84,12 @@ private:
 class IStreamBase : public virtual StreamBase
 {
 public:
+    IStreamBase( const IStreamBase & ) = delete;
+
+    ~IStreamBase() override = default;
+
+    IStreamBase & operator=( const IStreamBase & ) = delete;
+
     virtual void skip( size_t ) = 0;
 
     virtual uint16_t getBE16() = 0;
@@ -188,6 +182,12 @@ public:
     }
 
 protected:
+    IStreamBase() = default;
+
+    IStreamBase( IStreamBase && ) = default;
+
+    IStreamBase & operator=( IStreamBase && stream ) noexcept;
+
     virtual uint8_t get8() = 0;
 
     virtual size_t sizeg() = 0;
@@ -197,6 +197,12 @@ protected:
 class OStreamBase : public virtual StreamBase
 {
 public:
+    OStreamBase( const OStreamBase & ) = delete;
+
+    ~OStreamBase() override = default;
+
+    OStreamBase & operator=( const OStreamBase & ) = delete;
+
     virtual void putBE16( uint16_t ) = 0;
     virtual void putLE16( uint16_t ) = 0;
     virtual void putBE32( uint32_t ) = 0;
@@ -271,6 +277,12 @@ public:
     }
 
 protected:
+    OStreamBase() = default;
+
+    OStreamBase( OStreamBase && ) = default;
+
+    OStreamBase & operator=( OStreamBase && stream ) noexcept;
+
     virtual void put8( const uint8_t ) = 0;
 
     virtual size_t sizep() = 0;
@@ -454,12 +466,12 @@ public:
     explicit RWStreamBuf( const size_t sz );
 
     RWStreamBuf( const RWStreamBuf & ) = delete;
-    RWStreamBuf( RWStreamBuf && stream ) = default;
+    RWStreamBuf( RWStreamBuf && ) = default;
 
     ~RWStreamBuf() override = default;
 
     RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
-    RWStreamBuf & operator=( RWStreamBuf && stream ) = default;
+    RWStreamBuf & operator=( RWStreamBuf && stream ) noexcept;
 
     void putBE32( uint32_t v ) override;
     void putLE32( uint32_t v ) override;
@@ -499,12 +511,12 @@ public:
     explicit ROStreamBuf( const std::vector<uint8_t> & buf );
 
     ROStreamBuf( const ROStreamBuf & ) = delete;
-    ROStreamBuf( ROStreamBuf && stream ) = default;
+    ROStreamBuf( ROStreamBuf && ) = default;
 
     ~ROStreamBuf() override = default;
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
-    ROStreamBuf & operator=( ROStreamBuf && stream ) = default;
+    ROStreamBuf & operator=( ROStreamBuf && ) = default;
 };
 
 class StreamFile final : public IStreamBase, public OStreamBase
