@@ -210,7 +210,7 @@ namespace
         }
 
         RWStreamBuf compressed;
-        compressed.setbigendian( true );
+        compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
                    << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
@@ -231,7 +231,7 @@ namespace
         }
 
         RWStreamBuf decompressed;
-        decompressed.setbigendian( true );
+        decompressed.setBigendian( true );
 
         {
             std::vector<uint8_t> temp = stream.getRaw();
@@ -406,7 +406,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -433,7 +433,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -460,7 +460,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "wb" ) ) {
             return false;

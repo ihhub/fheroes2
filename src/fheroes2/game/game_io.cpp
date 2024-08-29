@@ -115,7 +115,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     const Settings & conf = Settings::Get();
 
     StreamFile fileStream;
-    fileStream.setbigendian( true );
+    fileStream.setBigendian( true );
 
     if ( !fileStream.open( filePath, "wb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
@@ -134,7 +134,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     }
 
     RWStreamBuf dataStream;
-    dataStream.setbigendian( true );
+    dataStream.setBigendian( true );
 
     dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
     if ( dataStream.fail() ) {
@@ -165,7 +165,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
     StreamFile fileStream;
-    fileStream.setbigendian( true );
+    fileStream.setBigendian( true );
 
     if ( !fileStream.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
@@ -226,7 +226,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     RWStreamBuf dataStream;
-    dataStream.setbigendian( true );
+    dataStream.setBigendian( true );
 
     if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
@@ -290,7 +290,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
-    fs.setbigendian( true );
+    fs.setBigendian( true );
 
     if ( !fs.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )

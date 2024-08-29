@@ -68,7 +68,7 @@ public:
         return *this;
     }
 
-    void setbigendian( bool f );
+    void setBigendian( bool f );
 
     bool fail() const
     {
@@ -81,7 +81,7 @@ public:
     }
 
 protected:
-    void setfail( bool f );
+    void setFail( bool f );
 
 private:
     enum : uint32_t
@@ -175,7 +175,7 @@ public:
     {
         const uint32_t size = get32();
         if ( size != v.size() ) {
-            setfail( true );
+            setFail( true );
 
             v = {};
 
@@ -433,7 +433,7 @@ protected:
             return *( _itget++ );
         }
 
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
@@ -567,7 +567,7 @@ private:
         T val;
 
         if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setfail( true );
+            setFail( true );
 
             return 0;
         }
@@ -583,7 +583,7 @@ private:
         }
 
         if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setfail( true );
+            setFail( true );
         }
     }
 

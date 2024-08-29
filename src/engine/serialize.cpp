@@ -37,7 +37,7 @@ namespace
     const size_t minBufferCapacity = 1024;
 }
 
-void StreamBase::setbigendian( bool f )
+void StreamBase::setBigendian( bool f )
 {
     if ( f ) {
         _flags |= BIGENDIAN;
@@ -47,7 +47,7 @@ void StreamBase::setbigendian( bool f )
     }
 }
 
-void StreamBase::setfail( bool f )
+void StreamBase::setFail( bool f )
 {
     if ( f ) {
         _flags |= FAILURE;
@@ -209,7 +209,7 @@ RWStreamBuf::RWStreamBuf( const size_t sz )
         reallocBuf( sz );
     }
 
-    setbigendian( IS_BIGENDIAN );
+    setBigendian( IS_BIGENDIAN );
 }
 
 void RWStreamBuf::putBE16( uint16_t v )
@@ -334,7 +334,7 @@ ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
     _itget = _itbeg;
     _itput = _itend;
 
-    setbigendian( IS_BIGENDIAN );
+    setBigendian( IS_BIGENDIAN );
 }
 
 bool StreamFile::open( const std::string & fn, const std::string & mode )
@@ -344,7 +344,7 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
         ERROR_LOG( "Error opening file " << fn )
     }
 
-    setfail( !_file );
+    setFail( !_file );
 
     return !fail();
 }
@@ -362,26 +362,26 @@ size_t StreamFile::size()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     const long len = std::ftell( _file.get() );
     if ( len < 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
@@ -401,7 +401,7 @@ void StreamFile::seek( size_t pos )
     }
 
     if ( std::fseek( _file.get(), static_cast<long>( pos ), SEEK_SET ) != 0 ) {
-        setfail( true );
+        setFail( true );
     }
 }
 
@@ -413,33 +413,33 @@ size_t StreamFile::sizeg()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     const long len = std::ftell( _file.get() );
     if ( len < 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
 
     // Something weird has happened
     if ( len < pos ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
@@ -455,7 +455,7 @@ size_t StreamFile::tellg()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setfail( true );
+        setFail( true );
 
         return 0;
     }
@@ -480,7 +480,7 @@ void StreamFile::skip( size_t pos )
     }
 
     if ( std::fseek( _file.get(), static_cast<long int>( pos ), SEEK_CUR ) != 0 ) {
-        setfail( true );
+        setFail( true );
     }
 }
 
@@ -544,7 +544,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     std::vector<uint8_t> v( chunkSize );
 
     if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
-        setfail( true );
+        setFail( true );
 
         return {};
     }
@@ -564,7 +564,7 @@ void StreamFile::putRaw( const void * ptr, size_t sz )
     }
 
     if ( std::fwrite( ptr, sz, 1, _file.get() ) != 1 ) {
-        setfail( true );
+        setFail( true );
     }
 }
 
@@ -578,7 +578,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
     RWStreamBuf buffer( chunkSize );
 
     if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
-        setfail( true );
+        setFail( true );
 
         return {};
     }
