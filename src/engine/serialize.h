@@ -135,20 +135,20 @@ public:
     template <class Type>
     IStreamBase & operator>>( std::vector<Type> & v )
     {
-        const uint32_t size = get32();
-        v.resize( size );
-        for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        v.resize( get32() );
+
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
+
         return *this;
     }
 
     template <class Type>
     IStreamBase & operator>>( std::list<Type> & v )
     {
-        const uint32_t size = get32();
-        v.resize( size );
-        for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        v.resize( get32() );
+
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
+
         return *this;
     }
 
@@ -156,30 +156,33 @@ public:
     IStreamBase & operator>>( std::map<Type1, Type2> & v )
     {
         const uint32_t size = get32();
+
         v.clear();
-        for ( uint32_t ii = 0; ii < size; ++ii ) {
+
+        for ( uint32_t i = 0; i < size; ++i ) {
             std::pair<Type1, Type2> pr;
+
             *this >> pr;
+
             v.emplace( std::move( pr ) );
         }
+
         return *this;
     }
 
     template <class Type, size_t Count>
-    IStreamBase & operator>>( std::array<Type, Count> & data )
+    IStreamBase & operator>>( std::array<Type, Count> & v )
     {
         const uint32_t size = get32();
-        if ( size != data.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            data = {};
+        if ( size != v.size() ) {
+            setfail( true );
+
+            v = {};
 
             return *this;
         }
 
-        for ( auto & value : data ) {
-            *this >> value;
-        }
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
 
         return *this;
     }
@@ -231,8 +234,9 @@ public:
     OStreamBase & operator<<( const std::vector<Type> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
@@ -240,8 +244,9 @@ public:
     OStreamBase & operator<<( const std::list<Type> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
@@ -249,18 +254,19 @@ public:
     OStreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
     template <class Type, size_t Count>
-    OStreamBase & operator<<( const std::array<Type, Count> & data )
+    OStreamBase & operator<<( const std::array<Type, Count> & v )
     {
-        put32( static_cast<uint32_t>( data.size() ) );
-        for ( const auto & value : data ) {
-            *this << value;
-        }
+        put32( static_cast<uint32_t>( v.size() ) );
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
@@ -426,6 +432,8 @@ protected:
         if ( sizeg() > 0 ) {
             return *( _itget++ );
         }
+
+        setfail( true );
 
         return 0;
     }
