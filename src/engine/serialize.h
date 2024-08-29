@@ -520,12 +520,10 @@ public:
     explicit ROStreamBuf( const std::vector<uint8_t> & buf );
 
     ROStreamBuf( const ROStreamBuf & ) = delete;
-    ROStreamBuf( ROStreamBuf && ) = default;
 
     ~ROStreamBuf() override = default;
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
-    ROStreamBuf & operator=( ROStreamBuf && ) = default;
 };
 
 // Stream with a file storage backend that supports both reading and writing
