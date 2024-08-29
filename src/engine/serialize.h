@@ -81,7 +81,7 @@ private:
     uint32_t _flags{ 0 };
 };
 
-// Interface that describes the methods needed to read from a stream
+// Interface that declares the methods needed to read from a stream
 class IStreamBase : virtual public StreamBase
 {
 public:
@@ -200,7 +200,7 @@ protected:
     virtual size_t tellg() = 0;
 };
 
-// Interface that describes the methods needed to write to a stream
+// Interface that declares the methods needed to write to a stream
 class OStreamBase : virtual public StreamBase
 {
 public:
@@ -294,7 +294,7 @@ protected:
     virtual size_t tellp() = 0;
 };
 
-// Interface that describes a stream with an in-memory storage backend that can be read from
+// Interface that declares a stream with an in-memory storage backend that can be read from
 class IStreamBuf : public IStreamBase
 {
 public:
