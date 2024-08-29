@@ -288,18 +288,18 @@ protected:
     virtual size_t tellp() = 0;
 };
 
-class StreamBuf : public IStreamBase
+class IStreamBuf : public IStreamBase
 {
 public:
     virtual const uint8_t * data() const = 0;
     virtual size_t size() = 0;
 
 protected:
-    StreamBuf() = default;
+    IStreamBuf() = default;
 };
 
 template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
-class StreamBufTmpl : public StreamBuf
+class StreamBufTmpl : public IStreamBuf
 {
 public:
     StreamBufTmpl( const StreamBufTmpl & ) = delete;
@@ -404,7 +404,7 @@ protected:
     StreamBufTmpl() = default;
 
     StreamBufTmpl( StreamBufTmpl && stream ) noexcept
-        : StreamBuf( std::move( stream ) )
+        : IStreamBuf( std::move( stream ) )
     {
         std::swap( _itbeg, stream._itbeg );
         std::swap( _itget, stream._itget );
@@ -418,7 +418,7 @@ protected:
             return *this;
         }
 
-        StreamBuf::operator=( std::move( stream ) );
+        IStreamBuf::operator=( std::move( stream ) );
 
         std::swap( _itbeg, stream._itbeg );
         std::swap( _itget, stream._itget );

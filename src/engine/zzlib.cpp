@@ -160,7 +160,7 @@ namespace Compression
         return !output.fail();
     }
 
-    bool writeIntoFileStream( StreamFile & fileStream, StreamBuf & data )
+    bool writeIntoFileStream( StreamFile & fileStream, IStreamBuf & data )
     {
         const std::vector<uint8_t> zip = compressData( data.data(), data.size() );
         if ( zip.empty() ) {

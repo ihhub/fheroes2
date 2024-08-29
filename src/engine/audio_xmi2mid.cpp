@@ -221,7 +221,7 @@ namespace
         {}
     };
 
-    StreamBuf & operator>>( StreamBuf & stream, IFFChunkHeader & st )
+    IStreamBuf & operator>>( IStreamBuf & stream, IFFChunkHeader & st )
     {
         st.ID = stream.getBE32();
         st.length = stream.getBE32();
@@ -244,7 +244,7 @@ namespace
         uint32_t type{ 0 }; // 4 byte ASCII string
     };
 
-    StreamBuf & operator>>( StreamBuf & stream, GroupChunkHeader & st )
+    IStreamBuf & operator>>( IStreamBuf & stream, GroupChunkHeader & st )
     {
         st.ID = stream.getBE32();
         st.length = stream.getBE32();
