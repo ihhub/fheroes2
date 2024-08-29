@@ -280,8 +280,6 @@ protected:
 
     OStreamBase( OStreamBase && ) = default;
 
-    OStreamBase & operator=( OStreamBase && stream ) noexcept;
-
     virtual void put8( const uint8_t ) = 0;
 
     virtual size_t sizep() = 0;

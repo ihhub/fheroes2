@@ -164,14 +164,6 @@ IStreamBase & IStreamBase::operator>>( fheroes2::Point & v )
     return *this >> v.x >> v.y;
 }
 
-OStreamBase & OStreamBase::operator=( OStreamBase && /* stream */ ) noexcept
-{
-    // Should never be called
-    assert( 0 );
-
-    return *this;
-}
-
 void OStreamBase::put16( uint16_t v )
 {
     bigendian() ? putBE16( v ) : putLE16( v );
