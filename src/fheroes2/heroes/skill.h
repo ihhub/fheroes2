@@ -206,6 +206,9 @@ namespace Skill
         int knowledge;
     };
 
+    OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+    IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
+
     OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
     IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
