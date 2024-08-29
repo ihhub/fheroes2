@@ -144,11 +144,9 @@ IStreamBase & IStreamBase::operator>>( uint32_t & v )
 
 IStreamBase & IStreamBase::operator>>( std::string & v )
 {
-    uint32_t size = get32();
-    v.resize( size );
+    v.resize( get32() );
 
-    for ( std::string::iterator it = v.begin(); it != v.end(); ++it )
-        *it = get8();
+    std::for_each( v.begin(), v.end(), [this]( char & item ) { item = get8(); } );
 
     return *this;
 }
@@ -227,6 +225,7 @@ OStreamBase & OStreamBase::operator<<( const uint32_t v )
 OStreamBase & OStreamBase::operator<<( const std::string & v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
+
     // A string is a container of bytes so it doesn't matter which endianess is being used.
     putRaw( v.data(), v.size() );
 
