@@ -922,7 +922,9 @@ IStreamBase & Skill::operator>>( IStreamBase & stream, SecSkills & ss )
     std::vector<Secondary> & v = ss;
     stream >> v;
 
-    if ( v.size() > HEROESMAXSKILL )
+    if ( v.size() > HEROESMAXSKILL ) {
         v.resize( HEROESMAXSKILL );
+    }
+
     return stream;
 }
