@@ -236,6 +236,9 @@ namespace
             textAreaBorders.y = 2 + 2;
             minimumTextArea.width = 19;
             minimumTextArea.height = 111;
+            // TODO: Currently the empty vertical button has a width of 28 which is not evenly dividable by 3 in resizeButton().
+            // It should be widened by 1 px to allow for widening.
+            maximumTextArea.width = 19;
             backgroundBorders.width = 5 + 4;
             backgroundBorders.height = 4 + 6;
             releasedOffset = { 5, 5 };
