@@ -36,7 +36,7 @@
 
 namespace
 {
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size buttonSize, const bool isReleasedState )
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size buttonSize )
     {
         assert( buttonSize.height > 0 );
 
@@ -160,17 +160,11 @@ namespace
 
             assert( offsetX + rightPartWidth == buttonSize.width );
             assert( offsetY + bottomPartHeight == buttonSize.height );
-            // TODO: This is copied straight from getButtonFillingColor() in agg_image.cpp. When all uses of that function has
-            // been removed from agg_image.cpp, this function can be moved to ui_button.cpp.
-            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-            uint8_t colorID;
-            if ( isEvilInterface ) {
-                colorID = isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
-            }
-            else {
-                colorID = isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
-            }
-            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, colorID );
+
+            // Find the background color using the central pixel of the button background.
+            const uint32_t centralPlace
+                = ( original.width() * original.height() / 2 ) - 1 - ( original.width() >= original.height() ? original.height() : original.width() ) / 2;
+            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, original.image()[centralPlace] );
         }
         else {
             // You are trying to modify the size of the button in an unexpected way.
@@ -765,8 +759,8 @@ namespace fheroes2
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        released = resizeButton( originalReleased, { width, originalReleased.height() }, true );
-        pressed = resizeButton( originalPressed, { width, originalPressed.height() }, false );
+        released = resizeButton( originalReleased, { width, originalReleased.height() } );
+        pressed = resizeButton( originalPressed, { width, originalPressed.height() } );
 
         if ( !isTransparentBackground ) {
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
@@ -815,8 +809,8 @@ namespace fheroes2
 
         assert( textAreaHeight + backgroundBorders.height > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height }, true );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height }, false );
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height } );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height } );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
