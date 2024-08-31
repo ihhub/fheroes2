@@ -344,9 +344,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Hero dismiss button.
     dst_pt.x = dialogRoi.x + 9;
-    dst_pt.y = dialogRoi.y + 318;
-    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ), fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+    dst_pt.y = dialogRoi.y + 378;
+    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y - fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ).height() / 2,
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ),
+                                          fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
 
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
@@ -356,14 +357,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         buttonDismiss.hide();
     }
     else {
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, dst_pt, { -3, 5 } );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display,
+                                     { dst_pt.x, dst_pt.y - fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ).height() / 2 }, { -3, 5 } );
     }
 
     // Hero Patrol mode button (used in Editor).
-    fheroes2::ButtonSprite buttonPatrol( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ),
-                                         fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
+    fheroes2::ButtonSprite buttonPatrol( dst_pt.x, dst_pt.y - fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ).height() / 2,
+                                         fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
     if ( isEditor ) {
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ), display, { dialogRoi.x + 9, dialogRoi.y + 318 }, { -3, 5 } );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ), display,
+                                     { dialogRoi.x + 9, dst_pt.y - fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ).height() / 2 }, { -3, 5 } );
         if ( Modes( PATROL ) ) {
             buttonPatrol.press();
         }
@@ -374,7 +377,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Exit button.
     dst_pt.x = dialogRoi.x + 602;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
+    fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 ).height() / 2,
+                                       fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
 
     LocalEvent & le = LocalEvent::Get();
 
