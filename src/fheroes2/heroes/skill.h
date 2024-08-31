@@ -153,7 +153,7 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    protected:
+    private:
         friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
         friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
