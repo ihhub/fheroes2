@@ -968,7 +968,22 @@ namespace
             }
         }
 
-    protected:
+    private:
+        SDL_Window * _window;
+        SDL_Surface * _surface;
+        SDL_Renderer * _renderer;
+        SDL_Texture * _texture;
+        int _driverIndex;
+
+        std::string _previousWindowTitle;
+        fheroes2::Point _prevWindowPos;
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
+
+        fheroes2::Size _windowedSize;
+
+        bool _isVSyncEnabled;
+
         RenderEngine()
             : _window( nullptr )
             , _surface( nullptr )
@@ -1189,22 +1204,6 @@ namespace
         {
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
-
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        SDL_Renderer * _renderer;
-        SDL_Texture * _texture;
-        int _driverIndex;
-
-        std::string _previousWindowTitle;
-        fheroes2::Point _prevWindowPos;
-        fheroes2::Size _currentScreenResolution;
-        fheroes2::Rect _activeWindowROI;
-
-        fheroes2::Size _windowedSize;
-
-        bool _isVSyncEnabled;
 
         uint32_t renderFlags() const
         {
