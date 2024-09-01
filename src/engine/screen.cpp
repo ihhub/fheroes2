@@ -636,20 +636,13 @@ namespace
         }
 
     private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        vita2d_texture * _texBuffer;
-        uint8_t * _palettedTexturePointer;
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        vita2d_texture * _texBuffer{ nullptr };
+        uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
 
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _texBuffer( nullptr )
-            , _palettedTexturePointer( nullptr )
-        {
-            // Do nothing.
-        }
+        RenderEngine() = default;
 
         enum : int32_t
         {
@@ -969,32 +962,22 @@ namespace
         }
 
     private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        SDL_Renderer * _renderer;
-        SDL_Texture * _texture;
-        int _driverIndex;
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        SDL_Renderer * _renderer{ nullptr };
+        SDL_Texture * _texture{ nullptr };
+        int _driverIndex{ -1 };
 
         std::string _previousWindowTitle;
-        fheroes2::Point _prevWindowPos;
+        fheroes2::Point _prevWindowPos{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
 
         fheroes2::Size _windowedSize;
 
-        bool _isVSyncEnabled;
+        bool _isVSyncEnabled{ false };
 
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _renderer( nullptr )
-            , _texture( nullptr )
-            , _driverIndex( -1 )
-            , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
-            , _isVSyncEnabled( false )
-        {
-            // Do nothing.
-        }
+        RenderEngine() = default;
 
         void clear() override
         {
