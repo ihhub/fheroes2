@@ -38,15 +38,15 @@ namespace
 {
     fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size buttonSize )
     {
-        assert( buttonSize.height > 0 );
+        const int32_t originalWidth = original.width();
+        const int32_t originalHeight = original.height();
+
+        assert( original.height() > 0 && original.width() > 0 );
 
         fheroes2::Image output;
 
         output.resize( buttonSize.width, buttonSize.height );
         output.reset();
-
-        const int32_t originalWidth = original.width();
-        const int32_t originalHeight = original.height();
 
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
             fheroes2::Copy( original, output );
