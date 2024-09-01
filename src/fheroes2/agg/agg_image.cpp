@@ -4769,6 +4769,7 @@ namespace
                 // Make the extended width and height lines transparent.
                 FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
                 FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
+
                 CopyTransformLayer( exitCommonMask, released );
                 CopyTransformLayer( exitCommonMask, pressed );
 
