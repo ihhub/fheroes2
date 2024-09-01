@@ -290,7 +290,13 @@ namespace
         else {
             if ( hero ) {
                 str.append( "\n\n(" );
-                str.append( _( "not claimed" ) );
+                // In case another player visited this tree with this hero.
+                if ( hero->isVisited( tile ) ) {
+                    str.append( _( "already claimed" ) );
+                }
+                else {
+                    str.append( _( "not claimed" ) );
+                }
                 str += ')';
             }
         }
