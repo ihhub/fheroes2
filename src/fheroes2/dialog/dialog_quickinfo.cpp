@@ -291,12 +291,7 @@ namespace
             if ( hero ) {
                 str.append( "\n\n(" );
                 // In case another player visited this tree with this hero.
-                if ( hero->isVisited( tile ) ) {
-                    str.append( _( "already claimed" ) );
-                }
-                else {
-                    str.append( _( "not claimed" ) );
-                }
+                str.append( hero->isVisited( tile ) ? _( "already claimed" ) : _( "not claimed" ) );
                 str += ')';
             }
         }
