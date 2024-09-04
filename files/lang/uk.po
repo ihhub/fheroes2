@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -11400,15 +11400,15 @@ msgstr "Магічно збільшує навичку захисту обран
 msgid "Stoneskin"
 msgstr "Кам'яна Шкіра"
 
+msgid "Steelskin"
+msgstr "Сталева Шкіра"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Збільшує навичку захисту обраного дружнього загону. Це закляття - покращена "
 "версія Кам'яної Шкіри."
-
-msgid "Steelskin"
-msgstr "Сталева Шкіра"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Змушує обраний ворожий загон завдавати мінімальної шкоди."
