@@ -137,7 +137,7 @@ namespace fheroes2
         RWStreamBuf hdata;
         hdata.setBigendian( true );
 
-        if ( !Compression::readFromFileStream( fileStream, hdata ) ) {
+        if ( !Compression::readFromStream( fileStream, hdata ) ) {
             return false;
         }
 
@@ -211,7 +211,7 @@ namespace fheroes2
         hdata.setBigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
-        return !hdata.fail() && Compression::writeIntoFileStream( fileStream, hdata );
+        return !hdata.fail() && Compression::writeIntoStream( hdata, fileStream );
     }
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )

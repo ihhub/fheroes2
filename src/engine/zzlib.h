@@ -30,9 +30,9 @@
 
 #include "image.h"
 
+class IStreamBase;
+class OStreamBase;
 class IStreamBuf;
-class RWStreamBuf;
-class StreamFile;
 
 namespace Compression
 {
@@ -45,14 +45,14 @@ namespace Compression
     // zero, the size of the decompressed data will be determined automatically.
     std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
-    // Reads & unzips the zipped chunk from the specified file stream and appends
-    // it to the end of the buffer. Returns true on success or false on error.
-    bool readFromFileStream( StreamFile & fileStream, RWStreamBuf & output );
+    // Reads & unzips the zipped chunk from the given input stream and writes it to the given output
+    // stream. Returns true on success or false on error.
+    bool readFromStream( IStreamBase & inputStream, OStreamBase & outputStream );
 
     // Zips the contents of the buffer from the current read position to the end of the buffer and writes
-    // it to the specified file stream. The current read position of the buffer does not change. Returns
+    // it to the given output stream. The current read position of the buffer does not change. Returns
     // true on success and false on error.
-    bool writeIntoFileStream( StreamFile & fileStream, IStreamBuf & data );
+    bool writeIntoStream( IStreamBuf & inputStream, OStreamBase & outputStream );
 
     fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
 }

@@ -147,7 +147,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // End-of-data marker
     dataStream << SAV2ID3;
-    if ( dataStream.fail() || !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
+    if ( dataStream.fail() || !Compression::writeIntoStream( dataStream, fileStream ) ) {
         return false;
     }
 
@@ -228,7 +228,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     RWStreamBuf dataStream;
     dataStream.setBigendian( true );
 
-    if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {
+    if ( !Compression::readFromStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
