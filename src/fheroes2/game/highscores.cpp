@@ -211,7 +211,7 @@ namespace fheroes2
         hdata.setBigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
-        return !hdata.fail() && Compression::zipStream( hdata, fileStream );
+        return !hdata.fail() && Compression::zipStreamBuf( hdata, fileStream );
     }
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )

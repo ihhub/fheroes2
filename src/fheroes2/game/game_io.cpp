@@ -147,7 +147,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // End-of-data marker
     dataStream << SAV2ID3;
-    if ( dataStream.fail() || !Compression::zipStream( dataStream, fileStream ) ) {
+    if ( dataStream.fail() || !Compression::zipStreamBuf( dataStream, fileStream ) ) {
         return false;
     }
 

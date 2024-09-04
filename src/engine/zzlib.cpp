@@ -160,7 +160,7 @@ namespace Compression
         return !outputStream.fail();
     }
 
-    bool zipStream( IStreamBuf & inputStream, OStreamBase & outputStream )
+    bool zipStreamBuf( IStreamBuf & inputStream, OStreamBase & outputStream )
     {
         const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size() );
         if ( zip.empty() ) {
