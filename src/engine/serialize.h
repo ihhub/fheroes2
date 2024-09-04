@@ -607,7 +607,7 @@ private:
         }
     }
 
-    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, std::fclose };
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, []( std::FILE * f ) { return std::fclose( f ); } };
 };
 
 namespace fheroes2

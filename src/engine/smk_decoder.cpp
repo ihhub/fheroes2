@@ -45,7 +45,7 @@ namespace
         }
 
         // Verify that the file is valid. We use C-code on purpose since libsmacker library does the same.
-        const std::unique_ptr<std::FILE, int ( * )( std::FILE * )> file( std::fopen( filePath.c_str(), "rb" ), std::fclose );
+        const std::unique_ptr<std::FILE, int ( * )( std::FILE * )> file( std::fopen( filePath.c_str(), "rb" ), []( std::FILE * f ) { return std::fclose( f ); } );
         if ( !file ) {
             return;
         }

@@ -36,7 +36,7 @@ class HeroBase;
 class Spell
 {
 public:
-    enum type_t : int32_t
+    enum : int32_t
     {
         NONE = 0,
         FIREBALL,

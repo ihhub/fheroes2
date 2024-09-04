@@ -33,9 +33,9 @@ namespace MP2
 
 namespace Skill
 {
-    struct stats_t;
-    struct values_t;
-    struct secondary_t;
+    struct FactionProperties;
+    struct SecondarySkillValuesPerLevel;
+    struct SecondarySkillValues;
 }
 
 class Heroes;
@@ -69,9 +69,9 @@ namespace GameStatic
     // Returns the percentage penalty for the damage dealt by shooters firing at targets protected by castle walls.
     uint32_t getCastleWallRangedPenalty();
 
-    const Skill::stats_t * GetSkillStats( int race );
-    const Skill::values_t * GetSkillValues( int skill );
-    const Skill::secondary_t * GetSkillForWitchsHut();
+    const Skill::FactionProperties * GetFactionProperties( const int race );
+    const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
+    const Skill::SecondarySkillValues * GetSecondarySkillValuesForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
