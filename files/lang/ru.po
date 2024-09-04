@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2024-07-14 13:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -11391,15 +11391,15 @@ msgstr "Магически увеличивает защиту выбранно�
 msgid "Stoneskin"
 msgstr "Каменная кожа"
 
+msgid "Steelskin"
+msgstr "Стальная кожа"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Увеличивает защиту выбранного отряда на 5. Это заклинание является более "
 "мощной версией заклинания 'Каменная кожа'."
-
-msgid "Steelskin"
-msgstr "Стальная кожа"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Заставляет вражеский отряд при атаке наносить минимальный урон."

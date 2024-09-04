@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -11680,6 +11680,9 @@ msgstr "Magicznie podnosi współczynnik obrony wybranych stworzeń."
 msgid "Stoneskin"
 msgstr "Kamienna Skóra"
 
+msgid "Steelskin"
+msgstr "Stalowa Skóra"
+
 #, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
@@ -11687,9 +11690,6 @@ msgid ""
 msgstr ""
 "Podnosi współczynnik obrony wybranych stworzeń. Zaklęcie to jest ulepszoną "
 "wersją 'Kamiennej Skóry'."
-
-msgid "Steelskin"
-msgstr "Stalowa Skóra"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Sprawia, że wybrane stworzenia zadają minimalne obrażenia."
