@@ -30,6 +30,7 @@
 #include <map>
 #include <numeric>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -126,18 +127,18 @@ namespace
             { 32, "Jazz Kit" },    { 40, "Brush Kit" }, { 48, "Orchestral Kit" }, { 49, "Fix Room Kit" },   { 56, "Sound FX Kit" } };
 #endif
 
-    enum Tag : uint32_t
+    enum class Tag : uint32_t
     {
-        TAG_FORM = 0x464F524D,
-        TAG_XDIR = 0x58444952,
-        TAG_INFO = 0x494E464F,
-        TAG_CAT0 = 0x43415420,
-        TAG_XMID = 0x584D4944,
-        TAG_TIMB = 0x54494D42,
-        TAG_EVNT = 0x45564E54,
-        TAG_RBRN = 0x5242524E,
-        TAG_MTHD = 0x4D546864,
-        TAG_MTRK = 0x4D54726B
+        FORM = 0x464F524D,
+        XDIR = 0x58444952,
+        INFO = 0x494E464F,
+        CAT0 = 0x43415420,
+        XMID = 0x584D4944,
+        TIMB = 0x54494D42,
+        EVNT = 0x45564E54,
+        RBRN = 0x5242524E,
+        MTHD = 0x4D546864,
+        MTRK = 0x4D54726B
     };
 
     // Some numbers in MIDI Files are represented in a form called VARIABLE-LENGTH QUANTITY.
@@ -205,14 +206,14 @@ namespace
 
     struct IFFChunkHeader
     {
-        // 4 upper case ASCII chars, padded with 0x20 (space).
-        uint32_t ID{ 0 };
+        // ASCII string 4 bytes long, padded with a space character 0x20 if necessary.
+        Tag ID{ 0 };
         // Big-endian.
         uint32_t length{ 0 };
 
         IFFChunkHeader() = default;
 
-        IFFChunkHeader( const uint32_t id, const uint32_t sz )
+        IFFChunkHeader( const Tag id, const uint32_t sz )
             : ID( id )
             , length( sz )
         {
@@ -229,7 +230,7 @@ namespace
 
     IStreamBase & operator>>( IStreamBase & stream, IFFChunkHeader & st )
     {
-        st.ID = stream.getBE32();
+        st.ID = static_cast<Tag>( stream.getBE32() );
         st.length = stream.getBE32();
 
         return stream;
@@ -237,7 +238,7 @@ namespace
 
     OStreamBase & operator<<( OStreamBase & stream, const IFFChunkHeader & st )
     {
-        stream.putBE32( st.ID );
+        stream.putBE32( static_cast<std::underlying_type_t<Tag>>( st.ID ) );
         stream.putBE32( st.length );
 
         return stream;
@@ -245,19 +246,19 @@ namespace
 
     struct GroupChunkHeader
     {
-        // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'.
-        uint32_t ID{ 0 };
+        // ASCII string 4 bytes long, padded with a space character 0x20 if necessary - either 'FORM', 'CAT ' or 'LIST'.
+        Tag ID{ 0 };
         // Big-endian.
         uint32_t length{ 0 };
-        // 4 byte ASCII string.
-        uint32_t type{ 0 };
+        // ASCII string 4 bytes long, padded with a space character 0x20 if necessary.
+        Tag type{ 0 };
     };
 
     IStreamBase & operator>>( IStreamBase & stream, GroupChunkHeader & st )
     {
-        st.ID = stream.getBE32();
+        st.ID = static_cast<Tag>( stream.getBE32() );
         st.length = stream.getBE32();
-        st.type = stream.getBE32();
+        st.type = static_cast<Tag>( stream.getBE32() );
 
         return stream;
     }
@@ -283,14 +284,14 @@ namespace
             GroupChunkHeader group;
             sb >> group;
 
-            if ( group.ID != TAG_FORM || group.type != TAG_XDIR ) {
+            if ( group.ID != Tag::FORM || group.type != Tag::XDIR ) {
                 ERROR_LOG( "XMI parse error: invalid IFF root chunk 1 (FORM:XDIR)" )
                 return;
             }
 
             IFFChunkHeader iff;
             sb >> iff;
-            if ( iff.ID != TAG_INFO || iff.length != 2 ) {
+            if ( iff.ID != Tag::INFO || iff.length != 2 ) {
                 ERROR_LOG( "XMI parse error: invalid TAG_INFO" )
                 return;
             }
@@ -302,14 +303,14 @@ namespace
 
             // CAT XMID
             sb >> group;
-            if ( group.ID != TAG_CAT0 || group.type != TAG_XMID ) {
+            if ( group.ID != Tag::CAT0 || group.type != Tag::XMID ) {
                 ERROR_LOG( "XMI parse error: invalid IFF root chunk 2 (CAT:XMID)" )
                 return;
             }
 
             // FORM XMID
             sb >> group;
-            if ( group.ID != TAG_FORM || group.type != TAG_XMID ) {
+            if ( group.ID != Tag::FORM || group.type != Tag::XMID ) {
                 ERROR_LOG( "XMI parse error: invalid form type (FORM:XMID)" )
                 return;
             }
@@ -317,19 +318,19 @@ namespace
             sb >> iff;
 
             // TIMB is not used in MIDI files.
-            if ( iff.ID == TAG_TIMB ) {
+            if ( iff.ID == Tag::TIMB ) {
                 sb.skip( iff.length );
                 sb >> iff;
             }
 
             // [RBRN]
-            if ( iff.ID == TAG_RBRN ) {
+            if ( iff.ID == Tag::RBRN ) {
                 sb.skip( iff.length );
                 sb >> iff;
             }
 
             // EVNT chunk
-            if ( iff.ID != TAG_EVNT ) {
+            if ( iff.ID != Tag::EVNT ) {
                 ERROR_LOG( "XMI parse error: ID is not EVNT" )
                 return;
             }
@@ -611,11 +612,11 @@ namespace
     struct MidTrack
     {
         MidiEvents events;
-        IFFChunkHeader mtrk{ TAG_MTRK, 0 };
+        IFFChunkHeader mtrk{ Tag::MTRK, 0 };
 
         explicit MidTrack( const subVectorIters & trackEvents )
             : events( trackEvents )
-            , mtrk( TAG_MTRK, static_cast<uint32_t>( events.sizeInBytes() ) )
+            , mtrk( Tag::MTRK, static_cast<uint32_t>( events.sizeInBytes() ) )
         {
             // Do nothing.
         }
@@ -631,7 +632,7 @@ namespace
 
     struct MidData
     {
-        IFFChunkHeader mthd{ TAG_MTHD, 6 };
+        IFFChunkHeader mthd{ Tag::MTHD, 6 };
         uint16_t format{ 0 };
         uint16_t ppqn{ 60 };
         // MIDI format 0 can contain only one track.
