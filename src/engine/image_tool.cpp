@@ -368,8 +368,6 @@ namespace fheroes2
     Sprite decodeMonochromaticICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX,
                                          const int16_t offsetY )
     {
-        // You can read about this format here: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
-
         Sprite sprite( width, height, offsetX, offsetY );
         sprite.reset();
 

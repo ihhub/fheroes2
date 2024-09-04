@@ -149,7 +149,6 @@ int main( int argc, char ** argv )
             }
 
             // When animationFrames is equal to 32 then it is Monochromatic ICN image.
-            // See: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
             const bool isMonochromatic = ( header.animationFrames == 32 );
             const fheroes2::Sprite sprite
                 = isMonochromatic ? fheroes2::decodeMonochromaticICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY )

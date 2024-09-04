@@ -627,7 +627,6 @@ namespace
             const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
             // When animationFrames is equal to 32 then it is Monochromatic ICN image.
-            // See: https://thaddeus002.github.io/fheroes2-WoT/infos/informations.html
             const bool isMonochromatic = ( header1.animationFrames == 32 );
 
             _icnVsSprite[id][i] = isMonochromatic
