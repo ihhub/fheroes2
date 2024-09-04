@@ -170,7 +170,7 @@ namespace
             quantity.value += *iter;
         }
 
-        quantity.lengthInBytes = static_cast<uint32_t>( iter - data ) + 1; // it's safe to cast since p is always bigger or equal to data
+        quantity.lengthInBytes = static_cast<uint32_t>( iter - data ) + 1;
 
         return true;
     }
