@@ -39,7 +39,7 @@ namespace
 
 namespace Compression
 {
-    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
+    std::vector<uint8_t> unzipData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -102,7 +102,7 @@ namespace Compression
         return res;
     }
 
-    std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize )
+    std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -134,7 +134,7 @@ namespace Compression
         return res;
     }
 
-    bool readFromStream( IStreamBase & inputStream, OStreamBase & outputStream )
+    bool unzipStream( IStreamBase & inputStream, OStreamBase & outputStream )
     {
         const uint32_t rawSize = inputStream.get32();
         const uint32_t zipSize = inputStream.get32();
@@ -150,7 +150,7 @@ namespace Compression
         inputStream.skip( 2 ); // Unused bytes
 
         const std::vector<uint8_t> zip = inputStream.getRaw( zipSize );
-        const std::vector<uint8_t> raw = decompressData( zip.data(), zip.size(), rawSize );
+        const std::vector<uint8_t> raw = unzipData( zip.data(), zip.size(), rawSize );
         if ( raw.size() != rawSize ) {
             return false;
         }
@@ -160,9 +160,9 @@ namespace Compression
         return !outputStream.fail();
     }
 
-    bool writeIntoStream( IStreamBuf & inputStream, OStreamBase & outputStream )
+    bool zipStream( IStreamBuf & inputStream, OStreamBase & outputStream )
     {
-        const std::vector<uint8_t> zip = compressData( inputStream.data(), inputStream.size() );
+        const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size() );
         if ( zip.empty() ) {
             return false;
         }
@@ -182,7 +182,7 @@ namespace Compression
             return {};
         }
 
-        const std::vector<uint8_t> & uncompressedData = decompressData( imageData, imageSize );
+        const std::vector<uint8_t> & uncompressedData = unzipData( imageData, imageSize );
         if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
             return {};
         }
