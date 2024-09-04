@@ -46,8 +46,10 @@
 #include "spell.h"
 #include "visit.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Castle;
-class StreamBase;
 
 namespace Battle
 {
@@ -692,8 +694,8 @@ public:
     void resetHeroSprite();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Heroes & );
-    friend StreamBase & operator>>( StreamBase &, Heroes & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, Heroes & hero );
 
     enum
     {
@@ -810,13 +812,10 @@ struct AllHeroes : public VecHeroes
     Heroes * FromJail( int32_t index ) const;
 };
 
-StreamBase & operator<<( StreamBase &, const VecHeroes & );
-StreamBase & operator>>( StreamBase &, VecHeroes & );
+OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
+IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
 
-StreamBase & operator<<( StreamBase &, const Heroes & );
-StreamBase & operator>>( StreamBase &, Heroes & );
-
-StreamBase & operator<<( StreamBase &, const AllHeroes & );
-StreamBase & operator>>( StreamBase &, AllHeroes & );
+OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
 
 #endif

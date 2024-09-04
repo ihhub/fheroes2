@@ -29,9 +29,11 @@
 #include <utility>
 #include <vector>
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
 class HeroBase;
-class StreamBase;
 
 namespace Skill
 {
@@ -120,8 +122,6 @@ namespace Skill
         static const char * String( int );
     };
 
-    StreamBase & operator>>( StreamBase &, Secondary & );
-
     class SecSkills final : protected std::vector<Secondary>
     {
     public:
@@ -151,13 +151,10 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    protected:
-        friend StreamBase & operator<<( StreamBase &, const SecSkills & );
-        friend StreamBase & operator>>( StreamBase &, SecSkills & );
+    private:
+        friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+        friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
-
-    StreamBase & operator<<( StreamBase &, const SecSkills & );
-    StreamBase & operator>>( StreamBase &, SecSkills & );
 
     class Primary
     {
@@ -198,8 +195,8 @@ namespace Skill
     protected:
         void LoadDefaults( int type, int race );
 
-        friend StreamBase & operator<<( StreamBase &, const Primary & );
-        friend StreamBase & operator>>( StreamBase &, Primary & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+        friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
         int attack;
         int defense;
@@ -207,7 +204,10 @@ namespace Skill
         int knowledge;
     };
 
-    StreamBase & operator<<( StreamBase &, const Primary & );
-    StreamBase & operator>>( StreamBase &, Primary & );
+    OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+    IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+    IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
 #endif

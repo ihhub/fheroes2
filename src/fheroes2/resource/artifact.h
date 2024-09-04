@@ -35,9 +35,11 @@
 #include "math_base.h"
 #include "ui_tool.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
 class StatusBar;
-class StreamBase;
 
 namespace MP2
 {
@@ -261,15 +263,12 @@ public:
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Artifact & );
-    friend StreamBase & operator>>( StreamBase &, Artifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Artifact & art );
+    friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
     int id;
     int ext;
 };
-
-StreamBase & operator<<( StreamBase &, const Artifact & );
-StreamBase & operator>>( StreamBase &, Artifact & );
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 

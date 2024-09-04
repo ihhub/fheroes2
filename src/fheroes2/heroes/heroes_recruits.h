@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,8 +27,10 @@
 #include <cstdint>
 #include <utility>
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
-class StreamBase;
 
 class Recruit
 {
@@ -57,8 +59,8 @@ private:
     int _id;
     uint32_t _surrenderDay;
 
-    friend StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
-    friend StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );
+    friend IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
 };
 
 class Recruits : public std::pair<Recruit, Recruit>
@@ -83,7 +85,7 @@ public:
     void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
-StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
-StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
+OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );
+IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
 
 #endif

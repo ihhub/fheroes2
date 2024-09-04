@@ -26,7 +26,6 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
@@ -41,39 +40,17 @@
 #include "endian_h2.h"
 #include "math_base.h"
 
+// Base class for all I/O facilities
 class StreamBase
 {
 public:
-    StreamBase() = default;
-
     StreamBase( const StreamBase & ) = delete;
-
-    StreamBase( StreamBase && stream ) noexcept
-    {
-        std::swap( _flags, stream._flags );
-    }
 
     virtual ~StreamBase() = default;
 
     StreamBase & operator=( const StreamBase & ) = delete;
 
-    StreamBase & operator=( StreamBase && stream ) noexcept
-    {
-        if ( this == &stream ) {
-            return *this;
-        }
-
-        std::swap( _flags, stream._flags );
-
-        return *this;
-    }
-
-    void setbigendian( bool f );
-
-    bool isconstbuf() const
-    {
-        return ( _flags & CONST_BUF ) != 0;
-    }
+    void setBigendian( bool f );
 
     bool fail() const
     {
@@ -85,6 +62,35 @@ public:
         return ( _flags & BIGENDIAN ) != 0;
     }
 
+protected:
+    StreamBase() = default;
+
+    StreamBase( StreamBase && stream ) noexcept;
+
+    StreamBase & operator=( StreamBase && stream ) noexcept;
+
+    void setFail( bool f );
+
+private:
+    enum : uint32_t
+    {
+        FAILURE = 0x00000001,
+        BIGENDIAN = 0x00000002
+    };
+
+    uint32_t _flags{ 0 };
+};
+
+// Interface that declares the methods needed to read from a stream
+class IStreamBase : virtual public StreamBase
+{
+public:
+    IStreamBase( const IStreamBase & ) = delete;
+
+    ~IStreamBase() override = default;
+
+    IStreamBase & operator=( const IStreamBase & ) = delete;
+
     virtual void skip( size_t ) = 0;
 
     virtual uint16_t getBE16() = 0;
@@ -92,263 +98,436 @@ public:
     virtual uint32_t getBE32() = 0;
     virtual uint32_t getLE32() = 0;
 
-    virtual void putBE32( uint32_t ) = 0;
-    virtual void putLE32( uint32_t ) = 0;
-    virtual void putBE16( uint16_t ) = 0;
-    virtual void putLE16( uint16_t ) = 0;
-
-    virtual std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) = 0;
-    virtual void putRaw( const void *, size_t ) = 0;
+    // 0 stands for all data.
+    virtual std::vector<uint8_t> getRaw( size_t = 0 ) = 0;
 
     uint16_t get16();
     uint32_t get32();
-
-    void put16( uint16_t );
-    void put32( uint32_t );
 
     uint8_t get()
     {
         return get8();
     }
 
+    IStreamBase & operator>>( bool & v );
+    IStreamBase & operator>>( char & v );
+    IStreamBase & operator>>( int8_t & v );
+    IStreamBase & operator>>( uint8_t & v );
+    IStreamBase & operator>>( int16_t & v );
+    IStreamBase & operator>>( uint16_t & v );
+    IStreamBase & operator>>( int32_t & v );
+    IStreamBase & operator>>( uint32_t & v );
+    IStreamBase & operator>>( std::string & v );
+
+    IStreamBase & operator>>( fheroes2::Point & v );
+
+    template <class Type1, class Type2>
+    IStreamBase & operator>>( std::pair<Type1, Type2> & v )
+    {
+        return *this >> v.first >> v.second;
+    }
+
+    template <class Type>
+    IStreamBase & operator>>( std::vector<Type> & v )
+    {
+        v.resize( get32() );
+
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
+
+        return *this;
+    }
+
+    template <class Type>
+    IStreamBase & operator>>( std::list<Type> & v )
+    {
+        v.resize( get32() );
+
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
+
+        return *this;
+    }
+
+    template <class Type1, class Type2>
+    IStreamBase & operator>>( std::map<Type1, Type2> & v )
+    {
+        const uint32_t size = get32();
+
+        v.clear();
+
+        for ( uint32_t i = 0; i < size; ++i ) {
+            std::pair<Type1, Type2> pr;
+
+            *this >> pr;
+
+            v.emplace( std::move( pr ) );
+        }
+
+        return *this;
+    }
+
+    template <class Type, size_t Count>
+    IStreamBase & operator>>( std::array<Type, Count> & v )
+    {
+        const uint32_t size = get32();
+        if ( size != v.size() ) {
+            setFail( true );
+
+            v = {};
+
+            return *this;
+        }
+
+        std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
+
+        return *this;
+    }
+
+protected:
+    IStreamBase() = default;
+
+    IStreamBase( IStreamBase && ) = default;
+
+    // All this operator does is call the corresponding base class operator. It is not recommended to
+    // declare these operators as default in the case of a virtual base, even if they are trivial, to
+    // catch a situation where, in the case of the diamond inheritance, the corresponding operator of
+    // the base class will be called multiple times. GCC has a special warning for this case (see the
+    // description of the -Wno-virtual-move-assign switch).
+    IStreamBase & operator=( IStreamBase && stream ) noexcept;
+
+    virtual uint8_t get8() = 0;
+
+    virtual size_t sizeg() = 0;
+    virtual size_t tellg() = 0;
+};
+
+// Interface that declares the methods needed to write to a stream
+class OStreamBase : virtual public StreamBase
+{
+public:
+    OStreamBase( const OStreamBase & ) = delete;
+
+    ~OStreamBase() override = default;
+
+    OStreamBase & operator=( const OStreamBase & ) = delete;
+
+    virtual void putBE16( uint16_t ) = 0;
+    virtual void putLE16( uint16_t ) = 0;
+    virtual void putBE32( uint32_t ) = 0;
+    virtual void putLE32( uint32_t ) = 0;
+
+    virtual void putRaw( const void *, size_t ) = 0;
+
+    void put16( uint16_t );
+    void put32( uint32_t );
+
     void put( const uint8_t ch )
     {
         put8( ch );
     }
 
-    StreamBase & operator>>( bool & v );
-    StreamBase & operator>>( char & v );
-    StreamBase & operator>>( int8_t & v );
-    StreamBase & operator>>( uint8_t & v );
-    StreamBase & operator>>( uint16_t & v );
-    StreamBase & operator>>( int16_t & v );
-    StreamBase & operator>>( uint32_t & v );
-    StreamBase & operator>>( int32_t & v );
-    StreamBase & operator>>( std::string & v );
+    OStreamBase & operator<<( const bool v );
+    OStreamBase & operator<<( const char v );
+    OStreamBase & operator<<( const int8_t v );
+    OStreamBase & operator<<( const uint8_t v );
+    OStreamBase & operator<<( const int16_t v );
+    OStreamBase & operator<<( const uint16_t v );
+    OStreamBase & operator<<( const int32_t v );
+    OStreamBase & operator<<( const uint32_t v );
+    OStreamBase & operator<<( const std::string & v );
 
-    StreamBase & operator>>( fheroes2::Point & point_ );
-
-    StreamBase & operator<<( const bool v );
-    StreamBase & operator<<( const char v );
-    StreamBase & operator<<( const int8_t v );
-    StreamBase & operator<<( const uint8_t v );
-    StreamBase & operator<<( const uint16_t v );
-    StreamBase & operator<<( const int16_t v );
-    StreamBase & operator<<( const uint32_t v );
-    StreamBase & operator<<( const int32_t v );
-    StreamBase & operator<<( const std::string & v );
-
-    StreamBase & operator<<( const fheroes2::Point & point_ );
+    OStreamBase & operator<<( const fheroes2::Point & v );
 
     template <class Type1, class Type2>
-    StreamBase & operator>>( std::pair<Type1, Type2> & p )
+    OStreamBase & operator<<( const std::pair<Type1, Type2> & v )
     {
-        return *this >> p.first >> p.second;
+        return *this << v.first << v.second;
     }
 
     template <class Type>
-    StreamBase & operator>>( std::vector<Type> & v )
+    OStreamBase & operator<<( const std::vector<Type> & v )
     {
-        const uint32_t size = get32();
-        v.resize( size );
-        for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        put32( static_cast<uint32_t>( v.size() ) );
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
     template <class Type>
-    StreamBase & operator>>( std::list<Type> & v )
+    OStreamBase & operator<<( const std::list<Type> & v )
     {
-        const uint32_t size = get32();
-        v.resize( size );
-        for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
-            *this >> *it;
+        put32( static_cast<uint32_t>( v.size() ) );
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
     template <class Type1, class Type2>
-    StreamBase & operator>>( std::map<Type1, Type2> & v )
+    OStreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
-        const uint32_t size = get32();
-        v.clear();
-        for ( uint32_t ii = 0; ii < size; ++ii ) {
-            std::pair<Type1, Type2> pr;
-            *this >> pr;
-            v.emplace( std::move( pr ) );
-        }
+        put32( static_cast<uint32_t>( v.size() ) );
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
         return *this;
     }
 
     template <class Type, size_t Count>
-    StreamBase & operator>>( std::array<Type, Count> & data )
-    {
-        const uint32_t size = get32();
-        if ( size != data.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            data = {};
-
-            return *this;
-        }
-
-        for ( auto & value : data ) {
-            *this >> value;
-        }
-
-        return *this;
-    }
-
-    template <class Type1, class Type2>
-    StreamBase & operator<<( const std::pair<Type1, Type2> & p )
-    {
-        return *this << p.first << p.second;
-    }
-
-    template <class Type>
-    StreamBase & operator<<( const std::vector<Type> & v )
+    OStreamBase & operator<<( const std::array<Type, Count> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
-        return *this;
-    }
 
-    template <class Type>
-    StreamBase & operator<<( const std::list<Type> & v )
-    {
-        put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
-        return *this;
-    }
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
 
-    template <class Type1, class Type2>
-    StreamBase & operator<<( const std::map<Type1, Type2> & v )
-    {
-        put32( static_cast<uint32_t>( v.size() ) );
-        for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
-            *this << *it;
-        return *this;
-    }
-
-    template <class Type, size_t Count>
-    StreamBase & operator<<( const std::array<Type, Count> & data )
-    {
-        put32( static_cast<uint32_t>( data.size() ) );
-        for ( const auto & value : data ) {
-            *this << value;
-        }
         return *this;
     }
 
 protected:
-    virtual uint8_t get8() = 0;
+    OStreamBase() = default;
+
+    OStreamBase( OStreamBase && ) = default;
+
     virtual void put8( const uint8_t ) = 0;
 
-    virtual size_t sizeg() = 0;
     virtual size_t sizep() = 0;
-    virtual size_t tellg() = 0;
     virtual size_t tellp() = 0;
-
-    void setconstbuf( bool f );
-    void setfail( bool f );
-
-private:
-    enum : uint32_t
-    {
-        FAILURE = 0x00000001,
-        CONST_BUF = 0x00000002,
-        BIGENDIAN = 0x00000004
-    };
-
-    uint32_t _flags{ 0 };
 };
 
-class StreamBuf final : public StreamBase
+// Interface that declares a stream with an in-memory storage backend that can be read from
+class IStreamBuf : public IStreamBase
 {
 public:
-    explicit StreamBuf( const size_t sz = 0 );
-    explicit StreamBuf( const std::vector<uint8_t> & buf );
+    virtual const uint8_t * data() const = 0;
+    virtual size_t size() = 0;
 
-    StreamBuf( const StreamBuf & ) = delete;
-    StreamBuf( StreamBuf && stream ) noexcept;
+protected:
+    IStreamBuf() = default;
+};
 
-    ~StreamBuf() override;
+// Class template for a stream with an in-memory storage backend that can store either const or non-const data as desired
+template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
+class StreamBufTmpl : public IStreamBuf
+{
+public:
+    StreamBufTmpl( const StreamBufTmpl & ) = delete;
 
-    StreamBuf & operator=( const StreamBuf & ) = delete;
-    StreamBuf & operator=( StreamBuf && stream ) noexcept;
+    ~StreamBufTmpl() override = default;
 
-    const uint8_t * data() const
+    StreamBufTmpl & operator=( const StreamBufTmpl & ) = delete;
+
+    const uint8_t * data() const override
     {
-        return itget;
+        return _itget;
     }
 
-    size_t size()
+    size_t size() override
     {
         return sizeg();
     }
 
     size_t capacity() const
     {
-        return itend - itbeg;
+        return _itend - _itbeg;
     }
 
     void seek( size_t sz )
     {
-        itget = itbeg + sz < itend ? itbeg + sz : itend;
+        _itget = ( _itbeg + sz < _itend ? _itbeg + sz : _itend );
     }
 
-    void skip( size_t sz ) override;
+    void skip( size_t sz ) override
+    {
+        _itget += ( sz <= sizeg() ? sz : sizeg() );
+    }
 
-    uint16_t getBE16() override;
-    uint16_t getLE16() override;
-    uint32_t getBE32() override;
-    uint32_t getLE32() override;
+    uint16_t getBE16() override
+    {
+        uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
+
+        result |= get8();
+
+        return result;
+    }
+
+    uint16_t getLE16() override
+    {
+        uint16_t result = get8();
+
+        result |= ( static_cast<uint16_t>( get8() ) << 8 );
+
+        return result;
+    }
+
+    uint32_t getBE32() override
+    {
+        uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
+
+        result |= ( static_cast<uint32_t>( get8() ) << 16 );
+        result |= ( static_cast<uint32_t>( get8() ) << 8 );
+        result |= get8();
+
+        return result;
+    }
+
+    uint32_t getLE32() override
+    {
+        uint32_t result = get8();
+
+        result |= ( static_cast<uint32_t>( get8() ) << 8 );
+        result |= ( static_cast<uint32_t>( get8() ) << 16 );
+        result |= ( static_cast<uint32_t>( get8() ) << 24 );
+
+        return result;
+    }
+
+    // 0 stands for all data.
+    std::vector<uint8_t> getRaw( size_t sz = 0 ) override
+    {
+        const size_t actualSize = sizeg();
+        const size_t resultSize = sz > 0 ? sz : actualSize;
+        const size_t sizeToCopy = std::min( resultSize, actualSize );
+
+        std::vector<uint8_t> result( resultSize, 0 );
+
+        std::copy( _itget, _itget + sizeToCopy, result.data() );
+
+        _itget += sizeToCopy;
+
+        return result;
+    }
+
+    // 0 stands for all data.
+    std::string toString( const size_t sz = 0 )
+    {
+        const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
+
+        T * strBeg = _itget;
+        _itget += length;
+
+        return { strBeg, std::find( strBeg, _itget, 0 ) };
+    }
+
+protected:
+    StreamBufTmpl() = default;
+
+    StreamBufTmpl( StreamBufTmpl && stream ) noexcept
+        : IStreamBuf( std::move( stream ) )
+    {
+        std::swap( _itbeg, stream._itbeg );
+        std::swap( _itget, stream._itget );
+        std::swap( _itput, stream._itput );
+        std::swap( _itend, stream._itend );
+    }
+
+    StreamBufTmpl & operator=( StreamBufTmpl && stream ) noexcept
+    {
+        if ( this == &stream ) {
+            return *this;
+        }
+
+        IStreamBuf::operator=( std::move( stream ) );
+
+        std::swap( _itbeg, stream._itbeg );
+        std::swap( _itget, stream._itget );
+        std::swap( _itput, stream._itput );
+        std::swap( _itend, stream._itend );
+
+        return *this;
+    }
+
+    size_t tellg() override
+    {
+        return _itget - _itbeg;
+    }
+
+    size_t sizeg() override
+    {
+        return _itput - _itget;
+    }
+
+    uint8_t get8() override
+    {
+        if ( sizeg() > 0 ) {
+            return *( _itget++ );
+        }
+
+        setFail( true );
+
+        return 0;
+    }
+
+    T * _itbeg{ nullptr };
+    T * _itget{ nullptr };
+    T * _itput{ nullptr };
+    T * _itend{ nullptr };
+};
+
+// Stream with a dynamically-sized in-memory storage backend that supports both reading and writing
+class RWStreamBuf final : public StreamBufTmpl<uint8_t>, public OStreamBase
+{
+public:
+    RWStreamBuf()
+        : RWStreamBuf( 0 )
+    {}
+
+    explicit RWStreamBuf( const size_t sz );
+
+    RWStreamBuf( const RWStreamBuf & ) = delete;
+    RWStreamBuf( RWStreamBuf && ) = default;
+
+    ~RWStreamBuf() override = default;
+
+    RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
+    RWStreamBuf & operator=( RWStreamBuf && stream ) noexcept;
 
     void putBE32( uint32_t v ) override;
     void putLE32( uint32_t v ) override;
     void putBE16( uint16_t v ) override;
     void putLE16( uint16_t v ) override;
 
-    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
     void putRaw( const void * ptr, size_t sz ) override;
-
-    std::string toString( const size_t size = 0 );
 
 private:
     friend class StreamFile;
 
-    void reset();
-
-    size_t tellg() override;
-    size_t tellp() override;
-    size_t sizeg() override;
-    size_t sizep() override;
-
-    void reallocbuf( size_t size );
-
-    uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
+    size_t sizep() override;
+    size_t tellp() override;
+
+    void reallocBuf( size_t size );
+
     // After using this method to write data, update the cursor by calling the advance() method.
-    uint8_t * dataForWriting()
+    uint8_t * rwData()
     {
-        return itput;
+        return _itput;
     }
 
     // Advances the cursor intended for writing data forward by a specified number of bytes.
     void advance( const size_t size )
     {
-        itput += size;
+        _itput += size;
     }
 
-    uint8_t * itbeg{ nullptr };
-    uint8_t * itget{ nullptr };
-    uint8_t * itput{ nullptr };
-    uint8_t * itend{ nullptr };
+    std::unique_ptr<uint8_t[]> _buf;
 };
 
-class StreamFile final : public StreamBase
+// Stream with read-only in-memory storage backed by a const vector instance
+class ROStreamBuf final : public StreamBufTmpl<const uint8_t>
+{
+public:
+    explicit ROStreamBuf( const std::vector<uint8_t> & buf );
+
+    ROStreamBuf( const ROStreamBuf & ) = delete;
+
+    ~ROStreamBuf() override = default;
+
+    ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
+};
+
+// Stream with a file storage backend that supports both reading and writing
+class StreamFile final : public IStreamBase, public OStreamBase
 {
 public:
     StreamFile() = default;
@@ -365,8 +544,8 @@ public:
     bool open( const std::string & fn, const std::string & mode );
     void close();
 
-    // 0 stands for full data.
-    StreamBuf toStreamBuf( const size_t size = 0 );
+    // 0 stands for all data.
+    RWStreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
     void skip( size_t ) override;
@@ -381,11 +560,12 @@ public:
     void putBE32( uint32_t ) override;
     void putLE32( uint32_t ) override;
 
-    // 0 stands for full data.
+    // 0 stands for all data.
     std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
 
     void putRaw( const void * ptr, size_t sz ) override;
 
+    // 0 stands for all data.
     std::string toString( const size_t size = 0 );
 
 private:
@@ -407,7 +587,7 @@ private:
         T val;
 
         if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setfail( true );
+            setFail( true );
 
             return 0;
         }
@@ -423,7 +603,7 @@ private:
         }
 
         if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setfail( true );
+            setFail( true );
         }
     }
 
