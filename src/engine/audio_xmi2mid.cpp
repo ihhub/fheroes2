@@ -157,7 +157,7 @@ namespace
         while ( iter < dataEnd && ( *iter ) > 127 ) {
             if ( ( iter - data ) >= 4 ) {
                 // The largest number to read is 4 bytes.
-                ERROR_LOG( "XMI format: the field is bigger than 4 bytes." )
+                ERROR_LOG( "XMI parse error: the field size exceeds 4 bytes" )
                 return false;
             }
 
@@ -283,33 +283,33 @@ namespace
             sb >> group;
 
             if ( group.ID != TAG_FORM || group.type != TAG_XDIR ) {
-                ERROR_LOG( "XMI parsing: invalid IFF root chunk 1 (FORM:XDIR)" )
+                ERROR_LOG( "XMI parse error: invalid IFF root chunk 1 (FORM:XDIR)" )
                 return;
             }
 
             IFFChunkHeader iff;
             sb >> iff;
             if ( iff.ID != TAG_INFO || iff.length != 2 ) {
-                ERROR_LOG( "XMI parsing: expected TAG_INFO of length 2" )
+                ERROR_LOG( "XMI parse error: invalid TAG_INFO" )
                 return;
             }
 
             if ( const uint16_t numTracks = sb.getLE16(); numTracks != 1 ) {
-                ERROR_LOG( "XMI parsing: the number of sequences should be 1 to be properly converted to MID format 0" )
+                ERROR_LOG( "XMI parse error: the number of sequences should be 1 to be properly converted to MID format 0" )
                 return;
             }
 
             // CAT XMID
             sb >> group;
             if ( group.ID != TAG_CAT0 || group.type != TAG_XMID ) {
-                ERROR_LOG( "XMI parsing: invalid IFF root chunk 2 (CAT :XMID)" )
+                ERROR_LOG( "XMI parse error: invalid IFF root chunk 2 (CAT:XMID)" )
                 return;
             }
 
-            sb >> group;
             // FORM XMID
+            sb >> group;
             if ( group.ID != TAG_FORM || group.type != TAG_XMID ) {
-                ERROR_LOG( "XMI parsing: invalid form type (FORM:XMID)" )
+                ERROR_LOG( "XMI parse error: invalid form type (FORM:XMID)" )
                 return;
             }
 
@@ -331,6 +331,11 @@ namespace
             // Read EVNT chunk.
             if ( iff.ID != TAG_EVNT ) {
                 ERROR_LOG( "XMI parse error: ID is not EVNT" )
+                return;
+            }
+
+            if ( sb.fail() ) {
+                ERROR_LOG( "XMI parse error: I/O error" )
                 return;
             }
 
@@ -431,7 +436,7 @@ namespace
                 assert( requiredLength > 0 );
                 if ( trackEvents.dataEnd - iter < requiredLength ) {
                     emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                    ERROR_LOG( "MIDI track: the data is truncated." )
+                    ERROR_LOG( "MIDI track: the data is truncated" )
                     return false;
                 }
 
@@ -458,7 +463,7 @@ namespace
 
                     if ( *iter == 0x2F ) {
                         if ( *( ++iter ) != 0x00 ) {
-                            ERROR_LOG( "MIDI track: End of Track sequence is incorrect." )
+                            ERROR_LOG( "MIDI track: End of Track sequence is incorrect" )
                         }
 
                         emplace_back( time, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
@@ -572,7 +577,7 @@ namespace
                 // Unknown command.
                 default:
                     emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                    ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *iter ), 2 )
+                    ERROR_LOG( "MIDI track: unknown command: " << GetHexString( static_cast<int>( *iter ), 2 )
                                                                << ", byte: " << static_cast<int>( iter - trackEvents.data ) )
                     break;
                 }
@@ -676,6 +681,11 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
     RWStreamBuf sb( mid.sizeInBytes() );
 
     sb << mid;
+
+    if ( sb.fail() ) {
+        ERROR_LOG( "Error writing MIDI data to the buffer: I/O error" );
+        return {};
+    }
 
     return { sb.data(), sb.data() + sb.size() };
 }
