@@ -40,7 +40,8 @@
 #include "puzzle.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 struct EventDate;
 
@@ -206,8 +207,8 @@ public:
 private:
     Cost _getKingdomStartingResources( const int difficulty ) const;
 
-    friend StreamBase & operator<<( StreamBase &, const Kingdom & );
-    friend StreamBase & operator>>( StreamBase &, Kingdom & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom );
 
     int color;
     Funds resource;
@@ -257,17 +258,11 @@ public:
     std::set<Heroes *> resetRecruits();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
-    friend StreamBase & operator>>( StreamBase &, Kingdoms & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj );
 
     static constexpr uint32_t _size = KINGDOMMAX + 1;
     Kingdom kingdoms[_size];
 };
-
-StreamBase & operator<<( StreamBase &, const Kingdom & );
-StreamBase & operator>>( StreamBase &, Kingdom & );
-
-StreamBase & operator<<( StreamBase &, const Kingdoms & );
-StreamBase & operator>>( StreamBase &, Kingdoms & );
 
 #endif

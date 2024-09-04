@@ -180,7 +180,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
             ++channelCount;
 
-            StreamBuf wavHeader( audioHeaderSize );
+            RWStreamBuf wavHeader( audioHeaderSize );
             wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
             wavHeader.putLE32( originalSize + 0x24 ); // Total size minus the size of this and previous fields
             wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")

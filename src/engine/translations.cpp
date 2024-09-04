@@ -205,7 +205,7 @@ namespace
     {
         // TODO: plural forms are not in use: Plural-Forms.
         LocaleType locale{ LocaleType::LOCALE_EN };
-        StreamBuf buf;
+        RWStreamBuf buf;
         std::map<uint32_t, Chunk> hash_offsets;
         std::string domain;
         std::string encoding;

@@ -793,12 +793,12 @@ int32_t Spell::CalculateDimensionDoorDistance()
     return 14;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Spell & spell )
+OStreamBase & operator<<( OStreamBase & stream, const Spell & spell )
 {
-    return msg << spell.id;
+    return stream << spell.id;
 }
 
-StreamBase & operator>>( StreamBase & msg, Spell & spell )
+IStreamBase & operator>>( IStreamBase & stream, Spell & spell )
 {
-    return msg >> spell.id;
+    return stream >> spell.id;
 }

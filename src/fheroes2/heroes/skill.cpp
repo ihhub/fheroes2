@@ -901,33 +901,30 @@ uint32_t Skill::GetDiplomacySurrenderCostDiscount( const int level )
     }
 }
 
-StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
+OStreamBase & Skill::operator<<( OStreamBase & stream, const Primary & skill )
 {
-    return msg << skill.attack << skill.defense << skill.knowledge << skill.power;
+    return stream << skill.attack << skill.defense << skill.knowledge << skill.power;
 }
 
-StreamBase & Skill::operator>>( StreamBase & msg, Primary & skill )
+IStreamBase & Skill::operator>>( IStreamBase & stream, Primary & skill )
 {
-    return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
+    return stream >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
 }
 
-StreamBase & Skill::operator>>( StreamBase & sb, Secondary & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & Skill::operator<<( StreamBase & sb, const SecSkills & ss )
+OStreamBase & Skill::operator<<( OStreamBase & stream, const SecSkills & ss )
 {
     const std::vector<Secondary> & v = ss;
-    return sb << v;
+    return stream << v;
 }
 
-StreamBase & Skill::operator>>( StreamBase & sb, SecSkills & ss )
+IStreamBase & Skill::operator>>( IStreamBase & stream, SecSkills & ss )
 {
     std::vector<Secondary> & v = ss;
-    sb >> v;
+    stream >> v;
 
-    if ( v.size() > HEROESMAXSKILL )
+    if ( v.size() > HEROESMAXSKILL ) {
         v.resize( HEROESMAXSKILL );
-    return sb;
+    }
+
+    return stream;
 }

@@ -44,8 +44,10 @@
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class MapObjectSimple;
-class StreamBase;
 
 struct MapEvent;
 struct Week;
@@ -139,8 +141,8 @@ struct EventDate
     std::string title;
 };
 
-StreamBase & operator<<( StreamBase &, const EventDate & );
-StreamBase & operator>>( StreamBase &, EventDate & );
+OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj );
+IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
 
@@ -396,8 +398,8 @@ private:
     void setHeroIdsForMapConditions();
 
     friend class Radar;
-    friend StreamBase & operator<<( StreamBase &, const World & );
-    friend StreamBase & operator>>( StreamBase &, World & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
+    friend IStreamBase & operator>>( IStreamBase & stream, World & w );
 
     std::vector<Maps::Tiles> vec_tiles;
     AllHeroes vec_heroes;
@@ -433,14 +435,11 @@ private:
     PlayerWorldPathfinder _pathfinder;
 };
 
-StreamBase & operator<<( StreamBase &, const CapturedObject & );
-StreamBase & operator>>( StreamBase &, CapturedObject & );
+OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj );
+IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj );
 
-StreamBase & operator<<( StreamBase &, const World & );
-StreamBase & operator>>( StreamBase &, World & );
-
-StreamBase & operator<<( StreamBase &, const MapObjects & );
-StreamBase & operator>>( StreamBase &, MapObjects & );
+OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
+IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
 
 extern World & world;
 

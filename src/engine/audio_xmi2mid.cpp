@@ -227,18 +227,20 @@ namespace
         }
     };
 
-    StreamBuf & operator>>( StreamBuf & sb, IFFChunkHeader & st )
+    IStreamBase & operator>>( IStreamBase & stream, IFFChunkHeader & st )
     {
-        st.ID = sb.getBE32();
-        st.length = sb.getBE32();
-        return sb;
+        st.ID = stream.getBE32();
+        st.length = stream.getBE32();
+
+        return stream;
     }
 
-    StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
+    OStreamBase & operator<<( OStreamBase & stream, const IFFChunkHeader & st )
     {
-        sb.putBE32( st.ID );
-        sb.putBE32( st.length );
-        return sb;
+        stream.putBE32( st.ID );
+        stream.putBE32( st.length );
+
+        return stream;
     }
 
     struct GroupChunkHeader
@@ -251,12 +253,13 @@ namespace
         uint32_t type{ 0 };
     };
 
-    StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
+    IStreamBase & operator>>( IStreamBase & stream, GroupChunkHeader & st )
     {
-        st.ID = sb.getBE32();
-        st.length = sb.getBE32();
-        st.type = sb.getBE32();
-        return sb;
+        st.ID = stream.getBE32();
+        st.length = stream.getBE32();
+        st.type = stream.getBE32();
+
+        return stream;
     }
 
     struct subVectorIters
@@ -274,7 +277,7 @@ namespace
         explicit XMIData( const std::vector<uint8_t> & buf )
         {
             // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
-            StreamBuf sb( buf );
+            ROStreamBuf sb( buf );
 
             GroupChunkHeader group;
             sb >> group;
@@ -397,19 +400,19 @@ namespace
         return left._time < right._time;
     }
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
+    OStreamBase & operator<<( OStreamBase & stream, const MidiChunk & event )
     {
         for ( const uint8_t binaryTimeByte : event._binaryTime ) {
-            sb << binaryTimeByte;
+            stream << binaryTimeByte;
         }
 
-        sb << event._type;
+        stream << event._type;
 
         for ( const uint8_t dataByte : event._data ) {
-            sb << dataByte;
+            stream << dataByte;
         }
 
-        return sb;
+        return stream;
     }
 
     struct MidiEvents final : public std::vector<MidiChunk>
@@ -592,13 +595,13 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
+    OStreamBase & operator<<( OStreamBase & stream, const MidiEvents & st )
     {
         for ( const MidiChunk & chunk : st ) {
-            sb << chunk;
+            stream << chunk;
         }
 
-        return sb;
+        return stream;
     }
 
     struct MidTrack
@@ -614,11 +617,12 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
+    OStreamBase & operator<<( OStreamBase & stream, const MidTrack & st )
     {
-        sb << st.mtrk;
-        sb << st.events;
-        return sb;
+        stream << st.mtrk;
+        stream << st.events;
+
+        return stream;
     }
 
     struct MidData
@@ -646,16 +650,16 @@ namespace
         }
     };
 
-    StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
+    OStreamBase & operator<<( OStreamBase & stream, const MidData & st )
     {
-        sb << st.mthd;
-        sb.putBE16( st.format );
+        stream << st.mthd;
+        stream.putBE16( st.format );
         // Write that there is one track in midi file.
-        sb.putBE16( static_cast<uint16_t>( 1 ) );
-        sb.putBE16( st.ppqn );
-        sb << st.track;
+        stream.putBE16( static_cast<uint16_t>( 1 ) );
+        stream.putBE16( st.ppqn );
+        stream << st.track;
 
-        return sb;
+        return stream;
     }
 }
 
@@ -669,7 +673,7 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
     const MidData mid( xmi.trackEvents );
 
     // Create a buffer for the midi data.
-    StreamBuf sb( mid.sizeInBytes() );
+    RWStreamBuf sb( mid.sizeInBytes() );
 
     sb << mid;
 

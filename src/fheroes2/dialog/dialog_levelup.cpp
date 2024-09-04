@@ -158,7 +158,7 @@ namespace
             = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
         text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), fheroes2::FontType::normalWhite() );
-        text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 13, display );
+        text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 15, display );
 
         button_learn1.draw();
         button_learn2.draw();

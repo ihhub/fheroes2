@@ -506,14 +506,14 @@ const char * Artifact::getDiscoveryDescription( const Artifact & art )
     return _( fheroes2::getArtifactData( art.GetID() ).discoveryEventDescription );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Artifact & art )
+OStreamBase & operator<<( OStreamBase & stream, const Artifact & art )
 {
-    return msg << art.id << art.ext;
+    return stream << art.id << art.ext;
 }
 
-StreamBase & operator>>( StreamBase & msg, Artifact & art )
+IStreamBase & operator>>( IStreamBase & stream, Artifact & art )
 {
-    return msg >> art.id >> art.ext;
+    return stream >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()
