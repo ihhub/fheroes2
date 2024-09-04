@@ -326,9 +326,9 @@ public:
         return sizeg();
     }
 
-    size_t capacity() const
+    size_t tell()
     {
-        return _itend - _itbeg;
+        return tellg();
     }
 
     void seek( size_t sz )
@@ -455,6 +455,11 @@ protected:
         setFail( true );
 
         return 0;
+    }
+
+    size_t capacity() const
+    {
+        return _itend - _itbeg;
     }
 
     T * _itbeg{ nullptr };

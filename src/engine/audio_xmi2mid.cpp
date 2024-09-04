@@ -339,8 +339,8 @@ namespace
                 return;
             }
 
-            // Mark the begin of EVNT data.
-            trackEvents.data = buf.cbegin() + static_cast<ptrdiff_t>( sb.capacity() - sb.size() );
+            // Mark the begin and end of the EVNT data.
+            trackEvents.data = buf.cbegin() + static_cast<ptrdiff_t>( sb.tell() );
             trackEvents.dataEnd = buf.cend();
 
             // The single track XMI files does not have any data after the EVNT data.
