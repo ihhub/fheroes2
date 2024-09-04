@@ -265,7 +265,7 @@ namespace
     struct subVectorIters
     {
         std::vector<uint8_t>::const_iterator data;
-        std::vector<uint8_t>::const_iterator dataEnd;
+        const std::vector<uint8_t>::const_iterator dataEnd;
     };
 
     struct XMIData
@@ -275,6 +275,7 @@ namespace
         bool isValid{ false };
 
         explicit XMIData( const std::vector<uint8_t> & buf )
+            : trackEvents{ buf.cend(), buf.cend() }
         {
             // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
             ROStreamBuf sb( buf );
@@ -315,9 +316,8 @@ namespace
 
             sb >> iff;
 
-            // TIMB chunk.
+            // TIMB is not used in MIDI files.
             if ( iff.ID == TAG_TIMB ) {
-                // It is not used in MID files.
                 sb.skip( iff.length );
                 sb >> iff;
             }
@@ -328,7 +328,7 @@ namespace
                 sb >> iff;
             }
 
-            // Read EVNT chunk.
+            // EVNT chunk
             if ( iff.ID != TAG_EVNT ) {
                 ERROR_LOG( "XMI parse error: ID is not EVNT" )
                 return;
@@ -339,16 +339,15 @@ namespace
                 return;
             }
 
-            // Mark the begin and end of the EVNT data.
-            trackEvents.data = buf.cbegin() + static_cast<ptrdiff_t>( sb.tell() );
-            trackEvents.dataEnd = buf.cend();
-
             // The single track XMI files does not have any data after the EVNT data.
-            if ( trackEvents.dataEnd - trackEvents.data != static_cast<ptrdiff_t>( iff.length ) ) {
-                trackEvents.data = buf.cend();
+            if ( sb.size() != iff.length ) {
                 ERROR_LOG( "XMI parse error: EVNT data is out of range" )
                 return;
             }
+
+            // Mark the beginning of the EVNT data.
+            trackEvents.data = buf.cbegin() + static_cast<ptrdiff_t>( sb.tell() );
+            assert( trackEvents.dataEnd - trackEvents.data == static_cast<ptrdiff_t>( iff.length ) );
 
             isValid = ( trackEvents.data != trackEvents.dataEnd );
         }
