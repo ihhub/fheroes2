@@ -28,6 +28,7 @@
 #include <cstring>
 #include <ostream>
 #include <string>
+#include <string_view>
 
 #include "endian_h2.h"
 #include "logging.h"
@@ -230,7 +231,7 @@ OStreamBase & OStreamBase::operator<<( const uint32_t v )
     return *this;
 }
 
-OStreamBase & OStreamBase::operator<<( const std::string & v )
+OStreamBase & OStreamBase::operator<<( const std::string_view v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
 
