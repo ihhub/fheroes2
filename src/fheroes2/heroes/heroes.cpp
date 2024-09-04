@@ -133,7 +133,7 @@ namespace
                         break;
                     }
 
-                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    fheroes2::appendModifierToString( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
                     strs->append( "\n" );
                 }
             }
@@ -1200,7 +1200,7 @@ uint32_t Heroes::getDailyRestoredSpellPoints() const
     // Spell points from artifacts.
     points += static_cast<uint32_t>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION ) );
 
-    points += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+    points += GetSecondarySkillValue( Skill::Secondary::MYSTICISM );
 
     return points;
 }
@@ -1265,7 +1265,7 @@ Castle * Heroes::inCastleMutable() const
     return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
-bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
+bool Heroes::isVisited( const Maps::Tiles & tile, Visit::Type type ) const
 {
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
@@ -1277,7 +1277,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
-bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Type type ) const
 {
     if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
@@ -1286,7 +1286,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::ty
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-void Heroes::SetVisited( int32_t index, Visit::type_t type )
+void Heroes::SetVisited( int32_t index, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const MP2::MapObjectType objectType = tile.GetObject( false );
@@ -1311,7 +1311,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 }
 
-void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::type_t type )
+void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();
@@ -1696,9 +1696,9 @@ bool Heroes::HasSecondarySkill( int skill ) const
     return Skill::Level::NONE != secondary_skills.GetLevel( skill );
 }
 
-uint32_t Heroes::GetSecondaryValues( int skill ) const
+uint32_t Heroes::GetSecondarySkillValue( int skill ) const
 {
-    return secondary_skills.GetValues( skill );
+    return secondary_skills.GetValue( skill );
 }
 
 bool Heroes::HasMaxSecondarySkill() const
@@ -1741,7 +1741,7 @@ void Heroes::Scout( const int tileIndex ) const
 int Heroes::GetScoutingDistance() const
 {
     return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
+                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondarySkillValue( Skill::Secondary::SCOUTING ) );
 }
 
 fheroes2::Rect Heroes::GetScoutRoi() const
@@ -1758,7 +1758,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
     if ( level == Skill::Level::NONE )
         return movePoints;
 
-    const uint32_t skillValue = GetSecondaryValues( skill );
+    const uint32_t skillValue = GetSecondarySkillValue( skill );
 
     if ( skillValue == 33 ) {
         return movePoints * 4 / 3;

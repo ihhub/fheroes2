@@ -1269,7 +1269,7 @@ double Army::GetStrength() const
 {
     double result = 0;
 
-    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondarySkillValue( Skill::Secondary::ARCHERY ) : 0;
 
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
     const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
@@ -1642,7 +1642,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
 
         if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
-            const uint32_t amountToJoin = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
+            const uint32_t amountToJoin
+                = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
             // The ability to hire the entire stack of monsters is a mandatory condition for their joining
             // due to hero's Diplomacy skill in accordance with the mechanics of the original game

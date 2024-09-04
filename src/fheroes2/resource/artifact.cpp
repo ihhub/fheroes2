@@ -433,7 +433,7 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-int Artifact::Rand( level_t lvl )
+int Artifact::Rand( ArtLevel lvl )
 {
     std::vector<int> v;
     v.reserve( 25 );
