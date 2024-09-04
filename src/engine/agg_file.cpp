@@ -41,10 +41,10 @@ namespace fheroes2
             return false;
         }
 
-        StreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
+        RWStreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
         const size_t nameEntriesSize = _maxFilenameSize * count;
         _stream.seek( size - nameEntriesSize );
-        StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
+        RWStreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
             std::string name = nameEntries.toString( _maxFilenameSize );
@@ -103,14 +103,14 @@ namespace fheroes2
     }
 }
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )
+IStreamBase & operator>>( IStreamBase & stream, fheroes2::ICNHeader & icn )
 {
-    icn.offsetX = static_cast<int16_t>( st.getLE16() );
-    icn.offsetY = static_cast<int16_t>( st.getLE16() );
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
+    icn.offsetX = static_cast<int16_t>( stream.getLE16() );
+    icn.offsetY = static_cast<int16_t>( stream.getLE16() );
+    icn.width = stream.getLE16();
+    icn.height = stream.getLE16();
+    icn.animationFrames = stream.get();
+    icn.offsetData = stream.getLE32();
 
-    return st;
+    return stream;
 }

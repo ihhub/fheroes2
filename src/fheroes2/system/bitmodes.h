@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,8 @@
 
 #include <cstdint>
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class BitModes
 {
@@ -58,13 +59,10 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const BitModes & );
-    friend StreamBase & operator>>( StreamBase &, BitModes & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const BitModes & b );
+    friend IStreamBase & operator>>( IStreamBase & stream, BitModes & b );
 
     uint32_t modes;
 };
-
-StreamBase & operator<<( StreamBase &, const BitModes & );
-StreamBase & operator>>( StreamBase &, BitModes & );
 
 #endif

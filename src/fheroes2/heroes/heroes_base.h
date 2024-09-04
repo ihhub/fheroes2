@@ -38,7 +38,8 @@
 #include "spell_book.h"
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
@@ -171,8 +172,8 @@ public:
     void LoadDefaults( const int type, const int race );
 
 protected:
-    friend StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-    friend StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
+    friend OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
     uint32_t magic_point;
     uint32_t move_point;
@@ -181,7 +182,7 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
+OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
 #endif

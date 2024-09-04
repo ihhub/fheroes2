@@ -627,32 +627,32 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
     return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
+OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
 
     // Only the basename of map filename (fi.file) is saved
-    msg << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
+    stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
 
     for ( size_t i = 0; i < KINGDOMMAX; ++i ) {
-        msg << fi.races[i] << fi.unions[i];
+        stream << fi.races[i] << fi.unions[i];
     }
 
-    return msg << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
-               << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
-               << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
-               << fi.worldWeek << fi.worldMonth;
+    return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
+                  << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
+                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
+                  << fi.worldWeek << fi.worldMonth;
 }
 
-StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
+IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 {
     uint8_t kingdommax = 0;
 
     // Only the basename of map filename (fi.file) is loaded
-    msg >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
+    stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
@@ -664,7 +664,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
         RacesItemType racesItem = 0;
         UnionsItemType unionsItem = 0;
 
-        msg >> racesItem >> unionsItem;
+        stream >> racesItem >> unionsItem;
 
         if ( i < KINGDOMMAX ) {
             fi.races[i] = racesItem;
@@ -672,7 +672,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
         }
     }
 
-    msg >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+    stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
         >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
         >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle;
 
@@ -680,11 +680,11 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     static_assert( std::is_same_v<VersionUnderlyingType, int>, "Type of version has been changed, check the logic below" );
 
     VersionUnderlyingType version = 0;
-    msg >> version;
+    stream >> version;
 
     fi.version = static_cast<GameVersion>( version );
 
-    return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    return stream >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
 MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )

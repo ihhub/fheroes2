@@ -642,14 +642,14 @@ namespace
 
 namespace Campaign
 {
-    StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data )
+    OStreamBase & operator<<( OStreamBase & stream, const ScenarioInfoId & data )
     {
-        return msg << data.campaignId << data.scenarioId;
+        return stream << data.campaignId << data.scenarioId;
     }
 
-    StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data )
+    IStreamBase & operator>>( IStreamBase & stream, ScenarioInfoId & data )
     {
-        return msg >> data.campaignId >> data.scenarioId;
+        return stream >> data.campaignId >> data.scenarioId;
     }
 
     ScenarioBonusData::ScenarioBonusData()

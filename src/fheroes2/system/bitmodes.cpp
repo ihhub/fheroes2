@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,14 +22,15 @@
  ***************************************************************************/
 
 #include "bitmodes.h"
+
 #include "serialize.h"
 
-StreamBase & operator<<( StreamBase & msg, const BitModes & b )
+OStreamBase & operator<<( OStreamBase & stream, const BitModes & b )
 {
-    return msg << b.modes;
+    return stream << b.modes;
 }
 
-StreamBase & operator>>( StreamBase & msg, BitModes & b )
+IStreamBase & operator>>( IStreamBase & stream, BitModes & b )
 {
-    return msg >> b.modes;
+    return stream >> b.modes;
 }
