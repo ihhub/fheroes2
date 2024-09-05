@@ -41,7 +41,7 @@ namespace
         const int32_t originalWidth = original.width();
         const int32_t originalHeight = original.height();
 
-        assert( original.height() > 0 && original.width() > 0 );
+        assert( originalHeight > 0 && originalWidth > 0 );
 
         fheroes2::Image output;
 
@@ -162,8 +162,7 @@ namespace
             assert( offsetY + bottomPartHeight == buttonSize.height );
 
             // Find the background color using the central pixel of the button background.
-            const uint32_t centralPlace
-                = ( original.width() * original.height() / 2 ) - 1 - ( original.width() >= original.height() ? original.height() : original.width() ) / 2;
+            const uint32_t centralPlace = ( originalWidth * originalHeight / 2 ) - 1 - ( originalWidth >= originalHeight ? originalHeight : originalWidth ) / 2;
             fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, original.image()[centralPlace] );
         }
         else {
