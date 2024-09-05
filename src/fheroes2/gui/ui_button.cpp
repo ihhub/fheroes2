@@ -45,14 +45,16 @@ namespace
 
         fheroes2::Image output;
 
+        if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
+            fheroes2::Copy( original, output );
+            return output;
+        }
+
         output.resize( buttonSize.width, buttonSize.height );
         output.reset();
 
-        if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
-            fheroes2::Copy( original, output );
-        }
         // Buttons that only are wider.
-        else if ( buttonSize.width > originalWidth && buttonSize.height == originalHeight ) {
+        if ( buttonSize.width > originalWidth && buttonSize.height == originalHeight ) {
             const int32_t middleWidth = originalWidth / 3;
             const int32_t overallMiddleWidth = buttonSize.width - middleWidth * 2;
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
