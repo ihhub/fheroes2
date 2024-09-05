@@ -162,8 +162,8 @@ namespace
             assert( offsetY + bottomPartHeight == buttonSize.height );
 
             // Find the background color using the central pixel of the button background.
-            const uint32_t centralPlace = ( originalWidth * originalHeight / 2 ) - 1 - ( originalWidth >= originalHeight ? originalHeight : originalWidth ) / 2;
-            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, original.image()[centralPlace] );
+            const uint32_t centralPosition = ( originalWidth * originalHeight / 2 ) - 1 - ( originalWidth >= originalHeight ? originalHeight : originalWidth ) / 2;
+            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, original.image()[centralPosition] );
         }
         else {
             // You are trying to modify the size of the button in an unexpected way.
