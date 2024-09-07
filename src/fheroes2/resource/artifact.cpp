@@ -1081,7 +1081,7 @@ bool fheroes2::isPriceOfLoyaltyArtifact( const int artifactID )
     return artifactID >= Artifact::SPELL_SCROLL && artifactID <= Artifact::SPADE_NECROMANCY;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
+ArtifactsBar::ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
     : _hero( hero )
     , use_mini_sprite( mini )
     , read_only( ro )
@@ -1168,7 +1168,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
         const bool isMbSelected = ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
         if ( isMbSelected ) {
             if ( can_change ) {
-                const_cast<Heroes *>( _hero )->EditSpellBook();
+                _hero->EditSpellBook();
             }
             else if ( _allowOpeningMagicBook ) {
                 _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false,
@@ -1206,7 +1206,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
                     fheroes2::showStandardTextMessage( Artifact( Artifact::MAGIC_BOOK ).GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
                 }
                 else {
-                    const_cast<Heroes *>( _hero )->SpellBookActivate();
+                    _hero->SpellBookActivate();
                 }
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
@@ -1246,7 +1246,7 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
     if ( art.isValid() ) {
         if ( can_change ) {
             if ( isMagicBook( art ) ) {
-                const_cast<Heroes *>( _hero )->SpellBookDeactivate();
+                _hero->SpellBookDeactivate();
             }
             else {
                 art.Reset();
