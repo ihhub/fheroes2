@@ -957,7 +957,8 @@ namespace Interface
                         // Erase objects in the selected area.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ), _editorPanel.getEraseObjectGroups() ) ) {
+                        if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ),
+                                            _editorPanel.getEraseObjectGroups() ) ) {
                             action.commit();
                             _redraw |= mapUpdateFlags;
 
