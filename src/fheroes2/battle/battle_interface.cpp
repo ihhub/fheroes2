@@ -833,7 +833,7 @@ bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
     return info.defender && info.defender->isFinishAnimFrame();
 }
 
-Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect )
+Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect )
     : _heroBase( hero )
     , _currentAnim( getHeroAnimation( hero, OP_STATIC ) )
     , _isFlippedHorizontally( isReflect )
@@ -1283,10 +1283,10 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
-    if ( const HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
+    if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
         _opponent1 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, false );
     }
-    if ( const HeroBase * opponent = arena.GetCommander2(); opponent != nullptr ) {
+    if ( HeroBase * opponent = arena.GetCommander2(); opponent != nullptr ) {
         _opponent2 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, true );
     }
 
