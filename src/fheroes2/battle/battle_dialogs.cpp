@@ -1021,8 +1021,9 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     display.render( pos_rt );
 
-    // This variable is used to access the parameters of the currently active hero. This hero must currently have a turn and shouldn't be a Captain.
-    Heroes * activeHero = ( currentColor == hero.GetColor() ) ? dynamic_cast<Heroes *>( &hero ) : nullptr;
+    // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
+    Heroes * heroForHeroScreen = ( currentColor == hero.GetColor() ) ? dynamic_cast<Heroes *>( &hero ) : nullptr;
+
     std::string statusMessage = _( "Hero's Options" );
 
     LocalEvent & le = LocalEvent::Get();
@@ -1055,10 +1056,8 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
             statusMessage = _( "Cancel" );
         }
-        else if ( le.isMouseCursorPosInArea( portraitArea ) && activeHero != nullptr ) {
-            // TODO: remove this temporary assertion
-            assert( activeHero->isHeroes() && !readonly );
-
+        // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
+        else if ( le.isMouseCursorPosInArea( portraitArea ) && heroForHeroScreen != nullptr ) {
             statusMessage = _( "Hero Screen" );
         }
         else if ( hero.isCaptain() ) {
@@ -1084,10 +1083,10 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
             result = 3;
         }
 
-        if ( le.MouseClickLeft( portraitArea ) && activeHero != nullptr ) {
+        if ( le.MouseClickLeft( portraitArea ) && heroForHeroScreen != nullptr ) {
             LocalEvent::Get().reset();
 
-            activeHero->OpenDialog( true, true, true, true, false, false );
+            heroForHeroScreen->OpenDialog( true, true, true, true, false, false );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
@@ -1110,7 +1109,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again. The cost of surrender is half of the total cost of the non-temporary troops remaining in the army." ),
                 Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( portraitArea ) && activeHero != nullptr ) {
+        else if ( le.isMouseRightButtonPressedInArea( portraitArea ) && heroForHeroScreen != nullptr ) {
             fheroes2::showStandardTextMessage( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( btnClose.area() ) ) {
