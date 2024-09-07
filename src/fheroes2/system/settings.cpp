@@ -496,11 +496,11 @@ std::string Settings::String() const
     return os.str();
 }
 
-void Settings::SetCurrentFileInfo( Maps::FileInfo fi )
+void Settings::setCurrentMapInfo( Maps::FileInfo fi )
 {
-    current_maps_file = std::move( fi );
+    _currentMapInfo = std::move( fi );
 
-    players.Init( current_maps_file );
+    players.Init( _currentMapInfo );
 }
 
 bool Settings::setGameLanguage( const std::string & language )
@@ -1086,20 +1086,20 @@ void Settings::resetFirstGameRun()
     _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.players;
+    return stream << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
 }
 
-StreamBase & operator>>( StreamBase & msg, Settings & conf )
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type;
+    stream >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
         int temp;
-        msg >> temp;
+        stream >> temp;
     }
 
-    return msg >> conf.players;
+    return stream >> conf.players;
 }

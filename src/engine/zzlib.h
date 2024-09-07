@@ -30,28 +30,29 @@
 
 #include "image.h"
 
-class StreamBuf;
-class StreamFile;
+class IStreamBase;
+class OStreamBase;
+class IStreamBuf;
 
 namespace Compression
 {
-    // Zips the input data and returns the compressed data or an empty vector in case of an error.
-    std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize );
-
     // Unzips the input data and returns the uncompressed data or an empty vector in case of an error.
     // The 'realSize' parameter represents the planned size of the decompressed data and is optional
     // (it is only used to speed up the decompression process). If this parameter is omitted or set to
     // zero, the size of the decompressed data will be determined automatically.
-    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
+    std::vector<uint8_t> unzipData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
-    // Reads & unzips the zipped chunk from the specified file stream and appends
-    // it to the end of the buffer. Returns true on success or false on error.
-    bool readFromFileStream( StreamFile & fileStream, StreamBuf & output );
+    // Zips the input data and returns the compressed data or an empty vector in case of an error.
+    std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize );
+
+    // Reads & unzips the zipped chunk from the given input stream and writes it to the given output
+    // stream. Returns true on success or false on error.
+    bool unzipStream( IStreamBase & inputStream, OStreamBase & outputStream );
 
     // Zips the contents of the buffer from the current read position to the end of the buffer and writes
-    // it to the specified file stream. The current read position of the buffer does not change. Returns
+    // it to the given output stream. The current read position of the buffer does not change. Returns
     // true on success and false on error.
-    bool writeIntoFileStream( StreamFile & fileStream, StreamBuf & data );
+    bool zipStreamBuf( IStreamBuf & inputStream, OStreamBase & outputStream );
 
     fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
 }

@@ -30,7 +30,8 @@
 #include "monster.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Army;
 
@@ -80,16 +81,13 @@ public:
     double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const Troop & );
-    friend StreamBase & operator>>( StreamBase &, Troop & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Troop & troop );
+    friend IStreamBase & operator>>( IStreamBase & stream, Troop & troop );
 
     static std::string GetSpeedString( uint32_t speed );
 
     uint32_t count;
 };
-
-StreamBase & operator<<( StreamBase &, const Troop & );
-StreamBase & operator>>( StreamBase &, Troop & );
 
 class ArmyTroop : public Troop
 {

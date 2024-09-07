@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2876,17 +2876,14 @@ msgstr "Totale: "
 msgid "Need: "
 msgstr "Servono: "
 
-msgid "Load Game"
-msgstr "Carica Partita"
-
-msgid "No save files to load."
-msgstr "Non esistono punti di salvataggio da caricare."
-
 msgid "New Game"
 msgstr "Nuova Partita"
 
 msgid "Start a single or multi-player game."
 msgstr "Inizia una partita singola o multigiocatore."
+
+msgid "Load Game"
+msgstr "Carica Partita"
 
 msgid "Load a previously saved game."
 msgstr "Carica una partita salvata."
@@ -3136,6 +3133,9 @@ msgid ""
 "%{skill2}"
 msgstr "Può imparare:"
 
+msgid "n/a"
+msgstr "n/d"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3168,9 +3168,6 @@ msgstr "Le Tue Risorse"
 
 msgid "Available Trades"
 msgstr "Scambi disponibili"
-
-msgid "n/a"
-msgstr "n/d"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "Protetto/a da %{count} %{monster}"
@@ -5341,6 +5338,9 @@ msgstr ""
 
 msgid "' language, but the current language of the game is '"
 msgstr ""
+
+msgid "No save files to load."
+msgstr "Non esistono punti di salvataggio da caricare."
 
 msgid "Hot Seat"
 msgstr ""
@@ -10634,6 +10634,9 @@ msgstr "Incrementa la difesa dell'unità prescelta."
 msgid "Stoneskin"
 msgstr "Schermo di Pietra"
 
+msgid "Steelskin"
+msgstr "Corazza"
+
 #, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
@@ -10641,9 +10644,6 @@ msgid ""
 msgstr ""
 "Incrementa la capacità di difesa dell'unità prescelta. È la forma sviluppata "
 "di Schermo di pietra."
-
-msgid "Steelskin"
-msgstr "Corazza"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Costringe l'unità nemiche prescelta di fare il danno minimo."

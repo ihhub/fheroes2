@@ -131,7 +131,7 @@ int main( int argc, char ** argv )
 
         static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-        StreamBuf wavHeader( wavHeaderLen );
+        RWStreamBuf wavHeader( wavHeaderLen );
         wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
         wavHeader.putLE32( static_cast<uint32_t>( size.value() ) + ( wavHeaderLen - 8 ) ); // Total size minus the size of this and previous fields
         wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")

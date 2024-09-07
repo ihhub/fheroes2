@@ -46,8 +46,10 @@
 #include "spell.h"
 #include "visit.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Castle;
-class StreamBase;
 
 namespace Battle
 {
@@ -442,7 +444,7 @@ public:
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill() const;
     int GetLevelSkill( int ) const override;
-    uint32_t GetSecondaryValues( int skill ) const override;
+    uint32_t GetSecondarySkillValue( int skill ) const override;
     void LearnSkill( const Skill::Secondary & );
 
     Skill::SecSkills & GetSecondarySkills()
@@ -524,14 +526,14 @@ public:
     }
 
     // set visited cell
-    void SetVisited( int32_t, Visit::type_t = Visit::LOCAL );
+    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
 
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::type_t = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tiles &, Visit::Type = Visit::LOCAL ) const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
@@ -692,8 +694,8 @@ public:
     void resetHeroSprite();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Heroes & );
-    friend StreamBase & operator>>( StreamBase &, Heroes & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, Heroes & hero );
 
     enum
     {
@@ -810,13 +812,10 @@ struct AllHeroes : public VecHeroes
     Heroes * FromJail( int32_t index ) const;
 };
 
-StreamBase & operator<<( StreamBase &, const VecHeroes & );
-StreamBase & operator>>( StreamBase &, VecHeroes & );
+OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
+IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
 
-StreamBase & operator<<( StreamBase &, const Heroes & );
-StreamBase & operator>>( StreamBase &, Heroes & );
-
-StreamBase & operator<<( StreamBase &, const AllHeroes & );
-StreamBase & operator>>( StreamBase &, AllHeroes & );
+OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
 
 #endif

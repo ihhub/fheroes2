@@ -37,7 +37,8 @@
 #include "mp2.h"
 #include "world_regions.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps
 {
@@ -356,8 +357,8 @@ namespace Maps
 
         std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
-        friend StreamBase & operator<<( StreamBase &, const Tiles & );
-        friend StreamBase & operator>>( StreamBase &, Tiles & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Tiles & tile );
+        friend IStreamBase & operator>>( IStreamBase & stream, Tiles & tile );
 
         // The following members are used in the Editor and in the game.
 
@@ -397,10 +398,10 @@ namespace Maps
         uint32_t _region{ REGION_NODE_BLOCKED };
     };
 
-    StreamBase & operator<<( StreamBase & msg, const TilesAddon & ta );
-    StreamBase & operator<<( StreamBase & msg, const Tiles & tile );
-    StreamBase & operator>>( StreamBase & msg, TilesAddon & ta );
-    StreamBase & operator>>( StreamBase & msg, Tiles & tile );
+    OStreamBase & operator<<( OStreamBase & stream, const TilesAddon & ta );
+    OStreamBase & operator<<( OStreamBase & stream, const Tiles & tile );
+    IStreamBase & operator>>( IStreamBase & stream, TilesAddon & ta );
+    IStreamBase & operator>>( IStreamBase & stream, Tiles & tile );
 }
 
 #endif

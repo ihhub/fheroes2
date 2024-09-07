@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3061,17 +3061,14 @@ msgstr "Total : "
 msgid "Need: "
 msgstr "Besoin : "
 
-msgid "Load Game"
-msgstr "Charger une partie"
-
-msgid "No save files to load."
-msgstr "Pas de sauvegarde disponible."
-
 msgid "New Game"
 msgstr "Nouvelle partie"
 
 msgid "Start a single or multi-player game."
 msgstr "Démarrer un jeu solo ou multijoueur."
+
+msgid "Load Game"
+msgstr "Charger une partie"
 
 msgid "Load a previously saved game."
 msgstr "Charger une partie sauvegardée."
@@ -3324,6 +3321,9 @@ msgstr ""
 "ou\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3359,9 +3359,6 @@ msgstr "Vos ressources"
 
 msgid "Available Trades"
 msgstr "Échanges possibles"
-
-msgid "n/a"
-msgstr "n/a"
 
 # artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 msgid "guarded by %{count} %{monster}"
@@ -5528,6 +5525,9 @@ msgstr "Cette partie a été sauvegardée en langue '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "', mais la langue actuelle du jeu est '"
+
+msgid "No save files to load."
+msgstr "Pas de sauvegarde disponible."
 
 msgid "Hot Seat"
 msgstr "Jouer à plusieurs"
@@ -11666,15 +11666,15 @@ msgstr "Augmente la statistique de défense des créatures sélectionnées."
 msgid "Stoneskin"
 msgstr "Chair de pierre"
 
+msgid "Steelskin"
+msgstr "Chair d'acier"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Augmente la caractéristique de défense des créatures ciblées. Il s'agit "
 "d'une version améliorée de chair de pierre."
-
-msgid "Steelskin"
-msgstr "Chair d'acier"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "La créature choisie inflige des dégâts minimums."

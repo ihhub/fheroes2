@@ -31,6 +31,15 @@
 #include <set>
 #include <utility>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
@@ -44,6 +53,11 @@
 #include <SDL_touch.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 #include "audio.h"
 #include "image.h"

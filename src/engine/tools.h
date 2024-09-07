@@ -117,6 +117,9 @@ namespace fheroes2
 
     std::string abbreviateNumber( const int num );
 
+    // Appends the given modifier to the end of the given string (e.g. "Coliseum +2")
+    void appendModifierToString( std::string & str, const int mod );
+
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.
     template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>

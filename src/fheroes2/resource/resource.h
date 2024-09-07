@@ -31,7 +31,8 @@
 
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 struct Cost
 {
@@ -134,8 +135,8 @@ struct Funds
     int32_t gold{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const Funds & res );
-StreamBase & operator>>( StreamBase &, Funds & res );
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res );
+IStreamBase & operator>>( IStreamBase & stream, Funds & res );
 
 namespace Resource
 {

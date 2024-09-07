@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3064,17 +3064,14 @@ msgstr "Общо: "
 msgid "Need: "
 msgstr "Още: "
 
-msgid "Load Game"
-msgstr "Зареди Игра"
-
-msgid "No save files to load."
-msgstr "Няма запазени файлове за зареждане."
-
 msgid "New Game"
 msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
 msgstr "Започни игра за един или няколко играча."
+
+msgid "Load Game"
+msgstr "Зареди Игра"
 
 msgid "Load a previously saved game."
 msgstr "Зареди запазена игра."
@@ -3319,6 +3316,9 @@ msgstr ""
 "или\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "без"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3354,9 +3354,6 @@ msgstr "Твоите ресурси"
 
 msgid "Available Trades"
 msgstr "Налични сделки"
-
-msgid "n/a"
-msgstr "без"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
@@ -5554,6 +5551,9 @@ msgstr "Запазената игра е локализирана на \""
 
 msgid "' language, but the current language of the game is '"
 msgstr "\" език, но текущият език на играта е \""
+
+msgid "No save files to load."
+msgstr "Няма запазени файлове за зареждане."
 
 msgid "Hot Seat"
 msgstr "Горещ стол"
@@ -11671,15 +11671,15 @@ msgstr "Магически увеличава защитните умения н
 msgid "Stoneskin"
 msgstr "Каменна кожа"
 
+msgid "Steelskin"
+msgstr "Стоманена кожа"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Увеличава защитните умения на набелязаните същества. Това е подобрена версия "
 "на Каменна кожа."
-
-msgid "Steelskin"
-msgstr "Стоманена кожа"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Кара избраните същества да нанасят минимални щети."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 09:23+0000\n"
+"POT-Creation-Date: 2024-09-04 11:59+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2839,17 +2839,14 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr "Įkelti žaidimą"
-
-msgid "No save files to load."
-msgstr ""
-
 msgid "New Game"
 msgstr ""
 
 msgid "Start a single or multi-player game."
 msgstr ""
+
+msgid "Load Game"
+msgstr "Įkelti žaidimą"
 
 msgid "Load a previously saved game."
 msgstr "Atverti prieš tai įrašytą žaidimą"
@@ -3084,6 +3081,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "n/a"
+msgstr ""
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3114,9 +3114,6 @@ msgid "Your Resources"
 msgstr "Tavo ištekliai"
 
 msgid "Available Trades"
-msgstr ""
-
-msgid "n/a"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -5212,6 +5209,9 @@ msgid "This saved game is localized to '"
 msgstr ""
 
 msgid "' language, but the current language of the game is '"
+msgstr ""
+
+msgid "No save files to load."
 msgstr ""
 
 msgid "Hot Seat"
@@ -10424,14 +10424,14 @@ msgstr "Magiškai padidina pasirinktų karių gynybos įgūdžius."
 msgid "Stoneskin"
 msgstr ""
 
+msgid "Steelskin"
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr "Magiškai padidina pasirinktų karių gynybos įgūdžius."
-
-msgid "Steelskin"
-msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""

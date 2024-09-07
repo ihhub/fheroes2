@@ -45,6 +45,15 @@
 #include "players.h"
 #include "position.h"
 
+class IStreamBase;
+class OStreamBase;
+
+class HeroBase;
+class Heroes;
+class Troop;
+
+struct Funds;
+
 namespace fheroes2
 {
     class RandomMonsterAnimation;
@@ -55,12 +64,6 @@ namespace Maps::Map_Format
 {
     struct CastleMetadata;
 }
-
-struct Funds;
-class HeroBase;
-class Heroes;
-class StreamBase;
-class Troop;
 
 enum BuildingType : uint32_t
 {
@@ -341,8 +344,8 @@ private:
     bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
-    friend StreamBase & operator<<( StreamBase &, const Castle & );
-    friend StreamBase & operator>>( StreamBase &, Castle & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
+    friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
     int race;
     uint32_t _constructedBuildings;
@@ -513,13 +516,10 @@ private:
     std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
-StreamBase & operator<<( StreamBase &, const VecCastles & );
-StreamBase & operator>>( StreamBase &, VecCastles & );
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
-StreamBase & operator<<( StreamBase &, const AllCastles & );
-StreamBase & operator>>( StreamBase &, AllCastles & );
-
-StreamBase & operator<<( StreamBase &, const Castle & );
-StreamBase & operator>>( StreamBase &, Castle & );
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
 
 #endif

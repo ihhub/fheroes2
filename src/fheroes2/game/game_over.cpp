@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -604,12 +604,12 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     return res;
 }
 
-StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
+OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
 {
-    return msg << res.colors << res.result;
+    return stream << res.colors << res.result;
 }
 
-StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
+IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
-    return msg >> res.colors >> res.result;
+    return stream >> res.colors >> res.result;
 }

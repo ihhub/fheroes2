@@ -128,6 +128,63 @@ namespace
 
         return friendColors;
     }
+
+    void ShowNewWeekDialog()
+    {
+        // restore the original music on exit
+        const AudioManager::MusicRestorer musicRestorer;
+
+        const bool isNewMonth = world.BeginMonth();
+
+        AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
+
+        const Week & week = world.GetWeekType();
+
+        // head
+        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
+        StringReplace( message, "%{name}", week.GetName() );
+        message += "\n\n";
+
+        if ( week.GetType() == WeekName::MONSTERS ) {
+            const Monster monster( week.GetMonster() );
+            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+
+            if ( monster.isValid() && count ) {
+                if ( isNewMonth )
+                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
+                else
+                    message += _( "%{monster} growth +%{count}." );
+                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
+                StringReplace( message, "%{count}", count );
+                message += "\n\n";
+            }
+        }
+
+        if ( week.GetType() == WeekName::PLAGUE )
+            message += _( " All populations are halved." );
+        else
+            message += _( " All dwellings increase population." );
+
+        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+    }
+
+    void ShowWarningLostTownsDialog()
+    {
+        const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+        const uint32_t lostTownDays = myKingdom.GetLostTownDays();
+
+        if ( lostTownDays == 1 ) {
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                                 _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        }
+        else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
+            std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
+            StringReplace( str, "%{day}", lostTownDays );
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
+        }
+    }
 }
 
 fheroes2::GameMode Game::StartBattleOnly()
@@ -377,63 +434,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
             setDisplayFadeIn();
         }
-    }
-}
-
-void ShowNewWeekDialog()
-{
-    // restore the original music on exit
-    const AudioManager::MusicRestorer musicRestorer;
-
-    const bool isNewMonth = world.BeginMonth();
-
-    AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
-
-    const Week & week = world.GetWeekType();
-
-    // head
-    std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-    StringReplace( message, "%{name}", week.GetName() );
-    message += "\n\n";
-
-    if ( week.GetType() == WeekName::MONSTERS ) {
-        const Monster monster( week.GetMonster() );
-        const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
-
-        if ( monster.isValid() && count ) {
-            if ( isNewMonth )
-                message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                            : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                  "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-            else
-                message += _( "%{monster} growth +%{count}." );
-            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-            StringReplace( message, "%{count}", count );
-            message += "\n\n";
-        }
-    }
-
-    if ( week.GetType() == WeekName::PLAGUE )
-        message += _( " All populations are halved." );
-    else
-        message += _( " All dwellings increase population." );
-
-    fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
-}
-
-void ShowWarningLostTownsDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const uint32_t lostTownDays = myKingdom.GetLostTownDays();
-
-    if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
-                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
-    }
-    else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
-        std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
-        StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
 }
 
