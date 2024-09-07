@@ -4443,7 +4443,7 @@ msgid "alliance|1st"
 msgstr "1."
 
 msgid "alliance|2nd"
-msgstr "2"
+msgstr "2."
 
 msgid "alliance|3rd"
 msgstr "3."
