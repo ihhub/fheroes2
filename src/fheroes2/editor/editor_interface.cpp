@@ -674,7 +674,7 @@ namespace Interface
                 else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
                     assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
-                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor, false );
+                    _gameArea.renderTileAreaSelect( display, _areaSelectionStartTileId, _tileUnderCursor, false );
                 }
             }
         }
@@ -862,7 +862,7 @@ namespace Interface
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
-                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushArea().width > 0 || _selectedTile == -1 ) ) {
+                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushArea().width > 0 || _areaSelectionStartTileId == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -896,21 +896,38 @@ namespace Interface
             }
 
             if ( isCursorOverGamearea ) {
-                // Get tile index under the cursor.
-                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.getMouseCursorPos() );
-                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                // Get relative tile position under the cursor. This position can be outside the map size.
+                const fheroes2::Point posInGameArea = _gameArea.getInternalPosition( le.getMouseCursorPos() );
+                const fheroes2::Point tilePos{ posInGameArea.x / TILEWIDTH, posInGameArea.y / TILEWIDTH };
+                const bool isValidTile = ( tilePos.x >= 0 && tilePos.y >= 0 && tilePos.x < world.w() && tilePos.y < world.h() );
+                const bool isBrushEmpty = ( _editorPanel.getBrushArea() == fheroes2::Rect() );
 
-                if ( _tileUnderCursor != tileIndex ) {
-                    _tileUnderCursor = tileIndex;
+                if ( isValidTile ) {
+                    const int32_t tileIndex = tilePos.y * world.w() + tilePos.x;
+                    if ( _tileUnderCursor != tileIndex ) {
+                        _tileUnderCursor = tileIndex;
 
-                    // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.showAreaSelectRect() && ( brushSize.width > 0 || _selectedTile != -1 ) ) {
+                        // Force redraw if cursor position was changed as area rectangle is also changed.
+                        if ( _editorPanel.showAreaSelectRect() && ( !isBrushEmpty || _areaSelectionStartTileId != -1 ) ) {
+                            _redraw |= REDRAW_GAMEAREA;
+                        }
+                    }
+                }
+                else if ( _areaSelectionStartTileId != -1 ) {
+                    assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
+
+                    const fheroes2::Point clampedPoint{ std::clamp( tilePos.x, 0, world.w() - 1 ), std::clamp( tilePos.y, 0, world.h() - 1 ) };
+                    const int32_t tileIndex = clampedPoint.y * world.w() + clampedPoint.x;
+                    if ( _tileUnderCursor != tileIndex ) {
+                        _tileUnderCursor = tileIndex;
+
+                        // Force redraw if cursor position was changed as area rectangle is also changed.
                         _redraw |= REDRAW_GAMEAREA;
                     }
                 }
 
-                if ( _selectedTile == -1 && tileIndex != -1 && brushSize.width == 0 && le.isMouseLeftButtonPressed() ) {
-                    _selectedTile = tileIndex;
+                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && le.isMouseLeftButtonPressed() ) {
+                    _areaSelectionStartTileId = tilePos.y * world.w() + tilePos.x;
                     _redraw |= REDRAW_GAMEAREA;
                 }
             }
@@ -919,14 +936,14 @@ namespace Interface
                 _redraw |= REDRAW_GAMEAREA;
             }
 
-            if ( _selectedTile > -1 && le.isMouseLeftButtonReleased() ) {
+            if ( _areaSelectionStartTileId > -1 && le.isMouseLeftButtonReleased() ) {
                 if ( isCursorOverGamearea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
-                        Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                        Maps::setTerrainOnTiles( _areaSelectionStartTileId, _tileUnderCursor, groundId );
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
@@ -940,7 +957,7 @@ namespace Interface
                         // Erase objects in the selected area.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( _selectedTile, _tileUnderCursor ), _editorPanel.getEraseObjectGroups() ) ) {
+                        if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ), _editorPanel.getEraseObjectGroups() ) ) {
                             action.commit();
                             _redraw |= mapUpdateFlags;
 
@@ -951,7 +968,7 @@ namespace Interface
                 }
 
                 // Reset the area start tile.
-                _selectedTile = -1;
+                _areaSelectionStartTileId = -1;
 
                 _redraw |= mapUpdateFlags;
             }
@@ -1309,7 +1326,7 @@ namespace Interface
                 // This is a case when area was not selected but a single tile was clicked.
                 Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
 
-                _selectedTile = -1;
+                _areaSelectionStartTileId = -1;
             }
 
             _validateObjectsOnTerrainUpdate();
@@ -1370,7 +1387,7 @@ namespace Interface
 
             if ( brushSize.width == 0 ) {
                 // This is a case when area was not selected but a single tile was clicked.
-                _selectedTile = -1;
+                _areaSelectionStartTileId = -1;
             }
         }
         else if ( _editorPanel.isObjectMode() ) {
