@@ -33,6 +33,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -233,7 +234,7 @@ public:
     OStreamBase & operator<<( const uint16_t v );
     OStreamBase & operator<<( const int32_t v );
     OStreamBase & operator<<( const uint32_t v );
-    OStreamBase & operator<<( const std::string & v );
+    OStreamBase & operator<<( const std::string_view v );
 
     OStreamBase & operator<<( const fheroes2::Point & v );
 

@@ -215,7 +215,7 @@ namespace
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
                    << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
 
-        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
         stream.putRaw( temp.data(), temp.size() );
 
@@ -241,7 +241,7 @@ namespace
                 return false;
             }
 
-            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            const std::vector<uint8_t> decompressedData = Compression::unzipData( temp.data(), temp.size() );
             if ( decompressedData.empty() ) {
                 // This is a corrupted file.
                 map = {};
