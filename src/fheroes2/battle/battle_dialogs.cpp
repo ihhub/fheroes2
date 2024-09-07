@@ -996,14 +996,21 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
     fheroes2::Button btnSurrender( pos_rt.x + 133, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
     fheroes2::Button btnClose( pos_rt.x + 192, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
 
-    if ( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) )
+    if ( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) ) {
         btnCast.disable();
+    }
 
-    if ( readonly || !CanRetreatOpponent( hero.GetColor() ) )
+    if ( readonly || !CanRetreatOpponent( hero.GetColor() ) ) {
         btnRetreat.disable();
+    }
 
-    if ( readonly || !CanSurrenderOpponent( hero.GetColor() ) )
+    if ( readonly || !CanSurrenderOpponent( hero.GetColor() ) ) {
         btnSurrender.disable();
+    }
+
+    if ( !buttons ) {
+        btnClose.disable();
+    }
 
     btnCast.draw();
     btnRetreat.draw();
@@ -1025,41 +1032,40 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         btnSurrender.isEnabled() && le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
         le.isMouseLeftButtonPressedInArea( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
 
-        if ( buttons ) {
-            // The Cast Spell is available for a hero and a captain.
-            if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
-                statusMessage = _( "Cast Spell" );
-            }
-            // The retreat is available during a player's turn only. A captain cannot retreat.
-            else if ( le.isMouseCursorPosInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
-                statusMessage = _( "Retreat" );
-            }
-            // The surrender is available during a player's turn only. A captain cannot surrender.
-            else if ( le.isMouseCursorPosInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
-                statusMessage = _( "Surrender" );
-            }
-            else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
-                statusMessage = _( "Cancel" );
-            }
-            else if ( le.isMouseCursorPosInArea( portraitArea ) && activeHero != nullptr ) {
-                // TODO: remove this temporary assertion
-                assert( activeHero->isHeroes() && !readonly );
-
-                statusMessage = _( "Hero Screen" );
-            }
-            else if ( hero.isCaptain() ) {
-                statusMessage = _( "Captain's Options" );
-            }
-            else {
-                statusMessage = _( "Hero's Options" );
-            }
-        }
-        else {
+        if ( !buttons ) {
             if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 
             continue;
+        }
+
+        // The Cast Spell is available for a hero and a captain.
+        if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
+            statusMessage = _( "Cast Spell" );
+        }
+        // The retreat is available during a player's turn only. A captain cannot retreat.
+        else if ( le.isMouseCursorPosInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            statusMessage = _( "Retreat" );
+        }
+        // The surrender is available during a player's turn only. A captain cannot surrender.
+        else if ( le.isMouseCursorPosInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            statusMessage = _( "Surrender" );
+        }
+        else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
+            statusMessage = _( "Cancel" );
+        }
+        else if ( le.isMouseCursorPosInArea( portraitArea ) && activeHero != nullptr ) {
+            // TODO: remove this temporary assertion
+            assert( activeHero->isHeroes() && !readonly );
+
+            statusMessage = _( "Hero Screen" );
+        }
+        else if ( hero.isCaptain() ) {
+            statusMessage = _( "Captain's Options" );
+        }
+        else {
+            statusMessage = _( "Hero's Options" );
         }
 
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) ) {
