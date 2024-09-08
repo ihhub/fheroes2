@@ -833,22 +833,29 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-        // We add a magic book while adding a hero on the map.
-        // In case if a map creator set Magic Book to be an artifact of the hero we face two Magic Books situation.
+        // We add a magic book while adding a hero on the map. If the map creator also added a
+        // Magic Book to the hero's artifacts, then we are faced with a situation of two Magic
+        // Books, which should not be the case.
         return false;
     }
 
-    iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-    if ( it == end() ) {
+    const auto firstEmptySlotIter = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
+    if ( firstEmptySlotIter == end() ) {
         return false;
     }
 
-    *it = art;
+    // If the artifact to add is not a Magic Book, then just use the first empty slot.
+    if ( art.GetID() != Artifact::MAGIC_BOOK ) {
+        *firstEmptySlotIter = art;
 
-    // Always put Magic Book at first place.
-    if ( art.GetID() == Artifact::MAGIC_BOOK ) {
-        std::swap( *it, front() );
+        return true;
     }
+
+    // Otherwise, we should first shift the existing artifacts (if any) from left to right...
+    std::move_backward( begin(), firstEmptySlotIter, std::next( firstEmptySlotIter ) );
+
+    // ... and then put the Magic Book to the first slot of the artifacts bag.
+    front() = art;
 
     return true;
 }
