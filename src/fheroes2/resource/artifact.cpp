@@ -833,10 +833,8 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
         return false;
     }
 
+    // There should not be more than one Magic Book in the artifact bag at a time.
     if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-        // We add a magic book while adding a hero on the map. If the map creator also added a
-        // Magic Book to the hero's artifacts, then we are faced with a situation of two Magic
-        // Books, which should not be the case.
         return false;
     }
 
@@ -855,7 +853,7 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     // Otherwise, we should first shift the existing artifacts (if any) from left to right...
     std::move_backward( begin(), firstEmptySlotIter, std::next( firstEmptySlotIter ) );
 
-    // ... and then put the Magic Book to the first slot of the artifacts bag.
+    // ... and then put the Magic Book to the first slot of the artifact bag.
     front() = art;
 
     return true;
