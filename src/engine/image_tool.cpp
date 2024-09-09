@@ -244,176 +244,159 @@ namespace fheroes2
         return true;
     }
 
-    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    Sprite decodeICNSprite( const uint8_t * data, const uint8_t * dataEnd, const ICNHeader & icnHeader )
     {
-        Sprite sprite( width, height, offsetX, offsetY );
+        Sprite sprite( icnHeader.width, icnHeader.height, icnHeader.offsetX, icnHeader.offsetY );
         sprite.reset();
 
-        uint8_t * imageData = sprite.image();
         uint8_t * imageTransform = sprite.transform();
 
         uint32_t posX = 0;
 
-        const uint8_t * dataEnd = data + sizeData;
-
         // The need for a transform layer can only be determined during ICN decoding.
         bool noTransformLayer = true;
 
-        while ( data < dataEnd ) {
-            if ( *data == 0 ) {
-                // 0x00 - end of row reached, go to the first pixel of next row.
-                // All of remaining pixels of current line are transparent.
+        // When animationFrames is equal to 32 then it is Monochromatic ICN image.
+        const bool isMonochromatic = ( icnHeader.animationFrames == 32 );
 
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+        if ( isMonochromatic ) {
+            while ( data < dataEnd ) {
+                if ( *data == 0 ) {
+                    // 0x00 - end of row reached, go to the first pixel of next row.
 
-                imageData += width;
-                imageTransform += width;
-                posX = 0;
-                ++data;
-            }
-            else if ( *data < 0x80 ) {
-                // 0x01-0x7F - number N of sprite pixels.
-                // The next N bytes are the colors of the next N pixels.
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
 
-                const uint8_t pixelCount = *data;
-                ++data;
+                    imageTransform += icnHeader.width;
+                    posX = 0;
+                    ++data;
+                }
+                else if ( *data < 0x80 ) {
+                    // 0x01-0x7F - number of black pixels.
+                    // Image data is all already set to 0. Just set transform layer to 0.
 
-                if ( data + pixelCount > dataEnd ) {
-                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    const uint8_t pixelCount = *data;
+
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                    ++data;
+                    posX += pixelCount;
+                }
+                else if ( *data == 0x80 ) {
+                    // 0x80 - end of image.
+
                     break;
                 }
+                else {
+                    // 0x81 to 0xFF - number of empty (transparent) pixels + 0x80.
+                    // The (n - 128) pixels are transparent.
 
-                memcpy( imageData + posX, data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                    noTransformLayer = false;
 
-                data += pixelCount;
-                posX += pixelCount;
-            }
-            else if ( *data == 0x80 ) {
-                // 0x80 - end of image
-
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
-
-                break;
-            }
-            else if ( *data < 0xC0 ) {
-                // 0x81 to 0xBF - number of empty (transparent) pixels + 0x80. The (n - 128) pixels are transparent.
-
-                noTransformLayer = false;
-
-                posX += *data - 0x80;
-                ++data;
-            }
-            else if ( *data == 0xC0 ) {
-                // 0xC0 - put here N transform layer pixels.
-                // If the next byte modulo 4 is not null, N equals the next byte modulo 4,
-                // otherwise N equals the second next byte.
-
-                noTransformLayer = false;
-
-                ++data;
-
-                const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
-
-                const uint32_t countValue = transformValue & 0x03;
-                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
-
-                if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    memset( imageTransform + posX, transformType, pixelCount );
+                    posX += *data - 0x80;
+                    ++data;
                 }
-
-                posX += pixelCount;
-
-                ++data;
-            }
-            else if ( *data == 0xC1 ) {
-                // 0xC1 - next byte is the number of next pixels of same color.
-                // The second next byte is the color of these pixels.
-
-                ++data;
-                const uint32_t pixelCount = *data;
-                ++data;
-
-                memset( imageData + posX, *data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
-
-                posX += pixelCount;
-
-                ++data;
-            }
-            else {
-                // 0xC2 to 0xFF - number of pixels of same color plus 0xC0.
-                // Next byte is the color of these pixels.
-
-                const uint32_t pixelCount = *data - 0xC0;
-                ++data;
-
-                memset( imageData + posX, *data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
-
-                posX += pixelCount;
-
-                ++data;
             }
         }
+        else {
+            uint8_t * imageData = sprite.image();
 
-        if ( noTransformLayer ) {
-            sprite._disableTransformLayer();
-        }
+            while ( data < dataEnd ) {
+                if ( *data == 0 ) {
+                    // 0x00 - end of row reached, go to the first pixel of next row.
+                    // All of remaining pixels of current line are transparent.
 
-        return sprite;
-    }
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
 
-    Sprite decodeMonochromaticICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX,
-                                         const int16_t offsetY )
-    {
-        Sprite sprite( width, height, offsetX, offsetY );
-        sprite.reset();
+                    imageData += icnHeader.width;
+                    imageTransform += icnHeader.width;
+                    posX = 0;
+                    ++data;
+                }
+                else if ( *data < 0x80 ) {
+                    // 0x01-0x7F - number N of sprite pixels.
+                    // The next N bytes are the colors of the next N pixels.
 
-        uint8_t * imageTransform = sprite.transform();
+                    const uint8_t pixelCount = *data;
+                    ++data;
 
-        uint32_t posX = 0;
+                    if ( data + pixelCount > dataEnd ) {
+                        // Image data is corrupted - we can not read data beyond dataEnd.
+                        break;
+                    }
 
-        const uint8_t * dataEnd = data + sizeData;
+                    memcpy( imageData + posX, data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
 
-        // The need for a transform layer can only be determined during ICN decoding.
-        bool noTransformLayer = true;
+                    data += pixelCount;
+                    posX += pixelCount;
+                }
+                else if ( *data == 0x80 ) {
+                    // 0x80 - end of image
 
-        while ( data < dataEnd ) {
-            if ( *data == 0 ) {
-                // 0x00 - end of row reached, go to the first pixel of next row.
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
 
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+                    break;
+                }
+                else if ( *data < 0xC0 ) {
+                    // 0x81 to 0xBF - number of empty (transparent) pixels + 0x80. The (n - 128) pixels are transparent.
 
-                imageTransform += width;
-                posX = 0;
-                ++data;
-            }
-            else if ( *data < 0x80 ) {
-                // 0x01-0x7F - number of black pixels.
-                // Image data is all already set to 0. Just set transform layer to 0.
+                    noTransformLayer = false;
 
-                const uint8_t pixelCount = *data;
+                    posX += *data - 0x80;
+                    ++data;
+                }
+                else if ( *data == 0xC0 ) {
+                    // 0xC0 - put here N transform layer pixels.
+                    // If the next byte modulo 4 is not null, N equals the next byte modulo 4,
+                    // otherwise N equals the second next byte.
 
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                    noTransformLayer = false;
 
-                ++data;
-                posX += pixelCount;
-            }
-            else if ( *data == 0x80 ) {
-                // 0x80 - end of image.
+                    ++data;
 
-                break;
-            }
-            else {
-                // 0x81 to 0xFF - number of empty (transparent) pixels + 0x80.
-                // The (n - 128) pixels are transparent.
+                    const uint8_t transformValue = *data;
+                    const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
-                noTransformLayer = false;
+                    const uint32_t countValue = transformValue & 0x03;
+                    const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
-                posX += *data - 0x80;
-                ++data;
+                    if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
+                        memset( imageTransform + posX, transformType, pixelCount );
+                    }
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else if ( *data == 0xC1 ) {
+                    // 0xC1 - next byte is the number of next pixels of same color.
+                    // The second next byte is the color of these pixels.
+
+                    ++data;
+                    const uint32_t pixelCount = *data;
+                    ++data;
+
+                    memset( imageData + posX, *data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else {
+                    // 0xC2 to 0xFF - number of pixels of same color plus 0xC0.
+                    // Next byte is the color of these pixels.
+
+                    const uint32_t pixelCount = *data - 0xC0;
+                    ++data;
+
+                    memset( imageData + posX, *data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
             }
         }
 

@@ -607,17 +607,20 @@ namespace
             fheroes2::ICNHeader header1;
             imageStream >> header1;
 
-            uint32_t sizeData = 0;
+            // There should be enough frames for ICNs with animation. When animationFrames is equal to 32 then it is a Monochromatic image
+            assert( header1.animationFrames == 32 || header1.animationFrames <= count );
+
+            uint32_t dataSize = 0;
             if ( i + 1 != count ) {
                 fheroes2::ICNHeader header2;
                 imageStream >> header2;
-                sizeData = header2.offsetData - header1.offsetData;
+                dataSize = header2.offsetData - header1.offsetData;
             }
             else {
-                sizeData = blockSize - header1.offsetData;
+                dataSize = blockSize - header1.offsetData;
             }
 
-            if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+            if ( headerSize + header1.offsetData + dataSize > body.size() ) {
                 // This is a corrupted AGG file.
                 throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
                                                       + " is being corrupted. "
@@ -625,13 +628,9 @@ namespace
             }
 
             const uint8_t * data = body.data() + headerSize + header1.offsetData;
+            const uint8_t * dataEnd = data + dataSize;
 
-            // When animationFrames is equal to 32 then it is Monochromatic ICN image.
-            const bool isMonochromatic = ( header1.animationFrames == 32 );
-
-            _icnVsSprite[id][i] = isMonochromatic
-                                      ? fheroes2::decodeMonochromaticICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY )
-                                      : fheroes2::decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
+            _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
         }
     }
 

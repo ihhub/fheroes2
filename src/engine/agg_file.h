@@ -53,14 +53,14 @@ namespace fheroes2
 
     struct ICNHeader
     {
-        ICNHeader() = default;
-
         int16_t offsetX{ 0 };
         int16_t offsetY{ 0 };
         uint16_t width{ 0 };
         uint16_t height{ 0 };
         // Used for adventure map animations, this can replace ICN::AnimationFrame.
-        // When it is equal to 32 then it is Monochromatic ICN image.
+        // The frames count is always a modulus of 32: for animations with more than 31 frames the value is ( totalFrames - 32 ).
+        // TODO: Find a way to detect that 32 was deducted from the animationFrames value if it is possible.
+        // When it is equal to 32 then it is Monochromatic ICN image. Is it a probably a bitfield.
         uint8_t animationFrames{ 0 };
         uint32_t offsetData{ 0 };
     };

@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 
+#include "agg_file.h"
 #include "image.h"
 
 namespace fheroes2
@@ -36,10 +37,7 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image );
 
-    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
-
-    Sprite decodeMonochromaticICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX,
-                                         const int16_t offsetY );
+    Sprite decodeICNSprite( const uint8_t * data, const uint8_t * dataEnd, const ICNHeader & icnHeader );
 
     void decodeTILImages( const uint8_t * data, const size_t imageCount, const int32_t width, const int32_t height, std::vector<Image> & output );
 
