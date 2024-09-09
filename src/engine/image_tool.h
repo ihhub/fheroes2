@@ -25,11 +25,12 @@
 #include <string>
 #include <vector>
 
-#include "agg_file.h"
 #include "image.h"
 
 namespace fheroes2
 {
+    struct ICNHeader;
+
     bool Save( const Image & image, const std::string & path );
 
     // Save an image into file. 'background' represents palette index from the original palette. Recommended value is 23.

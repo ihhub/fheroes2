@@ -51,6 +51,7 @@
 #pragma GCC diagnostic pop
 #endif
 
+#include "agg_file.h"
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
