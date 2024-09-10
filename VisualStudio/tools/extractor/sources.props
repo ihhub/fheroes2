@@ -6,7 +6,6 @@
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
     <ClCompile Include="..\engine\tools.cpp" />
-    <ClCompile Include="..\engine\translations.cpp" />
     <ClCompile Include="extractor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -17,6 +16,5 @@
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />
     <ClInclude Include="..\engine\tools.h" />
-    <ClInclude Include="..\engine\translations.h" />
   </ItemGroup>
 </Project>
