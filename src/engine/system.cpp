@@ -32,6 +32,8 @@
 #include <utility>
 
 #if defined( _WIN32 )
+#include <tuple>
+
 #include <direct.h>
 #include <io.h>
 #define WIN32_LEAN_AND_MEAN
