@@ -609,6 +609,7 @@ bool System::GetCaseInsensitivePath( const std::string_view path, std::string & 
     return !last;
 #else
     correctedPath = path;
+
     return true;
 #endif
 }
