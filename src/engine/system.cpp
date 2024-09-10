@@ -654,21 +654,21 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 }
 
-std::string System::encLocalToSDL( const std::string & str )
+std::string System::encLocalToSDL( const std::string_view str )
 {
 #if defined( _WIN32 )
-    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
+    return convertBetweenACPAndUTF8( std::string{ str }, EncodingConversionDirection::ACPToUTF8 );
 #else
-    return str;
+    return std::string{ str };
 #endif
 }
 
-std::string System::encSDLToLocal( const std::string & str )
+std::string System::encSDLToLocal( const std::string_view str )
 {
 #if defined( _WIN32 )
-    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
+    return convertBetweenACPAndUTF8( std::string{ str }, EncodingConversionDirection::UTF8ToACP );
 #else
-    return str;
+    return std::string{ str };
 #endif
 }
 

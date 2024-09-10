@@ -65,12 +65,12 @@ namespace System
     // Converts the given string from local encoding to SDL encoding (UTF-8). It is used mainly on Windows, because on Windows
     // this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding is used,
     // and the original string is simply returned unchanged.
-    std::string encLocalToSDL( const std::string & str );
+    std::string encLocalToSDL( const std::string_view str );
 
     // Converts the given string from SDL encoding (UTF-8) to local encoding. It is used mainly on Windows, because on Windows
     // this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding is used,
     // and the original string is simply returned unchanged.
-    std::string encSDLToLocal( const std::string & str );
+    std::string encSDLToLocal( const std::string_view str );
 
     tm GetTM( const time_t time );
 }
