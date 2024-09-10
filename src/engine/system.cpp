@@ -584,7 +584,7 @@ bool System::GetCaseInsensitivePath( const std::string_view path, std::string & 
 
         const struct dirent * e = readdir( d );
         while ( e ) {
-            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
+            if ( strcasecmp( subPathIter->c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;
 
                 closedir( d );
