@@ -36,7 +36,7 @@
 #include <vector>
 
 template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
-std::string GetHexString( T value, int width = 8 )
+std::string GetHexString( const T value, const int width = 8 )
 {
     std::ostringstream stream;
 
@@ -65,7 +65,7 @@ void StringReplace( std::string & dst, const char * pred, const T value )
 }
 
 // Returns the number of bits that are set in the number passed as an argument
-constexpr int CountBits( uint32_t val )
+constexpr int CountBits( const uint32_t val )
 {
     int res = 0;
 
