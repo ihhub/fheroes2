@@ -227,7 +227,7 @@ namespace
         thread_local std::map<EncodingConversionDirection, std::map<std::string, std::string>> resultsCache;
 
         if ( const auto dirIter = resultsCache.find( dir ); dirIter != resultsCache.end() ) {
-            const std::map<std::string, std::string> & strMap = dirIter->second;
+            const auto & strMap = dirIter->second;
 
             if ( const auto strIter = strMap.find( str ); strIter != strMap.end() ) {
                 return strIter->second;
@@ -235,7 +235,7 @@ namespace
         }
 
         // In case of any issues, the original string will be returned, so let's put it to the cache right away
-        const auto [dummy, inserted] = resultsCache[dir].emplace( str, str );
+        const auto [resultIter, inserted] = resultsCache[dir].emplace( str, str );
         if ( !inserted ) {
             assert( 0 );
         }
@@ -279,7 +279,7 @@ namespace
         std::string result( mbStr.get() );
 
         // Put the final result to the cache
-        resultsCache[dir][str] = result;
+        resultIter->second = result;
 
         return result;
     }
