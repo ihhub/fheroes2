@@ -35,7 +35,7 @@
 #include <type_traits>
 #include <vector>
 
-template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
 std::string GetHexString( const T value, const int width = 8 )
 {
     std::ostringstream stream;
@@ -56,7 +56,7 @@ std::vector<std::string> StringSplit( const std::string & str, const char sep );
 
 void StringReplace( std::string & dst, const char * pred, const std::string & src );
 
-template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
 void StringReplace( std::string & dst, const char * pred, const T value )
 {
     StringReplace( dst, pred, std::to_string( value ) );
