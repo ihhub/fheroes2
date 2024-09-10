@@ -82,7 +82,7 @@
 namespace
 {
 #if !defined( __linux__ ) || defined( ANDROID )
-    std::string GetHomeDirectory( const std::string & appName )
+    std::string GetHomeDirectory( const std::string_view appName )
     {
 #if defined( TARGET_PS_VITA )
         return System::concatPath( "ux0:data", appName );
@@ -118,7 +118,7 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToSDL( appName ).c_str() ), SDL_free ); path ) {
+        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToSDL( std::string{ appName } ).c_str() ), SDL_free ); path ) {
             return System::encSDLToLocal( path.get() );
         }
 #endif
@@ -128,7 +128,7 @@ namespace
 #endif
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
-    std::vector<std::string> splitUnixPath( const std::string & path, const std::string_view delimiter )
+    std::vector<std::string> splitUnixPath( const std::string_view path, const std::string_view delimiter )
     {
         std::vector<std::string> result;
 
@@ -142,12 +142,12 @@ namespace
             const size_t nextPos = path.find( delimiter, pos );
 
             if ( nextPos == std::string::npos ) {
-                result.push_back( path.substr( pos ) );
+                result.emplace_back( path.substr( pos ) );
 
                 break;
             }
             if ( pos < nextPos ) {
-                result.push_back( path.substr( pos, nextPos - pos ) );
+                result.emplace_back( path.substr( pos, nextPos - pos ) );
             }
 
             pos = nextPos + delimiter.size();
@@ -234,7 +234,10 @@ namespace
         }
 
         // In case of any issues, the original string will be returned, so let's put it to the cache right away
-        resultsCache[dir][str] = str;
+        const auto [dummy, inserted] = resultsCache[dir].emplace( str, str );
+        if ( !inserted ) {
+            assert( 0 );
+        }
 
         const auto [mbCodePage, mbFlags, wcCodePage, wcFlags] = [dir]() -> std::tuple<UINT, DWORD, UINT, DWORD> {
             switch ( dir ) {
@@ -309,7 +312,7 @@ bool System::isShellLevelGlobbingSupported()
 #endif
 }
 
-bool System::MakeDirectory( const std::string & path )
+bool System::MakeDirectory( const std::string_view path )
 {
     std::error_code ec;
 
@@ -342,10 +345,10 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 #endif
 }
 
-std::string System::GetConfigDirectory( const std::string & appName )
+std::string System::GetConfigDirectory( const std::string_view appName )
 {
     // Location of the app config directory, in theory, should not change while the app is running and can be cached
-    thread_local std::map<std::string, std::string> resultsCache;
+    thread_local std::map<std::string, std::string, std::less<>> resultsCache;
 
     if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
         return iter->second;
@@ -367,15 +370,18 @@ std::string System::GetConfigDirectory( const std::string & appName )
 #endif
     }();
 
-    resultsCache[appName] = result;
+    const auto [dummy, inserted] = resultsCache.emplace( appName, result );
+    if ( !inserted ) {
+        assert( 0 );
+    }
 
     return result;
 }
 
-std::string System::GetDataDirectory( const std::string & appName )
+std::string System::GetDataDirectory( const std::string_view appName )
 {
     // Location of the app data directory, in theory, should not change while the app is running and can be cached
-    thread_local std::map<std::string, std::string> resultsCache;
+    thread_local std::map<std::string, std::string, std::less<>> resultsCache;
 
     if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
         return iter->second;
@@ -403,7 +409,10 @@ std::string System::GetDataDirectory( const std::string & appName )
 #endif
     }();
 
-    resultsCache[appName] = result;
+    const auto [dummy, inserted] = resultsCache.emplace( appName, result );
+    if ( !inserted ) {
+        assert( 0 );
+    }
 
     return result;
 }
@@ -451,7 +460,7 @@ std::string System::GetBasename( std::string_view path )
     return std::string{ path.substr( pos + 1 ) };
 }
 
-std::string System::GetStem( std::string_view path )
+std::string System::GetStem( const std::string_view path )
 {
     std::string res = GetBasename( path );
 
@@ -464,7 +473,7 @@ std::string System::GetStem( std::string_view path )
     return res;
 }
 
-bool System::IsFile( const std::string & path )
+bool System::IsFile( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a file.
@@ -482,7 +491,7 @@ bool System::IsFile( const std::string & path )
     return std::filesystem::is_regular_file( correctedPath, ec );
 }
 
-bool System::IsDirectory( const std::string & path )
+bool System::IsDirectory( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a directory.
@@ -500,7 +509,7 @@ bool System::IsDirectory( const std::string & path )
     return std::filesystem::is_directory( correctedPath, ec );
 }
 
-bool System::Unlink( const std::string & path )
+bool System::Unlink( const std::string_view path )
 {
     std::error_code ec;
 
@@ -508,10 +517,10 @@ bool System::Unlink( const std::string & path )
     return std::filesystem::remove( path, ec );
 }
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
-// based on: https://github.com/OneSadCookie/fcaseopen
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
+bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
+#if !defined( _WIN32 ) && !defined( ANDROID )
+    // based on: https://github.com/OneSadCookie/fcaseopen
     correctedPath.clear();
 
     if ( path.empty() ) {
@@ -597,14 +606,11 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     }
 
     return !last;
-}
 #else
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
-{
     correctedPath = path;
     return true;
-}
 #endif
+}
 
 void System::globFiles( const std::string_view glob, std::vector<std::string> & fileNames )
 {

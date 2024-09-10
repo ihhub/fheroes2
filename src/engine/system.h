@@ -39,22 +39,22 @@ namespace System
     // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
     bool isShellLevelGlobbingSupported();
 
-    bool MakeDirectory( const std::string & path );
+    bool MakeDirectory( const std::string_view path );
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
-    std::string GetConfigDirectory( const std::string & appName );
-    std::string GetDataDirectory( const std::string & appName );
+    std::string GetConfigDirectory( const std::string_view appName );
+    std::string GetDataDirectory( const std::string_view appName );
 
     std::string GetDirname( std::string_view path );
     std::string GetBasename( std::string_view path );
-    std::string GetStem( std::string_view path );
+    std::string GetStem( const std::string_view path );
 
-    bool IsFile( const std::string & path );
-    bool IsDirectory( const std::string & path );
-    bool Unlink( const std::string & path );
+    bool IsFile( const std::string_view path );
+    bool IsDirectory( const std::string_view path );
+    bool Unlink( const std::string_view path );
 
-    bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
+    bool GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath );
 
     // Resolves the wildcard pattern 'glob' and appends matching paths to 'fileNames'. Supported wildcards are '?' and '*'.
     // These wildcards are resolved only if they are in the last element of the path. For example, they will be resolved
