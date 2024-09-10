@@ -50,8 +50,8 @@ namespace System
     std::string GetBasename( std::string_view path );
     std::string GetStem( std::string_view path );
 
-    bool IsFile( const std::string & path, bool writable = false );
-    bool IsDirectory( const std::string & path, bool writable = false );
+    bool IsFile( const std::string & path );
+    bool IsDirectory( const std::string & path );
     bool Unlink( const std::string & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );

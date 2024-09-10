@@ -34,24 +34,14 @@
 #if defined( _WIN32 )
 #include <tuple>
 
-#include <direct.h>
-#include <io.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#else
-#include <dirent.h>
-#include <unistd.h>
-
-#if defined( TARGET_PS_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <algorithm>
-
-#include <psp2/io/stat.h>
-#else
-#include <sys/stat.h>
-#endif
 #endif
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
+#include <dirent.h>
 #include <strings.h>
 #endif
 
@@ -321,13 +311,10 @@ bool System::isShellLevelGlobbingSupported()
 
 bool System::MakeDirectory( const std::string & path )
 {
-#if defined( _WIN32 )
-    return _mkdir( path.c_str() ) == 0;
-#elif defined( TARGET_PS_VITA )
-    return sceIoMkdir( path.c_str(), 0777 ) == 0;
-#else
-    return mkdir( path.c_str(), S_IRWXU ) == 0;
-#endif
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    return std::filesystem::create_directories( path, ec );
 }
 
 std::string System::concatPath( const std::string_view left, const std::string_view right )
@@ -477,87 +464,48 @@ std::string System::GetStem( std::string_view path )
     return res;
 }
 
-bool System::IsFile( const std::string & path, bool writable )
+bool System::IsFile( const std::string & path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a file.
         return false;
     }
 
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
-        // This is a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 04 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a file.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) ) {
         return false;
+    }
 
-    struct stat fs;
+    std::error_code ec;
 
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISREG( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    // Using the non-throwing overload
+    return std::filesystem::is_regular_file( correctedPath, ec );
 }
 
-bool System::IsDirectory( const std::string & path, bool writable )
+bool System::IsDirectory( const std::string & path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a directory.
         return false;
     }
 
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
-        // Not a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 00 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a directory.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) ) {
         return false;
+    }
 
-    struct stat fs;
+    std::error_code ec;
 
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    // Using the non-throwing overload
+    return std::filesystem::is_directory( correctedPath, ec );
 }
 
 bool System::Unlink( const std::string & path )
 {
-#if defined( _WIN32 )
-    return _unlink( path.c_str() ) == 0;
-#else
-    return unlink( path.c_str() ) == 0;
-#endif
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    return std::filesystem::remove( path, ec );
 }
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
