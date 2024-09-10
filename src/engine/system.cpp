@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <filesystem>
+#include <functional>
 #include <initializer_list>
 #include <map>
 #include <system_error>
