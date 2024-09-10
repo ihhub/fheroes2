@@ -321,6 +321,14 @@ bool System::MakeDirectory( const std::string_view path )
     return std::filesystem::create_directories( path, ec );
 }
 
+bool System::Unlink( const std::string_view path )
+{
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    return std::filesystem::remove( path, ec );
+}
+
 std::string System::concatPath( const std::string_view left, const std::string_view right )
 {
     // Avoid memory allocation while concatenating string. Allocate needed size at once.
@@ -508,14 +516,6 @@ bool System::IsDirectory( const std::string_view path )
 
     // Using the non-throwing overload
     return std::filesystem::is_directory( correctedPath, ec );
-}
-
-bool System::Unlink( const std::string_view path )
-{
-    std::error_code ec;
-
-    // Using the non-throwing overload
-    return std::filesystem::remove( path, ec );
 }
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )

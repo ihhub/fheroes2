@@ -40,6 +40,8 @@ namespace System
     bool isShellLevelGlobbingSupported();
 
     bool MakeDirectory( const std::string_view path );
+    bool Unlink( const std::string_view path );
+
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
@@ -52,7 +54,6 @@ namespace System
 
     bool IsFile( const std::string_view path );
     bool IsDirectory( const std::string_view path );
-    bool Unlink( const std::string_view path );
 
     bool GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath );
 
