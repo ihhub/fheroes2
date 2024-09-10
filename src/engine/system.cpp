@@ -35,6 +35,8 @@
 #if defined( _WIN32 )
 #include <tuple>
 
+#include "tools.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #elif defined( TARGET_PS_VITA )
@@ -218,13 +220,13 @@ namespace
         UTF8ToACP
     };
 
-    std::string convertBetweenACPAndUTF8( const std::string & str, const EncodingConversionDirection dir )
+    std::string convertBetweenACPAndUTF8( const std::string_view str, const EncodingConversionDirection dir )
     {
         if ( str.empty() ) {
-            return str;
+            return {};
         }
 
-        thread_local std::map<EncodingConversionDirection, std::map<std::string, std::string>> resultsCache;
+        thread_local std::map<EncodingConversionDirection, std::map<std::string, std::string, std::less<>>> resultsCache;
 
         if ( const auto dirIter = resultsCache.find( dir ); dirIter != resultsCache.end() ) {
             const auto & strMap = dirIter->second;
@@ -238,6 +240,12 @@ namespace
         const auto [resultIter, inserted] = resultsCache[dir].emplace( str, str );
         if ( !inserted ) {
             assert( 0 );
+        }
+
+        const auto strLen = fheroes2::checkedCast<int>( str.size() );
+        if ( !strLen ) {
+            // The size of this string does not fit into an int, so this string cannot be safely converted
+            return std::string{ str };
         }
 
         const auto [mbCodePage, mbFlags, wcCodePage, wcFlags] = [dir]() -> std::tuple<UINT, DWORD, UINT, DWORD> {
@@ -254,29 +262,32 @@ namespace
             return { CP_ACP, MB_ERR_INVALID_CHARS, CP_ACP, WC_NO_BEST_FIT_CHARS };
         }();
 
-        const int wcLen = MultiByteToWideChar( mbCodePage, mbFlags, str.c_str(), -1, nullptr, 0 );
+        const int wcLen = MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, nullptr, 0 );
         if ( wcLen <= 0 ) {
-            return str;
+            return std::string{ str };
         }
 
+        // The contents of this buffer will not be zero-terminated
         const std::unique_ptr<wchar_t[]> wcStr( new wchar_t[wcLen] );
 
-        if ( MultiByteToWideChar( mbCodePage, mbFlags, str.c_str(), -1, wcStr.get(), wcLen ) != wcLen ) {
-            return str;
+        if ( MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, wcStr.get(), wcLen ) != wcLen ) {
+            return std::string{ str };
         }
 
-        const int mbLen = WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), -1, nullptr, 0, nullptr, nullptr );
+        const int mbLen = WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, nullptr, 0, nullptr, nullptr );
         if ( mbLen <= 0 ) {
-            return str;
+            return std::string{ str };
         }
 
+        // The contents of this buffer will not be zero-terminated
         const std::unique_ptr<char[]> mbStr( new char[mbLen] );
 
-        if ( WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), -1, mbStr.get(), mbLen, nullptr, nullptr ) != mbLen ) {
-            return str;
+        if ( WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, mbStr.get(), mbLen, nullptr, nullptr ) != mbLen ) {
+            return std::string{ str };
         }
 
-        std::string result( mbStr.get() );
+        // The contents of this buffer is not zero-terminated
+        std::string result( mbStr.get(), mbLen );
 
         // Put the final result to the cache
         resultIter->second = result;
@@ -659,7 +670,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
 std::string System::encLocalToSDL( const std::string_view str )
 {
 #if defined( _WIN32 )
-    return convertBetweenACPAndUTF8( std::string{ str }, EncodingConversionDirection::ACPToUTF8 );
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
 #else
     return std::string{ str };
 #endif
@@ -668,7 +679,7 @@ std::string System::encLocalToSDL( const std::string_view str )
 std::string System::encSDLToLocal( const std::string_view str )
 {
 #if defined( _WIN32 )
-    return convertBetweenACPAndUTF8( std::string{ str }, EncodingConversionDirection::UTF8ToACP );
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
 #else
     return std::string{ str };
 #endif
