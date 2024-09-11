@@ -60,6 +60,7 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "screen.h"
+#include "system.h"
 #include "tools.h"
 
 namespace
@@ -907,8 +908,11 @@ namespace
 
         void setTitle( const std::string & title ) override
         {
-            if ( _window != nullptr )
-                SDL_SetWindowTitle( _window, title.c_str() );
+            if ( _window == nullptr ) {
+                return;
+            }
+
+            SDL_SetWindowTitle( _window, System::encLocalToSDL( title ).c_str() );
         }
 
         void setIcon( const fheroes2::Image & icon ) override
@@ -996,7 +1000,7 @@ namespace
                 if ( !isFullScreen() ) {
                     SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
                 }
-                _previousWindowTitle = SDL_GetWindowTitle( _window );
+                _previousWindowTitle = System::encSDLToLocal( SDL_GetWindowTitle( _window ) );
 
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
@@ -1100,7 +1104,8 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( System::encLocalToSDL( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
+                                        resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )

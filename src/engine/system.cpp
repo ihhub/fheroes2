@@ -27,13 +27,11 @@
 #include <cstdlib>
 #include <filesystem>
 #include <initializer_list>
+#include <map>
 #include <system_error>
 #include <utility>
 
 #if defined( _WIN32 )
-#include <clocale>
-#include <map>
-
 #include <direct.h>
 #include <io.h>
 #define WIN32_LEAN_AND_MEAN
@@ -51,9 +49,7 @@
 #endif
 #endif
 
-#if defined( _WIN32 ) || defined( ANDROID )
-#include "logging.h"
-#else
+#if !defined( _WIN32 ) && !defined( ANDROID )
 #include <strings.h>
 #endif
 
@@ -94,48 +90,44 @@
 namespace
 {
 #if !defined( __linux__ ) || defined( ANDROID )
-    std::string GetHomeDirectory( const std::string & prog )
+    std::string GetHomeDirectory( const std::string & appName )
     {
 #if defined( TARGET_PS_VITA )
-        return System::concatPath( "ux0:data", prog );
+        return System::concatPath( "ux0:data", appName );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return System::concatPath( "/switch", prog );
+        return System::concatPath( "/switch", appName );
 #elif defined( ANDROID )
-        (void)prog;
+        (void)appName;
 
-        const char * storagePath = SDL_AndroidGetExternalStoragePath();
-        if ( storagePath == nullptr ) {
-            ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
-            return { "." };
-        }
-
-        VERBOSE_LOG( "Application storage path is " << storagePath )
-        return storagePath;
-#endif
-
-        const char * homeEnvPath = getenv( "HOME" );
-
-#if defined( MACOS_APP_BUNDLE )
-        if ( homeEnvPath != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), prog );
+        if ( const char * storagePath = SDL_AndroidGetExternalStoragePath(); storagePath != nullptr ) {
+            return storagePath;
         }
 
         return { "." };
 #endif
+        {
+            const char * homeEnvPath = getenv( "HOME" );
 
-        if ( homeEnvPath != nullptr ) {
-            return System::concatPath( homeEnvPath, std::string( "." ).append( prog ) );
+#if defined( MACOS_APP_BUNDLE )
+            if ( homeEnvPath != nullptr ) {
+                return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
+            }
+
+            return { "." };
+#endif
+
+            if ( homeEnvPath != nullptr ) {
+                return System::concatPath( homeEnvPath, std::string( "." ).append( appName ) );
+            }
         }
 
-        const char * dataEnvPath = getenv( "APPDATA" );
-        if ( dataEnvPath != nullptr ) {
-            return System::concatPath( dataEnvPath, prog );
+        if ( const char * dataEnvPath = getenv( "APPDATA" ); dataEnvPath != nullptr ) {
+            return System::concatPath( dataEnvPath, appName );
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", prog.c_str() ), SDL_free );
-        if ( path ) {
-            return path.get();
+        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToSDL( appName ).c_str() ), SDL_free ); path ) {
+            return System::encSDLToLocal( path.get() );
         }
 #endif
 
@@ -225,6 +217,77 @@ namespace
 
         return wildcardIdx == wildcard.length();
     }
+
+#if defined( _WIN32 )
+    enum class EncodingConversionDirection
+    {
+        ACPToUTF8,
+        UTF8ToACP
+    };
+
+    std::string convertBetweenACPAndUTF8( const std::string & str, const EncodingConversionDirection dir )
+    {
+        if ( str.empty() ) {
+            return str;
+        }
+
+        thread_local std::map<EncodingConversionDirection, std::map<std::string, std::string>> resultsCache;
+
+        if ( const auto dirIter = resultsCache.find( dir ); dirIter != resultsCache.end() ) {
+            const std::map<std::string, std::string> & strMap = dirIter->second;
+
+            if ( const auto strIter = strMap.find( str ); strIter != strMap.end() ) {
+                return strIter->second;
+            }
+        }
+
+        // In case of any issues, the original string will be returned, so let's put it to the cache right away
+        resultsCache[dir][str] = str;
+
+        const auto [mbCodePage, mbFlags, wcCodePage, wcFlags] = [dir]() -> std::tuple<UINT, DWORD, UINT, DWORD> {
+            switch ( dir ) {
+            case EncodingConversionDirection::ACPToUTF8:
+                return { CP_ACP, MB_ERR_INVALID_CHARS, CP_UTF8, WC_ERR_INVALID_CHARS };
+            case EncodingConversionDirection::UTF8ToACP:
+                return { CP_UTF8, MB_ERR_INVALID_CHARS, CP_ACP, WC_NO_BEST_FIT_CHARS };
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return { CP_ACP, MB_ERR_INVALID_CHARS, CP_ACP, WC_NO_BEST_FIT_CHARS };
+        }();
+
+        const int wcLen = MultiByteToWideChar( mbCodePage, mbFlags, str.c_str(), -1, nullptr, 0 );
+        if ( wcLen <= 0 ) {
+            return str;
+        }
+
+        const std::unique_ptr<wchar_t[]> wcStr( new wchar_t[wcLen] );
+
+        if ( MultiByteToWideChar( mbCodePage, mbFlags, str.c_str(), -1, wcStr.get(), wcLen ) != wcLen ) {
+            return str;
+        }
+
+        const int mbLen = WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), -1, nullptr, 0, nullptr, nullptr );
+        if ( mbLen <= 0 ) {
+            return str;
+        }
+
+        const std::unique_ptr<char[]> mbStr( new char[mbLen] );
+
+        if ( WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), -1, mbStr.get(), mbLen, nullptr, nullptr ) != mbLen ) {
+            return str;
+        }
+
+        std::string result( mbStr.get() );
+
+        // Put the final result to the cache
+        resultsCache[dir][str] = result;
+
+        return result;
+    }
+#endif
 }
 
 bool System::isHandheldDevice()
@@ -290,49 +353,70 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 #endif
 }
 
-std::string System::GetConfigDirectory( const std::string & prog )
+std::string System::GetConfigDirectory( const std::string & appName )
 {
+    // Location of the app config directory, in theory, should not change while the app is running and can be cached
+    thread_local std::map<std::string, std::string> resultsCache;
+
+    if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
+        return iter->second;
+    }
+
+    std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
-    const char * configEnv = getenv( "XDG_CONFIG_HOME" );
-    if ( configEnv ) {
-        return System::concatPath( configEnv, prog );
-    }
+        if ( const char * configEnv = getenv( "XDG_CONFIG_HOME" ); configEnv != nullptr ) {
+            return System::concatPath( configEnv, appName );
+        }
 
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, ".config" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return System::concatPath( System::concatPath( homeEnv, ".config" ), appName );
+        }
 
-    return { "." };
+        return { "." };
 #else
-    return GetHomeDirectory( prog );
+        return GetHomeDirectory( appName );
 #endif
+    }();
+
+    resultsCache[appName] = result;
+
+    return result;
 }
 
-std::string System::GetDataDirectory( const std::string & prog )
+std::string System::GetDataDirectory( const std::string & appName )
 {
+    // Location of the app data directory, in theory, should not change while the app is running and can be cached
+    thread_local std::map<std::string, std::string> resultsCache;
+
+    if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
+        return iter->second;
+    }
+
+    std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
-    const char * dataEnv = getenv( "XDG_DATA_HOME" );
-    if ( dataEnv ) {
-        return System::concatPath( dataEnv, prog );
-    }
+        if ( const char * dataEnv = getenv( "XDG_DATA_HOME" ); dataEnv != nullptr ) {
+            return System::concatPath( dataEnv, appName );
+        }
 
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, ".local/share" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return System::concatPath( System::concatPath( homeEnv, ".local/share" ), appName );
+        }
 
-    return { "." };
+        return { "." };
 #elif defined( MACOS_APP_BUNDLE )
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), appName );
+        }
 
-    return { "." };
+        return { "." };
 #else
-    return GetHomeDirectory( prog );
+        return GetHomeDirectory( appName );
 #endif
+    }();
+
+    resultsCache[appName] = result;
+
+    return result;
 }
 
 std::string System::GetDirname( std::string_view path )
@@ -614,77 +698,21 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 }
 
-std::string System::FileNameToUTF8( const std::string & name )
+std::string System::encLocalToSDL( const std::string & str )
 {
 #if defined( _WIN32 )
-    if ( name.empty() ) {
-        return name;
-    }
-
-    thread_local std::map<std::string, std::string> acpToUtf8;
-
-    const auto iter = acpToUtf8.find( name );
-    if ( iter != acpToUtf8.end() ) {
-        return iter->second;
-    }
-
-    // In case of any issues, the original string will be returned, so let's put it to the cache right away
-    acpToUtf8[name] = name;
-
-    const auto getLastErrorStr = []() {
-        LPTSTR msgBuf;
-
-        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,
-                            reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
-             > 0 ) {
-            const std::string result( msgBuf );
-
-            LocalFree( msgBuf );
-
-            return result;
-        }
-
-        return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
-    };
-
-    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, nullptr, 0 );
-    if ( wLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
-
-    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, wStr.get(), wLen ) != wLen ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
-    if ( uLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::unique_ptr<char[]> uStr( new char[uLen] );
-
-    if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::string result( uStr.get() );
-
-    // Put the final result to the cache
-    acpToUtf8[name] = result;
-
-    return result;
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
 #else
-    return name;
+    return str;
+#endif
+}
+
+std::string System::encSDLToLocal( const std::string & str )
+{
+#if defined( _WIN32 )
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
+#else
+    return str;
 #endif
 }
 
