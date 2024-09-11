@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,41 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "statusbar.h"
+#pragma once
 
 #include <cstdint>
-#include <memory>
-#include <utility>
+#include <vector>
 
-#include "math_tools.h"
-#include "screen.h"
-#include "ui_text.h"
+#include "math_base.h"
 
-StatusBar::StatusBar()
-    : MovableText( fheroes2::Display::instance() )
+namespace fheroes2
 {
-    // Do nothing.
-}
-
-void StatusBar::ShowMessage( std::string msg )
-{
-    if ( msg == _prevMessage ) {
-        // No updates.
-        return;
-    }
-
-    _prevMessage = msg;
-
-    auto text = std::make_unique<fheroes2::Text>( std::move( msg ), fheroes2::FontType::normalWhite() );
-    text->fitToOneRow( _roi.width );
-
-    const int32_t textWidth = text->width();
-    const fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - textWidth ) / 2, _roi.y, textWidth, text->height() };
-
-    update( std::move( text ) );
-
-    draw( messageRoi.x, messageRoi.y );
-
-    fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
-    _prevMessageRoi = messageRoi;
+    double GetAngle( const Point & start, const Point & target );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 }

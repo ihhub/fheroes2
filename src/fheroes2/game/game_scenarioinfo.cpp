@@ -49,6 +49,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "mus.h"
 #include "player_info.h"
 #include "players.h"

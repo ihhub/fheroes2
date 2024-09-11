@@ -59,9 +59,9 @@
 
 #include "image_palette.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "screen.h"
 #include "system.h"
-#include "tools.h"
 
 namespace
 {

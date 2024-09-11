@@ -35,8 +35,6 @@
 #include <type_traits>
 #include <vector>
 
-#include "math_base.h"
-
 template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
 std::string GetHexString( T value, int width = 8 )
 {
@@ -47,9 +45,9 @@ std::string GetHexString( T value, int width = 8 )
     return stream.str();
 }
 
-int Sign( int );
+int Sign( const int i );
 
-std::string StringTrim( std::string );
+std::string StringTrim( std::string str );
 
 std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
@@ -85,15 +83,6 @@ std::string insertCharToString( const std::string & inputString, const size_t po
 
 namespace fheroes2
 {
-    double GetAngle( const Point & start, const Point & target );
-    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
-    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
-
-    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
-
-    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
-
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
     template <class T>
