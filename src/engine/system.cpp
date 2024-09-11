@@ -245,6 +245,9 @@ namespace
         const auto strLen = fheroes2::checkedCast<int>( str.size() );
         if ( !strLen ) {
             // The size of this string does not fit into an int, so this string cannot be safely converted
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
             return std::string{ str };
         }
 
@@ -264,6 +267,9 @@ namespace
 
         const int wcLen = MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, nullptr, 0 );
         if ( wcLen <= 0 ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
             return std::string{ str };
         }
 
@@ -271,11 +277,17 @@ namespace
         const std::unique_ptr<wchar_t[]> wcStr( new wchar_t[wcLen] );
 
         if ( MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, wcStr.get(), wcLen ) != wcLen ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
             return std::string{ str };
         }
 
         const int mbLen = WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, nullptr, 0, nullptr, nullptr );
         if ( mbLen <= 0 ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
             return std::string{ str };
         }
 
@@ -283,6 +295,9 @@ namespace
         const std::unique_ptr<char[]> mbStr( new char[mbLen] );
 
         if ( WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, mbStr.get(), mbLen, nullptr, nullptr ) != mbLen ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
             return std::string{ str };
         }
 
