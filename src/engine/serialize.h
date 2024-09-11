@@ -685,7 +685,7 @@ private:
 namespace fheroes2
 {
     // Get a value of type T in the system byte order from the buffer in which it was originally stored in the little-endian byte order
-    template <typename T, typename = typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>>>
     T getLEValue( const char * data, const size_t base, const size_t offset = 0 )
     {
         const char * begin = data + base + offset * sizeof( T );
