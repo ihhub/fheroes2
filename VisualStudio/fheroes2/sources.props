@@ -240,7 +240,6 @@
     <ClInclude Include="src\engine\audio.h" />
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
-    <ClInclude Include="src\engine\endian_h2.h" />
     <ClInclude Include="src\engine\exception.h" />
     <ClInclude Include="src\engine\h2d_file.h" />
     <ClInclude Include="src\engine\image.h" />

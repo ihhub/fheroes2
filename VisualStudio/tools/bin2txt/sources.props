@@ -5,7 +5,6 @@
     <ClCompile Include="bin2txt.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\endian_h2.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />

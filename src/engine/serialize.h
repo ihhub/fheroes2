@@ -38,8 +38,74 @@
 #include <utility>
 #include <vector>
 
-#include "endian_h2.h"
+#if defined( __linux__ )
+#include <endian.h>
+
+#elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
+#include <sys/endian.h>
+
+#elif defined( _WIN32 )
+#include <cstdlib>
+
+#define BIG_ENDIAN 4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
+
+#define htobe16( x ) _byteswap_ushort( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) _byteswap_ushort( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) _byteswap_ulong( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) _byteswap_ulong( x )
+#define le32toh( x ) ( x )
+
+#elif defined( __APPLE__ )
+#include <libkern/OSByteOrder.h>
+#define htobe16( x ) OSSwapHostToBigInt16( x )
+#define htole16( x ) OSSwapHostToLittleInt16( x )
+#define be16toh( x ) OSSwapBigToHostInt16( x )
+#define le16toh( x ) OSSwapLittleToHostInt16( x )
+#define htobe32( x ) OSSwapHostToBigInt32( x )
+#define htole32( x ) OSSwapHostToLittleInt32( x )
+#define be32toh( x ) OSSwapBigToHostInt32( x )
+#define le32toh( x ) OSSwapLittleToHostInt32( x )
+
+#elif defined( TARGET_PS_VITA )
+#define BIG_ENDIAN 4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
+
+#define htobe16( x ) __builtin_bswap16( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) __builtin_bswap16( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) __builtin_bswap32( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) __builtin_bswap32( x )
+#define le32toh( x ) ( x )
+
+#elif defined( TARGET_NINTENDO_SWITCH )
+#include <machine/endian.h>
+#define LITTLE_ENDIAN _LITTLE_ENDIAN
+#define BIG_ENDIAN _BIG_ENDIAN
+#define BYTE_ORDER _BYTE_ORDER
+#define htobe16( x ) __bswap16( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) __bswap16( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) __bswap32( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) __bswap32( x )
+#define le32toh( x ) ( x )
+
+#else
+#error "Unsupported platform"
+#endif
+
 #include "math_base.h"
+
+#define IS_BIGENDIAN ( BYTE_ORDER == BIG_ENDIAN )
 
 // Base class for all I/O facilities
 class StreamBase

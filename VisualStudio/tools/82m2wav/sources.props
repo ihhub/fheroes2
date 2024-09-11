@@ -7,7 +7,6 @@
     <ClCompile Include="82m2wav.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\endian_h2.h" />
     <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />
