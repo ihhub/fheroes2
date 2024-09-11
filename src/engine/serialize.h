@@ -38,10 +38,7 @@
 #include <utility>
 #include <vector>
 
-#if defined( __linux__ )
-#include <endian.h>
-
-#elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
+#if defined( __FreeBSD__ ) || defined( __OpenBSD__ )
 #include <sys/endian.h>
 
 #elif defined( _WIN32 )
@@ -100,7 +97,10 @@
 #define le32toh( x ) ( x )
 
 #else
-#error "Unsupported platform"
+// POSIX 1003.1-2024
+// https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/endian.h.html
+#include <endian.h>
+
 #endif
 
 #include "math_base.h"
