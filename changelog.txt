@@ -9,7 +9,7 @@ version 1.1.2 (15 September 2024)
 - update the Hungarian translation
 - limit the use of the Summon Boat by AI for the original maps
 - do not create an undo action in the Editor if nothing was changed for an object
-- allow to undone any castle modifications in the Editor
+- allow to undo any castle modifications in the Editor
 - improve AI castle protection logic on the Adventure Map
 - render mirrored troop in dialog properly
 - update resources before showing construction animation inside castle dialog
@@ -19,7 +19,7 @@ version 1.1.2 (15 September 2024)
 - update Earthquake spell animation and improve its logic to allow bridge and nearby towers demolition
 - disable mouse popup for empty space in map selection window
 - fix AI heroes ignoring patrol limit
-- AI should determine best skill when levelling up heroes
+- AI should determine best skill when leveling up heroes
 - update hero spell points indicator after the battle and before performing defeated opponent fade animation
 - fix creature and header overlap in recruit window
 - fix map special conditions render after drop list is closed
@@ -33,8 +33,8 @@ version 1.1.2 (15 September 2024)
 - Android Toolset: add Russian translation for FH2M file manager
 - fix Anti-Magic spell description
 - update the Polish translation
-- fix mini-map updates while picking certain objects on the Adventure Map
-- fix invalid animation while picking an artifact hidden by another object on the Adventure Map
+- fix mini-map updates while picking up certain objects on the Adventure Map
+- fix invalid animation while picking up an artifact hidden by another object on the Adventure Map
 - remove scouting & movement bonuses for AI-controlled players
 - fix rendering issues in mine selection dialog for the Editor
 - allow to input "/", "*", "-", "+" and "." from the keypad

@@ -52,7 +52,7 @@
           <li>update the Hungarian translation</li>
           <li>limit the use of the Summon Boat by AI for the original maps</li>
           <li>do not create an undo action in the Editor if nothing was changed for an object</li>
-          <li>allow to undone any castle modifications in the Editor</li>
+          <li>allow to undo any castle modifications in the Editor</li>
           <li>improve AI castle protection logic on the Adventure Map</li>
           <li>render mirrored troop in dialog properly</li>
           <li>update resources before showing construction animation inside castle dialog</li>
@@ -62,7 +62,7 @@
           <li>update Earthquake spell animation and improve its logic to allow bridge and nearby towers demolition</li>
           <li>disable mouse popup for empty space in map selection window</li>
           <li>fix AI heroes ignoring patrol limit</li>
-          <li>AI should determine best skill when levelling up heroes</li>
+          <li>AI should determine best skill when leveling up heroes</li>
           <li>update hero spell points indicator after the battle and before performing defeated opponent fade animation</li>
           <li>fix creature and header overlap in recruit window</li>
           <li>fix map special conditions render after drop list is closed</li>
@@ -76,8 +76,8 @@
           <li>Android Toolset: add Russian translation for FH2M file manager</li>
           <li>fix Anti-Magic spell description</li>
           <li>update the Polish translation</li>
-          <li>fix mini-map updates while picking certain objects on the Adventure Map</li>
-          <li>fix invalid animation while picking an artifact hidden by another object on the Adventure Map</li>
+          <li>fix mini-map updates while picking up certain objects on the Adventure Map</li>
+          <li>fix invalid animation while picking up an artifact hidden by another object on the Adventure Map</li>
           <li>remove scouting &amp; movement bonuses for AI-controlled players</li>
           <li>fix rendering issues in mine selection dialog for the Editor</li>
           <li>allow to input "/", "*", "-", "+" and "." from the keypad</li>
