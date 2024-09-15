@@ -67,7 +67,7 @@ namespace
                 return;
             }
 
-            // It seems that we are just moving a single unit to a free cell
+            // It seems that we are just moving a single unit to an empty slot
             assert( !troopTarget.isValid() );
 
             Army::SwapTroops( troopFrom, troopTarget );
