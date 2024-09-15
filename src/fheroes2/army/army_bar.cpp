@@ -61,10 +61,6 @@ namespace
 
         assert( overallCount > 0 );
 
-        if ( saveLastTroop && troopFrom.GetCount() <= 1 ) {
-            return;
-        }
-
         if ( overallCount == 1 ) {
             // prevent cross-army split if we lose the last unit in the hero army
             if ( saveLastTroop ) {
