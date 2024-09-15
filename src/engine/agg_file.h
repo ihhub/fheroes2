@@ -58,9 +58,9 @@ namespace fheroes2
         uint16_t width{ 0 };
         uint16_t height{ 0 };
         // Used for adventure map animations, this can replace ICN::AnimationFrame.
-        // The frames count is always a modulus of 32: for animations with more than 31 frames the value is ( totalFrames - 32 ).
+        // The frames count is always a modulus of 32 (only 5 bits are used): for animations with more than 31 frames the value is ( totalFrames - 32 ).
         // TODO: Find a way to detect that 32 was deducted from the animationFrames value if it is possible.
-        // When it is equal to 32 then it is Monochromatic ICN image. Is it a probably a bitfield.
+        // When the 6th bit in animationFrames is set then it is Monochromatic ICN image.
         uint8_t animationFrames{ 0 };
         uint32_t offsetData{ 0 };
     };

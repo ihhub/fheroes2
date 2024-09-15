@@ -257,8 +257,8 @@ namespace fheroes2
         // The need for a transform layer can only be determined during ICN decoding.
         bool noTransformLayer = true;
 
-        // When animationFrames is equal to 32 then it is Monochromatic ICN image.
-        const bool isMonochromatic = ( icnHeader.animationFrames == 32 );
+        // When the 6th bit in animationFrames is set then it is Monochromatic ICN image.
+        const bool isMonochromatic = ( icnHeader.animationFrames & 0x20 );
 
         if ( isMonochromatic ) {
             while ( data < dataEnd ) {
