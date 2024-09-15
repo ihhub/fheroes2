@@ -246,11 +246,9 @@ uint32_t ICN::getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, c
     case CMBTHROB:
         return 1 + currentFrameNumber % 18;
     case CMBTHROK:
-        return 1 + currentFrameNumber % 19;
     case CMBTHRON:
         return 1 + currentFrameNumber % 19;
     case CMBTHROS:
-        return 1 + currentFrameNumber % 16;
     case CMBTHROW:
         return 1 + currentFrameNumber % 16;
     case CMBTHROZ:
@@ -337,7 +335,6 @@ uint32_t ICN::getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, c
     case CMBTFLE3:
         return 1 + currentFrameNumber % 25;
     case CMBTSURR:
-        return 1 + currentFrameNumber % 20;
     case WINCMBT:
         return 1 + currentFrameNumber % 20;
     case MINIMON:
@@ -356,7 +353,8 @@ uint32_t ICN::getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, c
         switch ( startIndex ) {
         // bottle
         case 0x00:
-            return startIndex + ( currentFrameNumber % 11 ) + 1;
+            // 'startIndex' is equal to 0 here so it is not used in the expression.
+            return ( currentFrameNumber % 11 ) + 1;
         // shadow
         case 0x0C:
         // chest
@@ -365,11 +363,11 @@ uint32_t ICN::getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, c
         case 0x26:
         // flotsam
         case 0x2D:
-        // unkn
+        // Magellan's Maps building shadow.
         case 0x37:
-        // boat
+        // Magellan's Maps building boat.
         case 0x3E:
-        // waves
+        // Magellan's Maps building waves.
         case 0x45:
         // seaweed
         case 0x4C:
