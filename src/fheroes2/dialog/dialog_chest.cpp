@@ -132,4 +132,3 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     return result;
 }
-
