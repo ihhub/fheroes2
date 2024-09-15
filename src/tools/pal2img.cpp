@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " generates an image with colors based on a provided palette file." << std::endl
                   << "Syntax: " << baseName << " palette_file.pal output.bmp|output.png" << std::endl;
