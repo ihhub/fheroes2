@@ -108,7 +108,7 @@ namespace fheroes2
         }
         case Campaign::ScenarioBonusData::STARTING_RACE:
         case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-            const CustomImageDialogElement raceUI( AGG::GetICN( ICN::Get4Captain( bonusData._subType ), 1 ) );
+            const CustomImageDialogElement raceUI( AGG::GetICN( ICN::getCaptainIcnId( bonusData._subType ), 1 ) );
 
             showStandardTextMessage( bonusData.getName(), bonusData.getDescription(), Dialog::ZERO, { &raceUI } );
             break;
@@ -201,7 +201,7 @@ namespace fheroes2
         case Campaign::CampaignAwardData::TYPE_HIREABLE_HERO:
         case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
             Sprite output = Crop( AGG::GetICN( ICN::HEROBKG, 0 ), 47, 29, 105, 98 );
-            const Sprite & heroPortrait = AGG::GetICN( ICN::PORTxxxx( awardData._subType ), 0 );
+            const Sprite & heroPortrait = AGG::GetICN( ICN::getHeroPortraitIcnId( awardData._subType ), 0 );
             Blit( heroPortrait, 0, 0, output, 2, 2, heroPortrait.width(), heroPortrait.height() );
 
             const CustomImageDialogElement heroUI( std::move( output ) );

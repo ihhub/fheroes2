@@ -21,12 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "captain.h"
+
 #include <cassert>
 
 #include "agg_image.h"
 #include "artifact.h"
 #include "artifact_info.h"
-#include "captain.h"
 #include "castle.h"
 #include "icn.h"
 #include "interface_icons.h"
@@ -205,7 +206,7 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
             return fheroes2::Image();
 
         fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
-        const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0 );
+        const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( GetColor() ), 0 );
 
         const fheroes2::Point & offset = GetFlagOffset( GetRace() );
         fheroes2::Blit( flag, portrait, offset.x, offset.y );

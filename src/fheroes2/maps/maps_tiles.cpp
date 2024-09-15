@@ -422,8 +422,8 @@ namespace
     void getAddonInfo( const Maps::TilesAddon & addon, std::ostringstream & os )
     {
         os << "UID             : " << addon._uid << std::endl
-           << "ICN object type : " << static_cast<int>( addon._objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( addon._objectIcnType ) ) << ")"
-           << std::endl
+           << "ICN object type : " << static_cast<int>( addon._objectIcnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( addon._objectIcnType ) )
+           << ")" << std::endl
            << "image index     : " << static_cast<int>( addon._imageIndex ) << std::endl
            << "layer type      : " << static_cast<int>( addon._layerType ) << " - " << getObjectLayerName( addon._layerType ) << std::endl
            << "is shadow       : " << ( isAddonShadow( addon ) ? "yes" : "no" ) << std::endl;
