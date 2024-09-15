@@ -1175,7 +1175,7 @@ namespace fheroes2
         }
 
         for ( uint8_t i = 0; i < borderWidth; i++ ) {
-            fheroes2::Sprite cnt = CreateContour( image, borderColor );
+            const fheroes2::Sprite cnt = CreateContour( image, borderColor );
             Blit( cnt, image );
         }
     }
