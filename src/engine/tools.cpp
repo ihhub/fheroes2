@@ -379,4 +379,17 @@ namespace fheroes2
 
         return std::to_string( num );
     }
+
+    void appendModifierToString( std::string & str, const int mod )
+    {
+        if ( mod < 0 ) {
+            // The minus sign is already present
+            str.append( " " );
+        }
+        else if ( mod > 0 ) {
+            str.append( " +" );
+        }
+
+        str.append( std::to_string( mod ) );
+    }
 }

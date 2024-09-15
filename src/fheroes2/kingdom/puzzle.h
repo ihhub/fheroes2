@@ -30,7 +30,8 @@
 
 #define PUZZLETILES 48
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Puzzle : public std::bitset<PUZZLETILES>
 {
@@ -48,7 +49,7 @@ public:
     std::vector<uint8_t> zone4_order{ 20, 21, 26, 27 };
 };
 
-StreamBase & operator<<( StreamBase &, const Puzzle & );
-StreamBase & operator>>( StreamBase &, Puzzle & );
+OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl );
+IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl );
 
 #endif

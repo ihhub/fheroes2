@@ -92,14 +92,14 @@ namespace
         int gameType;
     };
 
-    StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
+    OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )
     {
-        return msg << hdr.status << hdr.info << hdr.gameType;
+        return stream << hdr.status << hdr.info << hdr.gameType;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
+    IStreamBase & operator>>( IStreamBase & stream, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info >> hdr.gameType;
+        return stream >> hdr.status >> hdr.info >> hdr.gameType;
     }
 }
 
@@ -115,7 +115,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     const Settings & conf = Settings::Get();
 
     StreamFile fileStream;
-    fileStream.setbigendian( true );
+    fileStream.setBigendian( true );
 
     if ( !fileStream.open( filePath, "wb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
@@ -133,8 +133,8 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
         return false;
     }
 
-    StreamBuf dataStream;
-    dataStream.setbigendian( true );
+    RWStreamBuf dataStream;
+    dataStream.setBigendian( true );
 
     dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
     if ( dataStream.fail() ) {
@@ -147,7 +147,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // End-of-data marker
     dataStream << SAV2ID3;
-    if ( dataStream.fail() || !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
+    if ( dataStream.fail() || !Compression::zipStreamBuf( dataStream, fileStream ) ) {
         return false;
     }
 
@@ -165,7 +165,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
     StreamFile fileStream;
-    fileStream.setbigendian( true );
+    fileStream.setBigendian( true );
 
     if ( !fileStream.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
@@ -225,10 +225,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    StreamBuf dataStream;
-    dataStream.setbigendian( true );
+    RWStreamBuf dataStream;
+    dataStream.setBigendian( true );
 
-    if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {
+    if ( !Compression::unzipStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
@@ -290,7 +290,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
-    fs.setbigendian( true );
+    fs.setBigendian( true );
 
     if ( !fs.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )

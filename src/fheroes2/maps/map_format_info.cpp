@@ -31,35 +31,35 @@ namespace Maps::Map_Format
 {
     // The following operators are used only inside this module, but they cannot be declared in an anonymous namespace due to the way ADL works
 
-    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object );
-    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object );
+    OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object );
+    IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object );
 
-    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
-    StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
+    OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile );
+    IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile );
 
-    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo );
-    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo );
+    OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo );
+    IStreamBase & operator>>( IStreamBase & stream, DailyEvent & eventInfo );
 
-    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const CastleMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, CastleMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const HeroMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, HeroMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SphinxMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SphinxMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SignMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SignMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
 
-    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata );
-    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata );
 }
 
 namespace
@@ -161,26 +161,26 @@ namespace
         }
     }
 
-    bool saveToStream( StreamBase & msg, const Maps::Map_Format::BaseMapFormat & map )
+    bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
 
-        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
-            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-            << map.name << map.description;
+        stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
+               << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
+               << map.name << map.description;
 
-        return !msg.fail();
+        return !stream.fail();
     }
 
-    bool loadFromStream( StreamBase & msg, Maps::Map_Format::BaseMapFormat & map )
+    bool loadFromStream( IStreamBase & stream, Maps::Map_Format::BaseMapFormat & map )
     {
-        msg >> map.version;
+        stream >> map.version;
         if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
             return false;
         }
 
-        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
+        stream >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
             >> map.lossConditionMetadata >> map.size;
 
@@ -193,55 +193,55 @@ namespace
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
         LanguageUnderlyingType language;
 
-        msg >> language;
+        stream >> language;
         map.language = static_cast<fheroes2::SupportedLanguage>( language );
 
-        msg >> map.name >> map.description;
+        stream >> map.name >> map.description;
 
-        return !msg.fail();
+        return !stream.fail();
     }
 
-    bool saveToStream( StreamBase & msg, const Maps::Map_Format::MapFormat & map )
+    bool saveToStream( OStreamBase & stream, const Maps::Map_Format::MapFormat & map )
     {
         // Only the base map information is not encoded.
         // The rest of data must be compressed to prevent manual corruption of the file.
-        if ( !saveToStream( msg, static_cast<const Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
+        if ( !saveToStream( stream, static_cast<const Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
             return false;
         }
 
-        StreamBuf compressed;
-        compressed.setbigendian( true );
+        RWStreamBuf compressed;
+        compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
                    << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
 
-        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
-        msg.putRaw( temp.data(), temp.size() );
+        stream.putRaw( temp.data(), temp.size() );
 
-        return !msg.fail();
+        return !stream.fail();
     }
 
-    bool loadFromStream( StreamBase & msg, Maps::Map_Format::MapFormat & map )
+    bool loadFromStream( IStreamBase & stream, Maps::Map_Format::MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        if ( !loadFromStream( msg, static_cast<Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
+        if ( !loadFromStream( stream, static_cast<Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
             map = {};
             return false;
         }
 
-        StreamBuf decompressed;
-        decompressed.setbigendian( true );
+        RWStreamBuf decompressed;
+        decompressed.setBigendian( true );
 
         {
-            std::vector<uint8_t> temp = msg.getRaw();
+            std::vector<uint8_t> temp = stream.getRaw();
             if ( temp.empty() ) {
                 // This is a corrupted file.
                 map = {};
                 return false;
             }
 
-            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            const std::vector<uint8_t> decompressedData = Compression::unzipData( temp.data(), temp.size() );
             if ( decompressedData.empty() ) {
                 // This is a corrupted file.
                 map = {};
@@ -269,134 +269,134 @@ namespace
         convertFromV3ToV4( map );
         convertFromV4ToV5( map );
 
-        return !msg.fail();
+        return !stream.fail();
     }
 }
 
 namespace Maps::Map_Format
 {
-    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object )
+    OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object )
     {
         using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
 
-        return msg << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
+        return stream << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
     }
 
-    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object )
+    IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object )
     {
-        msg >> object.id;
+        stream >> object.id;
 
         using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
         GroupUnderlyingType group;
-        msg >> group;
+        stream >> group;
 
         object.group = static_cast<ObjectGroup>( group );
 
-        return msg >> object.index;
+        return stream >> object.index;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile )
+    OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )
     {
-        return msg << tile.terrainIndex << tile.terrainFlag << tile.objects;
+        return stream << tile.terrainIndex << tile.terrainFlag << tile.objects;
     }
 
-    StreamBase & operator>>( StreamBase & msg, TileInfo & tile )
+    IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile )
     {
-        return msg >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
+        return stream >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo )
+    OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo )
     {
-        return msg << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay << eventInfo.repeatPeriodInDays
-                   << eventInfo.resources;
+        return stream << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay
+                      << eventInfo.repeatPeriodInDays << eventInfo.resources;
     }
 
-    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo )
+    IStreamBase & operator>>( IStreamBase & stream, DailyEvent & eventInfo )
     {
-        return msg >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay >> eventInfo.repeatPeriodInDays
-               >> eventInfo.resources;
+        return stream >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay
+               >> eventInfo.repeatPeriodInDays >> eventInfo.resources;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata )
     {
-        return msg << metadata.metadata;
+        return stream << metadata.metadata;
     }
 
-    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata )
     {
-        return msg >> metadata.metadata;
+        return stream >> metadata.metadata;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const CastleMetadata & metadata )
     {
-        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
-                   << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
+        return stream << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
+                      << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
     }
 
-    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, CastleMetadata & metadata )
     {
-        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
+        return stream >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
                >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const HeroMetadata & metadata )
     {
-        return msg << metadata.customName << metadata.customPortrait << metadata.armyMonsterType << metadata.armyMonsterCount << metadata.artifact
-                   << metadata.artifactMetadata << metadata.availableSpells << metadata.isOnPatrol << metadata.patrolRadius << metadata.secondarySkill
-                   << metadata.secondarySkillLevel << metadata.customLevel << metadata.customExperience << metadata.customAttack << metadata.customDefense
-                   << metadata.customKnowledge << metadata.customSpellPower << metadata.magicPoints << metadata.race;
+        return stream << metadata.customName << metadata.customPortrait << metadata.armyMonsterType << metadata.armyMonsterCount << metadata.artifact
+                      << metadata.artifactMetadata << metadata.availableSpells << metadata.isOnPatrol << metadata.patrolRadius << metadata.secondarySkill
+                      << metadata.secondarySkillLevel << metadata.customLevel << metadata.customExperience << metadata.customAttack << metadata.customDefense
+                      << metadata.customKnowledge << metadata.customSpellPower << metadata.magicPoints << metadata.race;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, HeroMetadata & metadata )
     {
-        return msg >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
+        return stream >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
                >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
                >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefense
                >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints >> metadata.race;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SphinxMetadata & metadata )
     {
-        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+        return stream << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
     }
 
-    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SphinxMetadata & metadata )
     {
-        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+        return stream >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SignMetadata & metadata )
     {
-        return msg << metadata.message;
+        return stream << metadata.message;
     }
 
-    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SignMetadata & metadata )
     {
-        return msg >> metadata.message;
+        return stream >> metadata.message;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata )
     {
-        return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
-                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
+        return stream << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
+                      << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                      << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
     }
 
-    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata )
     {
-        return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
+        return stream >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
                >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata )
     {
-        return msg << metadata.allowedSpells;
+        return stream << metadata.allowedSpells;
     }
 
-    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata )
     {
-        return msg >> metadata.allowedSpells;
+        return stream >> metadata.allowedSpells;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
@@ -406,7 +406,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -433,7 +433,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -460,7 +460,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "wb" ) ) {
             return false;

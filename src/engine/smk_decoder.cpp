@@ -45,7 +45,7 @@ namespace
         }
 
         // Verify that the file is valid. We use C-code on purpose since libsmacker library does the same.
-        const std::unique_ptr<std::FILE, int ( * )( std::FILE * )> file( std::fopen( filePath.c_str(), "rb" ), std::fclose );
+        const std::unique_ptr<std::FILE, int ( * )( std::FILE * )> file( std::fopen( filePath.c_str(), "rb" ), []( std::FILE * f ) { return std::fclose( f ); } );
         if ( !file ) {
             return;
         }
@@ -180,7 +180,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
             ++channelCount;
 
-            StreamBuf wavHeader( audioHeaderSize );
+            RWStreamBuf wavHeader( audioHeaderSize );
             wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
             wavHeader.putLE32( originalSize + 0x24 ); // Total size minus the size of this and previous fields
             wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")

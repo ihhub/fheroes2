@@ -539,7 +539,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         if ( !isHandFighting() && !isHandFighting( *this, enemy ) ) {
             // Hero's Archery skill may increase damage
             if ( GetCommander() ) {
-                dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
+                dmg += ( dmg * GetCommander()->GetSecondarySkillValue( Skill::Secondary::ARCHERY ) / 100 );
             }
 
             const Arena * arena = GetArena();

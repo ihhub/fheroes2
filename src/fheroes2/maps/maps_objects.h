@@ -34,7 +34,8 @@
 #include "position.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class MapObjectSimple : public MapPosition
 {
@@ -70,8 +71,8 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
-    friend StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
 
     uint32_t uid;
     int type;
@@ -172,16 +173,16 @@ struct MapSign : public MapObjectSimple
     std::string message;
 };
 
-StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
-StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
+OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
 
-StreamBase & operator<<( StreamBase & msg, const MapEvent & obj );
-StreamBase & operator>>( StreamBase & msg, MapEvent & obj );
+OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj );
 
-StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj );
-StreamBase & operator>>( StreamBase & msg, MapSphinx & obj );
+OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj );
 
-StreamBase & operator<<( StreamBase & msg, const MapSign & obj );
-StreamBase & operator>>( StreamBase & msg, MapSign & obj );
+OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapSign & obj );
 
 #endif

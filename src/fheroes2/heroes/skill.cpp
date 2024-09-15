@@ -39,6 +39,7 @@
 #include "rand.h"
 #include "serialize.h"
 #include "skill_static.h"
+#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -54,40 +55,40 @@ namespace
 
     int SecondaryGetWeightSkillFromRace( const int race, const int skill )
     {
-        const Skill::stats_t * ptr = GameStatic::GetSkillStats( race );
+        const Skill::FactionProperties * ptr = GameStatic::GetFactionProperties( race );
         if ( ptr == nullptr ) {
             return 0;
         }
 
         switch ( skill ) {
         case Skill::Secondary::PATHFINDING:
-            return ptr->mature_secondary.pathfinding;
+            return ptr->weightsOfSecondarySkills.pathfinding;
         case Skill::Secondary::ARCHERY:
-            return ptr->mature_secondary.archery;
+            return ptr->weightsOfSecondarySkills.archery;
         case Skill::Secondary::LOGISTICS:
-            return ptr->mature_secondary.logistics;
+            return ptr->weightsOfSecondarySkills.logistics;
         case Skill::Secondary::SCOUTING:
-            return ptr->mature_secondary.scouting;
+            return ptr->weightsOfSecondarySkills.scouting;
         case Skill::Secondary::DIPLOMACY:
-            return ptr->mature_secondary.diplomacy;
+            return ptr->weightsOfSecondarySkills.diplomacy;
         case Skill::Secondary::NAVIGATION:
-            return ptr->mature_secondary.navigation;
+            return ptr->weightsOfSecondarySkills.navigation;
         case Skill::Secondary::LEADERSHIP:
-            return ptr->mature_secondary.leadership;
+            return ptr->weightsOfSecondarySkills.leadership;
         case Skill::Secondary::WISDOM:
-            return ptr->mature_secondary.wisdom;
+            return ptr->weightsOfSecondarySkills.wisdom;
         case Skill::Secondary::MYSTICISM:
-            return ptr->mature_secondary.mysticism;
+            return ptr->weightsOfSecondarySkills.mysticism;
         case Skill::Secondary::LUCK:
-            return ptr->mature_secondary.luck;
+            return ptr->weightsOfSecondarySkills.luck;
         case Skill::Secondary::BALLISTICS:
-            return ptr->mature_secondary.ballistics;
+            return ptr->weightsOfSecondarySkills.ballistics;
         case Skill::Secondary::EAGLE_EYE:
-            return ptr->mature_secondary.eagleeye;
+            return ptr->weightsOfSecondarySkills.eagleeye;
         case Skill::Secondary::NECROMANCY:
-            return ptr->mature_secondary.necromancy;
+            return ptr->weightsOfSecondarySkills.necromancy;
         case Skill::Secondary::ESTATES:
-            return ptr->mature_secondary.estates;
+            return ptr->weightsOfSecondarySkills.estates;
         default:
             assert( 0 );
             break;
@@ -116,21 +117,23 @@ namespace
     }
 }
 
-uint32_t Skill::Secondary::GetValues() const
+uint32_t Skill::Secondary::GetValue() const
 {
-    const values_t * val = GameStatic::GetSkillValues( Skill() );
+    const SecondarySkillValuesPerLevel * ptr = GameStatic::GetSecondarySkillValuesPerLevel( Skill() );
+    if ( ptr == nullptr ) {
+        return 0;
+    }
 
-    if ( val )
-        switch ( Level() ) {
-        case Level::BASIC:
-            return val->values.basic;
-        case Level::ADVANCED:
-            return val->values.advanced;
-        case Level::EXPERT:
-            return val->values.expert;
-        default:
-            break;
-        }
+    switch ( Level() ) {
+    case Level::BASIC:
+        return ptr->values.basic;
+    case Level::ADVANCED:
+        return ptr->values.advanced;
+    case Level::EXPERT:
+        return ptr->values.expert;
+    default:
+        break;
+    }
 
     return 0;
 }
@@ -144,47 +147,54 @@ Skill::Primary::Primary()
 
 void Skill::Primary::LoadDefaults( int type, int race )
 {
-    const stats_t * ptr = GameStatic::GetSkillStats( race );
+    const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
+    if ( ptr == nullptr ) {
+        return;
+    }
 
-    if ( ptr )
-        switch ( type ) {
-        case HeroBase::CAPTAIN:
-            attack = ptr->captain_primary.attack;
-            defense = ptr->captain_primary.defense;
-            power = ptr->captain_primary.power;
-            knowledge = ptr->captain_primary.knowledge;
-            break;
+    switch ( type ) {
+    case HeroBase::CAPTAIN:
+        attack = ptr->captainPrimarySkills.attack;
+        defense = ptr->captainPrimarySkills.defense;
+        power = ptr->captainPrimarySkills.power;
+        knowledge = ptr->captainPrimarySkills.knowledge;
+        break;
 
-        case HeroBase::HEROES:
-            attack = ptr->initial_primary.attack;
-            defense = ptr->initial_primary.defense;
-            power = ptr->initial_primary.power;
-            knowledge = ptr->initial_primary.knowledge;
-            break;
+    case HeroBase::HEROES:
+        attack = ptr->heroInitialPrimarySkills.attack;
+        defense = ptr->heroInitialPrimarySkills.defense;
+        power = ptr->heroInitialPrimarySkills.power;
+        knowledge = ptr->heroInitialPrimarySkills.knowledge;
+        break;
 
-        default:
-            break;
-        }
+    default:
+        break;
+    }
 }
 
 int Skill::Primary::GetInitialSpell( int race )
 {
-    const stats_t * ptr = GameStatic::GetSkillStats( race );
-    return ptr ? ptr->initial_spell : 0;
+    const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
+    if ( ptr == nullptr ) {
+        return Spell::NONE;
+    }
+
+    return ptr->initialSpell;
 }
 
 int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
 {
-    if ( const stats_t * ptr = GameStatic::GetSkillStats( race ) ) {
+    const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
+    if ( ptr ) {
         switch ( skill ) {
         case ATTACK:
-            return ptr->initial_primary.attack;
+            return ptr->heroInitialPrimarySkills.attack;
         case DEFENSE:
-            return ptr->initial_primary.defense;
+            return ptr->heroInitialPrimarySkills.defense;
         case POWER:
-            return ptr->initial_primary.power;
+            return ptr->heroInitialPrimarySkills.power;
         case KNOWLEDGE:
-            return ptr->initial_primary.knowledge;
+            return ptr->heroInitialPrimarySkills.knowledge;
         default:
             // Are you sure that you are passing the correct skill type?
             assert( 0 );
@@ -197,25 +207,27 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
 
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
-    Rand::Queue percents( MAXPRIMARYSKILL );
-
-    const stats_t * ptr = GameStatic::GetSkillStats( race );
-    if ( ptr ) {
-        if ( ptr->over_level > level ) {
-            percents.Push( ATTACK, ptr->mature_primary_under.attack );
-            percents.Push( DEFENSE, ptr->mature_primary_under.defense );
-            percents.Push( POWER, ptr->mature_primary_under.power );
-            percents.Push( KNOWLEDGE, ptr->mature_primary_under.knowledge );
-        }
-        else {
-            percents.Push( ATTACK, ptr->mature_primary_over.attack );
-            percents.Push( DEFENSE, ptr->mature_primary_over.defense );
-            percents.Push( POWER, ptr->mature_primary_over.power );
-            percents.Push( KNOWLEDGE, ptr->mature_primary_over.knowledge );
-        }
+    const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
+    if ( ptr == nullptr ) {
+        return UNKNOWN;
     }
 
-    int result = percents.Size() ? percents.GetWithSeed( seed ) : UNKNOWN;
+    Rand::Queue percents( MAXPRIMARYSKILL );
+
+    if ( ptr->boundaryBetweenLowAndHighLevels > level ) {
+        percents.Push( ATTACK, ptr->weightsOfPrimarySkillsForLowLevels.attack );
+        percents.Push( DEFENSE, ptr->weightsOfPrimarySkillsForLowLevels.defense );
+        percents.Push( POWER, ptr->weightsOfPrimarySkillsForLowLevels.power );
+        percents.Push( KNOWLEDGE, ptr->weightsOfPrimarySkillsForLowLevels.knowledge );
+    }
+    else {
+        percents.Push( ATTACK, ptr->weightsOfPrimarySkillsForHighLevels.attack );
+        percents.Push( DEFENSE, ptr->weightsOfPrimarySkillsForHighLevels.defense );
+        percents.Push( POWER, ptr->weightsOfPrimarySkillsForHighLevels.power );
+        percents.Push( KNOWLEDGE, ptr->weightsOfPrimarySkillsForHighLevels.knowledge );
+    }
+
+    const int result = percents.GetWithSeed( seed );
 
     switch ( result ) {
     case ATTACK:
@@ -231,6 +243,7 @@ int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
         ++knowledge;
         break;
     default:
+        assert( 0 );
         break;
     }
 
@@ -384,40 +397,55 @@ bool Skill::Secondary::isValid() const
 
 int Skill::Secondary::RandForWitchsHut()
 {
-    const Skill::secondary_t * sec = GameStatic::GetSkillForWitchsHut();
+    const Skill::SecondarySkillValues * ptr = GameStatic::GetSecondarySkillValuesForWitchsHut();
+    if ( ptr == nullptr ) {
+        return UNKNOWN;
+    }
+
     std::vector<int> v;
+    v.reserve( 14 );
 
-    if ( sec ) {
-        v.reserve( 14 );
-
-        if ( sec->archery )
-            v.push_back( ARCHERY );
-        if ( sec->ballistics )
-            v.push_back( BALLISTICS );
-        if ( sec->diplomacy )
-            v.push_back( DIPLOMACY );
-        if ( sec->eagleeye )
-            v.push_back( EAGLE_EYE );
-        if ( sec->estates )
-            v.push_back( ESTATES );
-        if ( sec->leadership )
-            v.push_back( LEADERSHIP );
-        if ( sec->logistics )
-            v.push_back( LOGISTICS );
-        if ( sec->luck )
-            v.push_back( LUCK );
-        if ( sec->mysticism )
-            v.push_back( MYSTICISM );
-        if ( sec->navigation )
-            v.push_back( NAVIGATION );
-        if ( sec->necromancy )
-            v.push_back( NECROMANCY );
-        if ( sec->pathfinding )
-            v.push_back( PATHFINDING );
-        if ( sec->scouting )
-            v.push_back( SCOUTING );
-        if ( sec->wisdom )
-            v.push_back( WISDOM );
+    if ( ptr->archery ) {
+        v.push_back( ARCHERY );
+    }
+    if ( ptr->ballistics ) {
+        v.push_back( BALLISTICS );
+    }
+    if ( ptr->diplomacy ) {
+        v.push_back( DIPLOMACY );
+    }
+    if ( ptr->eagleeye ) {
+        v.push_back( EAGLE_EYE );
+    }
+    if ( ptr->estates ) {
+        v.push_back( ESTATES );
+    }
+    if ( ptr->leadership ) {
+        v.push_back( LEADERSHIP );
+    }
+    if ( ptr->logistics ) {
+        v.push_back( LOGISTICS );
+    }
+    if ( ptr->luck ) {
+        v.push_back( LUCK );
+    }
+    if ( ptr->mysticism ) {
+        v.push_back( MYSTICISM );
+    }
+    if ( ptr->navigation ) {
+        v.push_back( NAVIGATION );
+    }
+    if ( ptr->necromancy ) {
+        v.push_back( NECROMANCY );
+    }
+    if ( ptr->pathfinding ) {
+        v.push_back( PATHFINDING );
+    }
+    if ( ptr->scouting ) {
+        v.push_back( SCOUTING );
+    }
+    if ( ptr->wisdom ) {
+        v.push_back( WISDOM );
     }
 
     return v.empty() ? UNKNOWN : Rand::Get( v );
@@ -499,7 +527,7 @@ std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
 
 std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 {
-    uint32_t count = GetValues();
+    uint32_t count = GetValue();
     std::string name = GetName();
     std::string str = "unknown";
 
@@ -616,7 +644,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case NECROMANCY: {
-        count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+        count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondarySkillValue( Skill::Secondary::NECROMANCY );
         name = GetNameWithBonus( hero );
         str = _( "%{skill} allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." );
         break;
@@ -646,54 +674,77 @@ Skill::SecSkills::SecSkills( int race )
 {
     reserve( HEROESMAXSKILL );
 
-    if ( race & Race::ALL ) {
-        const stats_t * ptr = GameStatic::GetSkillStats( race );
+    if ( !( race & Race::ALL ) ) {
+        return;
+    }
 
-        if ( ptr ) {
-            if ( ptr->initial_secondary.archery )
-                AddSkill( Secondary( Secondary::ARCHERY, ptr->initial_secondary.archery ) );
-            if ( ptr->initial_secondary.diplomacy )
-                AddSkill( Secondary( Secondary::DIPLOMACY, ptr->initial_secondary.diplomacy ) );
-            if ( ptr->initial_secondary.eagleeye )
-                AddSkill( Secondary( Secondary::EAGLE_EYE, ptr->initial_secondary.eagleeye ) );
-            if ( ptr->initial_secondary.estates )
-                AddSkill( Secondary( Secondary::ESTATES, ptr->initial_secondary.estates ) );
-            if ( ptr->initial_secondary.logistics )
-                AddSkill( Secondary( Secondary::LOGISTICS, ptr->initial_secondary.logistics ) );
-            if ( ptr->initial_secondary.luck )
-                AddSkill( Secondary( Secondary::LUCK, ptr->initial_secondary.luck ) );
-            if ( ptr->initial_secondary.mysticism )
-                AddSkill( Secondary( Secondary::MYSTICISM, ptr->initial_secondary.mysticism ) );
-            if ( ptr->initial_secondary.pathfinding )
-                AddSkill( Secondary( Secondary::PATHFINDING, ptr->initial_secondary.pathfinding ) );
-            if ( ptr->initial_secondary.leadership )
-                AddSkill( Secondary( Secondary::LEADERSHIP, ptr->initial_secondary.leadership ) );
-            if ( ptr->initial_secondary.ballistics )
-                AddSkill( Secondary( Secondary::BALLISTICS, ptr->initial_secondary.ballistics ) );
-            if ( ptr->initial_secondary.navigation )
-                AddSkill( Secondary( Secondary::NAVIGATION, ptr->initial_secondary.navigation ) );
-            if ( ptr->initial_secondary.scouting )
-                AddSkill( Secondary( Secondary::SCOUTING, ptr->initial_secondary.scouting ) );
-            if ( ptr->initial_secondary.necromancy )
-                AddSkill( Secondary( Secondary::NECROMANCY, ptr->initial_secondary.necromancy ) );
-            if ( ptr->initial_secondary.wisdom )
-                AddSkill( Secondary( Secondary::WISDOM, ptr->initial_secondary.wisdom ) );
-        }
+    const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
+    if ( ptr == nullptr ) {
+        return;
+    }
+
+    if ( ptr->heroInitialSecondarySkills.archery ) {
+        AddSkill( Secondary( Secondary::ARCHERY, ptr->heroInitialSecondarySkills.archery ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.diplomacy ) {
+        AddSkill( Secondary( Secondary::DIPLOMACY, ptr->heroInitialSecondarySkills.diplomacy ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.eagleeye ) {
+        AddSkill( Secondary( Secondary::EAGLE_EYE, ptr->heroInitialSecondarySkills.eagleeye ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.estates ) {
+        AddSkill( Secondary( Secondary::ESTATES, ptr->heroInitialSecondarySkills.estates ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.logistics ) {
+        AddSkill( Secondary( Secondary::LOGISTICS, ptr->heroInitialSecondarySkills.logistics ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.luck ) {
+        AddSkill( Secondary( Secondary::LUCK, ptr->heroInitialSecondarySkills.luck ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.mysticism ) {
+        AddSkill( Secondary( Secondary::MYSTICISM, ptr->heroInitialSecondarySkills.mysticism ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.pathfinding ) {
+        AddSkill( Secondary( Secondary::PATHFINDING, ptr->heroInitialSecondarySkills.pathfinding ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.leadership ) {
+        AddSkill( Secondary( Secondary::LEADERSHIP, ptr->heroInitialSecondarySkills.leadership ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.ballistics ) {
+        AddSkill( Secondary( Secondary::BALLISTICS, ptr->heroInitialSecondarySkills.ballistics ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.navigation ) {
+        AddSkill( Secondary( Secondary::NAVIGATION, ptr->heroInitialSecondarySkills.navigation ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.scouting ) {
+        AddSkill( Secondary( Secondary::SCOUTING, ptr->heroInitialSecondarySkills.scouting ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.necromancy ) {
+        AddSkill( Secondary( Secondary::NECROMANCY, ptr->heroInitialSecondarySkills.necromancy ) );
+    }
+    if ( ptr->heroInitialSecondarySkills.wisdom ) {
+        AddSkill( Secondary( Secondary::WISDOM, ptr->heroInitialSecondarySkills.wisdom ) );
     }
 }
 
 int Skill::SecSkills::GetLevel( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    if ( iter == end() ) {
+        return Level::NONE;
+    }
 
-    return it == end() ? Level::NONE : ( *it ).Level();
+    return iter->Level();
 }
 
-uint32_t Skill::SecSkills::GetValues( int skill ) const
+uint32_t Skill::SecSkills::GetValue( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    const const_iterator iter = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
+    if ( iter == end() ) {
+        return 0;
+    }
 
-    return it == end() ? 0 : ( *it ).GetValues();
+    return iter->GetValue();
 }
 
 int Skill::SecSkills::Count() const
@@ -835,40 +886,30 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-void StringAppendModifiers( std::string & str, int value )
-{
-    if ( value < 0 )
-        str.append( " " ); // '-' present
-    else if ( value > 0 )
-        str.append( " +" );
-
-    str.append( std::to_string( value ) );
-}
-
 int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    if ( skill.GetValues() && strs ) {
+    if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValues() );
+        fheroes2::appendModifierToString( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
-    return skill.GetValues();
+    return skill.GetValue();
 }
 
 int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    if ( skill.GetValues() && strs ) {
+    if ( skill.GetValue() && strs ) {
         strs->append( skill.GetName() );
-        StringAppendModifiers( *strs, skill.GetValues() );
+        fheroes2::appendModifierToString( *strs, skill.GetValue() );
         strs->append( "\n" );
     }
 
-    return skill.GetValues();
+    return skill.GetValue();
 }
 
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
@@ -881,7 +922,7 @@ uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
 
 uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
 {
-    uint32_t percent = hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+    uint32_t percent = hero.GetSecondarySkillValue( Skill::Secondary::NECROMANCY );
     percent += 10 * GetNecromancyBonus( hero );
     // cap at 100% bonus
     return std::min( percent, 100u );
@@ -901,33 +942,30 @@ uint32_t Skill::GetDiplomacySurrenderCostDiscount( const int level )
     }
 }
 
-StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
+OStreamBase & Skill::operator<<( OStreamBase & stream, const Primary & skill )
 {
-    return msg << skill.attack << skill.defense << skill.knowledge << skill.power;
+    return stream << skill.attack << skill.defense << skill.knowledge << skill.power;
 }
 
-StreamBase & Skill::operator>>( StreamBase & msg, Primary & skill )
+IStreamBase & Skill::operator>>( IStreamBase & stream, Primary & skill )
 {
-    return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
+    return stream >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
 }
 
-StreamBase & Skill::operator>>( StreamBase & sb, Secondary & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & Skill::operator<<( StreamBase & sb, const SecSkills & ss )
+OStreamBase & Skill::operator<<( OStreamBase & stream, const SecSkills & ss )
 {
     const std::vector<Secondary> & v = ss;
-    return sb << v;
+    return stream << v;
 }
 
-StreamBase & Skill::operator>>( StreamBase & sb, SecSkills & ss )
+IStreamBase & Skill::operator>>( IStreamBase & stream, SecSkills & ss )
 {
     std::vector<Secondary> & v = ss;
-    sb >> v;
+    stream >> v;
 
-    if ( v.size() > HEROESMAXSKILL )
+    if ( v.size() > HEROESMAXSKILL ) {
         v.resize( HEROESMAXSKILL );
-    return sb;
+    }
+
+    return stream;
 }

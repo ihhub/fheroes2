@@ -586,16 +586,16 @@ bool HeroBase::CanLearnSpell( const Spell & spell ) const
              || ( 3 == spell.Level() && Skill::Level::BASIC <= wisdom ) || 3 > spell.Level() );
 }
 
-StreamBase & operator<<( StreamBase & msg, const HeroBase & hero )
+OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero )
 {
-    return msg << static_cast<const Skill::Primary &>( hero ) << static_cast<const MapPosition &>( hero ) << hero.modes << hero.magic_point << hero.move_point
-               << hero.spell_book << hero.bag_artifacts;
+    return stream << static_cast<const Skill::Primary &>( hero ) << static_cast<const MapPosition &>( hero ) << hero.modes << hero.magic_point << hero.move_point
+                  << hero.spell_book << hero.bag_artifacts;
 }
 
-StreamBase & operator>>( StreamBase & msg, HeroBase & hero )
+IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero )
 {
-    msg >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
+    stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
         >> hero.bag_artifacts;
 
-    return msg;
+    return stream;
 }

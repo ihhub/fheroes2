@@ -342,58 +342,58 @@ void Puzzle::ShowMapsDialog() const
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
+OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl )
 {
-    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
+    stream << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
 
     // orders
-    msg << static_cast<uint8_t>( pzl.zone1_order.size() );
+    stream << static_cast<uint8_t>( pzl.zone1_order.size() );
     for ( const uint8_t tile : pzl.zone1_order )
-        msg << tile;
+        stream << tile;
 
-    msg << static_cast<uint8_t>( pzl.zone2_order.size() );
+    stream << static_cast<uint8_t>( pzl.zone2_order.size() );
     for ( const uint8_t tile : pzl.zone2_order )
-        msg << tile;
+        stream << tile;
 
-    msg << static_cast<uint8_t>( pzl.zone3_order.size() );
+    stream << static_cast<uint8_t>( pzl.zone3_order.size() );
     for ( const uint8_t tile : pzl.zone3_order )
-        msg << tile;
+        stream << tile;
 
-    msg << static_cast<uint8_t>( pzl.zone4_order.size() );
+    stream << static_cast<uint8_t>( pzl.zone4_order.size() );
     for ( const uint8_t tile : pzl.zone4_order )
-        msg << tile;
+        stream << tile;
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Puzzle & pzl )
+IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl )
 {
     std::string str;
 
-    msg >> str;
+    stream >> str;
     pzl = str.c_str();
 
     uint8_t size;
 
-    msg >> size;
+    stream >> size;
     pzl.zone1_order.resize( size );
     for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone1_order[ii];
+        stream >> pzl.zone1_order[ii];
 
-    msg >> size;
+    stream >> size;
     pzl.zone2_order.resize( size );
     for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone2_order[ii];
+        stream >> pzl.zone2_order[ii];
 
-    msg >> size;
+    stream >> size;
     pzl.zone3_order.resize( size );
     for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone3_order[ii];
+        stream >> pzl.zone3_order[ii];
 
-    msg >> size;
+    stream >> size;
     pzl.zone4_order.resize( size );
     for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone4_order[ii];
+        stream >> pzl.zone4_order[ii];
 
-    return msg;
+    return stream;
 }

@@ -233,7 +233,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     // - unused 29 bytes
     //    Always zeros.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {
@@ -2134,7 +2134,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
         }
     }
 
@@ -2156,7 +2156,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_TAVERN, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2167,7 +2167,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2184,7 +2184,7 @@ int Castle::GetLuckModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( Castle::GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2499,23 +2499,23 @@ void AllCastles::Scout( int colors ) const
             ( *it )->Scout();
 }
 
-StreamBase & operator<<( StreamBase & msg, const Castle & castle )
+OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
 {
     const ColorBase & color = castle;
 
-    msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
-        << color << castle.name << castle.mageguild << static_cast<uint32_t>( castle.dwelling.size() );
+    stream << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
+           << color << castle.name << castle.mageguild << static_cast<uint32_t>( castle.dwelling.size() );
 
     for ( const uint32_t dwelling : castle.dwelling ) {
-        msg << dwelling;
+        stream << dwelling;
     }
 
-    return msg << castle.army;
+    return stream << castle.army;
 }
 
-StreamBase & operator>>( StreamBase & msg, Castle & castle )
+IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 {
-    msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings;
+    stream >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1101_RELEASE ) {
@@ -2524,14 +2524,14 @@ StreamBase & operator>>( StreamBase & msg, Castle & castle )
         }
     }
     else {
-        msg >> castle._disabledBuildings;
+        stream >> castle._disabledBuildings;
     }
 
     ColorBase & color = castle;
-    msg >> castle.captain >> color >> castle.name >> castle.mageguild;
+    stream >> castle.captain >> color >> castle.name >> castle.mageguild;
 
     uint32_t dwellingcount;
-    msg >> dwellingcount;
+    stream >> dwellingcount;
 
     if ( dwellingcount != castle.dwelling.size() ) {
         // Is it a corrupted save?
@@ -2541,67 +2541,67 @@ StreamBase & operator>>( StreamBase & msg, Castle & castle )
     }
     else {
         for ( uint32_t & dwelling : castle.dwelling ) {
-            msg >> dwelling;
+            stream >> dwelling;
         }
     }
 
-    msg >> castle.army;
+    stream >> castle.army;
     castle.army.SetCommander( &castle.captain );
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles )
 {
-    msg << static_cast<uint32_t>( castles.size() );
+    stream << static_cast<uint32_t>( castles.size() );
 
     for ( auto it = castles.begin(); it != castles.end(); ++it )
-        msg << ( *it ? ( *it )->GetIndex() : static_cast<int32_t>( -1 ) );
+        stream << ( *it ? ( *it )->GetIndex() : static_cast<int32_t>( -1 ) );
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles )
 {
     int32_t index;
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     castles.resize( size, nullptr );
 
     for ( auto it = castles.begin(); it != castles.end(); ++it ) {
-        msg >> index;
+        stream >> index;
         *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
         assert( *it != nullptr );
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles )
 {
-    msg << static_cast<uint32_t>( castles.Size() );
+    stream << static_cast<uint32_t>( castles.Size() );
 
     for ( const Castle * castle : castles )
-        msg << *castle;
+        stream << *castle;
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles )
 {
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     castles.Clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
         Castle * castle = new Castle();
-        msg >> *castle;
+        stream >> *castle;
         castles.AddCastle( castle );
     }
 
-    return msg;
+    return stream;
 }
 
 std::string Castle::GetStringBuilding( uint32_t build ) const

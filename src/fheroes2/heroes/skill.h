@@ -29,11 +29,11 @@
 #include <utility>
 #include <vector>
 
-void StringAppendModifiers( std::string &, int );
+class IStreamBase;
+class OStreamBase;
 
 class Heroes;
 class HeroBase;
-class StreamBase;
 
 namespace Skill
 {
@@ -111,7 +111,7 @@ namespace Skill
         std::string GetName() const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        uint32_t GetValues() const;
+        uint32_t GetValue() const;
 
         // Returns the sprite index from SECSKILL
         int GetIndexSprite1() const;
@@ -121,8 +121,6 @@ namespace Skill
         static int RandForWitchsHut();
         static const char * String( int );
     };
-
-    StreamBase & operator>>( StreamBase &, Secondary & );
 
     class SecSkills final : protected std::vector<Secondary>
     {
@@ -139,7 +137,7 @@ namespace Skill
         int Count() const;
         int GetLevel( int skill ) const;
         int GetTotalLevel() const;
-        uint32_t GetValues( int skill ) const;
+        uint32_t GetValue( int skill ) const;
 
         Secondary * FindSkill( int );
 
@@ -153,13 +151,10 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    protected:
-        friend StreamBase & operator<<( StreamBase &, const SecSkills & );
-        friend StreamBase & operator>>( StreamBase &, SecSkills & );
+    private:
+        friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+        friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
-
-    StreamBase & operator<<( StreamBase &, const SecSkills & );
-    StreamBase & operator>>( StreamBase &, SecSkills & );
 
     class Primary
     {
@@ -200,8 +195,8 @@ namespace Skill
     protected:
         void LoadDefaults( int type, int race );
 
-        friend StreamBase & operator<<( StreamBase &, const Primary & );
-        friend StreamBase & operator>>( StreamBase &, Primary & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+        friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
         int attack;
         int defense;
@@ -209,7 +204,10 @@ namespace Skill
         int knowledge;
     };
 
-    StreamBase & operator<<( StreamBase &, const Primary & );
-    StreamBase & operator>>( StreamBase &, Primary & );
+    OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+    IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+    IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
 #endif

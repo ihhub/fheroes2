@@ -693,7 +693,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         // estates skill bonus
         for ( const Heroes * hero : heroes ) {
             assert( hero != nullptr );
-            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
+            totalIncome.gold += hero->GetSecondarySkillValue( Skill::Secondary::ESTATES );
         }
     }
 
@@ -998,45 +998,45 @@ Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
     return { 7500, 20, 5, 20, 5, 5, 5 };
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
-    return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+    return stream << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
+IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+    stream >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1100_RELEASE ) {
         int dummy;
 
-        msg >> dummy;
+        stream >> dummy;
     }
 
-    return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+    return stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj )
 {
-    msg << Kingdoms::_size;
+    stream << Kingdoms::_size;
     for ( const Kingdom & kingdom : obj.kingdoms )
-        msg << kingdom;
+        stream << kingdom;
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
+IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj )
 {
     uint32_t kingdomscount = 0;
-    msg >> kingdomscount;
+    stream >> kingdomscount;
 
     if ( kingdomscount <= Kingdoms::_size ) {
         for ( uint32_t i = 0; i < kingdomscount; ++i )
-            msg >> obj.kingdoms[i];
+            stream >> obj.kingdoms[i];
     }
 
-    return msg;
+    return stream;
 }

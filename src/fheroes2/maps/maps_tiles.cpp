@@ -1822,74 +1822,74 @@ bool Maps::Tiles::isDetachedObject() const
     return false;
 }
 
-StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
+OStreamBase & Maps::operator<<( OStreamBase & stream, const TilesAddon & ta )
 {
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
 
-    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
+    return stream << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
 }
 
-StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
+IStreamBase & Maps::operator>>( IStreamBase & stream, TilesAddon & ta )
 {
-    msg >> ta._layerType;
+    stream >> ta._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
         ta._layerType = ( ta._layerType & 0x03 );
     }
 
-    msg >> ta._uid;
+    stream >> ta._uid;
 
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
     ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-    msg >> objectIcnType;
+    stream >> objectIcnType;
 
     ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
         bool temp;
-        msg >> temp >> temp;
+        stream >> temp >> temp;
     }
 
-    msg >> ta._imageIndex;
+    stream >> ta._imageIndex;
 
-    return msg;
+    return stream;
 }
 
-StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
+OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
 {
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainAddon._objectIcnType )>;
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
     // TODO: use operator<<() for _mainAddon.
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainAddon._uid
-               << static_cast<ObjectIcnTypeUnderlyingType>( tile._mainAddon._objectIcnType ) << tile._mainAddon._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
-               << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._mainAddon._layerType << tile._boatOwnerColor;
+    return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainAddon._uid
+                  << static_cast<ObjectIcnTypeUnderlyingType>( tile._mainAddon._objectIcnType ) << tile._mainAddon._imageIndex
+                  << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
+                  << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._mainAddon._layerType << tile._boatOwnerColor;
 }
 
-StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
+IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 {
-    msg >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainAddon._uid;
+    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainAddon._uid;
 
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainAddon._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
     ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-    msg >> objectIcnType;
+    stream >> objectIcnType;
 
     tile._mainAddon._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
         bool temp;
-        msg >> temp >> temp;
+        stream >> temp >> temp;
     }
 
-    msg >> tile._mainAddon._imageIndex;
+    stream >> tile._mainAddon._imageIndex;
 
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
     static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint16_t>, "Type of _mainObjectType has been changed, check the logic below" );
@@ -1897,17 +1897,17 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         uint8_t mainObjectType = static_cast<uint8_t>( MP2::OBJ_NONE );
-        msg >> mainObjectType;
+        stream >> mainObjectType;
 
         tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
     }
     else {
         MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
-        msg >> mainObjectType;
+        stream >> mainObjectType;
 
         tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
     }
 
-    return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
+    return stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
            >> tile._mainAddon._layerType >> tile._boatOwnerColor;
 }
