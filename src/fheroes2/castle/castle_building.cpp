@@ -223,14 +223,14 @@ namespace
         }
 
         // Building animation sprite.
-        if ( const uint32_t index2 = ICN::AnimationFrame( icn, index, frame ) ) {
+        if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, index, frame ) ) {
             fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
         }
 
         if ( knightCastleCase && building == BUILD_RIGHTTURRET ) {
             // Draw Castle's flags after the Turret.
             const int castleIcn = Castle::GetICNBuilding( BUILD_CASTLE, race );
-            const uint32_t flagAnimFrame = ICN::AnimationFrame( castleIcn, index, frame );
+            const uint32_t flagAnimFrame = ICN::getAnimatedIcnIndex( castleIcn, index, frame );
             if ( flagAnimFrame > 0 ) {
                 fheroes2::drawCastleDialogBuilding( castleIcn, flagAnimFrame, castle, dst_pt, max, alpha );
             }
@@ -254,12 +254,12 @@ namespace
 
                 fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
-                if ( const uint32_t index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
+                if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn2, 0, frame ) ) {
                     fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
                 }
             }
             else {
-                if ( const uint32_t index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
+                if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, 0, frame ) ) {
                     fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
                 }
             }
@@ -269,7 +269,7 @@ namespace
 
             fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
-            if ( const uint32_t index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
+            if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn2, 0, frame ) ) {
                 fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
             }
         }

@@ -90,7 +90,7 @@ namespace
             , _finished( false )
             , _loop( loop )
         {
-            _frameId = ICN::AnimationFrame( _icnId, 1, _counter );
+            _frameId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
         }
 
         uint32_t frameId()
@@ -99,11 +99,11 @@ namespace
                 return _frameId;
 
             ++_counter;
-            uint32_t nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+            uint32_t nextId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
             if ( nextId < _frameId ) {
                 if ( _loop ) {
                     _counter = 0;
-                    nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+                    nextId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
                     std::swap( nextId, _frameId );
                     return nextId;
                 }

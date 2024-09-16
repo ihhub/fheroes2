@@ -188,7 +188,7 @@ namespace
             fheroes2::Display & display = fheroes2::Display::instance();
             const int index = fheroes2::getIndexBuildingSprite( _getBuildindTypeForRender() );
 
-            const int buildingIcnId = ICN::Get4Building( _race );
+            const int buildingIcnId = ICN::getBuildingIcnId( _race );
             const fheroes2::Sprite & buildingImage = ( buildingIcnId == ICN::UNKNOWN )
                                                          ? fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 )
                                                          : fheroes2::AGG::GetICN( buildingIcnId, index );
