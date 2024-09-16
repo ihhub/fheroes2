@@ -1314,7 +1314,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const uint32_t uid = tile.GetObjectUID();
+    const uint32_t uid = tile.getMainObjectPart()._uid;
     int wide = 0;
 
     switch ( objectType ) {
@@ -1333,7 +1333,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 
     if ( tile.GetObject( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
     }
 }
@@ -2037,7 +2037,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
     if ( isValidId( id ) )
         switch ( type ) {
         case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            return fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
@@ -2047,7 +2047,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
                 return iter->second;
             }
 
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 

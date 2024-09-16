@@ -62,7 +62,7 @@ namespace
 
     void printUsage( char ** argv )
     {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
                   << "Syntax: " << baseName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl

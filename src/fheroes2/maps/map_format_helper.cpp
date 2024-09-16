@@ -224,12 +224,12 @@ namespace Maps
         std::set<std::pair<uint32_t, uint8_t>> roadParts;
         std::set<std::pair<uint32_t, uint8_t>> streamParts;
 
-        const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart()._objectIcnType;
         if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-            roadParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
         }
         else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            streamParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
         }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {

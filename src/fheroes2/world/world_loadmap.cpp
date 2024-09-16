@@ -446,7 +446,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         for ( const int32_t tileId : vec_object ) {
             const Maps::Tiles & tile = vec_tiles[tileId];
-            if ( ( tile.getLayerType() & 0x3 ) != Maps::OBJECT_LAYER ) {
+            if ( ( tile.getMainObjectPart()._layerType & 0x3 ) != Maps::OBJECT_LAYER ) {
                 continue;
             }
 
@@ -561,7 +561,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart()._imageIndex );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
@@ -1151,7 +1151,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
         ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
 
         // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->GetObjectUID() );
+        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->getMainObjectPart()._uid );
     }
 
     setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
@@ -1257,8 +1257,8 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
 
     case MP2::OBJ_HERO: {
         // remove map editor sprite
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
-            tile.removeObjectPartsByUID( tile.GetObjectUID() );
+        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_MINIHERO ) {
+            tile.removeObjectPartsByUID( tile.getMainObjectPart()._uid );
         }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );

@@ -40,7 +40,7 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " converts the specified XMI file(s) to MIDI format." << std::endl
                   << "Syntax: " << baseName << " dst_dir input_file.xmi ..." << std::endl;
