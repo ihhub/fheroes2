@@ -119,7 +119,7 @@ namespace
 
         area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
+        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
         if ( animationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
@@ -153,7 +153,7 @@ namespace
         // Render possible animation image.
         // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
         const uint32_t mainObjectAnimationIndex
-            = ICN::AnimationFrame( mainObjectIcn, tile.getMainObjectPart()._imageIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
+            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart()._imageIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
         if ( mainObjectAnimationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 

@@ -117,7 +117,7 @@ namespace Battle
     class OpponentSprite
     {
     public:
-        OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect );
+        OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
 
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
@@ -141,7 +141,7 @@ namespace Battle
             return _currentAnim.isLastFrame();
         }
 
-        const HeroBase * GetHero() const
+        HeroBase * GetHero() const
         {
             return _heroBase;
         }
@@ -162,7 +162,7 @@ namespace Battle
         };
 
     private:
-        const HeroBase * _heroBase;
+        HeroBase * _heroBase;
         AnimationSequence _currentAnim;
         int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };

@@ -1123,15 +1123,15 @@ namespace ICN
         LASTICN
     };
 
-    const char * GetString( int );
-    uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
-    int PORTxxxx( int heroId );
+    const char * getIcnFileName( const int icnId );
+    uint32_t getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, const uint32_t currentFrameNumber, const bool quantity = false );
+    int getHeroPortraitIcnId( const int heroId );
 
-    int Get4Captain( int race );
-    int Get4Building( int race );
-    int Get4Castle( int race );
+    int getCaptainIcnId( const int race );
+    int getBuildingIcnId( const int race );
+    int getCastleIcnId( const int race );
 
-    int GetFlagIcnId( int color );
+    int getFlagIcnId( const int color );
 }
 
 #endif

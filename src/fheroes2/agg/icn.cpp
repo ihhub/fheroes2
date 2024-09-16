@@ -221,40 +221,38 @@ namespace ICN
               { ZOMBIE2, "ZOMBIE2.ICN" },   { ZOMBIE, "ZOMBIE.ICN" } } };
 }
 
-const char * ICN::GetString( int icn )
+const char * ICN::getIcnFileName( const int icnId )
 {
-    return UNKNOWN <= icn && icn < LAST_VALID_FILE_ICN ? icnMap[icn].string : "CUSTOM";
+    return UNKNOWN <= icnId && icnId < LAST_VALID_FILE_ICN ? icnMap[icnId].string : "CUSTOM";
 }
 
-uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity )
+uint32_t ICN::getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, const uint32_t currentFrameNumber, const bool quantity /* = false */ )
 {
-    switch ( icn ) {
+    switch ( icnId ) {
     case TWNBBOAT:
     case TWNKBOAT:
     case TWNNBOAT:
     case TWNSBOAT:
     case TWNWBOAT:
     case TWNZBOAT:
-        return 1 + ticket % 9;
+        return 1 + currentFrameNumber % 9;
     case CMBTCAPB:
     case CMBTCAPK:
     case CMBTCAPN:
     case CMBTCAPS:
     case CMBTCAPW:
     case CMBTCAPZ:
-        return 1 + ticket % 10;
+        return 1 + currentFrameNumber % 10;
     case CMBTHROB:
-        return 1 + ticket % 18;
+        return 1 + currentFrameNumber % 18;
     case CMBTHROK:
-        return 1 + ticket % 19;
     case CMBTHRON:
-        return 1 + ticket % 19;
+        return 1 + currentFrameNumber % 19;
     case CMBTHROS:
-        return 1 + ticket % 16;
     case CMBTHROW:
-        return 1 + ticket % 16;
+        return 1 + currentFrameNumber % 16;
     case CMBTHROZ:
-        return 1 + ticket % 18;
+        return 1 + currentFrameNumber % 18;
     case HEROFL00:
     case HEROFL01:
     case HEROFL02:
@@ -262,7 +260,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     case HEROFL04:
     case HEROFL05:
     case HEROFL06:
-        return ticket % 5;
+        return currentFrameNumber % 5;
     case TWNBDOCK:
     case TWNKDOCK:
     case TWNNDOCK:
@@ -309,7 +307,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     case TWNZDW_2:
     case TWNZTHIE:
     case TWNZUP_2:
-        return 1 + ticket % 5;
+        return 1 + currentFrameNumber % 5;
     case TWNBCSTL:
     case TWNKDW_2:
     case TWNKUP_2:
@@ -318,45 +316,45 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     case TWNWDW_0:
     case TWNWWEL2:
     case TWNZTVRN:
-        return 1 + ticket % 6;
+        return 1 + currentFrameNumber % 6;
     case TWNKDW_4:
     case TWNKUP_4:
-        return 1 + ticket % 7;
+        return 1 + currentFrameNumber % 7;
     case TAVWIN:
-        return 2 + ticket % 20;
+        return 2 + currentFrameNumber % 20;
     case CMBTLOS1:
-        return 1 + ticket % 30;
+        return 1 + currentFrameNumber % 30;
     case CMBTLOS2:
-        return 1 + ticket % 29;
+        return 1 + currentFrameNumber % 29;
     case CMBTLOS3:
-        return 1 + ticket % 22;
+        return 1 + currentFrameNumber % 22;
     case CMBTFLE1:
-        return 1 + ticket % 43;
+        return 1 + currentFrameNumber % 43;
     case CMBTFLE2:
-        return 1 + ticket % 26;
+        return 1 + currentFrameNumber % 26;
     case CMBTFLE3:
-        return 1 + ticket % 25;
+        return 1 + currentFrameNumber % 25;
     case CMBTSURR:
-        return 1 + ticket % 20;
     case WINCMBT:
-        return 1 + ticket % 20;
+        return 1 + currentFrameNumber % 20;
     case MINIMON:
-        return start + 1 + ticket % 6;
+        return startIndex + 1 + currentFrameNumber % 6;
     case TWNNMAGE:
-        return start + 1 + ticket % 5;
+        return startIndex + 1 + currentFrameNumber % 5;
     case TWNBMAGE:
-        return 4 == start ? start + 1 + ticket % 8 : 0;
+        return 4 == startIndex ? startIndex + 1 + currentFrameNumber % 8 : 0;
     case SHNGANIM:
-        return 1 + ticket % 39;
+        return 1 + currentFrameNumber % 39;
     case BTNSHNGL:
-        return start + ticket % 4;
+        return startIndex + currentFrameNumber % 4;
     case OBJNHAUN:
-        return ticket % 15;
+        return currentFrameNumber % 15;
     case OBJNWATR:
-        switch ( start ) {
+        switch ( startIndex ) {
         // bottle
         case 0x00:
-            return start + ( ticket % 11 ) + 1;
+            // 'startIndex' is equal to 0 here so it is not used in the expression.
+            return ( currentFrameNumber % 11 ) + 1;
         // shadow
         case 0x0C:
         // chest
@@ -365,11 +363,11 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x26:
         // flotsam
         case 0x2D:
-        // unkn
+        // Magellan's Maps building shadow.
         case 0x37:
-        // boat
+        // Magellan's Maps building boat.
         case 0x3E:
-        // waves
+        // Magellan's Maps building waves.
         case 0x45:
         // seaweed
         case 0x4C:
@@ -388,13 +386,13 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xE9:
         case 0xF1:
         case 0xF8:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         // seagull on stones
         case 0x76:
         case 0x86:
         case 0x96:
         case 0xA6:
-            return start + ( ticket % 15 ) + 1;
+            return startIndex + ( currentFrameNumber % 15 ) + 1;
         // whirlpool
         case 0xCA:
         case 0xCE:
@@ -402,21 +400,21 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xD6:
         case 0xDA:
         case 0xDE:
-            return start + ( ticket % 3 ) + 1;
+            return startIndex + ( currentFrameNumber % 3 ) + 1;
         default:
             return 0;
         }
     case OBJNWAT2:
-        switch ( start ) {
+        switch ( startIndex ) {
         // sail broken ship (left)
         case 0x03:
         case 0x0C:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         default:
             return 0;
         }
     case OBJNCRCK:
-        switch ( start ) {
+        switch ( startIndex ) {
         // pool of oil
         case 0x50:
         case 0x5B:
@@ -431,12 +429,12 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xBE:
         // shadow smoke
         case 0xCA:
-            return start + ( ticket % 10 ) + 1;
+            return startIndex + ( currentFrameNumber % 10 ) + 1;
         default:
             return 0;
         }
     case OBJNDIRT:
-        switch ( start ) {
+        switch ( startIndex ) {
         // mill
         case 0x99:
         case 0x9D:
@@ -448,21 +446,21 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xB5:
         case 0xB9:
         case 0xBD:
-            return start + ( ticket % 3 ) + 1;
+            return startIndex + ( currentFrameNumber % 3 ) + 1;
         default:
             return 0;
         }
     case OBJNDSRT:
-        switch ( start ) {
+        switch ( startIndex ) {
         // campfire
         case 0x36:
         case 0x3D:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         default:
             return 0;
         }
     case OBJNGRA2:
-        switch ( start ) {
+        switch ( startIndex ) {
         // mill
         case 0x17:
         case 0x1B:
@@ -474,7 +472,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x33:
         case 0x37:
         case 0x3B:
-            return start + ( ticket % 3 ) + 1;
+            return startIndex + ( currentFrameNumber % 3 ) + 1;
         // smoke from chimney
         case 0x3F:
         case 0x46:
@@ -488,12 +486,12 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x6B:
         // Peasant Hut
         case 0x72:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         default:
             return 0;
         }
     case OBJNLAV2:
-        switch ( start ) {
+        switch ( startIndex ) {
         // middle volcano
         case 0x00:
         // shadow
@@ -501,7 +499,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x0E:
         // lava
         case 0x15:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         // small volcano
         // shadow
         case 0x21:
@@ -509,13 +507,13 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         // lava
         case 0x37:
         case 0x43:
-            return start + ( ticket % 10 ) + 1;
+            return startIndex + ( currentFrameNumber % 10 ) + 1;
         default:
             return 0;
         }
     case OBJNLAV3:
         // big volcano
-        switch ( start ) {
+        switch ( startIndex ) {
         // smoke
         case 0x00:
         case 0x0F:
@@ -534,25 +532,25 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xC3:
         case 0xD2:
         case 0xE1:
-            return start + ( ticket % 14 ) + 1;
+            return startIndex + ( currentFrameNumber % 14 ) + 1;
         default:
             return 0;
         }
     case OBJNLAVA:
-        switch ( start ) {
+        switch ( startIndex ) {
         // shadow of lava
         case 0x4E:
         case 0x58:
         case 0x62:
-            return start + ( ticket % 9 ) + 1;
+            return startIndex + ( currentFrameNumber % 9 ) + 1;
         default:
             return 0;
         }
     case OBJNMUL2:
-        switch ( start ) {
+        switch ( startIndex ) {
         // lighthouse
         case 0x3D:
-            return start + ( ticket % 9 ) + 1;
+            return startIndex + ( currentFrameNumber % 9 ) + 1;
         // Alchemist Tower
         case 0x1B:
         // watermill
@@ -568,26 +566,26 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xAD:
         // shadow smoke
         case 0xB4:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         // magic garden
         case 0xBE:
-            return quantity ? start + ( ticket % 6 ) + 1 : start + 7;
+            return quantity ? startIndex + ( currentFrameNumber % 6 ) + 1 : startIndex + 7;
         default:
             return 0;
         }
     case OBJNMULT:
-        switch ( start ) {
+        switch ( startIndex ) {
         // smoke
         case 0x05:
         // shadow
         case 0x0F:
         case 0x19:
-            return start + ( ticket % 9 ) + 1;
+            return startIndex + ( currentFrameNumber % 9 ) + 1;
         // smoke
         case 0x24:
         // shadow
         case 0x2D:
-            return start + ( ticket % 8 ) + 1;
+            return startIndex + ( currentFrameNumber % 8 ) + 1;
         // smoke
         case 0x5A:
         // shadow
@@ -596,12 +594,12 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x7C:
         // campfire
         case 0x83:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         default:
             return 0;
         }
     case OBJNSNOW:
-        switch ( start ) {
+        switch ( startIndex ) {
         // fire camp
         case 0x04:
         // Alchemist Tower
@@ -611,7 +609,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0xA9:
         case 0xB1:
         case 0xB8:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         // mill
         case 0x60:
         case 0x64:
@@ -623,12 +621,12 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x7C:
         case 0x80:
         case 0x84:
-            return start + ( ticket % 3 ) + 1;
+            return startIndex + ( currentFrameNumber % 3 ) + 1;
         default:
             return 0;
         }
     case OBJNSWMP:
-        switch ( start ) {
+        switch ( startIndex ) {
         // shadow
         case 0x00:
         case 0x0E:
@@ -642,14 +640,14 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x3A:
         case 0x43:
         case 0x4A:
-            return start + ( ticket % 6 ) + 1;
+            return startIndex + ( currentFrameNumber % 6 ) + 1;
         default:
             return 0;
         }
     // extra objects for loyalty version
     case X_LOC1:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
-            switch ( start ) {
+            switch ( startIndex ) {
             // alchemist tower
             case 0x04:
             case 0x0D:
@@ -663,7 +661,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
             case 0x55:
             case 0x5E:
             case 0x67:
-                return start + ( ticket % 8 ) + 1;
+                return startIndex + ( currentFrameNumber % 8 ) + 1;
             default:
                 return 0;
             }
@@ -671,7 +669,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     // extra objects for loyalty version
     case X_LOC2:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
-            switch ( start ) {
+            switch ( startIndex ) {
             // mermaid
             case 0x0A:
             case 0x13:
@@ -685,7 +683,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
             case 0x53:
             case 0x5C:
             case 0x66:
-                return start + ( ticket % 8 ) + 1;
+                return startIndex + ( currentFrameNumber % 8 ) + 1;
             default:
                 return 0;
             }
@@ -694,7 +692,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     // extra objects for loyalty version
     case X_LOC3:
         if ( Settings::Get().isPriceOfLoyaltySupported() )
-            switch ( start ) {
+            switch ( startIndex ) {
             // hut magi
             case 0x00:
             case 0x0A:
@@ -703,7 +701,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
             case 0x20:
             case 0x29:
             case 0x32:
-                return start + ( ticket % 8 ) + 1;
+                return startIndex + ( currentFrameNumber % 8 ) + 1;
             // barrier
             case 0x3C:
             case 0x42:
@@ -713,7 +711,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
             case 0x5A:
             case 0x60:
             case 0x66:
-                return start + ( ticket % 4 ) + 1;
+                return startIndex + ( currentFrameNumber % 4 ) + 1;
             default:
                 return 0;
             }
@@ -725,7 +723,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
     return 0;
 }
 
-int ICN::PORTxxxx( int heroId )
+int ICN::getHeroPortraitIcnId( const int heroId )
 {
     switch ( heroId ) {
     case Heroes::UNKNOWN:
@@ -883,7 +881,7 @@ int ICN::PORTxxxx( int heroId )
     return ICN::UNKNOWN;
 }
 
-int ICN::Get4Captain( int race )
+int ICN::getCaptainIcnId( const int race )
 {
     switch ( race ) {
     case Race::BARB:
@@ -905,7 +903,7 @@ int ICN::Get4Captain( int race )
     return UNKNOWN;
 }
 
-int ICN::Get4Building( int race )
+int ICN::getBuildingIcnId( const int race )
 {
     switch ( race ) {
     case Race::BARB:
@@ -927,7 +925,7 @@ int ICN::Get4Building( int race )
     return UNKNOWN;
 }
 
-int ICN::Get4Castle( int race )
+int ICN::getCastleIcnId( const int race )
 {
     switch ( race ) {
     case Race::BARB:
@@ -949,7 +947,7 @@ int ICN::Get4Castle( int race )
     return UNKNOWN;
 }
 
-int ICN::GetFlagIcnId( int color )
+int ICN::getFlagIcnId( const int color )
 {
     switch ( color ) {
     case Color::BLUE:

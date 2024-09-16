@@ -1,3 +1,49 @@
+version 1.1.2 (15 September 2024)
+- preserve the order of artifacts when adding the Spell Book to the artifacts bag
+- update the Portuguese translation
+- speed up MIDI file processing
+- update the German translation
+- update visited status for Tree of Knowledge object
+- update New Secondary Skill dialog
+- add an extra check to verify the game resources not being corrupted
+- update the Hungarian translation
+- limit the use of the Summon Boat by AI for the original maps
+- do not create an undo action in the Editor if nothing was changed for an object
+- allow to undo any castle modifications in the Editor
+- improve AI castle protection logic on the Adventure Map
+- render mirrored troop in dialog properly
+- update resources before showing construction animation inside castle dialog
+- update the Swedish translation
+- fix the audio playback and distance calculation in the 3D Audio mode
+- fix Cliff Nest glowing pixel
+- update Earthquake spell animation and improve its logic to allow bridge and nearby towers demolition
+- disable mouse popup for empty space in map selection window
+- fix AI heroes ignoring patrol limit
+- AI should determine best skill when leveling up heroes
+- update hero spell points indicator after the battle and before performing defeated opponent fade animation
+- fix creature and header overlap in recruit window
+- fix map special conditions render after drop list is closed
+- implement alliances in the Editor
+- fix original maps bottom layer (hacky) placed resources and artifacts
+- add Backslash character to normal and small fonts
+- add missed Small Cliff (Dirt terrain) to the Landscape Miscellaneous objects in the Editor
+- add Ukrainian language virtual keyboard
+- fix inability to save maps within the Editor for some installations
+- add monster statistics popup window inside the Editor monster information dialog
+- Android Toolset: add Russian translation for FH2M file manager
+- fix Anti-Magic spell description
+- update the Polish translation
+- fix mini-map updates while picking up certain objects on the Adventure Map
+- fix invalid animation while picking up an artifact hidden by another object on the Adventure Map
+- remove scouting & movement bonuses for AI-controlled players
+- fix rendering issues in mine selection dialog for the Editor
+- allow to input "/", "*", "-", "+" and "." from the keypad
+- add new River Deltas objects
+- add Slovak virtual keyboard support
+- update the Russian translation
+- fix lagging input controls on some devices
+- AI: properly evaluate the enemy heroes defending the castles
+
 version 1.1.1 (13 July 2024)
 - update the Russian translation
 - properly set tile information upon placing a new object

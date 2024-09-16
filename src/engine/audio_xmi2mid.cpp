@@ -263,7 +263,7 @@ namespace
         return stream;
     }
 
-    struct subVectorIters
+    struct VectorSubrange
     {
         std::vector<uint8_t>::const_iterator data;
         const std::vector<uint8_t>::const_iterator dataEnd;
@@ -271,7 +271,7 @@ namespace
 
     struct XMIData
     {
-        subVectorIters trackEvents;
+        VectorSubrange trackEvents;
 
         bool isValid{ false };
 
@@ -426,7 +426,7 @@ namespace
 
         MidiEvents() = default;
 
-        explicit MidiEvents( const subVectorIters & trackEvents )
+        explicit MidiEvents( const VectorSubrange & trackEvents )
         {
             assert( trackEvents.data != trackEvents.dataEnd );
 
@@ -614,7 +614,7 @@ namespace
         MidiEvents events;
         IFFChunkHeader mtrk{ Tag::MTRK, 0 };
 
-        explicit MidTrack( const subVectorIters & trackEvents )
+        explicit MidTrack( const VectorSubrange & trackEvents )
             : events( trackEvents )
             , mtrk( Tag::MTRK, static_cast<uint32_t>( events.sizeInBytes() ) )
         {
@@ -638,7 +638,7 @@ namespace
         // MIDI format 0 can contain only one track.
         MidTrack track;
 
-        explicit MidData( const subVectorIters & trackEvents )
+        explicit MidData( const VectorSubrange & trackEvents )
             : track( trackEvents )
         {
             // XMI files play MIDI at a fixed clock rate of 120 Hz

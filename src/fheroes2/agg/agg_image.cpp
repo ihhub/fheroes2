@@ -585,7 +585,7 @@ namespace
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
-        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
 
         if ( body.empty() ) {
             return;
@@ -2449,7 +2449,7 @@ namespace
                 throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
             }
 
-            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
             const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
 
             if ( id == ICN::SMALFONT ) {
@@ -3327,7 +3327,7 @@ namespace
 
                 // Since we cannot access game settings from here we are checking an existence
                 // of one of POL resources as an indicator for this version.
-                if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                if ( !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ) ).empty() ) {
                     fheroes2::Sprite editorIcon;
                     fheroes2::h2d::readImage( "main_menu_editor_icon.image", editorIcon );
 

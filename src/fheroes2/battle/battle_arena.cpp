@@ -743,12 +743,12 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1() const
+HeroBase * Battle::Arena::GetCommander1() const
 {
     return _army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2() const
+HeroBase * Battle::Arena::GetCommander2() const
 {
     return _army2->GetCommander();
 }

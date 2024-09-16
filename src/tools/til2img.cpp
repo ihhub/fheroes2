@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -47,7 +47,7 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s) using the specified palette." << std::endl
                   << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.til ..." << std::endl;

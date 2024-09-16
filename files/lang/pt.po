@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-04 11:59+0000\n"
-"PO-Revision-Date: 2024-05-30 12:20-0300\n"
+"PO-Revision-Date: 2024-09-05 20:21-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -4111,9 +4111,8 @@ msgstr "Não foi possível localizar a pasta de dados para salvar o mapa."
 msgid "Unable to create a directory to save the map."
 msgstr "Não foi possível criar um diretório para salvar o mapa."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
-msgstr "Não foi possível localizar a pasta de dados para salvar o mapa."
+msgstr "Não foi possível localizar um diretório para salvar o mapa."
 
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Tem certeza de que deseja substituir o mapa existente?"
@@ -4440,25 +4439,20 @@ msgstr "Acumular ouro."
 msgid "Run out of time."
 msgstr "Ficar sem tempo."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " aliança"
+msgstr "1."
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " aliança"
+msgstr "2."
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " aliança"
+msgstr "3."
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " aliança"
+msgstr "4."
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " aliança"
+msgstr "5."
 
 msgid "Special Loss Condition"
 msgstr "Condição Especial de Derrota"
@@ -4472,13 +4466,11 @@ msgstr "Permitir condições de vitória padrão"
 msgid "Allow this condition also for AI"
 msgstr "Permitir essa condição também para IA"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " aliança"
+msgstr "Definir alianças:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " aliança"
+msgstr "{%number} aliança: "
 
 msgid "Gold:"
 msgstr "Ouro:"
@@ -4500,15 +4492,14 @@ msgstr ""
 "vitória."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "Colocar o jogador %{color} na aliança %{alliance}"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
-"jogador %{color} se ele for controlado por um humano."
+"Se essa caixa de seleção estiver marcada, o jogador %{color} estará na "
+"aliança %{alliance}."
 
 msgid "Days:"
 msgstr "Dias:"
@@ -11517,9 +11508,8 @@ msgstr "Clamor Divino"
 msgid "Anti-Magic"
 msgstr "Anti-Magia"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
-msgstr "Impede magia prejudicial contra as criaturas selecionadas."
+msgstr "Impede qualquer magia contra as criaturas selecionadas."
 
 msgid "Dispel Magic"
 msgstr "Dissipar Magia"

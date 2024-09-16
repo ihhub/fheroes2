@@ -41,7 +41,7 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " extracts various data from monster animation files." << std::endl
                   << "Syntax: " << baseName << " dst_dir input_file.bin ..." << std::endl;
