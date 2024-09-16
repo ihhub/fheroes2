@@ -222,8 +222,8 @@ namespace
     {
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) == objectType ) {
-            objectUID = tile.GetObjectUID();
+        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == objectType ) {
+            objectUID = tile.getMainObjectPart()._uid;
         }
         else {
             // In maps made by the original map editor the action object can be in the bottom layer addons.

@@ -660,7 +660,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     // correct only RND town and castle
     const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
     const MP2::MapObjectType objectType = entranceTile.GetObject();
-    const uint32_t castleID = entranceTile.GetObjectUID();
+    const uint32_t castleID = entranceTile.getMainObjectPart()._uid;
 
     if ( isRandom && ( objectType != MP2::OBJ_RANDOM_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN,
