@@ -61,23 +61,20 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const int spacer = 10;
     FrameBox box( headerText.height( BOXAREA_WIDTH ) + spacer + messageText.height( BOXAREA_WIDTH ) + spacer + sprite_expr.height() + 2 + text.height(), true );
 
-    fheroes2::Point pt;
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
     const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).height();
-    fheroes2::Button button_yes( pt.x, pt.y, buttonYesIcnID, 0, 1 );
+    const fheroes2::Sprite & buttonYesSprite = fheroes2::AGG::GetICN( buttonYesIcnID, 0 );
 
-    const int buttonYesXPosition = pt.x;
+    const int32_t buttonsYPosition = box.GetArea().y + box.GetArea().height - buttonYesSprite.height();
+    const int32_t buttonYesXPosition = box.GetArea().x + box.GetArea().width / 2 - buttonYesSprite.width() - 20;
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).height();
-    fheroes2::Button button_no( pt.x, pt.y, buttonNoIcnID, 0, 1 );
+    fheroes2::Button button_yes( buttonYesXPosition, buttonsYPosition, buttonYesIcnID, 0, 1 );
 
-    const int buttonNoXPosition = pt.x;
+    const int32_t buttonNoXPosition = box.GetArea().x + box.GetArea().width / 2 + 20;
+
+    fheroes2::Button button_no( buttonNoXPosition, buttonsYPosition, buttonNoIcnID, 0, 1 );
 
     fheroes2::Rect pos = box.GetArea();
 
@@ -95,7 +92,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     pos.y += sprite_expr.height();
     // sprite1
-    pos.x = buttonYesXPosition + ( ( fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).width() - sprite_gold.width() ) / 2 );
+    pos.x = buttonYesXPosition + ( ( buttonYesSprite.width() - sprite_gold.width() ) / 2 );
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
     text.draw( pos.x + sprite_gold.width() / 2 - text.width() / 2, pos.y + 4, display );
