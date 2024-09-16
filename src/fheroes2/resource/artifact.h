@@ -347,7 +347,7 @@ public:
     using Interface::ItemsActionBar<Artifact>::RedrawItem;
     using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
 
-    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
+    ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
@@ -370,7 +370,7 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool read_only;

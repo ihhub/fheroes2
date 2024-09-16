@@ -159,7 +159,7 @@ class MeetingArtifactBar : public ArtifactsBar
 public:
     using ArtifactsBar::RedrawItem;
 
-    explicit MeetingArtifactBar( const Heroes * hero )
+    explicit MeetingArtifactBar( Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
