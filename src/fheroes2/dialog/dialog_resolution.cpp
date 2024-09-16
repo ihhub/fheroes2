@@ -133,10 +133,10 @@ namespace
                 const int32_t integer = resolution.screenWidth / resolution.gameWidth;
                 const int32_t fraction = resolution.screenWidth * 10 / resolution.gameWidth - 10 * integer;
 
-                std::string scaledResolutionText =
-                    _( "Selecting this resolution will set a resolution that is scaled from the original resolution (%{resolution}) by multiplying it with the number "
-                       "in the brackets (%{scale}). A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look better because the pixels are upscaled "
-                       "evenly in both horizontal and vertical directions." );
+                std::string scaledResolutionText = _(
+                    "Selecting this resolution will set a resolution that is scaled from the original resolution (%{resolution}) by multiplying it with the number "
+                    "in the brackets (%{scale}). A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look better because the pixels are upscaled "
+                    "evenly in both horizontal and vertical directions." );
 
                 StringReplace( scaledResolutionText, "%{resolution}", std::to_string( resolution.gameWidth ) + middleText + std::to_string( resolution.gameHeight ) );
                 StringReplace( scaledResolutionText, "%{scale}", std::to_string( integer ) + "." + std::to_string( fraction ) );
