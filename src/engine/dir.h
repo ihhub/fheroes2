@@ -31,10 +31,14 @@ struct ListFiles : public std::list<std::string>
 {
     void Append( ListFiles && files );
 
-    void ReadDir( const std::string_view path, const std::string & filter, const bool sensitive );
-    void FindFileInDir( const std::string_view path, const std::string & fileName, const bool sensitive );
+    // Adds files from the 'path' directory ending in 'filter' to the list, case-insensitive.
+    void ReadDir( const std::string_view path, const std::string & filter );
 
-    static bool IsEmpty( const std::string_view path, const std::string & filter, const bool sensitive );
+    // Adds files from the 'path' directory with names matching 'fileName' to the list, case-insensitive.
+    void FindFileInDir( const std::string_view path, const std::string & fileName );
+
+    // Returns true if there are no files in the 'path' directory with names ending in 'filter', case-insensitive, otherwise returns false.
+    static bool IsEmpty( const std::string_view path, const std::string & filter );
 };
 
 #endif

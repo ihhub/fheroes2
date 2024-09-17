@@ -40,28 +40,29 @@
 namespace
 {
     template <typename F>
-    bool filterByName( const char * filename, const bool nameAsFilter, const std::string & name, const F & strCmp )
+    bool filterByName( const std::string & filename, const bool nameAsFilter, const std::string & name, const F & strCmp )
     {
-        if ( !nameAsFilter || !name.empty() ) {
-            const size_t filenameLength = strlen( filename );
-            if ( filenameLength < name.length() ) {
-                return true;
-            }
-
-            if ( !nameAsFilter && filenameLength != name.length() ) {
-                return true;
-            }
-
-            const char * filenamePtr = filename + filenameLength - name.length();
-            if ( strCmp( filenamePtr, name.c_str() ) != 0 ) {
-                return true;
-            }
+        if ( nameAsFilter && name.empty() ) {
+            return true;
         }
 
-        return false;
+        if ( filename.length() < name.length() ) {
+            return false;
+        }
+
+        if ( !nameAsFilter && filename.length() != name.length() ) {
+            return false;
+        }
+
+        const char * filenamePtr = filename.c_str() + filename.length() - name.length();
+        if ( strCmp( filenamePtr, name.c_str() ) != 0 ) {
+            return false;
+        }
+
+        return true;
     }
 
-    void getFilesFromDirectory( const std::string_view path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
+    void getFilesFromDirectory( const std::string_view path, const std::string & name, bool nameAsFilter, ListFiles & files )
     {
         std::string correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
@@ -69,11 +70,9 @@ namespace
         }
 
 #if defined( _WIN32 )
-        (void)sensitive;
-
         const auto strCmp = _stricmp;
 #else
-        const auto strCmp = sensitive ? strcmp : strcasecmp;
+        const auto strCmp = strcasecmp;
 #endif
 
         std::error_code ec;
@@ -86,7 +85,7 @@ namespace
             }
 
             const std::string fileName = entry.path().filename().string();
-            if ( filterByName( fileName.c_str(), nameAsFilter, name, strCmp ) ) {
+            if ( !filterByName( fileName, nameAsFilter, name, strCmp ) ) {
                 continue;
             }
 
@@ -102,19 +101,19 @@ void ListFiles::Append( ListFiles && files )
     }
 }
 
-void ListFiles::ReadDir( const std::string_view path, const std::string & filter, const bool sensitive )
+void ListFiles::ReadDir( const std::string_view path, const std::string & filter )
 {
-    getFilesFromDirectory( path, filter, sensitive, true, *this );
+    getFilesFromDirectory( path, filter, true, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName, const bool sensitive )
+void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName )
 {
-    getFilesFromDirectory( path, fileName, sensitive, false, *this );
+    getFilesFromDirectory( path, fileName, false, *this );
 }
 
-bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter, const bool sensitive )
+bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter )
 {
     ListFiles list;
-    list.ReadDir( path, filter, sensitive );
+    list.ReadDir( path, filter );
     return list.empty();
 }

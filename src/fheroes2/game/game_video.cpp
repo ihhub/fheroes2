@@ -67,7 +67,7 @@ namespace Video
 
                 if ( System::IsDirectory( fullDirPath ) ) {
                     ListFiles videoFiles;
-                    videoFiles.FindFileInDir( fullDirPath, fileName, false );
+                    videoFiles.FindFileInDir( fullDirPath, fileName );
                     if ( videoFiles.empty() ) {
                         continue;
                     }
