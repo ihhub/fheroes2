@@ -25,6 +25,7 @@
 
 #include <cstring>
 #include <filesystem>
+#include <system_error>
 #include <utility>
 
 #if defined( _WIN32 )
