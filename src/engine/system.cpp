@@ -29,6 +29,7 @@
 #include <functional>
 #include <initializer_list>
 #include <map>
+#include <memory>
 #include <system_error>
 #include <utility>
 
@@ -65,8 +66,6 @@
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
-#include <memory>
-
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
@@ -76,14 +75,14 @@
 #pragma GCC diagnostic pop
 #endif
 
-#if defined( _WIN32 )
-#define SEPARATOR '\\'
-#else
-#define SEPARATOR '/'
-#endif
-
 namespace
 {
+#if defined( _WIN32 )
+    constexpr char dirSep{ '\\' };
+#else
+    constexpr char dirSep{ '/' };
+#endif
+
 #if !defined( __linux__ ) || defined( ANDROID )
     std::string GetHomeDirectory( const std::string_view appName )
     {
@@ -130,39 +129,9 @@ namespace
     }
 #endif
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
-    std::vector<std::string> splitUnixPath( const std::string_view path, const std::string_view delimiter )
-    {
-        std::vector<std::string> result;
-
-        if ( path.empty() ) {
-            return result;
-        }
-
-        size_t pos = 0;
-
-        while ( pos < path.size() ) {
-            const size_t nextPos = path.find( delimiter, pos );
-
-            if ( nextPos == std::string::npos ) {
-                result.emplace_back( path.substr( pos ) );
-
-                break;
-            }
-            if ( pos < nextPos ) {
-                result.emplace_back( path.substr( pos, nextPos - pos ) );
-            }
-
-            pos = nextPos + delimiter.size();
-        }
-
-        return result;
-    }
-#endif
-
     std::string_view trimTrailingSeparators( std::string_view path )
     {
-        while ( path.size() > 1 && path.back() == SEPARATOR ) {
+        while ( path.size() > 1 && path.back() == dirSep ) {
             path.remove_suffix( 1 );
         }
 
@@ -362,7 +331,7 @@ std::string System::concatPath( const std::string_view left, const std::string_v
     temp.reserve( left.size() + 1 + right.size() );
 
     temp += left;
-    temp += SEPARATOR;
+    temp += dirSep;
     temp += right;
 
     return temp;
@@ -460,13 +429,13 @@ std::string System::GetDirname( std::string_view path )
 
     path = trimTrailingSeparators( path );
 
-    const size_t pos = path.rfind( SEPARATOR );
+    const size_t pos = path.rfind( dirSep );
 
     if ( pos == std::string::npos ) {
         return { "." };
     }
     if ( pos == 0 ) {
-        return { std::initializer_list<char>{ SEPARATOR } };
+        return { std::initializer_list<char>{ dirSep } };
     }
 
     // Trailing separators should already be trimmed
@@ -483,7 +452,7 @@ std::string System::GetBasename( std::string_view path )
 
     path = trimTrailingSeparators( path );
 
-    const size_t pos = path.rfind( SEPARATOR );
+    const size_t pos = path.rfind( dirSep );
 
     if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
         return std::string{ path };
@@ -547,40 +516,24 @@ bool System::IsDirectory( const std::string_view path )
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
 #if !defined( _WIN32 ) && !defined( ANDROID )
-    // based on: https://github.com/OneSadCookie/fcaseopen
+    static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
+
+    // The following code is based on https://github.com/OneSadCookie/fcaseopen
     correctedPath.clear();
 
     if ( path.empty() ) {
         return false;
     }
 
-    DIR * d;
-    bool last = false;
-    const char * curDir = ".";
-    const char * delimiter = "/";
+    std::unique_ptr<DIR, int ( * )( DIR * )> dir( path.front() == dirSep ? opendir( "/" ) : opendir( "." ), closedir );
 
-    if ( path[0] == delimiter[0] ) {
-        correctedPath.append( delimiter );
-
-        d = opendir( delimiter );
-    }
-    else {
-        d = opendir( curDir );
-    }
-
-    const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
-        if ( !d ) {
+    for ( const std::filesystem::path & pathItem : std::filesystem::path{ path } ) {
+        if ( !dir ) {
             return false;
         }
 
-        if ( last ) {
-            closedir( d );
-            return false;
-        }
-
-        if ( subPathIter != splittedPath.begin() ) {
-            correctedPath.append( delimiter );
+        if ( !correctedPath.empty() && correctedPath.back() != dirSep ) {
+            correctedPath += dirSep;
         }
 
         // Avoid directory traversal and try to probe directory name directly.
@@ -592,52 +545,42 @@ bool System::GetCaseInsensitivePath( const std::string_view path, std::string & 
         // It's not uncommon for /nix/store to have tens of thousands files.
         // GetCaseInsensitivePath() calls become very expensive on such systems.
         //
-        // The idea is to try to open current subpath as a directory and avoid
-        // directory traversal altogether. Otherwise fall back to linear
+        // The idea is to try to open the current path item as a directory and
+        // avoid directory traversal altogether. Otherwise fall back to linear
         // case-insensitive search.
+        {
+            std::string tmpPath = correctedPath + pathItem.string();
 
-        std::string absSubpath = correctedPath + *subPathIter;
-        DIR * de = opendir( absSubpath.c_str() );
-        if ( de ) {
-            correctedPath = std::move( absSubpath );
+            if ( std::unique_ptr<DIR, int ( * )( DIR * )> tmpDir( opendir( tmpPath.c_str() ), closedir ); tmpDir ) {
+                correctedPath = std::move( tmpPath );
+                dir = std::move( tmpDir );
 
-            closedir( d );
-            d = opendir( correctedPath.c_str() );
-
-            closedir( de );
-            continue;
+                continue;
+            }
         }
 
-        const struct dirent * e = readdir( d );
-        while ( e ) {
-            if ( strcasecmp( subPathIter->c_str(), e->d_name ) == 0 ) {
-                correctedPath += e->d_name;
+        const struct dirent * entry = readdir( dir.get() );
+        while ( entry != nullptr ) {
+            if ( strcasecmp( pathItem.c_str(), entry->d_name ) == 0 ) {
+                correctedPath += entry->d_name;
 
-                closedir( d );
-                d = opendir( correctedPath.c_str() );
+                dir.reset( opendir( correctedPath.c_str() ) );
 
                 break;
             }
 
-            e = readdir( d );
+            entry = readdir( dir.get() );
         }
 
-        if ( !e ) {
-            correctedPath += *subPathIter;
-            last = true;
+        if ( entry == nullptr ) {
+            return false;
         }
     }
-
-    if ( d ) {
-        closedir( d );
-    }
-
-    return !last;
 #else
     correctedPath = path;
-
-    return true;
 #endif
+
+    return !correctedPath.empty();
 }
 
 void System::globFiles( const std::string_view glob, std::vector<std::string> & fileNames )
