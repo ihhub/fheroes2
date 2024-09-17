@@ -25,15 +25,16 @@
 
 #include <list>
 #include <string>
+#include <string_view>
 
 struct ListFiles : public std::list<std::string>
 {
     void Append( ListFiles && files );
 
-    void ReadDir( const std::string & path, const std::string & filter, const bool sensitive );
-    void FindFileInDir( const std::string & path, const std::string & fileName, const bool sensitive );
+    void ReadDir( const std::string_view path, const std::string & filter, const bool sensitive );
+    void FindFileInDir( const std::string_view path, const std::string & fileName, const bool sensitive );
 
-    static bool IsEmpty( const std::string & path, const std::string & filter, const bool sensitive );
+    static bool IsEmpty( const std::string_view path, const std::string & filter, const bool sensitive );
 };
 
 #endif

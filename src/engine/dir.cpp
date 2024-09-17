@@ -61,8 +61,13 @@ namespace
         return false;
     }
 
-    void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
+    void getFilesFromDirectory( const std::string_view path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
     {
+        std::string correctedPath;
+        if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
+            return;
+        }
+
 #if defined( _WIN32 )
         (void)sensitive;
 
@@ -74,7 +79,7 @@ namespace
         std::error_code ec;
 
         // Using the non-throwing overload
-        for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( path, ec ) ) {
+        for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( correctedPath, ec ) ) {
             // Using the non-throwing overload
             if ( !entry.is_regular_file( ec ) ) {
                 continue;
@@ -85,7 +90,7 @@ namespace
                 continue;
             }
 
-            files.emplace_back( System::concatPath( path, fileName ) );
+            files.emplace_back( System::concatPath( correctedPath, fileName ) );
         }
     }
 }
@@ -97,17 +102,17 @@ void ListFiles::Append( ListFiles && files )
     }
 }
 
-void ListFiles::ReadDir( const std::string & path, const std::string & filter, const bool sensitive )
+void ListFiles::ReadDir( const std::string_view path, const std::string & filter, const bool sensitive )
 {
     getFilesFromDirectory( path, filter, sensitive, true, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName, const bool sensitive )
+void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName, const bool sensitive )
 {
     getFilesFromDirectory( path, fileName, sensitive, false, *this );
 }
 
-bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, const bool sensitive )
+bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter, const bool sensitive )
 {
     ListFiles list;
     list.ReadDir( path, filter, sensitive );
