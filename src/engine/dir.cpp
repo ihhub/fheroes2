@@ -38,26 +38,26 @@
 namespace
 {
     template <typename F>
-    bool filterByName( const std::string & filename, const bool nameAsFilter, const std::string & name, const F & strCmp )
+    bool nameFilter( const std::string & filename, const bool needExactMatch, const std::string & filter, const F & strCmp )
     {
-        if ( nameAsFilter && name.empty() ) {
+        if ( !needExactMatch && filter.empty() ) {
             return true;
         }
 
-        if ( filename.length() < name.length() ) {
+        if ( filename.length() < filter.length() ) {
             return false;
         }
 
-        if ( !nameAsFilter && filename.length() != name.length() ) {
+        if ( needExactMatch && filename.length() != filter.length() ) {
             return false;
         }
 
-        const char * filenamePtr = filename.c_str() + filename.length() - name.length();
+        const char * filenamePtr = filename.c_str() + filename.length() - filter.length();
 
-        return ( strCmp( filenamePtr, name.c_str() ) == 0 );
+        return ( strCmp( filenamePtr, filter.c_str() ) == 0 );
     }
 
-    void getFilesFromDirectory( const std::string_view path, const std::string & name, bool nameAsFilter, ListFiles & files )
+    void getFilesFromDirectory( const std::string_view path, const std::string & filter, const bool needExactMatch, ListFiles & files )
     {
         std::string correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
@@ -80,7 +80,7 @@ namespace
             }
 
             const std::string fileName = entry.path().filename().string();
-            if ( !filterByName( fileName, nameAsFilter, name, strCmp ) ) {
+            if ( !nameFilter( fileName, needExactMatch, filter, strCmp ) ) {
                 continue;
             }
 
@@ -98,12 +98,12 @@ void ListFiles::Append( ListFiles && files )
 
 void ListFiles::ReadDir( const std::string_view path, const std::string & filter )
 {
-    getFilesFromDirectory( path, filter, true, *this );
+    getFilesFromDirectory( path, filter, false, *this );
 }
 
 void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName )
 {
-    getFilesFromDirectory( path, fileName, false, *this );
+    getFilesFromDirectory( path, fileName, true, *this );
 }
 
 bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter )
