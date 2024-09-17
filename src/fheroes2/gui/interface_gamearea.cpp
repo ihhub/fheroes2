@@ -1065,7 +1065,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
+    const fheroes2::Point tileOffset = getInternalPosition( mousePosition );
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                                    ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -1126,7 +1126,7 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
+    const fheroes2::Point offset = getInternalPosition( point );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 

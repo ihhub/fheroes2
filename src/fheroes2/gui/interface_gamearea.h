@@ -274,6 +274,11 @@ namespace Interface
 
         bool mouseIndicatesFastScroll( const fheroes2::Point & mousePosition );
 
+        fheroes2::Point getInternalPosition( const fheroes2::Point & position ) const
+        {
+            return _topLeftTileOffset + position - _windowROI.getPosition();
+        }
+
     private:
         BaseInterface & _interface;
 
