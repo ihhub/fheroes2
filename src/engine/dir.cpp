@@ -96,17 +96,17 @@ void ListFiles::Append( ListFiles && files )
     }
 }
 
-void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )
+void ListFiles::ReadDir( const std::string & path, const std::string & filter, const bool sensitive )
 {
     getFilesFromDirectory( path, filter, sensitive, true, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive )
+void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName, const bool sensitive )
 {
     getFilesFromDirectory( path, fileName, sensitive, false, *this );
 }
 
-bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, bool sensitive )
+bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, const bool sensitive )
 {
     ListFiles list;
     list.ReadDir( path, filter, sensitive );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,10 +29,11 @@
 struct ListFiles : public std::list<std::string>
 {
     void Append( ListFiles && files );
-    void ReadDir( const std::string & path, const std::string & filter = "", bool sensitive = true );
-    static bool IsEmpty( const std::string & path, const std::string & filter = "", bool sensitive = true );
 
-    void FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive );
+    void ReadDir( const std::string & path, const std::string & filter, const bool sensitive );
+    void FindFileInDir( const std::string & path, const std::string & fileName, const bool sensitive );
+
+    static bool IsEmpty( const std::string & path, const std::string & filter, const bool sensitive );
 };
 
 #endif
