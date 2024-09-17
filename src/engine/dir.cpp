@@ -55,11 +55,8 @@ namespace
         }
 
         const char * filenamePtr = filename.c_str() + filename.length() - name.length();
-        if ( strCmp( filenamePtr, name.c_str() ) != 0 ) {
-            return false;
-        }
 
-        return true;
+        return ( strCmp( filenamePtr, name.c_str() ) == 0 );
     }
 
     void getFilesFromDirectory( const std::string_view path, const std::string & name, bool nameAsFilter, ListFiles & files )
