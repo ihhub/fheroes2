@@ -31,6 +31,16 @@
 #include <set>
 #include <utility>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
+#include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_hints.h>
@@ -44,12 +54,17 @@
 #include <SDL_version.h>
 #include <SDL_video.h>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
-#include "tools.h"
 
 namespace
 {
@@ -124,6 +139,26 @@ namespace
         case fheroes2::Key::KEY_KP_9:
             if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '9';
+            break;
+        case fheroes2::Key::KEY_KP_PERIOD:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '.';
+            break;
+        case fheroes2::Key::KEY_KP_DIVIDE:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '/';
+            break;
+        case fheroes2::Key::KEY_KP_MULTIPLY:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '*';
+            break;
+        case fheroes2::Key::KEY_KP_MINUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '-';
+            break;
+        case fheroes2::Key::KEY_KP_PLUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '+';
             break;
         case fheroes2::Key::KEY_MINUS:
             return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '_' : '-' );
@@ -330,34 +365,48 @@ namespace EventProcessing
 
         static void initTouchpad()
         {
-            const int touchNumber = SDL_GetNumTouchDevices();
-            if ( touchNumber > 0 ) {
-                fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
-                const SDL_bool value = SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
-                if ( value != SDL_TRUE ) {
-                    ERROR_LOG( "Failed to set SDL_HINT_TOUCH_MOUSE_EVENTS." )
-                }
-#endif
+            if ( SDL_SetHint( SDL_HINT_MOUSE_TOUCH_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_MOUSE_TOUCH_EVENTS " hint." )
             }
+#endif
+#if SDL_VERSION_ATLEAST( 2, 0, 6 )
+            if ( SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_TOUCH_MOUSE_EVENTS " hint." )
+            }
+#endif
+
+            if ( SDL_GetNumTouchDevices() <= 0 ) {
+                return;
+            }
+
+            fheroes2::cursor().enableSoftwareEmulation( true );
         }
 
         void initController()
         {
-            for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
-                if ( SDL_IsGameController( i ) ) {
+            const int joystickNumber = SDL_NumJoysticks();
+            if ( joystickNumber < 0 ) {
+                ERROR_LOG( "Failed to get the number of joysticks. The error value: " << joystickNumber << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            for ( int i = 0; i < joystickNumber; ++i ) {
+                if ( SDL_IsGameController( i ) == SDL_TRUE ) {
                     _gameController = SDL_GameControllerOpen( i );
                     if ( _gameController != nullptr ) {
                         fheroes2::cursor().enableSoftwareEmulation( true );
                         break;
                     }
+
+                    ERROR_LOG( "Failed to open a controller with ID " << i << ". Error description: " << SDL_GetError() )
                 }
             }
         }
 
         void closeController()
         {
-            if ( SDL_GameControllerGetAttached( _gameController ) ) {
+            if ( SDL_GameControllerGetAttached( _gameController ) == SDL_TRUE ) {
                 SDL_GameControllerClose( _gameController );
                 _gameController = nullptr;
             }
@@ -380,18 +429,26 @@ namespace EventProcessing
             SDL_Event event;
 
             while ( SDL_PollEvent( &event ) ) {
+                // Most SDL events should be processed sequentially one event at a time, but for some
+                // event types, the processing of intermediate events may be skipped in order to gain
+                // overall event processing speed.
+                bool processImmediately = true;
+
                 switch ( event.type ) {
                 case SDL_WINDOWEVENT:
                     if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-                        // A special case since we need to exit the loop.
                         if ( allowExit ) {
                             // Try to perform clear exit to catch all memory leaks, for example.
                             return false;
                         }
+                        processImmediately = false;
                         break;
                     }
                     if ( onWindowEvent( event.window ) ) {
                         updateDisplay = true;
+                    }
+                    else {
+                        processImmediately = false;
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -400,6 +457,7 @@ namespace EventProcessing
                     break;
                 case SDL_MOUSEMOTION:
                     onMouseMotionEvent( eventHandler, event.motion );
+                    processImmediately = false;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -425,9 +483,11 @@ namespace EventProcessing
                     // SDL requires joystick events to be enabled in order to handle controller events.
                     // This is because the controller related code depends on the joystick related code.
                     // See SDL_gamecontroller.c within SDL source code for implementation details.
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERAXISMOTION:
                     onControllerAxisEvent( eventHandler, event.caxis );
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERBUTTONDOWN:
                 case SDL_CONTROLLERBUTTONUP:
@@ -437,6 +497,9 @@ namespace EventProcessing
                 case SDL_FINGERUP:
                 case SDL_FINGERMOTION:
                     onTouchEvent( eventHandler, event.tfinger );
+                    if ( event.type == SDL_FINGERMOTION ) {
+                        processImmediately = false;
+                    }
                     break;
                 case SDL_RENDER_TARGETS_RESET:
                     // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
@@ -457,6 +520,7 @@ namespace EventProcessing
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
                     }
+                    processImmediately = false;
                     break;
                 case SDL_APP_LOWMEMORY:
                     // According to SDL this event can only happen on Android or iOS.
@@ -469,8 +533,16 @@ namespace EventProcessing
                     assert( eventTypeStatus.count( event.type ) == 0 );
 
                     // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
+                    processImmediately = false;
                     break;
                 }
+
+                // If the current event does require immediate processing, then we need to return immediately.
+                if ( processImmediately ) {
+                    break;
+                }
+
+                // Otherwise, we can process it later along with the newly received events, if any.
             }
 
             return true;
@@ -486,7 +558,11 @@ namespace EventProcessing
 
         static void setEventProcessingState( const uint32_t eventType, const bool enable )
         {
-            eventTypeStatus.emplace( eventType );
+            const auto [dummy, inserted] = eventTypeStatus.emplace( eventType );
+            if ( !inserted ) {
+                assert( 0 );
+            }
+
             SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ) );
         }
 
@@ -801,20 +877,20 @@ namespace EventProcessing
             // Not sure how it is possible to have something else for a button.
             assert( ( button.state == SDL_PRESSED ) || ( button.state == SDL_RELEASED ) );
 
-            int buttonType = LocalEvent::MOUSE_BUTTON_UNKNOWN;
+            LocalEvent::MouseButtonType buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_UNKNOWN;
             switch ( button.button ) {
             case SDL_BUTTON_LEFT:
-                buttonType = LocalEvent::MOUSE_BUTTON_LEFT;
+                buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_LEFT;
                 break;
             case SDL_BUTTON_MIDDLE:
-                buttonType = LocalEvent::MOUSE_BUTTON_MIDDLE;
+                buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_MIDDLE;
                 break;
             case SDL_BUTTON_RIGHT:
-                buttonType = LocalEvent::MOUSE_BUTTON_RIGHT;
+                buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_RIGHT;
                 break;
             default:
-                VERBOSE_LOG( "Unknown mouse button " << button.button )
-                break;
+                VERBOSE_LOG( "Unknown mouse button " << static_cast<int>( button.button ) )
+                return;
             }
 
             eventHandler.onMouseButtonEvent( button.state == SDL_PRESSED, buttonType, { button.x, button.y } );
@@ -828,13 +904,13 @@ namespace EventProcessing
                 return;
             }
 
-            uint8_t state = LocalEvent::KEY_UNKNOWN;
+            LocalEvent::KeyboardEventState state = LocalEvent::KeyboardEventState::KEY_UNKNOWN;
             switch ( event.type ) {
             case SDL_KEYDOWN:
-                state = LocalEvent::KEY_DOWN;
+                state = LocalEvent::KeyboardEventState::KEY_DOWN;
                 break;
             case SDL_KEYUP:
-                state = LocalEvent::KEY_UP;
+                state = LocalEvent::KeyboardEventState::KEY_UP;
                 break;
             default:
                 // We don't handle other events for now.
@@ -851,19 +927,19 @@ namespace EventProcessing
 
         static void onControllerAxisEvent( LocalEvent & eventHandler, const SDL_ControllerAxisEvent & motion )
         {
-            uint8_t axisType = LocalEvent::CONTROLLER_AXIS_UNKNOWN;
+            LocalEvent::ControllerAxisType axisType = LocalEvent::ControllerAxisType::CONTROLLER_AXIS_UNKNOWN;
             switch ( motion.axis ) {
             case SDL_CONTROLLER_AXIS_LEFTX:
-                axisType = LocalEvent::CONTROLLER_AXIS_LEFT_X;
+                axisType = LocalEvent::ControllerAxisType::CONTROLLER_AXIS_LEFT_X;
                 break;
             case SDL_CONTROLLER_AXIS_LEFTY:
-                axisType = LocalEvent::CONTROLLER_AXIS_LEFT_Y;
+                axisType = LocalEvent::ControllerAxisType::CONTROLLER_AXIS_LEFT_Y;
                 break;
             case SDL_CONTROLLER_AXIS_RIGHTX:
-                axisType = LocalEvent::CONTROLLER_AXIS_RIGHT_X;
+                axisType = LocalEvent::ControllerAxisType::CONTROLLER_AXIS_RIGHT_X;
                 break;
             case SDL_CONTROLLER_AXIS_RIGHTY:
-                axisType = LocalEvent::CONTROLLER_AXIS_RIGHT_Y;
+                axisType = LocalEvent::ControllerAxisType::CONTROLLER_AXIS_RIGHT_Y;
                 break;
             default:
                 // We don't process other axes.
@@ -878,47 +954,47 @@ namespace EventProcessing
             // Not sure how it is possible to have something else for a button.
             assert( ( button.state == SDL_PRESSED ) || ( button.state == SDL_RELEASED ) );
 
-            int buttonType = LocalEvent::CONTROLLER_BUTTON_UNKNOWN;
+            LocalEvent::ControllerButtonType buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_UNKNOWN;
 
             switch ( button.button ) {
             case SDL_CONTROLLER_BUTTON_A:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_A;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A;
                 break;
             case SDL_CONTROLLER_BUTTON_B:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_B;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B;
                 break;
             case SDL_CONTROLLER_BUTTON_X:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_X;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_X;
                 break;
             case SDL_CONTROLLER_BUTTON_Y:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_Y;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_Y;
                 break;
             case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_RIGHT_SHOULDER;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER;
                 break;
             case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_LEFT_SHOULDER;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_LEFT_SHOULDER;
                 break;
             case SDL_CONTROLLER_BUTTON_DPAD_UP:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_UP;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_UP;
                 break;
             case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_DOWN;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_DOWN;
                 break;
             case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_RIGHT;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_RIGHT;
                 break;
             case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_LEFT;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_LEFT;
                 break;
             case SDL_CONTROLLER_BUTTON_BACK:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_BACK;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_BACK;
                 break;
             case SDL_CONTROLLER_BUTTON_START:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_START;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_START;
                 break;
             case SDL_CONTROLLER_BUTTON_GUIDE:
-                buttonType = LocalEvent::CONTROLLER_BUTTON_GUIDE;
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_GUIDE;
                 break;
             default:
                 // We don't handle other buttons for now.
@@ -927,29 +1003,29 @@ namespace EventProcessing
 
 #if defined( TARGET_NINTENDO_SWITCH )
             // Custom button mapping for Nintendo Switch
-            if ( buttonType == LocalEvent::CONTROLLER_BUTTON_A ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_B;
+            if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B;
             }
-            if ( buttonType == LocalEvent::CONTROLLER_BUTTON_B ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_A;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_X ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_START;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_X ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_START;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_Y ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_GUIDE;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_Y ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_GUIDE;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_RIGHT;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_RIGHT;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_LEFT_SHOULDER ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_DPAD_LEFT;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_LEFT_SHOULDER ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_LEFT;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_BACK ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_X;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_BACK ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_X;
             }
-            else if ( buttonType == LocalEvent::CONTROLLER_BUTTON_START ) {
-                buttonType = LocalEvent::CONTROLLER_BUTTON_Y;
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_START ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_Y;
             }
 #endif
 
@@ -965,17 +1041,17 @@ namespace EventProcessing
             }
 #endif
 
-            uint8_t fingerEventType = LocalEvent::FINGER_EVENT_UNKNOWN;
+            LocalEvent::TouchFingerEventType fingerEventType = LocalEvent::TouchFingerEventType::FINGER_EVENT_UNKNOWN;
 
             switch ( event.type ) {
             case SDL_FINGERDOWN:
-                fingerEventType = LocalEvent::FINGER_EVENT_DOWN;
+                fingerEventType = LocalEvent::TouchFingerEventType::FINGER_EVENT_DOWN;
                 break;
             case SDL_FINGERUP:
-                fingerEventType = LocalEvent::FINGER_EVENT_UP;
+                fingerEventType = LocalEvent::TouchFingerEventType::FINGER_EVENT_UP;
                 break;
             case SDL_FINGERMOTION:
-                fingerEventType = LocalEvent::FINGER_EVENT_MOTION;
+                fingerEventType = LocalEvent::TouchFingerEventType::FINGER_EVENT_MOTION;
                 break;
             default:
                 // We don't handle any other events.
@@ -998,6 +1074,11 @@ namespace EventProcessing
             }
 
             const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.which );
+            if ( removedController == nullptr ) {
+                ERROR_LOG( "Failed to remove a controller with ID " << event.which << ". Error description: " << SDL_GetError() )
+                return;
+            }
+
             if ( removedController == _gameController ) {
                 SDL_GameControllerClose( _gameController );
                 _gameController = nullptr;
@@ -1011,6 +1092,9 @@ namespace EventProcessing
                 if ( _gameController != nullptr ) {
                     fheroes2::cursor().enableSoftwareEmulation( true );
                 }
+                else {
+                    ERROR_LOG( "Failed to open a controller with ID " << event.which << ". Error description: " << SDL_GetError() )
+                }
             }
         }
     };
@@ -1021,57 +1105,6 @@ namespace fheroes2
     const char * KeySymGetName( const Key key )
     {
         return EventProcessing::EventEngine::getKeyName( key );
-    }
-
-    bool PressIntKey( uint32_t max, uint32_t & result )
-    {
-        const LocalEvent & le = LocalEvent::Get();
-
-        if ( le.KeyPress( fheroes2::Key::KEY_BACKSPACE ) ) {
-            result /= 10;
-            return true;
-        }
-
-        if ( !le.KeyPress() ) {
-            // No key is pressed.
-            return false;
-        }
-
-        if ( le.KeyValue() >= fheroes2::Key::KEY_0 && le.KeyValue() <= fheroes2::Key::KEY_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        if ( le.KeyValue() >= fheroes2::Key::KEY_KP_0 && le.KeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
@@ -1087,9 +1120,8 @@ namespace fheroes2
             }
             break;
         case fheroes2::Key::KEY_DELETE:
-            if ( !res.empty() ) {
-                if ( pos < res.size() )
-                    res.erase( pos, 1 );
+            if ( pos < res.size() ) {
+                res.erase( pos, 1 );
             }
             break;
 
@@ -1124,9 +1156,6 @@ namespace fheroes2
 
 LocalEvent::LocalEvent()
     : _engine( std::make_unique<EventProcessing::EventEngine>() )
-    , modes( 0 )
-    , key_value( fheroes2::Key::NONE )
-    , mouse_button( MOUSE_BUTTON_UNKNOWN )
     , _mouseButtonLongPressDelay( mouseButtonLongPressTimeout )
 {
     // Do nothing.
@@ -1149,17 +1178,6 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-void LocalEvent::reset()
-{
-    ResetModes( KEY_PRESSED );
-    ResetModes( MOUSE_MOTION );
-    ResetModes( MOUSE_PRESSED );
-    ResetModes( MOUSE_RELEASED );
-    ResetModes( MOUSE_WHEEL );
-    ResetModes( MOUSE_TOUCH );
-    ResetModes( KEY_HOLD );
-}
-
 bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
 {
     // Event processing might be computationally heavy.
@@ -1180,14 +1198,14 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
     }
 
     // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "ongoing" states
-    ResetModes( KEY_PRESSED );
-    ResetModes( MOUSE_MOTION );
-    ResetModes( MOUSE_RELEASED );
-    ResetModes( MOUSE_WHEEL );
+    resetStates( KEY_PRESSED );
+    resetStates( MOUSE_MOTION );
+    resetStates( MOUSE_RELEASED );
+    resetStates( MOUSE_WHEEL );
 
     // MOUSE_PRESSED is an "ongoing" state, so we shouldn't reset the MOUSE_TOUCH while that state is active
-    if ( !( modes & MOUSE_PRESSED ) ) {
-        ResetModes( MOUSE_TOUCH );
+    if ( !( _actionStates & MOUSE_PRESSED ) ) {
+        resetStates( MOUSE_TOUCH );
     }
 
     bool isDisplayRefreshRequired = false;
@@ -1239,12 +1257,12 @@ void LocalEvent::ResumeSounds()
 
 void LocalEvent::onMouseWheelEvent( fheroes2::Point position )
 {
-    SetModes( MOUSE_WHEEL );
-    mouse_rm = mouse_cu;
-    mouse_wm = position;
+    setStates( MOUSE_WHEEL );
+    _mouseReleaseMiddlePos = _mouseCursorPos;
+    _mouseWheelMovementOffset = position;
 }
 
-void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touchId, const int64_t fingerId, fheroes2::PointBase2D<float> position )
+void LocalEvent::onTouchFingerEvent( const TouchFingerEventType eventType, const int64_t touchId, const int64_t fingerId, fheroes2::PointBase2D<float> position )
 {
     // ID of a finger here is a composite thing, and consists of a touch device id and a finger id. This
     // should allow gestures to be handled correctly even when using different touchpads for different
@@ -1252,7 +1270,7 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
     const auto eventFingerId = std::make_pair( touchId, fingerId );
 
     switch ( eventType ) {
-    case FINGER_EVENT_DOWN:
+    case TouchFingerEventType::FINGER_EVENT_DOWN:
         if ( !_fingerIds.first ) {
             _fingerIds.first = eventFingerId;
         }
@@ -1265,8 +1283,8 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
         }
 
         break;
-    case FINGER_EVENT_UP:
-    case FINGER_EVENT_MOTION:
+    case TouchFingerEventType::FINGER_EVENT_UP:
+    case TouchFingerEventType::FINGER_EVENT_MOTION:
         if ( eventFingerId != _fingerIds.first && eventFingerId != _fingerIds.second ) {
             // An event from an unknown finger, ignore
             return;
@@ -1286,6 +1304,7 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
         // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+        assert( windowRect.width > 0 );
 
         _emulatedPointerPos.x = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
         _emulatedPointerPos.y
@@ -1295,65 +1314,67 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
         _emulatedPointerPos.y = static_cast<double>( position.y ) * display.height();
 #endif
 
-        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPos.x );
-        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPos.y );
+        _mouseCursorPos.x = static_cast<int32_t>( _emulatedPointerPos.x );
+        _mouseCursorPos.y = static_cast<int32_t>( _emulatedPointerPos.y );
 
-        SetModes( MOUSE_MOTION );
-        SetModes( MOUSE_TOUCH );
+        setStates( MOUSE_MOTION );
+        setStates( MOUSE_TOUCH );
 
         if ( _globalMouseMotionEventHook ) {
-            _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
+            _mouseCursorRenderArea = _globalMouseMotionEventHook( _mouseCursorPos.x, _mouseCursorPos.y );
         }
 
         // If there is a two-finger gesture in progress, the first finger is only used to move the cursor.
         // The operation of the left mouse button is not simulated.
         if ( !_isTwoFingerGestureInProgress ) {
-            if ( eventType == FINGER_EVENT_DOWN ) {
-                mouse_pl = mouse_cu;
+            if ( eventType == TouchFingerEventType::FINGER_EVENT_DOWN ) {
+                _mousePressLeftPos = _mouseCursorPos;
 
                 _mouseButtonLongPressDelay.reset();
 
-                SetModes( MOUSE_PRESSED );
+                setStates( MOUSE_PRESSED );
             }
-            else if ( eventType == FINGER_EVENT_UP ) {
-                mouse_rl = mouse_cu;
+            else if ( eventType == TouchFingerEventType::FINGER_EVENT_UP ) {
+                _mouseReleaseLeftPos = _mouseCursorPos;
 
-                ResetModes( MOUSE_PRESSED );
-                SetModes( MOUSE_RELEASED );
-                ResetModes( DRAG_ONGOING );
+                resetStates( MOUSE_PRESSED );
+                resetStates( DRAG_ONGOING );
+
+                setStates( MOUSE_RELEASED );
             }
 
-            mouse_button = MOUSE_BUTTON_LEFT;
+            _currentMouseButton = MouseButtonType::MOUSE_BUTTON_LEFT;
         }
     }
     else if ( eventFingerId == _fingerIds.second ) {
-        if ( eventType == FINGER_EVENT_DOWN ) {
-            mouse_pr = mouse_cu;
+        if ( eventType == TouchFingerEventType::FINGER_EVENT_DOWN ) {
+            _mousePressRightPos = _mouseCursorPos;
 
             _mouseButtonLongPressDelay.reset();
 
-            SetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_TOUCH );
+            setStates( MOUSE_PRESSED );
+            setStates( MOUSE_TOUCH );
 
             // When the second finger touches the screen, the two-finger gesture processing begins. This
             // gesture simulates the operation of the right mouse button and ends when both fingers are
             // removed from the screen.
             _isTwoFingerGestureInProgress = true;
         }
-        else if ( eventType == FINGER_EVENT_UP ) {
-            mouse_rr = mouse_cu;
+        else if ( eventType == TouchFingerEventType::FINGER_EVENT_UP ) {
+            _mouseReleaseRightPos = _mouseCursorPos;
 
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_TOUCH );
-            ResetModes( DRAG_ONGOING );
+            resetStates( MOUSE_PRESSED );
+            resetStates( DRAG_ONGOING );
+
+            setStates( MOUSE_RELEASED );
+            setStates( MOUSE_TOUCH );
         }
 
-        mouse_button = MOUSE_BUTTON_RIGHT;
+        _currentMouseButton = MouseButtonType::MOUSE_BUTTON_RIGHT;
     }
 
     // The finger no longer touches the screen, reset its state
-    if ( eventType == FINGER_EVENT_UP ) {
+    if ( eventType == TouchFingerEventType::FINGER_EVENT_UP ) {
         if ( eventFingerId == _fingerIds.first ) {
             _fingerIds.first.reset();
         }
@@ -1372,9 +1393,9 @@ void LocalEvent::onTouchFingerEvent( const uint8_t eventType, const int64_t touc
     }
 }
 
-void LocalEvent::onControllerAxisEvent( const uint8_t axisType, const int16_t value )
+void LocalEvent::onControllerAxisEvent( const ControllerAxisType axisType, const int16_t value )
 {
-    if ( axisType == CONTROLLER_AXIS_LEFT_X ) {
+    if ( axisType == ControllerAxisType::CONTROLLER_AXIS_LEFT_X ) {
         if ( std::abs( value ) > CONTROLLER_L_DEADZONE ) {
             _controllerLeftXAxis = value;
         }
@@ -1382,7 +1403,7 @@ void LocalEvent::onControllerAxisEvent( const uint8_t axisType, const int16_t va
             _controllerLeftXAxis = 0;
         }
     }
-    else if ( axisType == CONTROLLER_AXIS_LEFT_Y ) {
+    else if ( axisType == ControllerAxisType::CONTROLLER_AXIS_LEFT_Y ) {
         if ( std::abs( value ) > CONTROLLER_L_DEADZONE ) {
             _controllerLeftYAxis = value;
         }
@@ -1390,7 +1411,7 @@ void LocalEvent::onControllerAxisEvent( const uint8_t axisType, const int16_t va
             _controllerLeftYAxis = 0;
         }
     }
-    else if ( axisType == CONTROLLER_AXIS_RIGHT_X ) {
+    else if ( axisType == ControllerAxisType::CONTROLLER_AXIS_RIGHT_X ) {
         if ( std::abs( value ) > CONTROLLER_R_DEADZONE ) {
             _controllerRightXAxis = value;
         }
@@ -1398,7 +1419,7 @@ void LocalEvent::onControllerAxisEvent( const uint8_t axisType, const int16_t va
             _controllerRightXAxis = 0;
         }
     }
-    else if ( axisType == CONTROLLER_AXIS_RIGHT_Y ) {
+    else if ( axisType == ControllerAxisType::CONTROLLER_AXIS_RIGHT_Y ) {
         if ( std::abs( value ) > CONTROLLER_R_DEADZONE ) {
             _controllerRightYAxis = value;
         }
@@ -1408,84 +1429,85 @@ void LocalEvent::onControllerAxisEvent( const uint8_t axisType, const int16_t va
     }
 }
 
-void LocalEvent::onControllerButtonEvent( const bool isPressed, const int buttonType )
+void LocalEvent::onControllerButtonEvent( const bool isPressed, const ControllerButtonType buttonType )
 {
     if ( isPressed ) {
-        SetModes( KEY_PRESSED );
+        setStates( KEY_PRESSED );
     }
     else {
-        ResetModes( KEY_PRESSED );
+        resetStates( KEY_PRESSED );
     }
 
-    if ( buttonType == CONTROLLER_BUTTON_A || buttonType == CONTROLLER_BUTTON_B ) {
-        if ( modes & KEY_PRESSED ) {
+    if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_A || buttonType == ControllerButtonType::CONTROLLER_BUTTON_B ) {
+        if ( isAnyKeyPressed() ) {
             _mouseButtonLongPressDelay.reset();
 
-            SetModes( MOUSE_PRESSED );
+            setStates( MOUSE_PRESSED );
         }
         else {
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            ResetModes( DRAG_ONGOING );
+            resetStates( MOUSE_PRESSED );
+            resetStates( DRAG_ONGOING );
+
+            setStates( MOUSE_RELEASED );
         }
 
-        if ( buttonType == CONTROLLER_BUTTON_A ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pl = mouse_cu;
+        if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_A ) {
+            if ( isAnyKeyPressed() ) {
+                _mousePressLeftPos = _mouseCursorPos;
             }
             else {
-                mouse_rl = mouse_cu;
+                _mouseReleaseLeftPos = _mouseCursorPos;
             }
 
-            mouse_button = MOUSE_BUTTON_LEFT;
+            _currentMouseButton = MouseButtonType::MOUSE_BUTTON_LEFT;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_B ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pr = mouse_cu;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_B ) {
+            if ( isAnyKeyPressed() ) {
+                _mousePressRightPos = _mouseCursorPos;
             }
             else {
-                mouse_rr = mouse_cu;
+                _mouseReleaseRightPos = _mouseCursorPos;
             }
 
-            mouse_button = MOUSE_BUTTON_RIGHT;
+            _currentMouseButton = MouseButtonType::MOUSE_BUTTON_RIGHT;
         }
 
-        ResetModes( KEY_PRESSED );
+        resetStates( KEY_PRESSED );
     }
-    else if ( modes & KEY_PRESSED ) {
-        if ( buttonType == CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
+    else if ( isAnyKeyPressed() ) {
+        if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
             _controllerPointerSpeed *= _controllerTriggerCursorSpeedup;
-            key_value = fheroes2::Key::NONE;
+            _currentKeyboardValue = fheroes2::Key::NONE;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_GUIDE ) {
-            key_value = fheroes2::Key::KEY_ESCAPE;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_GUIDE ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_ESCAPE;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_DPAD_DOWN ) {
-            key_value = fheroes2::Key::KEY_SPACE;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_DPAD_DOWN ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_SPACE;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_DPAD_LEFT ) {
-            key_value = fheroes2::Key::KEY_H;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_DPAD_LEFT ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_H;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_DPAD_RIGHT ) {
-            key_value = fheroes2::Key::KEY_T;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_DPAD_RIGHT ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_T;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_X ) {
-            key_value = fheroes2::Key::KEY_E;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_X ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_E;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_Y ) {
-            key_value = fheroes2::Key::KEY_C;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_Y ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_C;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_BACK ) {
-            key_value = fheroes2::Key::KEY_F;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_BACK ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_F;
         }
-        else if ( buttonType == CONTROLLER_BUTTON_START ) {
-            key_value = fheroes2::Key::KEY_ENTER;
+        else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_START ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_ENTER;
         }
         else {
-            key_value = fheroes2::Key::NONE;
+            _currentKeyboardValue = fheroes2::Key::NONE;
         }
     }
-    else if ( buttonType == CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
+    else if ( buttonType == ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER ) {
         _controllerPointerSpeed /= _controllerTriggerCursorSpeedup;
     }
 }
@@ -1496,7 +1518,7 @@ void LocalEvent::ProcessControllerAxisMotion()
     _controllerTimer.reset();
 
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
-        SetModes( MOUSE_MOTION );
+        setStates( MOUSE_MOTION );
 
         const int32_t xSign = ( _controllerLeftXAxis < 0 ) ? -1 : 1;
         const int32_t ySign = ( _controllerLeftYAxis < 0 ) ? -1 : 1;
@@ -1516,30 +1538,34 @@ void LocalEvent::ProcessControllerAxisMotion()
         else if ( _emulatedPointerPos.y >= display.height() )
             _emulatedPointerPos.y = display.height() - 1;
 
-        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPos.x );
-        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPos.y );
+        _mouseCursorPos.x = static_cast<int32_t>( _emulatedPointerPos.x );
+        _mouseCursorPos.y = static_cast<int32_t>( _emulatedPointerPos.y );
 
         if ( _globalMouseMotionEventHook ) {
-            _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
+            _mouseCursorRenderArea = _globalMouseMotionEventHook( _mouseCursorPos.x, _mouseCursorPos.y );
         }
     }
 
     // map scroll with right stick
     if ( _controllerRightXAxis != 0 || _controllerRightYAxis != 0 ) {
         _controllerScrollActive = true;
-        SetModes( KEY_PRESSED );
+        setStates( KEY_PRESSED );
 
-        if ( _controllerRightXAxis < 0 )
-            key_value = fheroes2::Key::KEY_LEFT;
-        else if ( _controllerRightXAxis > 0 )
-            key_value = fheroes2::Key::KEY_RIGHT;
-        else if ( _controllerRightYAxis < 0 )
-            key_value = fheroes2::Key::KEY_UP;
-        else if ( _controllerRightYAxis > 0 )
-            key_value = fheroes2::Key::KEY_DOWN;
+        if ( _controllerRightXAxis < 0 ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_LEFT;
+        }
+        else if ( _controllerRightXAxis > 0 ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_RIGHT;
+        }
+        else if ( _controllerRightYAxis < 0 ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_UP;
+        }
+        else if ( _controllerRightYAxis > 0 ) {
+            _currentKeyboardValue = fheroes2::Key::KEY_DOWN;
+        }
     }
     else if ( _controllerScrollActive ) {
-        ResetModes( KEY_PRESSED );
+        resetStates( KEY_PRESSED );
         _controllerScrollActive = false;
     }
 }
@@ -1559,89 +1585,92 @@ void LocalEvent::onRenderDeviceResetEvent()
     fheroes2::Copy( temp, display );
 }
 
-void LocalEvent::onKeyboardEvent( const fheroes2::Key key, const int32_t keyModifier, const uint8_t keyState )
+void LocalEvent::onKeyboardEvent( const fheroes2::Key key, const int32_t keyModifier, const KeyboardEventState keyState )
 {
-    if ( keyState == KEY_DOWN ) {
-        SetModes( KEY_PRESSED );
-        SetModes( KEY_HOLD );
+    if ( keyState == KeyboardEventState::KEY_DOWN ) {
+        setStates( KEY_PRESSED );
+        setStates( KEY_HOLD );
 
         if ( _globalKeyDownEventHook ) {
             _globalKeyDownEventHook( key, keyModifier );
         }
     }
-    else if ( keyState == KEY_UP ) {
-        ResetModes( KEY_PRESSED );
-        ResetModes( KEY_HOLD );
+    else if ( keyState == KeyboardEventState::KEY_UP ) {
+        resetStates( KEY_PRESSED );
+        resetStates( KEY_HOLD );
     }
 
-    key_value = key;
+    _currentKeyboardValue = key;
 }
 
 void LocalEvent::onMouseMotionEvent( fheroes2::Point position )
 {
-    SetModes( MOUSE_MOTION );
-    mouse_cu = position;
-    _emulatedPointerPos.x = mouse_cu.x;
-    _emulatedPointerPos.y = mouse_cu.y;
+    setStates( MOUSE_MOTION );
+    _mouseCursorPos = position;
+    _emulatedPointerPos.x = _mouseCursorPos.x;
+    _emulatedPointerPos.y = _mouseCursorPos.y;
 
     if ( _globalMouseMotionEventHook ) {
         _mouseCursorRenderArea = _globalMouseMotionEventHook( position.x, position.y );
     }
 }
 
-void LocalEvent::onMouseButtonEvent( const bool isPressed, const int buttonType, fheroes2::Point position )
+void LocalEvent::onMouseButtonEvent( const bool isPressed, const MouseButtonType buttonType, fheroes2::Point position )
 {
     if ( isPressed ) {
         _mouseButtonLongPressDelay.reset();
 
-        SetModes( MOUSE_PRESSED );
+        setStates( MOUSE_PRESSED );
     }
     else {
-        ResetModes( MOUSE_PRESSED );
-        SetModes( MOUSE_RELEASED );
-        ResetModes( DRAG_ONGOING );
+        resetStates( MOUSE_PRESSED );
+        resetStates( DRAG_ONGOING );
+
+        setStates( MOUSE_RELEASED );
     }
 
-    mouse_button = buttonType;
+    _currentMouseButton = buttonType;
 
-    mouse_cu = position;
-    _emulatedPointerPos.x = mouse_cu.x;
-    _emulatedPointerPos.y = mouse_cu.y;
+    _mouseCursorPos = position;
+    _emulatedPointerPos.x = _mouseCursorPos.x;
+    _emulatedPointerPos.y = _mouseCursorPos.y;
 
-    if ( modes & MOUSE_PRESSED ) {
+    if ( _actionStates & MOUSE_PRESSED ) {
         switch ( buttonType ) {
-        case MOUSE_BUTTON_LEFT:
-            mouse_pl = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_LEFT:
+            _mousePressLeftPos = _mouseCursorPos;
             break;
 
-        case MOUSE_BUTTON_MIDDLE:
-            mouse_pm = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_MIDDLE:
+            _mousePressMiddlePos = _mouseCursorPos;
             break;
 
-        case MOUSE_BUTTON_RIGHT:
-            mouse_pr = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_RIGHT:
+            _mousePressRightPos = _mouseCursorPos;
             break;
 
         default:
+            assert( 0 );
             break;
         }
     }
     // Mouse button has been released
     else {
         switch ( buttonType ) {
-        case MOUSE_BUTTON_LEFT:
-            mouse_rl = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_LEFT:
+            _mouseReleaseLeftPos = _mouseCursorPos;
             break;
 
-        case MOUSE_BUTTON_MIDDLE:
-            mouse_rm = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_MIDDLE:
+            _mouseReleaseMiddlePos = _mouseCursorPos;
             break;
 
-        case MOUSE_BUTTON_RIGHT:
-            mouse_rr = mouse_cu;
+        case MouseButtonType::MOUSE_BUTTON_RIGHT:
+            _mouseReleaseRightPos = _mouseCursorPos;
             break;
 
         default:
+            assert( 0 );
             break;
         }
     }
@@ -1649,11 +1678,11 @@ void LocalEvent::onMouseButtonEvent( const bool isPressed, const int buttonType,
 
 bool LocalEvent::MouseClickLeft()
 {
-    if ( !( modes & MOUSE_RELEASED ) ) {
+    if ( !( _actionStates & MOUSE_RELEASED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_LEFT != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_LEFT ) {
         return false;
     }
 
@@ -1661,22 +1690,22 @@ bool LocalEvent::MouseClickLeft()
         return false;
     }
 
-    ResetModes( MOUSE_RELEASED );
+    resetStates( MOUSE_RELEASED );
 
     return true;
 }
 
-bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
+bool LocalEvent::MouseClickLeft( const fheroes2::Rect & area )
 {
-    if ( !( modes & MOUSE_RELEASED ) ) {
+    if ( !( _actionStates & MOUSE_RELEASED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_LEFT != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_LEFT ) {
         return false;
     }
 
-    if ( !( rt & mouse_pl ) || !( rt & mouse_rl ) ) {
+    if ( !( area & _mousePressLeftPos ) || !( area & _mouseReleaseLeftPos ) ) {
         return false;
     }
 
@@ -1684,18 +1713,18 @@ bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
         return false;
     }
 
-    ResetModes( MOUSE_RELEASED );
+    resetStates( MOUSE_RELEASED );
 
     return true;
 }
 
 bool LocalEvent::MouseClickMiddle()
 {
-    if ( !( modes & MOUSE_RELEASED ) ) {
+    if ( !( _actionStates & MOUSE_RELEASED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_MIDDLE != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_MIDDLE ) {
         return false;
     }
 
@@ -1703,18 +1732,18 @@ bool LocalEvent::MouseClickMiddle()
         return false;
     }
 
-    ResetModes( MOUSE_RELEASED );
+    resetStates( MOUSE_RELEASED );
 
     return true;
 }
 
 bool LocalEvent::MouseClickRight()
 {
-    if ( !( modes & MOUSE_RELEASED ) ) {
+    if ( !( _actionStates & MOUSE_RELEASED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_RIGHT != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_RIGHT ) {
         return false;
     }
 
@@ -1722,22 +1751,22 @@ bool LocalEvent::MouseClickRight()
         return false;
     }
 
-    ResetModes( MOUSE_RELEASED );
+    resetStates( MOUSE_RELEASED );
 
     return true;
 }
 
-bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
+bool LocalEvent::MouseClickRight( const fheroes2::Rect & area )
 {
-    if ( !( modes & MOUSE_RELEASED ) ) {
+    if ( !( _actionStates & MOUSE_RELEASED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_RIGHT != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_RIGHT ) {
         return false;
     }
 
-    if ( !( rt & mouse_pr ) || !( rt & mouse_rr ) ) {
+    if ( !( area & _mousePressRightPos ) || !( area & _mouseReleaseRightPos ) ) {
         return false;
     }
 
@@ -1745,22 +1774,22 @@ bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
         return false;
     }
 
-    ResetModes( MOUSE_RELEASED );
+    resetStates( MOUSE_RELEASED );
 
     return true;
 }
 
 bool LocalEvent::MouseLongPressLeft( const fheroes2::Rect & rt )
 {
-    if ( !( modes & MOUSE_PRESSED ) ) {
+    if ( !( _actionStates & MOUSE_PRESSED ) ) {
         return false;
     }
 
-    if ( MOUSE_BUTTON_LEFT != mouse_button ) {
+    if ( _currentMouseButton != MouseButtonType::MOUSE_BUTTON_LEFT ) {
         return false;
     }
 
-    if ( !( rt & mouse_pl ) ) {
+    if ( !( rt & _mousePressLeftPos ) ) {
         return false;
     }
 

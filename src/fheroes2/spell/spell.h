@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,13 +28,15 @@
 
 #define DEFAULT_SPELL_DURATION 3
 
+class IStreamBase;
+class OStreamBase;
+
 class HeroBase;
-class StreamBase;
 
 class Spell
 {
 public:
-    enum type_t : int32_t
+    enum : int32_t
     {
         NONE = 0,
         FIREBALL,
@@ -246,13 +248,10 @@ public:
     static int32_t CalculateDimensionDoorDistance();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Spell & );
-    friend StreamBase & operator>>( StreamBase &, Spell & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
+    friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );
 
     int id;
 };
-
-StreamBase & operator<<( StreamBase &, const Spell & );
-StreamBase & operator>>( StreamBase &, Spell & );
 
 #endif

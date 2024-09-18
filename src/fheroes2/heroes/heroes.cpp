@@ -28,14 +28,13 @@
 #include <cstddef>
 #include <iterator>
 #include <map>
-#include <memory>
-#include <ostream>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -43,9 +42,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
-#include "difficulty.h"
 #include "direction.h"
-#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
@@ -77,7 +74,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -137,7 +133,7 @@ namespace
                         break;
                     }
 
-                    StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
+                    fheroes2::appendModifierToString( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
                     strs->append( "\n" );
                 }
             }
@@ -460,7 +456,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // Reset the army to default
     army.Reset( true );
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     // Skip first unused byte.
     dataStream.skip( 1 );
@@ -601,10 +597,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
-
-    if ( isControlAI() ) {
-        AI::Get().HeroesPostLoad( *this );
-    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
@@ -1036,11 +1028,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         }
     }
 
-    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
-    if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
-    }
-
     return result;
 }
 
@@ -1213,7 +1200,7 @@ uint32_t Heroes::getDailyRestoredSpellPoints() const
     // Spell points from artifacts.
     points += static_cast<uint32_t>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION ) );
 
-    points += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+    points += GetSecondarySkillValue( Skill::Secondary::MYSTICISM );
 
     return points;
 }
@@ -1278,7 +1265,7 @@ Castle * Heroes::inCastleMutable() const
     return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
-bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
+bool Heroes::isVisited( const Maps::Tiles & tile, Visit::Type type ) const
 {
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
@@ -1290,7 +1277,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
-bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Type type ) const
 {
     if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
@@ -1299,7 +1286,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::ty
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-void Heroes::SetVisited( int32_t index, Visit::type_t type )
+void Heroes::SetVisited( int32_t index, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const MP2::MapObjectType objectType = tile.GetObject( false );
@@ -1324,10 +1311,10 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 }
 
-void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::type_t type )
+void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const uint32_t uid = tile.GetObjectUID();
+    const uint32_t uid = tile.getMainObjectPart()._uid;
     int wide = 0;
 
     switch ( objectType ) {
@@ -1346,7 +1333,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 
     if ( tile.GetObject( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
     }
 }
@@ -1602,8 +1589,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
 
             const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-            fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                   Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::OK, { &artifactUI } );
         }
         return false;
     }
@@ -1613,9 +1599,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         header.append( _( "Do you wish to buy one?" ) );
 
         const fheroes2::ArtifactDialogElement artifactUI( Artifact::MAGIC_BOOK );
-        if ( fheroes2::showMessage( fheroes2::Text( GetName(), fheroes2::FontType::normalYellow() ), fheroes2::Text( header, fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO, { &artifactUI } )
-             == Dialog::NO ) {
+        if ( fheroes2::showStandardTextMessage( GetName(), std::move( header ), Dialog::YES | Dialog::NO, { &artifactUI } ) == Dialog::NO ) {
             return false;
         }
     }
@@ -1654,7 +1638,7 @@ void Heroes::SetMove( const bool enable )
         ResetModes( SLEEPER );
 
         if ( isControlAI() ) {
-            AI::Get().HeroesBeginMovement( *this );
+            AI::Planner::Get().HeroesBeginMovement( *this );
         }
 
         SetModes( ENABLEMOVE );
@@ -1665,10 +1649,6 @@ void Heroes::SetMove( const bool enable )
         }
 
         ResetModes( ENABLEMOVE );
-
-        if ( isControlAI() ) {
-            AI::Get().HeroesFinishMovement( *this );
-        }
 
         // Reset the hero sprite
         resetHeroSprite();
@@ -1716,9 +1696,9 @@ bool Heroes::HasSecondarySkill( int skill ) const
     return Skill::Level::NONE != secondary_skills.GetLevel( skill );
 }
 
-uint32_t Heroes::GetSecondaryValues( int skill ) const
+uint32_t Heroes::GetSecondarySkillValue( int skill ) const
 {
-    return secondary_skills.GetValues( skill );
+    return secondary_skills.GetValue( skill );
 }
 
 bool Heroes::HasMaxSecondarySkill() const
@@ -1761,7 +1741,7 @@ void Heroes::Scout( const int tileIndex ) const
 int Heroes::GetScoutingDistance() const
 {
     return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
+                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondarySkillValue( Skill::Secondary::SCOUTING ) );
 }
 
 fheroes2::Rect Heroes::GetScoutRoi() const
@@ -1778,7 +1758,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
     if ( level == Skill::Level::NONE )
         return movePoints;
 
-    const uint32_t skillValue = GetSecondaryValues( skill );
+    const uint32_t skillValue = GetSecondarySkillValue( skill );
 
     if ( skillValue == 33 ) {
         return movePoints * 4 / 3;
@@ -1846,10 +1826,9 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
-    if ( !skipsecondary )
-        LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
-    if ( isControlAI() )
-        AI::Get().HeroesLevelUp( *this );
+    if ( !skipsecondary ) {
+        LevelUpSecondarySkill( seeds, primarySkill, autoselect );
+    }
 }
 
 void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
@@ -1875,6 +1854,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         else {
             selected = sec1.isValid() ? sec1 : sec2;
         }
+    }
+    else if ( isControlAI() ) {
+        selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
     else {
         AudioManager::PlaySound( M82::NWHEROLV );
@@ -2030,8 +2012,9 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( isControlAI() )
-        AI::Get().HeroesActionNewPosition( *this );
+    if ( isControlAI() ) {
+        AI::Planner::Get().HeroesActionNewPosition( *this );
+    }
 
     ResetModes( VISIONS );
 }
@@ -2054,7 +2037,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
     if ( isValidId( id ) )
         switch ( type ) {
         case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            return fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
@@ -2064,7 +2047,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
                 return iter->second;
             }
 
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 
@@ -2174,8 +2157,6 @@ std::string Heroes::String() const
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl
            << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
-
-        os << AI::Get().HeroesString( *this );
     }
 
     return os.str();
@@ -2447,28 +2428,28 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
     return nullptr;
 }
 
-StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
+OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes )
 {
-    msg << static_cast<uint32_t>( heroes.size() );
+    stream << static_cast<uint32_t>( heroes.size() );
 
     for ( const Heroes * hero : heroes ) {
         assert( hero != nullptr );
-        msg << hero->GetID();
+        stream << hero->GetID();
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
+IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
 {
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     heroes.clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
         int32_t hid;
-        msg >> hid;
+        stream >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
@@ -2500,35 +2481,35 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
         }
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
+OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero )
 {
     const HeroBase & base = hero;
     const ColorBase & col = hero;
 
     // HeroBase
-    msg << base;
+    stream << base;
 
     // Heroes
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
 
-    return msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
-               << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
-               << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
+    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
+                  << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
+                  << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 }
 
-StreamBase & operator>>( StreamBase & msg, Heroes & hero )
+IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
 {
     HeroBase & base = hero;
     ColorBase & col = hero;
 
     // HeroBase
-    msg >> base;
+    stream >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
+    stream >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
@@ -2560,14 +2541,14 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
             int temp = 0;
-            msg >> temp;
+            stream >> temp;
 
             hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
         }
         else {
             uint8_t temp = 0;
 
-            msg >> temp;
+            stream >> temp;
 
             hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
         }
@@ -2575,46 +2556,46 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     else {
         ObjectTypeUnderHeroType temp = 0;
 
-        msg >> temp;
+        stream >> temp;
 
         hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
     }
 
-    msg >> hero.path >> hero.direction >> hero.sprite_index;
+    stream >> hero.path >> hero.direction >> hero.sprite_index;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         int16_t patrolX = 0;
         int16_t patrolY = 0;
 
-        msg >> patrolX >> patrolY;
+        stream >> patrolX >> patrolY;
         hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
     }
     else {
-        msg >> hero._patrolCenter;
+        stream >> hero._patrolCenter;
     }
 
-    msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
+    stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
+OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 {
-    msg << static_cast<uint32_t>( heroes.size() );
+    stream << static_cast<uint32_t>( heroes.size() );
 
     for ( Heroes * const & hero : heroes ) {
-        msg << *hero;
+        stream << *hero;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
+IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
     uint32_t size;
-    msg >> size;
+    stream >> size;
 
     heroes.clear();
     heroes.resize( size, nullptr );
@@ -2625,18 +2606,18 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
         // In order to preserve the original order of heroes we have to do the below trick.
         for ( size_t i = 1; i < heroes.size(); ++i ) {
             heroes[i] = new Heroes();
-            msg >> *heroes[i];
+            stream >> *heroes[i];
         }
 
         heroes[0] = new Heroes();
-        msg >> *heroes[0];
+        stream >> *heroes[0];
     }
     else {
         for ( Heroes *& hero : heroes ) {
             hero = new Heroes();
-            msg >> *hero;
+            stream >> *hero;
         }
     }
 
-    return msg;
+    return stream;
 }

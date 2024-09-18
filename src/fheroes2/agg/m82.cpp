@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -225,7 +225,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
     case MP2::OBJ_VOLCANO:
-        switch ( tile.getObjectIcnType() ) {
+        switch ( tile.getMainObjectPart()._objectIcnType ) {
         // Tile with volcanic steam only
         case MP2::OBJ_ICN_TYPE_UNKNOWN:
             return UNKNOWN;

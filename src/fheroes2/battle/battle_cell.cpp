@@ -28,7 +28,7 @@
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_troop.h"
-#include "tools.h"
+#include "math_tools.h"
 
 namespace
 {
@@ -279,7 +279,7 @@ void Battle::Cell::SetArea( const fheroes2::Rect & area )
     _coord[6] = { infl * _pos.x, infl * _pos.y + infl * _pos.height - infl * ( _pos.height - cellHeightVerSide ) / 2 };
 }
 
-Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
+Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 

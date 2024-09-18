@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <array>
 #include <ctime>
-#include <memory>
 
 #include "campaign_scenariodata.h"
 #include "game_language.h"
@@ -110,31 +109,38 @@ namespace fheroes2
         return static_cast<uint32_t>( std::time( nullptr ) );
     }
 
-    void HighscoreData::loadV1( StreamBase & msg )
+    void HighscoreData::loadV1( IStreamBase & stream )
     {
         languageAbbreviation = fheroes2::getLanguageAbbreviation( fheroes2::SupportedLanguage::English );
 
-        msg >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
+        stream >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const HighscoreData & data )
+    OStreamBase & operator<<( OStreamBase & stream, const HighscoreData & data )
     {
-        return msg << data.languageAbbreviation << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
+        return stream << data.languageAbbreviation << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HighscoreData & data )
+    IStreamBase & operator>>( IStreamBase & stream, HighscoreData & data )
     {
-        return msg >> data.languageAbbreviation >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
+        return stream >> data.languageAbbreviation >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
     }
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        StreamBuf hdata;
-        if ( !Compression::readFile( hdata, fileName ) ) {
+        StreamFile fileStream;
+        fileStream.setBigendian( true );
+        if ( !fileStream.open( fileName, "rb" ) ) {
             return false;
         }
 
-        hdata.setbigendian( true );
+        RWStreamBuf hdata;
+        hdata.setBigendian( true );
+
+        if ( !Compression::unzipStream( fileStream, hdata ) ) {
+            return false;
+        }
+
         uint32_t magicValue = 0;
 
         hdata >> magicValue;
@@ -194,11 +200,18 @@ namespace fheroes2
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
-        StreamBuf hdata;
-        hdata.setbigendian( true );
+        StreamFile fileStream;
+        fileStream.setBigendian( true );
+
+        if ( !fileStream.open( fileName, "wb" ) ) {
+            return false;
+        }
+
+        RWStreamBuf hdata;
+        hdata.setBigendian( true );
         hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
-        return !hdata.fail() && Compression::writeFile( hdata, fileName );
+        return !hdata.fail() && Compression::zipStreamBuf( hdata, fileStream );
     }
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )

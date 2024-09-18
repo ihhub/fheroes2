@@ -27,14 +27,12 @@
 #include <array>
 #include <cassert>
 #include <limits>
-#include <memory>
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_planner.h"
 #include "artifact.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -329,7 +327,7 @@ void World::Reset()
     vec_eventsday.clear();
 
     // rumors
-    _rumors.clear();
+    _customRumors.clear();
 
     // castles
     vec_castles.Clear();
@@ -374,7 +372,7 @@ void World::generateBattleOnlyMap()
         fi.version = GameVersion::PRICE_OF_LOYALTY;
     }
 
-    conf.SetCurrentFileInfo( std::move( fi ) );
+    conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
@@ -409,7 +407,7 @@ void World::generateForEditor( const int32_t size )
 
     fi.version = GameVersion::PRICE_OF_LOYALTY;
 
-    conf.SetCurrentFileInfo( std::move( fi ) );
+    conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
@@ -711,7 +709,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 std::string World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
-    const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
+    const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
     switch ( chosenRumorId ) {
@@ -779,7 +777,7 @@ std::string World::getCurrentRumor() const
     }
 
     assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
-    return _rumors[chosenRumorId - standardRumorCount];
+    return _customRumors[chosenRumorId - standardRumorCount];
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -793,7 +791,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     }
 
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -828,10 +826,10 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     }
 
     // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.getHero() != nullptr ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.getHero() != nullptr ) {
             continue;
         }
 
@@ -988,7 +986,7 @@ void World::ActionForMagellanMaps( int color )
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             if ( isAIPlayer && tile.isFog( color ) ) {
-                AI::Get().revealFog( tile, kingdom );
+                AI::Planner::Get().revealFog( tile, kingdom );
             }
 
             tile.ClearFog( alliedColors );
@@ -1287,13 +1285,17 @@ std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 void World::resetPathfinder()
 {
     _pathfinder.reset();
-    AI::Get().resetPathfinder();
+    AI::Planner::Get().resetPathfinder();
 }
 
 void World::updatePassabilities()
 {
     for ( Maps::Tiles & tile : vec_tiles ) {
-        tile.updateEmpty();
+        // If tile is empty then update tile's object type if needed.
+        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+            tile.updateObjectType();
+        }
+
         tile.setInitialPassability();
     }
 
@@ -1313,14 +1315,14 @@ void World::PostLoad( const bool setTilePassabilities )
     _allTeleports.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
     }
 
     resetPathfinder();
@@ -1353,115 +1355,115 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     return false;
 }
 
-StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
+OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )
 {
-    return msg << obj.objcol << obj.guardians;
+    return stream << obj.objcol << obj.guardians;
 }
 
-StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
+IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 {
-    return msg >> obj.objcol >> obj.guardians;
+    return stream >> obj.objcol >> obj.guardians;
 }
 
-StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
+OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    msg << static_cast<uint32_t>( objs.size() );
+    stream << static_cast<uint32_t>( objs.size() );
     for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
         if ( ( *it ).second ) {
             const MapObjectSimple & obj = *( *it ).second;
-            msg << ( *it ).first << obj.GetType();
+            stream << ( *it ).first << obj.GetType();
 
             switch ( obj.GetType() ) {
             case MP2::OBJ_EVENT:
-                msg << static_cast<const MapEvent &>( obj );
+                stream << dynamic_cast<const MapEvent &>( obj );
                 break;
 
             case MP2::OBJ_SPHINX:
-                msg << static_cast<const MapSphinx &>( obj );
+                stream << dynamic_cast<const MapSphinx &>( obj );
                 break;
 
             case MP2::OBJ_SIGN:
-                msg << static_cast<const MapSign &>( obj );
+                stream << dynamic_cast<const MapSign &>( obj );
                 break;
 
             default:
-                msg << obj;
+                stream << obj;
                 break;
             }
         }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
+IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
     uint32_t size = 0;
-    msg >> size;
+    stream >> size;
 
     objs.clear();
 
     for ( uint32_t ii = 0; ii < size; ++ii ) {
         int32_t index;
         int type;
-        msg >> index >> type;
+        stream >> index >> type;
 
         switch ( type ) {
         case MP2::OBJ_EVENT: {
             MapEvent * ptr = new MapEvent();
-            msg >> *ptr;
+            stream >> *ptr;
             objs[index] = ptr;
             break;
         }
 
         case MP2::OBJ_SPHINX: {
             MapSphinx * ptr = new MapSphinx();
-            msg >> *ptr;
+            stream >> *ptr;
             objs[index] = ptr;
             break;
         }
 
         case MP2::OBJ_SIGN: {
             MapSign * ptr = new MapSign();
-            msg >> *ptr;
+            stream >> *ptr;
             objs[index] = ptr;
             break;
         }
 
         default: {
             MapObjectSimple * ptr = new MapObjectSimple();
-            msg >> *ptr;
+            stream >> *ptr;
             objs[index] = ptr;
             break;
         }
         }
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const World & w )
+OStreamBase & operator<<( OStreamBase & stream, const World & w )
 {
-    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
+    return stream << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._customRumors << w.vec_eventsday << w.map_captureobj
+                  << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
 }
 
-StreamBase & operator>>( StreamBase & msg, World & w )
+IStreamBase & operator>>( IStreamBase & stream, World & w )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         uint16_t width = 0;
         uint16_t height = 0;
 
-        msg >> width >> height;
+        stream >> width >> height;
         w.width = width;
         w.height = height;
     }
     else {
-        msg >> w.width >> w.height;
+        stream >> w.width >> w.height;
     }
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
+    stream >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
+        >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
@@ -1469,11 +1471,11 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         ++w.heroIdAsLossCondition;
     }
 
-    msg >> w.map_objects >> w._seed;
+    stream >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
-    return msg;
+    return stream;
 }
 
 void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
@@ -1549,7 +1551,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     // - string
     //    Null terminated string containing the event text.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     dataStream.skip( 1 );
 
@@ -1630,12 +1632,12 @@ bool EventDate::isAllow( const int col, const uint32_t date ) const
     return ( ( date - firstOccurrenceDay ) % repeatPeriodInDays ) == 0;
 }
 
-StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
+OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj )
 {
-    return msg << obj.resource << obj.isApplicableForAIPlayers << obj.firstOccurrenceDay << obj.repeatPeriodInDays << obj.colors << obj.message << obj.title;
+    return stream << obj.resource << obj.isApplicableForAIPlayers << obj.firstOccurrenceDay << obj.repeatPeriodInDays << obj.colors << obj.message << obj.title;
 }
 
-StreamBase & operator>>( StreamBase & msg, EventDate & obj )
+IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 {
-    return msg >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
+    return stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
 }

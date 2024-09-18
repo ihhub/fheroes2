@@ -33,7 +33,8 @@
 #include "bitmodes.h"
 #include "color.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps
 {
@@ -90,6 +91,9 @@ struct Focus : std::pair<int, void *>
         return first == FOCUS_HEROES && second ? static_cast<Heroes *>( second ) : nullptr;
     }
 };
+
+OStreamBase & operator<<( OStreamBase & stream, const Focus & focus );
+IStreamBase & operator>>( IStreamBase & stream, Focus & focus );
 
 struct Control
 {
@@ -194,8 +198,8 @@ public:
 #endif
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const Player & );
-    friend StreamBase & operator>>( StreamBase &, Player & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Player & player );
+    friend IStreamBase & operator>>( IStreamBase & stream, Player & player );
 
     int control;
     int color;
@@ -215,9 +219,6 @@ protected:
     bool _isAIAutoControlModePlanned;
 #endif
 };
-
-StreamBase & operator<<( StreamBase &, const Player & );
-StreamBase & operator>>( StreamBase &, Player & );
 
 class Players : public std::vector<Player *>
 {
@@ -270,7 +271,7 @@ private:
     int _currentColor{ Color::NONE };
 };
 
-StreamBase & operator<<( StreamBase &, const Players & );
-StreamBase & operator>>( StreamBase &, Players & );
+OStreamBase & operator<<( OStreamBase & stream, const Players & players );
+IStreamBase & operator>>( IStreamBase & stream, Players & players );
 
 #endif

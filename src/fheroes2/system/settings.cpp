@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <memory>
+#include <sstream>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -34,9 +34,11 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "logging.h"
 #include "render_processor.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -108,7 +110,6 @@ Settings::Settings()
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
-    , preferably_count_players( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
     _gameOptions.SetModes( GAME_SHOW_INTRO );
@@ -495,13 +496,11 @@ std::string Settings::String() const
     return os.str();
 }
 
-void Settings::SetCurrentFileInfo( Maps::FileInfo fi )
+void Settings::setCurrentMapInfo( Maps::FileInfo fi )
 {
-    current_maps_file = std::move( fi );
+    _currentMapInfo = std::move( fi );
 
-    players.Init( current_maps_file );
-
-    preferably_count_players = 0;
+    players.Init( _currentMapInfo );
 }
 
 bool Settings::setGameLanguage( const std::string & language )
@@ -625,10 +624,10 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
-                res.FindFileInDir( path, fileNameFilter, false );
+                res.FindFileInDir( path, fileNameFilter );
             }
             else {
-                res.ReadDir( path, fileNameFilter, false );
+                res.ReadDir( path, fileNameFilter );
             }
         }
     }
@@ -1005,11 +1004,6 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-void Settings::SetPreferablyCountPlayers( int c )
-{
-    preferably_count_players = std::min( c, 6 );
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
@@ -1092,12 +1086,20 @@ void Settings::resetFirstGameRun()
     _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.preferably_count_players << conf.players;
+    return stream << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
 }
 
-StreamBase & operator>>( StreamBase & msg, Settings & conf )
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 {
-    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
+    stream >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
+        int temp;
+        stream >> temp;
+    }
+
+    return stream >> conf.players;
 }

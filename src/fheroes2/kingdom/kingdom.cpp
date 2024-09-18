@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 
-#include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -49,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "profit.h"
@@ -96,11 +96,11 @@ namespace
 
         return corrected;
     }
-}
 
-bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
-{
-    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
+    {
+        return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    }
 }
 
 Kingdom::Kingdom()
@@ -305,8 +305,6 @@ void Kingdom::AddHero( Heroes * hero )
     if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) ) {
         heroes.push_back( hero );
     }
-
-    AI::Get().HeroesAdd( *hero );
 }
 
 void Kingdom::RemoveHero( const Heroes * hero )
@@ -331,26 +329,21 @@ void Kingdom::RemoveHero( const Heroes * hero )
         player->GetFocus().Reset();
     }
 
-    assert( hero != nullptr );
-
-    AI::Get().HeroesRemove( *hero );
-
     if ( isLoss() ) {
         LossPostActions();
     }
 }
 
-void Kingdom::AddCastle( const Castle * castle )
+void Kingdom::AddCastle( Castle * castle )
 {
     if ( castle ) {
-        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) )
-            castles.push_back( const_cast<Castle *>( castle ) );
+        if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
+            castles.push_back( castle );
+        }
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
             Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
-
-        AI::Get().CastleAdd( *castle );
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
@@ -372,10 +365,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
         }
-
-        assert( castle != nullptr );
-
-        AI::Get().CastleRemove( *castle );
     }
 
     if ( isLoss() )
@@ -704,7 +693,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         // estates skill bonus
         for ( const Heroes * hero : heroes ) {
             assert( hero != nullptr );
-            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
+            totalIncome.gold += hero->GetSecondarySkillValue( Skill::Secondary::ESTATES );
         }
     }
 
@@ -908,7 +897,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( const Castle * castle : castles ) {
+    for ( Castle * castle : castles ) {
         assert( castle != nullptr );
 
         // Skip neutral castles and towns.
@@ -969,7 +958,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
+Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() ) {
         switch ( difficulty ) {
@@ -1009,45 +998,45 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
     return { 7500, 20, 5, 20, 5, 5, 5 };
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
-    return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+    return stream << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
+IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+    stream >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1100_RELEASE ) {
         int dummy;
 
-        msg >> dummy;
+        stream >> dummy;
     }
 
-    return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+    return stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj )
 {
-    msg << Kingdoms::_size;
+    stream << Kingdoms::_size;
     for ( const Kingdom & kingdom : obj.kingdoms )
-        msg << kingdom;
+        stream << kingdom;
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
+IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj )
 {
     uint32_t kingdomscount = 0;
-    msg >> kingdomscount;
+    stream >> kingdomscount;
 
     if ( kingdomscount <= Kingdoms::_size ) {
         for ( uint32_t i = 0; i < kingdomscount; ++i )
-            msg >> obj.kingdoms[i];
+            stream >> obj.kingdoms[i];
     }
 
-    return msg;
+    return stream;
 }

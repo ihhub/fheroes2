@@ -23,7 +23,6 @@
 
 #include "zzlib.h"
 
-#include <algorithm>
 #include <cstring>
 #include <ostream>
 
@@ -40,7 +39,7 @@ namespace
 
 namespace Compression
 {
-    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
+    std::vector<uint8_t> unzipData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -103,7 +102,7 @@ namespace Compression
         return res;
     }
 
-    std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize )
+    std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -135,64 +134,46 @@ namespace Compression
         return res;
     }
 
-    bool readFile( StreamBuf & output, const std::string & fn, const size_t offset /* = 0 */ )
+    bool unzipStream( IStreamBase & inputStream, OStreamBase & outputStream )
     {
-        StreamFile sf;
-        sf.setbigendian( true );
-
-        if ( !sf.open( fn, "rb" ) ) {
-            return false;
-        }
-
-        if ( offset ) {
-            sf.seek( offset );
-        }
-
-        const uint32_t rawSize = sf.get32();
-        const uint32_t zipSize = sf.get32();
+        const uint32_t rawSize = inputStream.get32();
+        const uint32_t zipSize = inputStream.get32();
         if ( zipSize == 0 ) {
             return false;
         }
 
-        const uint16_t version = sf.get16();
+        const uint16_t version = inputStream.get16();
         if ( version != FORMAT_VERSION_0 ) {
             return false;
         }
 
-        sf.skip( 2 ); // Unused bytes
+        inputStream.skip( 2 ); // Unused bytes
 
-        const std::vector<uint8_t> zip = sf.getRaw( zipSize );
-        const std::vector<uint8_t> raw = decompressData( zip.data(), zip.size(), rawSize );
+        const std::vector<uint8_t> zip = inputStream.getRaw( zipSize );
+        const std::vector<uint8_t> raw = unzipData( zip.data(), zip.size(), rawSize );
         if ( raw.size() != rawSize ) {
             return false;
         }
 
-        output.putRaw( raw.data(), raw.size() );
+        outputStream.putRaw( raw.data(), raw.size() );
 
-        return !output.fail();
+        return !outputStream.fail();
     }
 
-    bool writeFile( StreamBuf & input, const std::string & fn, const bool append /* = false */ )
+    bool zipStreamBuf( IStreamBuf & inputStream, OStreamBase & outputStream )
     {
-        StreamFile sf;
-        sf.setbigendian( true );
-
-        if ( !sf.open( fn, append ? "ab" : "wb" ) ) {
-            return false;
-        }
-
-        const std::vector<uint8_t> zip = compressData( input.data(), input.size() );
+        const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size() );
         if ( zip.empty() ) {
             return false;
         }
 
-        sf.put32( static_cast<uint32_t>( input.size() ) );
-        sf.put32( static_cast<uint32_t>( zip.size() ) );
-        sf.put16( FORMAT_VERSION_0 );
-        sf.put16( 0 ); // Unused bytes
-        sf.putRaw( zip.data(), zip.size() );
+        outputStream.put32( static_cast<uint32_t>( inputStream.size() ) );
+        outputStream.put32( static_cast<uint32_t>( zip.size() ) );
+        outputStream.put16( FORMAT_VERSION_0 );
+        outputStream.put16( 0 ); // Unused bytes
+        outputStream.putRaw( zip.data(), zip.size() );
 
-        return !sf.fail();
+        return !outputStream.fail();
     }
 
     fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
@@ -201,7 +182,7 @@ namespace Compression
             return {};
         }
 
-        const std::vector<uint8_t> & uncompressedData = decompressData( imageData, imageSize );
+        const std::vector<uint8_t> & uncompressedData = unzipData( imageData, imageSize );
         if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
             return {};
         }

@@ -21,11 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -40,7 +40,7 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "gamedefs.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -69,48 +69,6 @@ namespace
     const fheroes2::Size primarySkillIconSize{ 82, 93 };
     const uint32_t experienceMaxValue{ 2990600 };
     const uint32_t spellPointsMaxValue{ 999 };
-
-    void renderRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )
-    {
-        fheroes2::Image racePortrait( portPos.width, portPos.height );
-
-        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex ) {
-            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
-            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
-            fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
-                            std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
-        };
-
-        switch ( race ) {
-        case Race::KNGT:
-            preparePortrait( ICN::CMBTHROK, 4 );
-            break;
-        case Race::BARB:
-            preparePortrait( ICN::CMBTHROB, 5 );
-            break;
-        case Race::SORC:
-            preparePortrait( ICN::CMBTHROS, 6 );
-            break;
-        case Race::WRLK:
-            preparePortrait( ICN::CMBTHROW, 7 );
-            break;
-        case Race::WZRD:
-            preparePortrait( ICN::CMBTHROZ, 8 );
-            break;
-        case Race::NECR:
-            preparePortrait( ICN::CMBTHRON, 9 );
-            break;
-        case Race::RAND:
-            // TODO: Make a portrait for the random hero.
-            preparePortrait( ICN::NOMAD, 10 );
-            break;
-        default:
-            // Have you added a new race? Correct the logic above!
-            assert( 0 );
-            break;
-        }
-        fheroes2::Copy( racePortrait, 0, 0, output, portPos );
-    }
 }
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog,
@@ -152,7 +110,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
     if ( isEditor && !isValidId( portrait ) ) {
-        renderRacePortrait( _race, portPos, display );
+        fheroes2::renderHeroRacePortrait( _race, portPos, display );
     }
     else {
         PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
@@ -386,9 +344,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Hero dismiss button.
     dst_pt.x = dialogRoi.x + 9;
-    dst_pt.y = dialogRoi.y + 318;
-    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ), fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+    dst_pt.y = dialogRoi.y + 378;
+    const fheroes2::Sprite & dismissReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 );
+    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y - dismissReleased.height() / 2, dismissReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ),
+                                          fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
 
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
@@ -398,14 +357,14 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         buttonDismiss.hide();
     }
     else {
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, dst_pt, { -3, 5 } );
+        fheroes2::addGradientShadow( dismissReleased, display, { dst_pt.x, dst_pt.y - dismissReleased.height() / 2 }, { -3, 5 } );
     }
 
     // Hero Patrol mode button (used in Editor).
-    fheroes2::ButtonSprite buttonPatrol( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ),
-                                         fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
+    const fheroes2::Sprite & patrolReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 );
+    fheroes2::ButtonSprite buttonPatrol( dst_pt.x, dst_pt.y - patrolReleased.height() / 2, patrolReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
     if ( isEditor ) {
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ), display, { dialogRoi.x + 9, dialogRoi.y + 318 }, { -3, 5 } );
+        fheroes2::addGradientShadow( patrolReleased, display, { dialogRoi.x + 9, dst_pt.y - patrolReleased.height() / 2 }, { -3, 5 } );
         if ( Modes( PATROL ) ) {
             buttonPatrol.press();
         }
@@ -416,7 +375,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Exit button.
     dst_pt.x = dialogRoi.x + 602;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
+    const fheroes2::Sprite & exitReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 );
+    fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -451,7 +411,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // dialog menu loop
     while ( le.HandleEvents() ) {
         // Exit this dialog.
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
@@ -459,7 +419,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // Manage hero's army.
-        if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
+        if ( le.isMouseCursorPosInArea( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
             if ( selectArtifacts.isSelected() ) {
                 selectArtifacts.ResetSelected();
             }
@@ -471,7 +431,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // Manage hero's artifacts.
-        else if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
+        else if ( le.isMouseCursorPosInArea( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
             if ( selectArmy.isSelected() ) {
                 selectArmy.ResetSelected();
             }
@@ -494,7 +454,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Dismiss hero.
         else if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible() ) {
-            if ( le.MousePressLeft( buttonDismiss.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( buttonDismiss.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) {
                 buttonDismiss.drawOnPress();
             }
             else {
@@ -512,7 +472,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Previous hero.
         if ( buttonPrevHero.isEnabled() ) {
-            le.MousePressLeft( buttonPrevHero.area() ) ? buttonPrevHero.drawOnPress() : buttonPrevHero.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPrevHero.area() ) ? buttonPrevHero.drawOnPress() : buttonPrevHero.drawOnRelease();
             if ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) {
                 return Dialog::PREV;
             }
@@ -520,30 +480,30 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Next hero.
         if ( buttonNextHero.isEnabled() ) {
-            le.MousePressLeft( buttonNextHero.area() ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonNextHero.area() ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
             if ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) {
                 return Dialog::NEXT;
             }
         }
 
-        if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
+        if ( le.isMouseCursorPosInArea( moraleIndicator.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator );
             message = fheroes2::MoraleString( army.GetMorale() );
         }
-        else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( luckIndicator.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator );
             message = fheroes2::LuckString( army.GetLuck() );
         }
-        else if ( le.MouseCursor( experienceInfo.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( experienceInfo.GetArea() ) ) {
             if ( isEditor ) {
                 message = useDefaultExperience ? _( "Set custom Experience value. Current value is default." )
                                                : _( "Change Experience value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
-                    uint32_t value = experience;
+                    int32_t value = static_cast<int32_t>( experience );
                     if ( Dialog::SelectCount( _( "Set Experience value" ), 0, experienceMaxValue, value ) ) {
                         useDefaultExperience = false;
-                        experience = value;
+                        experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );
                         experienceInfo.Redraw();
                         drawTitleText( name, _race, true );
@@ -564,16 +524,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 experienceInfo.QueueEventProcessing();
             }
         }
-        else if ( le.MouseCursor( spellPointsInfo.GetArea() ) ) {
+        else if ( le.isMouseCursorPosInArea( spellPointsInfo.GetArea() ) ) {
             if ( isEditor ) {
                 message = useDefaultSpellPoints ? _( "Set custom Spell Points value. Current value is default." )
                                                 : _( "Change Spell Points value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
-                    uint32_t value = GetSpellPoints();
+                    int32_t value = static_cast<int32_t>( GetSpellPoints() );
                     if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, spellPointsMaxValue, value ) ) {
                         useDefaultSpellPoints = false;
-                        SetSpellPoints( value );
+                        SetSpellPoints( static_cast<uint32_t>( value ) );
                         spellPointsInfo.setDefaultState( useDefaultSpellPoints );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
@@ -603,7 +563,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             needRedraw = true;
             army.SetSpreadFormation( false );
         }
-        else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
+        else if ( le.isMouseCursorPosInArea( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
                 // The change of secondary skills affects many hero stats.
                 secskill_bar.Redraw( display );
@@ -612,7 +572,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 needRedraw = true;
             }
         }
-        else if ( le.MouseCursor( primarySkillsBar.GetArea() ) && primarySkillsBar.QueueEventProcessing( &message ) ) {
+        else if ( le.isMouseCursorPosInArea( primarySkillsBar.GetArea() ) && primarySkillsBar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
                 primarySkillsBar.Redraw( display );
 
@@ -633,23 +593,23 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 needRedraw = true;
             }
         }
-        else if ( le.MousePressRight( portPos ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( portPos ) ) {
             if ( isEditor ) {
                 portrait = 0;
-                renderRacePortrait( _race, portPos, display );
+                fheroes2::renderHeroRacePortrait( _race, portPos, display );
                 needRedraw = true;
             }
             else {
                 Dialog::QuickInfo( *this, true );
             }
         }
-        else if ( buttonPatrol.isVisible() && le.MouseCursor( buttonPatrol.area() ) ) {
-            if ( le.MousePressLeft() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
+        else if ( buttonPatrol.isVisible() && le.isMouseCursorPosInArea( buttonPatrol.area() ) ) {
+            if ( le.isMouseLeftButtonPressed() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
                 buttonPatrol.drawOnPress();
-                uint32_t value = _patrolDistance;
+                int32_t value = static_cast<int32_t>( _patrolDistance );
                 if ( Dialog::SelectCount( _( "Set patrol radius in tiles" ), 0, 255, value ) ) {
                     SetModes( PATROL );
-                    _patrolDistance = static_cast<int>( value );
+                    _patrolDistance = static_cast<uint32_t>( value );
                 }
                 else {
                     buttonPatrol.drawOnRelease();
@@ -677,14 +637,14 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 drawTitleText( name, _race, true );
                 needRedraw = true;
             }
-            else if ( le.MouseCursor( raceRect ) ) {
+            else if ( le.isMouseCursorPosInArea( raceRect ) ) {
                 assert( !needRedraw );
                 message = _( "Click to change race." );
-                if ( le.MouseClickLeft() || le.MouseWheelDn() ) {
+                if ( le.MouseClickLeft() || le.isMouseWheelDown() ) {
                     _race = Race::getNextRace( _race );
                     needRedraw = true;
                 }
-                else if ( le.MouseClickRight() || le.MouseWheelUp() ) {
+                else if ( le.MouseClickRight() || le.isMouseWheelUp() ) {
                     _race = Race::getPreviousRace( _race );
                     needRedraw = true;
                 }
@@ -694,7 +654,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     redrawRace( _race );
 
                     if ( portrait == 0 ) {
-                        renderRacePortrait( _race, portPos, display );
+                        fheroes2::renderHeroRacePortrait( _race, portPos, display );
                     }
 
                     if ( primarySkillsBar.isDefaultValues() ) {
@@ -715,13 +675,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
         else {
             // If dialog is opened not in Editor.
-            if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
+            if ( le.isMouseRightButtonPressedInArea( rectSpreadArmyFormat ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Spread Formation" ),
                     _( "'Spread' combat formation spreads the hero's units from the top to the bottom of the battlefield, with at least one empty space between each unit." ),
                     Dialog::ZERO );
             }
-            else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( rectGroupedArmyFormat ) ) {
                 fheroes2::showStandardTextMessage( _( "Grouped Formation" ),
                                                    _( "'Grouped' combat formation bunches the hero's army together in the center of their side of the battlefield." ),
                                                    Dialog::ZERO );
@@ -729,10 +689,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // Status messages.
-        if ( le.MouseCursor( buttonExit.area() ) ) {
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
             message = _( "Exit Hero Screen" );
         }
-        else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
+        else if ( buttonDismiss.isVisible() && le.isMouseCursorPosInArea( buttonDismiss.area() ) ) {
             if ( inCastle() ) {
                 message = _( "You cannot dismiss a hero in a castle" );
             }
@@ -747,39 +707,39 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
-        else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) ) {
+        else if ( buttonPrevHero.isEnabled() && le.isMouseCursorPosInArea( buttonPrevHero.area() ) ) {
             message = _( "Show previous hero" );
         }
-        else if ( buttonNextHero.isEnabled() && le.MouseCursor( buttonNextHero.area() ) ) {
+        else if ( buttonNextHero.isEnabled() && le.isMouseCursorPosInArea( buttonNextHero.area() ) ) {
             message = _( "Show next hero" );
         }
         else if ( !isEditor ) {
             // These messages are not shown in the Editor mode.
-            if ( le.MouseCursor( rectSpreadArmyFormat ) ) {
+            if ( le.isMouseCursorPosInArea( rectSpreadArmyFormat ) ) {
                 message = _( "Set army combat formation to 'Spread'" );
             }
-            else if ( le.MouseCursor( rectGroupedArmyFormat ) ) {
+            else if ( le.isMouseCursorPosInArea( rectGroupedArmyFormat ) ) {
                 message = _( "Set army combat formation to 'Grouped'" );
             }
         }
         else if ( message.empty() ) {
             // Editor related status messages.
-            if ( le.MouseCursor( selectArtifacts.GetArea() ) ) {
+            if ( le.isMouseCursorPosInArea( selectArtifacts.GetArea() ) ) {
                 message = _( "Set hero's Artifacts. Right-click to reset Artifact." );
             }
-            else if ( le.MouseCursor( secskill_bar.GetArea() ) ) {
+            else if ( le.isMouseCursorPosInArea( secskill_bar.GetArea() ) ) {
                 message = _( "Set hero's Secondary Skills. Right-click to reset skill." );
             }
-            else if ( le.MouseCursor( selectArmy.GetArea() ) ) {
+            else if ( le.isMouseCursorPosInArea( selectArmy.GetArea() ) ) {
                 message = _( "Set hero's Army. Right-click to reset unit." );
             }
-            else if ( le.MouseCursor( portPos ) ) {
+            else if ( le.isMouseCursorPosInArea( portPos ) ) {
                 message = _( "Set hero's portrait. Right-click to reset to default." );
             }
-            else if ( le.MouseCursor( titleRoi ) ) {
+            else if ( le.isMouseCursorPosInArea( titleRoi ) ) {
                 message = _( "Click to change hero's name. Right-click to reset to default." );
             }
-            else if ( le.MouseCursor( buttonPatrol.area() ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonPatrol.area() ) ) {
                 if ( buttonPatrol.isPressed() ) {
                     message = _( "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it." );
                     StringReplace( message, "%{tiles}", _patrolDistance );

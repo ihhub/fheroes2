@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -61,19 +61,20 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const int spacer = 10;
     FrameBox box( headerText.height( BOXAREA_WIDTH ) + spacer + messageText.height( BOXAREA_WIDTH ) + spacer + sprite_expr.height() + 2 + text.height(), true );
 
-    fheroes2::Point pt;
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
     const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).height();
-    fheroes2::Button button_yes( pt.x, pt.y, buttonYesIcnID, 0, 1 );
+    const fheroes2::Sprite & buttonYesSprite = fheroes2::AGG::GetICN( buttonYesIcnID, 0 );
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).height();
-    fheroes2::Button button_no( pt.x, pt.y, buttonNoIcnID, 0, 1 );
+    const int32_t buttonsYPosition = box.GetArea().y + box.GetArea().height - buttonYesSprite.height();
+    const int32_t buttonYesXPosition = box.GetArea().x + box.GetArea().width / 2 - buttonYesSprite.width() - 20;
+
+    fheroes2::Button button_yes( buttonYesXPosition, buttonsYPosition, buttonYesIcnID, 0, 1 );
+
+    const int32_t buttonNoXPosition = box.GetArea().x + box.GetArea().width / 2 + 20;
+
+    fheroes2::Button button_no( buttonNoXPosition, buttonsYPosition, buttonNoIcnID, 0, 1 );
 
     fheroes2::Rect pos = box.GetArea();
 
@@ -91,13 +92,13 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     pos.y += sprite_expr.height();
     // sprite1
-    pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_gold.width() - 30;
+    pos.x = buttonYesXPosition + ( ( buttonYesSprite.width() - sprite_gold.width() ) / 2 );
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
     text.draw( pos.x + sprite_gold.width() / 2 - text.width() / 2, pos.y + 4, display );
 
     // sprite2
-    pos.x = box.GetArea().x + box.GetArea().width / 2 + 30;
+    pos.x = buttonNoXPosition + ( ( fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).width() - sprite_expr.width() ) / 2 );
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
     text.set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
@@ -113,8 +114,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
-        le.MousePressLeft( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button_yes.area() ) ) {
             result = true;

@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <map>
 #include <optional>
 #include <utility>
@@ -210,7 +211,6 @@ void Game::updateAdventureMapAnimationIndex()
     ++maps_animation_frame;
 }
 
-// play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
     int availableChannels = Mixer::getChannelCount();
@@ -286,17 +286,17 @@ void Game::EnvironmentSoundMixer()
 
         actualPosition -= tilePixelOffset;
 
-        const double distance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
-        if ( distance >= maxDistance ) {
+        const double dblDistance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
+        if ( dblDistance >= maxDistance ) {
             continue;
         }
 
-        const uint8_t volumePercentage = static_cast<uint8_t>( ( maxDistance - distance ) * 100 / maxDistance );
+        const uint8_t distance = [maxDistance, dblDistance]() {
+            const long dist = std::lround( dblDistance * 255 / maxDistance );
+            assert( dist >= 0 && dist <= 255 );
 
-        assert( volumePercentage <= 100 );
-        if ( volumePercentage == 0 ) {
-            continue;
-        }
+            return static_cast<uint8_t>( dist );
+        }();
 
         int16_t angle = 0;
 
@@ -316,20 +316,24 @@ void Game::EnvironmentSoundMixer()
         }
 
         std::vector<AudioManager::AudioLoopEffectInfo> & effects = soundEffects[soundType];
-        bool doesEffectExist = false;
-        for ( AudioManager::AudioLoopEffectInfo & info : effects ) {
-            if ( info.angle == angle ) {
-                info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
-                doesEffectExist = true;
-                break;
-            }
-        }
 
-        if ( doesEffectExist ) {
+        // If there is already a source of the same sound in this direction, then choose the one that is closer.
+        if ( std::find_if( effects.begin(), effects.end(),
+                           [distance, angle]( AudioManager::AudioLoopEffectInfo & info ) {
+                               if ( info.angle != angle ) {
+                                   return false;
+                               }
+
+                               info.distance = std::min( distance, info.distance );
+
+                               return true;
+                           } )
+             != effects.end() ) {
             continue;
         }
 
-        effects.emplace_back( angle, volumePercentage );
+        // Otherwise, use the current one for now.
+        effects.emplace_back( angle, distance );
 
         --availableChannels;
         if ( availableChannels == 0 ) {

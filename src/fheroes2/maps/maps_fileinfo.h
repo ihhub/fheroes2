@@ -32,7 +32,8 @@
 #include "gamedefs.h"
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 enum class GameVersion : int
 {
@@ -74,8 +75,6 @@ namespace Maps
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
-
-        bool isAllowCountPlayers( int playerCount ) const;
 
         int AllowCompHumanColors() const
         {
@@ -206,8 +205,8 @@ namespace Maps
         void FillUnions( const int side1Colors, const int side2Colors );
     };
 
-    StreamBase & operator<<( StreamBase &, const FileInfo & );
-    StreamBase & operator>>( StreamBase &, FileInfo & );
+    OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );
+    IStreamBase & operator>>( IStreamBase & stream, FileInfo & fi );
 }
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
@@ -215,10 +214,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For all map files.
-    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
     // Only for RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
 
 #endif

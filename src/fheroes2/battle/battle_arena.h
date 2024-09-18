@@ -37,7 +37,6 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "battle_tower.h"
 #include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
@@ -57,10 +56,19 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Units;
-    class Unit;
     class Interface;
     class Status;
+    class Tower;
+    class Unit;
+    class Units;
+
+    enum class TowerType : uint8_t;
+
+    enum class SiegeWeaponType
+    {
+        Catapult,
+        EarthquakeSpell
+    };
 
     class Actions : public std::list<Command>
     {};
@@ -108,10 +116,11 @@ namespace Battle
 
         Result & GetResult();
 
+        HeroBase * GetCommander1() const;
+        HeroBase * GetCommander2() const;
+
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1() const;
-        const HeroBase * GetCommander2() const;
         const HeroBase * GetCurrentCommander() const;
 
         Force & GetForce1() const;
@@ -136,7 +145,7 @@ namespace Battle
         const SpellStorage & GetUsageSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
-        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
+        int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
@@ -209,8 +218,6 @@ namespace Battle
             return _covrIcnId;
         }
 
-        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
-
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
         static Board * GetBoard();
@@ -240,9 +247,14 @@ namespace Battle
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
-
-        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
+
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
+        // structure still has enough hitpoints.
+        void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
@@ -252,8 +264,6 @@ namespace Battle
 
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
-
-        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
         void ApplyActionRetreat( const Command & cmd );
         void ApplyActionSurrender( const Command & cmd );
@@ -270,7 +280,7 @@ namespace Battle
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
         void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellEarthquake( const Command & cmd );
         void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,

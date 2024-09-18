@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,11 +24,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
+#include <functional>
 #include <iostream>
 #include <optional>
 #include <set>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -62,7 +62,7 @@ namespace
 
     void printUsage( char ** argv )
     {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
                   << "Syntax: " << baseName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl

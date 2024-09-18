@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,14 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2OBJDSRT_H
-#define H2OBJDSRT_H
+#pragma once
 
 #include <cstdint>
+#include <vector>
 
-namespace ObjDsrt
+#include "math_base.h"
+
+namespace fheroes2
 {
-    bool isShadow( const uint8_t index );
+    double GetAngle( const Point & start, const Point & target );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 }
-
-#endif

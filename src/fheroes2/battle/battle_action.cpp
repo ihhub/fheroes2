@@ -22,10 +22,11 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
+#include <map>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -35,10 +36,11 @@
 #include <vector>
 
 #include "battle.h"
-#include "battle_arena.h"
+#include "battle_arena.h" // IWYU pragma: associated
 #include "battle_army.h"
 #include "battle_board.h"
 #include "battle_bridge.h"
+#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_grave.h"
@@ -478,7 +480,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         break;
 
     case Spell::EARTHQUAKE:
-        ApplyActionSpellEarthQuake( cmd );
+        ApplyActionSpellEarthquake( cmd );
         break;
 
     case Spell::MIRRORIMAGE:
@@ -1273,22 +1275,34 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         return;
     }
 
+    const auto checkParameters = [this]( const CastleDefenseStructure target, const int damage ) {
+        if ( damage <= 0 ) {
+            return false;
+        }
+
+        const std::vector<CastleDefenseStructure> & allowedTargets = Catapult::getAllowedTargets();
+
+        if ( std::find( allowedTargets.begin(), allowedTargets.end(), target ) == allowedTargets.end() ) {
+            return false;
+        }
+
+        return ( damage <= getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+    };
+
     uint32_t shots = cmd.GetNextValue();
 
     while ( shots-- ) {
-        const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
-        const uint32_t damage = cmd.GetNextValue();
-        const bool hit = cmd.GetNextValue() != 0;
+        const CastleDefenseStructure target = static_cast<CastleDefenseStructure>( cmd.GetNextValue() );
+        const int damage = cmd.GetNextValue();
+        const bool hit = ( cmd.GetNextValue() != 0 );
 
-        if ( target == CastleDefenseElement::NONE ) {
+        if ( target == CastleDefenseStructure::NONE ) {
             continue;
         }
 
-        const uint32_t castleTargetValue = GetCastleTargetValue( target );
-
         using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
 
-        if ( castleTargetValue < damage ) {
+        if ( !checkParameters( target, damage ) ) {
             ERROR_LOG( "Invalid parameters: "
                        << "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << ( hit ? "yes" : "no" ) )
 
@@ -1309,7 +1323,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
             continue;
         }
 
-        SetCastleTargetValue( target, castleTargetValue - damage );
+        applyDamageToCastleDefenseStructure( target, damage );
 
         if ( _interface ) {
             // Continue animating the smoke cloud after changing the "health" of the building.
@@ -1538,7 +1552,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     unit->SetPosition( pos );
 }
 
-void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
+void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
 {
     const HeroBase * commander = GetCurrentCommander();
     if ( commander == nullptr ) {
@@ -1551,36 +1565,64 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         return;
     }
 
-    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
+    const auto [minDamage, maxDamage] = getEarthquakeDamageRange( commander );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+    std::map<CastleDefenseStructure, int> earthquakeDamage;
 
-    if ( _interface ) {
-        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
-        _interface->RedrawActionEarthQuakeSpell( targets );
-    }
+    for ( const CastleDefenseStructure target :
+          { CastleDefenseStructure::WALL1, CastleDefenseStructure::WALL2, CastleDefenseStructure::WALL3, CastleDefenseStructure::WALL4, CastleDefenseStructure::TOWER1,
+            CastleDefenseStructure::TOWER2, CastleDefenseStructure::BRIDGE, CastleDefenseStructure::TOP_BRIDGE_TOWER, CastleDefenseStructure::BOTTOM_BRIDGE_TOWER } ) {
+        const int targetCondition = getCastleDefenseStructureCondition( target, SiegeWeaponType::EarthquakeSpell );
+        assert( targetCondition >= 0 );
 
-    const std::pair<uint32_t, uint32_t> range = getEarthquakeDamageRange( commander );
-    const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
-    for ( int position : wallHexPositions ) {
-        const int wallCondition = board[position].GetObject();
+        if ( targetCondition == 0 ) {
+            continue;
+        }
 
-        if ( wallCondition > 0 ) {
-            uint32_t wallDamage = _randomGenerator.Get( range.first, range.second );
-
-            if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
-                wallDamage = wallCondition;
+        const int damage = [this, minDmg = minDamage, maxDmg = maxDamage, target]() {
+            // Reduce the chance of bridge demolition by an extra 50% chance to "miss" it by the Earthquake spell.
+            // It is done to be closer to the original game behavior where bridge demolition by this spell
+            // is more rare than the demolition of the other structures.
+            if ( target == CastleDefenseStructure::BRIDGE && _randomGenerator.Get( 0, 1 ) == 0 ) {
+                return 0;
             }
 
-            board[position].SetObject( wallCondition - wallDamage );
+            return static_cast<int>( _randomGenerator.Get( minDmg, maxDmg ) );
+        }();
+        assert( damage >= 0 );
+
+        if ( damage == 0 ) {
+            continue;
+        }
+
+        const auto [dummy, inserted] = earthquakeDamage.try_emplace( target, std::min( damage, targetCondition ) );
+        if ( !inserted ) {
+            assert( 0 );
         }
     }
 
-    if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[0]->SetDestroy();
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << earthquakeDamage.size() )
+
+    std::vector<CastleDefenseStructure> earthquakeTargets;
+
+    if ( _interface ) {
+        earthquakeTargets.reserve( earthquakeDamage.size() );
+
+        for ( const auto & [target, dummy] : earthquakeDamage ) {
+            earthquakeTargets.push_back( target );
+        }
+
+        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
+        _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
     }
-    if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[2]->SetDestroy();
+
+    for ( const auto & [target, damage] : earthquakeDamage ) {
+        applyDamageToCastleDefenseStructure( target, damage );
+    }
+
+    if ( _interface ) {
+        // Render a second part of blast animation after targets are damaged or even destroyed.
+        _interface->redrawActionEarthquakeSpellPart2( earthquakeTargets );
     }
 }
 

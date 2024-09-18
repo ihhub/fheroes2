@@ -298,7 +298,7 @@ namespace
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
 
-        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
+        for ( const auto & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
@@ -579,7 +579,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
                     populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
                 }
             }
@@ -671,7 +671,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
+            for ( const auto & addon : tile.getTopLayerAddons() ) {
                 if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
@@ -682,7 +682,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
-            for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
+            for ( const auto * addon : topLayerTallObjects ) {
                 redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
             }
         }
@@ -1012,9 +1012,9 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
 void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Point & mousePosition = le.GetMouseCursor();
+    const fheroes2::Point & mousePosition = le.getMouseCursorPos();
 
-    if ( !le.MousePressLeft() ) {
+    if ( !le.isMouseLeftButtonPressed() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1029,7 +1029,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = true;
     }
 
-    if ( _mouseDraggingMovement && le.MousePressLeft( GetROI() ) ) {
+    if ( _mouseDraggingMovement && le.isMouseLeftButtonPressedInArea( GetROI() ) ) {
         if ( _lastMouseDragPosition == mousePosition ) {
             _needRedrawByMouseDragging = false;
         }
@@ -1061,11 +1061,11 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
+    const fheroes2::Point tileOffset = getInternalPosition( mousePosition );
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                                    ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -1074,7 +1074,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
     }
-    else if ( le.MousePressRight( tileROI ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
     }
     else if ( le.MouseLongPressLeft( tileROI ) ) {
@@ -1082,7 +1082,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     // The cursor may have moved after mouse click events.
-    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+    index = GetValidTileIdFromPoint( le.getMouseCursorPos() );
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
@@ -1126,7 +1126,7 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
+    const fheroes2::Point offset = getInternalPosition( point );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 
@@ -1201,10 +1201,9 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
 Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 {
-    Maps::Tiles & tile = world.GetTiles( tileId );
+    const Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        removeObjectSprite( tile );
-        tile.setAsEmpty();
+        removeMainObjectFromTile( tile );
     }
 }
