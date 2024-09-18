@@ -1152,7 +1152,7 @@ namespace fheroes2
         const uint8_t centerY = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
         const uint8_t dColor = outsideColor - insideColor;
 
-        for ( uint8_t row = 0; row < height; row++ ) {
+        for ( uint8_t row = 0; row < height; ++row ) {
             const uint8_t heightScale = ( dColor * static_cast<uint8_t>( std::abs( centerY - row ) ) ) / centerY;
 
             const uint8_t val = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
