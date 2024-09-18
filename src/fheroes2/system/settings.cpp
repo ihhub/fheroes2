@@ -624,10 +624,10 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
-                res.FindFileInDir( path, fileNameFilter, false );
+                res.FindFileInDir( path, fileNameFilter );
             }
             else {
-                res.ReadDir( path, fileNameFilter, false );
+                res.ReadDir( path, fileNameFilter );
             }
         }
     }

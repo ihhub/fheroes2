@@ -9,7 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\audio.h" />
-    <ClInclude Include="..\engine\endian_h2.h" />
     <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />

@@ -10,7 +10,6 @@
     <ClCompile Include="pal2img.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\endian_h2.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_palette.h" />
     <ClInclude Include="..\engine\image_tool.h" />
@@ -18,5 +17,6 @@
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />
+    <ClInclude Include="..\engine\tools.h" />
   </ItemGroup>
 </Project>

@@ -233,7 +233,7 @@ namespace
     MapsFileInfoList getSortedMapsFileInfoList()
     {
         ListFiles files;
-        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
+        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension() );
 
         MapsFileInfoList mapInfos;
         mapInfos.reserve( files.size() );

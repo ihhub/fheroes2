@@ -63,6 +63,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "monster_anim.h"
 #include "monster_info.h"
