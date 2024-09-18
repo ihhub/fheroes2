@@ -937,7 +937,7 @@ int Heroes::GetKnowledge() const
 int Heroes::GetKnowledge( std::string * strs ) const
 {
     int result = knowledge + GetKnowledgeModificator( strs );
-    return std::clamp( result, 1, 255 );
+    return std::clamp( result, 0, 255 );
 }
 
 void Heroes::IncreasePrimarySkill( int skill )
