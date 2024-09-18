@@ -1139,9 +1139,13 @@ namespace fheroes2
         }
     }
 
-    void applyFontVerticalGradientAndContour( Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
+    void applyFontVerticalGradientAndContour( Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderColor )
     {
         assert( !image.singleLayer() );
+
+        if ( image.width() < 3 || image.height() < 3 ) {
+            return;
+        }
 
         const int32_t height = image.height();
         const int32_t width = image.width();
@@ -1174,10 +1178,7 @@ namespace fheroes2
             }
         }
 
-        for ( uint8_t i = 0; i < borderWidth; i++ ) {
-            const fheroes2::Sprite cnt = CreateContour( image, borderColor );
-            Blit( cnt, image );
-        }
+        Blit( CreateContour( image, borderColor ), image );
     }
 
     void Blit( const Image & in, Image & out, const bool flip /* = false */ )
