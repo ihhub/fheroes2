@@ -1150,28 +1150,28 @@ namespace fheroes2
         const int32_t height = image.height();
         const int32_t width = image.width();
 
-        uint8_t * inData = image.image();
-        uint8_t * inTransform = image.transform();
+        uint8_t * imageY = image.image();
+        uint8_t * transformY = image.transform();
 
         const int32_t centerY = std::max( 1, ( height / 2 ) - height % 2 );
         const uint8_t dColor = outsideColor - insideColor;
 
-        for ( int32_t row = 0; row < height; ++row ) {
+        for ( int32_t row = 0; row < height; ++row, imageY += width, transformY += width ) {
             const int32_t heightScale = ( dColor * std::abs( centerY - row ) ) / centerY;
             const uint8_t color = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
 
-            uint8_t * inRowStart = inData + row * width;
-            const uint8_t * inRowEnd = inRowStart + width;
-            uint8_t * inTrans = inTransform + row * width;
+            uint8_t * imageX = imageY;
+            const uint8_t * imageXEnd = imageX + width;
+            uint8_t * transformX = transformY;
 
-            for ( ; inRowStart != inRowEnd; ++inRowStart, ++inTrans ) {
-                if ( *inTrans == 0 ) {
+            for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
+                if ( *transformX == 0 ) {
                     // 21 is the pixel limit of shadows in Base white Font
-                    if ( *inRowStart < 21 ) {
-                        *inRowStart = color;
+                    if ( *imageX < 21 ) {
+                        *imageX = color;
                     }
                     else {
-                        *inTrans = 1;
+                        *transformX = 1;
                     }
                 }
             }
