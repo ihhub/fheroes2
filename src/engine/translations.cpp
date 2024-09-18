@@ -483,8 +483,7 @@ void Translation::reset()
 
 const char * Translation::gettext( const std::string & str )
 {
-    const char * data = str.data();
-    return current ? current->ngettext( data, 0 ) : stripContext( data );
+    return current ? current->ngettext( str.c_str(), 0 ) : stripContext( str.c_str() );
 }
 
 const char * Translation::gettext( const char * str )
