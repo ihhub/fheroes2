@@ -1143,7 +1143,7 @@ namespace fheroes2
     {
         assert( !image.singleLayer() );
 
-        if ( image.width() < 3 || image.height() < 3 ) {
+        if ( image.width() < 2 || image.height() < 2 ) {
             return;
         }
 
@@ -1153,23 +1153,22 @@ namespace fheroes2
         uint8_t * inData = image.image();
         uint8_t * inTransform = image.transform();
 
-        const uint8_t centerY = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
+        const int32_t centerY = std::max( 1, ( height / 2 ) - height % 2 );
         const uint8_t dColor = outsideColor - insideColor;
 
-        for ( uint8_t row = 0; row < height; ++row ) {
-            const uint8_t heightScale = ( dColor * static_cast<uint8_t>( std::abs( centerY - row ) ) ) / centerY;
+        for ( int32_t row = 0; row < height; ++row ) {
+            const int32_t heightScale = ( dColor * std::abs( centerY - row ) ) / centerY;
+            const uint8_t color = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
 
-            const uint8_t val = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
-            uint8_t * inRowStart = inData + static_cast<ptrdiff_t>( row ) * width;
-
-            const uint8_t * inRowEnd = inData + static_cast<ptrdiff_t>( row + 1 ) * width;
-            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( row ) * width;
+            uint8_t * inRowStart = inData + row * width;
+            const uint8_t * inRowEnd = inRowStart + width;
+            uint8_t * inTrans = inTransform + row * width;
 
             for ( ; inRowStart != inRowEnd; ++inRowStart, ++inTrans ) {
                 if ( *inTrans == 0 ) {
                     // 21 is the pixel limit of shadows in Base white Font
                     if ( *inRowStart < 21 ) {
-                        *inRowStart = val;
+                        *inRowStart = color;
                     }
                     else {
                         *inTrans = 1;
