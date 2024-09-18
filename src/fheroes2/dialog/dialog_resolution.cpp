@@ -135,7 +135,7 @@ namespace
 
                 std::string scaledResolutionText = _(
                     "Selecting this resolution will set a resolution that is scaled from the original resolution (%{resolution}) by multiplying it with the number "
-                    "in the brackets (%{scale}). A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look better because the pixels are upscaled "
+                    "in the brackets (%{scale}).\nA resolution with a clean integer number (2.0x, 3.0x etc.) will usually look better because the pixels are upscaled "
                     "evenly in both horizontal and vertical directions." );
 
                 StringReplace( scaledResolutionText, "%{resolution}", std::to_string( resolution.gameWidth ) + middleText + std::to_string( resolution.gameHeight ) );
