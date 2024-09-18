@@ -2555,8 +2555,10 @@ namespace
         case ICN::GOLDEN_GRADIENT_FONT: {
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
+
             _icnVsSprite[id].resize( original.size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+
+            for ( size_t i = 0; i < original.size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() + 6, in.height() + 6 );
@@ -2574,8 +2576,10 @@ namespace
         case ICN::GOLDEN_GRADIENT_LARGE_FONT: {
             fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
+
             _icnVsSprite[id].resize( original.size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+
+            for ( size_t i = 0; i < original.size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() + 6, in.height() + 6 );
@@ -2592,8 +2596,10 @@ namespace
         case ICN::SILVER_GRADIENT_FONT: {
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
+
             _icnVsSprite[id].resize( original.size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+
+            for ( size_t i = 0; i < original.size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() + 6, in.height() + 6 );
@@ -2610,8 +2616,10 @@ namespace
         case ICN::SILVER_GRADIENT_LARGE_FONT: {
             fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
+
             _icnVsSprite[id].resize( original.size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+
+            for ( size_t i = 0; i < original.size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() + 6, in.height() + 6 );
@@ -2625,7 +2633,6 @@ namespace
             }
             return true;
         }
-
         case ICN::SPELLS:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() != 60 ) {
