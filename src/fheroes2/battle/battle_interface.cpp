@@ -63,6 +63,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "monster_anim.h"
 #include "monster_info.h"
@@ -833,7 +834,7 @@ bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
     return info.defender && info.defender->isFinishAnimFrame();
 }
 
-Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect )
+Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect )
     : _heroBase( hero )
     , _currentAnim( getHeroAnimation( hero, OP_STATIC ) )
     , _isFlippedHorizontally( isReflect )
@@ -1283,10 +1284,10 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
-    if ( const HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
+    if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
         _opponent1 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, false );
     }
-    if ( const HeroBase * opponent = arena.GetCommander2(); opponent != nullptr ) {
+    if ( HeroBase * opponent = arena.GetCommander2(); opponent != nullptr ) {
         _opponent2 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, true );
     }
 
@@ -1785,7 +1786,7 @@ void Battle::Interface::RedrawOpponentsFlags()
             break;
         }
 
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
         fheroes2::Blit( flag, _mainSurface, _opponent1->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         _opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
@@ -1817,7 +1818,7 @@ void Battle::Interface::RedrawOpponentsFlags()
             break;
         }
 
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
         const fheroes2::Point offset = _opponent2->Offset();
         fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
@@ -1959,7 +1960,7 @@ void Battle::Interface::RedrawCover()
             spriteIndex = _bridgeAnimation.currentFrameId;
         }
 
-        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), spriteIndex );
+        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::getCastleIcnId( Arena::GetCastle()->GetRace() ), spriteIndex );
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
@@ -2251,7 +2252,7 @@ void Battle::Interface::_redrawCoverStatic()
 
 void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellId )
 {
-    const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
+    const int castleIcnId = ICN::getCastleIcnId( castle.GetRace() );
 
     if ( Arena::CATAPULT_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
@@ -2367,7 +2368,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
 
 void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::getCastleIcnId( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }

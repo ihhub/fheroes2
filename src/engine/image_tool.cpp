@@ -54,6 +54,7 @@
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -124,17 +125,17 @@ namespace
         int res = 0;
 
         if ( isPNGFilePath( path ) ) {
-            res = IMG_SavePNG( surface.get(), path.c_str() );
+            res = IMG_SavePNG( surface.get(), System::encLocalToSDL( path ).c_str() );
         }
         else {
-            res = SDL_SaveBMP( surface.get(), path.c_str() );
+            res = SDL_SaveBMP( surface.get(), System::encLocalToSDL( path ).c_str() );
         }
 #else
         if ( isPNGFilePath( path ) ) {
             memcpy( path.data() + path.size() - 3, "bmp", 3 );
         }
 
-        const int res = SDL_SaveBMP( surface.get(), path.c_str() );
+        const int res = SDL_SaveBMP( surface.get(), System::encLocalToSDL( path ).c_str() );
 #endif
 
         return res == 0;
@@ -176,9 +177,9 @@ namespace fheroes2
         std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
 
 #if defined( WITH_IMAGE )
-        loadedSurface.reset( IMG_Load( path.c_str() ) );
+        loadedSurface.reset( IMG_Load( System::encLocalToSDL( path ).c_str() ) );
 #else
-        loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
+        loadedSurface.reset( SDL_LoadBMP( System::encLocalToSDL( path ).c_str() ) );
 #endif
         if ( !loadedSurface ) {
             return false;

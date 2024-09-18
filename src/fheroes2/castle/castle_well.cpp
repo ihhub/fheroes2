@@ -432,7 +432,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 
         // Dwelling building image.
         fheroes2::Point renderPoint( offset.x + 21, offset.y + 35 );
-        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnIndex );
+        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( race ), icnIndex );
         fheroes2::Copy( dwellingImage, 0, 0, background, renderPoint.x, renderPoint.y, dwellingImage.width(), dwellingImage.height() );
 
         // Dwelling name.

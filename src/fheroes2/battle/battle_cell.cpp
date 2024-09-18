@@ -28,7 +28,7 @@
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_troop.h"
-#include "tools.h"
+#include "math_tools.h"
 
 namespace
 {

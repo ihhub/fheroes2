@@ -585,7 +585,7 @@ namespace
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
-        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
 
         if ( body.empty() ) {
             return;
@@ -2449,7 +2449,7 @@ namespace
                 throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
             }
 
-            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
             const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
 
             if ( id == ICN::SMALFONT ) {
@@ -3409,7 +3409,7 @@ namespace
 
                 // Since we cannot access game settings from here we are checking an existence
                 // of one of POL resources as an indicator for this version.
-                if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                if ( !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ) ).empty() ) {
                     fheroes2::Sprite editorIcon;
                     fheroes2::h2d::readImage( "main_menu_editor_icon.image", editorIcon );
 
@@ -4825,22 +4825,27 @@ namespace
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
 
             if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
-                released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
-                pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                released.resize( originalReleased.width() + 1, originalReleased.height() );
+                pressed.resize( originalPressed.width() + 1, originalPressed.height() );
                 released.reset();
                 pressed.reset();
 
-                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
-                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() );
+                // Shorten the button by 1 pixel in the height so that it is evenly divided by 5 in resizeButton() in ui_button.cpp
+                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 7 );
+                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() - 7 );
+                Copy( originalReleased, 0, originalReleased.height() - 7, released, 1, originalReleased.height() - 8, originalReleased.width(),
+                      originalReleased.height() - 7 );
+                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(), originalPressed.height() - 7 );
+
                 FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
 
                 // Fix the carried over broken transform layer of the original vertical button that is being used.
                 fheroes2::Image exitCommonMask = fheroes2::ExtractCommonPattern( { &released, &pressed } );
                 // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
-                FillTransform( exitCommonMask, 4, 2, 1, 115, 1 );
-                FillTransform( exitCommonMask, 5, 116, 1, 1, 1 );
-                FillTransform( exitCommonMask, 5, 117, 18, 1, 1 );
-                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
+                FillTransform( exitCommonMask, 4, 2, 1, 114, 1 );
+                FillTransform( exitCommonMask, 5, 115, 1, 2, 1 );
+                FillTransform( exitCommonMask, 6, 116, 17, 1, 1 );
+                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 113, 1, 2, 1 );
 
                 invertTransparency( exitCommonMask );
                 // Make the extended width and height lines transparent.
@@ -4853,23 +4858,20 @@ namespace
                 // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
                 const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
 
-                Copy( originalReleased, 0, 4, released, 1, 4, 1, released.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, released.height() - 1, 22, 1 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 1, released.height() - 1, 1, 1 );
-
-                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, pressed.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, pressed.height() - 1, 22, 1 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 1, pressed.height() - 1, 1, 1 );
+                Copy( originalReleased, 0, 4, released, 1, 4, 1, originalReleased.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, originalReleased.height() - 1, 22, 1 );
+                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, originalPressed.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, originalPressed.height() - 1, 22, 1 );
 
                 // Clean the button states' text areas.
-                Fill( released, 6, 4, 18, 111, getButtonFillingColor( true ) );
-                Fill( pressed, 5, 5, 18, 111, getButtonFillingColor( false ) );
+                Fill( released, 6, 4, 18, 110, getButtonFillingColor( true ) );
+                Fill( pressed, 5, 5, 18, 110, getButtonFillingColor( false ) );
 
-                // Make the background transparent by removing remaining red background pieces.
+                // Make the pressed background transparent by removing remaining red parts.
                 FillTransform( pressed, 5, 0, 21, 1, 1 );
                 FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
                 FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
+                FillTransform( pressed, pressed.width() - 1, 3, 1, originalPressed.height() - 5, 1 );
             }
 
             return true;

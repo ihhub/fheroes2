@@ -1932,7 +1932,7 @@ bool Castle::HasSeaAccess() const
             return false;
         }
 
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
             // The main addon does not exist on this tile.
             // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
             return true;
@@ -2009,7 +2009,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
+        return ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );

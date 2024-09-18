@@ -298,7 +298,7 @@ namespace
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
 
-        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
+        for ( const auto & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
@@ -579,7 +579,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
                     populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
                 }
             }
@@ -671,7 +671,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
+            for ( const auto & addon : tile.getTopLayerAddons() ) {
                 if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
@@ -682,7 +682,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
-            for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
+            for ( const auto * addon : topLayerTallObjects ) {
                 redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
             }
         }
@@ -1065,7 +1065,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
+    const fheroes2::Point tileOffset = getInternalPosition( mousePosition );
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                                    ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -1126,7 +1126,7 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
+    const fheroes2::Point offset = getInternalPosition( point );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 

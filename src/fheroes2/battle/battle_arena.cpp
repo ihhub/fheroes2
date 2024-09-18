@@ -59,13 +59,13 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
 #include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
-#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
@@ -743,12 +743,12 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1() const
+HeroBase * Battle::Arena::GetCommander1() const
 {
     return _army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2() const
+HeroBase * Battle::Arena::GetCommander2() const
 {
     return _army2->GetCommander();
 }

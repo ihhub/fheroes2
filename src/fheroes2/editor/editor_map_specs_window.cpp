@@ -54,6 +54,7 @@
 #include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
@@ -1059,7 +1060,7 @@ namespace
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
 
                     fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
                 }
@@ -1731,7 +1732,7 @@ namespace
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
 
                     fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
                 }
