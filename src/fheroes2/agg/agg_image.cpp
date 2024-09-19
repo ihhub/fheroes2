@@ -2566,8 +2566,9 @@ namespace
                 Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                 out.setPosition( in.x() - 2, in.y() - 2 );
 
-                applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::BROWN_START + 18 );
+                applyFontVerticalGradient( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START );
 
+                Blit( CreateContour( out, PAL::ColorRanges::BROWN_START + 18 ), out );
                 Blit( CreateContour( out, 0 ), out );
                 Blit( CreateContour( out, 62 ), out );
             }
@@ -2586,8 +2587,10 @@ namespace
                 out.reset();
                 Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                 out.setPosition( in.x() - 2, in.y() - 2 );
-                applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::BROWN_START + 18 );
 
+                applyFontVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START );
+
+                Blit( CreateContour( out, PAL::ColorRanges::BROWN_START + 18 ), out );
                 Blit( CreateContour( out, 0 ), out );
                 Blit( CreateContour( out, 62 ), out );
             }
@@ -2606,8 +2609,10 @@ namespace
                 out.reset();
                 Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                 out.setPosition( in.x() - 2, in.y() - 2 );
-                applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_END - 7 );
 
+                applyFontVerticalGradient( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START );
+
+                Blit( CreateContour( out, PAL::ColorRanges::GRAY_END - 7 ), out );
                 Blit( CreateContour( out, 0 ), out );
                 Blit( CreateContour( out, 0 ), out );
             }
@@ -2626,8 +2631,10 @@ namespace
                 out.reset();
                 Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                 out.setPosition( in.x() - 2, in.y() - 2 );
-                applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_END - 7 );
 
+                applyFontVerticalGradient( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START );
+
+                Blit( CreateContour( out, PAL::ColorRanges::GRAY_END - 7 ), out );
                 Blit( CreateContour( out, 0 ), out );
                 Blit( CreateContour( out, 0 ), out );
             }

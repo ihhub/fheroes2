@@ -1139,7 +1139,7 @@ namespace fheroes2
         }
     }
 
-    void applyFontVerticalGradientAndContour( Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderColor )
+    void applyFontVerticalGradient( Image & image, const uint8_t outsideColor, const uint8_t insideColor )
     {
         assert( !image.singleLayer() );
 
@@ -1176,8 +1176,6 @@ namespace fheroes2
                 }
             }
         }
-
-        Blit( CreateContour( image, borderColor ), image );
     }
 
     void Blit( const Image & in, Image & out, const bool flip /* = false */ )
