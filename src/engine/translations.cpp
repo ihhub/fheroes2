@@ -183,16 +183,27 @@ namespace
         return ~crc;
     }
 
-    std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
+    bool getCharsetFromHeader( const std::string & hdr, std::string & charset )
     {
-        if ( str.size() > tag.size() && str.rfind( tag, 0 ) == 0 ) {
-            const size_t pos = str.find( sep );
-            if ( pos != std::string::npos ) {
-                return str.substr( pos + sep.size() );
-            }
+        constexpr std::string_view hdrEntry{ "Content-Type:" };
+        constexpr std::string_view charsetDirective{ "charset=" };
+
+        if ( hdr.size() <= hdrEntry.size() + charsetDirective.size() ) {
+            return false;
         }
 
-        return {};
+        if ( hdr.rfind( hdrEntry, 0 ) != 0 ) {
+            return false;
+        }
+
+        const size_t pos = hdr.find( charsetDirective );
+        if ( pos == std::string::npos ) {
+            return false;
+        }
+
+        charset = hdr.substr( pos + charsetDirective.size() );
+
+        return true;
     }
 
     const char * stripContext( const char * str )
@@ -207,17 +218,18 @@ namespace
         // TODO: plural forms are not in use: Plural-Forms.
         LocaleType locale{ LocaleType::LOCALE_EN };
         RWStreamBuf buf;
-        std::map<uint32_t, Chunk> hash_offsets;
+        std::map<uint32_t, Chunk> hashOffsets;
         std::string domain;
         std::string encoding;
 
         const char * ngettext( const char * str, size_t plural )
         {
-            std::map<uint32_t, Chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
-            if ( it == hash_offsets.end() )
+            const auto iter = std::as_const( hashOffsets ).find( crc32b( str ) );
+            if ( iter == hashOffsets.end() ) {
                 return stripContext( str );
+            }
 
-            buf.seek( ( *it ).second.offset );
+            buf.seek( iter->second.offset );
             const uint8_t * ptr = buf.data();
 
             while ( plural > 0 ) {
@@ -234,6 +246,8 @@ namespace
 
         bool open( const std::string & file )
         {
+            assert( buf.data() == nullptr && hashOffsets.empty() && encoding.empty() );
+
             StreamFile sf;
             if ( !sf.open( file, "rb" ) ) {
                 return false;
@@ -272,19 +286,19 @@ namespace
             sf.close();
 
             // Parse encoding.
+            // TODO: parse plural form information here and use it in the code.
             if ( stringCount > 0 ) {
                 buf.seek( translationOffset );
                 const uint32_t length2 = buf.get32();
                 const uint32_t offset2 = buf.get32();
 
                 buf.seek( offset2 );
-                const std::vector<std::string> tags = StringSplit( buf.toString( length2 ), '\n' );
+                const std::vector<std::string> headers = StringSplit( buf.toString( length2 ), '\n' );
 
-                for ( const std::string & tag : tags ) {
-                    if ( encoding.empty() ) {
-                        encoding = getTag( tag, "Content-Type", "charset=" );
+                for ( const std::string & hdr : headers ) {
+                    if ( getCharsetFromHeader( hdr, encoding ) ) {
+                        break;
                     }
-                    // TODO: parse plural form information here and use it in the code.
                 }
             }
 
@@ -316,7 +330,7 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                const auto [dummy, inserted] = hash_offsets.try_emplace( crc, Chunk{ offset2, length2 } );
+                const auto [dummy, inserted] = hashOffsets.try_emplace( crc, Chunk{ offset2, length2 } );
                 if ( !inserted ) {
                     ERROR_LOG( "Clashing hash value for: " << msg1 )
                 }
