@@ -206,7 +206,7 @@ namespace
         }
 
         // In case of any issues, the original string will be returned, so let's put it to the cache right away
-        const auto [resultIter, inserted] = resultsCache[dir].emplace( str, str );
+        const auto [resultIter, inserted] = resultsCache[dir].try_emplace( std::string{ str }, str );
         if ( !inserted ) {
             assert( 0 );
         }
@@ -374,7 +374,7 @@ std::string System::GetConfigDirectory( const std::string_view appName )
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.emplace( appName, result );
+    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
     if ( !inserted ) {
         assert( 0 );
     }
@@ -413,7 +413,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.emplace( appName, result );
+    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
     if ( !inserted ) {
         assert( 0 );
     }

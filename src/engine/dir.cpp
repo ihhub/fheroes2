@@ -65,9 +65,9 @@ namespace
         }
 
 #if defined( _WIN32 )
-        const auto strCmp = _stricmp;
+        auto * const strCmp = _stricmp;
 #else
-        const auto strCmp = strcasecmp;
+        auto * const strCmp = strcasecmp;
 #endif
 
         std::error_code ec;
