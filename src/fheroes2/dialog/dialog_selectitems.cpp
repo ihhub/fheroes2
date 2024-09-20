@@ -46,6 +46,7 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "map_object_info.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles_render.h"
 #include "mp2.h"

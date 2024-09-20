@@ -25,6 +25,7 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 

@@ -40,6 +40,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "maps.h"
 #include "maps_tiles_render.h"
 #include "math_base.h"
 #include "screen.h"

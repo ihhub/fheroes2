@@ -47,6 +47,7 @@
 #include "heroes.h"
 #include "localevent.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_render.h"
