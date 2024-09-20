@@ -6626,7 +6626,7 @@ void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroB
         return;
     }
 
-    const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const int spellPoints = hero ? hero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
     const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
 
     _redraw = true;
