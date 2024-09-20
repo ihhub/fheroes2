@@ -28,12 +28,12 @@
 #include <cstdint>
 #include <vector>
 
-#define PUZZLETILES 48
-
 class IStreamBase;
 class OStreamBase;
 
-class Puzzle : public std::bitset<PUZZLETILES>
+inline constexpr size_t puzzleTilesNum{ 48 };
+
+class Puzzle : public std::bitset<puzzleTilesNum>
 {
 public:
     Puzzle();

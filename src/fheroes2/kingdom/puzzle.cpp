@@ -302,7 +302,7 @@ Puzzle & Puzzle::operator=( const char * str )
 
 void Puzzle::Update( uint32_t open_obelisk, uint32_t total_obelisk )
 {
-    const uint32_t open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
+    const uint32_t open_puzzle = open_obelisk * puzzleTilesNum / total_obelisk;
     size_t need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
 
     if ( need_puzzle && ClosedTilesExists( *this, zone1_order ) )
