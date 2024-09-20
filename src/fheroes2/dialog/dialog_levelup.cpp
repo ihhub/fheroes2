@@ -101,7 +101,7 @@ namespace
         const fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
         const int spacer = 10;
 
-        const Dialog::FrameBox box( box1.height( BOXAREA_WIDTH ) + spacer + box2.height( BOXAREA_WIDTH ) + 10 + sprite_frame.height(), true );
+        const Dialog::FrameBox box( box1.height( Dialog::boxAreaWidthPx ) + spacer + box2.height( Dialog::boxAreaWidthPx ) + 10 + sprite_frame.height(), true );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
@@ -118,11 +118,11 @@ namespace
         const fheroes2::Rect & boxArea = box.GetArea();
         fheroes2::Point pos( boxArea.x, boxArea.y );
 
-        box1.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
-        pos.y += box1.height( BOXAREA_WIDTH ) + spacer;
+        box1.draw( pos.x, pos.y + 2, Dialog::boxAreaWidthPx, display );
+        pos.y += box1.height( Dialog::boxAreaWidthPx ) + spacer;
 
-        box2.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
-        pos.y += box2.height( BOXAREA_WIDTH ) + spacer;
+        box2.draw( pos.x, pos.y + 2, Dialog::boxAreaWidthPx, display );
+        pos.y += box2.height( Dialog::boxAreaWidthPx ) + spacer;
 
         // sprite1
         pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;

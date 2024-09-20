@@ -60,7 +60,7 @@ namespace
             , _key( key )
         {
             // Text always occupies the whole width of the dialog.
-            _area = { BOXAREA_WIDTH, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
+            _area = { Dialog::boxAreaWidthPx, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
         }
 
         ~HotKeyElement() override = default;
@@ -73,9 +73,9 @@ namespace
             text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
 
-            _restorer.update( offset.x, offset.y, BOXAREA_WIDTH, text.height() );
+            _restorer.update( offset.x, offset.y, Dialog::boxAreaWidthPx, text.height() );
 
-            text.draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+            text.draw( offset.x, offset.y, Dialog::boxAreaWidthPx, output );
         }
 
         void processEvents( const fheroes2::Point & /*offset*/ ) const override

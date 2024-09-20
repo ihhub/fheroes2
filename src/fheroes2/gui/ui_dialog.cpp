@@ -97,11 +97,11 @@ namespace fheroes2
         // setup cursor
         const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
 
-        const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
+        const int32_t headerHeight = header.empty() ? 0 : header.height( Dialog::boxAreaWidthPx ) + textOffsetY;
 
         int overallTextHeight = headerHeight;
 
-        const int32_t bodyTextHeight = body.height( BOXAREA_WIDTH );
+        const int32_t bodyTextHeight = body.height( Dialog::boxAreaWidthPx );
         if ( bodyTextHeight > 0 ) {
             overallTextHeight += bodyTextHeight + textOffsetY;
         }
@@ -127,7 +127,7 @@ namespace fheroes2
 
                 ++elementId;
             }
-            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= BOXAREA_WIDTH ) {
+            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= Dialog::boxAreaWidthPx ) {
                 rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
                 rowHeight.back() = std::max( rowHeight.back(), element->area().height );
 
@@ -165,8 +165,8 @@ namespace fheroes2
         const Rect & pos = box.GetArea();
 
         Display & display = Display::instance();
-        header.draw( pos.x, pos.y + textOffsetY, BOXAREA_WIDTH, display );
-        body.draw( pos.x, pos.y + textOffsetY + headerHeight, BOXAREA_WIDTH, display );
+        header.draw( pos.x, pos.y + textOffsetY, Dialog::boxAreaWidthPx, display );
+        body.draw( pos.x, pos.y + textOffsetY + headerHeight, Dialog::boxAreaWidthPx, display );
 
         elementHeight = overallTextHeight + textOffsetY;
         if ( bodyTextHeight > 0 ) {
@@ -193,7 +193,7 @@ namespace fheroes2
             const int32_t currentRowElementCount = rowElementCount[currentRowId];
             const int32_t currentRowMaxElementWidth = rowMaxElementWidth[currentRowId];
 
-            const int32_t emptyWidth = BOXAREA_WIDTH - currentRowElementCount * currentRowMaxElementWidth;
+            const int32_t emptyWidth = Dialog::boxAreaWidthPx - currentRowElementCount * currentRowMaxElementWidth;
             const int32_t offsetBetweenElements = emptyWidth / ( currentRowElementCount + 1 );
 
             const int32_t widthOffset = offsetBetweenElements + currentRowElementIndex * ( currentRowMaxElementWidth + offsetBetweenElements );
@@ -257,12 +257,12 @@ namespace fheroes2
         : _text( text )
     {
         // Text always occupies the whole width of the dialog.
-        _area = { BOXAREA_WIDTH, _text->height( BOXAREA_WIDTH ) };
+        _area = { Dialog::boxAreaWidthPx, _text->height( Dialog::boxAreaWidthPx ) };
     }
 
     void TextDialogElement::draw( Image & output, const Point & offset ) const
     {
-        _text->draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+        _text->draw( offset.x, offset.y, Dialog::boxAreaWidthPx, output );
     }
 
     void TextDialogElement::processEvents( const Point & /* offset */ ) const

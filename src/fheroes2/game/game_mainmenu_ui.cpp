@@ -125,7 +125,7 @@ namespace fheroes2
         const uint32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
         fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset + back.y() );
 
-        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+        const int32_t buttonMiddlePos = panelXPos + Dialog::shadowWidthPx + ( panel.width() - Dialog::shadowWidthPx ) / 2;
 
         const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
         const int32_t buttonWidth = buttonSample.width();

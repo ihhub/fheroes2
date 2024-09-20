@@ -34,9 +34,6 @@
 #include "image.h"
 #include "math_base.h"
 
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
-
 class Castle;
 class Kingdom;
 class HeroBase;
@@ -219,6 +216,11 @@ namespace Dialog
         fheroes2::Rect top;
         int border;
     };
+
+    // Width of the rendered dialog shadow in pixels
+    inline constexpr int shadowWidthPx{ 16 };
+    // "Standard" width of the rendered dialog box in pixels
+    inline constexpr int boxAreaWidthPx{ 244 };
 }
 
 #endif
