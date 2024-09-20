@@ -704,7 +704,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
     fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
 
-    FrameBox box( 10 + textbox.height( boxAreaWidthPx ) + 10 + text.height() + 40 + sprite.height() + 10, true );
+    const FrameBox box( 10 + textbox.height( boxAreaWidthPx ) + 10 + text.height() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;

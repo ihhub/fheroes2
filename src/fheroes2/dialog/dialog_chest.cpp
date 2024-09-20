@@ -59,7 +59,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
                          fheroes2::FontType::smallWhite() };
 
     const int spacer = 10;
-    FrameBox box( headerText.height( boxAreaWidthPx ) + spacer + messageText.height( boxAreaWidthPx ) + spacer + sprite_expr.height() + 2 + text.height(), true );
+    const FrameBox box( headerText.height( boxAreaWidthPx ) + spacer + messageText.height( boxAreaWidthPx ) + spacer + sprite_expr.height() + 2 + text.height(), true );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;

@@ -455,7 +455,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
-    fheroes2::ImageRestorer background( display, rt.x - shadowWidthPx, rt.y, rt.width + shadowWidthPx, rt.height + shadowWidthPx );
+    const fheroes2::ImageRestorer background( display, rt.x - shadowWidthPx, rt.y, rt.width + shadowWidthPx, rt.height + shadowWidthPx );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
     fheroes2::Blit( shadow, display, rt.x - shadowWidthPx, rt.y + shadowWidthPx );

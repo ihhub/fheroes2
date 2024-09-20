@@ -115,7 +115,7 @@ int Dialog::SelectSkillFromArena()
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( title.height( boxAreaWidthPx ) + textbox.height( boxAreaWidthPx ) + 2 * spacer + sprite.height() + 15, true );
+    const Dialog::FrameBox box( title.height( boxAreaWidthPx ) + textbox.height( boxAreaWidthPx ) + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
