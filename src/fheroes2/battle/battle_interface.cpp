@@ -322,7 +322,7 @@ namespace
             const fheroes2::Point & offset = target.animation.getBlindOffset();
 
             // calculate OG Heroes2 unit position to apply offset to
-            const int32_t rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
+            const int32_t rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : Battle::Cell::widthPx / 2;
 
             // Overwrite result with custom blind value
             result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
@@ -465,8 +465,8 @@ namespace
     {
         const int32_t r = 22;
         const int32_t l = 10;
-        const int32_t w = CELLW;
-        const int32_t h = CELLH;
+        const int32_t w = Battle::Cell::widthPx;
+        const int32_t h = Battle::Cell::heightPx;
 
         fheroes2::Image sf( w + 1, h + 1 );
         sf.reset();
@@ -488,8 +488,8 @@ namespace
     fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
     {
         const int32_t l = 13;
-        const int32_t w = CELLW;
-        const int32_t h = CELLH;
+        const int32_t w = Battle::Cell::widthPx;
+        const int32_t h = Battle::Cell::heightPx;
 
         fheroes2::Image sf( w, h );
         sf.reset();
@@ -3561,7 +3561,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. Halfling)
-        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : CELLW / 2;
+        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : Cell::widthPx / 2;
         const fheroes2::Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
 
         // Use the front one to calculate the angle, then overwrite
@@ -4076,7 +4076,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // If a wide flyer is flying to the right its visual horizontal destination should be shifted to the left by one cell.
         if ( canFly && isWide && !unit.isReflect() ) {
-            _movingPos.x -= CELLW;
+            _movingPos.x -= Cell::widthPx;
         }
 
         // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
@@ -4173,7 +4173,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
 
     if ( unit.isWide() && targetPos.x > destPos.x ) {
-        targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
+        targetPos.x -= Cell::widthPx; // this is needed to avoid extra cell shifting upon landing when we move to right side
     }
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );

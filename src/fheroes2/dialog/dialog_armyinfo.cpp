@@ -434,9 +434,9 @@ namespace
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
         fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
         if ( isReflected )
-            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
+            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
         else
-            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
+            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset();
 
         fheroes2::Point inPos( 0, 0 );
         fheroes2::Point outPos( monsterPos.x, monsterPos.y );

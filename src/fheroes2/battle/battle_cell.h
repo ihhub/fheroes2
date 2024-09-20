@@ -31,9 +31,6 @@
 
 #include "math_base.h"
 
-#define CELLW 44
-#define CELLH 52
-
 namespace Battle
 {
     class Unit;
@@ -86,6 +83,11 @@ namespace Battle
         bool isPassableForUnit( const Unit & unit ) const;
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
+
+        // Width of the rendered cell in pixels
+        static constexpr int widthPx{ 44 };
+        // Height of the rendered cell in pixels
+        static constexpr int heightPx{ 52 };
 
     private:
         int32_t _index;
