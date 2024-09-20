@@ -21,15 +21,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_border.h"
+
 #include <algorithm>
 
 #include "agg_image.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_border.h"
 #include "localevent.h"
-#include "maps.h"
+#include "maps_tiles_render.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_tool.h"
@@ -81,17 +82,17 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     const int32_t extraDisplayWidth = displayWidth - fheroes2::Display::DEFAULT_WIDTH;
     const int32_t extraDisplayHeight = displayHeight - fheroes2::Display::DEFAULT_HEIGHT;
 
-    const int32_t topRepeatCount = extraDisplayWidth > 0 ? extraDisplayWidth / TILEWIDTH : 0;
-    const int32_t topRepeatWidth = ( topRepeatCount + 1 ) * TILEWIDTH;
+    const int32_t topRepeatCount = extraDisplayWidth > 0 ? extraDisplayWidth / Maps::tileWidthPx : 0;
+    const int32_t topRepeatWidth = ( topRepeatCount + 1 ) * Maps::tileWidthPx;
 
-    const int32_t vertRepeatCount = extraDisplayHeight > 0 ? extraDisplayHeight / TILEWIDTH : 0;
+    const int32_t vertRepeatCount = extraDisplayHeight > 0 ? extraDisplayHeight / Maps::tileWidthPx : 0;
     const int32_t iconsCount = vertRepeatCount > 3 ? 8 : ( vertRepeatCount < 3 ? 4 : 7 );
 
-    const int32_t vertRepeatHeight = ( vertRepeatCount + 1 ) * TILEWIDTH;
-    const int32_t vertRepeatHeightTop = ( iconsCount - 3 ) * TILEWIDTH;
+    const int32_t vertRepeatHeight = ( vertRepeatCount + 1 ) * Maps::tileWidthPx;
+    const int32_t vertRepeatHeightTop = ( iconsCount - 3 ) * Maps::tileWidthPx;
     const int32_t vertRepeatHeightBottom = vertRepeatHeight - vertRepeatHeightTop;
 
-    const int32_t topPadWidth = extraDisplayWidth % TILEWIDTH;
+    const int32_t topPadWidth = extraDisplayWidth % Maps::tileWidthPx;
 
     // top and bottom padding is split in two halves around the repeated "tiles"
     const int32_t topPadWidthLeft = topPadWidth / 2;
@@ -104,7 +105,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         bottomRepeatCount = extraDisplayWidth > 0 ? extraDisplayWidth / bottomTileWidth : 0;
     }
     else {
-        bottomTileWidth = TILEWIDTH;
+        bottomTileWidth = Maps::tileWidthPx;
         bottomRepeatCount = topRepeatCount;
     }
     const int32_t bottomRepeatWidth = ( bottomRepeatCount + 1 ) * bottomTileWidth;
@@ -113,7 +114,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     const int32_t bottomPadWidthLeft = bottomPadWidth / 2;
     const int32_t bottomPadWidthRight = bottomPadWidth - bottomPadWidthLeft;
 
-    const int32_t vertPadHeight = extraDisplayHeight % TILEWIDTH;
+    const int32_t vertPadHeight = extraDisplayHeight % Maps::tileWidthPx;
 
     fheroes2::Rect srcrt;
     fheroes2::Point dstpt;
@@ -140,10 +141,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.x += srcrt.width;
     srcrt.x += srcrt.width;
 
-    srcrt.width = TILEWIDTH;
+    srcrt.width = Maps::tileWidthPx;
     repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, topRepeatWidth, BORDERWIDTH );
     dstpt.x += topRepeatWidth;
-    srcrt.x += TILEWIDTH;
+    srcrt.x += Maps::tileWidthPx;
 
     srcrt.width = isEvilInterface ? 65 : 25;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -170,10 +171,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     srcrt.y += srcrt.height;
 
     if ( isEvilInterface ) {
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
         dstpt.y += vertRepeatHeightTop;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
 
         srcrt.width = BORDERWIDTH;
         srcrt.height = 35;
@@ -191,19 +192,19 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height;
         srcrt.y += srcrt.height;
 
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += TILEWIDTH;
+        dstpt.y += Maps::tileWidthPx;
 
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
         dstpt.y += vertRepeatHeightBottom;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
     }
     else {
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeight );
         dstpt.y += vertRepeatHeight;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
 
         srcrt.height = 125;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -230,10 +231,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
-    srcrt.height = TILEWIDTH;
+    srcrt.height = Maps::tileWidthPx;
     repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
     dstpt.y += vertRepeatHeightTop;
-    srcrt.y += TILEWIDTH;
+    srcrt.y += Maps::tileWidthPx;
 
     srcrt.height = isEvilInterface ? 35 : 50;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -259,22 +260,22 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height;
         srcrt.y += srcrt.height;
 
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += TILEWIDTH;
+        dstpt.y += Maps::tileWidthPx;
 
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
         dstpt.y += vertRepeatHeightBottom;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
     }
     else {
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += TILEWIDTH;
+        dstpt.y += Maps::tileWidthPx;
 
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
         dstpt.y += vertRepeatHeightBottom;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
 
         srcrt.height = 43;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -301,10 +302,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     dstpt.y += srcrt.height;
     srcrt.y += srcrt.height;
 
-    srcrt.height = TILEWIDTH;
+    srcrt.height = Maps::tileWidthPx;
     repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
     dstpt.y += vertRepeatHeightTop;
-    srcrt.y += TILEWIDTH;
+    srcrt.y += Maps::tileWidthPx;
 
     srcrt.height = isEvilInterface ? 35 : 50;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -330,22 +331,22 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += srcrt.height;
         srcrt.y += srcrt.height;
 
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += TILEWIDTH;
+        dstpt.y += Maps::tileWidthPx;
 
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
         dstpt.y += vertRepeatHeightBottom;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
     }
     else {
-        srcrt.height = TILEWIDTH;
+        srcrt.height = Maps::tileWidthPx;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += TILEWIDTH;
+        dstpt.y += Maps::tileWidthPx;
 
         repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
         dstpt.y += vertRepeatHeightBottom;
-        srcrt.y += TILEWIDTH;
+        srcrt.y += Maps::tileWidthPx;
 
         srcrt.height = 43;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );

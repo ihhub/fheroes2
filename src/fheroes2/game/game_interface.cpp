@@ -40,7 +40,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
-#include "maps.h"
+#include "maps_tiles_render.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
@@ -197,17 +197,17 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     };
 
     const fheroes2::Rect & gameAreaROI = _gameArea.GetROI();
-    const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
+    const bool isFadingEnabled = ( gameAreaROI.width > Maps::tileWidthPx * distance ) || ( gameAreaROI.height > Maps::tileWidthPx * distance );
 
     const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
         const fheroes2::Point heroPos = _gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
 
-        const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
-        const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
+        const int32_t x = heroPos.x - Maps::tileWidthPx * ( distance / 2 );
+        const int32_t y = heroPos.y - Maps::tileWidthPx * ( distance / 2 );
 
         // We need to add an extra cell since the hero stands exactly in the middle of a cell
-        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.width );
-        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.height );
+        const int32_t w = std::min( Maps::tileWidthPx * ( distance + 1 ), gameAreaROI.width );
+        const int32_t h = std::min( Maps::tileWidthPx * ( distance + 1 ), gameAreaROI.height );
 
         return { isHideInterface ? x : std::max( x, BORDERWIDTH ), isHideInterface ? y : std::max( y, BORDERWIDTH ), w, h };
     }();

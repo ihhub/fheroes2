@@ -34,7 +34,7 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
-#include "maps.h"
+#include "maps_tiles_render.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
@@ -345,7 +345,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
         iconsCount = 2;
     }
     else {
-        const int32_t count_h = ( fheroes2::Display::instance().height() - fheroes2::Display::DEFAULT_HEIGHT ) / TILEWIDTH;
+        const int32_t count_h = ( fheroes2::Display::instance().height() - fheroes2::Display::DEFAULT_HEIGHT ) / Maps::tileWidthPx;
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 

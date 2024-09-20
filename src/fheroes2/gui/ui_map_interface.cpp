@@ -31,7 +31,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "maps.h"
+#include "maps_tiles_render.h"
 #include "screen.h"
 #include "ui_text.h"
 
@@ -42,8 +42,8 @@ namespace Interface
         // If this assertion blows up then you are trying to render a window bigger than the interface area.
         assert( interfaceArea.width >= windowSize.width && interfaceArea.height >= windowSize.height );
 
-        fheroes2::Point windowsPos{ ( ( mousePos.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.width / 2 ),
-                                    ( ( mousePos.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.height / 2 ) };
+        fheroes2::Point windowsPos{ ( ( mousePos.x - BORDERWIDTH ) / Maps::tileWidthPx ) * Maps::tileWidthPx + Maps::tileWidthPx - ( windowSize.width / 2 ),
+                                    ( ( mousePos.y - BORDERWIDTH ) / Maps::tileWidthPx ) * Maps::tileWidthPx + Maps::tileWidthPx - ( windowSize.height / 2 ) };
 
         // Clamp area to the edges of the area.
         windowsPos.x = std::clamp( windowsPos.x, BORDERWIDTH, ( interfaceArea.width - windowSize.width ) + BORDERWIDTH );

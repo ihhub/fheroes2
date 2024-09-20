@@ -31,7 +31,7 @@
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
-#include "maps.h"
+#include "maps_tiles_render.h"
 #include "mp2.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -60,25 +60,29 @@ namespace fheroes2
         const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
         const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
 
-        const int32_t topOffset = TILEWIDTH - lighthouseTop.height();
+        const int32_t topOffset = Maps::tileWidthPx - lighthouseTop.height();
 
-        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
+        Image combined( 5 * Maps::tileWidthPx, 2 * Maps::tileWidthPx + lighthouseTop.height() );
         combined.reset();
 
-        Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowBottom, 0, 0, combined, TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowTop, 0, 0, combined, shadowTop.x(), Maps::tileWidthPx + shadowTop.y() - topOffset, Maps::tileWidthPx, Maps::tileWidthPx );
+        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), Maps::tileWidthPx * 2 + shadowMiddle.y() - topOffset, Maps::tileWidthPx, Maps::tileWidthPx );
+        Copy( shadowBottom, 0, 0, combined, Maps::tileWidthPx + shadowBottom.x(), Maps::tileWidthPx * 2 + shadowBottom.y() - topOffset, Maps::tileWidthPx,
+              Maps::tileWidthPx );
+        Copy( lighthouseTop, 0, 0, combined, Maps::tileWidthPx * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, Maps::tileWidthPx, Maps::tileWidthPx );
+        Copy( lighthouseMiddle, 0, 0, combined, Maps::tileWidthPx * 2 + lighthouseMiddle.x(), Maps::tileWidthPx + lighthouseMiddle.y() - topOffset, Maps::tileWidthPx,
+              Maps::tileWidthPx );
+        Copy( lighthouseBottom, 0, 0, combined, Maps::tileWidthPx * 2 + lighthouseBottom.x(), Maps::tileWidthPx * 2 + lighthouseBottom.y() - topOffset, Maps::tileWidthPx,
+              Maps::tileWidthPx );
 
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
         // Use MAPS_DELAY for animation delay since the lighthouse is a map object
         // 61 (0x3D) references the icn offset for the lighthouse animation in icn.cpp
         const CustomAnimationDialogElement lighthouseCustomDynamicImageElement( ICN::OBJNMUL2, combined,
-                                                                                { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 61,
-                                                                                getAnimationDelayValue( Game::MAPS_DELAY ) );
+                                                                                { Maps::tileWidthPx * 2 + lighthouseLight.x(),
+                                                                                  Maps::tileWidthPx + lighthouseLight.y() - topOffset },
+                                                                                61, getAnimationDelayValue( Game::MAPS_DELAY ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showStandardTextMessage( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), _( "For every lighthouse controlled, your ships will move further each day." ), buttons,

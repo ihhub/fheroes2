@@ -46,8 +46,8 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "map_object_info.h"
-#include "maps.h"
 #include "maps_fileinfo.h"
+#include "maps_tiles_render.h"
 #include "mp2.h"
 #include "pal.h"
 #include "race.h"
@@ -289,9 +289,9 @@ namespace
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             const int32_t imageHeight = image.height();
             const int32_t imageWidth = image.width();
-            if ( imageHeight > TILEWIDTH * 3 || imageWidth > TILEWIDTH * 5 ) {
+            if ( imageHeight > Maps::tileWidthPx * 3 || imageWidth > Maps::tileWidthPx * 5 ) {
                 // Reduce the size of very tall images to fit the list.
-                const double ratio = std::max( imageHeight / ( TILEWIDTH * 3. ), imageWidth / ( TILEWIDTH * 5. ) );
+                const double ratio = std::max( imageHeight / ( Maps::tileWidthPx * 3. ), imageWidth / ( Maps::tileWidthPx * 5. ) );
                 fheroes2::Image resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
@@ -602,7 +602,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            fheroes2::Blit( mineSprite, display, dstx + TILEWIDTH * 5 + 5 - mineSprite.width(), dsty + 1 );
+            fheroes2::Blit( mineSprite, display, dstx + Maps::tileWidthPx * 5 + 5 - mineSprite.width(), dsty + 1 );
 
             // Mine type selection mark background.
             const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
@@ -1269,9 +1269,11 @@ void Dialog::selectTownType( int & type, int & color )
     background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    const fheroes2::Rect castleRoi{ pos.x - 2 * TILEWIDTH - TILEWIDTH / 2, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 5 * TILEWIDTH, 5 * TILEWIDTH };
+    const fheroes2::Rect castleRoi{ pos.x - 2 * Maps::tileWidthPx - Maps::tileWidthPx / 2, pos.y - 4 * Maps::tileWidthPx + Maps::tileWidthPx / 2, 5 * Maps::tileWidthPx,
+                                    5 * Maps::tileWidthPx };
 
-    fheroes2::ImageRestorer castleBackground( display, pos.x - 5 * TILEWIDTH, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 8 * TILEWIDTH, 5 * TILEWIDTH );
+    fheroes2::ImageRestorer castleBackground( display, pos.x - 5 * Maps::tileWidthPx, pos.y - 4 * Maps::tileWidthPx + Maps::tileWidthPx / 2, 8 * Maps::tileWidthPx,
+                                              5 * Maps::tileWidthPx );
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
@@ -1446,8 +1448,9 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
         const fheroes2::Sprite & resourceImage = fheroes2::generateMapObjectImage( resourceInfo[i] );
-        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - TILEWIDTH * 3 ) / 2, offsetY + ( stepY - TILEWIDTH ) / 2 );
-        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, TILEWIDTH };
+        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - Maps::tileWidthPx * 3 ) / 2,
+                                             offsetY + ( stepY - Maps::tileWidthPx ) / 2 );
+        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, Maps::tileWidthPx };
         fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y - 4 );
         fheroes2::Blit( markBackground, display, resourceRoi[i].x + 2, resourceRoi[i].y + ( resourceRoi[i].height - markBackground.height() ) / 2 );
         offsetY += stepY;
@@ -1516,7 +1519,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     // Mine appearance type selection list.
     MineTypeList listbox( area.getPosition() );
-    const fheroes2::Rect listRoi( area.x + area.width - 5 * TILEWIDTH - 75, resourceSelectRoi.y, 5 * TILEWIDTH + 20, resourceSelectRoi.height );
+    const fheroes2::Rect listRoi( area.x + area.width - 5 * Maps::tileWidthPx - 75, resourceSelectRoi.y, 5 * Maps::tileWidthPx + 20, resourceSelectRoi.height );
     background.applyTextBackgroundShading( listRoi );
 
     // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.

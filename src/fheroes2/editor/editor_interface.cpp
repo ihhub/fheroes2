@@ -61,10 +61,10 @@
 #include "localevent.h"
 #include "map_format_helper.h"
 #include "map_object_info.h"
-#include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "maps_tiles_render.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -898,7 +898,7 @@ namespace Interface
             if ( isCursorOverGamearea ) {
                 // Get relative tile position under the cursor. This position can be outside the map size.
                 const fheroes2::Point posInGameArea = _gameArea.getInternalPosition( le.getMouseCursorPos() );
-                const fheroes2::Point tilePos{ posInGameArea.x / TILEWIDTH, posInGameArea.y / TILEWIDTH };
+                const fheroes2::Point tilePos{ posInGameArea.x / Maps::tileWidthPx, posInGameArea.y / Maps::tileWidthPx };
                 const bool isValidTile = ( tilePos.x >= 0 && tilePos.y >= 0 && tilePos.x < world.w() && tilePos.y < world.h() );
                 const bool isBrushEmpty = ( _editorPanel.getBrushArea() == fheroes2::Rect() );
 

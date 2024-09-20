@@ -37,8 +37,8 @@
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
-#include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_render.h"
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
@@ -518,7 +518,8 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH - TILEWIDTH / 2, newCoordsCenter.y * TILEWIDTH - TILEWIDTH / 2 } );
+                    return roi.ChangeCenter(
+                        { newCoordsCenter.x * Maps::tileWidthPx - Maps::tileWidthPx / 2, newCoordsCenter.y * Maps::tileWidthPx - Maps::tileWidthPx / 2 } );
                 }
             }
         }
