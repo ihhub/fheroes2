@@ -116,6 +116,6 @@ namespace Battle
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
         int _color{ 0 };
         // Board cells passability status at the time of current cache creation
-        std::array<bool, ARENASIZE> _boardStatus{};
+        std::array<bool, Board::sizeInCells> _boardStatus{};
     };
 }

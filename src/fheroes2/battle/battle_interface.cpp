@@ -1495,7 +1495,7 @@ void Battle::Interface::RedrawArmies()
 
     const Castle * castle = Arena::GetCastle();
 
-    std::array<int32_t, ARENAH>
+    std::array<int32_t, Board::heightInCells>
         wallCellIds{ Arena::CASTLE_FIRST_TOP_WALL_POS, Arena::CASTLE_TOP_ARCHER_TOWER_POS,  Arena::CASTLE_SECOND_TOP_WALL_POS, Arena::CASTLE_TOP_GATE_TOWER_POS,
                      Arena::CASTLE_GATE_POS,           Arena::CASTLE_BOTTOM_GATE_TOWER_POS, Arena::CASTLE_THIRD_TOP_WALL_POS,  Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS,
                      Arena::CASTLE_FOURTH_TOP_WALL_POS };
@@ -1504,10 +1504,10 @@ void Battle::Interface::RedrawArmies()
         RedrawKilled();
     }
 
-    for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
+    for ( int32_t cellRowId = 0; cellRowId < Board::heightInCells; ++cellRowId ) {
         // Redraw objects.
-        for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-            const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+        for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+            const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
             RedrawHighObjects( cellId );
         }
 
@@ -1539,8 +1539,8 @@ void Battle::Interface::RedrawArmies()
 
             const int32_t wallCellId = wallCellIds[cellRowId];
 
-            for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+                const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 bool isCellBefore = true;
                 if ( cellRowId < 5 ) {
@@ -1678,8 +1678,8 @@ void Battle::Interface::RedrawArmies()
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
             // Redraw monsters.
-            for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+                const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
                 for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
@@ -1931,7 +1931,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     const int32_t monsterIndex = unit.GetHeadIndex();
     const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
-    const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
+    const bool isValidFrontMonster = ( monsterIndex / Board::widthInCells ) == ( tileInFront == Board::widthInCells );
 
     int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
     const int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
@@ -2218,7 +2218,7 @@ void Battle::Interface::_redrawBattleGround()
     }
 
     // Ground obstacles.
-    for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
+    for ( int32_t cellId = 0; cellId < Board::sizeInCells; ++cellId ) {
         RedrawLowObjects( cellId );
     }
 
@@ -3572,7 +3572,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
 
         double angle = GetAngle( fheroes2::Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
         // This check is made only for situations when a target stands on the same row as shooter.
-        if ( attacker.GetHeadIndex() / ARENAW == defender.GetHeadIndex() / ARENAW ) {
+        if ( attacker.GetHeadIndex() / Board::widthInCells == defender.GetHeadIndex() / Board::widthInCells ) {
             angle = 0;
         }
 
@@ -3933,7 +3933,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{src}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     assert( _movingUnit == nullptr && _flyingUnit == nullptr );
 
@@ -4146,7 +4147,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{dst}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     status.SetMessage( msg, true );
 
@@ -4179,7 +4181,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{src}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
@@ -4273,7 +4276,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         bridge->ActionUp();
     }
 
-    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{dst}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     status.SetMessage( msg, true );
 
