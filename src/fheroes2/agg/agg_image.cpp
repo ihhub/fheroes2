@@ -2419,6 +2419,32 @@ namespace
         generateDefaultImages( id );
     }
 
+    void generateGradientFont( const int fontId, const int originalFontId, const uint8_t gradientInnerColor, const uint8_t gradientOuterColor,
+                               const uint8_t contourInnerColor, const uint8_t contourOuterColor )
+    {
+        assert( fontId != originalFontId );
+
+        fheroes2::AGG::GetICN( originalFontId, 0 );
+        const std::vector<fheroes2::Sprite> & original = _icnVsSprite[originalFontId];
+
+        _icnVsSprite[fontId].resize( original.size() );
+
+        for ( size_t i = 0; i < original.size(); ++i ) {
+            const fheroes2::Sprite & in = original[i];
+            fheroes2::Sprite & out = _icnVsSprite[fontId][i];
+            out.resize( in.width() + 6, in.height() + 6 );
+            out.reset();
+            Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+            out.setPosition( in.x() - 2, in.y() - 2 );
+
+            applyFontVerticalGradient( out, gradientInnerColor, gradientOuterColor );
+
+            Blit( CreateContour( out, contourInnerColor ), out );
+            Blit( CreateContour( out, 0 ), out );
+            Blit( CreateContour( out, contourOuterColor ), out );
+        }
+    }
+
     // This function must return true is resources have been modified, false otherwise.
     bool LoadModifiedICN( const int id )
     {
@@ -2551,6 +2577,18 @@ namespace
             return true;
         case ICN::GRAY_SMALL_FONT:
             CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
+            return true;
+        case ICN::GOLDEN_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 108, 133, 55, 62 );
+            return true;
+        case ICN::GOLDEN_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 108, 127, 55, 62 );
+            return true;
+        case ICN::SILVER_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 10, 31, 29, 0 );
+            return true;
+        case ICN::SILVER_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 10, 26, 29, 0 );
             return true;
         case ICN::SPELLS:
             LoadOriginalICN( id );
@@ -5232,6 +5270,10 @@ namespace fheroes2::AGG
                 return GetICN( ICN::GRAY_FONT, character - 0x20 );
             case FontColor::YELLOW:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            case FontColor::GOLDEN_GRADIENT:
+                return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
+            case FontColor::SILVER_GRADIENT:
+                return GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -5242,6 +5284,10 @@ namespace fheroes2::AGG
             switch ( fontType.color ) {
             case FontColor::WHITE:
                 return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+            case FontColor::GOLDEN_GRADIENT:
+                return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
+            case FontColor::SILVER_GRADIENT:
+                return GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
