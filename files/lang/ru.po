@@ -4121,12 +4121,11 @@ msgid "The map is corrupted."
 msgstr "Карта повреждена."
 
 msgid "Unable to locate data directory to save the map."
-msgstr "Не удалось найти папку для сохранения карты."
+msgstr "Не удалось найти папку с данными для сохранения карты."
 
 msgid "Unable to create a directory to save the map."
 msgstr "Невозможно создать папку для сохранения карты."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
 msgstr "Не удалось найти папку для сохранения карты."
 
@@ -4443,7 +4442,7 @@ msgid "None."
 msgstr "Нет."
 
 msgid "One side defeats another."
-msgstr "Одна сторона побеждает другую."
+msgstr "Один союз побеждает других."
 
 msgid "Accumulate gold."
 msgstr "Накопить золото."
@@ -4451,25 +4450,20 @@ msgstr "Накопить золото."
 msgid "Run out of time."
 msgstr "Не успеть вовремя."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " союз"
+msgstr "1-ый"
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " союз"
+msgstr "2-ой"
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " союз"
+msgstr "3-ий"
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " союз"
+msgstr "4-ый"
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " союз"
+msgstr "5-ый"
 
 msgid "Special Loss Condition"
 msgstr "Особое условие поражения"
@@ -4483,13 +4477,11 @@ msgstr "Разрешить обычную победу"
 msgid "Allow this condition also for AI"
 msgstr "Применять условие и к ИИ"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " союз"
+msgstr "Задать союзы игроков:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " союз"
+msgstr "{%number} союз: "
 
 msgid "Gold:"
 msgstr "Золото:"
@@ -4511,15 +4503,14 @@ msgstr ""
 "победы."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "Поместить игрока цвета %{color} в %{alliance} союз"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Если этот флажок установлен, то это событие произойдёт для игрока-человека, "
-"если его цвет %{color}."
+"Если этот флажок установлен, то в %{alliance} союз будет помещён %{color} "
+"игрок."
 
 msgid "Days:"
 msgstr "Дней:"
@@ -11445,7 +11436,6 @@ msgstr "Экзорцизм"
 msgid "Anti-Magic"
 msgstr "Антимагия"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
 msgstr "Защищает выбранный отряд от действия всех заклинаний."
 
