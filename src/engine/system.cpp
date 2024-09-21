@@ -120,8 +120,8 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToSDL( std::string{ appName } ).c_str() ), SDL_free ); path ) {
-            return System::encSDLToLocal( path.get() );
+        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToUTF8( std::string{ appName } ).c_str() ), SDL_free ); path ) {
+            return System::encUTF8ToLocal( path.get() );
         }
 #endif
 
@@ -613,11 +613,23 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dirPath, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
-        if ( globMatch( entryPath.filename().string(), pattern ) ) {
-            fileNames.push_back( entryPath.string() );
-
-            isNoMatches = false;
+        if (
+#if defined( _WIN32 )
+            const std::string fileName = encUTF8ToLocal( entryPath.filename().u8string() );
+#else
+            const std::string fileName = entryPath.filename().string();
+#endif
+            !globMatch( fileName, pattern ) ) {
+            continue;
         }
+
+#if defined( _WIN32 )
+        fileNames.emplace_back( encUTF8ToLocal( entryPath.u8string() ) );
+#else
+        fileNames.emplace_back( entryPath.string() );
+#endif
+
+        isNoMatches = false;
     }
 
     if ( isNoMatches ) {
@@ -625,7 +637,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 }
 
-std::string System::encLocalToSDL( const std::string_view str )
+std::string System::encLocalToUTF8( const std::string_view str )
 {
 #if defined( _WIN32 )
     return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
@@ -634,7 +646,7 @@ std::string System::encLocalToSDL( const std::string_view str )
 #endif
 }
 
-std::string System::encSDLToLocal( const std::string_view str )
+std::string System::encUTF8ToLocal( const std::string_view str )
 {
 #if defined( _WIN32 )
     return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );

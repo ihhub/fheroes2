@@ -79,12 +79,23 @@ namespace
                 continue;
             }
 
-            const std::string fileName = entry.path().filename().string();
-            if ( !nameFilter( fileName, needExactMatch, filter, strCmp ) ) {
+            const std::filesystem::path & entryPath = entry.path();
+
+            if (
+#if defined( _WIN32 )
+                const std::string fileName = System::encUTF8ToLocal( entryPath.filename().u8string() );
+#else
+                const std::string fileName = entryPath.filename().string();
+#endif
+                !nameFilter( fileName, needExactMatch, filter, strCmp ) ) {
                 continue;
             }
 
-            files.emplace_back( System::concatPath( correctedPath, fileName ) );
+#if defined( _WIN32 )
+            files.emplace_back( System::encUTF8ToLocal( entryPath.u8string() ) );
+#else
+            files.emplace_back( entryPath.string() );
+#endif
         }
     }
 }
