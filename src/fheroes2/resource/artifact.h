@@ -299,6 +299,7 @@ struct ArtifactSetData
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
+    // Maximum number of artifacts that can be placed in an artifact bag
     static constexpr size_t maxCapacity{ 14 };
 
     BagArtifacts();

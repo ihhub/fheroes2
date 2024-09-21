@@ -56,8 +56,11 @@ namespace Battle
     class Board : public std::vector<Cell>
     {
     public:
+        // Width of the battlefield, measured in cells
         static constexpr int widthInCells{ 11 };
+        // Height of the battlefield, measured in cells
         static constexpr int heightInCells{ 9 };
+        // Total number of cells on the battlefield
         static constexpr int sizeInCells{ widthInCells * heightInCells };
 
         Board();

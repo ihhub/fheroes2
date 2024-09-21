@@ -124,6 +124,7 @@ enum class BuildingStatus : int32_t
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
+    // Maximum number of creature dwellings that can be built in a castle
     static constexpr int maxNumOfDwellings{ 6 };
 
     enum : uint32_t
