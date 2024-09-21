@@ -59,7 +59,9 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
                          fheroes2::FontType::smallWhite() };
 
     const int spacer = 10;
-    const FrameBox box( headerText.height( boxAreaWidthPx ) + spacer + messageText.height( boxAreaWidthPx ) + spacer + sprite_expr.height() + 2 + text.height(), true );
+    const FrameBox box( headerText.height( fheroes2::boxAreaWidthPx ) + spacer + messageText.height( fheroes2::boxAreaWidthPx ) + spacer + sprite_expr.height() + 2
+                            + text.height(),
+                        true );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
@@ -79,16 +81,16 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     fheroes2::Rect pos = box.GetArea();
 
     if ( !header.empty() ) {
-        headerText.draw( pos.x, pos.y + 2, boxAreaWidthPx, display );
+        headerText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
     }
 
-    pos.y += headerText.height( boxAreaWidthPx ) + spacer;
+    pos.y += headerText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     if ( !message.empty() ) {
-        messageText.draw( pos.x, pos.y + 2, boxAreaWidthPx, display );
+        messageText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
     }
 
-    pos.y += messageText.height( boxAreaWidthPx ) + spacer;
+    pos.y += messageText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     pos.y += sprite_expr.height();
     // sprite1

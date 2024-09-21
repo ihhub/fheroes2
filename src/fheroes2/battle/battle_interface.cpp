@@ -54,7 +54,6 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes_base.h"
 #include "interface_list.h"
@@ -78,6 +77,7 @@
 #include "timing.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_tool.h"
@@ -1214,7 +1214,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     _interfacePosition = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
                            _surfaceInnerArea.width, _surfaceInnerArea.height };
-    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    border.SetPosition( _interfacePosition.x - fheroes2::borderWidthPx, _interfacePosition.y - fheroes2::borderWidthPx, fheroes2::Display::DEFAULT_WIDTH,
+                        fheroes2::Display::DEFAULT_HEIGHT );
 
     // damage info popup
     popup.setBattleUIRect( _interfacePosition );

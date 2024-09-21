@@ -70,7 +70,4 @@ namespace Maps
     std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile );
 
     const fheroes2::Image & getTileSurface( const Tiles & tile );
-
-    // Width of the rendered tile in pixels
-    inline constexpr int tileWidthPx{ 32 };
 }

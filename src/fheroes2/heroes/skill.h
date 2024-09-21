@@ -37,6 +37,9 @@ class HeroBase;
 
 namespace Skill
 {
+    inline constexpr int maxNumOfPrimarySkills{ 4 };
+    inline constexpr int maxNumOfSecondarySkills{ 14 };
+
     class Secondary;
 
     int GetLeadershipModifiers( int level, std::string * strs );

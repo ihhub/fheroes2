@@ -42,7 +42,6 @@
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -464,5 +463,5 @@ fheroes2::GameMode Game::SelectScenario( const uint8_t humanPlayerCount )
 
 int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
-    return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
+    return currentId * width * maxNumOfPlayers / totalCount + ( width * ( maxNumOfPlayers - totalCount ) / ( 2 * totalCount ) );
 }

@@ -25,13 +25,13 @@
 #include <cstdint>
 
 #include "agg_image.h"
-#include "dialog.h"
 #include "game.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "ui_constants.h"
 #include "ui_tool.h"
 
 namespace
@@ -125,7 +125,7 @@ namespace fheroes2
         const int32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
         fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset + back.y() );
 
-        const int32_t buttonMiddlePos = panelXPos + Dialog::shadowWidthPx + ( panel.width() - Dialog::shadowWidthPx ) / 2;
+        const int32_t buttonMiddlePos = panelXPos + fheroes2::shadowWidthPx + ( panel.width() - fheroes2::shadowWidthPx ) / 2;
 
         const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
         const int32_t buttonWidth = buttonSample.width();

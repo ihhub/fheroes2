@@ -35,7 +35,6 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_io.h"
-#include "gamedefs.h"
 #include "logging.h"
 #include "render_processor.h"
 #include "save_format_version.h"
@@ -108,7 +107,7 @@ Settings::Settings()
     , heroes_speed( defaultSpeedDelay )
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
-    , battle_speed( DEFAULT_BATTLE_SPEED )
+    , battle_speed( defaultBattleSpeed )
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );

@@ -24,6 +24,7 @@
 #define H2KINGDOM_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <list>
@@ -31,7 +32,6 @@
 
 #include "bitmodes.h"
 #include "castle.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
@@ -77,7 +77,12 @@ public:
     };
 
     Kingdom();
+    Kingdom( const Kingdom & ) = delete;
+
     ~Kingdom() override = default;
+
+    Kingdom & operator=( const Kingdom & ) = delete;
+    Kingdom & operator=( Kingdom && ) = default;
 
     void Init( const int clr );
     void clear();
@@ -244,13 +249,13 @@ public:
     void NewWeek();
     void NewMonth();
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( const int color );
+    const Kingdom & GetKingdom( const int color ) const;
 
     int GetNotLossColors() const;
-    int FindWins( int ) const;
+    int FindWins( const int cond ) const;
 
-    void AddHeroes( const AllHeroes & );
+    void AddHeroes( const AllHeroes & heroes );
     void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
@@ -261,8 +266,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj );
     friend IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj );
 
-    static constexpr uint32_t _size = KINGDOMMAX + 1;
-    Kingdom kingdoms[_size];
+    std::array<Kingdom, maxNumOfPlayers + 1> _kingdoms;
 };
 
 #endif

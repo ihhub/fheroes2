@@ -37,7 +37,6 @@
 #include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game_credits.h"
@@ -50,13 +49,13 @@
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
-#include "maps_tiles_render.h"
 #include "math_base.h"
 #include "mus.h"
 #include "players.h"
 #include "rand.h"
 #include "settings.h"
 #include "tools.h"
+#include "ui_constants.h"
 #include "world.h"
 
 namespace
@@ -124,7 +123,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 
         players.push_back( player );
 
-        Players::Set( Color::GetIndex( p.GetColor() ), player );
+        Players::Set( p.GetColor(), player );
     }
 }
 
@@ -271,7 +270,7 @@ void Game::EnvironmentSoundMixer()
     std::stable_sort( positions.begin(), positions.end(),
                       []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
-    const double maxDistance = std::sqrt( ( maxOffset * maxOffset + maxOffset * maxOffset ) * Maps::tileWidthPx * Maps::tileWidthPx );
+    const double maxDistance = std::sqrt( ( maxOffset * maxOffset + maxOffset * maxOffset ) * fheroes2::tileWidthPx * fheroes2::tileWidthPx );
 
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
@@ -282,8 +281,8 @@ void Game::EnvironmentSoundMixer()
         }
 
         fheroes2::Point actualPosition = pos;
-        actualPosition.x *= Maps::tileWidthPx;
-        actualPosition.y *= Maps::tileWidthPx;
+        actualPosition.x *= fheroes2::tileWidthPx;
+        actualPosition.y *= fheroes2::tileWidthPx;
 
         actualPosition -= tilePixelOffset;
 

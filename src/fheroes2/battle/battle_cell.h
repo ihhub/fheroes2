@@ -53,6 +53,11 @@ namespace Battle
     class Cell final
     {
     public:
+        // Width of the rendered cell in pixels
+        static constexpr int widthPx{ 44 };
+        // Height of the rendered cell in pixels
+        static constexpr int heightPx{ 52 };
+
         explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
@@ -83,11 +88,6 @@ namespace Battle
         bool isPassableForUnit( const Unit & unit ) const;
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
-
-        // Width of the rendered cell in pixels
-        static constexpr int widthPx{ 44 };
-        // Height of the rendered cell in pixels
-        static constexpr int heightPx{ 52 };
 
     private:
         int32_t _index;

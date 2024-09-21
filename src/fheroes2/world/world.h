@@ -62,6 +62,9 @@ namespace Route
     class Step;
 }
 
+inline constexpr int numOfDaysPerWeek{ 7 };
+inline constexpr int numOfWeeksPerMonth{ 4 };
+
 struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 {
     MapObjects() = default;

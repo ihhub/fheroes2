@@ -30,9 +30,9 @@
 #include <string>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
 #include "math_base.h"
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -170,7 +170,7 @@ namespace Dialog
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {
@@ -216,11 +216,6 @@ namespace Dialog
         fheroes2::Rect top;
         int border;
     };
-
-    // Width of the rendered dialog shadow in pixels
-    inline constexpr int shadowWidthPx{ 16 };
-    // "Standard" width of the rendered dialog box in pixels
-    inline constexpr int boxAreaWidthPx{ 244 };
 }
 
 #endif

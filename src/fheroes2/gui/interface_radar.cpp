@@ -30,7 +30,6 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
@@ -38,12 +37,12 @@
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps_tiles.h"
-#include "maps_tiles_render.h"
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "world.h"
 
@@ -142,17 +141,17 @@ namespace
 }
 
 Interface::Radar::Radar( BaseInterface & interface )
-    : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
+    : BorderWindow( { 0, 0, fheroes2::radarWidthPx, fheroes2::radarWidthPx } )
     , _radarType( RadarType::WorldMap )
     , _interface( interface )
 {
     // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
-    _map.resize( RADARWIDTH, RADARWIDTH );
+    _map.resize( fheroes2::radarWidthPx, fheroes2::radarWidthPx );
 }
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
-    : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
+    : BorderWindow( { display.width() - fheroes2::borderWidthPx - fheroes2::radarWidthPx, fheroes2::borderWidthPx, fheroes2::radarWidthPx, fheroes2::radarWidthPx } )
     , _radarType( RadarType::ViewWorld )
     , _interface( radar._interface )
     , _roi( 0, 0, world.w(), world.h() )
@@ -161,7 +160,7 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
 {
     // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
-    _map.resize( RADARWIDTH, RADARWIDTH );
+    _map.resize( fheroes2::radarWidthPx, fheroes2::radarWidthPx );
 }
 
 void Interface::Radar::SavePosition()
@@ -518,8 +517,8 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter(
-                        { newCoordsCenter.x * Maps::tileWidthPx - Maps::tileWidthPx / 2, newCoordsCenter.y * Maps::tileWidthPx - Maps::tileWidthPx / 2 } );
+                    return roi.ChangeCenter( { newCoordsCenter.x * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2,
+                                               newCoordsCenter.y * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2 } );
                 }
             }
         }
