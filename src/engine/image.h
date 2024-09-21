@@ -228,8 +228,6 @@ namespace fheroes2
 
     void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, const uint8_t transformId );
 
-    void applyFontVerticalGradient( Image & image, const uint8_t outsideColor, const uint8_t insideColor );
-
     // draw one image onto another
     void Blit( const Image & in, Image & out, const bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
