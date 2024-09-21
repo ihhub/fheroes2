@@ -2579,16 +2579,16 @@ namespace
             CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
             return true;
         case ICN::GOLDEN_GRADIENT_FONT:
-            generateGradientFont( id, ICN::FONT, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::BROWN_START + 18, 62 );
+            generateGradientFont( id, ICN::FONT, 108, 133, 55, 62 );
             return true;
         case ICN::GOLDEN_GRADIENT_LARGE_FONT:
-            generateGradientFont( id, ICN::WHITE_LARGE_FONT, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::BROWN_START + 18, 62 );
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 108, 127, 55, 62 );
             return true;
         case ICN::SILVER_GRADIENT_FONT:
-            generateGradientFont( id, ICN::FONT, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_END - 7, 0 );
+            generateGradientFont( id, ICN::FONT, 10, 31, 29, 0 );
             return true;
         case ICN::SILVER_GRADIENT_LARGE_FONT:
-            generateGradientFont( id, ICN::WHITE_LARGE_FONT, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_END - 7, 0 );
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 10, 26, 29, 0 );
             return true;
         case ICN::SPELLS:
             LoadOriginalICN( id );
