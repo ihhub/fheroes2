@@ -1670,9 +1670,9 @@ namespace Interface
                     }
                 }
 
-                if ( obeliskCount >= puzzleTilesNum ) {
+                if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
-                    StringReplace( warning, "%{count}", puzzleTilesNum );
+                    StringReplace( warning, "%{count}", numOfPuzzleTiles );
                     _warningMessage.reset( std::move( warning ) );
                     return;
                 }

@@ -32,9 +32,9 @@
 class IStreamBase;
 class OStreamBase;
 
-inline constexpr size_t puzzleTilesNum{ 48 };
+inline constexpr size_t numOfPuzzleTiles{ 48 };
 
-class Puzzle : public std::bitset<puzzleTilesNum>
+class Puzzle : public std::bitset<numOfPuzzleTiles>
 {
 public:
     Puzzle();
