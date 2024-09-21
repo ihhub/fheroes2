@@ -118,7 +118,9 @@ namespace
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
             : point( p )
             , thickness( thick )
-        {}
+        {
+            // Do nothing.
+        }
 
         fheroes2::Point point;
         int32_t thickness;
@@ -390,13 +392,11 @@ namespace
 
     const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
     {
-        static std::vector<int> staticAnim;
-        if ( staticAnim.empty() ) {
-            staticAnim.push_back( 1 );
-        }
+        static const std::vector<int> staticAnim{ 1 };
 
-        if ( !hero || animation == Battle::OP_STATIC )
+        if ( !hero || animation == Battle::OP_STATIC ) {
             return staticAnim;
+        }
 
         const int heroType = matchHeroType( hero );
 
@@ -406,36 +406,16 @@ namespace
             return ( heroType == Battle::CAPTAIN ) ? staticAnim : sorrowAnim;
         }
 
-        static std::vector<int> heroTypeAnim[7][9];
-
-        if ( heroTypeAnim[heroType][animation].empty() ) {
-            const int sourceArray[7][9][9] = {
-                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
-                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
-                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
-                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
-                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
-                { { 6, 7, 6, 7, 6, 7 },
-                  { 7, 8, 9, 10, 11 },
-                  { 10, 9, 7 },
-                  { 7, 12, 13, 14, 15 },
-                  { 7 },
-                  { 7, 12, 13, 14, 16 },
-                  { 7 },
-                  { 17 },
-                  { 18, 19 } }, // NECROMANCER
-                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
-            };
-
-            for ( const int frame : sourceArray[heroType][animation] ) {
-                if ( frame == 0 ) {
-                    break;
-                }
-
-                heroTypeAnim[heroType][animation].push_back( frame );
-            }
-        }
+        static const std::vector<int> heroTypeAnim[7][9]{
+            //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
+            { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+            { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+            { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+            { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+            { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+            { { 6, 7, 6, 7, 6, 7 }, { 7, 8, 9, 10, 11 }, { 10, 9, 7 }, { 7, 12, 13, 14, 15 }, { 7 }, { 7, 12, 13, 14, 16 }, { 7 }, { 17 }, { 18, 19 } }, // NECROMANCER
+            { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
+        };
 
         return heroTypeAnim[heroType][animation];
     }
@@ -735,28 +715,47 @@ namespace Battle
 
         void AddMessage( std::string str )
         {
-            _messages.push_back( std::move( str ) );
+            // Check if message string fits the log width.
+            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+            size_t pos = std::string::npos;
+
+            while ( text.width() > battleLogElementWidth ) {
+                // Find the maximum allowed phrase to fit the line. We assume that all words are separated by a space.
+                pos = str.rfind( ' ', pos - 1 );
+
+                // There should not be such a large word.
+                assert( pos != std::string::npos );
+
+                text.set( str.substr( 0, pos ), fheroes2::FontType::normalWhite() );
+            }
+
+            if ( pos == std::string::npos ) {
+                _messages.push_back( std::move( str ) );
+            }
+            else {
+                // If a phrase does not fit the log width we split it into two lines.
+                _messages.push_back( str.substr( 0, pos ) );
+                _messages.push_back( str.substr( pos + 1 ) );
+            }
 
             if ( !_isLogOpened ) {
                 _scrollbar.hide();
             }
 
             SetListContent( _messages );
-            SetCurrent( _messages.size() - 1 );
 
+            // Update the scrollbar image.
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
             setScrollBarImage( scrollbarSlider );
-            SetCurrentVisible();
+            SetCurrent( _messages.size() - 1 );
         }
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool /* unused */ ) override
         {
-            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( battleLogElementWidth );
-
+            const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
             text.draw( px, py, fheroes2::Display::instance() );
         }
 
