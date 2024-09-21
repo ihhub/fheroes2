@@ -122,7 +122,8 @@ namespace
         return width;
     }
 
-    // Returns text lines parameters (in pixels) in 'offsets': x - line widths, y - vertical line shift. And in 'charsInLine' - the number of characters on the line.
+    // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
+    // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
     void getTextLineInfos( const uint8_t * data, const int32_t size, const int32_t maxWidth, const int32_t firstLineOffsetX, const fheroes2::FontType fontType,
                            const int32_t rowHeight, std::vector<TextLineInfo> & textLineInfos )
     {
