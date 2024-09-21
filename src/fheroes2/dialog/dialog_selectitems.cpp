@@ -815,9 +815,9 @@ namespace Dialog
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
     std::vector<int> skills;
-    skills.reserve( static_cast<size_t>( Skill::maxNumOfSecondarySkills ) * 3 );
+    skills.reserve( static_cast<size_t>( Skill::numOfSecondarySkills ) * 3 );
 
-    for ( int i = 0; i < Skill::maxNumOfSecondarySkills * 3; ++i ) {
+    for ( int i = 0; i < Skill::numOfSecondarySkills * 3; ++i ) {
         if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
             skills.push_back( i );
         }

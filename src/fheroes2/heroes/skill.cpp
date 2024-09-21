@@ -45,13 +45,11 @@
 
 namespace
 {
-    constexpr std::array<int, Skill::maxNumOfSecondarySkills> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,
-                                                                                  Skill::Secondary::LOGISTICS,   Skill::Secondary::SCOUTING,
-                                                                                  Skill::Secondary::DIPLOMACY,   Skill::Secondary::NAVIGATION,
-                                                                                  Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,
-                                                                                  Skill::Secondary::MYSTICISM,   Skill::Secondary::LUCK,
-                                                                                  Skill::Secondary::BALLISTICS,  Skill::Secondary::EAGLE_EYE,
-                                                                                  Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
+    constexpr std::array<int, Skill::numOfSecondarySkills> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS,
+                                                                               Skill::Secondary::SCOUTING,    Skill::Secondary::DIPLOMACY,  Skill::Secondary::NAVIGATION,
+                                                                               Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,     Skill::Secondary::MYSTICISM,
+                                                                               Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
+                                                                               Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
     static_assert( !allSecondarySkills.empty() && allSecondarySkills.back() != 0, "All existing secondary skills must be present in this array" );
 
     int SecondaryGetWeightSkillFromRace( const int race, const int skill )
@@ -100,7 +98,7 @@ namespace
 
     int SecondaryPriorityFromRace( const int race, const std::unordered_set<int> & blacklist, const uint32_t seed )
     {
-        Rand::Queue parts( Skill::maxNumOfSecondarySkills );
+        Rand::Queue parts( Skill::numOfSecondarySkills );
 
         for ( auto skill : allSecondarySkills ) {
             if ( blacklist.find( skill ) != blacklist.end() ) {
@@ -213,7 +211,7 @@ int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
         return UNKNOWN;
     }
 
-    Rand::Queue percents( maxNumOfPrimarySkills );
+    Rand::Queue percents( numOfPrimarySkills );
 
     if ( ptr->boundaryBetweenLowAndHighLevels > level ) {
         percents.Push( ATTACK, ptr->weightsOfPrimarySkillsForLowLevels.attack );
@@ -831,7 +829,7 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
                                                                                       uint32_t const secondSkillSeed ) const
 {
     std::unordered_set<int> blacklist;
-    blacklist.reserve( maxNumOfSecondarySkills + Heroes::maxNumOfSecSkills );
+    blacklist.reserve( numOfSecondarySkills + Heroes::maxNumOfSecSkills );
 
     for ( const Secondary & skill : *this ) {
         if ( skill.Level() != Level::EXPERT ) {
