@@ -2419,6 +2419,32 @@ namespace
         generateDefaultImages( id );
     }
 
+    void generateGradientFont( const int fontId, const int originalFontId, const uint8_t gradientInnerColor, const uint8_t gradientOuterColor,
+                               const uint8_t contourInnerColor, const uint8_t contourOuterColor )
+    {
+        assert( fontId != originalFontId );
+
+        fheroes2::AGG::GetICN( originalFontId, 0 );
+        const std::vector<fheroes2::Sprite> & original = _icnVsSprite[originalFontId];
+
+        _icnVsSprite[fontId].resize( original.size() );
+
+        for ( size_t i = 0; i < original.size(); ++i ) {
+            const fheroes2::Sprite & in = original[i];
+            fheroes2::Sprite & out = _icnVsSprite[fontId][i];
+            out.resize( in.width() + 6, in.height() + 6 );
+            out.reset();
+            Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+            out.setPosition( in.x() - 2, in.y() - 2 );
+
+            applyFontVerticalGradient( out, gradientOuterColor, gradientInnerColor );
+
+            Blit( CreateContour( out, contourInnerColor ), out );
+            Blit( CreateContour( out, 0 ), out );
+            Blit( CreateContour( out, contourOuterColor ), out );
+        }
+    }
+
     // This function must return true is resources have been modified, false otherwise.
     bool LoadModifiedICN( const int id )
     {
@@ -2552,94 +2578,18 @@ namespace
         case ICN::GRAY_SMALL_FONT:
             CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
             return true;
-        case ICN::GOLDEN_GRADIENT_FONT: {
-            fheroes2::AGG::GetICN( ICN::FONT, 0 );
-            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
-
-            _icnVsSprite[id].resize( original.size() );
-
-            for ( size_t i = 0; i < original.size(); ++i ) {
-                const fheroes2::Sprite & in = original[i];
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( in.width() + 6, in.height() + 6 );
-                out.reset();
-                Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
-                out.setPosition( in.x() - 2, in.y() - 2 );
-
-                applyFontVerticalGradient( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START );
-
-                Blit( CreateContour( out, PAL::ColorRanges::BROWN_START + 18 ), out );
-                Blit( CreateContour( out, 0 ), out );
-                Blit( CreateContour( out, 62 ), out );
-            }
+        case ICN::GOLDEN_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::BROWN_START + 18, 62 );
             return true;
-        }
-        case ICN::GOLDEN_GRADIENT_LARGE_FONT: {
-            fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, 0 );
-            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
-
-            _icnVsSprite[id].resize( original.size() );
-
-            for ( size_t i = 0; i < original.size(); ++i ) {
-                const fheroes2::Sprite & in = original[i];
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( in.width() + 6, in.height() + 6 );
-                out.reset();
-                Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
-                out.setPosition( in.x() - 2, in.y() - 2 );
-
-                applyFontVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START );
-
-                Blit( CreateContour( out, PAL::ColorRanges::BROWN_START + 18 ), out );
-                Blit( CreateContour( out, 0 ), out );
-                Blit( CreateContour( out, 62 ), out );
-            }
+        case ICN::GOLDEN_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, PAL::ColorRanges::YELLOW_START, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::BROWN_START + 18, 62 );
             return true;
-        }
-        case ICN::SILVER_GRADIENT_FONT: {
-            fheroes2::AGG::GetICN( ICN::FONT, 0 );
-            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
-
-            _icnVsSprite[id].resize( original.size() );
-
-            for ( size_t i = 0; i < original.size(); ++i ) {
-                const fheroes2::Sprite & in = original[i];
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( in.width() + 6, in.height() + 6 );
-                out.reset();
-                Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
-                out.setPosition( in.x() - 2, in.y() - 2 );
-
-                applyFontVerticalGradient( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START );
-
-                Blit( CreateContour( out, PAL::ColorRanges::GRAY_END - 7 ), out );
-                Blit( CreateContour( out, 0 ), out );
-                Blit( CreateContour( out, 0 ), out );
-            }
+        case ICN::SILVER_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_END - 7, 0 );
             return true;
-        }
-        case ICN::SILVER_GRADIENT_LARGE_FONT: {
-            fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, 0 );
-            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
-
-            _icnVsSprite[id].resize( original.size() );
-
-            for ( size_t i = 0; i < original.size(); ++i ) {
-                const fheroes2::Sprite & in = original[i];
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( in.width() + 6, in.height() + 6 );
-                out.reset();
-                Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
-                out.setPosition( in.x() - 2, in.y() - 2 );
-
-                applyFontVerticalGradient( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START );
-
-                Blit( CreateContour( out, PAL::ColorRanges::GRAY_END - 7 ), out );
-                Blit( CreateContour( out, 0 ), out );
-                Blit( CreateContour( out, 0 ), out );
-            }
+        case ICN::SILVER_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, PAL::ColorRanges::GRAY_START, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_END - 7, 0 );
             return true;
-        }
         case ICN::SPELLS:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() != 60 ) {
