@@ -20,9 +20,11 @@
 
 #include "ui_font.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 #include <initializer_list>
 
 #include "game_language.h"
