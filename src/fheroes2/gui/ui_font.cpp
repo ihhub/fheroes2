@@ -6008,7 +6008,7 @@ namespace fheroes2
         updateSmallFontLetterShadow( icnVsSprite[75] );
     }
 
-    void applyFontVerticalGradient( Image & image, const uint8_t outsideColor, const uint8_t insideColor )
+    void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor )
     {
         assert( !image.singleLayer() );
 

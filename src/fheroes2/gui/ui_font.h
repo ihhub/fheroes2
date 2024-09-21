@@ -43,5 +43,5 @@ namespace fheroes2
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite );
 
-    void applyFontVerticalGradient( Image & image, const uint8_t outsideColor, const uint8_t insideColor );
+    void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor );
 }

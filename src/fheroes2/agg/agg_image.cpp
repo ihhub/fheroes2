@@ -2437,7 +2437,7 @@ namespace
             Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
             out.setPosition( in.x() - 2, in.y() - 2 );
 
-            applyFontVerticalGradient( out, gradientOuterColor, gradientInnerColor );
+            applyFontVerticalGradient( out, gradientInnerColor, gradientOuterColor );
 
             Blit( CreateContour( out, contourInnerColor ), out );
             Blit( CreateContour( out, 0 ), out );
