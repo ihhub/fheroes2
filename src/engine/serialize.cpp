@@ -30,7 +30,6 @@
 #include <string>
 #include <string_view>
 
-#include "endian_h2.h"
 #include "logging.h"
 
 namespace

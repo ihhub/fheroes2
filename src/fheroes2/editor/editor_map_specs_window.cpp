@@ -54,6 +54,7 @@
 #include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"

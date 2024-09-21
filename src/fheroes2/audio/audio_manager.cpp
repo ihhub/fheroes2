@@ -67,7 +67,7 @@ namespace
         for ( const std::string & dir : directories ) {
             ListFiles musicFilePaths;
 
-            musicFilePaths.ReadDir( dir, fileName, false );
+            musicFilePaths.ReadDir( dir, fileName );
             if ( musicFilePaths.empty() ) {
                 continue;
             }
