@@ -361,11 +361,11 @@ std::string System::GetConfigDirectory( const std::string_view appName )
     std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
         if ( const char * configEnv = getenv( "XDG_CONFIG_HOME" ); configEnv != nullptr ) {
-            return System::concatPath( configEnv, appName );
+            return concatPath( configEnv, appName );
         }
 
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, ".config" ), appName );
+            return concatPath( concatPath( homeEnv, ".config" ), appName );
         }
 
         return { "." };
@@ -394,17 +394,17 @@ std::string System::GetDataDirectory( const std::string_view appName )
     std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
         if ( const char * dataEnv = getenv( "XDG_DATA_HOME" ); dataEnv != nullptr ) {
-            return System::concatPath( dataEnv, appName );
+            return concatPath( dataEnv, appName );
         }
 
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, ".local/share" ), appName );
+            return concatPath( concatPath( homeEnv, ".local/share" ), appName );
         }
 
         return { "." };
 #elif defined( MACOS_APP_BUNDLE )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), appName );
+            return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
 
         return { "." };
