@@ -616,7 +616,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
             continue;
         }
 
-        fileNames.emplace_back( fsPathToString( entryPath.string() ) );
+        fileNames.emplace_back( fsPathToString( entryPath ) );
 
         isNoMatches = false;
     }

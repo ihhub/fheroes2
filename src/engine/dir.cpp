@@ -85,7 +85,7 @@ namespace
                 continue;
             }
 
-            files.emplace_back( System::fsPathToString( entryPath.string() ) );
+            files.emplace_back( System::fsPathToString( entryPath ) );
         }
     }
 }
