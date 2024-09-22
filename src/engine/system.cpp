@@ -25,7 +25,6 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <filesystem>
 #include <functional>
 #include <initializer_list>
 #include <map>
@@ -120,8 +119,8 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToSDL( std::string{ appName } ).c_str() ), SDL_free ); path ) {
-            return System::encSDLToLocal( path.get() );
+        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToUTF8( std::string{ appName } ).c_str() ), SDL_free ); path ) {
+            return System::encUTF8ToLocal( path.get() );
         }
 #endif
 
@@ -361,11 +360,11 @@ std::string System::GetConfigDirectory( const std::string_view appName )
     std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
         if ( const char * configEnv = getenv( "XDG_CONFIG_HOME" ); configEnv != nullptr ) {
-            return System::concatPath( configEnv, appName );
+            return concatPath( configEnv, appName );
         }
 
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, ".config" ), appName );
+            return concatPath( concatPath( homeEnv, ".config" ), appName );
         }
 
         return { "." };
@@ -394,17 +393,17 @@ std::string System::GetDataDirectory( const std::string_view appName )
     std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
         if ( const char * dataEnv = getenv( "XDG_DATA_HOME" ); dataEnv != nullptr ) {
-            return System::concatPath( dataEnv, appName );
+            return concatPath( dataEnv, appName );
         }
 
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, ".local/share" ), appName );
+            return concatPath( concatPath( homeEnv, ".local/share" ), appName );
         }
 
         return { "." };
 #elif defined( MACOS_APP_BUNDLE )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), appName );
+            return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
 
         return { "." };
@@ -613,11 +612,13 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dirPath, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
-        if ( globMatch( entryPath.filename().string(), pattern ) ) {
-            fileNames.push_back( entryPath.string() );
-
-            isNoMatches = false;
+        if ( !globMatch( fsPathToString( entryPath.filename() ), pattern ) ) {
+            continue;
         }
+
+        fileNames.emplace_back( fsPathToString( entryPath ) );
+
+        isNoMatches = false;
     }
 
     if ( isNoMatches ) {
@@ -625,7 +626,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 }
 
-std::string System::encLocalToSDL( const std::string_view str )
+std::string System::encLocalToUTF8( const std::string_view str )
 {
 #if defined( _WIN32 )
     return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
@@ -634,12 +635,25 @@ std::string System::encLocalToSDL( const std::string_view str )
 #endif
 }
 
-std::string System::encSDLToLocal( const std::string_view str )
+std::string System::encUTF8ToLocal( const std::string_view str )
 {
 #if defined( _WIN32 )
     return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
 #else
     return std::string{ str };
+#endif
+}
+
+std::string System::fsPathToString( const std::filesystem::path & path )
+{
+#if defined( _WIN32 )
+    // On Windows, std::filesystem::path::string() can throw an exception if path contains UTF-16 characters that
+    // are non-representable in CP_ACP. However, converting a well-formed UTF-16 string to UTF-8 is always safe,
+    // so we perform this conversion first, and then convert the resulting UTF-8 to CP_ACP using our conversion
+    // function, which can never throw an exception.
+    return encUTF8ToLocal( path.u8string() );
+#else
+    return path.string();
 #endif
 }
 

@@ -79,12 +79,13 @@ namespace
                 continue;
             }
 
-            const std::string fileName = entry.path().filename().string();
-            if ( !nameFilter( fileName, needExactMatch, filter, strCmp ) ) {
+            const std::filesystem::path & entryPath = entry.path();
+
+            if ( !nameFilter( System::fsPathToString( entryPath.filename() ), needExactMatch, filter, strCmp ) ) {
                 continue;
             }
 
-            files.emplace_back( System::concatPath( correctedPath, fileName ) );
+            files.emplace_back( System::fsPathToString( entryPath ) );
         }
     }
 }
