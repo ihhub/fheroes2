@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SERIALIZE_H
-#define H2SERIALIZE_H
+#pragma once
 
 #include <algorithm>
 #include <array>
@@ -165,8 +164,8 @@ public:
     virtual uint32_t getBE32() = 0;
     virtual uint32_t getLE32() = 0;
 
-    // 0 stands for all data.
-    virtual std::vector<uint8_t> getRaw( size_t = 0 ) = 0;
+    // If a zero size is specified, then all still unread data is returned
+    virtual std::vector<uint8_t> getRaw( size_t ) = 0;
 
     uint16_t get16();
     uint32_t get32();
@@ -448,8 +447,8 @@ public:
         return result;
     }
 
-    // 0 stands for all data.
-    std::vector<uint8_t> getRaw( size_t sz = 0 ) override
+    // If a zero size is specified, then all still unread data is returned
+    std::vector<uint8_t> getRaw( size_t sz ) override
     {
         const size_t actualSize = sizeg();
         const size_t resultSize = sz > 0 ? sz : actualSize;
@@ -464,7 +463,9 @@ public:
         return result;
     }
 
-    // 0 stands for all data.
+    // If a zero size is specified, then all still unread data is read, and from this data, a string is
+    // formed that ends with the first null character found (or includes all data if no null character
+    // was found), and this string is returned
     std::string toString( const size_t sz = 0 )
     {
         const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
@@ -616,7 +617,7 @@ public:
     bool open( const std::string & fn, const std::string & mode );
     void close();
 
-    // 0 stands for all data.
+    // If a zero size is specified, then all still unread data is returned
     RWStreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
@@ -632,12 +633,14 @@ public:
     void putBE32( uint32_t ) override;
     void putLE32( uint32_t ) override;
 
-    // 0 stands for all data.
-    std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
+    // If a zero size is specified, then all still unread data is returned
+    std::vector<uint8_t> getRaw( const size_t size ) override;
 
     void putRaw( const void * ptr, size_t sz ) override;
 
-    // 0 stands for all data.
+    // If a zero size is specified, then all still unread data is read, and from this data, a string is
+    // formed that ends with the first null character found (or includes all data if no null character
+    // was found), and this string is returned
     std::string toString( const size_t size = 0 );
 
 private:
@@ -704,5 +707,3 @@ namespace fheroes2
         return result;
     }
 }
-
-#endif

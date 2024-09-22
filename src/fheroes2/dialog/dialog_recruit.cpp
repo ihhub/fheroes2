@@ -36,7 +36,6 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -50,6 +49,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -659,7 +659,8 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
     // Set cursor.
     const CursorRestorer cursorRestorer( false );
 
-    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - fheroes2::Display::DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2,
+                                        display.height() / 2 - fheroes2::Display::DEFAULT_HEIGHT / 2 + fheroes2::borderWidthPx );
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 

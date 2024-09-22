@@ -38,7 +38,6 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -60,7 +59,7 @@ namespace
 {
     const int32_t bottomBarOffsetY = 461;
 
-    const std::array<uint32_t, CASTLEMAXMONSTER> castleDwellings
+    const std::array<uint32_t, Castle::maxNumOfDwellings> castleDwellings
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
     uint32_t howManyRecruitMonster( const Castle & castle, Troops & tempCastleArmy, Troops & tempHeroArmy, const uint32_t dw, const Funds & add, Funds & res )
@@ -139,8 +138,8 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
     }
 
     // In this loop we should go in reverse order - from strongest monsters to weakest in order to purchase most of the best monsters.
-    for ( size_t id = 0; id < CASTLEMAXMONSTER; ++id ) {
-        const uint32_t dwellingType = castleDwellings[CASTLEMAXMONSTER - id - 1];
+    for ( size_t id = 0; id < maxNumOfDwellings; ++id ) {
+        const uint32_t dwellingType = castleDwellings[maxNumOfDwellings - id - 1];
         const uint32_t recruitableNumber = howManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
 
         if ( recruitableNumber == 0 ) {
@@ -221,17 +220,17 @@ void Castle::OpenWell()
     // EXIT button.
     fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
-    const std::array<fheroes2::Rect, CASTLEMAXMONSTER> rectMonster
+    const std::array<fheroes2::Rect, maxNumOfDwellings> rectMonster
         = { fheroes2::Rect( roi.x + 20, roi.y + 18, 288, 124 ),   fheroes2::Rect( roi.x + 20, roi.y + 168, 288, 124 ),
             fheroes2::Rect( roi.x + 20, roi.y + 318, 288, 124 ),  fheroes2::Rect( roi.x + 334, roi.y + 18, 288, 124 ),
             fheroes2::Rect( roi.x + 334, roi.y + 168, 288, 124 ), fheroes2::Rect( roi.x + 334, roi.y + 318, 288, 124 ) };
 
-    const std::array<Monster, CASTLEMAXMONSTER> castleMonster
+    const std::array<Monster, maxNumOfDwellings> castleMonster
         = { Monster( race, GetActualDwelling( castleDwellings[0] ) ), Monster( race, GetActualDwelling( castleDwellings[1] ) ),
             Monster( race, GetActualDwelling( castleDwellings[2] ) ), Monster( race, GetActualDwelling( castleDwellings[3] ) ),
             Monster( race, GetActualDwelling( castleDwellings[4] ) ), Monster( race, GetActualDwelling( castleDwellings[5] ) ) };
 
-    std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> monsterAnimInfo
+    std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> monsterAnimInfo
         = { fheroes2::RandomMonsterAnimation( castleMonster[0] ), fheroes2::RandomMonsterAnimation( castleMonster[1] ),
             fheroes2::RandomMonsterAnimation( castleMonster[2] ), fheroes2::RandomMonsterAnimation( castleMonster[3] ),
             fheroes2::RandomMonsterAnimation( castleMonster[4] ), fheroes2::RandomMonsterAnimation( castleMonster[5] ) };
@@ -265,7 +264,7 @@ void Castle::OpenWell()
             }
         }
 
-        for ( size_t dwellingId = 0; dwellingId < CASTLEMAXMONSTER; ++dwellingId ) {
+        for ( size_t dwellingId = 0; dwellingId < maxNumOfDwellings; ++dwellingId ) {
             if ( _constructedBuildings & castleDwellings[dwellingId] ) {
                 if ( le.MouseClickLeft( rectMonster[dwellingId] ) || pressedHotkeyBuildingID == castleDwellings[dwellingId] ) {
                     if ( RecruitMonster( Dialog::RecruitMonster( castleMonster[dwellingId], dwelling[dwellingId], true, 2 ) ) ) {
@@ -536,11 +535,11 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     }
 }
 
-void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const
+void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    for ( size_t monsterId = 0; monsterId < CASTLEMAXMONSTER; ++monsterId ) {
+    for ( size_t monsterId = 0; monsterId < maxNumOfDwellings; ++monsterId ) {
         fheroes2::Point outPos( roi.x, roi.y + 1 );
 
         switch ( monsterId ) {
@@ -576,10 +575,10 @@ void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array
 
         const fheroes2::Sprite & smonster = fheroes2::AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId() );
         if ( flipMonsterSprite ) {
-            outPos.x += 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
+            outPos.x += 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? Battle::Cell::widthPx / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
         }
         else {
-            outPos.x += 193 + smonster.x() - ( monster.isWide() ? CELLW / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
+            outPos.x += 193 + smonster.x() - ( monster.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
         }
 
         outPos.y += 124 + smonster.y();

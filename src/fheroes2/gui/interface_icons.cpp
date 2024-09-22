@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,16 +28,15 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
-#include "maps.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
+#include "ui_constants.h"
 #include "ui_scrollbar.h"
 #include "world.h"
 
@@ -80,7 +79,8 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
-    fheroes2::Rect srcrt( icnadv.width() - RADARWIDTH - BORDERWIDTH, RADARWIDTH + 2 * BORDERWIDTH, RADARWIDTH / 2, 32 );
+    fheroes2::Rect srcrt( icnadv.width() - fheroes2::radarWidthPx - fheroes2::borderWidthPx, fheroes2::radarWidthPx + 2 * fheroes2::borderWidthPx,
+                          fheroes2::radarWidthPx / 2, 32 );
 
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, offset.y, srcrt.width, srcrt.height );
 
@@ -345,7 +345,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
         iconsCount = 2;
     }
     else {
-        const int32_t count_h = ( fheroes2::Display::instance().height() - fheroes2::Display::DEFAULT_HEIGHT ) / TILEWIDTH;
+        const int32_t count_h = ( fheroes2::Display::instance().height() - fheroes2::Display::DEFAULT_HEIGHT ) / fheroes2::tileWidthPx;
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 

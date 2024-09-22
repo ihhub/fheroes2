@@ -103,7 +103,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     _middleFragmentHeight = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
     const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
 
-    area.width = BOXAREA_WIDTH;
+    area.width = fheroes2::boxAreaWidthPx;
     area.height = activeAreaHeight + activeAreaHeight + _middleFragmentHeight;
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -118,7 +118,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
     _restorer.reset( new fheroes2::ImageRestorer( display, _position.x, _position.y, overallWidth( evil ), height_top_bottom + _middleFragmentHeight ) );
 
-    area.x = _position.x + ( windowWidth - BOXAREA_WIDTH ) / 2 + leftSideOffset;
+    area.x = _position.x + ( windowWidth - fheroes2::boxAreaWidthPx ) / 2 + leftSideOffset;
     area.y = _position.y + ( topHeight( evil ) - activeAreaHeight );
 
     redraw();

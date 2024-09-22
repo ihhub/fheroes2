@@ -79,7 +79,7 @@ std::string StringUpper( std::string str )
     return str;
 }
 
-void StringReplace( std::string & dst, const char * pred, const std::string & src )
+void StringReplace( std::string & dst, const char * pred, const std::string_view src )
 {
     size_t pos;
 
@@ -88,9 +88,10 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
     }
 }
 
-std::vector<std::string> StringSplit( const std::string & str, const char sep )
+std::vector<std::string> StringSplit( const std::string_view str, const char sep )
 {
     std::vector<std::string> vec;
+
     size_t pos1 = 0;
     size_t pos2 = 0;
 
@@ -100,13 +101,14 @@ std::vector<std::string> StringSplit( const std::string & str, const char sep )
             break;
         }
 
-        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
+        vec.emplace_back( str.substr( pos1, pos2 - pos1 ) );
+
         pos1 = pos2 + 1;
     }
 
-    // tail
-    if ( pos1 < str.size() )
-        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
+    if ( pos1 < str.size() ) {
+        vec.emplace_back( str.substr( pos1, str.size() - pos1 ) );
+    }
 
     return vec;
 }

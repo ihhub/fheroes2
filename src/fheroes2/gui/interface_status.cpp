@@ -35,7 +35,6 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -49,6 +48,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
@@ -94,7 +94,7 @@ void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
     uint32_t oh = 72;
 
     if ( !Settings::Get().isHideInterfaceEnabled() ) {
-        oh = fheroes2::Display::instance().height() - oy - BORDERWIDTH;
+        oh = fheroes2::Display::instance().height() - oy - fheroes2::borderWidthPx;
     }
 
     BorderWindow::SetPosition( ox, oy, ow, oh );
@@ -402,7 +402,7 @@ void Interface::StatusWindow::DrawBackground() const
     const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const fheroes2::Rect & pos = GetArea();
 
-    if ( !Settings::Get().isHideInterfaceEnabled() && display.height() - BORDERWIDTH - icnston.height() > pos.y ) {
+    if ( !Settings::Get().isHideInterfaceEnabled() && display.height() - fheroes2::borderWidthPx - icnston.height() > pos.y ) {
         // top
         const int32_t startY = 11;
         const int32_t copyHeight = 46;

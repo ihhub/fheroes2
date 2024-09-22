@@ -56,6 +56,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_text.h"
@@ -99,18 +100,18 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     const fheroes2::Text heroDescriptionText( std::move( str ), fheroes2::FontType::normalWhite() );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), fheroes2::boxAreaWidthPx );
 
-    const int32_t dialogHeight = recruitHeroText.height( BOXAREA_WIDTH ) + spacer + portrait_frame.height() + spacer + heroDescriptionText.height( BOXAREA_WIDTH )
-                                 + spacer + rbs.GetArea().height;
+    const int32_t dialogHeight = recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer + portrait_frame.height() + spacer
+                                 + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer + rbs.GetArea().height;
 
     const Dialog::FrameBox box( dialogHeight, true );
     const fheroes2::Rect & dialogRoi = box.GetArea();
 
-    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, BOXAREA_WIDTH, display );
+    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, fheroes2::boxAreaWidthPx, display );
 
     // portrait and frame
-    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( BOXAREA_WIDTH ) + spacer };
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer };
     fheroes2::Blit( portrait_frame, display, pos.x, pos.y );
 
     const fheroes2::Rect heroPortraitArea( pos.x, pos.y, portrait_frame.width(), portrait_frame.height() );
@@ -119,9 +120,9 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     hero->PortraitRedraw( pos.x, pos.y, PORT_BIG, display );
 
     pos.y += portrait_frame.height() + spacer;
-    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, BOXAREA_WIDTH, display );
+    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( BOXAREA_WIDTH ) + spacer );
+    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();

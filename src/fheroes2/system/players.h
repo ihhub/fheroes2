@@ -44,7 +44,9 @@ namespace Maps
 class Castle;
 class Heroes;
 
-// control_t
+// Maximum number of players on the map
+inline constexpr int maxNumOfPlayers{ 6 };
+
 enum
 {
     CONTROL_NONE = 0,

@@ -25,15 +25,16 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
-
-#define PUZZLETILES 48
 
 class IStreamBase;
 class OStreamBase;
 
-class Puzzle : public std::bitset<PUZZLETILES>
+inline constexpr size_t numOfPuzzleTiles{ 48 };
+
+class Puzzle : public std::bitset<numOfPuzzleTiles>
 {
 public:
     Puzzle();

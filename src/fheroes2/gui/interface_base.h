@@ -23,11 +23,11 @@
 #include <cstdint>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "math_base.h"
 #include "screen.h"
+#include "ui_constants.h"
 
 namespace Interface
 {
@@ -91,26 +91,26 @@ namespace Interface
 
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
-            return cursorPos.x < BORDERWIDTH;
+            return cursorPos.x < fheroes2::borderWidthPx;
         }
 
         static bool isScrollRight( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
-            return cursorPos.x >= display.width() - BORDERWIDTH;
+            return cursorPos.x >= display.width() - fheroes2::borderWidthPx;
         }
 
         static bool isScrollTop( const fheroes2::Point & cursorPos )
         {
-            return cursorPos.y < BORDERWIDTH;
+            return cursorPos.y < fheroes2::borderWidthPx;
         }
 
         static bool isScrollBottom( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
-            return cursorPos.y >= display.height() - BORDERWIDTH;
+            return cursorPos.y >= display.height() - fheroes2::borderWidthPx;
         }
 
         GameArea & getGameArea()

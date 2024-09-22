@@ -29,6 +29,9 @@
 
 namespace fheroes2
 {
+    // Spell power value, based on which the effect of the monsters' built-in spells is calculated
+    inline constexpr int spellPowerForBuiltinMonsterSpells{ 3 };
+
     enum class MonsterAbilityType : int
     {
         // Basic abilities.

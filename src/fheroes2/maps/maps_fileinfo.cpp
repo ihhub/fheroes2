@@ -166,10 +166,10 @@ void Maps::FileInfo::Reset()
     height = 0;
     difficulty = Difficulty::NORMAL;
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
 
-    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+    for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         races[i] = Race::NONE;
         unions[i] = Color::IndexToColor( i );
     }
@@ -288,13 +288,13 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Does the game start with a hero in the first castle?
     startWithHeroInFirstCastle = ( 0 == fs.get() );
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
 
     // Initial races.
     for ( const int color : colors ) {
         const uint8_t race = Race::IndexToRace( fs.get() );
         const int idx = Color::GetIndex( color );
-        assert( idx < KINGDOMMAX );
+        assert( idx < maxNumOfPlayers );
 
         races[idx] = race;
 
@@ -524,11 +524,11 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
 
     using UnionsItemType = decltype( unions )::value_type;
 
-    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+    for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         const uint8_t color = Color::IndexToColor( i );
 
         if ( side1Colors & color ) {
@@ -632,12 +632,12 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
 
     // Only the basename of map filename (fi.file) is saved
-    stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
+    stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
 
-    for ( size_t i = 0; i < KINGDOMMAX; ++i ) {
+    for ( size_t i = 0; i < maxNumOfPlayers; ++i ) {
         stream << fi.races[i] << fi.unions[i];
     }
 
@@ -654,8 +654,8 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     // Only the basename of map filename (fi.file) is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
 
     using RacesItemType = decltype( fi.races )::value_type;
     using UnionsItemType = decltype( fi.unions )::value_type;
@@ -666,7 +666,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 
         stream >> racesItem >> unionsItem;
 
-        if ( i < KINGDOMMAX ) {
+        if ( i < maxNumOfPlayers ) {
             fi.races[i] = racesItem;
             fi.unions[i] = unionsItem;
         }

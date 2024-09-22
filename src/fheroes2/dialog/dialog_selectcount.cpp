@@ -79,7 +79,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     const fheroes2::Text headerText( std::move( header ), fheroes2::FontType::normalWhite() );
     int32_t headerOffsetY{ 10 };
     const int32_t selectionAreaHeight{ 30 };
-    const int32_t headerHeight = headerText.height( BOXAREA_WIDTH );
+    const int32_t headerHeight = headerText.height( fheroes2::boxAreaWidthPx );
     const int32_t uiWidth = uiElement ? uiElement->area().width : 0;
     const int32_t uiHeight = uiElement ? uiElement->area().height : 0;
 
@@ -88,7 +88,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     const fheroes2::Rect & windowArea = box.GetArea();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
+    headerText.draw( windowArea.x, windowArea.y, fheroes2::boxAreaWidthPx, display );
 
     const fheroes2::Point uiOffset{ windowArea.x + ( windowArea.width - uiWidth ) / 2, windowArea.y + headerHeight + headerOffsetY };
     if ( uiElement ) {
@@ -173,7 +173,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const int32_t titleHeight = hasTitle ? titlebox.height( BOXAREA_WIDTH ) + 10 : 0;
+    const int32_t titleHeight = hasTitle ? titlebox.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
     const int32_t keyBoardButtonExtraHeight = 20;
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
@@ -181,7 +181,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
-    const int32_t textboxHeight = textbox.height( BOXAREA_WIDTH );
+    const int32_t textboxHeight = textbox.height( fheroes2::boxAreaWidthPx );
 
     const int32_t frameBoxHeight = 10 + titleHeight + textboxHeight + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
     const FrameBox box( frameBoxHeight, true );
@@ -189,11 +189,11 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     // Title text.
     if ( hasTitle ) {
-        titlebox.draw( frameBoxArea.x, frameBoxArea.y + 12, BOXAREA_WIDTH, display );
+        titlebox.draw( frameBoxArea.x, frameBoxArea.y + 12, fheroes2::boxAreaWidthPx, display );
     }
 
     // Header text.
-    textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, BOXAREA_WIDTH, display );
+    textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, fheroes2::boxAreaWidthPx, display );
 
     fheroes2::Point dst_pt{ frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2, frameBoxArea.y + 10 + titleHeight + textboxHeight + 10 };
 
@@ -375,11 +375,11 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     const std::string msg( _( "How many creatures do you wish to move?" ) );
     fheroes2::Text titleText( msg, fheroes2::FontType::normalWhite() );
     titleText.setUniformVerticalAlignment( false );
-    const int32_t titleHeight = headerHeight + titleText.rows( BOXAREA_WIDTH ) * titleText.height();
+    const int32_t titleHeight = headerHeight + titleText.rows( fheroes2::boxAreaWidthPx ) * titleText.height();
 
     fheroes2::Text slotSeparationText( _( "Select how many units to separate into:" ), fheroes2::FontType::normalWhite() );
     slotSeparationText.setUniformVerticalAlignment( false );
-    const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
+    const int32_t bodyHeight = slotSeparationText.rows( fheroes2::boxAreaWidthPx ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
     const int boxHeight = freeSlots > 1 ? 63 + spacer + titleHeight + bodyHeight : 45;
@@ -391,8 +391,8 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     const int center = pos.x + pos.width / 2;
     const int textTopOffset = 13;
 
-    header.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
-    titleText.draw( pos.x, pos.y + 2 + headerHeight, BOXAREA_WIDTH, display );
+    header.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
+    titleText.draw( pos.x, pos.y + 2 + headerHeight, fheroes2::boxAreaWidthPx, display );
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
     const fheroes2::Rect selectionBoxArea{ pos.x + 70, pos.y + textTopOffset + titleHeight, valueSelectionSize.width, valueSelectionSize.height };
@@ -420,7 +420,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             vrts[i] = { center + offset + deltaXStart + i * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() };
         }
 
-        slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
+        slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, fheroes2::boxAreaWidthPx, display );
 
         for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );

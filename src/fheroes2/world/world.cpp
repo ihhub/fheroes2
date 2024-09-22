@@ -42,7 +42,6 @@
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -464,37 +463,37 @@ Heroes * World::GetHero( const Castle & castle ) const
 
 int World::GetDay() const
 {
-    return LastDay() ? DAYOFWEEK : day % DAYOFWEEK;
+    return LastDay() ? numOfDaysPerWeek : day % numOfDaysPerWeek;
 }
 
 int World::GetWeek() const
 {
-    return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
+    return LastWeek() ? numOfWeeksPerMonth : week % numOfWeeksPerMonth;
 }
 
 bool World::BeginWeek() const
 {
-    return 1 == ( day % DAYOFWEEK );
+    return 1 == ( day % numOfDaysPerWeek );
 }
 
 bool World::BeginMonth() const
 {
-    return 1 == ( week % WEEKOFMONTH ) && BeginWeek();
+    return 1 == ( week % numOfWeeksPerMonth ) && BeginWeek();
 }
 
 bool World::LastDay() const
 {
-    return ( 0 == ( day % DAYOFWEEK ) );
+    return ( 0 == ( day % numOfDaysPerWeek ) );
 }
 
 bool World::FirstWeek() const
 {
-    return ( 1 == ( week % WEEKOFMONTH ) );
+    return ( 1 == ( week % numOfWeeksPerMonth ) );
 }
 
 bool World::LastWeek() const
 {
-    return ( 0 == ( week % WEEKOFMONTH ) );
+    return ( 0 == ( week % numOfWeeksPerMonth ) );
 }
 
 const Week & World::GetWeekType() const

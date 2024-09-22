@@ -33,7 +33,6 @@
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps.h"
@@ -47,8 +46,7 @@
 
 namespace
 {
-    const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = { nullptr };
+    std::array<Player *, maxNumOfPlayers + 1> playersArray{};
     int humanColors{ Color::NONE };
 
     enum
@@ -311,7 +309,7 @@ IStreamBase & operator>>( IStreamBase & stream, Player & player )
 
 Players::Players()
 {
-    reserve( KINGDOMMAX );
+    reserve( maxNumOfPlayers );
 }
 
 Players::~Players()
@@ -321,15 +319,13 @@ Players::~Players()
 
 void Players::clear()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Player * player ) { delete player; } );
 
     std::vector<Player *>::clear();
 
-    for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
-        _players[ii] = nullptr;
-
     _currentColor = Color::NONE;
+
+    playersArray = {};
     humanColors = Color::NONE;
 }
 
@@ -341,7 +337,7 @@ void Players::Init( int colors )
 
     for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
         push_back( new Player( *it ) );
-        _players[Color::GetIndex( *it )] = back();
+        playersArray[Color::GetIndex( *it )] = back();
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
@@ -374,7 +370,7 @@ void Players::Init( const Maps::FileInfo & fi )
             first = player;
 
         push_back( player );
-        _players[Color::GetIndex( color )] = back();
+        playersArray[Color::GetIndex( color )] = back();
     }
 
     if ( first )
@@ -385,13 +381,12 @@ void Players::Init( const Maps::FileInfo & fi )
 
 void Players::Set( const int color, Player * player )
 {
-    assert( color >= 0 && color < playersSize );
-    _players[color] = player;
+    playersArray[Color::GetIndex( color )] = player;
 }
 
 Player * Players::Get( int color )
 {
-    return _players[Color::GetIndex( color )];
+    return playersArray[Color::GetIndex( color )];
 }
 
 bool Players::isFriends( int player, int colors )
@@ -603,14 +598,16 @@ IStreamBase & operator>>( IStreamBase & stream, Players & players )
 
     players.clear();
     players.setCurrentColor( current );
-    const Colors vcolors( colors );
 
-    for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
+    const Colors vcolors( colors );
+    std::for_each( vcolors.begin(), vcolors.end(), [&stream, &players]( const int /* color */ ) {
         Player * player = new Player();
         stream >> *player;
-        Players::Set( Color::GetIndex( player->GetColor() ), player );
+
+        Players::Set( player->GetColor(), player );
+
         players.push_back( player );
-    }
+    } );
 
     return stream;
 }

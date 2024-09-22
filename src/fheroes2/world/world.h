@@ -62,6 +62,11 @@ namespace Route
     class Step;
 }
 
+// Number of days in the game week
+inline constexpr int numOfDaysPerWeek{ 7 };
+// Number of weeks in the game month
+inline constexpr int numOfWeeksPerMonth{ 4 };
+
 struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 {
     MapObjects() = default;

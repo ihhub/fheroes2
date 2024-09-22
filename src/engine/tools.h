@@ -32,6 +32,7 @@
 #include <optional>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <vector>
 
@@ -52,9 +53,9 @@ std::string StringTrim( std::string str );
 std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
 
-std::vector<std::string> StringSplit( const std::string & str, const char sep );
+std::vector<std::string> StringSplit( const std::string_view str, const char sep );
 
-void StringReplace( std::string & dst, const char * pred, const std::string & src );
+void StringReplace( std::string & dst, const char * pred, const std::string_view src );
 
 template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
 void StringReplace( std::string & dst, const char * pred, const T value )

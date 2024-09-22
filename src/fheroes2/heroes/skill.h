@@ -37,6 +37,11 @@ class HeroBase;
 
 namespace Skill
 {
+    // Total number of primary skills available in the game
+    inline constexpr int numOfPrimarySkills{ 4 };
+    // Total number of secondary skills available in the game
+    inline constexpr int numOfSecondarySkills{ 14 };
+
     class Secondary;
 
     int GetLeadershipModifiers( int level, std::string * strs );
