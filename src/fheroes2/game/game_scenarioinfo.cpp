@@ -109,7 +109,17 @@ namespace
 
     void RedrawMapTitle( const fheroes2::Rect & roi )
     {
-        const fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
+        fheroes2::Text text;
+        const auto & info = Settings::Get().getCurrentMapInfo();
+
+        if ( info.version == GameVersion::RESURRECTION ) {
+            const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
+            text.set( info.name, fheroes2::FontType::normalWhite() );
+        }
+        else {
+            text.set( info.name, fheroes2::FontType::normalWhite() );
+        }
+
         text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 

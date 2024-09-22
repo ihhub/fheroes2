@@ -142,7 +142,14 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite() } );
+
+            if ( info.version == GameVersion::RESURRECTION ) {
+                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
+                body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            }
+            else {
+                body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            }
 
             if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
                 body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );

@@ -79,6 +79,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -720,10 +721,22 @@ namespace Interface
 
         _historyManager.reset();
 
+        const auto gameLanguage = fheroes2::getCurrentLanguage();
+
         if ( isNewMap ) {
             _mapFormat = {};
             Maps::saveMapInEditor( _mapFormat );
             _loadedFileName.clear();
+        }
+
+        // If the language of the map is different from the game's language show a warning message.
+        if ( _mapFormat.mainLanguage != gameLanguage && _mapFormat.mainLanguage != fheroes2::SupportedLanguage::English ) {
+            std::string differentLanguageWarning = _( "The game's language is set as %{gameLanguage} which is different for map's language  %{mapLanguage}. "
+                                                      "Some texts might not be displayed properly." );
+            StringReplace( differentLanguageWarning, "%{gameLanguage}", fheroes2::getLanguageName( gameLanguage ) );
+            StringReplace( differentLanguageWarning, "%{mapLanguage}", fheroes2::getLanguageName( _mapFormat.mainLanguage ) );
+
+            fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::OK );
         }
 
         // Stop all sounds and music.

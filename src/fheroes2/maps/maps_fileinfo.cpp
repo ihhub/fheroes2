@@ -38,6 +38,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
 #include "map_format_info.h"
@@ -46,6 +47,7 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
@@ -196,6 +198,8 @@ void Maps::FileInfo::Reset()
     worldDay = 0;
     worldWeek = 0;
     worldMonth = 0;
+
+    mainLanguage = fheroes2::SupportedLanguage::English;
 }
 
 bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
@@ -519,6 +523,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
 
     version = GameVersion::RESURRECTION;
 
+    mainLanguage = map.mainLanguage;
+
     return true;
 }
 
@@ -641,10 +647,12 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
         stream << fi.races[i] << fi.unions[i];
     }
 
+    using LanguageUnderlyingType = std::underlying_type_t<decltype( fi.mainLanguage )>;
+
     return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
                   << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
-                  << fi.worldWeek << fi.worldMonth;
+                  << fi.worldWeek << fi.worldMonth << static_cast<LanguageUnderlyingType>( fi.mainLanguage );
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
@@ -684,7 +692,22 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 
     fi.version = static_cast<GameVersion>( version );
 
-    return stream >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    stream >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        fi.mainLanguage = fheroes2::SupportedLanguage::English;
+    }
+    else {
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( fi.mainLanguage )>;
+        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
+        LanguageUnderlyingType language;
+
+        stream >> language;
+        fi.mainLanguage = static_cast<fheroes2::SupportedLanguage>( language );
+    }
+
+    return stream;
 }
 
 MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )

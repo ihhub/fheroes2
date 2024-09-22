@@ -31,6 +31,7 @@
 
 #include "math_base.h"
 #include "players.h"
+#include "ui_language.h"
 
 class IStreamBase;
 class OStreamBase;
@@ -200,6 +201,10 @@ namespace Maps
         uint32_t worldDay;
         uint32_t worldWeek;
         uint32_t worldMonth;
+
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
     private:
         void FillUnions( const int side1Colors, const int side2Colors );

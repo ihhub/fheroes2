@@ -163,12 +163,12 @@ namespace
 
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.mainLanguage )>;
 
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-               << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size
+               << static_cast<LanguageUnderlyingType>( map.mainLanguage ) << map.name << map.description;
 
         return !stream.fail();
     }
@@ -189,12 +189,12 @@ namespace
             return false;
         }
 
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.mainLanguage )>;
         static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
         LanguageUnderlyingType language;
 
         stream >> language;
-        map.language = static_cast<fheroes2::SupportedLanguage>( language );
+        map.mainLanguage = static_cast<fheroes2::SupportedLanguage>( language );
 
         stream >> map.name >> map.description;
 

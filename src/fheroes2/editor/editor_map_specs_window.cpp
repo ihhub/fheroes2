@@ -38,6 +38,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
@@ -2254,6 +2255,12 @@ namespace Editor
         background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumorsRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
         const fheroes2::Rect buttonEventsRoi( buttonEvents.area() );
 
+        fheroes2::Button buttonLanguage;
+        const int buttonLanguageIcn = isEvilInterface ? ICN::BUTTON_LANGUAGE_EVIL : ICN::BUTTON_LANGUAGE_GOOD;
+        background.renderButton( buttonLanguage, buttonLanguageIcn, 0, 1, { 20 + buttonRumorsRoi.width + buttonEventsRoi.width + 2 * 10, 6 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        const fheroes2::Rect buttonLanguageRoi( buttonLanguage.area() );
+
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
@@ -2263,6 +2270,7 @@ namespace Editor
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
             buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
             buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEventsRoi ) );
+            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguageRoi ) );
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
 
@@ -2297,6 +2305,23 @@ namespace Editor
                 }
 
                 display.render( background.totalArea() );
+            }
+            else if ( le.MouseClickLeft( buttonLanguageRoi ) ) {
+                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+                const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
+                if ( mapFormat.mainLanguage != fheroes2::SupportedLanguage::English && language != mapFormat.mainLanguage ) {
+                    std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
+                                                              "Some texts might not be displayed properly. Do you want to proceed?" );
+                    StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
+                    StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
+
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                        mapFormat.mainLanguage = language;
+                    }
+                }
+                else {
+                    mapFormat.mainLanguage = language;
+                }
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
