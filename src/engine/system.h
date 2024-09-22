@@ -25,6 +25,7 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <filesystem>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -72,6 +73,9 @@ namespace System
     // Windows this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding
     // is used, and the original string is simply returned unchanged.
     std::string encUTF8ToLocal( const std::string_view str );
+
+    // Performs a safe conversion of an std::filesystem::path instance to a string. See the implementation for details.
+    std::string fsPathToString( const std::filesystem::path & path );
 
     tm GetTM( const time_t time );
 }

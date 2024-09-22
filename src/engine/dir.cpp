@@ -81,21 +81,11 @@ namespace
 
             const std::filesystem::path & entryPath = entry.path();
 
-            if (
-#if defined( _WIN32 )
-                const std::string fileName = System::encUTF8ToLocal( entryPath.filename().u8string() );
-#else
-                const std::string fileName = entryPath.filename().string();
-#endif
-                !nameFilter( fileName, needExactMatch, filter, strCmp ) ) {
+            if ( !nameFilter( System::fsPathToString( entryPath.filename() ), needExactMatch, filter, strCmp ) ) {
                 continue;
             }
 
-#if defined( _WIN32 )
-            files.emplace_back( System::encUTF8ToLocal( entryPath.u8string() ) );
-#else
-            files.emplace_back( entryPath.string() );
-#endif
+            files.emplace_back( System::fsPathToString( entryPath.string() ) );
         }
     }
 }

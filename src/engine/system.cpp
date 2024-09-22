@@ -25,7 +25,6 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <filesystem>
 #include <functional>
 #include <initializer_list>
 #include <map>
@@ -613,21 +612,11 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dirPath, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
-        if (
-#if defined( _WIN32 )
-            const std::string fileName = encUTF8ToLocal( entryPath.filename().u8string() );
-#else
-            const std::string fileName = entryPath.filename().string();
-#endif
-            !globMatch( fileName, pattern ) ) {
+        if ( !globMatch( fsPathToString( entryPath.filename() ), pattern ) ) {
             continue;
         }
 
-#if defined( _WIN32 )
-        fileNames.emplace_back( encUTF8ToLocal( entryPath.u8string() ) );
-#else
-        fileNames.emplace_back( entryPath.string() );
-#endif
+        fileNames.emplace_back( fsPathToString( entryPath.string() ) );
 
         isNoMatches = false;
     }
@@ -652,6 +641,19 @@ std::string System::encUTF8ToLocal( const std::string_view str )
     return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
 #else
     return std::string{ str };
+#endif
+}
+
+std::string System::fsPathToString( const std::filesystem::path & path )
+{
+#if defined( _WIN32 )
+    // On Windows, std::filesystem::path::string() can throw an exception if path contains UTF-16 characters that
+    // are non-representable in CP_ACP. However, converting a well-formed UTF-16 string to UTF-8 is always safe,
+    // so we perform this conversion first, and then convert the resulting UTF-8 to CP_ACP using our conversion
+    // function, which can never throw an exception.
+    return encUTF8ToLocal( path.u8string() );
+#else
+    return path.string();
 #endif
 }
 
