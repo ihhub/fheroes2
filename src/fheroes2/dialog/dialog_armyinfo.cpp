@@ -434,9 +434,9 @@ namespace
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
         fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
         if ( isReflected )
-            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
+            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
         else
-            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
+            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset();
 
         fheroes2::Point inPos( 0, 0 );
         fheroes2::Point outPos( monsterPos.x, monsterPos.y );
@@ -516,7 +516,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         monsterAnimation.reset();
     }
 
-    const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + SHADOWWIDTH, sprite_dialog.width(), sprite_dialog.height() - 2 * SHADOWWIDTH );
+    const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + fheroes2::shadowWidthPx, sprite_dialog.width(), sprite_dialog.height() - 2 * fheroes2::shadowWidthPx );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
     const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
@@ -704,13 +704,13 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
     fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
 
-    FrameBox box( 10 + textbox.height( BOXAREA_WIDTH ) + 10 + text.height() + 40 + sprite.height() + 10, true );
+    const FrameBox box( 10 + textbox.height( fheroes2::boxAreaWidthPx ) + 10 + text.height() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
-    textbox.draw( pos.x, posy + 2, BOXAREA_WIDTH, display );
+    textbox.draw( pos.x, posy + 2, fheroes2::boxAreaWidthPx, display );
 
-    posy += textbox.height( BOXAREA_WIDTH ) + 10;
+    posy += textbox.height( fheroes2::boxAreaWidthPx ) + 10;
     text.draw( pos.x + ( pos.width - text.width() ) / 2, posy + 2, display );
 
     posy += text.height() + 40;

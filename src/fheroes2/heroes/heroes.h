@@ -77,6 +77,9 @@ class Heroes final : public HeroBase, public ColorBase
 public:
     friend class Battle::Only;
 
+    // Maximum number of hero's secondary skills
+    static constexpr int maxNumOfSecSkills{ 8 };
+
     enum : int32_t
     {
         // Unknown / undefined hero.
@@ -770,6 +773,14 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
+    VecHeroes() = default;
+    VecHeroes( const VecHeroes & ) = delete;
+
+    ~VecHeroes() = default;
+
+    VecHeroes & operator=( const VecHeroes & ) = delete;
+    VecHeroes & operator=( VecHeroes && ) = default;
+
     Heroes * Get( int hid ) const;
     Heroes * Get( const fheroes2::Point & center ) const;
 };

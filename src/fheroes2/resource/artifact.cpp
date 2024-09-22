@@ -38,7 +38,6 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
@@ -518,7 +517,7 @@ IStreamBase & operator>>( IStreamBase & stream, Artifact & art )
 }
 
 BagArtifacts::BagArtifacts()
-    : std::vector<Artifact>( HEROESMAXARTIFACT, Artifact::UNKNOWN )
+    : std::vector<Artifact>( maxCapacity, Artifact::UNKNOWN )
 {}
 
 bool BagArtifacts::ContainSpell( const int spellId ) const

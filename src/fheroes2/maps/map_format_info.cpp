@@ -234,7 +234,7 @@ namespace
         decompressed.setBigendian( true );
 
         {
-            std::vector<uint8_t> temp = stream.getRaw();
+            std::vector<uint8_t> temp = stream.getRaw( 0 );
             if ( temp.empty() ) {
                 // This is a corrupted file.
                 map = {};

@@ -2923,9 +2923,10 @@ namespace
                     _icnVsSprite[id].emplace_back( std::move( originalFrame ) );
 
                     const size_t frameID = golemICNSize + i;
-                    // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the
-                    // left and reduce this shift every next frame by "CELLW/(7*4)".
-                    _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * CELLW / 28, _icnVsSprite[id][frameID].y() );
+                    // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by
+                    // "6 * Battle::Cell::widthPx / ( 4 * 7 )" to the left and reduce this shift every next frame by "Battle::Cell::widthPx / ( 7 * 4 )".
+                    _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * Battle::Cell::widthPx / 28,
+                                                           _icnVsSprite[id][frameID].y() );
                 }
             }
             return true;

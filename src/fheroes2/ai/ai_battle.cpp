@@ -1343,7 +1343,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
             }
 
             const int32_t idx = position.GetHead()->GetIndex();
-            const uint32_t distanceToBattlefieldCenter = Battle::Board::GetDistance( idx, ARENASIZE / 2 );
+            const uint32_t distanceToBattlefieldCenter = Battle::Board::GetDistance( idx, Battle::Board::sizeInCells / 2 );
 
             const auto idxParams = std::make_pair( characteristics.distanceToNearestEnemy, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter );
 
@@ -1554,7 +1554,9 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             }
 
             // Do not pursue faster units that can move away and avoid an engagement
-            const uint32_t dist = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ? nearestCellInfo.dist + ARENAW + ARENAH : nearestCellInfo.dist );
+            const uint32_t dist
+                = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ? nearestCellInfo.dist + Battle::Board::widthInCells + Battle::Board::heightInCells
+                                                                               : nearestCellInfo.dist );
             const double unitPriority = enemy->evaluateThreatForUnit( currentUnit ) - dist * attackDistanceModifier;
 
             if ( unitPriority < maxPriority ) {
@@ -1697,10 +1699,10 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                             // If an ordinary shooter is located on a tile that protrudes sideways, then using a wide unit to cover this shooter from the side does
                             // not give any advantage
                             if ( frnd->isReflect() ) {
-                                return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 1 );
+                                return ( ( frnd->GetHeadIndex() / Battle::Board::widthInCells ) % 2 == 1 );
                             }
 
-                            return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 0 );
+                            return ( ( frnd->GetHeadIndex() / Battle::Board::widthInCells ) % 2 == 0 );
                         }();
 
                         if ( preferToCoverFromTheSide ) {
@@ -1953,7 +1955,7 @@ bool AI::BattlePlanner::isPositionLocatedInDefendedArea( const Battle::Unit & cu
             return Battle::Board::isCastleIndex( idx );
         }
 
-        return ( Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( idx, reflect ) <= ARENAW / 2 );
+        return ( Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( idx, reflect ) <= Battle::Board::widthInCells / 2 );
     };
 
     if ( !checkIdx( pos.GetHead()->GetIndex() ) ) {

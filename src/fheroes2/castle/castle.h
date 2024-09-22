@@ -38,7 +38,6 @@
 #include "bitmodes.h"
 #include "captain.h"
 #include "color.h"
-#include "gamedefs.h"
 #include "mageguild.h"
 #include "math_base.h"
 #include "monster.h"
@@ -125,6 +124,9 @@ enum class BuildingStatus : int32_t
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
+    // Maximum number of creature dwellings that can be built in a castle
+    static constexpr int maxNumOfDwellings{ 6 };
+
     enum : uint32_t
     {
         UNUSED_ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
@@ -336,7 +338,7 @@ private:
 
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
-    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> & monsterAnimInfo ) const;
 
     void _setDefaultBuildings();
 
@@ -356,7 +358,7 @@ private:
     std::string name;
 
     MageGuild mageguild;
-    std::array<uint32_t, CASTLEMAXMONSTER> dwelling;
+    std::array<uint32_t, maxNumOfDwellings> dwelling;
     Army army;
 };
 
@@ -450,6 +452,7 @@ struct VecCastles : public std::vector<Castle *>
     ~VecCastles() = default;
 
     VecCastles & operator=( const VecCastles & ) = delete;
+    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };

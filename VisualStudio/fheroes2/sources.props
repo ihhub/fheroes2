@@ -364,6 +364,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_campaign.h" />
     <ClInclude Include="src\fheroes2\gui\ui_castle.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_constants.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
     <ClInclude Include="src\fheroes2\gui\ui_font.h" />
     <ClInclude Include="src\fheroes2\gui\ui_keyboard.h" />
@@ -428,7 +429,6 @@
     <ClInclude Include="src\fheroes2\spell\spell_info.h" />
     <ClInclude Include="src\fheroes2\spell\spell_storage.h" />
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
-    <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\save_format_version.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />

@@ -39,6 +39,8 @@
 class IStreamBase;
 class OStreamBase;
 
+inline constexpr int defaultBattleSpeed{ 4 };
+
 enum AdventureMapScrollSpeed : int
 {
     SCROLL_SPEED_NONE = 0,

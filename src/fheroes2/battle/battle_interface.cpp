@@ -54,7 +54,6 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes_base.h"
 #include "interface_list.h"
@@ -78,6 +77,7 @@
 #include "timing.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_tool.h"
@@ -118,7 +118,9 @@ namespace
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
             : point( p )
             , thickness( thick )
-        {}
+        {
+            // Do nothing.
+        }
 
         fheroes2::Point point;
         int32_t thickness;
@@ -322,7 +324,7 @@ namespace
             const fheroes2::Point & offset = target.animation.getBlindOffset();
 
             // calculate OG Heroes2 unit position to apply offset to
-            const int32_t rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
+            const int32_t rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : Battle::Cell::widthPx / 2;
 
             // Overwrite result with custom blind value
             result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
@@ -390,52 +392,29 @@ namespace
 
     const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
     {
-        static std::vector<int> staticAnim;
-        if ( staticAnim.empty() ) {
-            staticAnim.push_back( 1 );
-        }
+        static const std::vector<int> staticAnim{ 1 };
 
-        if ( !hero || animation == Battle::OP_STATIC )
+        if ( !hero || animation == Battle::OP_STATIC ) {
             return staticAnim;
+        }
 
         const int heroType = matchHeroType( hero );
 
         if ( animation == Battle::OP_SORROW ) {
             static const std::vector<int> sorrowAnim{ 2, 3, 4, 5, 4, 5, 4, 3, 2 };
-
             return ( heroType == Battle::CAPTAIN ) ? staticAnim : sorrowAnim;
         }
 
-        static std::vector<int> heroTypeAnim[7][9];
-
-        if ( heroTypeAnim[heroType][animation].empty() ) {
-            const int sourceArray[7][9][9] = {
-                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
-                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
-                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
-                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
-                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
-                { { 6, 7, 6, 7, 6, 7 },
-                  { 7, 8, 9, 10, 11 },
-                  { 10, 9, 7 },
-                  { 7, 12, 13, 14, 15 },
-                  { 7 },
-                  { 7, 12, 13, 14, 16 },
-                  { 7 },
-                  { 17 },
-                  { 18, 19 } }, // NECROMANCER
-                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
-            };
-
-            for ( const int frame : sourceArray[heroType][animation] ) {
-                if ( frame == 0 ) {
-                    break;
-                }
-
-                heroTypeAnim[heroType][animation].push_back( frame );
-            }
-        }
+        static const std::vector<int> heroTypeAnim[7][9]{
+            //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
+            { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+            { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+            { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+            { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+            { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+            { { 6, 7, 6, 7, 6, 7 }, { 7, 8, 9, 10, 11 }, { 10, 9, 7 }, { 7, 12, 13, 14, 15 }, { 7 }, { 7, 12, 13, 14, 16 }, { 7 }, { 17 }, { 18, 19 } }, // NECROMANCER
+            { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
+        };
 
         return heroTypeAnim[heroType][animation];
     }
@@ -465,8 +444,8 @@ namespace
     {
         const int32_t r = 22;
         const int32_t l = 10;
-        const int32_t w = CELLW;
-        const int32_t h = CELLH;
+        const int32_t w = Battle::Cell::widthPx;
+        const int32_t h = Battle::Cell::heightPx;
 
         fheroes2::Image sf( w + 1, h + 1 );
         sf.reset();
@@ -488,8 +467,8 @@ namespace
     fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
     {
         const int32_t l = 13;
-        const int32_t w = CELLW;
-        const int32_t h = CELLH;
+        const int32_t w = Battle::Cell::widthPx;
+        const int32_t h = Battle::Cell::heightPx;
 
         fheroes2::Image sf( w, h );
         sf.reset();
@@ -1214,7 +1193,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     _interfacePosition = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
                            _surfaceInnerArea.width, _surfaceInnerArea.height };
-    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    border.SetPosition( _interfacePosition.x - fheroes2::borderWidthPx, _interfacePosition.y - fheroes2::borderWidthPx, fheroes2::Display::DEFAULT_WIDTH,
+                        fheroes2::Display::DEFAULT_HEIGHT );
 
     // damage info popup
     popup.setBattleUIRect( _interfacePosition );
@@ -1494,7 +1474,7 @@ void Battle::Interface::RedrawArmies()
 
     const Castle * castle = Arena::GetCastle();
 
-    std::array<int32_t, ARENAH>
+    std::array<int32_t, Board::heightInCells>
         wallCellIds{ Arena::CASTLE_FIRST_TOP_WALL_POS, Arena::CASTLE_TOP_ARCHER_TOWER_POS,  Arena::CASTLE_SECOND_TOP_WALL_POS, Arena::CASTLE_TOP_GATE_TOWER_POS,
                      Arena::CASTLE_GATE_POS,           Arena::CASTLE_BOTTOM_GATE_TOWER_POS, Arena::CASTLE_THIRD_TOP_WALL_POS,  Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS,
                      Arena::CASTLE_FOURTH_TOP_WALL_POS };
@@ -1503,10 +1483,10 @@ void Battle::Interface::RedrawArmies()
         RedrawKilled();
     }
 
-    for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
+    for ( int32_t cellRowId = 0; cellRowId < Board::heightInCells; ++cellRowId ) {
         // Redraw objects.
-        for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-            const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+        for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+            const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
             RedrawHighObjects( cellId );
         }
 
@@ -1538,8 +1518,8 @@ void Battle::Interface::RedrawArmies()
 
             const int32_t wallCellId = wallCellIds[cellRowId];
 
-            for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+                const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 bool isCellBefore = true;
                 if ( cellRowId < 5 ) {
@@ -1677,8 +1657,8 @@ void Battle::Interface::RedrawArmies()
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
             // Redraw monsters.
-            for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
+                const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
                 for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
@@ -1930,7 +1910,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     const int32_t monsterIndex = unit.GetHeadIndex();
     const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
-    const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
+    const bool isValidFrontMonster = ( monsterIndex / Board::widthInCells ) == ( tileInFront == Board::widthInCells );
 
     int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
     const int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
@@ -2217,7 +2197,7 @@ void Battle::Interface::_redrawBattleGround()
     }
 
     // Ground obstacles.
-    for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
+    for ( int32_t cellId = 0; cellId < Board::sizeInCells; ++cellId ) {
         RedrawLowObjects( cellId );
     }
 
@@ -3561,7 +3541,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. Halfling)
-        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : CELLW / 2;
+        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : Cell::widthPx / 2;
         const fheroes2::Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
 
         // Use the front one to calculate the angle, then overwrite
@@ -3571,7 +3551,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
 
         double angle = GetAngle( fheroes2::Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
         // This check is made only for situations when a target stands on the same row as shooter.
-        if ( attacker.GetHeadIndex() / ARENAW == defender.GetHeadIndex() / ARENAW ) {
+        if ( attacker.GetHeadIndex() / Board::widthInCells == defender.GetHeadIndex() / Board::widthInCells ) {
             angle = 0;
         }
 
@@ -3932,7 +3912,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{src}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     assert( _movingUnit == nullptr && _flyingUnit == nullptr );
 
@@ -4076,7 +4057,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // If a wide flyer is flying to the right its visual horizontal destination should be shifted to the left by one cell.
         if ( canFly && isWide && !unit.isReflect() ) {
-            _movingPos.x -= CELLW;
+            _movingPos.x -= Cell::widthPx;
         }
 
         // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
@@ -4145,7 +4126,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{dst}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     status.SetMessage( msg, true );
 
@@ -4173,12 +4155,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
 
     if ( unit.isWide() && targetPos.x > destPos.x ) {
-        targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
+        targetPos.x -= Cell::widthPx; // this is needed to avoid extra cell shifting upon landing when we move to right side
     }
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{src}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
@@ -4272,7 +4255,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         bridge->ActionUp();
     }
 
-    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+    StringReplace( msg, "%{dst}",
+                   std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
     status.SetMessage( msg, true );
 
@@ -6626,7 +6610,7 @@ void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroB
         return;
     }
 
-    const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const int spellPoints = hero ? hero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
     const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
 
     _redraw = true;

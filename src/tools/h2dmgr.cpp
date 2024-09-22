@@ -77,7 +77,7 @@ namespace
             return false;
         }
 
-        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
         if ( palette.size() != validPaletteSize ) {
             std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return false;
