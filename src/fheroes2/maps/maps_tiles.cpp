@@ -613,8 +613,8 @@ void Maps::Tiles::setBoat( const int direction, const int color )
     const uint32_t newUid = getNewObjectUID();
 
     // Check that this ID is not used for some other object.
-    for ( int32_t idx = 0; idx < world.getSize(); ++idx ) {
-        assert( !world.GetTiles( idx ).doesObjectExist( newUid ) );
+    for ( uint32_t tileIndex = 0; tileIndex < world.getSize(); ++tileIndex ) {
+        assert( !world.GetTiles( tileIndex ).doesObjectExist( newUid ) );
     }
     _mainAddon._uid = newUid;
 #else
