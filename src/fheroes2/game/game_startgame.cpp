@@ -1163,6 +1163,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
+
         isCursorOverButtons = false;
         isCursorOverGamearea = false;
 
