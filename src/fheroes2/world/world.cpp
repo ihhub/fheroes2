@@ -1304,7 +1304,7 @@ void World::updatePassabilities()
     }
 }
 
-void World::PostLoad( const bool setTilePassabilities )
+void World::PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum )
 {
     if ( setTilePassabilities ) {
         updatePassabilities();
@@ -1326,6 +1326,30 @@ void World::PostLoad( const bool setTilePassabilities )
 
     resetPathfinder();
     ComputeStaticAnalysis();
+
+    // Find the maximum UID value.
+    uint32_t maxUid = 0;
+
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        maxUid = std::max( tile.getMainObjectPart()._uid, maxUid );
+
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+
+        for ( const auto & addon : tile.getTopLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+    }
+
+    if ( updateUidCounterToMaximum ) {
+        // And set the UID counter value with the found maximum.
+        Maps::setLastObjectUID( maxUid );
+    }
+    else {
+        // Check that 'getNewObjectUID()' will return values that will not match the existing ones on the started map.
+        assert( Maps::getLastObjectUID() >= maxUid );
+    }
 }
 
 uint32_t World::GetMapSeed() const
@@ -1472,7 +1496,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
 
     stream >> w.map_objects >> w._seed;
 
-    w.PostLoad( false );
+    w.PostLoad( false, true );
 
     return stream;
 }

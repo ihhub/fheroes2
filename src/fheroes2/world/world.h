@@ -390,7 +390,7 @@ private:
     void Reset();
     void MonthOfMonstersAction( const Monster & );
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
-    void PostLoad( const bool setTilePassabilities );
+    void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
     bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 

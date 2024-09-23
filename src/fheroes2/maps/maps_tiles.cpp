@@ -609,7 +609,17 @@ void Maps::Tiles::setBoat( const int direction, const int color )
         break;
     }
 
+#ifdef WITH_DEBUG
+    const uint32_t newUid = getNewObjectUID();
+
+    // Check that this ID is not used for some other object.
+    for ( uint32_t tileIndex = 0; tileIndex < world.getSize(); ++tileIndex ) {
+        assert( !world.GetTiles( tileIndex ).doesObjectExist( newUid ) );
+    }
+    _mainAddon._uid = newUid;
+#else
     _mainAddon._uid = getNewObjectUID();
+#endif // WITH_DEBUG
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
     static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );
