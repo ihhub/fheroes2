@@ -2820,6 +2820,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     if ( doListlogProcessing ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
+        // Hide the possibly shown Damage Info pop-up dialog.
+        popup.reset();
+
         listlog->QueueEventProcessing();
     }
     else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.isMouseCursorPosInArea( _ballistaTowerRect ) ) {
@@ -3016,6 +3019,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
     }
     else if ( le.isMouseCursorPosInArea( status ) ) {
+        // Hide the possibly shown Damage Info pop-up dialog.
+        popup.reset();
+
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
 
