@@ -38,7 +38,6 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
@@ -56,6 +55,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
 
@@ -298,7 +298,7 @@ namespace
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
 
-        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
+        for ( const auto & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
@@ -332,16 +332,17 @@ void Interface::GameArea::generate( const fheroes2::Size & screenSize, const boo
     if ( withoutBorders )
         SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, screenSize.width - RADARWIDTH - 3 * BORDERWIDTH, screenSize.height - 2 * BORDERWIDTH );
+        SetAreaPosition( fheroes2::borderWidthPx, fheroes2::borderWidthPx, screenSize.width - fheroes2::radarWidthPx - 3 * fheroes2::borderWidthPx,
+                         screenSize.height - 2 * fheroes2::borderWidthPx );
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
 {
     _windowROI = { x, y, w, h };
-    const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
+    const fheroes2::Size worldSize( world.w() * fheroes2::tileWidthPx, world.h() * fheroes2::tileWidthPx );
 
     if ( worldSize.width > w ) {
-        _minLeftOffset = -( w / 2 ) - TILEWIDTH / 2;
+        _minLeftOffset = -( w / 2 ) - fheroes2::tileWidthPx / 2;
         _maxLeftOffset = worldSize.width - w / 2;
     }
     else {
@@ -350,7 +351,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     if ( worldSize.height > h ) {
-        _minTopOffset = -( h / 2 ) - TILEWIDTH / 2;
+        _minTopOffset = -( h / 2 ) - fheroes2::tileWidthPx / 2;
         _maxTopOffset = worldSize.height - h / 2;
     }
     else {
@@ -359,7 +360,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     // adding 1 extra tile for both axes in case of drawing tiles partially near sides
-    _visibleTileCount = { ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 };
+    _visibleTileCount = { ( w + fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx + 1, ( h + fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx + 1 };
 
     _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }
@@ -579,7 +580,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
                     populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
                 }
             }
@@ -671,7 +672,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
+            for ( const auto & addon : tile.getTopLayerAddons() ) {
                 if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
@@ -682,7 +683,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
-            for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
+            for ( const auto * addon : topLayerTallObjects ) {
                 redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
             }
         }
@@ -792,8 +793,8 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
 
     const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
     const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
-    const int32_t sizeX = TILEWIDTH + std::abs( startTileOffset.x - endTileOffset.x );
-    const int32_t sizeY = TILEWIDTH + std::abs( startTileOffset.y - endTileOffset.y );
+    const int32_t sizeX = fheroes2::tileWidthPx + std::abs( startTileOffset.x - endTileOffset.x );
+    const int32_t sizeY = fheroes2::tileWidthPx + std::abs( startTileOffset.y - endTileOffset.y );
 
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
@@ -1065,11 +1066,11 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
-    const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
+    const fheroes2::Point tileOffset = getInternalPosition( mousePosition );
+    const fheroes2::Point tilePos( ( tileOffset.x / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx - _topLeftTileOffset.x + _windowROI.x,
+                                   ( tileOffset.y / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx - _topLeftTileOffset.y + _windowROI.x );
 
-    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
+    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, fheroes2::tileWidthPx, fheroes2::tileWidthPx );
 
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
@@ -1094,15 +1095,17 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
 {
-    const int32_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
-    const int32_t y = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.y / TILEWIDTH );
+    const int32_t x
+        = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx : _topLeftTileOffset.x / fheroes2::tileWidthPx );
+    const int32_t y
+        = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx : _topLeftTileOffset.y / fheroes2::tileWidthPx );
 
     return { x, y };
 }
 
 void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 {
-    SetCenterInPixels( { tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 } );
+    SetCenterInPixels( { tile.x * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2, tile.y * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2 } );
 }
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
@@ -1126,12 +1129,12 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
+    const fheroes2::Point offset = getInternalPosition( point );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 
-    const int32_t x = offset.x / TILEWIDTH;
-    const int32_t y = offset.y / TILEWIDTH;
+    const int32_t x = offset.x / fheroes2::tileWidthPx;
+    const int32_t y = offset.y / fheroes2::tileWidthPx;
 
     if ( x >= world.w() || y >= world.h() )
         return -1;
@@ -1141,7 +1144,7 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & po
 
 fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
-    return { tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y };
+    return { tileId.x * fheroes2::tileWidthPx - _topLeftTileOffset.x + _windowROI.x, tileId.y * fheroes2::tileWidthPx - _topLeftTileOffset.y + _windowROI.y };
 }
 
 void Interface::GameArea::updateObjectAnimationInfo() const

@@ -327,9 +327,9 @@ namespace Bin_Info
         if ( ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM )
              && ( frameXOffset[MOVE_START].size() == 4 && frameXOffset[MOVE_MAIN].size() == 7 && animationFrames[MOVE_MAIN].size() == 7 ) ) { // the original golem info
             frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-            frameXOffset[MOVE_START][2] = CELLW * 2 / 8 + 3;
-            frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
+            frameXOffset[MOVE_START][2] = Battle::Cell::widthPx * 2 / 8 + 3;
+            frameXOffset[MOVE_START][3] = Battle::Cell::widthPx * 3 / 8;
 
             // 'MOVE_MAIN' animation is missing 1/4 of animation start. 'MOVE_START' (for first and one cell move) has this 1/4 of animation,
             // but 'MOVE_TILE_START` (for movement after the first cell) is empty, so we move all frames except the last frame from 'MOVE_MAIN'
@@ -344,11 +344,11 @@ namespace Bin_Info
             frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin(), frameXOffset[MOVE_MAIN].end() - 1 );
 
             // Correct the 'x' offset by half of cell.
-            frameXOffset[MOVE_MAIN][0] += CELLW / 2;
+            frameXOffset[MOVE_MAIN][0] += Battle::Cell::widthPx / 2;
             for ( size_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
-                frameXOffset[MOVE_START][id + 4] += CELLW / 2;
+                frameXOffset[MOVE_START][id + 4] += Battle::Cell::widthPx / 2;
                 // For 'MOVE_TILE_START' also include the correction, made in "agg_image.cpp".
-                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - static_cast<int32_t>( id ) ) * CELLW / 28;
+                frameXOffset[MOVE_TILE_START][id] += Battle::Cell::widthPx / 2 - ( 6 - static_cast<int32_t>( id ) ) * Battle::Cell::widthPx / 28;
                 // For 'MOVE_TILE_START' animation frames IDs use new frames, made in "agg_image.cpp", which starts from ID = 40.
                 animationFrames[MOVE_TILE_START][id] = 40 + static_cast<int32_t>( id );
             }
@@ -464,12 +464,12 @@ namespace Bin_Info
         if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
              && frameXOffset[MOVE_STOP].size() == 1 ) {
             frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
             for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
-                xOffset += CELLW / 4 + 3;
+                xOffset += Battle::Cell::widthPx / 4 + 3;
             }
 
-            frameXOffset[MOVE_STOP][0] = CELLW;
+            frameXOffset[MOVE_STOP][0] = Battle::Cell::widthPx;
         }
     }
 

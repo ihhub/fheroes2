@@ -38,12 +38,20 @@
 #include "bitmodes.h"
 #include "captain.h"
 #include "color.h"
-#include "gamedefs.h"
 #include "mageguild.h"
 #include "math_base.h"
 #include "monster.h"
 #include "players.h"
 #include "position.h"
+
+class IStreamBase;
+class OStreamBase;
+
+class HeroBase;
+class Heroes;
+class Troop;
+
+struct Funds;
 
 namespace fheroes2
 {
@@ -56,13 +64,7 @@ namespace Maps::Map_Format
     struct CastleMetadata;
 }
 
-struct Funds;
-class HeroBase;
-class Heroes;
-class StreamBase;
-class Troop;
-
-enum building_t : uint32_t
+enum BuildingType : uint32_t
 {
     BUILD_NOTHING = 0x00000000,
     BUILD_THIEVESGUILD = 0x00000001,
@@ -73,9 +75,11 @@ enum building_t : uint32_t
     BUILD_LEFTTURRET = 0x00000020,
     BUILD_RIGHTTURRET = 0x00000040,
     BUILD_MARKETPLACE = 0x00000080,
-    BUILD_WEL2 = 0x00000100, // Farm, Garbage He, Crystal Gar, Waterfall, Orchard, Skull Pile
+    // Farm, Garbage Heap, Crystal Garden, Waterfall, Orchard, Skull Pile
+    BUILD_WEL2 = 0x00000100,
     BUILD_MOAT = 0x00000200,
-    BUILD_SPEC = 0x00000400, // Fortification, Coliseum, Rainbow, Dungeon, Library, Storm
+    // Fortifications, Coliseum, Rainbow, Dungeon, Library, Storm
+    BUILD_SPEC = 0x00000400,
     BUILD_CASTLE = 0x00000800,
     BUILD_CAPTAIN = 0x00001000,
     BUILD_SHRINE = 0x00002000,
@@ -85,7 +89,7 @@ enum building_t : uint32_t
     BUILD_MAGEGUILD4 = 0x00020000,
     BUILD_MAGEGUILD5 = 0x00040000,
     BUILD_MAGEGUILD = BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4 | BUILD_MAGEGUILD5,
-    BUILD_TENT = 0x00080000, // deprecated
+    BUILD_TENT = 0x00080000,
     DWELLING_MONSTER1 = 0x00100000,
     DWELLING_MONSTER2 = 0x00200000,
     DWELLING_MONSTER3 = 0x00400000,
@@ -98,7 +102,8 @@ enum building_t : uint32_t
     DWELLING_UPGRADE4 = 0x10000000,
     DWELLING_UPGRADE5 = 0x20000000,
     DWELLING_UPGRADE6 = 0x40000000,
-    DWELLING_UPGRADE7 = 0x80000000, // black dragon
+    // Black Dragons
+    DWELLING_UPGRADE7 = 0x80000000,
     DWELLING_UPGRADES = DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE4 | DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7
 };
 
@@ -119,6 +124,9 @@ enum class BuildingStatus : int32_t
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
+    // Maximum number of creature dwellings that can be built in a castle
+    static constexpr int maxNumOfDwellings{ 6 };
+
     enum : uint32_t
     {
         UNUSED_ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
@@ -330,7 +338,7 @@ private:
 
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
-    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> & monsterAnimInfo ) const;
 
     void _setDefaultBuildings();
 
@@ -338,8 +346,8 @@ private:
     bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
-    friend StreamBase & operator<<( StreamBase &, const Castle & );
-    friend StreamBase & operator>>( StreamBase &, Castle & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
+    friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
     int race;
     uint32_t _constructedBuildings;
@@ -350,7 +358,7 @@ private:
     std::string name;
 
     MageGuild mageguild;
-    std::array<uint32_t, CASTLEMAXMONSTER> dwelling;
+    std::array<uint32_t, maxNumOfDwellings> dwelling;
     Army army;
 };
 
@@ -360,40 +368,60 @@ namespace CastleDialog
     class FadeBuilding
     {
     public:
-        FadeBuilding()
-            : _alpha( 255 )
-            , _build( BUILD_NOTHING )
-        {}
+        FadeBuilding() = default;
 
-        void StartFadeBuilding( const uint32_t build );
+        void StartFadeBuilding( const uint32_t building )
+        {
+            _alpha = 0;
+            _building = building;
+            _isOnlyBoat = false;
+        }
 
-        bool UpdateFadeBuilding();
+        void StartFadeBoat()
+        {
+            _alpha = 0;
+            _building = BUILD_SHIPYARD;
+            _isOnlyBoat = true;
+        }
+
+        bool UpdateFade();
 
         bool IsFadeDone() const
         {
             return _alpha == 255;
         }
 
-        void StopFadeBuilding();
+        void StopFade()
+        {
+            _alpha = 255;
+            _building = BUILD_NOTHING;
+            _isOnlyBoat = false;
+        }
 
         uint8_t GetAlpha() const
         {
             return _alpha;
         }
 
-        uint32_t GetBuild() const
+        uint32_t GetBuilding() const
         {
-            return _build;
+            return _building;
+        }
+
+        bool isOnlyBoat() const
+        {
+            return _isOnlyBoat;
         }
 
     private:
-        uint8_t _alpha;
-        uint32_t _build;
+        uint8_t _alpha{ 255 };
+        uint32_t _building{ BUILD_NOTHING };
+        bool _isOnlyBoat{ false };
     };
 
     struct BuildingRenderInfo
     {
-        BuildingRenderInfo( building_t b, const fheroes2::Rect & r )
+        BuildingRenderInfo( BuildingType b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -403,20 +431,17 @@ namespace CastleDialog
             return b == static_cast<uint32_t>( id );
         }
 
-        building_t id;
+        BuildingType id;
         fheroes2::Rect coord;
     };
 
     struct CacheBuildings : std::vector<BuildingRenderInfo>
     {
-        CacheBuildings( const Castle &, const fheroes2::Point & );
+        CacheBuildings( const Castle & castle, const fheroes2::Point & top );
     };
 
-    void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
-                            const uint32_t animationIndex );
-
-    void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, uint32_t build, uint32_t frame, uint8_t alpha = 255 );
-    void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, uint32_t build, uint32_t frame, uint8_t alpha = 255 );
+    void RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
+                             const uint32_t animationIndex );
 }
 
 struct VecCastles : public std::vector<Castle *>
@@ -427,6 +452,7 @@ struct VecCastles : public std::vector<Castle *>
     ~VecCastles() = default;
 
     VecCastles & operator=( const VecCastles & ) = delete;
+    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };
@@ -493,13 +519,10 @@ private:
     std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
-StreamBase & operator<<( StreamBase &, const VecCastles & );
-StreamBase & operator>>( StreamBase &, VecCastles & );
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
-StreamBase & operator<<( StreamBase &, const AllCastles & );
-StreamBase & operator>>( StreamBase &, AllCastles & );
-
-StreamBase & operator<<( StreamBase &, const Castle & );
-StreamBase & operator>>( StreamBase &, Castle & );
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
 
 #endif

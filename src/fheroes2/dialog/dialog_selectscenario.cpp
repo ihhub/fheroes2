@@ -43,6 +43,7 @@
 #include "system.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -91,14 +92,31 @@ namespace
         fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
     }
 
-    void mapInfo( const Maps::FileInfo & info )
+    void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
     {
-        fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
+        ShowToolTip( _( "Players Icon" ),
+                     _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
+    }
+
+    void SizeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    {
+        ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
+    }
+
+    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    {
+        ShowToolTip( _( "Map Type" ),
+                     _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+    }
+
+    void mapInfo( const Maps::FileInfo * info )
+    {
+        const fheroes2::Text header( info->name, fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
 
         body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info.version ) {
+        switch ( info->version ) {
         case GameVersion::SUCCESSION_WARS:
             body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
@@ -115,16 +133,16 @@ namespace
         }
 
         body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-        body.add( { info.filename, fheroes2::FontType::smallWhite() } );
+        body.add( { info->filename, fheroes2::FontType::smallWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
 
-    void LossConditionInfo( const Maps::FileInfo & info )
+    void LossConditionInfo( const Maps::FileInfo * info )
     {
         std::string msg;
 
-        switch ( info.lossConditionType ) {
+        switch ( info->lossConditionType ) {
         case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
@@ -146,11 +164,11 @@ namespace
         ShowToolTip( _( "Loss Condition" ), msg );
     }
 
-    void VictoryConditionInfo( const Maps::FileInfo & info )
+    void VictoryConditionInfo( const Maps::FileInfo * info )
     {
         std::string msg;
 
-        switch ( info.victoryConditionType ) {
+        switch ( info->victoryConditionType ) {
         case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
@@ -179,12 +197,12 @@ namespace
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
     {
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+        const Maps::FileInfo & currentMapinfo = Settings::Get().getCurrentMapInfo();
 
-        const std::string & mapFileName = System::GetBasename( mapInfo.filename );
         size_t mapId = 0;
+
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapInfo.name ) && ( System::GetBasename( mapIter->filename ) == mapFileName ) ) {
+            if ( mapIter->name == currentMapinfo.name && mapIter->filename == currentMapinfo.filename ) {
                 return mapId;
             }
         }
@@ -207,6 +225,15 @@ namespace
         const int32_t yCoordinate = posY + MAP_LIST_ROW_SPACING_Y - 1;
 
         text.draw( xCoordinate, yCoordinate, display );
+    }
+
+    template <class ShowFunction>
+    void ShowIfFound( ScenarioListBox & listbox, const fheroes2::Point & mouseLocation, const ShowFunction & function )
+    {
+        const Maps::FileInfo * item = listbox.GetFromPosition( mouseLocation );
+        if ( item ) {
+            function( item );
+        }
     }
 }
 
@@ -429,10 +456,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
-    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
+    const fheroes2::ImageRestorer background( display, rt.x - fheroes2::shadowWidthPx, rt.y, rt.width + fheroes2::shadowWidthPx, rt.height + fheroes2::shadowWidthPx );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
-    fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
+    fheroes2::Blit( shadow, display, rt.x - fheroes2::shadowWidthPx, rt.y + fheroes2::shadowWidthPx );
 
     const fheroes2::Rect countPlayers( rt.x + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );
     const fheroes2::Rect sizeMaps( rt.x + SCENARIO_LIST_MAP_SIZE_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );
@@ -631,43 +658,41 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         else if ( le.isMouseRightButtonPressedInArea( buttonSelectAll.area() ) ) {
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         }
-        else if ( le.isMouseRightButtonPressedInArea( countPlayers ) || le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
-            ShowToolTip( _( "Players Icon" ),
-                         _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
+        else if ( le.isMouseRightButtonPressedInArea( countPlayers ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), PlayersToolTip );
         }
-        else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) || le.isMouseRightButtonPressedInArea( curMapSize ) ) {
-            ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
+        else if ( le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
+            PlayersToolTip();
         }
-        else if ( le.isMouseRightButtonPressedInArea( mapTypes ) || le.isMouseRightButtonPressedInArea( curMapType ) ) {
-            ShowToolTip( _( "Map Type" ),
-                         _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+        else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), SizeToolTip );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( curMapSize ) ) {
+            SizeToolTip();
+        }
+        else if ( le.isMouseRightButtonPressedInArea( mapTypes ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), MapTypeToolTip );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
+            MapTypeToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
-            if ( item ) {
-                mapInfo( *item );
-            }
+            ShowIfFound( listbox, le.getMouseCursorPos(), mapInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapName ) ) {
             ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( victoryConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
-            if ( item ) {
-                VictoryConditionInfo( *item );
-            }
+            ShowIfFound( listbox, le.getMouseCursorPos(), VictoryConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( lossConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.getMouseCursorPos() );
-            if ( item ) {
-                LossConditionInfo( *item );
-            }
+            ShowIfFound( listbox, le.getMouseCursorPos(), LossConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curVictoryCond ) ) {
-            VictoryConditionInfo( listbox.GetCurrent() );
+            VictoryConditionInfo( &( listbox.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curLossCond ) ) {
-            LossConditionInfo( listbox.GetCurrent() );
+            LossConditionInfo( &( listbox.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curDifficulty ) ) {
             ShowToolTip(

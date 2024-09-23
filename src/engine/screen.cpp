@@ -28,6 +28,15 @@
 #include <set>
 #include <utility>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -39,14 +48,20 @@
 #include <SDL_surface.h>
 #include <SDL_video.h>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
 
 #include "image_palette.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "screen.h"
-#include "tools.h"
+#include "system.h"
 
 namespace
 {
@@ -622,20 +637,13 @@ namespace
         }
 
     private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        vita2d_texture * _texBuffer;
-        uint8_t * _palettedTexturePointer;
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        vita2d_texture * _texBuffer{ nullptr };
+        uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
 
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _texBuffer( nullptr )
-            , _palettedTexturePointer( nullptr )
-        {
-            // Do nothing.
-        }
+        RenderEngine() = default;
 
         enum : int32_t
         {
@@ -900,8 +908,11 @@ namespace
 
         void setTitle( const std::string & title ) override
         {
-            if ( _window != nullptr )
-                SDL_SetWindowTitle( _window, title.c_str() );
+            if ( _window == nullptr ) {
+                return;
+            }
+
+            SDL_SetWindowTitle( _window, System::encLocalToUTF8( title ).c_str() );
         }
 
         void setIcon( const fheroes2::Image & icon ) override
@@ -954,18 +965,23 @@ namespace
             }
         }
 
-    protected:
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _renderer( nullptr )
-            , _texture( nullptr )
-            , _driverIndex( -1 )
-            , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
-            , _isVSyncEnabled( false )
-        {
-            // Do nothing.
-        }
+    private:
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        SDL_Renderer * _renderer{ nullptr };
+        SDL_Texture * _texture{ nullptr };
+        int _driverIndex{ -1 };
+
+        std::string _previousWindowTitle;
+        fheroes2::Point _prevWindowPos{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
+
+        fheroes2::Size _windowedSize;
+
+        bool _isVSyncEnabled{ false };
+
+        RenderEngine() = default;
 
         void clear() override
         {
@@ -984,7 +1000,7 @@ namespace
                 if ( !isFullScreen() ) {
                     SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
                 }
-                _previousWindowTitle = SDL_GetWindowTitle( _window );
+                _previousWindowTitle = System::encUTF8ToLocal( SDL_GetWindowTitle( _window ) );
 
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
@@ -1088,7 +1104,8 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
+                                        resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1175,22 +1192,6 @@ namespace
         {
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
-
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        SDL_Renderer * _renderer;
-        SDL_Texture * _texture;
-        int _driverIndex;
-
-        std::string _previousWindowTitle;
-        fheroes2::Point _prevWindowPos;
-        fheroes2::Size _currentScreenResolution;
-        fheroes2::Rect _activeWindowROI;
-
-        fheroes2::Size _windowedSize;
-
-        bool _isVSyncEnabled;
 
         uint32_t renderFlags() const
         {

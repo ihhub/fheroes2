@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <ctime>
 #include <iomanip>
@@ -136,7 +137,7 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -189,18 +190,8 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
-        std::string savname( System::GetBasename( info.filename ) );
-
-        if ( savname.empty() ) {
-            return;
-        }
-
-        const std::string saveExtension = Game::GetSaveFileExtension();
-        const size_t dotPos = savname.size() - saveExtension.size();
-
-        if ( StringLower( savname.substr( dotPos ) ) == saveExtension ) {
-            savname.erase( dotPos );
-        }
+        std::string savname( System::GetStem( info.filename ) );
+        assert( !savname.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -242,7 +233,7 @@ namespace
     MapsFileInfoList getSortedMapsFileInfoList()
     {
         ListFiles files;
-        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
+        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension() );
 
         MapsFileInfoList mapInfos;
         mapInfos.reserve( files.size() );
@@ -337,7 +328,7 @@ namespace
         size_t charInsertPos = 0;
 
         if ( !lastfile.empty() ) {
-            filename = System::truncateFileExtensionAndPath( lastfile );
+            filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
 
             MapsFileInfoList::iterator it = lists.begin();
@@ -360,7 +351,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = System::truncateFileExtensionAndPath( listbox.GetCurrent().filename );
+            filename = System::GetStem( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -431,17 +422,13 @@ namespace
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
                 msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
+
                     if ( lists.empty() ) {
                         listbox.Redraw();
-
-                        if ( !isEditing ) {
-                            textInputAndDateBackground.restore();
-                            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
-                            return {};
-                        }
 
                         isListboxSelected = false;
                         charInsertPos = 0;
@@ -459,11 +446,11 @@ namespace
             }
             else if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                       || listbox.isDoubleClicked() ) {
-                if ( !filename.empty() ) {
-                    result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
-                }
-                else if ( isListboxSelected ) {
+                if ( isListboxSelected ) {
                     result = listbox.GetCurrent().filename;
+                }
+                else if ( !filename.empty() ) {
+                    result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
             }
             else if ( isEditing ) {
@@ -529,7 +516,7 @@ namespace
             }
 
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
@@ -549,7 +536,7 @@ namespace
                     isTextLimit = redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
                     redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
-                else {
+                else if ( isListboxSelected ) {
                     redrawTextInputField( filename, textInputRoi, false );
                     redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
                 }

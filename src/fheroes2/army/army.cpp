@@ -1269,7 +1269,7 @@ double Army::GetStrength() const
 {
     double result = 0;
 
-    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondarySkillValue( Skill::Secondary::ARCHERY ) : 0;
 
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
     const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
@@ -1642,7 +1642,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
 
         if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
-            const uint32_t amountToJoin = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
+            const uint32_t amountToJoin
+                = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
             // The ability to hire the entire stack of monsters is a mandatory condition for their joining
             // due to hero's Diplomacy skill in accordance with the mechanics of the original game
@@ -1904,26 +1905,26 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Army & army )
+OStreamBase & operator<<( OStreamBase & stream, const Army & army )
 {
-    msg << static_cast<uint32_t>( army.size() );
+    stream << static_cast<uint32_t>( army.size() );
 
     // Army: fixed size
     for ( Army::const_iterator it = army.begin(); it != army.end(); ++it )
-        msg << **it;
+        stream << **it;
 
-    return msg << army._isSpreadCombatFormation << army.color;
+    return stream << army._isSpreadCombatFormation << army.color;
 }
 
-StreamBase & operator>>( StreamBase & msg, Army & army )
+IStreamBase & operator>>( IStreamBase & stream, Army & army )
 {
     uint32_t armysz;
-    msg >> armysz;
+    stream >> armysz;
 
     for ( Army::iterator it = army.begin(); it != army.end(); ++it )
-        msg >> **it;
+        stream >> **it;
 
-    msg >> army._isSpreadCombatFormation >> army.color;
+    stream >> army._isSpreadCombatFormation >> army.color;
 
     // set army
     for ( Army::iterator it = army.begin(); it != army.end(); ++it ) {
@@ -1935,5 +1936,5 @@ StreamBase & operator>>( StreamBase & msg, Army & army )
     // set later from owner (castle, heroes)
     army.commander = nullptr;
 
-    return msg;
+    return stream;
 }

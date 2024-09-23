@@ -96,11 +96,11 @@ namespace
 
         return corrected;
     }
-}
 
-bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
-{
-    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
+    {
+        return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
+    }
 }
 
 Kingdom::Kingdom()
@@ -693,7 +693,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         // estates skill bonus
         for ( const Heroes * hero : heroes ) {
             assert( hero != nullptr );
-            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
+            totalIncome.gold += hero->GetSecondarySkillValue( Skill::Secondary::ESTATES );
         }
     }
 
@@ -775,69 +775,68 @@ double Kingdom::GetArmiesStrength() const
 
 void Kingdoms::Init()
 {
-    const Colors colors( Settings::Get().GetPlayers().GetColors() );
-
     clear();
 
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it )
-        GetKingdom( *it ).Init( *it );
+    const Colors colors( Settings::Get().GetPlayers().GetColors() );
+    std::for_each( colors.begin(), colors.end(), [this]( const int color ) { GetKingdom( color ).Init( color ); } );
 }
 
 void Kingdoms::clear()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        kingdom.clear();
+    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.clear(); } );
 }
 
 void Kingdoms::ApplyPlayWithStartingHero()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
+    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) {
+        if ( kingdom.isPlay() ) {
             kingdom.ApplyPlayWithStartingHero();
+        }
+    } );
 }
 
-const Kingdom & Kingdoms::GetKingdom( int color ) const
+const Kingdom & Kingdoms::GetKingdom( const int color ) const
 {
     switch ( color ) {
     case Color::BLUE:
-        return kingdoms[0];
+        return _kingdoms[0];
     case Color::GREEN:
-        return kingdoms[1];
+        return _kingdoms[1];
     case Color::RED:
-        return kingdoms[2];
+        return _kingdoms[2];
     case Color::YELLOW:
-        return kingdoms[3];
+        return _kingdoms[3];
     case Color::ORANGE:
-        return kingdoms[4];
+        return _kingdoms[4];
     case Color::PURPLE:
-        return kingdoms[5];
+        return _kingdoms[5];
     default:
         break;
     }
 
-    return kingdoms[6];
+    return _kingdoms[6];
 }
 
-Kingdom & Kingdoms::GetKingdom( int color )
+Kingdom & Kingdoms::GetKingdom( const int color )
 {
     switch ( color ) {
     case Color::BLUE:
-        return kingdoms[0];
+        return _kingdoms[0];
     case Color::GREEN:
-        return kingdoms[1];
+        return _kingdoms[1];
     case Color::RED:
-        return kingdoms[2];
+        return _kingdoms[2];
     case Color::YELLOW:
-        return kingdoms[3];
+        return _kingdoms[3];
     case Color::ORANGE:
-        return kingdoms[4];
+        return _kingdoms[4];
     case Color::PURPLE:
-        return kingdoms[5];
+        return _kingdoms[5];
     default:
         break;
     }
 
-    return kingdoms[6];
+    return _kingdoms[6];
 }
 
 void Kingdom::appendSurrenderedHero( Heroes & hero )
@@ -847,39 +846,37 @@ void Kingdom::appendSurrenderedHero( Heroes & hero )
 
 void Kingdoms::NewDay()
 {
-    for ( Kingdom & kingdom : kingdoms ) {
-        kingdom.ActionNewDay();
-    }
+    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewDay(); } );
 }
 
 void Kingdoms::NewWeek()
 {
-    for ( Kingdom & kingdom : kingdoms ) {
-        kingdom.ActionNewWeek();
-    }
+    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
 }
 
 void Kingdoms::NewMonth()
 {
-    for ( Kingdom & kingdom : kingdoms ) {
-        kingdom.ActionNewMonth();
-    }
+    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewMonth(); } );
 }
 
 int Kingdoms::GetNotLossColors() const
 {
     int result = 0;
-    for ( const Kingdom & kingdom : kingdoms )
-        if ( kingdom.GetColor() && !kingdom.isLoss() )
+    for ( const Kingdom & kingdom : _kingdoms ) {
+        if ( kingdom.GetColor() && !kingdom.isLoss() ) {
             result |= kingdom.GetColor();
+        }
+    }
     return result;
 }
 
-int Kingdoms::FindWins( int cond ) const
+int Kingdoms::FindWins( const int cond ) const
 {
-    for ( const Kingdom & kingdom : kingdoms )
-        if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) )
+    for ( const Kingdom & kingdom : _kingdoms ) {
+        if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) ) {
             return kingdom.GetColor();
+        }
+    }
     return 0;
 }
 
@@ -911,7 +908,7 @@ std::set<Heroes *> Kingdoms::resetRecruits()
 {
     std::set<Heroes *> remainingRecruits;
 
-    for ( Kingdom & kingdom : kingdoms ) {
+    for ( Kingdom & kingdom : _kingdoms ) {
         Recruits & recruits = kingdom.GetCurrentRecruits();
 
         // Heroes who retreated or surrendered on the last day of the previous week should still be available for recruitment next week in the same kingdom, provided that
@@ -958,7 +955,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
+Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() ) {
         switch ( difficulty ) {
@@ -998,45 +995,33 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
     return { 7500, 20, 5, 20, 5, 5, 5 };
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
-    return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+    return stream << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
+IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+    stream >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1100_RELEASE ) {
         int dummy;
 
-        msg >> dummy;
+        stream >> dummy;
     }
 
-    return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+    return stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
+OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj )
 {
-    msg << Kingdoms::_size;
-    for ( const Kingdom & kingdom : obj.kingdoms )
-        msg << kingdom;
-
-    return msg;
+    return stream << obj._kingdoms;
 }
 
-StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
+IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj )
 {
-    uint32_t kingdomscount = 0;
-    msg >> kingdomscount;
-
-    if ( kingdomscount <= Kingdoms::_size ) {
-        for ( uint32_t i = 0; i < kingdomscount; ++i )
-            msg >> obj.kingdoms[i];
-    }
-
-    return msg;
+    return stream >> obj._kingdoms;
 }

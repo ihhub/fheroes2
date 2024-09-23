@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3050,17 +3050,14 @@ msgstr "Tổng: "
 msgid "Need: "
 msgstr "Cần: "
 
-msgid "Load Game"
-msgstr "Tải Trò chơi"
-
-msgid "No save files to load."
-msgstr "Không có tệp lưu để tải."
-
 msgid "New Game"
 msgstr "Trò chơi Mới"
 
 msgid "Start a single or multi-player game."
 msgstr "Bắt đầu một trò chơi đơn hoặc nhiều người chơi."
+
+msgid "Load Game"
+msgstr "Tải Trò chơi"
 
 msgid "Load a previously saved game."
 msgstr "Tải một trò chơi đã lưu trước đó."
@@ -3305,6 +3302,9 @@ msgstr ""
 "hoặc\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3342,9 +3342,6 @@ msgstr "Tài nguyên của Ngươi"
 
 msgid "Available Trades"
 msgstr "Giao dịch Có sẵn"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bảo vệ bởi %{count} %{monster}"
@@ -3450,6 +3447,20 @@ msgstr "Chọn tối đa quá vật để chiêu mộ."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Chỉ chọn 1 quái vật để chiêu mộ."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Chọn Độ phân giải Trò chơi"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Chọn Độ phân giải:"
@@ -3632,6 +3643,42 @@ msgstr "Chọn Đối tượng Đại dương:"
 msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
+msgid "Players Icon"
+msgstr "Biểu tượng Người chơi"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Cho biết tổng số người chơi trong kịch bản. Bất kỳ vị trí nào không có con "
+"người chiếm giữ sẽ do người chơi máy tính chiếm giữ."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Cho biết bản đồ\n"
+"là nhỏ (36 x 36), thường\n"
+"(72 x 72), lớn (108 x 108),\n"
+"hay cực lớn (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Cỡ Biểu tượng"
+
+msgid "Map Type"
+msgstr "Kiểu Bản đồ"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
+"của lòng trung thành\" của trò chơi."
+
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
@@ -3720,42 +3767,6 @@ msgstr "Tất cả Bản đồ"
 
 msgid "View all maps, regardless of size."
 msgstr "Xem tất cả các bản đồ, bất kể kích thước."
-
-msgid "Players Icon"
-msgstr "Biểu tượng Người chơi"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Cho biết tổng số người chơi trong kịch bản. Bất kỳ vị trí nào không có con "
-"người chiếm giữ sẽ do người chơi máy tính chiếm giữ."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Cho biết bản đồ\n"
-"là nhỏ (36 x 36), thường\n"
-"(72 x 72), lớn (108 x 108),\n"
-"hay cực lớn (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Cỡ Biểu tượng"
-
-msgid "Map Type"
-msgstr "Kiểu Bản đồ"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
-"của lòng trung thành\" của trò chơi."
 
 msgid "Selected Name"
 msgstr "Chọn Tên"
@@ -5514,6 +5525,9 @@ msgstr "Trò chơi đã lưu này được bản địa hóa thành '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' ngôn ngữ, nhưng ngôn ngữ hiện tại của trò chơi là '"
+
+msgid "No save files to load."
+msgstr "Không có tệp lưu để tải."
 
 msgid "Hot Seat"
 msgstr "Ghế Nóng"
@@ -11692,15 +11706,15 @@ msgstr "Tăng kỹ năng phòng thủ của các sinh vật được chọn mộ
 msgid "Stoneskin"
 msgstr "Thạch bì"
 
+msgid "Steelskin"
+msgstr "Da sắt"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Tăng kỹ năng phòng thủ của các sinh vật được nhắm mục tiêu. Đây là phiên bản "
 "cải tiến của Thạch Bì."
-
-msgid "Steelskin"
-msgstr "Da sắt"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Khiến các sinh vật được chọn gây ra thiệt hại tối thiểu."

@@ -161,7 +161,7 @@ namespace Interface
 
         EditorPanel _editorPanel;
 
-        int32_t _selectedTile{ -1 };
+        int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
         std::function<void( const int32_t )> _cursorUpdater;

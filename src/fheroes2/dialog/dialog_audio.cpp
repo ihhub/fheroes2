@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_audio.h"
+
 #include <algorithm>
 #include <cassert>
 #include <string>
@@ -27,10 +29,8 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
-#include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 
@@ -117,13 +118,14 @@ namespace Dialog
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-        fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                            dialog.height() + fheroes2::borderWidthPx );
         const fheroes2::Rect dialogArea( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
         fheroes2::Fill( display, dialogArea.x, dialogArea.y, dialogArea.width, dialogArea.height, 0 );
-        fheroes2::Blit( dialogShadow, display, dialogArea.x - BORDERWIDTH, dialogArea.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, dialogArea.x - fheroes2::borderWidthPx, dialogArea.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
 
         const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
@@ -152,7 +154,6 @@ namespace Dialog
 
         bool saveConfig = false;
 
-        // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -161,51 +162,56 @@ namespace Dialog
                 break;
             }
 
-            // set music or sound volume
-            bool saveMusicVolume = false;
-            bool saveSoundVolume = false;
+            bool haveSettingsChanged = false;
+
             if ( Audio::isValid() ) {
-                if ( le.MouseClickLeft( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
-                    saveMusicVolume = true;
+                {
+                    bool haveMusicSettingsChanged = false;
+
+                    if ( le.MouseClickLeft( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() + 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( musicVolumeRoi ) ) {
+                        conf.SetMusicVolume( conf.MusicVolume() - 1 );
+                        haveMusicSettingsChanged = true;
+                    }
+
+                    if ( haveMusicSettingsChanged ) {
+                        Music::setVolume( 100 * conf.MusicVolume() / 10 );
+
+                        haveSettingsChanged = true;
+                    }
                 }
 
-                if ( saveMusicVolume ) {
-                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
-                }
+                {
+                    bool haveSoundSettingsChanged = false;
 
-                if ( le.MouseClickLeft( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
-                    saveSoundVolume = true;
-                }
-                if ( le.MouseClickLeft( audio3D ) ) {
-                    conf.set3DAudio( !conf.is3DAudioEnabled() );
-                    saveSoundVolume = true;
-                }
+                    if ( le.MouseClickLeft( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelUpInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() + 1 );
+                        haveSoundSettingsChanged = true;
+                    }
+                    else if ( le.isMouseWheelDownInArea( soundVolumeRoi ) ) {
+                        conf.SetSoundVolume( conf.SoundVolume() - 1 );
+                        haveSoundSettingsChanged = true;
+                    }
 
-                if ( saveSoundVolume && fromAdventureMap ) {
-                    Game::EnvironmentSoundMixer();
+                    if ( haveSoundSettingsChanged ) {
+                        Mixer::setVolume( 100 * conf.SoundVolume() / 10 );
+
+                        haveSettingsChanged = true;
+                    }
                 }
             }
 
-            // set music type
-            bool saveMusicType = false;
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
@@ -217,7 +223,17 @@ namespace Dialog
 
                 AudioManager::PlayCurrentMusic();
 
-                saveMusicType = true;
+                haveSettingsChanged = true;
+            }
+
+            if ( le.MouseClickLeft( audio3D ) ) {
+                conf.set3DAudio( !conf.is3DAudioEnabled() );
+
+                if ( fromAdventureMap ) {
+                    Game::EnvironmentSoundMixer();
+                }
+
+                haveSettingsChanged = true;
             }
 
             if ( le.isMouseRightButtonPressedInArea( musicVolumeRoi ) ) {
@@ -237,8 +253,7 @@ namespace Dialog
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( saveMusicVolume || saveSoundVolume || saveMusicType ) {
-                // redraw
+            if ( haveSettingsChanged ) {
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
                 drawDialog( roi );
                 buttonOkay.draw();

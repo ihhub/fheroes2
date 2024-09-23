@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2986,17 +2986,14 @@ msgstr "Total: "
 msgid "Need: "
 msgstr "Necesita: "
 
-msgid "Load Game"
-msgstr "Cargar Partida"
-
-msgid "No save files to load."
-msgstr "No hay partidas para cargar."
-
 msgid "New Game"
 msgstr "Nueva Partida"
 
 msgid "Start a single or multi-player game."
 msgstr "Comenzar una partida simple o multijugador."
+
+msgid "Load Game"
+msgstr "Cargar Partida"
 
 msgid "Load a previously saved game."
 msgstr "Cargar una partida previamente guardada."
@@ -3241,6 +3238,9 @@ msgstr ""
 "o\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "n/d"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3276,9 +3276,6 @@ msgstr "Tus recursos"
 
 msgid "Available Trades"
 msgstr "Tratos Disponibles"
-
-msgid "n/a"
-msgstr "n/d"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "protegido por %{count} %{monster}"
@@ -3383,6 +3380,20 @@ msgid "Select maximum monsters to be recruited."
 msgstr ""
 
 msgid "Select only 1 monster to be recruited."
+msgstr ""
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Seleccionar Resolución del Juego"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
 msgstr ""
 
 msgid "Select Game Resolution:"
@@ -3577,6 +3588,37 @@ msgstr "Artefactos"
 msgid "Select Adventure Object:"
 msgstr "Artefactos"
 
+msgid "Players Icon"
+msgstr "Icono de los jugadores"
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Indica cuantos jugadores hay en total en el escenario. Cualquier posición no "
+"ocupada por jugadores humanos, será ocupada por jugadores virtuales."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Indica si los mapas son pequeños (36x36), medianos (72x72), grandes "
+"(108x108) o extra grandes (144x144)."
+
+msgid "Size Icon"
+msgstr "Icono del tamaño"
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Tamaño del Mapa"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
@@ -3666,37 +3708,6 @@ msgstr "Todos los mapas"
 
 msgid "View all maps, regardless of size."
 msgstr "Ver todos los mapas, independientemente de su tamaño."
-
-msgid "Players Icon"
-msgstr "Icono de los jugadores"
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Indica cuantos jugadores hay en total en el escenario. Cualquier posición no "
-"ocupada por jugadores humanos, será ocupada por jugadores virtuales."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Indica si los mapas son pequeños (36x36), medianos (72x72), grandes "
-"(108x108) o extra grandes (144x144)."
-
-msgid "Size Icon"
-msgstr "Icono del tamaño"
-
-#, fuzzy
-msgid "Map Type"
-msgstr "Tamaño del Mapa"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
 
 msgid "Selected Name"
 msgstr "Nombre elegido"
@@ -5443,6 +5454,9 @@ msgstr ""
 
 msgid "' language, but the current language of the game is '"
 msgstr ""
+
+msgid "No save files to load."
+msgstr "No hay partidas para cargar."
 
 msgid "Hot Seat"
 msgstr "Asiento caliente"
@@ -11275,15 +11289,15 @@ msgstr ""
 msgid "Stoneskin"
 msgstr "Piel de Roca"
 
+msgid "Steelskin"
+msgstr "Piel de Acero"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Incrementa la habilidad de Defensa de las criaturas seleccionadas. Ésta es "
 "una versión mejorada de Piel de Roca."
-
-msgid "Steelskin"
-msgstr "Piel de Acero"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Hace que las criaturas seleccionadas inflijan daños mínimos."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3051,17 +3051,14 @@ msgstr "Celkovo: "
 msgid "Need: "
 msgstr "Potreba: "
 
-msgid "Load Game"
-msgstr "Nahraj hru"
-
-msgid "No save files to load."
-msgstr "Žiadne uložené hry."
-
 msgid "New Game"
 msgstr "Nová hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Začni hru jedného alebo viac hráčov."
+
+msgid "Load Game"
+msgstr "Nahraj hru"
 
 msgid "Load a previously saved game."
 msgstr "Nahraj predtým uloženú hru."
@@ -3300,6 +3297,9 @@ msgid ""
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
 
+msgid "n/a"
+msgstr "nie je"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3334,9 +3334,6 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možné obchody"
-
-msgid "n/a"
-msgstr "nie je"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "strážené: %{monster} (%{count})"
@@ -3445,6 +3442,20 @@ msgstr "Zvoľ najväčší možný počet bojovníkov k nájmu."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Zvoľ iba jedného bojovníka k nájmu."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Zvoľ rozlíšenie hry"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Zvoľ rozlíšenie hry:"
@@ -3637,6 +3648,40 @@ msgstr "Objekty oceánu"
 msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
+msgid "Players Icon"
+msgstr "Ikona hráča"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
+"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
+"alebo extra veľká (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Ikona veľkosti"
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
+"Price of Loyalty\"."
+
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
 
@@ -3726,40 +3771,6 @@ msgstr "Všetky mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Zobraz všetky mapy bez ohľadu na veľkosť."
-
-msgid "Players Icon"
-msgstr "Ikona hráča"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
-"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
-"alebo extra veľká (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Ikona veľkosti"
-
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
-"Price of Loyalty\"."
 
 msgid "Selected Name"
 msgstr "Zvolené meno"
@@ -5519,6 +5530,9 @@ msgstr "Táto uložená hra je zlokalizovaná na jazyk '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "', ale aktuálny jazyk hry je '"
+
+msgid "No save files to load."
+msgstr "Žiadne uložené hry."
 
 msgid "Hot Seat"
 msgstr "Horúce kreslo"
@@ -11570,15 +11584,15 @@ msgstr "Magicky zvýši obrannú schopnosť vybraných tvorov."
 msgid "Stoneskin"
 msgstr "Kamenná koža"
 
+msgid "Steelskin"
+msgstr "Oceľová koža"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Zvyšuje obrannú schopnosť cielených tvorov. Ide o vylepšenú verziu Kamennej "
 "kože."
-
-msgid "Steelskin"
-msgstr "Oceľová koža"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Zapríčiní, že vybrané bytosti spôsobia minimálne poškodenie."

@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,32 +20,17 @@
 
 #pragma once
 
-#include <cstddef>
-#include <string>
+#include <cstdint>
+#include <vector>
 
-namespace Translation
+#include "math_base.h"
+
+namespace fheroes2
 {
-    bool bindDomain( const char * domain, const char * file );
-
-    // Reset any translation to the default language - English.
-    void reset();
-
-    const char * gettext( const char * str );
-    const char * gettext( const std::string & str );
-    const char * ngettext( const char * str, const char * plural, size_t num );
-
-    // Converts the given string to lowercase in a locale aware way
-    std::string StringLower( std::string str );
+    double GetAngle( const Point & start, const Point & target );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 }
-
-#define _( str ) Translation::gettext( str )
-#define _n( str, plural, num ) Translation::ngettext( str, plural, num )
-
-constexpr const char * gettext_noop( const char * s )
-{
-    return s;
-}
-
-// Replaces the pattern in workString with patternReplacement. The patternReplacement is converted to lowercase in a locale
-// aware way, except for the first word in a sentence.
-void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );

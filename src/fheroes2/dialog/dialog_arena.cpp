@@ -115,16 +115,16 @@ int Dialog::SelectSkillFromArena()
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( title.height( BOXAREA_WIDTH ) + textbox.height( BOXAREA_WIDTH ) + 2 * spacer + sprite.height() + 15, true );
+    const Dialog::FrameBox box( title.height( fheroes2::boxAreaWidthPx ) + textbox.height( fheroes2::boxAreaWidthPx ) + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
 
-    title.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
-    dst_pt.y += title.height( BOXAREA_WIDTH ) + spacer;
+    title.draw( dst_pt.x, dst_pt.y + 2, fheroes2::boxAreaWidthPx, display );
+    dst_pt.y += title.height( fheroes2::boxAreaWidthPx ) + spacer;
 
-    textbox.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
-    dst_pt.y += textbox.height( BOXAREA_WIDTH ) + spacer;
+    textbox.draw( dst_pt.x, dst_pt.y + 2, fheroes2::boxAreaWidthPx, display );
+    dst_pt.y += textbox.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     int res = Skill::Primary::ATTACK;
 

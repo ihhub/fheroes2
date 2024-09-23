@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 16:33+0000\n"
-"PO-Revision-Date: 2023-12-22 00:32+0100\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"PO-Revision-Date: 2024-09-02 18:39+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -213,7 +213,7 @@ msgid "MAX"
 msgstr "MAX"
 
 msgid "DIFFICULTY"
-msgstr "SCHWIERIGKEIT"
+msgstr "SCHWIER."
 
 msgid "VIEW INTRO"
 msgstr "INTRO ANZEIGEN"
@@ -3069,17 +3069,14 @@ msgstr "Insgesamt: "
 msgid "Need: "
 msgstr "Bedarf: "
 
-msgid "Load Game"
-msgstr "Spiel laden"
-
-msgid "No save files to load."
-msgstr "Keine Speicherdateien vorhanden."
-
 msgid "New Game"
 msgstr "Neues Spiel"
 
 msgid "Start a single or multi-player game."
 msgstr "Einzel- oder Multi-Player Spiel starten."
+
+msgid "Load Game"
+msgstr "Spiel laden"
 
 msgid "Load a previously saved game."
 msgstr "Zuvor gespeichertes Spiel laden."
@@ -3329,6 +3326,9 @@ msgstr ""
 "oder\n"
 "%{skill2}"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3365,9 +3365,6 @@ msgstr "Eure Ressourcen"
 
 msgid "Available Trades"
 msgstr "Verfügbarer Handel"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bewacht von %{count} %{monster}"
@@ -3476,6 +3473,20 @@ msgstr "Maximale Anzahl an zu rekrutierenden Monstern wählen."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Nur 1 Monster auswählen, das rekrutiert werden soll."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Spielauflösung wählen"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Spielauflösung wählen:"
@@ -3667,6 +3678,42 @@ msgstr "Ozean-Objekte"
 msgid "Select Adventure Object:"
 msgstr "Ozean-Objekte"
 
+msgid "Players Icon"
+msgstr "Spieleranzahl"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Gibt an, wie viele Spieler insgesamt im Szenario sind. Alle Positionen, die "
+"nicht von Menschen besetzt sind, werden von Computerspielern besetzt."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Zeigt an, ob die Karte\n"
+"klein (36 x 36), mittelgroß\n"
+"(72 x 72), groß (108 x 108)\n"
+"oder extragroß (144 x 144) ist."
+
+msgid "Size Icon"
+msgstr "Kartengröße"
+
+msgid "Map Type"
+msgstr "Kartenart"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Zeigt an, ob die Karte für die Version \"The Succession Wars\" oder \"The "
+"Price of Loyalty\" des Spiels erstellt wurde."
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3756,42 +3803,6 @@ msgstr "Alle Karten"
 
 msgid "View all maps, regardless of size."
 msgstr "Alle Maps anzeigen, unabhängig von der Größe."
-
-msgid "Players Icon"
-msgstr "Spieleranzahl"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Gibt an, wie viele Spieler insgesamt im Szenario sind. Alle Positionen, die "
-"nicht von Menschen besetzt sind, werden von Computerspielern besetzt."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Zeigt an, ob die Karte\n"
-"klein (36 x 36), mittelgroß\n"
-"(72 x 72), groß (108 x 108)\n"
-"oder extragroß (144 x 144) ist."
-
-msgid "Size Icon"
-msgstr "Kartengröße"
-
-msgid "Map Type"
-msgstr "Kartenart"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Zeigt an, ob die Karte für die Version \"The Succession Wars\" oder \"The "
-"Price of Loyalty\" des Spiels erstellt wurde."
 
 msgid "Selected Name"
 msgstr "Ausgewählter Name"
@@ -5578,6 +5589,9 @@ msgstr "Dieses gespeicherte Spiel ist lokalisiert in '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' Sprache, aber die aktuelle Sprache des Spiels ist '"
+
+msgid "No save files to load."
+msgstr "Keine Speicherdateien vorhanden."
 
 msgid "Hot Seat"
 msgstr "Heißer Stuhl"
@@ -11845,15 +11859,15 @@ msgstr ""
 msgid "Stoneskin"
 msgstr "Steinhaut"
 
+msgid "Steelskin"
+msgstr "Stahlhaut"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Erhöht die Verteidigungsfähigkeit der ausgewählten Kreaturen. Dies ist eine "
 "verbesserte Version von Steinhaut."
-
-msgid "Steelskin"
-msgstr "Stahlhaut"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""

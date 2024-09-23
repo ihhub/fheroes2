@@ -25,14 +25,16 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
-#define PUZZLETILES 48
+class IStreamBase;
+class OStreamBase;
 
-class StreamBase;
+inline constexpr size_t numOfPuzzleTiles{ 48 };
 
-class Puzzle : public std::bitset<PUZZLETILES>
+class Puzzle : public std::bitset<numOfPuzzleTiles>
 {
 public:
     Puzzle();
@@ -48,7 +50,7 @@ public:
     std::vector<uint8_t> zone4_order{ 20, 21, 26, 27 };
 };
 
-StreamBase & operator<<( StreamBase &, const Puzzle & );
-StreamBase & operator>>( StreamBase &, Puzzle & );
+OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl );
+IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl );
 
 #endif
