@@ -1020,14 +1020,15 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
     }
-    else if ( !_mouseDraggingInitiated ) {
-        _mouseDraggingInitiated = true;
-        _lastMouseDragPosition = mousePosition;
-    }
-    else if ( isCursorOverGamearea && _interface.useMouseDragMovement()
-              && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
-                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
-        _mouseDraggingMovement = true;
+    else if ( isCursorOverGamearea && _interface.useMouseDragMovement() ) {
+        if ( !_mouseDraggingInitiated ) {
+            _mouseDraggingInitiated = true;
+            _lastMouseDragPosition = mousePosition;
+        }
+        else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
+                  || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
+            _mouseDraggingMovement = true;
+        }
     }
 
     if ( _mouseDraggingMovement && le.isMouseLeftButtonPressedInArea( GetROI() ) ) {
