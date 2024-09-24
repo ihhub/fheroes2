@@ -637,6 +637,9 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
     static const Spell dimensionDoor( Spell::DIMENSIONDOOR );
 
+    // The availability of a SP reserve for the use of this spell is not checked here because the need for a reserve depends
+    // on the end point of the hero's DD route. For instance, if hero moves to an object that will replenish the SP, then the
+    // need to reserve SP can be neglected.
     const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
     const int32_t townGateCastleIndex = [this, &hero]() {
