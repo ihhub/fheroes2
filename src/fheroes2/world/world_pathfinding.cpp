@@ -1249,6 +1249,8 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
         return {};
     }
 
+    assert( _dimensionDoorSPCost > 0 );
+
     if ( _pathStart == targetIndex ) {
         return {};
     }
@@ -1288,11 +1290,12 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     fheroes2::Point current = Maps::GetPoint( _pathStart );
     fheroes2::Point difference = targetPoint - current;
 
-    static const uint32_t movementCost = std::max( 1U, Spell( Spell::DIMENSIONDOOR ).movePoints() );
+    static const uint32_t dimensionDoorMovementCost = Spell( Spell::DIMENSIONDOOR ).movePoints();
+    assert( dimensionDoorMovementCost > 0 );
 
     const bool isHeroOnWater = world.GetTiles( _pathStart ).isWater();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
-    const uint32_t maxCasts = std::min( { remainingSpellPoints / std::max( 1U, _dimensionDoorSPCost ), _remainingMovePoints / movementCost, difficultyLimit } );
+    const uint32_t maxCasts = std::min( { remainingSpellPoints / _dimensionDoorSPCost, _remainingMovePoints / dimensionDoorMovementCost, difficultyLimit } );
     const Directions & directions = Direction::All();
 
     std::list<Route::Step> path;
@@ -1308,7 +1311,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
         const int32_t anotherNodeIdx = Maps::GetIndexFromAbsPoint( another );
 
         if ( Maps::isValidForDimensionDoor( anotherNodeIdx, isHeroOnWater ) ) {
-            path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
+            path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, dimensionDoorMovementCost );
 
             current = another;
         }
@@ -1349,7 +1352,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
                 return {};
             }
 
-            path.emplace_back( bestNextIdx, currentNodeIdx, Direction::CENTER, movementCost );
+            path.emplace_back( bestNextIdx, currentNodeIdx, Direction::CENTER, dimensionDoorMovementCost );
 
             current = Maps::GetPoint( bestNextIdx );
         }
