@@ -91,7 +91,7 @@ struct DwellingItem
     const uint32_t dwType;
 };
 
-class DwellingsBar : public Interface::ItemsBar<DwellingItem>
+class DwellingsBar final : public Interface::ItemsBar<DwellingItem>
 {
 public:
     DwellingsBar( Castle & cstl, const fheroes2::Size & sz );
