@@ -462,7 +462,7 @@ namespace Interface
             return curItemPos.first;
         }
 
-        void SetContentItems() override
+        void SetContentItems() override final
         {
             ResetSelected();
         }
