@@ -849,11 +849,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
     }
 
+    DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
+
     evaluateRegionSafety();
 
     updateKingdomBudget( kingdom );
-
-    DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
 
     uint32_t progressStatus = 1;
     status.DrawAITurnProgress( progressStatus );
