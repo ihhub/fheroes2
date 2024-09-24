@@ -102,7 +102,7 @@ public:
     bool ActionBarLeftMouseSingleClick( DwellingItem & dwl ) override;
     bool ActionBarRightMouseHold( DwellingItem & dwl ) override;
 
-protected:
+private:
     Castle & castle;
     fheroes2::Image backsf;
     std::vector<DwellingItem> content;
