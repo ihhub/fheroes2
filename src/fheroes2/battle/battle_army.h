@@ -94,8 +94,8 @@ namespace Battle
                     };
                 }
                 else {
-                    // The build will fail because this lambda does not meet the requirements of UnaryPredicate
-                    return []() {};
+                    // The build should fail because this lambda does not meet the requirements of UnaryPredicate
+                    return []() { assert( 0 ); };
                 }
             };
 
