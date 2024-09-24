@@ -793,9 +793,11 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
+
+        assert( teleportTile.getHero() == nullptr );
 
         result.push_back( teleportIndex );
     }
@@ -828,9 +830,11 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.getHero() != nullptr ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
             continue;
         }
+
+        assert( whirlpoolTile.getHero() == nullptr );
 
         result.push_back( whirlpoolIndex );
     }

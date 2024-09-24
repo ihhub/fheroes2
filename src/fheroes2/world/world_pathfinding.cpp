@@ -223,6 +223,8 @@ namespace
 
         // AI can use boats to overcome water obstacles
         if ( objectType == MP2::OBJ_BOAT ) {
+            assert( !fromWater && toWater );
+
             return true;
         }
 
@@ -247,7 +249,7 @@ namespace
         return true;
     }
 
-    bool isMovementAllowedForColor( const int from, const int direction, const int color, const bool isSummonBoatSpellAvailable )
+    bool isMovementAllowedForColor( const int from, const int direction, const int color, const bool ignoreFog, const bool isSummonBoatSpellAvailable )
     {
         const Maps::Tiles & fromTile = world.GetTiles( from );
         const bool fromWater = fromTile.isWater();
@@ -303,7 +305,7 @@ namespace
 
         const Maps::Tiles & toTile = world.GetTiles( Maps::GetDirectionIndex( from, direction ) );
 
-        if ( toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, color ) ) {
+        if ( toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, ignoreFog, color ) ) {
             return true;
         }
 
@@ -318,7 +320,7 @@ namespace
         }
 
         // ... and this tile should be reachable from the shore (as if this shore tile were a water tile)
-        return toTile.isPassableFrom( Direction::Reflect( direction ), true, false, color );
+        return toTile.isPassableFrom( Direction::Reflect( direction ), true, ignoreFog, color );
     }
 
     bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double minimalAdvantage )
@@ -486,7 +488,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
 
 bool WorldPathfinder::isMovementAllowed( const int from, const int direction ) const
 {
-    return isMovementAllowedForColor( from, direction, _color, false );
+    return isMovementAllowedForColor( from, direction, _color, false, false );
 }
 
 void PlayerWorldPathfinder::reset()
@@ -602,11 +604,16 @@ void AIWorldPathfinder::reset()
     _patrolDistance = 0;
     _maxMovePointsOnLand = 0;
     _maxMovePointsOnWater = 0;
+    _remainingSpellPoints = 0;
+    _maxSpellPoints = 0;
+    _dimensionDoorSPCost = 0;
+    _dimensionDoorNumOfUses = 0;
     _armyStrength = -1;
     _isOnPatrol = false;
     _isArtifactsBagFull = false;
     _isEquippedWithSpellBook = false;
     _isSummonBoatSpellAvailable = false;
+    _isDimensionDoorSpellAvailable = false;
 
     _townGateCastleIndex = -1;
     _townPortalCastleIndexes.clear();
@@ -627,6 +634,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
         return ( fheroes2::getSummonableBoat( hero ) != -1 );
     }();
+
+    static const Spell dimensionDoor( Spell::DIMENSIONDOOR );
+
+    const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
     const int32_t townGateCastleIndex = [this, &hero]() {
         static const Spell townGate( Spell::TOWNGATE );
@@ -669,13 +680,15 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
         return result;
     }();
 
-    auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _patrolCenter, _patrolDistance, _maxMovePointsOnLand,
-                                     _maxMovePointsOnWater, _armyStrength, _isOnPatrol, _isArtifactsBagFull, _isEquippedWithSpellBook, _isSummonBoatSpellAvailable,
-                                     _townGateCastleIndex, _townPortalCastleIndexes );
+    auto currentSettings
+        = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _patrolCenter, _patrolDistance, _maxMovePointsOnLand, _maxMovePointsOnWater,
+                    _remainingSpellPoints, _maxSpellPoints, _dimensionDoorSPCost, _dimensionDoorNumOfUses, _armyStrength, _isOnPatrol, _isArtifactsBagFull,
+                    _isEquippedWithSpellBook, _isSummonBoatSpellAvailable, _isDimensionDoorSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
     const auto newSettings
         = std::make_tuple( hero.GetIndex(), hero.GetColor(), hero.GetMovePoints(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ),
                            Maps::GetIndexFromAbsPoint( hero.GetPatrolCenter() ), hero.GetPatrolDistance(), hero.GetMaxMovePoints( false ), hero.GetMaxMovePoints( true ),
-                           hero.GetArmy().GetStrength(), hero.Modes( Heroes::PATROL ), hero.IsFullBagArtifacts(), hero.HaveSpellBook(), isSummonBoatSpellAvailable,
+                           hero.GetSpellPoints(), hero.GetMaxSpellPoints(), dimensionDoor.spellPoints( &hero ), hero.getDimensionDoorUses(), hero.GetArmy().GetStrength(),
+                           hero.Modes( Heroes::PATROL ), hero.IsFullBagArtifacts(), hero.HaveSpellBook(), isSummonBoatSpellAvailable, isDimensionDoorSpellAvailable,
                            townGateCastleIndex, townPortalCastleIndexes );
 
     if ( currentSettings != newSettings ) {
@@ -687,10 +700,12 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _patrolCenter, _patrolDistance, _maxMovePointsOnLand,
-                                     _maxMovePointsOnWater, _armyStrength, _isOnPatrol, _isArtifactsBagFull, _isEquippedWithSpellBook, _isSummonBoatSpellAvailable,
-                                     _townGateCastleIndex, _townPortalCastleIndexes );
-    const auto newSettings = std::make_tuple( start, color, 0U, skill, -1, 0U, 0U, 0U, armyStrength, false, false, false, false, -1, std::vector<int32_t>{} );
+    auto currentSettings
+        = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _patrolCenter, _patrolDistance, _maxMovePointsOnLand, _maxMovePointsOnWater,
+                    _remainingSpellPoints, _maxSpellPoints, _dimensionDoorSPCost, _dimensionDoorNumOfUses, _armyStrength, _isOnPatrol, _isArtifactsBagFull,
+                    _isEquippedWithSpellBook, _isSummonBoatSpellAvailable, _isDimensionDoorSpellAvailable, _townGateCastleIndex, _townPortalCastleIndexes );
+    const auto newSettings
+        = std::make_tuple( start, color, 0U, skill, -1, 0U, 0U, 0U, 0U, 0U, 0U, 0U, armyStrength, false, false, false, false, false, -1, std::vector<int32_t>{} );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -742,7 +757,7 @@ void AIWorldPathfinder::processWorldMap()
 
 bool AIWorldPathfinder::isMovementAllowed( const int from, const int direction ) const
 {
-    return isMovementAllowedForColor( from, direction, _color, _isSummonBoatSpellAvailable );
+    return isMovementAllowedForColor( from, direction, _color, false, _isSummonBoatSpellAvailable );
 }
 
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx )
@@ -1028,7 +1043,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
             return false;
         }
 
-        if ( !isMovementAllowedForColor( heroIndex, direction, heroColor, false ) ) {
+        if ( !isMovementAllowedForColor( heroIndex, direction, heroColor, false, false ) ) {
             return false;
         }
 
@@ -1223,59 +1238,42 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     return result;
 }
 
-std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & hero, int targetIndex ) const
+std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targetIndex ) const
 {
-    assert( Maps::isValidAbsIndex( targetIndex ) );
+    assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
 
-    if ( hero.GetIndex() == targetIndex ) {
+    if ( !_isDimensionDoorSpellAvailable ) {
         return {};
     }
 
-    if ( hero.Modes( Heroes::PATROL ) ) {
-        const int32_t patrolCenter = Maps::GetIndexFromAbsPoint( hero.GetPatrolCenter() );
-        assert( Maps::isValidAbsIndex( patrolCenter ) );
+    if ( _pathStart == targetIndex ) {
+        return {};
+    }
 
-        if ( Maps::GetApproximateDistance( targetIndex, patrolCenter ) > hero.GetPatrolDistance() ) {
+    if ( _isOnPatrol ) {
+        assert( Maps::isValidAbsIndex( _patrolCenter ) );
+
+        if ( Maps::GetApproximateDistance( targetIndex, _patrolCenter ) > _patrolDistance ) {
             return {};
         }
     }
 
     uint32_t difficultyLimit = Difficulty::GetDimensionDoorLimitForAI( Game::getDifficulty() );
-    const uint32_t spellsUsedThisTurn = hero.getDimensionDoorUses();
-    if ( spellsUsedThisTurn >= difficultyLimit ) {
+    if ( _dimensionDoorNumOfUses >= difficultyLimit ) {
         return {};
     }
 
-    const Spell dimensionDoor( Spell::DIMENSIONDOOR );
-    if ( !hero.HaveSpell( dimensionDoor ) ) {
-        return {};
-    }
+    difficultyLimit -= _dimensionDoorNumOfUses;
 
-    uint32_t currentSpellPoints = hero.GetSpellPoints();
+    uint32_t remainingSpellPoints = _remainingSpellPoints;
 
-    const Maps::Tiles & tile = world.GetTiles( targetIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( true );
-
-    // Reserve spell points only if target isn't a well that will replenish lost SP
-    if ( objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
-        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserveRatio ) {
+    // Reserve spell points only if the target is not an object that will replenish the lost spell points
+    if ( const MP2::MapObjectType objectType = world.GetTiles( targetIndex ).GetObject(); objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
+        if ( remainingSpellPoints < _maxSpellPoints * _spellPointsReserveRatio ) {
             return {};
         }
 
-        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserveRatio );
-    }
-
-    difficultyLimit -= spellsUsedThisTurn;
-    const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
-    const uint32_t spellcastsPossible = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
-    const uint32_t maxCasts = std::min( spellcastsPossible, difficultyLimit );
-
-    // Have to explicitly call GetObject( false ) since a hero might be standing on it
-    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
-        targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
-        if ( !Maps::isValidAbsIndex( targetIndex ) ) {
-            return {};
-        }
+        remainingSpellPoints -= static_cast<uint32_t>( _maxSpellPoints * _spellPointsReserveRatio );
     }
 
     if ( !isTileAccessibleForAIWithArmy( targetIndex, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
@@ -1284,32 +1282,36 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
     const fheroes2::Point targetPoint = Maps::GetPoint( targetIndex );
 
-    fheroes2::Point current = Maps::GetPoint( hero.GetIndex() );
+    fheroes2::Point current = Maps::GetPoint( _pathStart );
     fheroes2::Point difference = targetPoint - current;
 
-    const bool water = hero.isShipMaster();
-    const Directions & directions = Direction::All();
+    static const uint32_t movementCost = std::max( 1U, Spell( Spell::DIMENSIONDOOR ).movePoints() );
+
+    const bool isHeroOnWater = world.GetTiles( _pathStart ).isWater();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
+    const uint32_t maxCasts = std::min( { remainingSpellPoints / std::max( 1U, _dimensionDoorSPCost ), _remainingMovePoints / movementCost, difficultyLimit } );
+    const Directions & directions = Direction::All();
 
     std::list<Route::Step> path;
 
-    uint32_t spellsUsed = 0;
-    while ( maxCasts > spellsUsed ) {
+    for ( uint32_t spellsUsed = 0; spellsUsed < maxCasts; ++spellsUsed ) {
         const int32_t currentNodeIdx = Maps::GetIndexFromAbsPoint( current );
 
         fheroes2::Point another = current;
+
         another.x += ( difference.x > 0 ) ? std::min( difference.x, distanceLimit ) : std::max( difference.x, -distanceLimit );
         another.y += ( difference.y > 0 ) ? std::min( difference.y, distanceLimit ) : std::max( difference.y, -distanceLimit );
 
         const int32_t anotherNodeIdx = Maps::GetIndexFromAbsPoint( another );
 
-        if ( Maps::isValidForDimensionDoor( anotherNodeIdx, water ) ) {
+        if ( Maps::isValidForDimensionDoor( anotherNodeIdx, isHeroOnWater ) ) {
             path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
+
             current = another;
         }
         else {
-            fheroes2::Point bestDirectionDiff;
             int bestNextIdx = -1;
+            fheroes2::Point bestDirectionDiff;
 
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( !Maps::isValidDirection( anotherNodeIdx, directions[i] ) ) {
@@ -1317,12 +1319,13 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
                 }
 
                 const int newIndex = anotherNodeIdx + _mapOffset[i];
-                if ( !Maps::isValidForDimensionDoor( newIndex, water ) ) {
+                if ( !Maps::isValidForDimensionDoor( newIndex, isHeroOnWater ) ) {
                     continue;
                 }
 
-                // If we are near the destination and we cannot reach the cell, skip it.
-                if ( anotherNodeIdx == targetIndex && !isMovementAllowed( newIndex, Direction::Reflect( directions[i] ) ) ) {
+                // If we are near the destination but we cannot reach the target tile, then skip this direction
+                if ( anotherNodeIdx == targetIndex
+                     && !isMovementAllowedForColor( newIndex, Direction::Reflect( directions[i] ), _color, true, _isSummonBoatSpellAvailable ) ) {
                     continue;
                 }
 
@@ -1344,15 +1347,15 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
             }
 
             path.emplace_back( bestNextIdx, currentNodeIdx, Direction::CENTER, movementCost );
+
             current = Maps::GetPoint( bestNextIdx );
         }
-
-        ++spellsUsed;
 
         difference = targetPoint - current;
         if ( std::abs( difference.x ) <= 1 && std::abs( difference.y ) <= 1 ) {
             // If this assertion blows up the logic above is wrong!
             assert( !path.empty() );
+
             return path;
         }
     }

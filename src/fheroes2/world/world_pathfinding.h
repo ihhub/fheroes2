@@ -172,7 +172,11 @@ public:
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex ) const;
 
-    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
+    // Builds and returns a path to the tile with the index 'targetIndex', consisting of tile indexes suitable for using the
+    // Dimension Door spell to move between them. If the target tile is unsuitable for moving to it using the Dimension Door
+    // spell, but there is a tile suitable for this next to it, from which it is possible to move to the target tile, then the
+    // resulting path will end with this neighboring tile. If such a path could not be built, then an empty path is returned.
+    std::list<Route::Step> buildDimensionDoorPath( const int targetIndex ) const;
 
     // Builds and returns a path to the tile with the index 'targetIndex'. If there is a need to pass through any objects
     // on the way to this tile, then a path to the nearest such object is returned. If the destination tile is not reachable
@@ -232,11 +236,16 @@ private:
     uint32_t _patrolDistance{ 0 };
     uint32_t _maxMovePointsOnLand{ 0 };
     uint32_t _maxMovePointsOnWater{ 0 };
+    uint32_t _remainingSpellPoints{ 0 };
+    uint32_t _maxSpellPoints{ 0 };
+    uint32_t _dimensionDoorSPCost{ 0 };
+    uint32_t _dimensionDoorNumOfUses{ 0 };
     double _armyStrength{ -1 };
     bool _isOnPatrol{ false };
     bool _isArtifactsBagFull{ false };
     bool _isEquippedWithSpellBook{ false };
     bool _isSummonBoatSpellAvailable{ false };
+    bool _isDimensionDoorSpellAvailable{ false };
 
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
     // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),

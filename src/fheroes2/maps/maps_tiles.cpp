@@ -1033,9 +1033,9 @@ bool Maps::Tiles::isPassabilityTransparent() const
     return _mainAddon.isPassabilityTransparent();
 }
 
-bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
+bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const
 {
-    if ( !skipFog && isFog( heroColor ) ) {
+    if ( !ignoreFog && isFog( heroColor ) ) {
         return false;
     }
 

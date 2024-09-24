@@ -127,11 +127,11 @@ namespace
         return false;
     }
 
-    uint32_t getDistanceToObject( const Heroes & hero, const AIWorldPathfinder & pathfinder, const int32_t index )
+    uint32_t getDistanceToObject( const AIWorldPathfinder & pathfinder, const int32_t index )
     {
         const uint32_t dist = pathfinder.getDistance( index );
 
-        const std::list<Route::Step> dimensionDoorSteps = pathfinder.getDimensionDoorPath( hero, index );
+        const std::list<Route::Step> dimensionDoorSteps = pathfinder.buildDimensionDoorPath( index );
         if ( dimensionDoorSteps.empty() ) {
             return dist;
         }
@@ -460,7 +460,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const uint32_t distance = getDistanceToObject( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -482,7 +482,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const uint32_t distance = getDistanceToObject( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -565,7 +565,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const uint32_t distance = getDistanceToObject( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -2120,7 +2120,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
             continue;
 
         const int currentHeroIndex = otherHero->GetIndex();
-        const uint32_t dist = getDistanceToObject( hero, pathfinder, currentHeroIndex );
+        const uint32_t dist = getDistanceToObject( pathfinder, currentHeroIndex );
         if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
             continue;
 
@@ -2150,7 +2150,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
             continue;
 
         const int currentCastleIndex = castle->GetIndex();
-        const uint32_t dist = getDistanceToObject( hero, pathfinder, currentCastleIndex );
+        const uint32_t dist = getDistanceToObject( pathfinder, currentCastleIndex );
 
         if ( dist == 0 )
             continue;
@@ -2364,7 +2364,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         uint32_t dist = _pathfinder.getDistance( node.first );
 
         bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.buildDimensionDoorPath( node.first ) );
         if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
             dist = dimensionDoorDist;
             useDimensionDoor = true;
@@ -2397,7 +2397,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
         // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
         bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.buildDimensionDoorPath( fogDiscoveryTarget ) );
         if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
             distanceToFogDiscovery = dimensionDoorDist;
             useDimensionDoor = true;
@@ -2800,7 +2800,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         int prevHeroPosition = bestHero->GetIndex();
 
         // check if we want to use Dimension Door spell or move regularly
-        std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+        std::list<Route::Step> dimensionPath = _pathfinder.buildDimensionDoorPath( bestTargetIndex );
         uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
         uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
         if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
