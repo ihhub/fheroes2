@@ -40,6 +40,11 @@ class Kingdom;
 struct VecCastles;
 struct VecHeroes;
 
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
+
 namespace Maps
 {
     class Tiles;
