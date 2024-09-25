@@ -91,7 +91,6 @@ double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
 
     const auto iter = _tileArmyStrengthCache.find( tileId );
     if ( iter != _tileArmyStrengthCache.end() ) {
-        // Cache hit.
         return iter->second;
     }
 
@@ -99,7 +98,7 @@ double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
     static Army tileArmy;
     tileArmy.setFromTile( tile );
 
-    const auto [newEntryIter, inserted] = _tileArmyStrengthCache.emplace( tileId, tileArmy.GetStrength() );
+    const auto [newEntryIter, inserted] = _tileArmyStrengthCache.try_emplace( tileId, tileArmy.GetStrength() );
     if ( !inserted ) {
         assert( 0 );
     }
