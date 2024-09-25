@@ -414,10 +414,7 @@ void WorldPathfinder::reset()
     // The following optimization will only work correctly for square maps
     assert( world.w() == world.h() );
 
-    const size_t worldSize = world.getSize();
-
-    if ( _cache.size() != worldSize ) {
-        _cache.clear();
+    if ( const size_t worldSize = world.getSize(); _cache.size() != worldSize ) {
         _cache.resize( worldSize );
 
         const Directions & directions = Direction::All();
@@ -439,10 +436,10 @@ void WorldPathfinder::processWorldMap()
     assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) );
 
     for ( WorldNode & node : _cache ) {
-        node.reset();
+        node = {};
     }
 
-    _cache[_pathStart] = WorldNode( -1, 0, MP2::OBJ_NONE, _remainingMovePoints );
+    _cache[_pathStart].update( -1, 0, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
@@ -474,12 +471,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
         WorldNode & newNode = _cache[newIndex];
 
         if ( newNode._from == -1 || newNode._cost > movementCost ) {
-            const Maps::Tiles & newTile = world.GetTiles( newIndex );
-
-            newNode._from = currentNodeIdx;
-            newNode._cost = movementCost;
-            newNode._objectID = newTile.GetObject();
-            newNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty, maxMovePoints );
+            newNode.update( currentNodeIdx, movementCost, subtractMovePoints( currentNode._remainingMovePoints, movementPenalty, maxMovePoints ) );
 
             nodesToExplore.push_back( newIndex );
         }
@@ -577,12 +569,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             WorldNode & monsterNode = _cache[monsterIndex];
 
             if ( monsterNode._from == -1 || monsterNode._cost > movementCost ) {
-                const Maps::Tiles & monsterTile = world.GetTiles( monsterIndex );
-
-                monsterNode._from = currentNodeIdx;
-                monsterNode._cost = movementCost;
-                monsterNode._objectID = monsterTile.GetObject();
-                monsterNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty, maxMovePoints );
+                monsterNode.update( currentNodeIdx, movementCost, subtractMovePoints( currentNode._remainingMovePoints, movementPenalty, maxMovePoints ) );
             }
         }
     }
@@ -722,10 +709,10 @@ void AIWorldPathfinder::processWorldMap()
     assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) );
 
     for ( WorldNode & node : _cache ) {
-        node.reset();
+        node = {};
     }
 
-    _cache[_pathStart] = WorldNode( -1, 0, MP2::OBJ_NONE, _remainingMovePoints );
+    _cache[_pathStart].update( -1, 0, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
@@ -737,7 +724,8 @@ void AIWorldPathfinder::processWorldMap()
         const uint32_t cost = spell.movePoints();
         const uint32_t remaining = ( _remainingMovePoints < cost ) ? 0 : _remainingMovePoints - cost;
 
-        _cache[castleIndex] = WorldNode( _pathStart, cost, MP2::OBJ_CASTLE, remaining );
+        _cache[castleIndex].update( _pathStart, cost, remaining );
+
         nodesToExplore.push_back( castleIndex );
     };
 
@@ -827,12 +815,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
         // Check if the movement is really faster via teleport
         if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
-            const Maps::Tiles & teleportTile = world.GetTiles( teleportIdx );
-
-            teleportNode._from = currentNodeIdx;
-            teleportNode._cost = currentNode._cost;
-            teleportNode._objectID = teleportTile.GetObject();
-            teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
+            teleportNode.update( currentNodeIdx, currentNode._cost, currentNode._remainingMovePoints );
 
             nodesToExplore.push_back( teleportIdx );
         }
@@ -1207,7 +1190,9 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Kingdom & kingdom = world.GetKingdom( _color );
     std::set<int> uniqueIndices;
 
-    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index, const MP2::MapObjectType objectType ) {
+    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index ) {
+        const MP2::MapObjectType objectType = world.GetTiles( index ).GetObject();
+
         // std::set insert returns a pair, second value is true if it was unique
         if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
             result.emplace_back( index, objectType );
@@ -1226,16 +1211,16 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        const WorldNode & node = _cache[currentNode];
+        const int from = _cache[currentNode]._from;
 
-        assert( node._from != -1 );
+        assert( from != -1 );
 
-        validateAndAdd( currentNode, node._objectID );
+        validateAndAdd( currentNode );
 
         // The path should not pass through the same tile more than once
-        assert( uniqPathIndexes.insert( node._from ).second );
+        assert( uniqPathIndexes.insert( from ).second );
 
-        currentNode = node._from;
+        currentNode = from;
     }
 
     return result;

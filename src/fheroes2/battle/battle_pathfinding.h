@@ -60,11 +60,18 @@ namespace Battle
         uint32_t _distance{ 0 };
 
         BattleNode() = default;
-        BattleNode( BattleNodeIndex node, const uint32_t cost, const uint32_t distance )
-            : _from( std::move( node ) )
+        BattleNode( BattleNodeIndex from, const uint32_t cost, const uint32_t distance )
+            : _from( std::move( from ) )
             , _cost( cost )
             , _distance( distance )
         {}
+
+        void update( BattleNodeIndex from, const uint32_t cost, const uint32_t distance )
+        {
+            _from = std::move( from );
+            _cost = cost;
+            _distance = distance;
+        }
     };
 
     class BattlePathfinder final

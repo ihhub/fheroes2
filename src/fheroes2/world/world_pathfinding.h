@@ -41,23 +41,22 @@ struct WorldNode final
 {
     int _from{ -1 };
     uint32_t _cost{ 0 };
-    MP2::MapObjectType _objectID{ MP2::OBJ_NONE };
     // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints{ 0 };
 
     WorldNode() = default;
-    WorldNode( const int node, const uint32_t cost, const MP2::MapObjectType object, const uint32_t remainingMovePoints )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-        , _remainingMovePoints( remainingMovePoints )
-    {}
+
+    void update( const int from, const uint32_t cost, const uint32_t remainingMovePoints )
+    {
+        _from = from;
+        _cost = cost;
+        _remainingMovePoints = remainingMovePoints;
+    }
 
     void reset()
     {
         _from = -1;
         _cost = 0;
-        _objectID = MP2::OBJ_NONE;
         _remainingMovePoints = 0;
     }
 };

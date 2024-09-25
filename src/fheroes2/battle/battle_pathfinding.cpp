@@ -175,9 +175,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -214,9 +212,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
