@@ -743,8 +743,28 @@ namespace Battle
                 // Find the maximum allowed phrase to fit the line. We assume that all words are separated by a space.
                 pos = str.rfind( ' ', pos - 1 );
 
-                // There should not be such a large word.
-                assert( pos != std::string::npos );
+                // Theoretically there could be such a large word that did not fit the log width.
+                if ( pos == std::string::npos ) {
+                    // Find the next word in this phrase.
+                    pos = str.find( ' ' );
+
+                    // Cut this long word with the trailing '...'.
+                    text.fitToOneRow( battleLogElementWidth );
+
+                    if ( pos == std::string::npos ) {
+                        // This is the only word in the phrase.
+                        str = text.text();
+                    }
+                    else {
+                        _messages.push_back( text.text() );
+                        // Put the rest of the phrase to the next line.
+                        str = str.substr( pos + 1 );
+                        // There is no need to split this phrase any more.
+                        pos = std::string::npos;
+                    }
+
+                    break;
+                }
 
                 text.set( str.substr( 0, pos ), fheroes2::FontType::normalWhite() );
             }
