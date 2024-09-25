@@ -78,28 +78,28 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     }
 }
 
-double AI::Planner::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
 {
-    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-    static Army tileArmy;
+    assert( [&tile]() {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    if ( !isMonsterStrengthCacheable( objectType ) ) {
-        tileArmy.setFromTile( tile );
-
-        return tileArmy.GetStrength();
-    }
+        // Army::setFromTile() cannot be used for castle garrisons and hero armies
+        return ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HERO );
+    }() );
 
     const int32_t tileId = tile.GetIndex();
 
-    const auto iter = _neutralMonsterStrengthCache.find( tileId );
-    if ( iter != _neutralMonsterStrengthCache.end() ) {
+    const auto iter = _tileArmyStrengthCache.find( tileId );
+    if ( iter != _tileArmyStrengthCache.end() ) {
         // Cache hit.
         return iter->second;
     }
 
+    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+    static Army tileArmy;
     tileArmy.setFromTile( tile );
 
-    const auto [newEntryIter, inserted] = _neutralMonsterStrengthCache.emplace( tileId, tileArmy.GetStrength() );
+    const auto [newEntryIter, inserted] = _tileArmyStrengthCache.emplace( tileId, tileArmy.GetStrength() );
     if ( !inserted ) {
         assert( 0 );
     }

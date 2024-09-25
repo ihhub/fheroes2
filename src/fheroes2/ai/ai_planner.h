@@ -170,7 +170,7 @@ namespace AI
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero );
 
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
+        double getTileArmyStrength( const Maps::Tiles & tile );
 
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
@@ -207,11 +207,6 @@ namespace AI
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
                                 const bool moreTasksForHeroes );
-
-        static bool isMonsterStrengthCacheable( const MP2::MapObjectType objectType )
-        {
-            return objectType == MP2::OBJ_MONSTER;
-        }
 
         void updateMapActionObjectCache( const int mapIndex );
 
@@ -250,8 +245,9 @@ namespace AI
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
 
-        // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
-        // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
-        std::map<int32_t, double> _neutralMonsterStrengthCache;
+        // Strength of the armies guarding the tiles (neutral monsters, guardians of dwellings, and so on) is constant for AI
+        // during the same turn, but its calculation is a heavy operation, so it needs to be cached to speed up estimations.
+        // It is important to update this cache after performing an action on the corresponding tile.
+        std::map<int32_t, double> _tileArmyStrengthCache;
     };
 }

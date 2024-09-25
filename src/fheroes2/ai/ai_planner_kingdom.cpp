@@ -753,8 +753,8 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     VecHeroes & heroes = kingdom.GetHeroes();
     const VecCastles & castles = kingdom.GetCastles();
 
-    // Clear the cache of neutral monsters as their strength might have changed.
-    _neutralMonsterStrengthCache.clear();
+    // Clear the tile army strength cache because the strength of the respective armies might have changed since last time
+    _tileArmyStrengthCache.clear();
 
     DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
     DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )

@@ -186,10 +186,9 @@ namespace
         return heroArmyStrength > castleStrength;
     }
 
-    bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Planner & ai, const double heroArmyStrength,
-                             const double targetStrengthMultiplier )
+    bool isHeroStrongerThan( const Maps::Tiles & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
     {
-        return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
+        return heroArmyStrength > ai.getTileArmyStrength( tile ) * targetStrengthMultiplier;
     }
 
     bool isArmyValuableToObtain( const Troop & monster, double armyStrengthThreshold, const bool armyHasMonster )
@@ -301,7 +300,7 @@ namespace
         case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
                 if ( isCaptureObjectProtected( tile ) ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
+                    return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
                 return true;
@@ -309,7 +308,7 @@ namespace
             break;
 
         case MP2::OBJ_ABANDONED_MINE:
-            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+            return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
 
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
@@ -343,7 +342,7 @@ namespace
             }
 
             if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
             // No conditions to capture an artifact exist.
@@ -554,7 +553,7 @@ namespace
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
             if ( Color::NONE == getColorFromTile( tile ) ) {
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
             return isArmyValuableToHire( army, kingdom, tile, armyStrengthThreshold );
@@ -593,7 +592,7 @@ namespace
         case MP2::OBJ_SHIPWRECK:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
-                return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
+                return enemy.isValid() && isHeroStrongerThan( tile, ai, heroArmyStrength, 2 );
             }
             break;
 
@@ -601,19 +600,19 @@ namespace
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+                       && isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
             if ( doesTileContainValuableItems( tile ) ) {
                 // AI always chooses to fight the demon's servants and doesn't roll the dice
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             break;
 
         case MP2::OBJ_MONSTER:
-            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
+            return isHeroStrongerThan( tile, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
@@ -2646,9 +2645,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
         }
     }
 
-    if ( isMonsterStrengthCacheable( objectType ) ) {
-        _neutralMonsterStrengthCache.erase( tileIndex );
-    }
+    _tileArmyStrengthCache.erase( tileIndex );
 
     updatePriorityTargets( hero, tileIndex, objectType );
 
