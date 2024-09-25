@@ -1196,6 +1196,9 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     border.SetPosition( _interfacePosition.x - fheroes2::borderWidthPx, _interfacePosition.y - fheroes2::borderWidthPx, fheroes2::Display::DEFAULT_WIDTH,
                         fheroes2::Display::DEFAULT_HEIGHT );
 
+    // damage info popup
+    popup.setBattleUIRect( _interfacePosition );
+
     // cover
     const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -6641,7 +6644,7 @@ void Battle::PopupDamageInfo::reset()
 
 void Battle::PopupDamageInfo::_makeDamageImage()
 {
-    assert( _defender != nullptr && _battleUIRect != nullptr );
+    assert( _defender != nullptr );
 
     std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
@@ -6666,13 +6669,13 @@ void Battle::PopupDamageInfo::_makeDamageImage()
 
     // Get the border width and set the popup parameters.
     const int borderWidth = BorderWidth();
-    const int x = _battleUIRect->x + unitRect.x + unitRect.width;
-    const int y = _battleUIRect->y + unitRect.y;
+    const int x = _battleUIRect.x + unitRect.x + unitRect.width;
+    const int y = _battleUIRect.y + unitRect.y;
     const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
     const int h = damageText.height() + killedText.height() + 2 * borderWidth;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
-    const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect->width;
+    const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );

@@ -248,9 +248,8 @@ namespace Battle
     class PopupDamageInfo : public Dialog::FrameBorder
     {
     public:
-        explicit PopupDamageInfo( fheroes2::Rect * battleUIRect )
+        PopupDamageInfo()
             : Dialog::FrameBorder( 5 )
-            , _battleUIRect( battleUIRect )
         {
             // Do nothing.
         }
@@ -258,6 +257,11 @@ namespace Battle
         PopupDamageInfo( const PopupDamageInfo & ) = delete;
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
+
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect )
+        {
+            _battleUIRect = battleUIRect;
+        }
 
         void setAttackInfo( const Unit * attacker, const Unit * defender );
         void setSpellAttackInfo( const HeroBase * hero, const Unit * defender, const Spell & spell );
@@ -269,7 +273,7 @@ namespace Battle
         void _makeDamageImage();
 
         fheroes2::Sprite _damageImage;
-        fheroes2::Rect * _battleUIRect{ nullptr };
+        fheroes2::Rect _battleUIRect;
         const Battle::Unit * _defender{ nullptr };
         uint32_t _minDamage{ 0 };
         uint32_t _maxDamage{ 0 };
@@ -473,7 +477,7 @@ namespace Battle
 
         std::unique_ptr<StatusListBox> listlog;
 
-        PopupDamageInfo popup{ &_interfacePosition };
+        PopupDamageInfo popup;
         TurnOrder _turnOrder;
 
         std::unique_ptr<fheroes2::StandardWindow> _background;
