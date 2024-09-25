@@ -1243,7 +1243,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
 std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targetIndex ) const
 {
-    assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
+    assert( Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
 
     if ( !_isDimensionDoorSpellAvailable ) {
         return {};
