@@ -755,24 +755,27 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
+        double value( const IndexObject & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
                 return iter->second;
             }
 
-            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
+            const double result = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
 
-            _objectValue[objectInfo] = value;
-            return value;
+            if ( const auto [dummy, inserted] = _objectValue.try_emplace( objectInfo, result ); !inserted ) {
+                assert( 0 );
+            }
+
+            return result;
         }
 
     private:
         const Heroes & _hero;
         const AI::Planner & _ai;
         const double _ignoreValue;
-        std::map<std::pair<int, int>, double> _objectValue;
+        std::map<IndexObject, double> _objectValue;
     };
 
     double getMonsterUpgradeValue( const Army & army, const int monsterId )
@@ -980,7 +983,7 @@ namespace
 }
 
 // TODO: In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
-double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // In the future these hardcoded values could be configured by the mod
     // 1 tile distance is 100.0 value approximately
@@ -1617,7 +1620,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int index,
     return 0;
 }
 
-double AI::Planner::getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Fighters have higher priority for battles and smaller values for other objects.
     assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
@@ -1921,7 +1924,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int index,
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::COURIER );
@@ -2036,7 +2039,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int index,
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::SCOUT );
@@ -2083,7 +2086,8 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int index, c
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
+                                    const uint32_t distanceToObject ) const
 {
     assert( objectType == world.GetTiles( index ).GetObject() );
 
@@ -2210,17 +2214,14 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 #ifdef WITH_DEBUG
     MP2::MapObjectType objectType = MP2::OBJ_NONE;
 
-    // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
-    assert( std::is_sorted( _mapActionObjects.begin(), _mapActionObjects.end() ) );
-
     std::set<int> objectIndexes;
 
-    for ( const auto & actionObject : _mapActionObjects ) {
-        if ( actionObject.second == MP2::OBJ_HERO ) {
-            assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
+    for ( const auto & node : _mapActionObjects ) {
+        if ( node.second == MP2::OBJ_HERO ) {
+            assert( world.GetTiles( node.first ).getHero() != nullptr );
         }
 
-        const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
+        const auto [dummy, inserted] = objectIndexes.emplace( node.first );
         if ( !inserted ) {
             assert( 0 );
         }
@@ -2319,12 +2320,18 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
-                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
-                    const double extraValue = valueStorage.value( pair, 0 );
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
-                    }
+                if ( !objectValidator.isValid( pair.first ) ) {
+                    continue;
+                }
+
+                if ( const auto iter = _mapActionObjects.find( pair.first ); iter == _mapActionObjects.end() || iter->second != pair.second ) {
+                    continue;
+                }
+
+                const double extraValue = valueStorage.value( pair, 0 );
+                if ( extraValue > 0 ) {
+                    // There is no need to reduce the quality of the object even if the path has others.
+                    value += extraValue;
                 }
             }
         }
@@ -2377,29 +2384,27 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
     }
 
-    for ( const IndexObject & node : _mapActionObjects ) {
-        if ( !objectValidator.isValid( node.first ) ) {
+    for ( const auto & [idx, objType] : _mapActionObjects ) {
+        if ( !objectValidator.isValid( idx ) ) {
             continue;
         }
 
-        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, node.first );
+        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
         if ( dist == 0 ) {
             continue;
         }
 
-        double value = valueStorage.value( node, dist );
-        getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+        double value = valueStorage.value( { idx, objType }, dist );
+        getObjectValue( idx, dist, value, objType, useDimensionDoor );
 
         if ( dist > 0 && value > maxPriority ) {
             maxPriority = value;
-            priorityTarget = node.first;
+            priorityTarget = idx;
 #ifdef WITH_DEBUG
-            objectType = static_cast<MP2::MapObjectType>( node.second );
+            objectType = objType;
 #endif
 
-            DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                      << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ": valid object at " << idx << " value is " << value << " (" << MP2::StringObject( objType ) << ")" )
         }
     }
 
@@ -2645,7 +2650,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
         }
     }
 
-    _tileArmyStrengthCache.erase( tileIndex );
+    _tileArmyStrengthValues.erase( tileIndex );
 
     updatePriorityTargets( hero, tileIndex, objectType );
 

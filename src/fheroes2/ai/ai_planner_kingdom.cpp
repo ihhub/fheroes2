@@ -54,7 +54,6 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "mus.h"
-#include "pairs.h"
 #include "players.h"
 #include "resource.h"
 #include "skill.h"
@@ -736,6 +735,16 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
 #endif
 
+    _mapActionObjects.clear();
+    _priorityTargets.clear();
+    _enemyArmies.clear();
+
+    // Clear the tile army strength cache because the strength of the respective armies might have changed since last time
+    _tileArmyStrengthValues.clear();
+
+    _regions.clear();
+    _regions.resize( world.getRegionCount() );
+
     const int myColor = kingdom.GetColor();
 
     if ( kingdom.isLoss() || myColor == Color::NONE ) {
@@ -751,9 +760,6 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     VecHeroes & heroes = kingdom.GetHeroes();
     const VecCastles & castles = kingdom.GetCastles();
-
-    // Clear the tile army strength cache because the strength of the respective armies might have changed since last time
-    _tileArmyStrengthCache.clear();
 
     DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
     DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )
@@ -780,12 +786,6 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         underViewSpell = true;
     }
 
-    _priorityTargets.clear();
-    _enemyArmies.clear();
-    _mapActionObjects.clear();
-    _regions.clear();
-    _regions.resize( world.getRegionCount() );
-
     const int mapSize = world.w() * world.h();
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
@@ -807,7 +807,9 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
-        _mapActionObjects.emplace_back( idx, objectType );
+        if ( const auto [dummy, inserted] = _mapActionObjects.try_emplace( idx, objectType ); !inserted ) {
+            assert( 0 );
+        }
 
         if ( objectType == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
@@ -857,8 +859,9 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     uint32_t progressStatus = 1;
     status.DrawAITurnProgress( progressStatus );
 
-    std::vector<AICastle> sortedCastleList;
     std::set<int> castlesInDanger;
+    std::vector<AICastle> sortedCastleList;
+
     while ( true ) {
         // Step 2. Do some hero stuff.
         // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.

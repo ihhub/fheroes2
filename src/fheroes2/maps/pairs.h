@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,15 +29,15 @@
 #include "color.h"
 #include "mp2.h"
 
-class IndexObject : public std::pair<int32_t, int>
+class IndexObject : public std::pair<int32_t, MP2::MapObjectType>
 {
 public:
     IndexObject()
-        : std::pair<int32_t, int>( -1, MP2::OBJ_NONE )
+        : std::pair<int32_t, MP2::MapObjectType>( -1, MP2::OBJ_NONE )
     {}
 
-    IndexObject( int32_t index, int object )
-        : std::pair<int32_t, int>( index, object )
+    IndexObject( int32_t index, MP2::MapObjectType object )
+        : std::pair<int32_t, MP2::MapObjectType>( index, object )
     {}
 
     bool isIndex( int32_t index ) const
@@ -45,21 +45,21 @@ public:
         return index == first;
     }
 
-    bool isObject( int object ) const
+    bool isObject( MP2::MapObjectType object ) const
     {
         return object == second;
     }
 };
 
-class ObjectColor : public std::pair<int, int>
+class ObjectColor : public std::pair<MP2::MapObjectType, int>
 {
 public:
     ObjectColor()
-        : std::pair<int, int>( MP2::OBJ_NONE, Color::NONE )
+        : std::pair<MP2::MapObjectType, int>( MP2::OBJ_NONE, Color::NONE )
     {}
 
-    ObjectColor( int object, int color )
-        : std::pair<int, int>( object, color )
+    ObjectColor( MP2::MapObjectType object, int color )
+        : std::pair<MP2::MapObjectType, int>( object, color )
     {}
 
     bool isColor( int colors ) const

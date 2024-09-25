@@ -189,36 +189,39 @@ void MapObjects::remove( uint32_t uid )
     erase( it );
 }
 
-CapturedObject & CapturedObjects::Get( int32_t index )
+CapturedObject & CapturedObjects::Get( const int32_t index )
 {
-    std::map<int32_t, CapturedObject> & my = *this;
-    return my[index];
+    return this->operator[]( index );
 }
 
-void CapturedObjects::SetColor( int32_t index, int col )
+void CapturedObjects::SetColor( const int32_t index, const int col )
 {
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( int32_t index, int obj, int col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const int col )
 {
-    CapturedObject & co = Get( index );
+    CapturedObject & capturedObj = Get( index );
 
-    if ( co.GetColor() != col && co.guardians.isValid() )
-        co.guardians.Reset();
+    if ( capturedObj.GetColor() != col && capturedObj.guardians.isValid() ) {
+        capturedObj.guardians.Reset();
+    }
 
-    co.Set( obj, col );
+    capturedObj.Set( obj, col );
 }
 
-uint32_t CapturedObjects::GetCount( int obj, int col ) const
+uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col ) const
 {
     uint32_t result = 0;
 
-    const ObjectColor objcol( obj, col );
+    const ObjectColor objCol( obj, col );
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( objcol == ( *it ).second.objcol )
-            ++result;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objcol != objCol ) {
+            continue;
+        }
+
+        ++result;
     }
 
     return result;
@@ -227,63 +230,77 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
 uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
     uint32_t count = 0;
-    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
-    for ( const auto & [tileIndex, objectInfo] : *this ) {
-        if ( correctObject == objectInfo.objcol ) {
-            const int32_t mineResource = Maps::getDailyIncomeObjectResources( world.GetTiles( tileIndex ) ).getFirstValidResource().first;
-            if ( resourceType == mineResource ) {
-                ++count;
-            }
+    const ObjectColor objCol( MP2::OBJ_MINE, ownerColor );
+
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objcol != objCol ) {
+            continue;
         }
+
+        if ( resourceType != Maps::getDailyIncomeObjectResources( world.GetTiles( idx ) ).getFirstValidResource().first ) {
+            continue;
+        }
+
+        ++count;
     }
 
     return count;
 }
 
-int CapturedObjects::GetColor( int32_t index ) const
+int CapturedObjects::GetColor( const int32_t index ) const
 {
-    const_iterator it = find( index );
-    return it != end() ? ( *it ).second.GetColor() : Color::NONE;
+    const auto iter = find( index );
+    if ( iter == end() ) {
+        return Color::NONE;
+    }
+
+    return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( int colors )
+void CapturedObjects::ClearFog( const int colors )
 {
-    // clear abroad objects
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        const ObjectColor & objCol = capturedObj.objcol;
 
-        if ( objcol.isColor( colors ) ) {
-            int scoutingDistance = 0;
-
-            switch ( objcol.first ) {
-            case MP2::OBJ_MINE:
-            case MP2::OBJ_ALCHEMIST_LAB:
-            case MP2::OBJ_SAWMILL:
-                scoutingDistance = 2;
-                break;
-
-            default:
-                break;
-            }
-
-            if ( scoutingDistance )
-                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
+        if ( !objCol.isColor( colors ) ) {
+            continue;
         }
+
+        int scoutingDistance = 0;
+
+        switch ( objCol.first ) {
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_SAWMILL:
+            scoutingDistance = 2;
+            break;
+
+        default:
+            break;
+        }
+
+        if ( scoutingDistance == 0 ) {
+            continue;
+        }
+
+        Maps::ClearFog( idx, scoutingDistance, colors );
     }
 }
 
-void CapturedObjects::ResetColor( int color )
+void CapturedObjects::ResetColor( const int color )
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        ObjectColor & objcol = ( *it ).second.objcol;
+    for ( auto & [idx, capturedObj] : *this ) {
+        ObjectColor & objCol = capturedObj.objcol;
 
-        if ( objcol.isColor( color ) ) {
-            const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
-
-            objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
+        if ( !objCol.isColor( color ) ) {
+            continue;
         }
+
+        auto & [objectType, col] = objCol;
+
+        col = ( objectType == MP2::OBJ_CASTLE ) ? Color::UNUSED : Color::NONE;
+        world.GetTiles( idx ).setOwnershipFlag( objectType, col );
     }
 }
 
@@ -853,7 +870,7 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( int obj, int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }

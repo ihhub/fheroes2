@@ -25,11 +25,15 @@
 
 #include <cassert>
 #include <ostream>
+#include <type_traits>
 
 #include "direction.h"
+#include "game_io.h"
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "translations.h"
 
@@ -1032,4 +1036,32 @@ bool MP2::doesObjectContainMetadata( const MP2::MapObjectType type )
     }
 
     return false;
+}
+
+OStreamBase & MP2::operator<<( OStreamBase & stream, const MapObjectType objType )
+{
+    using ObjTypeUnderlyingType = std::underlying_type_t<decltype( objType )>;
+
+    return stream << static_cast<ObjTypeUnderlyingType>( objType );
+}
+
+IStreamBase & MP2::operator>>( IStreamBase & stream, MapObjectType & objType )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        int32_t temp = OBJ_NONE;
+        stream >> temp;
+
+        objType = static_cast<MapObjectType>( temp );
+    }
+    else {
+        using ObjTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objType )>>;
+
+        ObjTypeUnderlyingType temp = OBJ_NONE;
+        stream >> temp;
+
+        objType = static_cast<MapObjectType>( temp );
+    }
+
+    return stream;
 }

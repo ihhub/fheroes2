@@ -20,7 +20,6 @@
 
 #include "ai_planner.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -33,7 +32,6 @@
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "profit.h"
 #include "resource.h"
 #include "route.h"
@@ -89,8 +87,8 @@ double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
 
     const int32_t tileId = tile.GetIndex();
 
-    const auto iter = _tileArmyStrengthCache.find( tileId );
-    if ( iter != _tileArmyStrengthCache.end() ) {
+    const auto iter = _tileArmyStrengthValues.find( tileId );
+    if ( iter != _tileArmyStrengthValues.end() ) {
         return iter->second;
     }
 
@@ -98,7 +96,7 @@ double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
     static Army tileArmy;
     tileArmy.setFromTile( tile );
 
-    const auto [newEntryIter, inserted] = _tileArmyStrengthCache.try_emplace( tileId, tileArmy.GetStrength() );
+    const auto [newEntryIter, inserted] = _tileArmyStrengthValues.try_emplace( tileId, tileArmy.GetStrength() );
     if ( !inserted ) {
         assert( 0 );
     }
@@ -197,18 +195,24 @@ void AI::Planner::updateMapActionObjectCache( const int mapIndex )
 {
     const Maps::Tiles & tile = world.GetTiles( mapIndex );
     const MP2::MapObjectType objectType = tile.GetObject();
-    auto iter = std::lower_bound( _mapActionObjects.begin(), _mapActionObjects.end(), IndexObject{ mapIndex, objectType },
-                                  []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
 
-    if ( iter != _mapActionObjects.end() && iter->first == mapIndex ) {
-        if ( MP2::isInGameActionObject( objectType ) ) {
-            iter->second = objectType;
-        }
-        else {
+    if ( const auto iter = _mapActionObjects.find( mapIndex ); iter != _mapActionObjects.end() ) {
+        if ( !MP2::isInGameActionObject( objectType ) ) {
             _mapActionObjects.erase( iter );
+
+            return;
         }
+
+        iter->second = objectType;
+
+        return;
     }
-    else if ( MP2::isInGameActionObject( objectType ) ) {
-        _mapActionObjects.emplace( iter, IndexObject{ mapIndex, objectType } );
+
+    if ( !MP2::isInGameActionObject( objectType ) ) {
+        return;
+    }
+
+    if ( const auto [dummy, inserted] = _mapActionObjects.try_emplace( mapIndex, objectType ); !inserted ) {
+        assert( 0 );
     }
 }

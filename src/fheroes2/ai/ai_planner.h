@@ -28,7 +28,6 @@
 #include <utility>
 #include <vector>
 
-#include "pairs.h"
 #include "resource.h"
 #include "world_pathfinding.h"
 
@@ -173,7 +172,8 @@ namespace AI
 
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero );
 
-        double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
+                               const uint32_t distanceToObject ) const;
         double getTileArmyStrength( const Maps::Tiles & tile );
 
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
@@ -198,11 +198,13 @@ namespace AI
 
         int getPriorityTarget( Heroes & hero, double & maxPriority );
 
-        double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        double getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getGeneralObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getFighterObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getCourierObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getScoutObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+
         int getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const;
+
         double getResourcePriorityModifier( const int resource, const bool isMine ) const;
         double getFundsValueBasedOnPriority( const Funds & funds ) const;
 
@@ -242,16 +244,20 @@ namespace AI
         }
 
         // The following member variables should not be saved or serialized
-        std::vector<IndexObject> _mapActionObjects;
+
+        std::unordered_map<int32_t, MP2::MapObjectType> _mapActionObjects;
         std::unordered_map<int32_t, PriorityTask> _priorityTargets;
         std::unordered_map<int32_t, EnemyArmy> _enemyArmies;
-        std::vector<RegionStats> _regions;
-        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
-        AIWorldPathfinder _pathfinder;
 
         // Strength of the armies guarding the tiles (neutral monsters, guardians of dwellings, and so on) is constant for AI
         // during the same turn, but its calculation is a heavy operation, so it needs to be cached to speed up estimations.
         // It is important to update this cache after performing an action on the corresponding tile.
-        std::unordered_map<int32_t, double> _tileArmyStrengthCache;
+        std::unordered_map<int32_t, double> _tileArmyStrengthValues;
+
+        std::vector<RegionStats> _regions;
+
+        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
+
+        AIWorldPathfinder _pathfinder;
     };
 }
