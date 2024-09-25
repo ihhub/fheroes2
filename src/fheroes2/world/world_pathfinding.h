@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <list>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -43,6 +44,14 @@ struct WorldNode final
     uint32_t _cost{ 0 };
     // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints{ 0 };
+
+    // Attributes specific for AIWorldPathfinder
+    std::optional<bool> _isAccessibleForAI;
+    struct
+    {
+        std::optional<bool> fromWater;
+        std::optional<bool> fromLand;
+    } _isAvailableForWalkThroughForAI;
 
     WorldNode() = default;
 
@@ -77,8 +86,9 @@ public:
     uint32_t getDistance( int targetIndex ) const;
 
 protected:
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, const int currentNodeIdx );
+
     virtual void processWorldMap();
-    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
     // Checks whether moving from the source tile in the specified direction is allowed. The default implementation
     // can be overridden by a derived class.
@@ -175,7 +185,7 @@ public:
     // Dimension Door spell to move between them. If the target tile is unsuitable for moving to it using the Dimension Door
     // spell, but there is a tile suitable for this next to it, from which it is possible to move to the target tile, then the
     // resulting path will end with this neighboring tile. If such a path could not be built, then an empty path is returned.
-    std::list<Route::Step> buildDimensionDoorPath( const int targetIndex ) const;
+    std::list<Route::Step> buildDimensionDoorPath( const int targetIndex );
 
     // Builds and returns a path to the tile with the index 'targetIndex'. If there is a need to pass through any objects
     // on the way to this tile, then a path to the nearest such object is returned. If the destination tile is not reachable
@@ -210,6 +220,9 @@ public:
     void setSpellPointsReserveRatio( const double ratio );
 
 private:
+    bool isTileAccessibleForAI( const int tileIndex );
+    bool isTileAvailableForWalkThroughForAI( const int tileIndex, const bool fromWater );
+
     void processWorldMap() override;
 
     // Adds special logic for AI-controlled heroes to use Summon Boat spell to overcome water obstacles (if available)

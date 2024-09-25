@@ -449,7 +449,7 @@ void WorldPathfinder::processWorldMap()
     }
 }
 
-void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx )
+void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
     const Directions & directions = Direction::All();
     const WorldNode & currentNode = _cache[currentNodeIdx];
@@ -704,6 +704,32 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, co
     }
 }
 
+bool AIWorldPathfinder::isTileAccessibleForAI( const int tileIndex )
+{
+    std::optional<bool> & isAccessible = _cache[tileIndex]._isAccessibleForAI;
+    if ( isAccessible ) {
+        return *isAccessible;
+    }
+
+    isAccessible = isTileAccessibleForAIWithArmy( tileIndex, _armyStrength, _minimalArmyStrengthAdvantage );
+
+    return *isAccessible;
+}
+
+bool AIWorldPathfinder::isTileAvailableForWalkThroughForAI( const int tileIndex, const bool fromWater )
+{
+    std::optional<bool> & isAvailableForWalkThrough
+        = fromWater ? _cache[tileIndex]._isAvailableForWalkThroughForAI.fromWater : _cache[tileIndex]._isAvailableForWalkThroughForAI.fromLand;
+    if ( isAvailableForWalkThrough ) {
+        return *isAvailableForWalkThrough;
+    }
+
+    isAvailableForWalkThrough = isTileAvailableForWalkThroughForAIWithArmy( tileIndex, fromWater, _color, _isArtifactsBagFull, _isEquippedWithSpellBook, _armyStrength,
+                                                                            _minimalArmyStrengthAdvantage );
+
+    return *isAvailableForWalkThrough;
+}
+
 void AIWorldPathfinder::processWorldMap()
 {
     assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) );
@@ -758,7 +784,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
     // Always allow movement from the starting point to cover the edge case where we got here before this tile became blocked
     if ( !isFirstNode ) {
-        const auto isTileAccessible = [this, currentNodeIdx]() {
+        const bool isTileAccessible = [this, currentNodeIdx]() {
             if ( _isOnPatrol ) {
                 assert( Maps::isValidAbsIndex( _patrolCenter ) );
 
@@ -767,10 +793,10 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
                 }
             }
 
-            return isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage );
-        };
+            return isTileAccessibleForAI( currentNodeIdx );
+        }();
 
-        if ( !isTileAccessible() ) {
+        if ( !isTileAccessible ) {
             // If we can't move here, then reset the node
             currentNode.reset();
 
@@ -782,8 +808,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
         const bool fromWater = world.GetTiles( currentNode._from ).isWater();
 
-        if ( !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, fromWater, _color, _isArtifactsBagFull, _isEquippedWithSpellBook, _armyStrength,
-                                                          _minimalArmyStrengthAdvantage ) ) {
+        if ( !isTileAvailableForWalkThroughForAI( currentNodeIdx, fromWater ) ) {
             return;
         }
     }
@@ -1226,7 +1251,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     return result;
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targetIndex ) const
+std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targetIndex )
 {
     assert( Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
 
@@ -1266,7 +1291,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
         remainingSpellPoints -= static_cast<uint32_t>( _maxSpellPoints * _spellPointsReserveRatio );
     }
 
-    if ( !isTileAccessibleForAIWithArmy( targetIndex, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
+    if ( !isTileAccessibleForAI( targetIndex ) ) {
         return {};
     }
 

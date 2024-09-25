@@ -203,7 +203,7 @@ namespace AI
         double getCourierObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getScoutObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const;
 
-        int getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const;
+        int getCourierMainTarget( const Heroes & hero, const double lowestPossibleValue );
 
         double getResourcePriorityModifier( const int resource, const bool isMine ) const;
         double getFundsValueBasedOnPriority( const Funds & funds ) const;

@@ -138,7 +138,7 @@ namespace
 
     // Returns a pair consisting of a distance and a boolean value set to true if this distance was calculated
     // for the case of movement using the Dimension Door spell, otherwise this value is set to false
-    std::pair<uint32_t, bool> getDistanceToTile( const AIWorldPathfinder & pathfinder, const int32_t index )
+    std::pair<uint32_t, bool> getDistanceToTile( AIWorldPathfinder & pathfinder, const int32_t index )
     {
         const uint32_t regularMovementDist = pathfinder.getDistance( index );
 
@@ -258,7 +258,7 @@ namespace
         return true;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Planner & ai,
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
                             const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
@@ -708,7 +708,7 @@ namespace
     class ObjectValidator
     {
     public:
-        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder, AI::Planner & ai )
+        explicit ObjectValidator( const Heroes & hero, AIWorldPathfinder & pathfinder, AI::Planner & ai )
             : _hero( hero )
             , _pathfinder( pathfinder )
             , _ai( ai )
@@ -732,7 +732,7 @@ namespace
 
     private:
         const Heroes & _hero;
-        const AIWorldPathfinder & _pathfinder;
+        AIWorldPathfinder & _pathfinder;
         AI::Planner & _ai;
 
         // Hero's strength value is valid till any action is done.
@@ -2114,7 +2114,7 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, co
     return 0;
 }
 
-int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const
+int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestPossibleValue )
 {
     assert( hero.getAIRole() == Heroes::Role::COURIER );
 
@@ -2138,7 +2138,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
 
         const int currentHeroIndex = otherHero->GetIndex();
 
-        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentHeroIndex );
+        const auto [dist, dummy] = getDistanceToTile( _pathfinder, currentHeroIndex );
         if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) ) {
             continue;
         }
@@ -2173,7 +2173,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
 
         const int currentCastleIndex = castle->GetIndex();
 
-        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentCastleIndex );
+        const auto [dist, dummy] = getDistanceToTile( _pathfinder, currentCastleIndex );
         if ( dist == 0 ) {
             continue;
         }
@@ -2367,7 +2367,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     // Set baseline target if it's a special role
     if ( hero.getAIRole() == Heroes::Role::COURIER ) {
-        const int courierTarget = getCourierMainTarget( hero, _pathfinder, lowestPossibleValue );
+        const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
         if ( courierTarget != -1 ) {
             // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
             maxPriority = 0;
