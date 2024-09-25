@@ -127,23 +127,34 @@ namespace
         return false;
     }
 
-    uint32_t getDistanceToObject( const AIWorldPathfinder & pathfinder, const int32_t index )
+    bool shouldUseDimensionDoor( const uint32_t regularMovementDist, const uint32_t dimensionDoorDist )
     {
-        const uint32_t dist = pathfinder.getDistance( index );
-
-        const std::list<Route::Step> dimensionDoorSteps = pathfinder.buildDimensionDoorPath( index );
-        if ( dimensionDoorSteps.empty() ) {
-            return dist;
+        if ( dimensionDoorDist == 0 ) {
+            return false;
         }
 
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorSteps );
+        return ( regularMovementDist == 0 || dimensionDoorDist < regularMovementDist / 2 );
+    }
+
+    // Returns a pair consisting of a distance and a boolean value set to true if this distance was calculated
+    // for the case of movement using the Dimension Door spell, otherwise this value is set to false
+    std::pair<uint32_t, bool> getDistanceToTile( const AIWorldPathfinder & pathfinder, const int32_t index )
+    {
+        const uint32_t regularMovementDist = pathfinder.getDistance( index );
+
+        const std::list<Route::Step> dimensionDoorPath = pathfinder.buildDimensionDoorPath( index );
+        if ( dimensionDoorPath.empty() ) {
+            return { regularMovementDist, false };
+        }
+
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorPath );
         assert( dimensionDoorDist > 0 );
 
-        if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
-            return dimensionDoorDist;
+        if ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+            return { dimensionDoorDist, true };
         }
 
-        return dist;
+        return { regularMovementDist, false };
     }
 
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
@@ -460,7 +471,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -482,7 +493,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -565,7 +576,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -2103,6 +2114,7 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int index, const 
 int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const
 {
     assert( hero.getAIRole() == Heroes::Role::COURIER );
+
     int targetIndex = -1;
 
     const Kingdom & kingdom = hero.GetKingdom();
@@ -2112,21 +2124,26 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
     double bestTargetValue = lowestPossibleValue;
 
     for ( const Heroes * otherHero : allHeroes ) {
-        if ( !otherHero || hero.GetID() == otherHero->GetID() )
+        if ( !otherHero || hero.GetID() == otherHero->GetID() ) {
             continue;
+        }
 
         const Heroes::Role role = otherHero->getAIRole();
-        if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT )
+        if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
             continue;
+        }
 
         const int currentHeroIndex = otherHero->GetIndex();
-        const uint32_t dist = getDistanceToObject( pathfinder, currentHeroIndex );
-        if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
+
+        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentHeroIndex );
+        if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) ) {
             continue;
+        }
 
         double value = hero.getMeetingValue( *otherHero );
-        if ( value < 500 )
+        if ( value < 500 ) {
             continue;
+        }
 
         if ( role == Heroes::Role::CHAMPION ) {
             value *= 2.5;
@@ -2139,25 +2156,29 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
         }
     }
 
-    if ( targetIndex != -1 )
+    if ( targetIndex != -1 ) {
         return targetIndex;
+    }
 
     // Reset the max value
     bestTargetValue = lowestPossibleValue;
 
     for ( const Castle * castle : kingdom.GetCastles() ) {
-        if ( !castle || castle->GetHero() != nullptr )
+        if ( castle == nullptr || castle->GetHero() != nullptr ) {
             continue;
+        }
 
         const int currentCastleIndex = castle->GetIndex();
-        const uint32_t dist = getDistanceToObject( pathfinder, currentCastleIndex );
+        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentCastleIndex );
 
-        if ( dist == 0 )
+        if ( dist == 0 ) {
             continue;
+        }
 
         double value = castle->getVisitValue( hero );
-        if ( value < 250 )
+        if ( value < 250 ) {
             continue;
+        }
 
         const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
         if ( safetyFactor > 100 ) {
@@ -2175,6 +2196,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
             targetIndex = currentCastleIndex;
         }
     }
+
     return targetIndex;
 }
 
@@ -2361,15 +2383,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             continue;
         }
 
-        uint32_t dist = _pathfinder.getDistance( node.first );
-
-        bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.buildDimensionDoorPath( node.first ) );
-        if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
-            dist = dimensionDoorDist;
-            useDimensionDoor = true;
-        }
-
+        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, node.first );
         if ( dist == 0 ) {
             continue;
         }
@@ -2377,7 +2391,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         double value = valueStorage.value( node, dist );
         getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
 
-        if ( dist && value > maxPriority ) {
+        if ( dist > 0 && value > maxPriority ) {
             maxPriority = value;
             priorityTarget = node.first;
 #ifdef WITH_DEBUG
@@ -2391,17 +2405,11 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     }
 
     double fogDiscoveryValue = getFogDiscoveryValue( hero );
+    // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
     const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
-    if ( fogDiscoveryTarget >= 0 ) {
-        uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
-        // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
-        bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.buildDimensionDoorPath( fogDiscoveryTarget ) );
-        if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
-            distanceToFogDiscovery = dimensionDoorDist;
-            useDimensionDoor = true;
-        }
+    if ( fogDiscoveryTarget >= 0 ) {
+        auto [distanceToFogDiscovery, useDimensionDoor] = getDistanceToTile( _pathfinder, fogDiscoveryTarget );
 
         if ( isTerritoryExpansion ) {
             // Over time the AI should focus more on territory expansion.
@@ -2799,42 +2807,45 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
         int prevHeroPosition = bestHero->GetIndex();
 
-        // check if we want to use Dimension Door spell or move regularly
-        std::list<Route::Step> dimensionPath = _pathfinder.buildDimensionDoorPath( bestTargetIndex );
-        uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
-        uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
-        if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-            while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
-                    && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
-                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
-                dimensionDoorDistance -= dimensionPath.front().GetPenalty();
+        {
+            std::list<Route::Step> dimensionDoorPath = _pathfinder.buildDimensionDoorPath( bestTargetIndex );
+            uint32_t regularMovementDist = _pathfinder.getDistance( bestTargetIndex );
+            uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorPath );
 
-                _pathfinder.reEvaluateIfNeeded( *bestHero );
-                moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+                while ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+                    assert( !dimensionDoorPath.empty() && bestHero->MayStillMove( false, false ) );
 
-                dimensionPath.pop_front();
+                    HeroesCastDimensionDoor( *bestHero, dimensionDoorPath.front().GetIndex() );
+                    dimensionDoorDist -= dimensionDoorPath.front().GetPenalty();
 
-                // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
-                // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
+                    _pathfinder.reEvaluateIfNeeded( *bestHero );
+                    regularMovementDist = _pathfinder.getDistance( bestTargetIndex );
 
-                updateMapActionObjectCache( prevHeroPosition );
-                updateMapActionObjectCache( bestHero->GetIndex() );
+                    dimensionDoorPath.pop_front();
 
-                prevHeroPosition = bestHero->GetIndex();
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
+                }
+
+                if ( dimensionDoorDist > 0 ) {
+                    // The rest of the path the hero should do by foot.
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
+
+                    HeroesMove( *bestHero );
+                }
             }
-
-            if ( dimensionDoorDistance > 0 ) {
-                // The rest of the path the hero should do by foot.
+            else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                 HeroesMove( *bestHero );
             }
-        }
-        else {
-            bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
-
-            HeroesMove( *bestHero );
         }
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {

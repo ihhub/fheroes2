@@ -1906,7 +1906,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
         return false;
     }
 
-    if ( path.isValidForMovement() && !ignorePath ) {
+    if ( !ignorePath && path.isValidForMovement() ) {
         return path.hasAllowedSteps();
     }
 
