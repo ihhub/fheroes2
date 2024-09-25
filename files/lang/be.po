@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -278,6 +278,9 @@ msgid ""
 msgstr ""
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -1850,6 +1853,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr "Вы ўжо будавалі сёння ў гэтым замку."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - пабудова, дзе штотыдзень падрыхтоўваюцца %{monster}."
 
@@ -1858,12 +1867,6 @@ msgstr "Неабходна:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Выйсці з меню, нічога не змяняючы."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Вы ўжо будавалі сёння ў гэтым замку."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr ""
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2655,10 +2658,10 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
-msgid "Max"
+msgid "Hire all creatures in the town."
 msgstr ""
 
-msgid "Hire all creatures in the town."
+msgid "Max"
 msgstr ""
 
 msgid "Available"
@@ -2837,17 +2840,14 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr "Загрузіць гульню"
-
-msgid "No save files to load."
-msgstr ""
-
 msgid "New Game"
 msgstr "Новая гульня"
 
 msgid "Start a single or multi-player game."
 msgstr "Пачаць новую адзіночную ці шматасабовую гульню."
+
+msgid "Load Game"
+msgstr "Загрузіць гульню"
 
 msgid "Load a previously saved game."
 msgstr "Працягнуць захаваную гульню."
@@ -3079,6 +3079,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "n/a"
+msgstr ""
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3108,9 +3111,6 @@ msgid "Your Resources"
 msgstr ""
 
 msgid "Available Trades"
-msgstr ""
-
-msgid "n/a"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -3219,6 +3219,20 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Раздзяленне экрана"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Абряры раздзяленне экранa:"
 
@@ -3280,11 +3294,11 @@ msgstr ""
 msgid "File to Load:"
 msgstr ""
 
-msgid "Accept the choice made."
-msgstr "Ухваліць выбар."
-
 msgid "Terrain object"
 msgstr ""
+
+msgid "Accept the choice made."
+msgstr "Ухваліць выбар."
 
 msgid "Select Skill:"
 msgstr ""
@@ -3403,6 +3417,41 @@ msgstr "Мова"
 msgid "Select Adventure Object:"
 msgstr "Мова"
 
+msgid "Players Icon"
+msgstr "Іконка гульцоў"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Паказвае колькасць гульцоў у сцэнары. За не занятыя асобамі пазіцыі будзе "
+"гуляць кампутар."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Паказвае памер мапы:\n"
+"малы (36 х 36), сярэдні\n"
+"(72 x 72), вялікі (108 x 108)ці звышвялікі (144 х 144)."
+
+msgid "Size Icon"
+msgstr "Іконка памеру"
+
+msgid "Map Type"
+msgstr "Тып мапы"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Паказвае, для якой версіі гульні зроблена мапа: для \"The Succession Wars\" "
+"альбо \"The Price of Loyalty\""
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3493,41 +3542,6 @@ msgstr "Усе мапы"
 
 msgid "View all maps, regardless of size."
 msgstr "Паказваць усе мапы, незалежна ад памеру."
-
-msgid "Players Icon"
-msgstr "Іконка гульцоў"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Паказвае колькасць гульцоў у сцэнары. За не занятыя асобамі пазіцыі будзе "
-"гуляць кампутар."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Паказвае памер мапы:\n"
-"малы (36 х 36), сярэдні\n"
-"(72 x 72), вялікі (108 x 108)ці звышвялікі (144 х 144)."
-
-msgid "Size Icon"
-msgstr "Іконка памеру"
-
-msgid "Map Type"
-msgstr "Тып мапы"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Паказвае, для якой версіі гульні зроблена мапа: для \"The Succession Wars\" "
-"альбо \"The Price of Loyalty\""
 
 msgid "Selected Name"
 msgstr "Назва мапы"
@@ -3728,7 +3742,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr ""
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3737,7 +3751,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3763,6 +3780,53 @@ msgstr ""
 msgid "Click to save the Event properties."
 msgstr "Назва абранай мапы."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Назва абранай мапы."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Дзень: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Назва абранай мапы."
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr ""
 
@@ -3775,26 +3839,10 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Назва абранай мапы."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -3885,6 +3933,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 msgid "The map is corrupted."
 msgstr ""
 
@@ -3892,6 +3943,9 @@ msgid "Unable to locate data directory to save the map."
 msgstr ""
 
 msgid "Unable to create a directory to save the map."
+msgstr ""
+
+msgid "Unable to locate a directory to save the map."
 msgstr ""
 
 #, fuzzy
@@ -4179,6 +4233,29 @@ msgstr ""
 msgid "Warning"
 msgstr "Увага"
 
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} гулец"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race} %{name}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} гулец"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} гулец"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race} %{name}"
+
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr ""
+
 msgid "None."
 msgstr ""
 
@@ -4193,6 +4270,86 @@ msgstr "Назапасіць вялікую колькасць золата."
 msgid "Run out of time."
 msgstr ""
 
+msgid "alliance|1st"
+msgstr ""
+
+msgid "alliance|2nd"
+msgstr ""
+
+msgid "alliance|3rd"
+msgstr ""
+
+msgid "alliance|4th"
+msgstr ""
+
+msgid "alliance|5th"
+msgstr ""
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Умова паразы"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Умова перамогі"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Умова перамогі"
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr "Альянс з ограмі"
+
+#
+msgid "{%number} alliance: "
+msgstr ""
+
+msgid "Gold:"
+msgstr ""
+
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Назва абранай мапы."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Назва абранай мапы."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Назва абранай мапы."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Назва абранай мапы."
+
 #, fuzzy
 msgid "Map Difficulty"
 msgstr "Складанасць мапы:"
@@ -4200,14 +4357,6 @@ msgstr "Складанасць мапы:"
 #, fuzzy
 msgid "Map Description"
 msgstr "Апісанне"
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Умова перамогі"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Умова паразы"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4233,6 +4382,13 @@ msgid "Rumors"
 msgstr ""
 
 #, fuzzy
+msgid "Click to edit daily events."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+msgid "Events"
+msgstr ""
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
@@ -4242,6 +4398,14 @@ msgstr "Тып мапы"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Апісанне абранай мапы."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Апісанне абранай мапы."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4360,6 +4524,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4617,6 +4784,9 @@ msgstr ""
 
 msgid "Package Design"
 msgstr ""
+
+msgid "High Scores"
+msgstr "Найлепшыя дасягненні"
 
 msgid "Your Name"
 msgstr "Вашае імя"
@@ -5047,6 +5217,9 @@ msgstr ""
 msgid "' language, but the current language of the game is '"
 msgstr ""
 
+msgid "No save files to load."
+msgstr ""
+
 msgid "Hot Seat"
 msgstr "За адным кампутарам"
 
@@ -5129,9 +5302,6 @@ msgstr "Звесткі пра каманду"
 
 msgid "View the credits screen."
 msgstr "Праглядзець звесткі пра распрацоўшчыкаў."
-
-msgid "High Scores"
-msgstr "Найлепшыя дасягненні"
 
 msgid "View the high scores screen."
 msgstr "Праглядзець найлепшыя дасягненні."
@@ -5648,9 +5818,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месяц: %{month} Тыдзень: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Дзень: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -9811,13 +9978,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
@@ -10206,12 +10373,12 @@ msgstr ""
 msgid "Stoneskin"
 msgstr ""
 
+msgid "Steelskin"
+msgstr ""
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
-msgstr ""
-
-msgid "Steelskin"
 msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
@@ -10242,7 +10409,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
@@ -10568,7 +10735,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr ""
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

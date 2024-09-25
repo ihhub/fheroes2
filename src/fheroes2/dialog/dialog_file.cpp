@@ -24,13 +24,10 @@
 #include <cstdint>
 
 #include "cursor.h"
-#include "dialog.h"
-#include "dir.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "game_io.h"
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -38,8 +35,8 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_window.h"
 
 namespace
@@ -55,8 +52,8 @@ namespace
         const int32_t totalDialogHeight = 252;
 
         // Prepare restorer of the adventure map when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - BORDERWIDTH ) / 2, ( display.height() - totalDialogHeight + BORDERWIDTH ) / 2,
-                                      totalDialogWidth, totalDialogHeight );
+        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - fheroes2::borderWidthPx ) / 2,
+                                      ( display.height() - totalDialogHeight + fheroes2::borderWidthPx ) / 2, totalDialogWidth, totalDialogHeight );
 
         fheroes2::StandardWindow background( 289, 204, true, display );
 
@@ -103,11 +100,7 @@ namespace
                 }
             }
             else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
-                if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
-                    fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
-                }
-                else if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
+                if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
                     break;
                 }
@@ -129,24 +122,19 @@ namespace
                 break;
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "New Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Start a single or multi-player game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Load a previously saved game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Save Game" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Save the current game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Save Game" ), _( "Save the current game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Quit" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Quit out of Heroes of Might and Magic II." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
 

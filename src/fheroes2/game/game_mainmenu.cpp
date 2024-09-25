@@ -26,7 +26,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -40,7 +39,7 @@
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "editor_mainmenu.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -166,12 +165,18 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
             break;
-        case fheroes2::GameMode::SCENARIO_INFO:
-            result = Game::ScenarioInfo();
+        case fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER:
+        case fheroes2::GameMode::SELECT_SCENARIO_TWO_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_THREE_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS: {
+            const uint8_t humanPlayerCount
+                = static_cast<uint8_t>( static_cast<int>( result ) - static_cast<int>( fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER ) );
+            // Add +1 since we don't have zero human player option.
+            result = Game::SelectScenario( humanPlayerCount + 1 );
             break;
-        case fheroes2::GameMode::SELECT_SCENARIO:
-            result = Game::SelectScenario();
-            break;
+        }
         case fheroes2::GameMode::START_GAME:
             result = Game::StartGame();
             break;
@@ -279,7 +284,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
-    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
+    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, 0 ) );
     fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
 
     buttonNewGame.draw();
@@ -410,7 +415,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
-            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
+            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.isMouseCursorPosInArea( settingsArea ) ) {

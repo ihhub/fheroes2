@@ -21,20 +21,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -46,7 +46,7 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -128,6 +128,63 @@ namespace
 
         return friendColors;
     }
+
+    void ShowNewWeekDialog()
+    {
+        // restore the original music on exit
+        const AudioManager::MusicRestorer musicRestorer;
+
+        const bool isNewMonth = world.BeginMonth();
+
+        AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
+
+        const Week & week = world.GetWeekType();
+
+        // head
+        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
+        StringReplace( message, "%{name}", week.GetName() );
+        message += "\n\n";
+
+        if ( week.GetType() == WeekName::MONSTERS ) {
+            const Monster monster( week.GetMonster() );
+            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+
+            if ( monster.isValid() && count ) {
+                if ( isNewMonth )
+                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
+                else
+                    message += _( "%{monster} growth +%{count}." );
+                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
+                StringReplace( message, "%{count}", count );
+                message += "\n\n";
+            }
+        }
+
+        if ( week.GetType() == WeekName::PLAGUE )
+            message += _( " All populations are halved." );
+        else
+            message += _( " All dwellings increase population." );
+
+        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+    }
+
+    void ShowWarningLostTownsDialog()
+    {
+        const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+        const uint32_t lostTownDays = myKingdom.GetLostTownDays();
+
+        if ( lostTownDays == 1 ) {
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                                 _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        }
+        else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
+            std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
+            StringReplace( str, "%{day}", lostTownDays );
+            Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
+        }
+    }
 }
 
 fheroes2::GameMode Game::StartBattleOnly()
@@ -158,8 +215,6 @@ fheroes2::GameMode Game::StartBattleOnly()
 
 fheroes2::GameMode Game::StartGame()
 {
-    AI::Get().Reset();
-
     const Settings & conf = Settings::Get();
 
     // setup cursor
@@ -205,8 +260,7 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
@@ -380,63 +434,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
             setDisplayFadeIn();
         }
-    }
-}
-
-void ShowNewWeekDialog()
-{
-    // restore the original music on exit
-    const AudioManager::MusicRestorer musicRestorer;
-
-    const bool isNewMonth = world.BeginMonth();
-
-    AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
-
-    const Week & week = world.GetWeekType();
-
-    // head
-    std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-    StringReplace( message, "%{name}", week.GetName() );
-    message += "\n\n";
-
-    if ( week.GetType() == WeekName::MONSTERS ) {
-        const Monster monster( week.GetMonster() );
-        const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
-
-        if ( monster.isValid() && count ) {
-            if ( isNewMonth )
-                message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                            : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                  "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-            else
-                message += _( "%{monster} growth +%{count}." );
-            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-            StringReplace( message, "%{count}", count );
-            message += "\n\n";
-        }
-    }
-
-    if ( week.GetType() == WeekName::PLAGUE )
-        message += _( " All populations are halved." );
-    else
-        message += _( " All dwellings increase population." );
-
-    fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
-}
-
-void ShowWarningLostTownsDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const uint32_t lostTownDays = myKingdom.GetLostTownDays();
-
-    if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
-                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
-    }
-    else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
-        std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
-        StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
 }
 
@@ -862,7 +859,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Get().KingdomTurn( kingdom );
+                    AI::Planner::Get().KingdomTurn( kingdom );
 
 #if defined( WITH_DEBUG )
                     if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -1166,6 +1163,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
+
         isCursorOverButtons = false;
         isCursorOverGamearea = false;
 
@@ -1202,8 +1200,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            if ( !_gameArea.isDragScroll() )
+            if ( !_gameArea.isDragScroll() ) {
                 _radar.QueueEventProcessing();
+            }
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
@@ -1224,10 +1223,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         // gamearea
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !_radar.isDragRadar() )
+            if ( !_radar.isDragRadar() ) {
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.isMouseLeftButtonPressed() )
+            }
+            else if ( le.isMouseLeftButtonReleased() ) {
                 _radar.QueueEventProcessing();
+            }
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {

@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,27 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2OBJXLOC_H
-#define H2OBJXLOC_H
+#pragma once
 
 #include <cstdint>
+#include <vector>
 
-namespace ObjXlc1
+namespace Maps::Map_Format
 {
-    bool isShadow( const uint8_t index );
+    struct DailyEvent;
 }
 
-namespace ObjXlc2
+namespace Editor
 {
-    bool isShadow( const uint8_t index );
-
-    // Returns true if the index belongs to Reefs type of the object.
-    bool isReefs( const uint8_t index );
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors );
 }
-
-namespace ObjXlc3
-{
-    bool isShadow( const uint8_t index );
-}
-
-#endif

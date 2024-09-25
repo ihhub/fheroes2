@@ -39,22 +39,33 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class MapObjectSimple;
-class StreamBase;
 
 struct MapEvent;
 struct Week;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Route
 {
     class Step;
 }
+
+// Number of days in the game week
+inline constexpr int numOfDaysPerWeek{ 7 };
+// Number of weeks in the game month
+inline constexpr int numOfWeeksPerMonth{ 4 };
 
 struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 {
@@ -135,8 +146,8 @@ struct EventDate
     std::string title;
 };
 
-StreamBase & operator<<( StreamBase &, const EventDate & );
-StreamBase & operator>>( StreamBase &, EventDate & );
+OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj );
+IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
 
@@ -349,6 +360,16 @@ public:
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
+    uint8_t getWaterPercentage() const
+    {
+        return _waterPercentage;
+    }
+
+    double getLandRoughness() const
+    {
+        return _landRoughness;
+    }
+
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
@@ -369,7 +390,7 @@ private:
     void Reset();
     void MonthOfMonstersAction( const Monster & );
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
-    void PostLoad( const bool setTilePassabilities );
+    void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
     bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
@@ -382,8 +403,8 @@ private:
     void setHeroIdsForMapConditions();
 
     friend class Radar;
-    friend StreamBase & operator<<( StreamBase &, const World & );
-    friend StreamBase & operator>>( StreamBase &, World & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
+    friend IStreamBase & operator>>( IStreamBase & stream, World & w );
 
     std::vector<Maps::Tiles> vec_tiles;
     AllHeroes vec_heroes;
@@ -413,18 +434,17 @@ private:
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
 
+    uint8_t _waterPercentage{ 0 };
+    double _landRoughness{ 1.0 };
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };
 
-StreamBase & operator<<( StreamBase &, const CapturedObject & );
-StreamBase & operator>>( StreamBase &, CapturedObject & );
+OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj );
+IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj );
 
-StreamBase & operator<<( StreamBase &, const World & );
-StreamBase & operator>>( StreamBase &, World & );
-
-StreamBase & operator<<( StreamBase &, const MapObjects & );
-StreamBase & operator>>( StreamBase &, MapObjects & );
+OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
+IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
 
 extern World & world;
 

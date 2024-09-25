@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2TRANSLATIONS_H
-#define H2TRANSLATIONS_H
+#pragma once
 
 #include <cstddef>
 #include <string>
@@ -38,14 +37,18 @@ namespace Translation
     const char * gettext( const std::string & str );
     const char * ngettext( const char * str, const char * plural, size_t num );
 
+    // Converts the given string to lowercase in a locale aware way
     std::string StringLower( std::string str );
 }
 
-#define _( s ) Translation::gettext( s )
-#define _n( a, b, c ) Translation::ngettext( a, b, c )
+#define _( str ) Translation::gettext( str )
+#define _n( str, plural, num ) Translation::ngettext( str, plural, num )
+
 constexpr const char * gettext_noop( const char * s )
 {
     return s;
 }
 
-#endif
+// Replaces the pattern in workString with patternReplacement. The patternReplacement is converted to lowercase in a locale
+// aware way, except for the first word in a sentence.
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );

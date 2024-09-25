@@ -23,7 +23,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -46,7 +46,7 @@ int Dialog::BuyBoat( bool enable )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), fheroes2::boxAreaWidthPx );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATWIND, 0 );
     fheroes2::Text text{ _( "Build a new ship:" ), fheroes2::FontType::normalWhite() };

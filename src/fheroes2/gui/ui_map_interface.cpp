@@ -27,12 +27,11 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "maps.h"
 #include "screen.h"
+#include "ui_constants.h"
 #include "ui_text.h"
 
 namespace Interface
@@ -42,12 +41,14 @@ namespace Interface
         // If this assertion blows up then you are trying to render a window bigger than the interface area.
         assert( interfaceArea.width >= windowSize.width && interfaceArea.height >= windowSize.height );
 
-        fheroes2::Point windowsPos{ ( ( mousePos.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.width / 2 ),
-                                    ( ( mousePos.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.height / 2 ) };
+        fheroes2::Point windowsPos{ ( ( mousePos.x - fheroes2::borderWidthPx ) / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx + fheroes2::tileWidthPx
+                                        - ( windowSize.width / 2 ),
+                                    ( ( mousePos.y - fheroes2::borderWidthPx ) / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx + fheroes2::tileWidthPx
+                                        - ( windowSize.height / 2 ) };
 
         // Clamp area to the edges of the area.
-        windowsPos.x = std::clamp( windowsPos.x, BORDERWIDTH, ( interfaceArea.width - windowSize.width ) + BORDERWIDTH );
-        windowsPos.y = std::clamp( windowsPos.y, BORDERWIDTH, ( interfaceArea.height - windowSize.height ) + BORDERWIDTH );
+        windowsPos.x = std::clamp( windowsPos.x, fheroes2::borderWidthPx, ( interfaceArea.width - windowSize.width ) + fheroes2::borderWidthPx );
+        windowsPos.y = std::clamp( windowsPos.y, fheroes2::borderWidthPx, ( interfaceArea.height - windowSize.height ) + fheroes2::borderWidthPx );
 
         return { windowsPos.x, windowsPos.y, windowSize.width, windowSize.height };
     }
@@ -65,7 +66,7 @@ namespace Interface
         fheroes2::ImageRestorer restorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
         fheroes2::Blit( windowImage, display, windowRoi.x, windowRoi.y );
 
-        const int32_t objectTextBorderedWidth = windowRoi.width - 2 * BORDERWIDTH;
+        const int32_t objectTextBorderedWidth = windowRoi.width - 2 * fheroes2::borderWidthPx;
         const fheroes2::Text textUi( std::move( text ), fheroes2::FontType::smallWhite() );
         textUi.draw( windowRoi.x + 22, windowRoi.y - 6 + ( ( windowRoi.height - textUi.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
 

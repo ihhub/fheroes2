@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -37,7 +37,7 @@
 #include "dialog_selectitems.h"
 #include "direction.h"
 #include "game_interface.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
@@ -169,14 +169,14 @@ namespace
 
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.getMainObjectPart()._uid, boatSource, MP2::OBJ_BOAT ) );
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestination );
 
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
 
-        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.getMainObjectPart()._uid, boatDestination, MP2::OBJ_BOAT ) );
 
         return true;
     }

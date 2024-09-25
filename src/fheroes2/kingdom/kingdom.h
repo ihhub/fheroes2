@@ -24,6 +24,7 @@
 #define H2KINGDOM_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <list>
@@ -31,19 +32,23 @@
 
 #include "bitmodes.h"
 #include "castle.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "players.h"
 #include "puzzle.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 struct EventDate;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Maps
 {
@@ -72,7 +77,12 @@ public:
     };
 
     Kingdom();
+    Kingdom( const Kingdom & ) = delete;
+
     ~Kingdom() override = default;
+
+    Kingdom & operator=( const Kingdom & ) = delete;
+    Kingdom & operator=( Kingdom && ) = default;
 
     void Init( const int clr );
     void clear();
@@ -88,7 +98,8 @@ public:
     // upgraded to a castle.
     bool canRecruitHeroes() const
     {
-        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+        return std::any_of( castles.begin(), castles.end(),
+                            []( const Castle * castle ) { return ( castle->isCastle() || !castle->isBuildingDisabled( BUILD_CASTLE ) ); } );
     }
 
     // Returns true if this kingdom has any heroes, false otherwise.
@@ -163,7 +174,7 @@ public:
     void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
-    void AddCastle( const Castle * );
+    void AddCastle( Castle * castle );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
@@ -199,10 +210,10 @@ public:
     static uint32_t GetMaxHeroes();
 
 private:
-    cost_t _getKingdomStartingResources( const int difficulty ) const;
+    Cost _getKingdomStartingResources( const int difficulty ) const;
 
-    friend StreamBase & operator<<( StreamBase &, const Kingdom & );
-    friend StreamBase & operator>>( StreamBase &, Kingdom & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom );
 
     int color;
     Funds resource;
@@ -238,31 +249,24 @@ public:
     void NewWeek();
     void NewMonth();
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( const int color );
+    const Kingdom & GetKingdom( const int color ) const;
 
     int GetNotLossColors() const;
-    int FindWins( int ) const;
+    int FindWins( const int cond ) const;
 
-    void AddHeroes( const AllHeroes & );
-    void AddCastles( const AllCastles & );
+    void AddHeroes( const AllHeroes & heroes );
+    void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms
     std::set<Heroes *> resetRecruits();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
-    friend StreamBase & operator>>( StreamBase &, Kingdoms & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj );
 
-    static constexpr uint32_t _size = KINGDOMMAX + 1;
-    Kingdom kingdoms[_size];
+    std::array<Kingdom, maxNumOfPlayers + 1> _kingdoms;
 };
-
-StreamBase & operator<<( StreamBase &, const Kingdom & );
-StreamBase & operator>>( StreamBase &, Kingdom & );
-
-StreamBase & operator<<( StreamBase &, const Kingdoms & );
-StreamBase & operator>>( StreamBase &, Kingdoms & );
 
 #endif

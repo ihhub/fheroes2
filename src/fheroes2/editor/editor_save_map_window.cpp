@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_save_map_window.h"
+
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <ctime>
 #include <iterator>
@@ -96,14 +99,7 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols with '/' symbols.
-            std::string fullPath = info.filename;
-
-            // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
-            StringReplace( fullPath, "\\", "/" );
-
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -114,7 +110,7 @@ namespace
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
             body.add( { info.description, fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-            body.add( { fullPath, fheroes2::FontType::smallWhite() } );
+            body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
@@ -151,10 +147,7 @@ namespace
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
         std::string mapFileName( System::GetBasename( info.filename ) );
-
-        if ( mapFileName.empty() ) {
-            return;
-        }
+        assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
@@ -205,7 +198,7 @@ namespace Editor
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
+        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
@@ -290,7 +283,7 @@ namespace Editor
 
         MapsFileInfoList::iterator it = lists.begin();
         for ( ; it != lists.end(); ++it ) {
-            if ( System::truncateFileExtensionAndPath( ( *it ).filename ) == fileName ) {
+            if ( System::GetStem( ( *it ).filename ) == fileName ) {
                 break;
             }
         }
@@ -407,13 +400,15 @@ namespace Editor
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
                 msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
+
                     if ( lists.empty() ) {
                         isListboxSelected = false;
-                        fileName.clear();
                         charInsertPos = 0;
+                        fileName.clear();
 
                         buttonOk.disable();
                         buttonOk.draw();
@@ -461,7 +456,7 @@ namespace Editor
             }
 
             if ( needFileNameRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;

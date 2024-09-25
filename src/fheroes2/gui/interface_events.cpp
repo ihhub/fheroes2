@@ -24,8 +24,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact.h"
@@ -38,7 +40,7 @@
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -68,7 +70,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -224,15 +225,17 @@ void Interface::AdventureMap::EventCastSpell()
     _gameArea.SetCenter( hero->GetCenter() );
     redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
-    if ( spell.isValid() ) {
-        hero->ActionSpellCast( spell );
-
-        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
-        // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES, true );
-        RedrawFocus();
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, {} );
+    if ( !spell.isValid() ) {
+        return;
     }
+
+    hero->ActionSpellCast( spell );
+
+    // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+    // hero to another location, so we may have to update the terrain music theme and environment sounds
+    ResetFocus( GameFocus::HEROES, true );
+    RedrawFocus();
 }
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
@@ -462,8 +465,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             StringReplace( msg, "%{artifact}", ultimate.GetName() );
 
             const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( _( "Congratulations!" ), std::move( msg ), Dialog::OK, { &artifactUI } );
         }
         else {
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );

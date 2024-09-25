@@ -27,6 +27,7 @@
 #include <cassert>
 #include <vector>
 
+#include "castle.h"
 #include "kingdom.h"
 #include "profit.h"
 #include "race.h"
@@ -51,24 +52,6 @@ std::string Difficulty::String( int difficulty )
     }
 
     return "Unknown";
-}
-
-int Difficulty::GetScoutingBonusForAI( int difficulty )
-{
-    switch ( difficulty ) {
-    case Difficulty::NORMAL:
-        return 1;
-    case Difficulty::HARD:
-        return 2;
-    case Difficulty::EXPERT:
-        return 3;
-    case Difficulty::IMPOSSIBLE:
-        return 4;
-    default:
-        break;
-    }
-
-    return 0;
 }
 
 Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom )
@@ -174,19 +157,6 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-int Difficulty::GetHeroMovementBonusForAI( int difficulty )
-{
-    switch ( difficulty ) {
-    case Difficulty::EXPERT:
-    case Difficulty::IMPOSSIBLE:
-        return 75;
-    default:
-        break;
-    }
-
-    return 0;
-}
-
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {
@@ -284,7 +254,7 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
     return true;
 }
 
-bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:

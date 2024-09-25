@@ -28,7 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -38,12 +38,12 @@
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -258,10 +258,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
             || spells5.QueueEventProcessing();
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::Text header( _( "Exit" ), fheroes2::FontType::normalYellow() );
-            fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-
-            fheroes2::showMessage( header, body, 0 );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
     }
 }

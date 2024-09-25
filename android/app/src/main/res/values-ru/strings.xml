@@ -9,6 +9,7 @@
     <string name="activity_toolset_extract_homm2_assets_btn_text">Извлечь ресурсы HoMM2</string>
     <string name="activity_toolset_download_homm2_demo_btn_text">Скачать демо-версию HoMM2</string>
     <string name="activity_toolset_save_file_manager_btn_text">Менеджер файлов сохранений</string>
+    <string name="activity_toolset_map_file_manager_btn_text">Менеджер файлов карт FH2M</string>
     <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Операция успешно завершена.</string>
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Операция успешно завершена, но никаких ресурсов HoMM2 найдено не было.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">Во время операции произошла ошибка: %s</string>
@@ -43,4 +44,29 @@
     </plurals>
     <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Да</string>
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Нет</string>
+    <string name="activity_map_file_manager_label">fh2 менеджер файлов карт</string>
+    <string name="activity_map_file_manager_map_file_list_empty_lbl_text">Нет доступных файлов карт</string>
+    <string name="activity_map_file_manager_select_all_btn_content_description">Выбрать все файлы карт</string>
+    <string name="activity_map_file_manager_unselect_all_btn_content_description">Отменить выбор файлов карт</string>
+    <string name="activity_map_file_manager_import_btn_content_description">Импортировать файлы карт</string>
+    <string name="activity_map_file_manager_export_btn_content_description">Экспортировать выбранные файлы карт</string>
+    <string name="activity_map_file_manager_delete_btn_content_description">Удалить выбранные файлы карт</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_no_map_files_found">Операция успешно завершена, но никаких файлов карт найдено не было.</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_failed">Во время операции произошла ошибка: %s</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_title">Файлы для экспорта не выбраны</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_message">Пожалуйста, выберите файлы карт для экспорта.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_title">Файлы для удаления не выбраны</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_message">Пожалуйста, выберите файлы карт для удаления.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_positive_btn_text">OK</string>
+    <plurals name="activity_map_file_manager_delete_confirmation_title" tools:ignore="MissingQuantity">
+        <item quantity="other">Удалить файлы карт</item>
+    </plurals>
+    <plurals name="activity_map_file_manager_delete_confirmation_message">
+        <item quantity="one">Вы действительно хотите удалить %d выбранный файл?</item>
+        <item quantity="few">Вы действительно хотите удалить %d выбранных файла?</item>
+        <item quantity="many">Вы действительно хотите удалить %d выбранных файлов?</item>
+    </plurals>
+    <string name="activity_map_file_manager_delete_confirmation_positive_btn_text">Да</string>
+    <string name="activity_map_file_manager_delete_confirmation_negative_btn_text">Нет</string>
 </resources>

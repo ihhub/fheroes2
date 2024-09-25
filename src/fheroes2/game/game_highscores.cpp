@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -36,7 +35,7 @@
 #include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
@@ -241,8 +240,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             msg += std::to_string( GetRating() * getGameOverScoreFactor() / 100 );
         }
 
-        fheroes2::showMessage( fheroes2::Text( "High Scores", fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                               Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "High Scores" ), std::move( msg ), Dialog::OK );
 
         gameResult.ResetResult();
 
@@ -392,17 +390,14 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOtherHighScore.area() ) ) {
             if ( isCampaign ) {
-                fheroes2::showMessage( fheroes2::Text( _( "Standard" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "View High Scores for Standard Maps." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Standard" ), _( "View High Scores for Standard Maps." ), Dialog::ZERO );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( _( "Campaign" ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( "View High Scores for Campaigns." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Campaign" ), _( "View High Scores for Campaigns." ), Dialog::ZERO );
             }
         }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -255,6 +255,9 @@ msgid ""
 msgstr ""
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -1988,6 +1991,12 @@ msgstr "Tovenaarseiland"
 msgid "Descendants"
 msgstr "Afstammelingen"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Kan niet bouwen. Je hebt hier vandaag al gebouwd."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Voor deze actie moet je eerst een kasteel bouwen."
+
 msgid "The %{building} produces %{monster}."
 msgstr "Het %{building} produceert %{monster}."
 
@@ -1996,12 +2005,6 @@ msgstr "Vereist:"
 
 msgid "Exit this menu without doing anything."
 msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr "Kan niet bouwen. Je hebt hier vandaag al gebouwd."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Voor deze actie moet je eerst een kasteel bouwen."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2775,10 +2778,10 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
-msgid "Max"
+msgid "Hire all creatures in the town."
 msgstr ""
 
-msgid "Hire all creatures in the town."
+msgid "Max"
 msgstr ""
 
 msgid "Available"
@@ -2956,16 +2959,13 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr ""
-
-msgid "No save files to load."
-msgstr ""
-
 msgid "New Game"
 msgstr ""
 
 msgid "Start a single or multi-player game."
+msgstr ""
+
+msgid "Load Game"
 msgstr ""
 
 msgid "Load a previously saved game."
@@ -3193,6 +3193,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "n/a"
+msgstr ""
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3222,9 +3225,6 @@ msgid "Your Resources"
 msgstr ""
 
 msgid "Available Trades"
-msgstr ""
-
-msgid "n/a"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -3333,6 +3333,19 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+msgid "Select this game resolution."
+msgstr ""
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr ""
 
@@ -3393,10 +3406,10 @@ msgstr ""
 msgid "File to Load:"
 msgstr ""
 
-msgid "Accept the choice made."
+msgid "Terrain object"
 msgstr ""
 
-msgid "Terrain object"
+msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
@@ -3505,6 +3518,32 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Adventure Object:"
 msgstr "Selecteer spreuk doelwit"
 
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3590,32 +3629,6 @@ msgid "All Maps"
 msgstr ""
 
 msgid "View all maps, regardless of size."
-msgstr ""
-
-msgid "Players Icon"
-msgstr ""
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-
-msgid "Size Icon"
-msgstr ""
-
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
 
 msgid "Selected Name"
@@ -3809,7 +3822,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Brichtenbalk"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3818,7 +3831,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3846,6 +3862,55 @@ msgid "Click to save the Event properties."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr ""
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr ""
 
@@ -3858,27 +3923,10 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -3965,6 +4013,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Het spiegelbeeld wordt gecreëerd."
@@ -3973,6 +4024,9 @@ msgid "Unable to locate data directory to save the map."
 msgstr ""
 
 msgid "Unable to create a directory to save the map."
+msgstr ""
+
+msgid "Unable to locate a directory to save the map."
 msgstr ""
 
 #, fuzzy
@@ -4248,6 +4302,30 @@ msgid "Warning"
 msgstr "Waarschuuwing"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{name} de %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{name} de %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{name} de %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
 msgid "None."
 msgstr "Geen"
 
@@ -4261,16 +4339,96 @@ msgstr ""
 msgid "Run out of time."
 msgstr ""
 
-msgid "Map Difficulty"
-msgstr ""
+#, fuzzy
+msgid "alliance|1st"
+msgstr " alliantie"
 
-msgid "Map Description"
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " alliantie"
+
+msgid "Special Loss Condition"
 msgstr ""
 
 msgid "Special Victory Condition"
 msgstr ""
 
-msgid "Special Loss Condition"
+msgid "Allow standard victory conditions"
+msgstr ""
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " alliantie"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " alliantie"
+
+msgid "Gold:"
+msgstr ""
+
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Map Difficulty"
+msgstr ""
+
+msgid "Map Description"
 msgstr ""
 
 msgid "Change Map Name"
@@ -4297,6 +4455,14 @@ msgstr ""
 msgid "Rumors"
 msgstr ""
 
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Events"
+msgstr ""
+
 msgid "Click to change your map name."
 msgstr ""
 
@@ -4305,6 +4471,16 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
@@ -4421,6 +4597,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4675,6 +4854,9 @@ msgid "Map Designers"
 msgstr ""
 
 msgid "Package Design"
+msgstr ""
+
+msgid "High Scores"
 msgstr ""
 
 msgid "Your Name"
@@ -5095,6 +5277,9 @@ msgstr ""
 msgid "' language, but the current language of the game is '"
 msgstr ""
 
+msgid "No save files to load."
+msgstr ""
+
 msgid "Hot Seat"
 msgstr ""
 
@@ -5170,9 +5355,6 @@ msgid "Credits"
 msgstr ""
 
 msgid "View the credits screen."
-msgstr ""
-
-msgid "High Scores"
 msgstr ""
 
 msgid "View the high scores screen."
@@ -5675,9 +5857,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
-
-msgid "Day: %{day}"
 msgstr ""
 
 msgid ""
@@ -9809,13 +9988,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
@@ -10201,12 +10380,12 @@ msgstr ""
 msgid "Stoneskin"
 msgstr ""
 
+msgid "Steelskin"
+msgstr ""
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
-msgstr ""
-
-msgid "Steelskin"
 msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
@@ -10237,7 +10416,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
@@ -10561,7 +10740,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr ""
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

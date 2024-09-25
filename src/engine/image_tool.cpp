@@ -22,11 +22,19 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
-#include <functional>
 #include <memory>
 #include <ostream>
 #include <string_view>
 #include <vector>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
 
 #include <SDL_error.h>
 #include <SDL_pixels.h>
@@ -35,13 +43,18 @@
 #include <SDL_version.h>
 
 #if defined( WITH_IMAGE )
-#define ENABLE_PNG
 #include <SDL_image.h>
+#endif
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -63,7 +76,7 @@ namespace
         return palette;
     }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
 #else
     bool SaveImage( const fheroes2::Image & image, std::string path )
@@ -75,8 +88,8 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
-        if ( surface == nullptr ) {
+        const std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 ), SDL_FreeSurface );
+        if ( !surface ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
         }
@@ -108,23 +121,22 @@ namespace
             memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height ) );
         }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         int res = 0;
+
         if ( isPNGFilePath( path ) ) {
-            res = IMG_SavePNG( surface, path.c_str() );
+            res = IMG_SavePNG( surface.get(), System::encLocalToUTF8( path ).c_str() );
         }
         else {
-            res = SDL_SaveBMP( surface, path.c_str() );
+            res = SDL_SaveBMP( surface.get(), System::encLocalToUTF8( path ).c_str() );
         }
 #else
         if ( isPNGFilePath( path ) ) {
             memcpy( path.data() + path.size() - 3, "bmp", 3 );
         }
 
-        const int res = SDL_SaveBMP( surface, path.c_str() );
+        const int res = SDL_SaveBMP( surface.get(), System::encLocalToUTF8( path ).c_str() );
 #endif
-
-        SDL_FreeSurface( surface );
 
         return res == 0;
     }
@@ -161,13 +173,13 @@ namespace fheroes2
             return false;
         }
 
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
 
-#if defined( ENABLE_PNG )
-        loadedSurface.reset( IMG_Load( path.c_str() ) );
+#if defined( WITH_IMAGE )
+        loadedSurface.reset( IMG_Load( System::encLocalToUTF8( path ).c_str() ) );
 #else
-        loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
+        loadedSurface.reset( SDL_LoadBMP( System::encLocalToUTF8( path ).c_str() ) );
 #endif
         if ( !loadedSurface ) {
             return false;
@@ -180,7 +192,7 @@ namespace fheroes2
 
         // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
         // processing
-        const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+        const std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
         if ( !pixelFormat ) {
             return false;
         }
@@ -195,7 +207,7 @@ namespace fheroes2
         image.resize( surface->w, surface->h );
         image.reset();
 
-        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        const uint8_t * inY = static_cast<uint8_t *>( surface->pixels );
         uint8_t * outY = image.image();
         uint8_t * transformY = image.transform();
 
@@ -356,7 +368,7 @@ namespace fheroes2
 
     bool isPNGFormatSupported()
     {
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         return true;
 #else
         return false;

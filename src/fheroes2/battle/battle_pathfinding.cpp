@@ -27,7 +27,6 @@
 #include <functional>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <vector>
 
 #include "battle_arena.h"
@@ -52,7 +51,7 @@ namespace Battle
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::array<bool, ARENASIZE> boardStatus{};
+        std::array<bool, Board::sizeInCells> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
@@ -132,7 +131,7 @@ namespace Battle
 
         std::vector<BattleNodeIndex> nodesToExplore;
 
-        nodesToExplore.reserve( ARENASIZE * 2 );
+        nodesToExplore.reserve( Board::sizeInCells * 2 );
         nodesToExplore.push_back( _pathStart );
 
         for ( size_t nodesToExploreIdx = 0; nodesToExploreIdx < nodesToExplore.size(); ++nodesToExploreIdx ) {

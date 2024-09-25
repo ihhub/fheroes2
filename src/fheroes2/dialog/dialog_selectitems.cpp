@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstddef>
 #include <iterator>
-#include <memory>
 #include <numeric>
 #include <utility>
 #include <vector>
@@ -40,18 +39,14 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes_base.h"
 #include "icn.h"
-#include "image.h"
-#include "interface_list.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "pal.h"
 #include "race.h"
@@ -60,14 +55,13 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
-#include "ui_window.h"
 #include "world.h"
 
 namespace
@@ -78,373 +72,205 @@ namespace
         // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
-}
 
-class SelectEnum : public Interface::ListBox<int>
-{
-public:
-    using Interface::ListBox<int>::ActionListDoubleClick;
-    using Interface::ListBox<int>::ActionListSingleClick;
-    using Interface::ListBox<int>::ActionListPressRight;
-
-    SelectEnum() = delete;
-
-    explicit SelectEnum( const fheroes2::Size & dialogSize, std::string title, std::string description = {} )
+    class SelectEnumMonster final : public Dialog::ItemSelectionWindow
     {
-        assert( !title.empty() );
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-        background = std::make_unique<fheroes2::StandardWindow>( dialogSize.width, dialogSize.height, true, display );
-
-        const fheroes2::Rect & area = background->activeArea();
-
-        int32_t listOffsetY = 0;
-
-        fheroes2::Text text( std::move( title ), fheroes2::FontType::normalYellow() );
-        text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
-
-        // The additional text under the title.
-        if ( !description.empty() ) {
-            text.set( std::move( description ), fheroes2::FontType::normalWhite() );
-            text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
-            listOffsetY = text.height() + 3;
+    public:
+        explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
         }
 
-        const fheroes2::Rect listRoi( area.x + 10, area.y + 30 + listOffsetY, area.width - 40, area.height - 70 - listOffsetY );
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        background->applyTextBackgroundShading( listRoi );
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
-        listBackground = std::make_unique<fheroes2::ImageRestorer>( display, listRoi.x, listRoi.y, listRoi.width, listRoi.height );
-
-        SetAreaItems( { listRoi.x + 5, listRoi.y + 5, listRoi.width - 10, listRoi.height - 10 } );
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int32_t scrollbarOffsetX = area.x + area.width - 25;
-
-        background->renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
-
-        const int32_t topPartHeight = 19;
-        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
-
-        SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
-        SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
-        setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
-
-        // Render dialog buttons.
-        background->renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    }
-
-    void RedrawBackground( const fheroes2::Point & /* unused */ ) override
-    {
-        listBackground->restore();
-    }
-
-    void ActionListDoubleClick( int & /* unused */ ) override
-    {
-        ok = true;
-    }
-
-    void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
-    {
-        // Do nothing.
-    }
-
-    void ActionCurrentUp() override
-    {
-        // Do nothing.
-    }
-
-    void ActionCurrentDn() override
-    {
-        // Do nothing.
-    }
-
-    void ActionListSingleClick( int & /* unused */ ) override
-    {
-        // Do nothing.
-    }
-
-    void ActionListPressRight( int & /* unused */ ) override
-    {
-        // Do nothing.
-    }
-
-    void updateScrollBarImage()
-    {
-        const int32_t scrollBarWidth = _scrollbar.width();
-
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                                              { 0, 7, scrollBarWidth, 8 } ) );
-        _scrollbar.moveToIndex( _topId );
-    }
-
-    // An image with text should have offset of 10 pixels from all left and right edges.
-    void renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
-                     const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
-
-        fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - textOffsetX - 55 );
-        text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
-    }
-
-    int32_t selectItemsEventProcessing()
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        // setup cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-        const fheroes2::Rect & roi = background->activeArea();
-
-        updateScrollBarImage();
-
-        Redraw();
-        display.render( background->totalArea() );
-
-        LocalEvent & le = LocalEvent::Get();
-
-        while ( !ok && le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-
-            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-                return Dialog::OK;
-            }
-            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                return Dialog::CANCEL;
-            }
-
-            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), Dialog::ZERO );
-            }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
-            }
-
-            QueueEventProcessing();
-
-            if ( !IsNeedRedraw() ) {
-                continue;
-            }
-
-            Redraw();
-            display.render( roi );
+            renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
-        return Dialog::ZERO;
-    }
+        void ActionListPressRight( int & index ) override
+        {
+            const Monster monster( index );
+            if ( !monster.isValid() ) {
+                fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+                return;
+            }
 
-    bool ok{ false };
-    std::unique_ptr<fheroes2::StandardWindow> background;
-    std::unique_ptr<fheroes2::ImageRestorer> listBackground;
-    fheroes2::Button buttonOk;
-    fheroes2::Button buttonCancel;
-};
-
-class SelectEnumMonster : public SelectEnum
-{
-public:
-    explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
-        : SelectEnum( rt, std::move( title ) )
-    {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
-
-    using SelectEnum::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Monster mons( index );
-        const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-
-        renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        const Monster monster( index );
-        if ( !monster.isValid() ) {
-            fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
-            return;
+            Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
         }
 
-        Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
-    }
+    private:
+        static const int32_t _offsetY{ 43 };
+    };
 
-private:
-    static const int32_t _offsetY{ 43 };
-};
-
-class SelectEnumHeroes : public SelectEnum
-{
-public:
-    explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
-        : SelectEnum( rt, std::move( title ) )
+    class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+    public:
+        explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-    using SelectEnum::ActionListPressRight;
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+
+            renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            Dialog::QuickInfo( *world.GetHeroes( index ) );
+        }
+
+    private:
+        static const int32_t _offsetY{ 35 };
+    };
+
+    class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
     {
-        const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+    public:
+        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-        renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void ActionListPressRight( int & index ) override
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Artifact art( index );
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+
+            renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class SelectEnumSpell final : public Dialog::ItemSelectionWindow
     {
-        Dialog::QuickInfo( *world.GetHeroes( index ) );
-    }
+    public:
+        explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
 
-private:
-    static const int32_t _offsetY{ 35 };
-};
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-class SelectEnumArtifact : public SelectEnum
-{
-public:
-    explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-        : SelectEnum( rt, std::move( title ) )
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Spell spell( index );
+            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+
+            renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 55 };
+    };
+
+    class SelectEnumSecSkill final : public Dialog::ItemSelectionWindow
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+    public:
+        static int getSkillFromListIndex( int index )
+        {
+            return 1 + index / 3;
+        }
 
-    using SelectEnum::ActionListPressRight;
+        static int getLevelFromListIndex( int index )
+        {
+            return 1 + ( index % 3 );
+        }
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
+            const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
+
+            renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int & index ) override
+        {
+            fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() )
+                .showPopup( Dialog::ZERO );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class SelectKingdomCastle final : public Dialog::ItemSelectionWindow
     {
-        const Artifact art( index );
-        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+    public:
+        explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ), std::move( description ) )
+            , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
+        {
+            SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
+        }
 
-        renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
-    }
+        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
-private:
-    static const int32_t _offsetY{ 42 };
-};
+            assert( castle != nullptr );
 
-class SelectEnumSpell : public SelectEnum
-{
-public:
-    explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
-        : SelectEnum( rt, std::move( title ) )
-    {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
+            fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
+            fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
 
-    using SelectEnum::ActionListPressRight;
+            renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
+        }
 
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Spell spell( index );
-        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+        void ActionListPressRight( int & index ) override
+        {
+            Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
+        }
 
-        renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
-    }
+        static const int32_t itemsOffsetY{ 35 };
 
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
-    }
+    private:
+        const int _townFrameIcnId;
+    };
 
-private:
-    static const int32_t _offsetY{ 55 };
-};
-
-class SelectEnumSecSkill : public SelectEnum
-{
-public:
-    static int getSkillFromListIndex( int index )
-    {
-        return 1 + index / 3;
-    }
-
-    static int getLevelFromListIndex( int index )
-    {
-        return 1 + ( index % 3 );
-    }
-
-    explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
-        : SelectEnum( rt, std::move( title ) )
-    {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
-    }
-
-    using SelectEnum::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
-        const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
-
-        renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
-    }
-
-private:
-    static const int32_t _offsetY{ 42 };
-};
-
-class SelectKingdomCastle : public SelectEnum
-{
-public:
-    explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
-        : SelectEnum( rt, std::move( title ), std::move( description ) )
-        , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
-    {
-        SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
-    }
-
-    using SelectEnum::ActionListPressRight;
-
-    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-    {
-        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-
-        assert( castle != nullptr );
-
-        fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
-        fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
-
-        renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
-    }
-
-    void ActionListPressRight( int & index ) override
-    {
-        Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), background->totalArea() );
-    }
-
-    static const int32_t itemsOffsetY{ 35 };
-
-private:
-    const int _townFrameIcnId;
-};
-
-namespace
-{
     // This is a base class for items used in the Editor and they rely on Maps::ObjectInfo structures.
-    class ObjectTypeSelection : public SelectEnum
+    class ObjectTypeSelection : public Dialog::ItemSelectionWindow
     {
     public:
         ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title, const int32_t imageOffsetX,
                              const int32_t textOffsetX, const int32_t offsetY )
-            : SelectEnum( size, std::move( title ) )
+            : Dialog::ItemSelectionWindow( size, std::move( title ) )
             , _objectInfo( objectInfo )
             , _imageOffsetX( imageOffsetX )
             , _textOffsetX( textOffsetX )
@@ -453,7 +279,7 @@ namespace
             SetAreaMaxItems( rtAreaItems.height / _offsetY );
         }
 
-        using SelectEnum::ActionListPressRight;
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
 
         void RedrawItem( const int & objectId, int32_t posX, int32_t posY, bool isSelected ) override
         {
@@ -463,9 +289,9 @@ namespace
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             const int32_t imageHeight = image.height();
             const int32_t imageWidth = image.width();
-            if ( imageHeight > TILEWIDTH * 3 || imageWidth > TILEWIDTH * 5 ) {
+            if ( imageHeight > fheroes2::tileWidthPx * 3 || imageWidth > fheroes2::tileWidthPx * 5 ) {
                 // Reduce the size of very tall images to fit the list.
-                const double ratio = std::max( imageHeight / ( TILEWIDTH * 3. ), imageWidth / ( TILEWIDTH * 5. ) );
+                const double ratio = std::max( imageHeight / ( fheroes2::tileWidthPx * 3. ), imageWidth / ( fheroes2::tileWidthPx * 5. ) );
                 fheroes2::Image resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
@@ -497,7 +323,7 @@ namespace
         const int32_t _offsetY{ 0 };
     };
 
-    class MonsterTypeSelection : public ObjectTypeSelection
+    class MonsterTypeSelection final : public ObjectTypeSelection
     {
     public:
         MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -524,7 +350,7 @@ namespace
         }
     };
 
-    class ArtifactTypeSelection : public ObjectTypeSelection
+    class ArtifactTypeSelection final : public ObjectTypeSelection
     {
     public:
         ArtifactTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -575,7 +401,7 @@ namespace
         }
     };
 
-    class TreasureTypeSelection : public ObjectTypeSelection
+    class TreasureTypeSelection final : public ObjectTypeSelection
     {
     public:
         TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -626,7 +452,7 @@ namespace
         }
     };
 
-    class OceanObjectTypeSelection : public ObjectTypeSelection
+    class OceanObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         OceanObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -651,7 +477,7 @@ namespace
         }
     };
 
-    class GenericObjectTypeSelection : public ObjectTypeSelection
+    class GenericObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         GenericObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -689,7 +515,7 @@ namespace
         }
     };
 
-    class PowerUpObjectTypeSelection : public ObjectTypeSelection
+    class PowerUpObjectTypeSelection final : public ObjectTypeSelection
     {
     public:
         PowerUpObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
@@ -719,10 +545,10 @@ namespace
         objectSelection.SetCurrent( std::max( objectType, 0 ) );
 
         const int32_t result = objectSelection.selectItemsEventProcessing();
-        return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
+        return result == Dialog::OK ? objectSelection.GetCurrent() : -1;
     }
 
-    class MineTypeList : public Interface::ListBox<Maps::ObjectInfo>
+    class MineTypeList final : public Interface::ListBox<Maps::ObjectInfo>
     {
     public:
         using Interface::ListBox<Maps::ObjectInfo>::ActionListDoubleClick;
@@ -776,14 +602,10 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            fheroes2::Blit( mineSprite, display, dstx + TILEWIDTH * 5 + 5 - mineSprite.width(), dsty + 1 );
+            fheroes2::Blit( mineSprite, display, dstx + fheroes2::tileWidthPx * 5 + 5 - mineSprite.width(), dsty + 1 );
 
             // Mine type selection mark background.
-            fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
-            if ( Settings::Get().isEvilInterfaceEnabled() ) {
-                fheroes2::ApplyPalette( markBackground,
-                                        PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-            }
+            const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
             fheroes2::Blit( markBackground, display, dstx + 10, dsty + 24 );
 
             if ( current ) {
@@ -859,15 +681,143 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK || listbox.ok ) ? listbox.GetCurrent() : -1;
+    return ( result == Dialog::OK ) ? listbox.GetCurrent() : -1;
+}
+
+namespace Dialog
+{
+    ItemSelectionWindow::ItemSelectionWindow( const fheroes2::Size & dialogSize, std::string title, std::string description )
+    {
+        assert( !title.empty() );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        _window = std::make_unique<fheroes2::StandardWindow>( dialogSize.width, dialogSize.height, true, display );
+
+        const fheroes2::Rect & area = _window->activeArea();
+
+        int32_t listOffsetY = 0;
+
+        fheroes2::Text text( std::move( title ), fheroes2::FontType::normalYellow() );
+        text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
+
+        // The additional text under the title.
+        if ( !description.empty() ) {
+            text.set( std::move( description ), fheroes2::FontType::normalWhite() );
+            text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
+            listOffsetY = text.height() + 3;
+        }
+
+        const fheroes2::Rect listRoi( area.x + 10, area.y + 30 + listOffsetY, area.width - 40, area.height - 70 - listOffsetY );
+
+        _window->applyTextBackgroundShading( listRoi );
+
+        _backgroundRestorer = std::make_unique<fheroes2::ImageRestorer>( display, listRoi.x, listRoi.y, listRoi.width, listRoi.height );
+
+        SetAreaItems( { listRoi.x + 5, listRoi.y + 5, listRoi.width - 10, listRoi.height - 10 } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int32_t scrollbarOffsetX = area.x + area.width - 25;
+
+        _window->renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
+
+        const int32_t topPartHeight = 19;
+        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
+
+        SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
+        SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
+        setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+        setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+
+        // Render dialog buttons.
+        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel, isEvilInterface );
+    }
+
+    void ItemSelectionWindow::updateScrollBarImage()
+    {
+        const int32_t scrollBarWidth = _scrollbar.width();
+
+        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
+                                                              { 0, 7, scrollBarWidth, 8 } ) );
+        _scrollbar.moveToIndex( _topId );
+    }
+
+    // An image with text should have offset of 10 pixels from all left and right edges.
+    void ItemSelectionWindow::renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination,
+                                          const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
+
+        fheroes2::Text text( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
+        text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
+    }
+
+    int32_t ItemSelectionWindow::selectItemsEventProcessing()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        // setup cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        const fheroes2::Rect & roi = _window->activeArea();
+
+        updateScrollBarImage();
+
+        Redraw();
+        display.render( _window->totalArea() );
+
+        LocalEvent & le = LocalEvent::Get();
+
+        while ( !_isDoubleClicked && le.HandleEvents() ) {
+            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonOk.area() ) );
+            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonCancel.area() ) );
+
+            if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+                return Dialog::OK;
+            }
+            if ( le.MouseClickLeft( _buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                return Dialog::CANCEL;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( _buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( _buttonCancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+            }
+
+            QueueEventProcessing();
+
+            if ( !IsNeedRedraw() ) {
+                continue;
+            }
+
+            Redraw();
+            display.render( roi );
+        }
+
+        if ( _isDoubleClicked ) {
+            return Dialog::OK;
+        }
+
+        return Dialog::ZERO;
+    }
+
+    fheroes2::Rect ItemSelectionWindow::getBackgroundArea() const
+    {
+        assert( _window );
+        return _window->totalArea();
+    }
 }
 
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
     std::vector<int> skills;
-    skills.reserve( static_cast<size_t>( MAXSECONDARYSKILL * 3 ) );
+    skills.reserve( static_cast<size_t>( Skill::numOfSecondarySkills ) * 3 );
 
-    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
+    for ( int i = 0; i < Skill::numOfSecondarySkills * 3; ++i ) {
         if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
             skills.push_back( i );
         }
@@ -882,7 +832,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    if ( result == Dialog::OK || listbox.ok ) {
+    if ( result == Dialog::OK ) {
         const int skillIndex = listbox.GetCurrent();
         return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
@@ -910,24 +860,44 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
+    return ( result == Dialog::OK ) ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact( const int artifactId )
+Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryConditions )
 {
     std::vector<int> artifacts;
-    artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
+    artifacts.reserve( Artifact::ARTIFACT_COUNT - 2 );
 
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
     const bool isPriceofLoyaltyArtifactAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
-    // We show the magic book at the first place.
-    artifacts.emplace_back( Artifact::MAGIC_BOOK );
+    if ( !isForVictoryConditions ) {
+        // We show the Magic Book at the first place.
+        artifacts.emplace_back( Artifact::MAGIC_BOOK );
+    }
+    else {
+        // We show the Ultimate Artifact at the first place.
+        artifacts.emplace_back( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
+    }
 
     for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
-            artifacts.emplace_back( id );
+        if ( id == Artifact::MAGIC_BOOK ) {
+            continue;
         }
+
+        if ( isForVictoryConditions && id == Artifact::SPELL_SCROLL ) {
+            continue;
+        }
+
+        if ( !Artifact( id ).isValid() ) {
+            continue;
+        }
+
+        if ( !isPriceofLoyaltyArtifactAllowed && fheroes2::isPriceOfLoyaltyArtifact( id ) ) {
+            continue;
+        }
+
+        artifacts.emplace_back( id );
     }
 
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 150 }, _( "Select Artifact:" ) );
@@ -939,7 +909,7 @@ Artifact Dialog::selectArtifact( const int artifactId )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return ( result == Dialog::OK ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::selectMonster( const int monsterId )
@@ -959,7 +929,7 @@ Monster Dialog::selectMonster( const int monsterId )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return result == Dialog::OK || listbox.ok ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
+    return ( result == Dialog::OK ) ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
 }
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
@@ -980,7 +950,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
+    return ( result == Dialog::OK ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
 
 int Dialog::selectHeroType( const int heroType )
@@ -1299,9 +1269,11 @@ void Dialog::selectTownType( int & type, int & color )
     background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    const fheroes2::Rect castleRoi{ pos.x - 2 * TILEWIDTH - TILEWIDTH / 2, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 5 * TILEWIDTH, 5 * TILEWIDTH };
+    const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
+                                    5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
 
-    fheroes2::ImageRestorer castleBackground( display, pos.x - 5 * TILEWIDTH, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 8 * TILEWIDTH, 5 * TILEWIDTH );
+    fheroes2::ImageRestorer castleBackground( display, pos.x - 5 * fheroes2::tileWidthPx, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
+                                              8 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx );
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
@@ -1466,10 +1438,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     std::array<fheroes2::Rect, resourceCount> resourceRoi;
 
     // Resource type selection mark background.
-    fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
-    if ( isEvilInterface ) {
-        fheroes2::ApplyPalette( markBackground, PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
-    }
+    const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
 
     // Resource icons.
     const int32_t iconOffsetX = 35;
@@ -1479,8 +1448,9 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
         const fheroes2::Sprite & resourceImage = fheroes2::generateMapObjectImage( resourceInfo[i] );
-        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - TILEWIDTH * 3 ) / 2, offsetY + ( stepY - TILEWIDTH ) / 2 );
-        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, TILEWIDTH };
+        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - fheroes2::tileWidthPx * 3 ) / 2,
+                                             offsetY + ( stepY - fheroes2::tileWidthPx ) / 2 );
+        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, fheroes2::tileWidthPx };
         fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y - 4 );
         fheroes2::Blit( markBackground, display, resourceRoi[i].x + 2, resourceRoi[i].y + ( resourceRoi[i].height - markBackground.height() ) / 2 );
         offsetY += stepY;
@@ -1549,7 +1519,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     // Mine appearance type selection list.
     MineTypeList listbox( area.getPosition() );
-    const fheroes2::Rect listRoi( area.x + area.width - 5 * TILEWIDTH - 75, resourceSelectRoi.y, 5 * TILEWIDTH + 20, resourceSelectRoi.height );
+    const fheroes2::Rect listRoi( area.x + area.width - 5 * fheroes2::tileWidthPx - 75, resourceSelectRoi.y, 5 * fheroes2::tileWidthPx + 20, resourceSelectRoi.height );
     background.applyTextBackgroundShading( listRoi );
 
     // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
@@ -1635,17 +1605,22 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     // Mine appearance selection text.
     auto redrawAppearanceText = [&appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
+
         if ( info.objectType == MP2::OBJ_MINE ) {
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {
             StringReplace( mineText, "%{mineName}", MP2::StringObject( info.objectType ) );
         }
+
         const fheroes2::Text appearanceText( std::move( mineText ), fheroes2::FontType::smallWhite() );
         const int32_t textWidth = appearanceText.width( listRoi.width );
         const int32_t textHeight = appearanceText.height( listRoi.width );
+
         appearanceTextBackground.restore();
-        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight, textWidth, textHeight );
+
+        // The text height does not take into account the diacritical marks. Add extra 2 pixels to the restorer.
+        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight - 2, textWidth, textHeight + 2 );
         appearanceText.draw( listRoi.x, listRoi.y - textHeight, listRoi.width, display );
     };
     redrawAppearanceText( objectInfo[listbox.getCurrentId()] );

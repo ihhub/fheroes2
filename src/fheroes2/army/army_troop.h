@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,7 +30,8 @@
 #include "monster.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Army;
 
@@ -80,16 +81,13 @@ public:
     double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const Troop & );
-    friend StreamBase & operator>>( StreamBase &, Troop & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Troop & troop );
+    friend IStreamBase & operator>>( IStreamBase & stream, Troop & troop );
 
     static std::string GetSpeedString( uint32_t speed );
 
     uint32_t count;
 };
-
-StreamBase & operator<<( StreamBase &, const Troop & );
-StreamBase & operator>>( StreamBase &, Troop & );
 
 class ArmyTroop : public Troop
 {
@@ -101,9 +99,10 @@ public:
 
     uint32_t GetAttack() const override;
     uint32_t GetDefense() const override;
-    int GetColor() const override;
     int GetMorale() const override;
     int GetLuck() const override;
+
+    int GetColor() const;
 
     void SetArmy( const Army & );
     const Army * GetArmy() const;

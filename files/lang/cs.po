@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 13:03+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -315,6 +315,9 @@ msgstr ""
 "D"
 
 msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -2008,6 +2011,12 @@ msgstr "Kouzelníkův ostrov"
 msgid "Descendants"
 msgstr "Potomci"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nelze postavit. Dnes si zde již stavěl."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produkuje %{monster}."
 
@@ -2016,12 +2025,6 @@ msgstr "Požadováno:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Odejít z menu bez provedení změm."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nelze postavit. Dnes si zde již stavěl."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2832,11 +2835,11 @@ msgstr "Nejsou zde žádné stvoření k najmutí."
 msgid "Recruit Creatures"
 msgstr "Najmout Stvoření"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Najmout všechna stvoření ve městě."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Dostupných"
@@ -3032,17 +3035,14 @@ msgstr "Celkem: "
 msgid "Need: "
 msgstr "Potřeba: "
 
-msgid "Load Game"
-msgstr "Načíst Hru"
-
-msgid "No save files to load."
-msgstr "Žádné uložené hry k načtení."
-
 msgid "New Game"
 msgstr "Nová Hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Spusti hru jednoho nebo více hráčů."
+
+msgid "Load Game"
+msgstr "Načíst Hru"
 
 msgid "Load a previously saved game."
 msgstr "Načti dříve uloženou hru."
@@ -3284,6 +3284,9 @@ msgid ""
 "%{skill2}"
 msgstr "Můžeš se naučit:"
 
+msgid "n/a"
+msgstr "n/a"
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -3318,9 +3321,6 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možno zaměnit"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "hlídáno %{count} %{monster}"
@@ -3430,6 +3430,20 @@ msgstr "Vybrat maximální počet k najmutí."
 msgid "Select only 1 monster to be recruited."
 msgstr "Vybrat pouze 1 stvůru k najmutí."
 
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Vybrat rozlišení"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Nastav rozlišení hry:"
 
@@ -3497,10 +3511,10 @@ msgstr "Uložit do souboru:"
 msgid "File to Load:"
 msgstr "Soubor k načtení:"
 
-msgid "Accept the choice made."
+msgid "Terrain object"
 msgstr ""
 
-msgid "Terrain object"
+msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
@@ -3623,6 +3637,33 @@ msgstr "Artefakt"
 msgid "Select Adventure Object:"
 msgstr "Artefakt"
 
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Velikost mapy"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Map Type:\n"
 msgstr "Velikost mapy"
@@ -3715,33 +3756,6 @@ msgstr "Všechny mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Zobrazí všechny mapy, nezávisle na velikosti."
-
-msgid "Players Icon"
-msgstr ""
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-
-msgid "Size Icon"
-msgstr ""
-
-#, fuzzy
-msgid "Map Type"
-msgstr "Velikost mapy"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
 
 msgid "Selected Name"
 msgstr ""
@@ -3942,7 +3956,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Pruh správ"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3951,7 +3965,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3978,6 +3995,56 @@ msgstr "Pruh správ"
 msgid "Click to save the Event properties."
 msgstr "Klikni pro uložení aktuální hry."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Zdroje"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Den: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Událost"
+
+msgid "Add an additional event."
+msgstr ""
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Událost"
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -3991,27 +4058,10 @@ msgstr "Artefakt"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Zdroje"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Klikni pro uložení aktuální hry."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4111,6 +4161,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Soubor je požkozen."
@@ -4120,6 +4173,10 @@ msgstr ""
 
 msgid "Unable to create a directory to save the map."
 msgstr ""
+
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Uložit do souboru:"
 
 #, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
@@ -4416,6 +4473,30 @@ msgid "Warning"
 msgstr "Varování"
 
 #, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} se střetá s %{name2}"
+
+#, fuzzy
 msgid "None."
 msgstr "Nic"
 
@@ -4431,6 +4512,95 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " aliance"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr ""
+"Podmínky\n"
+"pro prohru"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr ""
+"Podmínky\n"
+"pro výhru"
+
+msgid "Allow standard victory conditions"
+msgstr ""
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " aliance"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " aliance"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Zlato"
+
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Mapa\n"
@@ -4442,18 +4612,6 @@ msgstr ""
 "\n"
 "\n"
 "Cesta: "
-
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr ""
-"Podmínky\n"
-"pro výhru"
-
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr ""
-"Podmínky\n"
-"pro prohru"
 
 msgid "Change Map Name"
 msgstr ""
@@ -4478,6 +4636,14 @@ msgid "Rumors"
 msgstr ""
 
 #, fuzzy
+msgid "Click to edit daily events."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "Events"
+msgstr "Událost"
+
+#, fuzzy
 msgid "Click to change your map name."
 msgstr "Klikni pro zobrazení následujícího města."
 
@@ -4489,6 +4655,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Klikni pro uložení aktuální hry."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Klikni pro uložení aktuální hry."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4608,6 +4782,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4883,6 +5060,9 @@ msgstr ""
 
 msgid "Package Design"
 msgstr ""
+
+msgid "High Scores"
+msgstr "Nejlepší výsledky"
 
 msgid "Your Name"
 msgstr ""
@@ -5318,6 +5498,9 @@ msgstr "Tato hra je uložena s lokalizací pro '"
 msgid "' language, but the current language of the game is '"
 msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 
+msgid "No save files to load."
+msgstr "Žádné uložené hry k načtení."
+
 msgid "Hot Seat"
 msgstr "Horké křeslo"
 
@@ -5401,9 +5584,6 @@ msgstr "Autoři"
 
 msgid "View the credits screen."
 msgstr "Zobraz obrazovku s autory."
-
-msgid "High Scores"
-msgstr "Nejlepší výsledky"
 
 msgid "View the high scores screen."
 msgstr "Zobraz tabulku s nej. skóre."
@@ -5965,9 +6145,6 @@ msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Měsíc: %{month} Týden: %{week}"
-
-msgid "Day: %{day}"
-msgstr "Den: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -10265,13 +10442,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
@@ -10677,15 +10854,15 @@ msgstr "Magicky zvýší obrannou sílu vybraných stvůr."
 msgid "Stoneskin"
 msgstr "Kamenná kůže"
 
+msgid "Steelskin"
+msgstr "Kůže z oceli"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Zvyšuje obrannou sílu u cílových stvůr. Jedná se o vylepšenou verzi kouzla "
 "Kamenná kůže."
-
-msgid "Steelskin"
-msgstr "Kůže z oceli"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Způsobí, že vybrané stvůry budou působit minimální poškození."
@@ -10717,7 +10894,8 @@ msgstr "Svatý Výkřik"
 msgid "Anti-Magic"
 msgstr "Antimagie"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Znemožňuje použití škodlivé magie proti vybraným stvůrám."
 
 msgid "Dispel Magic"
@@ -11069,7 +11247,8 @@ msgstr "Nemáš Knihu kouzel, bez ní nemůžeš kouzlit."
 msgid "No spell to cast."
 msgstr "Žádné kouzlo k seslání."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Tvému hrdinovi zbývá %{point} bodů kouzla."
 
 msgid "View Adventure Spells"

@@ -107,7 +107,17 @@ namespace
 
         void ActionListDoubleClick( std::string & /*unused*/ ) override
         {
-            // Do nothing.
+            _isDoubleClicked = true;
+        }
+
+        bool isDoubleClicked() const
+        {
+            return _isDoubleClicked;
+        }
+
+        void resetDoubleClickedState()
+        {
+            _isDoubleClicked = false;
         }
 
         void ActionListSingleClick( std::string & /*unused*/ ) override
@@ -141,6 +151,8 @@ namespace
 
     private:
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+
+        bool _isDoubleClicked{ false };
     };
 }
 
@@ -204,17 +216,19 @@ namespace Editor
 
         answerList.Redraw();
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 13 );
+        const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
+
+        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( answerArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
-        fheroes2::Button buttonAdd( answerRoi.x, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 13, 14 );
+        fheroes2::Button buttonAdd( answerRoi.x, answerRoi.y + answerRoi.height + 5, minibuttonIcnId, 13, 14 );
         buttonAdd.draw();
 
-        fheroes2::Button buttonEdit( answerRoi.x + buttonOffset, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 15, 16 );
+        fheroes2::Button buttonEdit( answerRoi.x + buttonOffset, answerRoi.y + answerRoi.height + 5, minibuttonIcnId, 15, 16 );
         buttonEdit.draw();
 
-        fheroes2::Button buttonDelete( answerRoi.x + answerArea.width - buttonWidth, answerRoi.y + answerRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDelete( answerRoi.x + answerArea.width - buttonWidth, answerRoi.y + answerRoi.height + 5, minibuttonIcnId, 17, 18 );
         buttonDelete.draw();
 
         offsetY += text.height() + riddleArea.height + elementOffset;
@@ -235,7 +249,7 @@ namespace Editor
 
         redrawArtifactImage( metadata.artifact );
 
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
         buttonDeleteArtifact.draw();
 
         const fheroes2::Rect resourceRoi{ answerRoi.x, offsetY + text.height(), answerRoi.width, 99 };
@@ -286,10 +300,10 @@ namespace Editor
                     int32_t * resourcePtr = metadata.resources.GetPtr( resourceType );
                     assert( resourcePtr != nullptr );
 
-                    uint32_t temp = *resourcePtr;
+                    int32_t temp = *resourcePtr;
 
                     if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
-                        *resourcePtr = static_cast<int32_t>( temp );
+                        *resourcePtr = temp;
                     }
 
                     resourceRoiRestorer.restore();
@@ -327,10 +341,12 @@ namespace Editor
                     isRedrawNeeded = true;
                 }
             }
-            else if ( le.MouseClickLeft( buttonEdit.area() ) ) {
+            else if ( answerList.isDoubleClicked() || le.MouseClickLeft( buttonEdit.area() ) ) {
                 if ( answerList.getCurrentId() < 0 ) {
                     continue;
                 }
+
+                answerList.resetDoubleClickedState();
 
                 std::string temp = answerList.GetCurrent();
                 if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false, true ) ) {
@@ -357,7 +373,7 @@ namespace Editor
                 isRedrawNeeded = true;
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( metadata.artifact );
+                const Artifact artifact = Dialog::selectArtifact( metadata.artifact, false );
                 if ( artifact.isValid() ) {
                     int32_t artifactMetadata = metadata.artifactMetadata;
 
@@ -414,12 +430,10 @@ namespace Editor
                 const Artifact artifact( metadata.artifact );
 
                 if ( artifact.isValid() ) {
-                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
-                    const fheroes2::Text description( fheroes2::getArtifactData( metadata.artifact ).getDescription( metadata.artifactMetadata ),
-                                                      fheroes2::FontType::normalWhite() );
-
                     fheroes2::ArtifactDialogElement artifactUI( artifact );
-                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
+
+                    fheroes2::showStandardTextMessage( artifact.GetName(), fheroes2::getArtifactData( metadata.artifact ).getDescription( metadata.artifactMetadata ),
+                                                       Dialog::ZERO, { &artifactUI } );
                 }
                 else {
                     fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );

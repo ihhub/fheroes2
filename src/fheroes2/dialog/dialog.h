@@ -23,19 +23,16 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
-
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
+#include "math_base.h"
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -45,7 +42,11 @@ class Monster;
 class Troop;
 
 struct ArtifactSetData;
-struct CapturedObject;
+
+namespace fheroes2
+{
+    class DialogElement;
+}
 
 namespace Skill
 {
@@ -112,8 +113,8 @@ namespace Dialog
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
-    bool SelectCount( std::string header, const uint32_t min, const uint32_t max, uint32_t & selectedValue, const uint32_t step = 1,
-                      const fheroes2::Image & backgroundImage = {} );
+    bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
+                      const fheroes2::DialogElement * uiElement = nullptr );
     bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
                       const bool englishOnlyVirtualKeyboard );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
@@ -121,7 +122,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
+    int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
@@ -169,7 +170,7 @@ namespace Dialog
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {
