@@ -2169,8 +2169,8 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
         }
 
         const int currentCastleIndex = castle->GetIndex();
-        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentCastleIndex );
 
+        const auto [dist, dummy] = getDistanceToTile( pathfinder, currentCastleIndex );
         if ( dist == 0 ) {
             continue;
         }
