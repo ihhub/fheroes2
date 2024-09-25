@@ -860,7 +860,7 @@ namespace Interface
             isCursorOverGamearea = false;
 
             // cursor is over the radar
-            if ( le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
+            if ( le.isMouseCursorPosInArea( _radar.GetArea() ) ) {
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
@@ -892,7 +892,7 @@ namespace Interface
                 if ( !_radar.isDragRadar() ) {
                     _gameArea.QueueEventProcessing( isCursorOverGamearea );
                 }
-                else if ( !le.isMouseLeftButtonPressed() ) {
+                else if ( le.isMouseLeftButtonReleased() ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -928,7 +928,7 @@ namespace Interface
                     }
                 }
 
-                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && le.isMouseLeftButtonPressed() ) {
+                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && !_radar.isDragRadar() && le.isMouseLeftButtonPressed() ) {
                     _areaSelectionStartTileId = tilePos.y * world.w() + tilePos.x;
                     _redraw |= REDRAW_GAMEAREA;
                 }
