@@ -23,12 +23,11 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
-#include <map>
 #include <set>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
-#include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
 #include "world_pathfinding.h"
@@ -239,8 +238,8 @@ namespace AI
 
         // The following member variables should not be saved or serialized
         std::vector<IndexObject> _mapActionObjects;
-        std::map<int32_t, PriorityTask> _priorityTargets;
-        std::map<int32_t, EnemyArmy> _enemyArmies;
+        std::unordered_map<int32_t, PriorityTask> _priorityTargets;
+        std::unordered_map<int32_t, EnemyArmy> _enemyArmies;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
@@ -248,6 +247,6 @@ namespace AI
         // Strength of the armies guarding the tiles (neutral monsters, guardians of dwellings, and so on) is constant for AI
         // during the same turn, but its calculation is a heavy operation, so it needs to be cached to speed up estimations.
         // It is important to update this cache after performing an action on the corresponding tile.
-        std::map<int32_t, double> _tileArmyStrengthCache;
+        std::unordered_map<int32_t, double> _tileArmyStrengthCache;
     };
 }
