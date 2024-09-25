@@ -80,20 +80,31 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
 
 double AI::Planner::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
 {
+    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+    static Army tileArmy;
+
     if ( !isMonsterStrengthCacheable( objectType ) ) {
-        return Army( tile ).GetStrength();
+        tileArmy.setFromTile( tile );
+
+        return tileArmy.GetStrength();
     }
 
     const int32_t tileId = tile.GetIndex();
 
-    auto iter = _neutralMonsterStrengthCache.find( tileId );
+    const auto iter = _neutralMonsterStrengthCache.find( tileId );
     if ( iter != _neutralMonsterStrengthCache.end() ) {
         // Cache hit.
         return iter->second;
     }
 
-    auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
-    return newEntry.first->second;
+    tileArmy.setFromTile( tile );
+
+    const auto [newEntryIter, inserted] = _neutralMonsterStrengthCache.emplace( tileId, tileArmy.GetStrength() );
+    if ( !inserted ) {
+        assert( 0 );
+    }
+
+    return newEntryIter->second;
 }
 
 double AI::Planner::getResourcePriorityModifier( const int resource, const bool isMine ) const
