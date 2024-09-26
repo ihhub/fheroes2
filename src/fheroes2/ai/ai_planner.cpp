@@ -78,16 +78,9 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
 
 double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
 {
-    assert( [&tile]() {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+    const int32_t tileIdx = tile.GetIndex();
 
-        // Army::setFromTile() cannot be used for castle garrisons and hero armies
-        return ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HERO );
-    }() );
-
-    const int32_t tileId = tile.GetIndex();
-
-    const auto iter = _tileArmyStrengthValues.find( tileId );
+    const auto iter = _tileArmyStrengthValues.find( tileIdx );
     if ( iter != _tileArmyStrengthValues.end() ) {
         return iter->second;
     }
@@ -96,7 +89,7 @@ double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
     static Army tileArmy;
     tileArmy.setFromTile( tile );
 
-    const auto [newEntryIter, inserted] = _tileArmyStrengthValues.try_emplace( tileId, tileArmy.GetStrength() );
+    const auto [newEntryIter, inserted] = _tileArmyStrengthValues.try_emplace( tileIdx, tileArmy.GetStrength() );
     if ( !inserted ) {
         assert( 0 );
     }
