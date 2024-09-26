@@ -72,5 +72,4 @@ namespace fheroes2
 
         return stream;
     }
-
 }
