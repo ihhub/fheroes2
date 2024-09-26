@@ -2566,6 +2566,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
+
     return stream;
 }
 

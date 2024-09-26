@@ -1855,9 +1855,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, TilesAddon & ta )
         stream >> temp >> temp;
     }
 
-    stream >> ta._imageIndex;
-
-    return stream;
+    return stream >> ta._imageIndex;
 }
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
