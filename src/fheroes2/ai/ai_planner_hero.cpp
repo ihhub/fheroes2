@@ -2518,24 +2518,24 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         }
     };
 
-    auto it = _priorityTargets.find( tileIndex );
-    if ( it == _priorityTargets.end() ) {
+    auto iter = _priorityTargets.find( tileIndex );
+    if ( iter == _priorityTargets.end() ) {
         // If the object is not a priority we have to update it after the battle as it can become the one.
         // Especially, when the opposite army has grown Skeletons or Ghosts.
         updateTile();
 
         // If the update did not add any priorities then nothing more to do.
-        it = _priorityTargets.find( tileIndex );
-        if ( it == _priorityTargets.end() ) {
+        iter = _priorityTargets.find( tileIndex );
+        if ( iter == _priorityTargets.end() ) {
             return;
         }
     }
 
-    const PriorityTask & task = it->second;
+    const PriorityTaskType taskType = iter->second.type;
 
-    switch ( task.type ) {
+    switch ( taskType ) {
     case PriorityTaskType::DEFEND:
-    case PriorityTaskType::REINFORCE: {
+    case PriorityTaskType::REINFORCE:
         if ( hero.GetIndex() != tileIndex ) {
             // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
             // one of these cases.
@@ -2560,16 +2560,26 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         assert( hero.isActive() );
 
         hero.SetModes( Heroes::SLEEPER );
+
+#ifdef WITH_DEBUG
+        {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            assert( castle != nullptr );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO,
+                       hero.GetName() << " stays in " << castle->GetName() << " to " << ( taskType == PriorityTaskType::DEFEND ? "defend the castle" : "reinforce" ) )
+        }
+#endif
+
         _priorityTargets.erase( tileIndex );
 
         break;
-    }
-    case PriorityTaskType::ATTACK: {
+    case PriorityTaskType::ATTACK:
         removePriorityAttackTarget( tileIndex );
 
         updateTile();
+
         break;
-    }
     default:
         // Did you add a new type of priority task? Add the logic above!
         assert( 0 );

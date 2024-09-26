@@ -612,6 +612,8 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         return false;
     }
 
+    DEBUG_LOG( DBG_AI, DBG_TRACE, castle.GetName() << " is threatened by enemy army at " << enemyArmy.index )
+
     double enemyStrength = enemyArmy.strength;
 
     --daysToReach;
