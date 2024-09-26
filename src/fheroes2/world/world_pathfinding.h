@@ -44,7 +44,9 @@ struct WorldNode final
     // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints{ 0 };
 
-    // Attributes specific for AIWorldPathfinder
+    // When calculating tile availability for an AI-controlled player, various relatively heavy computations are
+    // performed, the result of which does not depend on the direction in which the tile is entered. The results
+    // of these calculations can be cached.
     std::optional<bool> _isAccessibleForAI;
     struct
     {
