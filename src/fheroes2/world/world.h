@@ -87,14 +87,14 @@ struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 
 struct CapturedObject
 {
-    ObjectColor objcol;
+    ObjectColor objCol;
     Troop guardians;
 
     CapturedObject() = default;
 
     int GetColor() const
     {
-        return objcol.second;
+        return objCol.second;
     }
 
     Troop & GetTroop()
@@ -104,12 +104,12 @@ struct CapturedObject
 
     void Set( const MP2::MapObjectType obj, const int col )
     {
-        objcol = { obj, col };
+        objCol = { obj, col };
     }
 
     void SetColor( const int col )
     {
-        objcol.second = col;
+        objCol.second = col;
     }
 };
 

@@ -217,7 +217,7 @@ uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col 
     const ObjectColor objCol( obj, col );
 
     for ( const auto & [idx, capturedObj] : *this ) {
-        if ( capturedObj.objcol != objCol ) {
+        if ( capturedObj.objCol != objCol ) {
             continue;
         }
 
@@ -234,7 +234,7 @@ uint32_t CapturedObjects::GetCountMines( const int resourceType, const int owner
     const ObjectColor objCol( MP2::OBJ_MINE, ownerColor );
 
     for ( const auto & [idx, capturedObj] : *this ) {
-        if ( capturedObj.objcol != objCol ) {
+        if ( capturedObj.objCol != objCol ) {
             continue;
         }
 
@@ -261,7 +261,7 @@ int CapturedObjects::GetColor( const int32_t index ) const
 void CapturedObjects::ClearFog( const int colors )
 {
     for ( const auto & [idx, capturedObj] : *this ) {
-        const ObjectColor & objCol = capturedObj.objcol;
+        const ObjectColor & objCol = capturedObj.objCol;
 
         if ( !objCol.isColor( colors ) ) {
             continue;
@@ -291,7 +291,7 @@ void CapturedObjects::ClearFog( const int colors )
 void CapturedObjects::ResetColor( const int color )
 {
     for ( auto & [idx, capturedObj] : *this ) {
-        ObjectColor & objCol = capturedObj.objcol;
+        ObjectColor & objCol = capturedObj.objCol;
 
         if ( !objCol.isColor( color ) ) {
             continue;
@@ -1401,12 +1401,12 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )
 {
-    return stream << obj.objcol << obj.guardians;
+    return stream << obj.objCol << obj.guardians;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 {
-    return stream >> obj.objcol >> obj.guardians;
+    return stream >> obj.objCol >> obj.guardians;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )

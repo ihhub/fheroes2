@@ -990,7 +990,7 @@ std::string Maps::Tiles::String() const
     if ( MP2::isCaptureObject( GetObject( false ) ) ) {
         const CapturedObject & co = world.GetCapturedObject( _index );
 
-        os << "capture color   : " << Color::String( co.objcol.second ) << std::endl;
+        os << "capture color   : " << Color::String( co.objCol.second ) << std::endl;
         if ( co.guardians.isValid() ) {
             os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture count   : " << co.guardians.GetCount() << std::endl;
         }
