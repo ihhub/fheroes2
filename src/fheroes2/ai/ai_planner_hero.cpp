@@ -2212,20 +2212,21 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     int priorityTarget = -1;
     maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-    MP2::MapObjectType objectType = MP2::OBJ_NONE;
+    {
+        std::set<int> objectIndexes;
 
-    std::set<int> objectIndexes;
+        for ( const auto & node : _mapActionObjects ) {
+            if ( node.second == MP2::OBJ_HERO ) {
+                assert( world.GetTiles( node.first ).getHero() != nullptr );
+            }
 
-    for ( const auto & node : _mapActionObjects ) {
-        if ( node.second == MP2::OBJ_HERO ) {
-            assert( world.GetTiles( node.first ).getHero() != nullptr );
-        }
-
-        const auto [dummy, inserted] = objectIndexes.emplace( node.first );
-        if ( !inserted ) {
-            assert( 0 );
+            if ( const auto [dummy, inserted] = objectIndexes.emplace( node.first ); !inserted ) {
+                assert( 0 );
+            }
         }
     }
+
+    MP2::MapObjectType objectType = MP2::OBJ_NONE;
 #endif
 
     // Pre-calculate penalties for tiles where there is a threat of enemy attack
