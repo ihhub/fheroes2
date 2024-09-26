@@ -551,6 +551,9 @@ namespace MP2
 
     OStreamBase & operator<<( OStreamBase & stream, const MapObjectType objType );
     IStreamBase & operator>>( IStreamBase & stream, MapObjectType & objType );
+
+    OStreamBase & operator<<( OStreamBase & stream, const ObjectIcnType objIcnType );
+    IStreamBase & operator>>( IStreamBase & stream, ObjectIcnType & objIcnType );
 }
 
 #endif

@@ -1047,21 +1047,31 @@ OStreamBase & MP2::operator<<( OStreamBase & stream, const MapObjectType objType
 
 IStreamBase & MP2::operator>>( IStreamBase & stream, MapObjectType & objType )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
-        int32_t temp = OBJ_NONE;
-        stream >> temp;
+    using ObjTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objType )>>;
 
-        objType = static_cast<MapObjectType>( temp );
-    }
-    else {
-        using ObjTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objType )>>;
+    ObjTypeUnderlyingType temp = OBJ_NONE;
+    stream >> temp;
 
-        ObjTypeUnderlyingType temp = OBJ_NONE;
-        stream >> temp;
+    objType = static_cast<MapObjectType>( temp );
 
-        objType = static_cast<MapObjectType>( temp );
-    }
+    return stream;
+}
+
+OStreamBase & MP2::operator<<( OStreamBase & stream, const ObjectIcnType objIcnType )
+{
+    using ObjIcnTypeUnderlyingType = std::underlying_type_t<decltype( objIcnType )>;
+
+    return stream << static_cast<ObjIcnTypeUnderlyingType>( objIcnType );
+}
+
+IStreamBase & MP2::operator>>( IStreamBase & stream, ObjectIcnType & objIcnType )
+{
+    using ObjIcnTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objIcnType )>>;
+
+    ObjIcnTypeUnderlyingType temp = OBJ_ICN_TYPE_UNKNOWN;
+    stream >> temp;
+
+    objIcnType = static_cast<ObjectIcnType>( temp );
 
     return stream;
 }

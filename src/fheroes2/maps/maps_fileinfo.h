@@ -42,6 +42,9 @@ enum class GameVersion : int
     RESURRECTION = 2
 };
 
+OStreamBase & operator<<( OStreamBase & stream, const GameVersion version );
+IStreamBase & operator>>( IStreamBase & stream, GameVersion & version );
+
 namespace Maps
 {
     namespace Map_Format

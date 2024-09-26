@@ -22,9 +22,12 @@
 
 #include <string>
 
+class IStreamBase;
+class OStreamBase;
+
 namespace AI
 {
-    enum class Personality : int
+    enum class Personality : int32_t
     {
         NONE,
         WARRIOR,
@@ -34,4 +37,7 @@ namespace AI
 
     Personality getRandomPersonality();
     std::string getPersonalityString( const Personality personality );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Personality personality );
+    IStreamBase & operator>>( IStreamBase & stream, Personality & personality );
 }

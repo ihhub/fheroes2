@@ -21,6 +21,7 @@
 #include "ai_personality.h"
 
 #include "rand.h"
+#include "serialize.h"
 #include "translations.h"
 
 AI::Personality AI::getRandomPersonality()
@@ -42,4 +43,23 @@ std::string AI::getPersonalityString( const Personality personality )
     }
 
     return _( "None" );
+}
+
+OStreamBase & AI::operator<<( OStreamBase & stream, const Personality personality )
+{
+    using PersonalityUnderlyingType = std::underlying_type_t<decltype( personality )>;
+
+    return stream << static_cast<PersonalityUnderlyingType>( personality );
+}
+
+IStreamBase & AI::operator>>( IStreamBase & stream, Personality & personality )
+{
+    using PersonalityUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( personality )>>;
+
+    PersonalityUnderlyingType temp = static_cast<PersonalityUnderlyingType>( Personality::NONE );
+    stream >> temp;
+
+    personality = static_cast<Personality>( temp );
+
+    return stream;
 }
