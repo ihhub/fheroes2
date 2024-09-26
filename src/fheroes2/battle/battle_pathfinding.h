@@ -60,6 +60,7 @@ namespace Battle
         uint32_t _distance{ 0 };
 
         BattleNode() = default;
+
         BattleNode( BattleNodeIndex from, const uint32_t cost, const uint32_t distance )
             : _from( std::move( from ) )
             , _cost( cost )
