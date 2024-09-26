@@ -455,7 +455,7 @@ namespace
     }
 
     void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
-                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size buttonSize, const fheroes2::FontColor fontColor )
+                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size & buttonSize, const fheroes2::FontColor fontColor )
     {
         const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
         const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };

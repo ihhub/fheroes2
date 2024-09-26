@@ -36,7 +36,7 @@
 
 namespace
 {
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size buttonSize )
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size & buttonSize )
     {
         const int32_t originalWidth = original.width();
         const int32_t originalHeight = original.height();

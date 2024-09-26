@@ -21,6 +21,7 @@
 #include "ai_common.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -131,7 +132,7 @@ void AI::OptimizeTroopsOrder( Army & army )
     // Archers are sorted solely by strength
     std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
 
-    std::vector<size_t> slotOrder = { 2, 1, 3, 0, 4 };
+    std::array<size_t, 5> slotOrder = { 2, 1, 3, 0, 4 };
     switch ( archers.size() ) {
     case 1:
         slotOrder = { 0, 2, 1, 3, 4 };
