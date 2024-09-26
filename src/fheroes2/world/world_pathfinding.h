@@ -27,7 +27,6 @@
 #include <vector>
 
 #include "color.h"
-#include "mp2.h"
 #include "skill.h"
 
 class Heroes;
