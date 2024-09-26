@@ -1460,7 +1460,7 @@ void Battle::Interface::RedrawInterface()
     btn_settings.draw();
     btn_skip.draw();
 
-    popup.Redraw();
+    popup.redraw();
 
     if ( listlog && listlog->isOpenLog() ) {
         listlog->Redraw();
@@ -2699,7 +2699,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     // in case we moved the window
     _interfacePosition = border.GetArea();
 
-    popup.Reset();
+    popup.reset();
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
@@ -2758,7 +2758,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
         }
     }
 
-    popup.Reset();
+    popup.reset();
     _currentUnit = nullptr;
 }
 
@@ -2822,6 +2822,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     if ( doListlogProcessing ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
+
+        // Hide the possibly shown Damage Info pop-up dialog.
+        popup.reset();
 
         listlog->QueueEventProcessing();
     }
@@ -2979,10 +2982,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         const Cell * cell = Board::GetCell( _curentCellIndex );
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
-                popup.SetAttackInfo( cell, _currentUnit, cell->GetUnit() );
+                popup.setAttackInfo( _currentUnit, cell->GetUnit() );
             }
             else {
-                popup.Reset();
+                popup.reset();
             }
 
             boardActionIntentUpdater.setIntent( { themes, _curentCellIndex } );
@@ -3013,9 +3016,15 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else {
             le.MouseClickLeft();
             le.MouseClickRight();
+
+            // Reset the shown Damage Info pop-up when the cursor is moved out of the cells area.
+            popup.reset();
         }
     }
     else if ( le.isMouseCursorPosInArea( status ) ) {
+        // Hide the possibly shown Damage Info pop-up dialog.
+        popup.reset();
+
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
 
@@ -3054,12 +3063,11 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
         const int themes = GetBattleSpellCursor( msg );
         cursor.SetThemes( themes );
 
-        const Cell * cell = Board::GetCell( _curentCellIndex );
-        if ( cell && _currentUnit && cell->GetUnit() ) {
-            popup.SetSpellAttackInfo( cell, _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
+        if ( const Cell * cell = Board::GetCell( _curentCellIndex ); cell && _currentUnit && cell->GetUnit() ) {
+            popup.setSpellAttackInfo( _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
         }
         else {
-            popup.Reset();
+            popup.reset();
         }
 
         boardActionIntentUpdater.setIntent( { themes, _curentCellIndex } );
@@ -6543,55 +6551,58 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
     }
 }
 
-Battle::PopupDamageInfo::PopupDamageInfo()
-    : Dialog::FrameBorder( 5 )
-    , _cell( nullptr )
-    , _defender( nullptr )
-    , _minDamage( 0 )
-    , _maxDamage( 0 )
-    , _redraw( false )
-{}
-
-void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRect )
+bool Battle::PopupDamageInfo::_setDamageInfoBase( const Unit * defender )
 {
-    _battleUIRect = battleUIRect;
-}
-
-bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * defender )
-{
-    if ( cell == nullptr || defender == nullptr ) {
+    if ( defender == nullptr || ( defender == _defender ) ) {
         return false;
     }
 
-    if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().isBattleShowDamageInfoEnabled() ) {
         return false;
     }
 
-    _cell = cell;
+    // When pop-up is hidden: _cell is nullptr. Before showing pop-up
+    if ( _needDelay ) {
+        Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
+        _needDelay = false;
+
+        return false;
+    }
+
+    if ( !Game::hasEveryDelayPassed( { Game::BATTLE_POPUP_DELAY } ) ) {
+        return false;
+    }
+
     _defender = defender;
 
     return true;
 }
 
-void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+void Battle::PopupDamageInfo::setAttackInfo( const Unit * attacker, const Unit * defender )
 {
-    if ( attacker == nullptr || !SetDamageInfoBase( cell, defender ) ) {
+    if ( attacker == nullptr || !_setDamageInfoBase( defender ) ) {
         return;
     }
 
-    _redraw = true;
-    _minDamage = attacker->CalculateMinDamage( *defender );
-    _maxDamage = attacker->CalculateMaxDamage( *defender );
-
     if ( attacker->Modes( SP_BLESS ) ) {
+        _maxDamage = attacker->CalculateMaxDamage( *defender );
         _minDamage = _maxDamage;
     }
     else if ( attacker->Modes( SP_CURSE ) ) {
+        _minDamage = attacker->CalculateMinDamage( *defender );
         _maxDamage = _minDamage;
     }
+    else {
+        _minDamage = attacker->CalculateMinDamage( *defender );
+        _maxDamage = attacker->CalculateMaxDamage( *defender );
+    }
+
+    _makeDamageImage();
+
+    _redraw = true;
 }
 
-void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell )
+void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const Unit * defender, const Spell & spell )
 {
     assert( hero != nullptr );
 
@@ -6601,43 +6612,39 @@ void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroB
         return;
     }
 
-    if ( !SetDamageInfoBase( cell, defender ) ) {
-        return;
-    }
-
     // If defender unit immune to magic, do not show the tooltip
     if ( !defender->AllowApplySpell( spell, hero ) ) {
         return;
     }
 
-    const int spellPoints = hero ? hero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
-    const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
-
-    _redraw = true;
-    _minDamage = spellDamage;
-    _maxDamage = spellDamage;
-}
-
-void Battle::PopupDamageInfo::Reset()
-{
-    if ( _redraw ) {
-        _redraw = false;
-        _cell = nullptr;
-        _defender = nullptr;
-        _minDamage = 0;
-        _maxDamage = 0;
+    if ( !_setDamageInfoBase( defender ) ) {
+        return;
     }
 
-    Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
+    const int spellPoints = hero ? hero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
+    _minDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0, true );
+    _maxDamage = _minDamage;
+
+    _makeDamageImage();
+
+    _redraw = true;
 }
 
-void Battle::PopupDamageInfo::Redraw() const
+void Battle::PopupDamageInfo::reset()
 {
     if ( !_redraw ) {
         return;
     }
 
-    assert( _cell != nullptr && _defender != nullptr );
+    _redraw = false;
+    _needDelay = true;
+    _defender = nullptr;
+    _damageImage.clear();
+}
+
+void Battle::PopupDamageInfo::_makeDamageImage()
+{
+    assert( _defender != nullptr );
 
     std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
@@ -6658,24 +6665,35 @@ void Battle::PopupDamageInfo::Redraw() const
 
     const fheroes2::Text killedText( str, fheroes2::FontType::smallWhite() );
 
-    const fheroes2::Rect & cellRect = _cell->GetPos();
+    const fheroes2::Rect & unitRect = _defender->GetRectPosition();
 
     // Get the border width and set the popup parameters.
     const int borderWidth = BorderWidth();
-    const int x = _battleUIRect.x + cellRect.x + cellRect.width;
-    const int y = _battleUIRect.y + cellRect.y;
+    const int x = _battleUIRect.x + unitRect.x + unitRect.width;
+    const int y = _battleUIRect.y + unitRect.y;
     const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
     const int h = damageText.height() + killedText.height() + 2 * borderWidth;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
-    const bool isLeftSidePopup = ( cellRect.x + cellRect.width + w ) > _battleUIRect.width;
-    const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - cellRect.width - borderWidth ) : x, y, w, h );
+    const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
+    const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
 
-    Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    _damageImage = fheroes2::Stretch( backgroundImage, 0, 0, backgroundImage.width(), backgroundImage.height(), borderRect.width, borderRect.height );
+    _damageImage.setPosition( borderRect.x, borderRect.y );
+    _damageImage._disableTransformLayer();
 
-    const int leftTextBorder = borderRect.x + borderWidth;
+    damageText.draw( borderWidth, borderWidth + 2, _damageImage );
+    killedText.draw( borderWidth, borderRect.height / 2 + 2, _damageImage );
+}
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    damageText.draw( leftTextBorder, borderRect.y + borderWidth + 2, display );
-    killedText.draw( leftTextBorder, borderRect.y + borderRect.height / 2 + 2, display );
+void Battle::PopupDamageInfo::redraw() const
+{
+    if ( !_redraw ) {
+        return;
+    }
+
+    assert( !_damageImage.empty() );
+
+    fheroes2::Copy( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
 }
