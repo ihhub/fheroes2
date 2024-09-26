@@ -20,6 +20,8 @@
 
 #include "ai_personality.h"
 
+#include <type_traits>
+
 #include "rand.h"
 #include "serialize.h"
 #include "translations.h"

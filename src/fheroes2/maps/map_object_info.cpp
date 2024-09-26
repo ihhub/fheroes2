@@ -27,11 +27,13 @@
 #include <initializer_list>
 #include <map>
 #include <set>
+#include <type_traits>
 #include <utility>
 
 #include "artifact.h"
 #include "monster.h"
 #include "resource.h"
+#include "serialize.h"
 
 namespace
 {

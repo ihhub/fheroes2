@@ -28,11 +28,9 @@
 #include <type_traits>
 
 #include "direction.h"
-#include "game_io.h"
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "translations.h"

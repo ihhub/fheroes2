@@ -28,6 +28,9 @@
 #include "math_base.h"
 #include "mp2.h"
 
+class IStreamBase;
+class OStreamBase;
+
 namespace Maps
 {
     // An object usually contains of multiple parts / tiles. Each part has its own features like object layer type or image index.
