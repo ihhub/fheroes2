@@ -584,16 +584,19 @@ OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 {
     stream << players.GetColors() << players.getCurrentColor();
 
-    for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
-        stream << ( **it );
+    std::for_each( players.begin(), players.end(), [&stream]( const Player * player ) {
+        assert( player != nullptr );
+
+        stream << *player;
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
-    int colors;
-    int current;
+    int colors{ 0 };
+    int current{ 0 };
     stream >> colors >> current;
 
     players.clear();
