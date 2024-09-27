@@ -144,49 +144,50 @@ namespace
     }
 }
 
-MapObjects::~MapObjects()
-{
-    clear();
-}
-
-void MapObjects::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete ( *it ).second;
-    std::map<uint32_t, MapObjectSimple *>::clear();
-}
-
 void MapObjects::add( MapObjectSimple * obj )
 {
-    if ( obj ) {
-        std::map<uint32_t, MapObjectSimple *> & currentMap = *this;
-        if ( currentMap[obj->GetUID()] )
-            delete currentMap[obj->GetUID()];
-        currentMap[obj->GetUID()] = obj;
+    if ( obj == nullptr ) {
+        return;
     }
+
+    const auto [iter, inserted] = try_emplace( obj->GetUID(), obj );
+    if ( inserted ) {
+        return;
+    }
+
+    iter->second.reset( obj );
 }
 
-MapObjectSimple * MapObjects::get( uint32_t uid )
+MapObjectSimple * MapObjects::get( const uint32_t uid ) const
 {
-    iterator it = find( uid );
-    return it != end() ? ( *it ).second : nullptr;
+    if ( const auto iter = find( uid ); iter != end() ) {
+        return iter->second.get();
+    }
+
+    return nullptr;
 }
 
-std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
+std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) const
 {
-    std::list<MapObjectSimple *> res;
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            res.push_back( ( *it ).second );
-    return res;
+    std::list<MapObjectSimple *> result;
+
+    for ( const auto & item : *this ) {
+        const auto & [dummy, obj] = item;
+        assert( obj );
+
+        if ( !obj->isPosition( pos ) ) {
+            continue;
+        }
+
+        result.push_back( obj.get() );
+    }
+
+    return result;
 }
 
-void MapObjects::remove( uint32_t uid )
+void MapObjects::remove( const uint32_t uid )
 {
-    iterator it = find( uid );
-    if ( it != end() )
-        delete ( *it ).second;
-    erase( it );
+    erase( uid );
 }
 
 CapturedObject & CapturedObjects::Get( int32_t index )
@@ -1390,74 +1391,91 @@ IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    stream << static_cast<uint32_t>( objs.size() );
-    for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
-        if ( ( *it ).second ) {
-            const MapObjectSimple & obj = *( *it ).second;
-            stream << ( *it ).first << obj.GetType();
+    stream.put32( static_cast<uint32_t>( objs.size() ) );
 
-            switch ( obj.GetType() ) {
-            case MP2::OBJ_EVENT:
-                stream << dynamic_cast<const MapEvent &>( obj );
-                break;
+    std::for_each( objs.begin(), objs.end(), [&stream]( const auto & item ) {
+        const auto & [uid, obj] = item;
+        assert( obj && obj->GetUID() == uid );
 
-            case MP2::OBJ_SPHINX:
-                stream << dynamic_cast<const MapSphinx &>( obj );
-                break;
+        stream << uid << obj->GetType();
 
-            case MP2::OBJ_SIGN:
-                stream << dynamic_cast<const MapSign &>( obj );
-                break;
+        switch ( obj->GetType() ) {
+        case MP2::OBJ_EVENT:
+            stream << dynamic_cast<const MapEvent &>( *obj );
+            break;
 
-            default:
-                stream << obj;
-                break;
-            }
+        case MP2::OBJ_SPHINX:
+            stream << dynamic_cast<const MapSphinx &>( *obj );
+            break;
+
+        case MP2::OBJ_SIGN:
+            stream << dynamic_cast<const MapSign &>( *obj );
+            break;
+
+        default:
+            stream << *obj;
+            break;
         }
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
-    uint32_t size = 0;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
     objs.clear();
 
-    for ( uint32_t ii = 0; ii < size; ++ii ) {
-        int32_t index;
-        int type;
-        stream >> index >> type;
+    for ( uint32_t i = 0; i < size; ++i ) {
+        uint32_t uid{ 0 };
+        int type{ MP2::OBJ_NONE };
+        stream >> uid >> type;
 
-        switch ( type ) {
-        case MP2::OBJ_EVENT: {
-            MapEvent * ptr = new MapEvent();
+        std::unique_ptr<MapObjectSimple> obj = [&stream, type]() -> std::unique_ptr<MapObjectSimple> {
+            switch ( type ) {
+            case MP2::OBJ_EVENT: {
+                auto ptr = std::make_unique<MapEvent>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SPHINX: {
+                auto ptr = std::make_unique<MapSphinx>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SIGN: {
+                auto ptr = std::make_unique<MapSign>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            default:
+                break;
+            }
+
+            auto ptr = std::make_unique<MapObjectSimple>();
             stream >> *ptr;
-            objs[index] = ptr;
-            break;
+
+            return ptr;
+        }();
+
+        if ( obj->GetUID() != uid ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
         }
 
-        case MP2::OBJ_SPHINX: {
-            MapSphinx * ptr = new MapSphinx();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
-        }
-
-        case MP2::OBJ_SIGN: {
-            MapSign * ptr = new MapSign();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
-        }
-
-        default: {
-            MapObjectSimple * ptr = new MapObjectSimple();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
-        }
+        const auto [dummy, inserted] = objs.try_emplace( uid, std::move( obj ) );
+        if ( !inserted ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
         }
     }
 
