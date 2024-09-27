@@ -373,8 +373,7 @@ bool Troops::areAllTroopsUnique() const
             continue;
         }
 
-        auto [it, inserted] = monsterId.emplace( troop->GetID() );
-        if ( !inserted ) {
+        if ( auto [dummy, inserted] = monsterId.emplace( troop->GetID() ); !inserted ) {
             return false;
         }
     }

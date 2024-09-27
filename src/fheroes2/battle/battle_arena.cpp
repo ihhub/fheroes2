@@ -684,8 +684,8 @@ void Battle::Arena::CatapultAction()
 
     std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
     for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
-        const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+             !inserted ) {
             assert( 0 );
         }
     }

@@ -912,8 +912,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
                 assert( castle != nullptr );
 
                 if ( castle->GetHero() == nullptr ) {
-                    const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE );
-                    if ( inserted ) {
+                    if ( const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE ); inserted ) {
                         DEBUG_LOG( DBG_AI, DBG_INFO, castle->GetName() << " is designated as a priority target to reinforce nearby heroes" )
 
                         moreTaskForHeroes = true;
