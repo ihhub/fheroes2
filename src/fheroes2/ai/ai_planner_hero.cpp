@@ -757,18 +757,12 @@ namespace
 
         double value( const IndexObject & objectInfo, const uint32_t distance )
         {
-            auto iter = _objectValue.find( objectInfo );
-            if ( iter != _objectValue.end() ) {
-                return iter->second;
+            const auto [iter, inserted] = _objectValue.try_emplace( objectInfo, 0.0 );
+            if ( inserted ) {
+                iter->second = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
             }
 
-            const double result = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
-
-            if ( const auto [dummy, inserted] = _objectValue.try_emplace( objectInfo, result ); !inserted ) {
-                assert( 0 );
-            }
-
-            return result;
+            return iter->second;
         }
 
     private:

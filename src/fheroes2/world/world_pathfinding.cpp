@@ -708,11 +708,9 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, co
 bool AIWorldPathfinder::isTileAccessibleForAI( const int tileIndex )
 {
     std::optional<bool> & isAccessible = _cache[tileIndex]._isAccessibleForAI;
-    if ( isAccessible ) {
-        return *isAccessible;
+    if ( !isAccessible ) {
+        isAccessible = isTileAccessibleForAIWithArmy( tileIndex, _armyStrength, _minimalArmyStrengthAdvantage );
     }
-
-    isAccessible = isTileAccessibleForAIWithArmy( tileIndex, _armyStrength, _minimalArmyStrengthAdvantage );
 
     return *isAccessible;
 }
@@ -721,12 +719,10 @@ bool AIWorldPathfinder::isTileAvailableForWalkThroughForAI( const int tileIndex,
 {
     std::optional<bool> & isAvailableForWalkThrough
         = fromWater ? _cache[tileIndex]._isAvailableForWalkThroughForAI.fromWater : _cache[tileIndex]._isAvailableForWalkThroughForAI.fromLand;
-    if ( isAvailableForWalkThrough ) {
-        return *isAvailableForWalkThrough;
+    if ( !isAvailableForWalkThrough ) {
+        isAvailableForWalkThrough = isTileAvailableForWalkThroughForAIWithArmy( tileIndex, fromWater, _color, _isArtifactsBagFull, _isEquippedWithSpellBook,
+                                                                                _armyStrength, _minimalArmyStrengthAdvantage );
     }
-
-    isAvailableForWalkThrough = isTileAvailableForWalkThroughForAIWithArmy( tileIndex, fromWater, _color, _isArtifactsBagFull, _isEquippedWithSpellBook, _armyStrength,
-                                                                            _minimalArmyStrengthAdvantage );
 
     return *isAvailableForWalkThrough;
 }

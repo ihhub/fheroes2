@@ -78,23 +78,16 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
 
 double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
 {
-    const int32_t tileIdx = tile.GetIndex();
+    const auto [iter, inserted] = _tileArmyStrengthValues.try_emplace( tile.GetIndex(), 0.0 );
+    if ( inserted ) {
+        // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+        static Army tileArmy;
+        tileArmy.setFromTile( tile );
 
-    const auto iter = _tileArmyStrengthValues.find( tileIdx );
-    if ( iter != _tileArmyStrengthValues.end() ) {
-        return iter->second;
+        iter->second = tileArmy.GetStrength();
     }
 
-    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-    static Army tileArmy;
-    tileArmy.setFromTile( tile );
-
-    const auto [newEntryIter, inserted] = _tileArmyStrengthValues.try_emplace( tileIdx, tileArmy.GetStrength() );
-    if ( !inserted ) {
-        assert( 0 );
-    }
-
-    return newEntryIter->second;
+    return iter->second;
 }
 
 double AI::Planner::getResourcePriorityModifier( const int resource, const bool isMine ) const
@@ -186,26 +179,15 @@ double AI::Planner::getFundsValueBasedOnPriority( const Funds & funds ) const
 
 void AI::Planner::updateMapActionObjectCache( const int mapIndex )
 {
-    const Maps::Tiles & tile = world.GetTiles( mapIndex );
-    const MP2::MapObjectType objectType = tile.GetObject();
-
-    if ( const auto iter = _mapActionObjects.find( mapIndex ); iter != _mapActionObjects.end() ) {
-        if ( !MP2::isInGameActionObject( objectType ) ) {
-            _mapActionObjects.erase( iter );
-
-            return;
-        }
-
-        iter->second = objectType;
-
-        return;
-    }
+    const MP2::MapObjectType objectType = world.GetTiles( mapIndex ).GetObject();
 
     if ( !MP2::isInGameActionObject( objectType ) ) {
+        _mapActionObjects.erase( mapIndex );
+
         return;
     }
 
-    if ( const auto [dummy, inserted] = _mapActionObjects.try_emplace( mapIndex, objectType ); !inserted ) {
-        assert( 0 );
+    if ( const auto [iter, inserted] = _mapActionObjects.try_emplace( mapIndex, objectType ); !inserted ) {
+        iter->second = objectType;
     }
 }
