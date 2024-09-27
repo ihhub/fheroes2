@@ -714,28 +714,67 @@ namespace Battle
 
         void AddMessage( std::string str )
         {
-            _messages.push_back( std::move( str ) );
+            // Check if message string fits the log width.
+            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+            size_t pos = std::string::npos;
+
+            while ( text.width() > battleLogElementWidth ) {
+                // Find the maximum allowed phrase to fit the line. We assume that all words are separated by a space.
+                pos = str.rfind( ' ', pos - 1 );
+
+                // Theoretically there could be such a large word that did not fit the log width.
+                if ( pos == std::string::npos ) {
+                    // Find the next word in this phrase.
+                    pos = str.find( ' ' );
+
+                    // Cut this long word with the trailing '...'.
+                    text.fitToOneRow( battleLogElementWidth );
+
+                    if ( pos == std::string::npos ) {
+                        // This is the only word in the phrase.
+                        str = text.text();
+                    }
+                    else {
+                        _messages.push_back( text.text() );
+                        // Put the rest of the phrase to the next line.
+                        str = str.substr( pos + 1 );
+                        // There is no need to split this phrase any more.
+                        pos = std::string::npos;
+                    }
+
+                    break;
+                }
+
+                text.set( str.substr( 0, pos ), fheroes2::FontType::normalWhite() );
+            }
+
+            if ( pos == std::string::npos ) {
+                _messages.push_back( std::move( str ) );
+            }
+            else {
+                // If a phrase does not fit the log width we split it into two lines.
+                _messages.push_back( str.substr( 0, pos ) );
+                _messages.push_back( str.substr( pos + 1 ) );
+            }
 
             if ( !_isLogOpened ) {
                 _scrollbar.hide();
             }
 
             SetListContent( _messages );
-            SetCurrent( _messages.size() - 1 );
 
+            // Update the scrollbar image.
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
             setScrollBarImage( scrollbarSlider );
-            SetCurrentVisible();
+            SetCurrent( _messages.size() - 1 );
         }
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool /* unused */ ) override
         {
-            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( battleLogElementWidth );
-
+            const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
             text.draw( px, py, fheroes2::Display::instance() );
         }
 
