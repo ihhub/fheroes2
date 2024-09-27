@@ -116,6 +116,11 @@ public:
 
     StreamBase & operator=( const StreamBase & ) = delete;
 
+    void setFail()
+    {
+        setFail( true );
+    }
+
     void setBigendian( bool f );
 
     bool fail() const
@@ -236,7 +241,7 @@ public:
     {
         const uint32_t size = get32();
         if ( size != v.size() ) {
-            setFail( true );
+            setFail();
 
             v = {};
 
@@ -520,7 +525,7 @@ protected:
             return *( _itget++ );
         }
 
-        setFail( true );
+        setFail();
 
         return 0;
     }
@@ -662,7 +667,7 @@ private:
         T val;
 
         if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+            setFail();
 
             return 0;
         }
@@ -678,7 +683,7 @@ private:
         }
 
         if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+            setFail();
         }
     }
 
