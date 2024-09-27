@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstddef>
 #include <sstream>
-#include <type_traits>
 
 #include "castle.h"
 #include "game.h"
