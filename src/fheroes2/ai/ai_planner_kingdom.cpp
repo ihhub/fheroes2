@@ -623,20 +623,12 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         --daysToReach;
     }
 
-    auto attackTask = _priorityTargets.find( enemyArmy.index );
-    if ( attackTask == _priorityTargets.end() ) {
-        _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, castleIndex };
-    }
-    else {
-        attackTask->second.secondaryTaskTileId.insert( castleIndex );
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( enemyArmy.index, PriorityTaskType::ATTACK, castleIndex ); !inserted ) {
+        iter->second.secondaryTaskTileId.insert( castleIndex );
     }
 
-    auto defenseTask = _priorityTargets.find( castleIndex );
-    if ( defenseTask == _priorityTargets.end() ) {
-        _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyArmy.index };
-    }
-    else {
-        defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( castleIndex, PriorityTaskType::DEFEND, enemyArmy.index ); !inserted ) {
+        iter->second.secondaryTaskTileId.insert( enemyArmy.index );
     }
 
     // If the castle guard (including the garrison and the guest hero) is weaker than the enemy, then the
@@ -696,14 +688,20 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 {
     const int32_t tileIndex = tile.GetIndex();
 
-    _enemyArmies.erase( tileIndex );
-
     const auto enemyArmy = getEnemyArmyOnTile( kingdom.GetColor(), tile );
-    if ( enemyArmy ) {
-        _enemyArmies[enemyArmy->index] = *enemyArmy;
+    if ( !enemyArmy ) {
+        _enemyArmies.erase( tileIndex );
 
-        updatePriorityForEnemyArmy( kingdom, *enemyArmy );
+        return;
     }
+
+    assert( enemyArmy->index == tileIndex );
+
+    if ( const auto [iter, inserted] = _enemyArmies.try_emplace( tileIndex, *enemyArmy ); !inserted ) {
+        iter->second = *enemyArmy;
+    }
+
+    updatePriorityForEnemyArmy( kingdom, *enemyArmy );
 }
 
 void AI::Planner::KingdomTurn( Kingdom & kingdom )
@@ -844,7 +842,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         const auto enemyArmy = getEnemyArmyOnTile( myColor, tile );
         if ( enemyArmy ) {
-            _enemyArmies[enemyArmy->index] = *enemyArmy;
+            assert( enemyArmy->index == idx );
+
+            if ( const auto [dummy, inserted] = _enemyArmies.try_emplace( idx, *enemyArmy ); !inserted ) {
+                assert( 0 );
+            }
 
             if ( stats.highestThreat < enemyArmy->strength ) {
                 stats.highestThreat = enemyArmy->strength;
@@ -900,8 +902,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
+
             updateMapActionObjectCache( heroes.back()->GetIndex() );
+
             ++availableHeroCount;
+
             continue;
         }
 
