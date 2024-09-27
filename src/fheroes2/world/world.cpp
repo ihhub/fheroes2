@@ -150,12 +150,9 @@ void MapObjects::add( MapObjectSimple * obj )
         return;
     }
 
-    const auto [iter, inserted] = try_emplace( obj->GetUID(), obj );
-    if ( inserted ) {
-        return;
+    if ( const auto [iter, inserted] = try_emplace( obj->GetUID(), obj ); !inserted ) {
+        iter->second.reset( obj );
     }
-
-    iter->second.reset( obj );
 }
 
 MapObjectSimple * MapObjects::get( const uint32_t uid ) const
@@ -1472,8 +1469,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
             continue;
         }
 
-        const auto [dummy, inserted] = objs.try_emplace( uid, std::move( obj ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = objs.try_emplace( uid, std::move( obj ) ); !inserted ) {
             // Most likely the save file is corrupted.
             stream.setFail();
         }
