@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -48,7 +49,6 @@
 class IStreamBase;
 class OStreamBase;
 
-struct MapEvent;
 struct Week;
 
 namespace MP2
