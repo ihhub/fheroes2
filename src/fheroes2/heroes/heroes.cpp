@@ -2429,37 +2429,43 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes )
 {
-    stream << static_cast<uint32_t>( heroes.size() );
+    stream.put32( static_cast<uint32_t>( heroes.size() ) );
 
-    for ( const Heroes * hero : heroes ) {
+    std::for_each( heroes.begin(), heroes.end(), [&stream]( const Heroes * hero ) {
         assert( hero != nullptr );
+
         stream << hero->GetID();
-    }
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
 {
-    uint32_t size;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
     heroes.clear();
+    heroes.reserve( size );
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        int32_t hid;
+        int32_t hid{ -1 };
         stream >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
             // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE. UNKNOWN hero shouldn't exist!
             if ( hid == 72 || !Heroes::isValidId( hid + 1 ) ) {
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
             Heroes * hero = world.GetHeroes( hid + 1 );
             if ( hero == nullptr ) {
-                // Most likely save file is corrupted.
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
@@ -2467,12 +2473,17 @@ IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
         }
         else {
             if ( !Heroes::isValidId( hid ) ) {
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
             Heroes * hero = world.GetHeroes( hid );
             if ( hero == nullptr ) {
-                // Most likely save file is corrupted.
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
@@ -2577,44 +2588,53 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
+
     return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 {
-    stream << static_cast<uint32_t>( heroes.size() );
+    stream.put32( static_cast<uint32_t>( heroes.size() ) );
 
-    for ( Heroes * const & hero : heroes ) {
+    std::for_each( heroes.begin(), heroes.end(), [&stream]( const Heroes * hero ) {
+        assert( hero != nullptr );
+
         stream << *hero;
-    }
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
-    uint32_t size;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
     heroes.clear();
-    heroes.resize( size, nullptr );
+    heroes.reserve( size );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         // Before FORMAT_VERSION_1010_RELEASE UNKNOWN hero was last while now it is first.
         // In order to preserve the original order of heroes we have to do the below trick.
-        for ( size_t i = 1; i < heroes.size(); ++i ) {
-            heroes[i] = new Heroes();
-            stream >> *heroes[i];
-        }
+        if ( size > 0 ) {
+            heroes.push_back( new Heroes() );
 
-        heroes[0] = new Heroes();
-        stream >> *heroes[0];
+            for ( uint32_t i = 1; i < size; ++i ) {
+                Heroes * hero = new Heroes();
+                stream >> *hero;
+
+                heroes.push_back( hero );
+            }
+
+            stream >> *heroes[0];
+        }
     }
     else {
-        for ( Heroes *& hero : heroes ) {
-            hero = new Heroes();
+        for ( uint32_t i = 0; i < size; ++i ) {
+            Heroes * hero = new Heroes();
             stream >> *hero;
+
+            heroes.push_back( hero );
         }
     }
 
