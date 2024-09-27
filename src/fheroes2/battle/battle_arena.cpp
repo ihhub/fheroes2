@@ -76,6 +76,7 @@ namespace
     int GetCovr( int ground, std::mt19937 & gen )
     {
         std::vector<int> covrs;
+        covrs.reserve( 6 );
 
         switch ( ground ) {
         case Maps::Ground::SNOW:
