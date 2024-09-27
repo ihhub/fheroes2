@@ -21,9 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <type_traits>
-
-#include "serialize.h"
 
 namespace fheroes2
 {
@@ -53,23 +50,4 @@ namespace fheroes2
         Ukrainian,
         Vietnamese
     };
-
-    inline OStreamBase & operator<<( OStreamBase & stream, const SupportedLanguage lang )
-    {
-        using LangUnderlyingType = std::underlying_type_t<decltype( lang )>;
-
-        return stream << static_cast<LangUnderlyingType>( lang );
-    }
-
-    inline IStreamBase & operator>>( IStreamBase & stream, SupportedLanguage & lang )
-    {
-        using LangUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( lang )>>;
-
-        LangUnderlyingType temp = static_cast<LangUnderlyingType>( SupportedLanguage::English );
-        stream >> temp;
-
-        lang = static_cast<SupportedLanguage>( temp );
-
-        return stream;
-    }
 }

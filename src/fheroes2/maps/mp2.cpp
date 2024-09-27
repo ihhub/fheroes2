@@ -25,13 +25,11 @@
 
 #include <cassert>
 #include <ostream>
-#include <type_traits>
 
 #include "direction.h"
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
-#include "serialize.h"
 #include "settings.h"
 #include "translations.h"
 
@@ -1034,42 +1032,4 @@ bool MP2::doesObjectContainMetadata( const MP2::MapObjectType type )
     }
 
     return false;
-}
-
-OStreamBase & MP2::operator<<( OStreamBase & stream, const MapObjectType objType )
-{
-    using ObjTypeUnderlyingType = std::underlying_type_t<decltype( objType )>;
-
-    return stream << static_cast<ObjTypeUnderlyingType>( objType );
-}
-
-IStreamBase & MP2::operator>>( IStreamBase & stream, MapObjectType & objType )
-{
-    using ObjTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objType )>>;
-
-    ObjTypeUnderlyingType temp = OBJ_NONE;
-    stream >> temp;
-
-    objType = static_cast<MapObjectType>( temp );
-
-    return stream;
-}
-
-OStreamBase & MP2::operator<<( OStreamBase & stream, const ObjectIcnType objIcnType )
-{
-    using ObjIcnTypeUnderlyingType = std::underlying_type_t<decltype( objIcnType )>;
-
-    return stream << static_cast<ObjIcnTypeUnderlyingType>( objIcnType );
-}
-
-IStreamBase & MP2::operator>>( IStreamBase & stream, ObjectIcnType & objIcnType )
-{
-    using ObjIcnTypeUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objIcnType )>>;
-
-    ObjIcnTypeUnderlyingType temp = OBJ_ICN_TYPE_UNKNOWN;
-    stream >> temp;
-
-    objIcnType = static_cast<ObjectIcnType>( temp );
-
-    return stream;
 }

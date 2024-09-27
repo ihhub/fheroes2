@@ -25,9 +25,6 @@
 
 #include <cstdint>
 
-class IStreamBase;
-class OStreamBase;
-
 namespace MP2
 {
     enum MP2Info
@@ -548,12 +545,6 @@ namespace MP2
 
     // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
     bool doesObjectContainMetadata( const MP2::MapObjectType type );
-
-    OStreamBase & operator<<( OStreamBase & stream, const MapObjectType objType );
-    IStreamBase & operator>>( IStreamBase & stream, MapObjectType & objType );
-
-    OStreamBase & operator<<( OStreamBase & stream, const ObjectIcnType objIcnType );
-    IStreamBase & operator>>( IStreamBase & stream, ObjectIcnType & objIcnType );
 }
 
 #endif

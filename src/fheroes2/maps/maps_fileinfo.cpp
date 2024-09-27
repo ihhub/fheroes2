@@ -156,25 +156,6 @@ namespace Editor
     };
 }
 
-OStreamBase & operator<<( OStreamBase & stream, const GameVersion version )
-{
-    using VersionUnderlyingType = std::underlying_type_t<decltype( version )>;
-
-    return stream << static_cast<VersionUnderlyingType>( version );
-}
-
-IStreamBase & operator>>( IStreamBase & stream, GameVersion & version )
-{
-    using VersionUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( version )>>;
-
-    VersionUnderlyingType temp = static_cast<VersionUnderlyingType>( GameVersion::SUCCESSION_WARS );
-    stream >> temp;
-
-    version = static_cast<GameVersion>( temp );
-
-    return stream;
-}
-
 void Maps::FileInfo::Reset()
 {
     filename.clear();

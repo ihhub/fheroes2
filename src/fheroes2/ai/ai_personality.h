@@ -23,9 +23,6 @@
 #include <cstdint>
 #include <string>
 
-class IStreamBase;
-class OStreamBase;
-
 namespace AI
 {
     enum class Personality : int32_t
@@ -38,7 +35,4 @@ namespace AI
 
     Personality getRandomPersonality();
     std::string getPersonalityString( const Personality personality );
-
-    OStreamBase & operator<<( OStreamBase & stream, const Personality personality );
-    IStreamBase & operator>>( IStreamBase & stream, Personality & personality );
 }

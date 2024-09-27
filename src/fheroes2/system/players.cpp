@@ -106,25 +106,6 @@ namespace
 
         availableRaces.erase( availableRaces.begin() + raceIndex );
     }
-
-    OStreamBase & operator<<( OStreamBase & stream, const Player::HandicapStatus handicapStatus )
-    {
-        using HandicapStatusUnderlyingType = std::underlying_type_t<decltype( handicapStatus )>;
-
-        return stream << static_cast<HandicapStatusUnderlyingType>( handicapStatus );
-    }
-
-    IStreamBase & operator>>( IStreamBase & stream, Player::HandicapStatus & handicapStatus )
-    {
-        using HandicapStatusUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( handicapStatus )>>;
-
-        HandicapStatusUnderlyingType temp = static_cast<HandicapStatusUnderlyingType>( Player::HandicapStatus::NONE );
-        stream >> temp;
-
-        handicapStatus = static_cast<Player::HandicapStatus>( temp );
-
-        return stream;
-    }
 }
 
 bool Control::isControlAI() const

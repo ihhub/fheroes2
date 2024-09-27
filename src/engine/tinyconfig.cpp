@@ -59,7 +59,7 @@ namespace
         return key;
     }
 
-    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+    template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
     bool convertToInt( const std::string_view str, T & intValue )
     {
         const char * first = str.data();

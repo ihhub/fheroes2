@@ -27,13 +27,11 @@
 #include <initializer_list>
 #include <map>
 #include <set>
-#include <type_traits>
 #include <utility>
 
 #include "artifact.h"
 #include "monster.h"
 #include "resource.h"
-#include "serialize.h"
 
 namespace
 {
@@ -5020,24 +5018,5 @@ namespace Maps
         }
 
         return offsets;
-    }
-
-    OStreamBase & operator<<( OStreamBase & stream, const ObjectGroup objGroup )
-    {
-        using ObjGroupUnderlyingType = std::underlying_type_t<decltype( objGroup )>;
-
-        return stream << static_cast<ObjGroupUnderlyingType>( objGroup );
-    }
-
-    IStreamBase & operator>>( IStreamBase & stream, ObjectGroup & objGroup )
-    {
-        using ObjGroupUnderlyingType = std::underlying_type_t<std::remove_reference_t<decltype( objGroup )>>;
-
-        ObjGroupUnderlyingType temp = static_cast<ObjGroupUnderlyingType>( ObjectGroup::NONE );
-        stream >> temp;
-
-        objGroup = static_cast<ObjectGroup>( temp );
-
-        return stream;
     }
 }

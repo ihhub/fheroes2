@@ -28,9 +28,6 @@
 #include "math_base.h"
 #include "mp2.h"
 
-class IStreamBase;
-class OStreamBase;
-
 namespace Maps
 {
     // An object usually contains of multiple parts / tiles. Each part has its own features like object layer type or image index.
@@ -177,7 +174,4 @@ namespace Maps
     // The function returns tile offsets only for ground level objects located on OBJECT_LAYER, BACKGROUND_LAYER and TERRAIN_LAYER layers.
     // SHADOW_LAYER is excluded as it does not "use" any tile.
     std::vector<fheroes2::Point> getGroundLevelUsedTileOffset( const ObjectInfo & info );
-
-    OStreamBase & operator<<( OStreamBase & stream, const ObjectGroup objGroup );
-    IStreamBase & operator>>( IStreamBase & stream, ObjectGroup & objGroup );
 }
