@@ -191,7 +191,7 @@ void MapObjects::remove( uint32_t uid )
 
 CapturedObject & CapturedObjects::Get( const int32_t index )
 {
-    return this->operator[]( index );
+    return operator[]( index );
 }
 
 void CapturedObjects::SetColor( const int32_t index, const int col )
