@@ -840,7 +840,7 @@ public:
     template <typename BaseIterator>
     struct Iterator : public BaseIterator
     {
-        Iterator( BaseIterator && other ) noexcept
+        explicit Iterator( BaseIterator && other ) noexcept
             : BaseIterator( std::move( other ) )
         {}
 
