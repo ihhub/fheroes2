@@ -30,6 +30,7 @@
 #include <cstdint>
 #include <exception>
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 

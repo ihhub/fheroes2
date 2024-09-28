@@ -30,7 +30,6 @@
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <utility>
 
 #include "ai_planner.h"
 #include "artifact.h"
