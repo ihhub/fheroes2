@@ -182,17 +182,21 @@ namespace Battle
 
         Status & operator=( const Status & ) = delete;
 
-        void SetPosition( const int32_t cx, const int32_t cy );
+        void setPosition( const int32_t cx, const int32_t cy )
+        {
+            x = cx;
+            y = cy;
+        }
 
-        void SetLogs( StatusListBox * logs )
+        void setLogs( StatusListBox * logs )
         {
             _battleStatusLog = logs;
         }
 
-        void SetMessage( const std::string & messageString, const bool top = false );
-        void Redraw( fheroes2::Image & output ) const;
+        void setMessage( std::string messageString, const bool top );
+        void redraw( fheroes2::Image & output ) const;
 
-        const std::string & GetMessage() const
+        const std::string & getMessage() const
         {
             return _lastMessage;
         }
@@ -312,7 +316,7 @@ namespace Battle
 
         fheroes2::Point getRelativeMouseCursorPos() const;
 
-        void SetStatus( const std::string & message, const bool top = false );
+        void setStatus( const std::string & message, const bool top );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
         void FadeArena( const bool clearMessageLog );
 
