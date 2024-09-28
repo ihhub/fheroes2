@@ -335,7 +335,7 @@ void World::Reset()
     vec_castles.Clear();
 
     // heroes
-    vec_heroes.clear();
+    vec_heroes.Clear();
 
     // extra
     map_captureobj.clear();

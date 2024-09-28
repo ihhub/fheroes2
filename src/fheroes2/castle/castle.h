@@ -463,50 +463,29 @@ public:
     AllCastles();
     AllCastles( const AllCastles & ) = delete;
 
-    ~AllCastles();
+    ~AllCastles() = default;
 
     AllCastles & operator=( const AllCastles & ) = delete;
 
-    void Init();
-    void Clear();
-
-    void AddCastle( Castle * castle );
-
-    Castle * Get( const fheroes2::Point & position ) const
+    auto begin() const noexcept
     {
-        auto iter = _castleTiles.find( position );
-        if ( iter == _castleTiles.end() )
-            return nullptr;
-
-        return _castles[iter->second];
+        return Iterator( _castles.begin() );
     }
 
-    void Scout( int ) const;
-
-    void NewDay()
+    auto end() const noexcept
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+        return Iterator( _castles.end() );
     }
 
-    void NewWeek()
+    void Init()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+        Clear();
     }
 
-    void NewMonth()
+    void Clear()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
-    }
-
-    // begin/end methods so we can iterate through the elements
-    std::vector<Castle *>::const_iterator begin() const
-    {
-        return _castles.begin();
-    }
-
-    std::vector<Castle *>::const_iterator end() const
-    {
-        return _castles.end();
+        _castles.clear();
+        _castleTiles.clear();
     }
 
     size_t Size() const
@@ -514,8 +493,42 @@ public:
         return _castles.size();
     }
 
+    void AddCastle( std::unique_ptr<Castle> && castle );
+
+    Castle * Get( const fheroes2::Point & position ) const;
+
+    void Scout( const int colors ) const;
+
+    void NewDay() const
+    {
+        std::for_each( begin(), end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+    }
+
+    void NewWeek() const
+    {
+        std::for_each( begin(), end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewMonth() const
+    {
+        std::for_each( begin(), end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
+    }
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        decltype( auto ) operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
 private:
-    std::vector<Castle *> _castles;
+    std::vector<std::unique_ptr<Castle>> _castles;
     std::map<fheroes2::Point, size_t> _castleTiles;
 };
 

@@ -267,9 +267,10 @@ public:
 
     void addCastle( int32_t index, uint8_t race, uint8_t color )
     {
-        Castle * castle = new Castle( index % width, index / width, race );
+        auto castle = std::make_unique<Castle>( index % width, index / width, race );
         castle->SetColor( color );
-        vec_castles.AddCastle( castle );
+
+        vec_castles.AddCastle( std::move( castle ) );
     }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.

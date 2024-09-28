@@ -780,53 +780,84 @@ struct VecHeroes : public std::vector<Heroes *>
 
     VecHeroes & operator=( const VecHeroes & ) = delete;
     VecHeroes & operator=( VecHeroes && ) = default;
-
-    Heroes * Get( int hid ) const;
-    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
-struct AllHeroes : public VecHeroes
+class AllHeroes
 {
+public:
     AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
-    ~AllHeroes();
+    ~AllHeroes() = default;
 
     AllHeroes & operator=( const AllHeroes & ) = delete;
 
-    void Init();
-    void clear();
+    auto begin() const noexcept
+    {
+        return Iterator( _heroes.begin() );
+    }
 
-    void Scout( int colors ) const;
+    auto end() const noexcept
+    {
+        return Iterator( _heroes.end() );
+    }
+
+    void Init();
+
+    void Clear()
+    {
+        _heroes.clear();
+    }
+
+    Heroes * Get( const int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
+
+    void Scout( const int colors ) const;
 
     void ResetModes( const uint32_t modes ) const
     {
         std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
     }
 
-    void NewDay()
+    void NewDay() const
     {
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
     }
 
-    void NewWeek()
+    void NewWeek() const
     {
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
     }
 
-    void NewMonth()
+    void NewMonth() const
     {
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        decltype( auto ) operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+    friend IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
+
+    std::vector<std::unique_ptr<Heroes>> _heroes;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
-
-OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
-IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
 
 #endif

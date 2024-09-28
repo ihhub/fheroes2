@@ -2224,98 +2224,61 @@ double Heroes::getAIMinimumJoiningArmyStrength() const
     return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
 }
 
-AllHeroes::~AllHeroes()
-{
-    clear();
-}
-
 void AllHeroes::Init()
 {
-    clear();
+    Clear();
 
-    reserve( Heroes::HEROES_COUNT );
+    _heroes.reserve( Heroes::HEROES_COUNT );
 
-    push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
 
     for ( const int race : std::array<int, 6>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR } ) {
         const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
         assert( minHeroId <= maxHeroId );
 
         for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
-            push_back( new Heroes( hid, race ) );
+            _heroes.emplace_back( std::make_unique<Heroes>( hid, race ) );
         }
     }
 
     // SW campaign
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ROLAND, Race::WZRD, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::CORLAGON, Race::KNGT, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ELIZA, Race::SORC, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::HALTON, Race::KNGT, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
     if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5000 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5000 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::SOLMYR, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DAINWIN, Race::WRLK, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::MOG, Race::NECR, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::JOSEPH, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::CEALLACH, Race::KNGT, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::MARTINE, Race::SORC, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::JARKONAS, Race::BARB, 5000 ) );
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
         for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i ) {
-            push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+            _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
         }
     }
 
     if ( IS_DEVEL() ) {
-        push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DEBUG_HERO, Race::WRLK ) );
     }
     else {
-        push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
-    assert( size() == Heroes::HEROES_COUNT );
-}
-
-void AllHeroes::clear()
-{
-    std::for_each( begin(), end(), []( Heroes * hero ) {
-        assert( hero != nullptr );
-
-        delete hero;
-    } );
-
-    std::vector<Heroes *>::clear();
-}
-
-Heroes * VecHeroes::Get( int hid ) const
-{
-    if ( !Heroes::isValidId( hid ) ) {
-        return nullptr;
-    }
-
-    return ( *this )[hid];
-}
-
-Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
-{
-    for ( Heroes * hero : *this ) {
-        assert( hero != nullptr );
-        if ( hero->isPosition( center ) ) {
-            return hero;
-        }
-    }
-
-    return nullptr;
+    assert( _heroes.size() == Heroes::HEROES_COUNT );
 }
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
@@ -2393,24 +2356,49 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
     std::vector<int> heroesForHireNotRecruits = heroesForHire;
 
     heroesForHireNotRecruits.erase( std::remove_if( heroesForHireNotRecruits.begin(), heroesForHireNotRecruits.end(),
-                                                    [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                                    [this]( const int heroID ) { return _heroes.at( heroID )->Modes( Heroes::RECRUIT ); } ),
                                     heroesForHireNotRecruits.end() );
 
     if ( !heroesForHireNotRecruits.empty() ) {
-        return at( Rand::Get( heroesForHireNotRecruits ) );
+        return _heroes.at( Rand::Get( heroesForHireNotRecruits ) ).get();
     }
 
     // There are no heroes who are not yet available for recruitment, allow heroes to be available for recruitment in several kingdoms at the same time
-    return at( Rand::Get( heroesForHire ) );
+    return _heroes.at( Rand::Get( heroesForHire ) ).get();
+}
+
+Heroes * AllHeroes::Get( const int hid ) const
+{
+    if ( !Heroes::isValidId( hid ) ) {
+        return nullptr;
+    }
+
+    return _heroes[hid].get();
+}
+
+Heroes * AllHeroes::Get( const fheroes2::Point & center ) const
+{
+    for ( Heroes * hero : *this ) {
+        assert( hero != nullptr );
+
+        if ( hero->isPosition( center ) ) {
+            return hero;
+        }
+    }
+
+    return nullptr;
 }
 
 void AllHeroes::Scout( int colors ) const
 {
     for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );
-        if ( colors & hero->GetColor() ) {
-            hero->Scout( hero->GetIndex() );
+
+        if ( !( hero->GetColor() & colors ) ) {
+            continue;
         }
+
+        hero->Scout( hero->GetIndex() );
     }
 }
 
@@ -2583,7 +2571,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
 
 OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 {
-    stream.put32( static_cast<uint32_t>( heroes.size() ) );
+    stream.put32( static_cast<uint32_t>( heroes._heroes.size() ) );
 
     std::for_each( heroes.begin(), heroes.end(), [&stream]( const Heroes * hero ) {
         assert( hero != nullptr );
@@ -2596,34 +2584,36 @@ OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 
 IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
+    std::vector<std::unique_ptr<Heroes>> & vecHeroes = heroes._heroes;
+
     const uint32_t size = stream.get32();
 
-    heroes.clear();
-    heroes.reserve( size );
+    vecHeroes.clear();
+    vecHeroes.reserve( size );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         // Before FORMAT_VERSION_1010_RELEASE UNKNOWN hero was last while now it is first.
         // In order to preserve the original order of heroes we have to do the below trick.
         if ( size > 0 ) {
-            heroes.push_back( new Heroes() );
+            vecHeroes.emplace_back( std::make_unique<Heroes>() );
 
             for ( uint32_t i = 1; i < size; ++i ) {
-                Heroes * hero = new Heroes();
+                auto hero = std::make_unique<Heroes>();
                 stream >> *hero;
 
-                heroes.push_back( hero );
+                vecHeroes.emplace_back( std::move( hero ) );
             }
 
-            stream >> *heroes[0];
+            stream >> *( vecHeroes[0] );
         }
     }
     else {
         for ( uint32_t i = 0; i < size; ++i ) {
-            Heroes * hero = new Heroes();
+            auto hero = std::make_unique<Heroes>();
             stream >> *hero;
 
-            heroes.push_back( hero );
+            vecHeroes.emplace_back( std::move( hero ) );
         }
     }
 
