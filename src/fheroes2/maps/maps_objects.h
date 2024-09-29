@@ -173,9 +173,6 @@ struct MapSign : public MapObjectSimple
     std::string message;
 };
 
-OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
-IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
-
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj );
 
