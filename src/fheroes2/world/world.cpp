@@ -906,7 +906,7 @@ void World::ResetCapturedObjects( int color )
     map_captureobj.ResetColor( color );
 }
 
-void World::ClearFog( int colors )
+void World::ClearFog( int colors ) const
 {
     colors = Players::GetPlayerFriends( colors );
 

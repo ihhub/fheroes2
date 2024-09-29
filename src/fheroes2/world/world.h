@@ -371,7 +371,7 @@ public:
     CapturedObject & GetCapturedObject( int32_t );
 
     void ActionForMagellanMaps( int color );
-    void ClearFog( int color );
+    void ClearFog( int color ) const;
 
     bool KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const;
     bool KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const;
