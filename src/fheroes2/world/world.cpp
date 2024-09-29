@@ -1398,11 +1398,11 @@ IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    const std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsMap = objs._objects;
+    const std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
-    stream.put32( static_cast<uint32_t>( objectsMap.size() ) );
+    stream.put32( static_cast<uint32_t>( objectsRef.size() ) );
 
-    std::for_each( objectsMap.begin(), objectsMap.end(), [&stream]( const auto & item ) {
+    std::for_each( objectsRef.begin(), objectsRef.end(), [&stream]( const auto & item ) {
         const auto & [uid, obj] = item;
         assert( obj && obj->GetUID() == uid );
 
@@ -1432,11 +1432,11 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
-    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsMap = objs._objects;
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
     const uint32_t size = stream.get32();
 
-    objectsMap.clear();
+    objectsRef.clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
         uint32_t uid{ 0 };
@@ -1483,7 +1483,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
             continue;
         }
 
-        if ( const auto [dummy, inserted] = objectsMap.try_emplace( uid, std::move( obj ) ); !inserted ) {
+        if ( const auto [dummy, inserted] = objectsRef.try_emplace( uid, std::move( obj ) ); !inserted ) {
             // Most likely the save file is corrupted.
             stream.setFail();
         }
