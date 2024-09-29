@@ -146,7 +146,7 @@ namespace
 
 MapObjectSimple * MapObjects::get( const uint32_t uid ) const
 {
-    if ( const auto iter = find( uid ); iter != end() ) {
+    if ( const auto iter = _objects.find( uid ); iter != _objects.end() ) {
         return iter->second.get();
     }
 
@@ -157,7 +157,7 @@ std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) cons
 {
     std::list<MapObjectSimple *> result;
 
-    for ( const auto & item : *this ) {
+    for ( const auto & item : _objects ) {
         const auto & [dummy, obj] = item;
         assert( obj );
 
@@ -173,7 +173,7 @@ std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) cons
 
 void MapObjects::remove( const uint32_t uid )
 {
-    erase( uid );
+    _objects.erase( uid );
 }
 
 CapturedObject & CapturedObjects::Get( const int32_t index )
@@ -1398,9 +1398,11 @@ IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    stream.put32( static_cast<uint32_t>( objs.size() ) );
+    const std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsMap = objs._objects;
 
-    std::for_each( objs.begin(), objs.end(), [&stream]( const auto & item ) {
+    stream.put32( static_cast<uint32_t>( objectsMap.size() ) );
+
+    std::for_each( objectsMap.begin(), objectsMap.end(), [&stream]( const auto & item ) {
         const auto & [uid, obj] = item;
         assert( obj && obj->GetUID() == uid );
 
@@ -1430,9 +1432,11 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsMap = objs._objects;
+
     const uint32_t size = stream.get32();
 
-    objs.clear();
+    objectsMap.clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
         uint32_t uid{ 0 };
@@ -1479,7 +1483,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
             continue;
         }
 
-        if ( const auto [dummy, inserted] = objs.try_emplace( uid, std::move( obj ) ); !inserted ) {
+        if ( const auto [dummy, inserted] = objectsMap.try_emplace( uid, std::move( obj ) ); !inserted ) {
             // Most likely the save file is corrupted.
             stream.setFail();
         }

@@ -67,8 +67,9 @@ inline constexpr int numOfDaysPerWeek{ 7 };
 // Number of weeks in the game month
 inline constexpr int numOfWeeksPerMonth{ 4 };
 
-struct MapObjects : public std::map<uint32_t, std::unique_ptr<MapObjectSimple>>
+class MapObjects
 {
+public:
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
     MapObjects( MapObjects && other ) = delete;
@@ -78,6 +79,11 @@ struct MapObjects : public std::map<uint32_t, std::unique_ptr<MapObjectSimple>>
     MapObjects & operator=( const MapObjects & other ) = delete;
     MapObjects & operator=( MapObjects && other ) = delete;
 
+    void clear()
+    {
+        _objects.clear();
+    }
+
     template <typename T, std::enable_if_t<std::is_base_of_v<MapObjectSimple, T>, bool> = true>
     void add( std::unique_ptr<T> && obj )
     {
@@ -85,7 +91,7 @@ struct MapObjects : public std::map<uint32_t, std::unique_ptr<MapObjectSimple>>
             return;
         }
 
-        if ( const auto [iter, inserted] = try_emplace( obj->GetUID(), std::move( obj ) ); !inserted ) {
+        if ( const auto [iter, inserted] = _objects.try_emplace( obj->GetUID(), std::move( obj ) ); !inserted ) {
             iter->second = std::move( obj );
         }
     }
@@ -94,6 +100,12 @@ struct MapObjects : public std::map<uint32_t, std::unique_ptr<MapObjectSimple>>
 
     MapObjectSimple * get( const uint32_t uid ) const;
     std::list<MapObjectSimple *> get( const fheroes2::Point & pos ) const;
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
+
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> _objects;
 };
 
 struct CapturedObject
@@ -458,9 +470,6 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj );
 IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj );
-
-OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
-IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
 
 extern World & world;
 
