@@ -2209,12 +2209,12 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     {
         std::set<int> objectIndexes;
 
-        for ( const auto & node : _mapActionObjects ) {
-            if ( node.second == MP2::OBJ_HERO ) {
-                assert( world.GetTiles( node.first ).getHero() != nullptr );
+        for ( const auto & [idx, objType] : _mapActionObjects ) {
+            if ( objType == MP2::OBJ_HERO ) {
+                assert( world.GetTiles( idx ).getHero() != nullptr );
             }
 
-            if ( const auto [dummy, inserted] = objectIndexes.emplace( node.first ); !inserted ) {
+            if ( const auto [dummy, inserted] = objectIndexes.emplace( idx ); !inserted ) {
                 assert( 0 );
             }
         }
