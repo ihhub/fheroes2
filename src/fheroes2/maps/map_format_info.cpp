@@ -22,7 +22,6 @@
 
 #include <array>
 #include <cstddef>
-#include <type_traits>
 
 #include "serialize.h"
 #include "zzlib.h"
@@ -163,12 +162,9 @@ namespace
 
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-               << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.language << map.name << map.description;
 
         return !stream.fail();
     }
@@ -189,14 +185,7 @@ namespace
             return false;
         }
 
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
-        LanguageUnderlyingType language;
-
-        stream >> language;
-        map.language = static_cast<fheroes2::SupportedLanguage>( language );
-
-        stream >> map.name >> map.description;
+        stream >> map.language >> map.name >> map.description;
 
         return !stream.fail();
     }
@@ -277,22 +266,12 @@ namespace Maps::Map_Format
 {
     OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object )
     {
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
-
-        return stream << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
+        return stream << object.id << object.group << object.index;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object )
     {
-        stream >> object.id;
-
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
-        GroupUnderlyingType group;
-        stream >> group;
-
-        object.group = static_cast<ObjectGroup>( group );
-
-        return stream >> object.index;
+        return stream >> object.id >> object.group >> object.index;
     }
 
     OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )

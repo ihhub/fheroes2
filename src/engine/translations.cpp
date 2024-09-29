@@ -330,8 +330,7 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                const auto [dummy, inserted] = hashOffsets.try_emplace( crc, Chunk{ offset2, length2 } );
-                if ( !inserted ) {
+                if ( const auto [dummy, inserted] = hashOffsets.try_emplace( crc, Chunk{ offset2, length2 } ); !inserted ) {
                     ERROR_LOG( "Clashing hash value for: " << msg1 )
                 }
             }

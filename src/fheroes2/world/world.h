@@ -87,42 +87,47 @@ struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 
 struct CapturedObject
 {
-    ObjectColor objcol;
+    ObjectColor objCol;
     Troop guardians;
 
     CapturedObject() = default;
 
     int GetColor() const
     {
-        return objcol.second;
+        return objCol.second;
     }
+
     Troop & GetTroop()
     {
         return guardians;
     }
 
-    void Set( int obj, int col )
+    void Set( const MP2::MapObjectType obj, const int col )
     {
-        objcol = ObjectColor( obj, col );
+        objCol = { obj, col };
     }
-    void SetColor( int col )
+
+    void SetColor( const int col )
     {
-        objcol.second = col;
+        objCol.second = col;
     }
 };
 
 struct CapturedObjects : std::map<int32_t, CapturedObject>
 {
-    void Set( int32_t, int, int );
-    void SetColor( int32_t, int );
-    void ClearFog( int );
-    void ResetColor( int );
+    CapturedObjects() = default;
 
-    CapturedObject & Get( int32_t );
+    void Set( const int32_t index, const MP2::MapObjectType obj, const int col );
+    void SetColor( const int32_t index, const int col );
+    void ResetColor( const int color );
 
-    uint32_t GetCount( int, int ) const;
-    uint32_t GetCountMines( int, int ) const;
-    int GetColor( int32_t ) const;
+    void ClearFog( const int colors );
+
+    CapturedObject & Get( const int32_t index );
+    int GetColor( const int32_t index ) const;
+
+    uint32_t GetCount( const MP2::MapObjectType obj, const int col ) const;
+    uint32_t GetCountMines( const int resourceType, const int ownerColor ) const;
 };
 
 struct EventDate
@@ -335,7 +340,7 @@ public:
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( int32_t, int col );
-    uint32_t CountCapturedObject( int obj, int col ) const;
+    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const int col ) const;
     uint32_t CountCapturedMines( int type, int col ) const;
     uint32_t CountObeliskOnMaps();
     int ColorCapturedObject( int32_t ) const;

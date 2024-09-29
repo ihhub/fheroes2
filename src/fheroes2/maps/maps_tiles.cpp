@@ -990,7 +990,7 @@ std::string Maps::Tiles::String() const
     if ( MP2::isCaptureObject( GetObject( false ) ) ) {
         const CapturedObject & co = world.GetCapturedObject( _index );
 
-        os << "capture color   : " << Color::String( co.objcol.second ) << std::endl;
+        os << "capture color   : " << Color::String( co.objCol.second ) << std::endl;
         if ( co.guardians.isValid() ) {
             os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture count   : " << co.guardians.GetCount() << std::endl;
         }
@@ -1033,9 +1033,9 @@ bool Maps::Tiles::isPassabilityTransparent() const
     return _mainAddon.isPassabilityTransparent();
 }
 
-bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
+bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const
 {
-    if ( !skipFog && isFog( heroColor ) ) {
+    if ( !ignoreFog && isFog( heroColor ) ) {
         return false;
     }
 
@@ -1835,9 +1835,7 @@ bool Maps::Tiles::isDetachedObject() const
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const TilesAddon & ta )
 {
-    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
-
-    return stream << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
+    return stream << ta._layerType << ta._uid << ta._objectIcnType << ta._imageIndex;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, TilesAddon & ta )
@@ -1849,15 +1847,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, TilesAddon & ta )
         ta._layerType = ( ta._layerType & 0x03 );
     }
 
-    stream >> ta._uid;
-
-    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
-    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
-
-    ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-    stream >> objectIcnType;
-
-    ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
+    stream >> ta._uid >> ta._objectIcnType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
@@ -1865,34 +1855,20 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, TilesAddon & ta )
         stream >> temp >> temp;
     }
 
-    stream >> ta._imageIndex;
-
-    return stream;
+    return stream >> ta._imageIndex;
 }
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
 {
-    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainAddon._objectIcnType )>;
-    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
-
     // TODO: use operator<<() for _mainAddon.
     return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainAddon._uid
-                  << static_cast<ObjectIcnTypeUnderlyingType>( tile._mainAddon._objectIcnType ) << tile._mainAddon._imageIndex
-                  << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
+                  << tile._mainAddon._objectIcnType << tile._mainAddon._imageIndex << tile._mainObjectType << tile._fogColors << tile._metadata << tile._occupantHeroId
                   << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._mainAddon._layerType << tile._boatOwnerColor;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 {
-    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainAddon._uid;
-
-    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainAddon._objectIcnType )>;
-    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
-
-    ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-    stream >> objectIcnType;
-
-    tile._mainAddon._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
+    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainAddon._uid >> tile._mainAddon._objectIcnType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
@@ -1902,9 +1878,6 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 
     stream >> tile._mainAddon._imageIndex;
 
-    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
-    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint16_t>, "Type of _mainObjectType has been changed, check the logic below" );
-
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         uint8_t mainObjectType = static_cast<uint8_t>( MP2::OBJ_NONE );
@@ -1913,10 +1886,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
         tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
     }
     else {
-        MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
-        stream >> mainObjectType;
-
-        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+        stream >> tile._mainObjectType;
     }
 
     return stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer

@@ -90,16 +90,13 @@ namespace Battle
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
 
-                const BattleNodeIndex newNodeIdx = { headCellIdx, tailCellIdx };
-                if ( newNodeIdx == _pathStart ) {
-                    continue;
+                if ( const auto [iter, inserted] = _cache.try_emplace( { headCellIdx, tailCellIdx } ); inserted ) {
+                    // Wide units can occupy overlapping positions, the distance between which is actually zero,
+                    // but since the movement takes place, we will consider the distance equal to 1 in this case
+                    const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
+
+                    iter->second.update( _pathStart, 1, distance );
                 }
-
-                // Wide units can occupy overlapping positions, the distance between which is actually zero,
-                // but since the movement takes place, we will consider the distance equal to 1 in this case
-                const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
-
-                _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
 
             return;
@@ -175,9 +172,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -214,9 +209,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
