@@ -1058,18 +1058,7 @@ void Battle::Status::clear()
     _lowerText.set( "", fheroes2::FontType::normalWhite() );
 }
 
-void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
-{
-    _area = rt;
-    _orders = units;
-    _army2Color = army2Color;
-
-    if ( units ) {
-        _rects.reserve( units->size() );
-    }
-}
-
-void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1091,42 +1080,42 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
     }
 }
 
-void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                                    fheroes2::Image & output ) const
+void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                     fheroes2::Image & output ) const
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, turnOrderMonsterIconSize - 2, turnOrderMonsterIconSize - 2 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, pos.width - 2, pos.height - 2 );
 
     // Draw a monster's sprite.
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    const int32_t monsterSpriteHeight = monsterSprite.height();
     if ( unit.Modes( Battle::CAP_MIRRORIMAGE ) ) {
-        fheroes2::Sprite mirroredMonster = mons32;
+        fheroes2::Sprite mirroredMonster = monsterSprite;
 
         fheroes2::ApplyPalette( mirroredMonster, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
-        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - mons32.width() ) / 2,
-                        pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ), revert );
+        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - monsterSprite.width() ) / 2,
+                        pos.y + pos.height - monsterSpriteHeight - ( monsterSpriteHeight + 3 < pos.height ? 3 : 0 ), revert );
     }
     else {
-        fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
-                        revert );
+        fheroes2::Blit( monsterSprite, output, pos.x + ( pos.width - monsterSprite.width() ) / 2,
+                        pos.y + pos.height - monsterSpriteHeight - ( monsterSpriteHeight + 3 < pos.height ? 3 : 0 ), revert );
     }
 
     const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
-    number.draw( pos.x + 2, pos.y + 4, output );
+    number.drawInRoi( pos.x + 2, pos.y + 4, output, pos );
 
     if ( isCurrentUnit ) {
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, currentUnitColor );
+        fheroes2::DrawRect( output, pos, currentUnitColor );
     }
     else {
-        uint8_t color = 0;
+        uint8_t color = ARMY_COLOR_BLUE;
 
         switch ( unit.GetCurrentColor() ) {
         case -1: // Berserkers
             color = ARMY_COLOR_BLACK;
             break;
         case Color::BLUE:
-            color = ARMY_COLOR_BLUE;
             break;
         case Color::GREEN:
             color = ARMY_COLOR_GREEN;
@@ -1151,7 +1140,7 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
             break;
         }
 
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, color );
+        fheroes2::DrawRect( output, pos, color );
 
         if ( unit.Modes( Battle::TR_MOVED ) ) {
             fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
@@ -1161,43 +1150,50 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
     }
 }
 
-void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( _orders.expired() ) {
+    if ( _orderOfUnits.expired() ) {
         // Nothing to show.
         return;
     }
 
-    const std::shared_ptr<const Units> orders = _orders.lock();
+    const std::shared_ptr<const Units> unitsOrder = _orderOfUnits.lock();
 
-    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( unitsOrder->begin(), unitsOrder->end(), []( const Unit * unit ) {
         assert( unit != nullptr );
         return unit->isValid();
     } ) );
 
-    const int32_t maximumUnitsToDraw = _area.width / turnOrderMonsterIconSize;
+    const int32_t unitsToDraw = std::min( _area.width / turnOrderMonsterIconSize, validUnitCount );
 
-    int32_t offsetX = 0;
+    if ( _rects.size() != unitsToDraw ) {
+        // Update units icons positions.
 
-    if ( validUnitCount > maximumUnitsToDraw ) {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+        width = turnOrderMonsterIconSize * unitsToDraw;
+
+        int32_t offsetX = ( _area.width - width ) / 2;
+
+        x = _area.x + offsetX;
+        y = _area.y;
+        height = turnOrderMonsterIconSize;
+
+        _rects.clear();
+        _rects.reserve( unitsToDraw );
+
+        for ( int32_t index = 0; index < unitsToDraw; ++index ) {
+            // Just for now place 'nullptr' instead of a pointer to unit.
+            // These pointers will be updated in the next loop.
+            _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+
+            offsetX += turnOrderMonsterIconSize;
+        }
     }
-    else {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * validUnitCount ) / 2;
-    }
 
-    x = _area.x + offsetX;
-    y = _area.y;
-    height = turnOrderMonsterIconSize;
-    width = 0;
-
-    _rects.clear();
-
-    int32_t unitsDrawn = 0;
+    int32_t unitRectIndex = 0;
     int32_t unitsProcessed = 0;
 
-    for ( const Unit * unit : *orders ) {
-        if ( unitsDrawn == maximumUnitsToDraw ) {
+    for ( const Unit * unit : *unitsOrder ) {
+        if ( unitRectIndex == unitsToDraw ) {
             break;
         }
 
@@ -1206,18 +1202,15 @@ void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitC
             continue;
         }
 
-        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > maximumUnitsToDraw ) ) {
+        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > unitsToDraw ) ) {
             ++unitsProcessed;
             continue;
         }
 
-        _rects.emplace_back( unit, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
-        RedrawUnit( _rects.back().second, *unit, unit->GetColor() == _army2Color, current == unit, currentUnitColor, output );
+        _rects[unitRectIndex].first = unit;
+        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, current == unit, currentUnitColor, output );
 
-        offsetX += turnOrderMonsterIconSize;
-        width += turnOrderMonsterIconSize;
-
-        ++unitsDrawn;
+        ++unitRectIndex;
         ++unitsProcessed;
     }
 }
@@ -1368,7 +1361,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    _turnOrder.Set( _interfacePosition, units, arena.GetArmy2Color() );
+    _turnOrder.set( _interfacePosition, units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
@@ -1472,7 +1465,7 @@ void Battle::Interface::RedrawPartialFinish()
 void Battle::Interface::redrawPreRender()
 {
     if ( Settings::Get().BattleShowTurnOrder() ) {
-        _turnOrder.Redraw( _currentUnit, _contourColor, _mainSurface );
+        _turnOrder.redraw( _currentUnit, _contourColor, _mainSurface );
     }
 
 #ifdef WITH_DEBUG
@@ -2885,7 +2878,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        _turnOrder.QueueEventProcessing( msg, _interfacePosition.getPosition() );
+        _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() );
     }
     else if ( le.isMouseCursorPosInArea( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
