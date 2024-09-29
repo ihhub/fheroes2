@@ -2143,7 +2143,7 @@ std::string Heroes::String() const
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
         for ( const auto & info : visit_object ) {
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
+            os << MP2::StringObject( info.second ) << "(" << info.first << "), ";
         }
 
         os << std::endl;

@@ -245,7 +245,7 @@ int CapturedObjects::GetColor( const int32_t index ) const
     return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( const int colors )
+void CapturedObjects::ClearFog( const int colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
         const ObjectColor & objCol = capturedObj.objCol;

@@ -144,7 +144,7 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
     void SetColor( const int32_t index, const int col );
     void ResetColor( const int color );
 
-    void ClearFog( const int colors );
+    void ClearFog( const int colors ) const;
 
     CapturedObject & Get( const int32_t index );
     int GetColor( const int32_t index ) const;
