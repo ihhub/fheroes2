@@ -521,7 +521,7 @@ public:
             : BaseIterator( std::move( other ) )
         {}
 
-        decltype( auto ) operator*() const noexcept
+        auto operator*() const noexcept
         {
             return BaseIterator::operator*().get();
         }
