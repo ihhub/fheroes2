@@ -30,7 +30,6 @@
 #include <vector>
 
 #include "artifact.h"
-#include "mp2.h"
 #include "position.h"
 #include "resource.h"
 

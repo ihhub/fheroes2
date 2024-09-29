@@ -31,6 +31,7 @@
 #include "color.h"
 #include "game_io.h"
 #include "logging.h"
+#include "mp2.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
