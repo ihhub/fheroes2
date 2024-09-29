@@ -157,8 +157,7 @@ std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) cons
 {
     std::list<MapObjectSimple *> result;
 
-    for ( const auto & item : _objects ) {
-        const auto & [dummy, obj] = item;
+    for ( const auto & [dummy, obj] : _objects ) {
         assert( obj );
 
         if ( !obj->isPosition( pos ) ) {
