@@ -3390,9 +3390,8 @@ msgstr "A lények maximális számának kiválasztása toborzáshoz."
 msgid "Select only 1 monster to be recruited."
 msgstr "Csak egyetlen lény kiválasztása toborzáshoz."
 
-#, fuzzy
 msgid "Select this game resolution."
-msgstr "Játék felbontás kiválasztása"
+msgstr "Pálya felbontás kiválasztása."
 
 msgid ""
 "Selecting this resolution will set a resolution that is scaled from the "
@@ -3403,6 +3402,11 @@ msgid ""
 "better because the pixels are upscaled evenly in both horizontal and "
 "vertical directions."
 msgstr ""
+"A pálya felbontásának kiválasztásával az eredeti felbontáshoz (%{resolution}) "
+"képest adhatjuk meg a skálázás mértékét esz szorzószámmal (%{scale}).\n"
+"\n"
+"Az egész számú szorzó (2.0x, 3.0x stb.) általában jobb képet ad, mivel "
+"a pixelek egyformán lesznek felskálázva vízszintesen és függőlegesen."
 
 msgid "Select Game Resolution:"
 msgstr "Játék felbontás kiválasztása:"
