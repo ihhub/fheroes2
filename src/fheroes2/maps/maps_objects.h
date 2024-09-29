@@ -40,19 +40,7 @@ class OStreamBase;
 class MapObjectSimple : public MapPosition
 {
 public:
-    explicit MapObjectSimple( const int objectType = MP2::OBJ_NONE )
-        : uid( 0 )
-        , type( objectType )
-    {
-        // Do nothing.
-    }
-
-    ~MapObjectSimple() override = default;
-
-    int GetType() const
-    {
-        return type;
-    }
+    MapObjectSimple() = default;
 
     uint32_t GetUID() const
     {
@@ -74,17 +62,12 @@ protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
     friend IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
 
-    uint32_t uid;
-    int type;
+    uint32_t uid{ 0 };
 };
 
 struct MapEvent : public MapObjectSimple
 {
-    MapEvent()
-        : MapObjectSimple( MP2::OBJ_EVENT )
-    {
-        // Do nothing.
-    }
+    MapEvent() = default;
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
@@ -110,11 +93,7 @@ struct MapEvent : public MapObjectSimple
 
 struct MapSphinx : public MapObjectSimple
 {
-    MapSphinx()
-        : MapObjectSimple( MP2::OBJ_SPHINX )
-    {
-        // Do nothing.
-    }
+    MapSphinx() = default;
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
@@ -160,11 +139,7 @@ struct MapSphinx : public MapObjectSimple
 
 struct MapSign : public MapObjectSimple
 {
-    MapSign()
-        : MapObjectSimple( MP2::OBJ_SIGN )
-    {
-        // Do nothing.
-    }
+    MapSign() = default;
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 

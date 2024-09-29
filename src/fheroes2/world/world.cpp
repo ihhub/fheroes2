@@ -1409,25 +1409,26 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
         const auto & [uid, obj] = item;
         assert( obj && obj->GetUID() == uid );
 
-        stream << uid << obj->GetType();
+        if ( auto * objPtr = dynamic_cast<MapEvent *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_EVENT << *objPtr;
 
-        switch ( obj->GetType() ) {
-        case MP2::OBJ_EVENT:
-            stream << dynamic_cast<const MapEvent &>( *obj );
-            break;
-
-        case MP2::OBJ_SPHINX:
-            stream << dynamic_cast<const MapSphinx &>( *obj );
-            break;
-
-        case MP2::OBJ_SIGN:
-            stream << dynamic_cast<const MapSign &>( *obj );
-            break;
-
-        default:
-            stream << *obj;
-            break;
+            return;
         }
+
+        if ( auto * objPtr = dynamic_cast<MapSphinx *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SPHINX << *objPtr;
+
+            return;
+        }
+
+        if ( auto * objPtr = dynamic_cast<MapSign *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SIGN << *objPtr;
+
+            return;
+        }
+
+        // Unknown object type
+        assert( 0 );
     } );
 
     return stream;
@@ -1443,8 +1444,19 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 
     for ( uint32_t i = 0; i < size; ++i ) {
         uint32_t uid{ 0 };
-        int type{ MP2::OBJ_NONE };
-        stream >> uid >> type;
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
+        stream >> uid;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+            int temp{ MP2::OBJ_NONE };
+            stream >> temp;
+
+            type = static_cast<MP2::MapObjectType>( temp );
+        }
+        else {
+            stream >> type;
+        }
 
         std::unique_ptr<MapObjectSimple> obj = [&stream, type]() -> std::unique_ptr<MapObjectSimple> {
             switch ( type ) {
@@ -1473,11 +1485,15 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
                 break;
             }
 
-            auto ptr = std::make_unique<MapObjectSimple>();
-            stream >> *ptr;
-
-            return ptr;
+            return {};
         }();
+
+        if ( !obj ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
+        }
 
         if ( obj->GetUID() != uid ) {
             // Most likely the save file is corrupted.

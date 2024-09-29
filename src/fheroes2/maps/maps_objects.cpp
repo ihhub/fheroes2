@@ -316,12 +316,22 @@ void MapSign::setDefaultMessage()
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj )
 {
-    return stream << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
+    return stream << static_cast<const MapPosition &>( obj ) << obj.uid;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
 {
-    return stream >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        int dummy;
+
+        stream >> dummy >> obj.uid >> static_cast<MapPosition &>( obj );
+    }
+    else {
+        stream >> static_cast<MapPosition &>( obj ) >> obj.uid;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
