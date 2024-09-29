@@ -2584,28 +2584,28 @@ OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 
 IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
-    std::vector<std::unique_ptr<Heroes>> & vecHeroes = heroes._heroes;
+    std::vector<std::unique_ptr<Heroes>> & heroesRef = heroes._heroes;
 
     const uint32_t size = stream.get32();
 
-    vecHeroes.clear();
-    vecHeroes.reserve( size );
+    heroesRef.clear();
+    heroesRef.reserve( size );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         // Before FORMAT_VERSION_1010_RELEASE UNKNOWN hero was last while now it is first.
         // In order to preserve the original order of heroes we have to do the below trick.
         if ( size > 0 ) {
-            vecHeroes.emplace_back( std::make_unique<Heroes>() );
+            heroesRef.emplace_back( std::make_unique<Heroes>() );
 
             for ( uint32_t i = 1; i < size; ++i ) {
                 auto hero = std::make_unique<Heroes>();
                 stream >> *hero;
 
-                vecHeroes.emplace_back( std::move( hero ) );
+                heroesRef.emplace_back( std::move( hero ) );
             }
 
-            stream >> *( vecHeroes[0] );
+            stream >> *( heroesRef[0] );
         }
     }
     else {
@@ -2613,7 +2613,7 @@ IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
             auto hero = std::make_unique<Heroes>();
             stream >> *hero;
 
-            vecHeroes.emplace_back( std::move( hero ) );
+            heroesRef.emplace_back( std::move( hero ) );
         }
     }
 
