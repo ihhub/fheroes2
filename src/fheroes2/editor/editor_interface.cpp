@@ -859,7 +859,7 @@ namespace Interface
 
             isCursorOverGamearea = false;
 
-            // cursor is over the radar
+            // Cursor is over the radar.
             if ( le.isMouseCursorPosInArea( _radar.GetArea() ) ) {
                 cursor.SetThemes( Cursor::POINTER );
 
@@ -868,23 +868,22 @@ namespace Interface
                     _radar.QueueEventProcessing();
                 }
             }
-            // cursor is over the game area
-            else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
-                isCursorOverGamearea = true;
-            }
-            // cursor is over the buttons area
-            else if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
-                cursor.SetThemes( Cursor::POINTER );
-
-                if ( !_gameArea.NeedScroll() ) {
-                    res = _editorPanel.queueEventProcessing();
-                }
-            }
-            // cursor is somewhere else
             else if ( !_gameArea.NeedScroll() ) {
-                cursor.SetThemes( Cursor::POINTER );
+                if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
+                    // Cursor is over the game area.
+                    isCursorOverGamearea = true;
+                }
+                else {
+                    // Cursor is not over the game area.
+                    cursor.SetThemes( Cursor::POINTER );
 
-                _gameArea.ResetCursorPosition();
+                    _gameArea.ResetCursorPosition();
+
+                    if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
+                        // Cursor is over the buttons area.
+                        res = _editorPanel.queueEventProcessing();
+                    }
+                }
             }
 
             // gamearea

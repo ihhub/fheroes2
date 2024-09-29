@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstddef>
 #include <sstream>
-#include <type_traits>
 
 #include "castle.h"
 #include "game.h"
@@ -268,13 +267,10 @@ IStreamBase & operator>>( IStreamBase & stream, Focus & focus )
 
 OStreamBase & operator<<( OStreamBase & stream, const Player & player )
 {
-    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
-
     const BitModes & modes = player;
 
-    stream << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
-           << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
-    return stream;
+    return stream << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << player._aiPersonality
+                  << player._handicapStatus;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Player & player )
@@ -289,22 +285,7 @@ IStreamBase & operator>>( IStreamBase & stream, Player & player )
         stream >> temp;
     }
 
-    stream >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
-
-    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
-    static_assert( std::is_same_v<AIPersonalityUnderlyingType, int>, "Type of _aiPersonality has been changed, check the logic below" );
-
-    AIPersonalityUnderlyingType aiPersonality;
-    stream >> aiPersonality;
-
-    player._aiPersonality = static_cast<AI::Personality>( aiPersonality );
-
-    uint8_t handicapStatusInt;
-    stream >> handicapStatusInt;
-
-    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
-
-    return stream;
+    return stream >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus >> player._aiPersonality >> player._handicapStatus;
 }
 
 Players::Players()

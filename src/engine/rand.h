@@ -39,7 +39,7 @@ namespace Rand
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
 
-    template <typename T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+    template <typename T, std::enable_if_t<std::is_enum_v<T>, bool> = true>
     T Get( const T from, const T to )
     {
         return static_cast<T>( Get( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ) ) );
@@ -47,7 +47,7 @@ namespace Rand
 
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
 
-    template <typename T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+    template <typename T, std::enable_if_t<std::is_enum_v<T>, bool> = true>
     T GetWithSeed( const T from, const T to, const uint32_t seed )
     {
         return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );

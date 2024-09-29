@@ -373,8 +373,7 @@ std::string System::GetConfigDirectory( const std::string_view appName )
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
         assert( 0 );
     }
 
@@ -412,8 +411,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
         assert( 0 );
     }
 

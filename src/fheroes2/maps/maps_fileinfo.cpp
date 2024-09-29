@@ -629,8 +629,6 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
-    using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
-
     // Only the basename of map filename (fi.file) is saved
     stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
@@ -643,8 +641,7 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 
     return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
-                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
-                  << fi.worldWeek << fi.worldMonth;
+                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
@@ -672,19 +669,9 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         }
     }
 
-    stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
-        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
-        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle;
-
-    using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
-    static_assert( std::is_same_v<VersionUnderlyingType, int>, "Type of version has been changed, check the logic below" );
-
-    VersionUnderlyingType version = 0;
-    stream >> version;
-
-    fi.version = static_cast<GameVersion>( version );
-
-    return stream >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    return stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+           >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
+           >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
 MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )

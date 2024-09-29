@@ -373,8 +373,7 @@ bool Troops::areAllTroopsUnique() const
             continue;
         }
 
-        auto [it, inserted] = monsterId.emplace( troop->GetID() );
-        if ( !inserted ) {
+        if ( auto [dummy, inserted] = monsterId.emplace( troop->GetID() ); !inserted ) {
             return false;
         }
     }
@@ -1376,16 +1375,26 @@ std::string Army::String() const
 {
     std::ostringstream os;
 
-    os << "color(" << Color::String( commander ? commander->GetColor() : color ) << "), ";
+    os << "color(" << Color::String( GetColor() ) << "), strength(" << GetStrength() << "), ";
 
-    if ( GetCommander() )
+    if ( const HeroBase * cmdr = GetCommander(); cmdr != nullptr ) {
         os << "commander(" << GetCommander()->GetName() << ")";
+    }
+    else {
+        os << "commander(None)";
+    }
 
     os << ": ";
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            os << std::dec << ( *it )->GetCount() << " " << ( *it )->GetName() << ", ";
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        os << std::dec << troop->GetCount() << " " << troop->GetName() << ", ";
+    }
 
     return os.str();
 }
