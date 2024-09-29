@@ -121,7 +121,7 @@ enum class BuildingStatus : int32_t
     LACK_RESOURCES
 };
 
-class Castle : public MapPosition, public BitModes, public ColorBase, public Control
+class Castle final : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
     // Maximum number of creature dwellings that can be built in a castle
