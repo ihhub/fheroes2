@@ -144,17 +144,6 @@ namespace
     }
 }
 
-void MapObjects::add( MapObjectSimple * obj )
-{
-    if ( obj == nullptr ) {
-        return;
-    }
-
-    if ( const auto [iter, inserted] = try_emplace( obj->GetUID(), obj ); !inserted ) {
-        iter->second.reset( obj );
-    }
-}
-
 MapObjectSimple * MapObjects::get( const uint32_t uid ) const
 {
     if ( const auto iter = find( uid ); iter != end() ) {

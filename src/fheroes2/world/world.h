@@ -77,7 +77,18 @@ struct MapObjects : public std::map<uint32_t, std::unique_ptr<MapObjectSimple>>
     MapObjects & operator=( const MapObjects & other ) = delete;
     MapObjects & operator=( MapObjects && other ) = delete;
 
-    void add( MapObjectSimple * obj );
+    template <typename T, std::enable_if_t<std::is_base_of_v<MapObjectSimple, T>, bool> = true>
+    void add( std::unique_ptr<T> && obj )
+    {
+        if ( !obj ) {
+            return;
+        }
+
+        if ( const auto [iter, inserted] = try_emplace( obj->GetUID(), std::move( obj ) ); !inserted ) {
+            iter->second = std::move( obj );
+        }
+    }
+
     void remove( const uint32_t uid );
 
     MapObjectSimple * get( const uint32_t uid ) const;
