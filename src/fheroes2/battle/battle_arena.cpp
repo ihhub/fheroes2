@@ -1040,15 +1040,15 @@ const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( cons
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardTroops( const int32_t index ) const
 {
-    const auto graves = graveyard.getGraves( index );
-    if ( !graves ) {
+    const Graves * const graves = graveyard.getGraves( index );
+    if ( graves == nullptr ) {
         return {};
     }
 
     std::vector<const Unit *> result;
-    result.reserve( graves->get().size() );
+    result.reserve( graves->size() );
 
-    for ( const auto & [uid, dummy] : graves->get() ) {
+    for ( const auto & [uid, dummy] : *graves ) {
         const Unit * unit = GetTroopUID( uid );
         assert( unit != nullptr );
 

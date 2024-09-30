@@ -116,16 +116,16 @@ std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroopWithColor( const int
     return gravesIter->uid;
 }
 
-std::optional<std::reference_wrapper<const Battle::Graves>> Battle::Graveyard::getGraves( const int32_t index ) const
+const Battle::Graves * Battle::Graveyard::getGraves( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
-        return {};
+        return nullptr;
     }
 
     if ( iter->second.empty() ) {
-        return {};
+        return nullptr;
     }
 
-    return iter->second;
+    return &( iter->second );
 }

@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <functional>
 #include <map>
 #include <optional>
 #include <vector>
@@ -66,6 +65,6 @@ namespace Battle
         std::optional<uint32_t> getUIDOfLastTroop( const int32_t index ) const;
         std::optional<uint32_t> getUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
 
-        std::optional<std::reference_wrapper<const Graves>> getGraves( const int32_t index ) const;
+        const Graves * getGraves( const int32_t index ) const;
     };
 }
