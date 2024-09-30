@@ -1108,12 +1108,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
     }
 
     if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
-        // Only the commanding hero can cast resurrection spells
-        assert( hero != nullptr );
+        target = getLastResurrectableTroopFromGraveyard( dst );
+        assert( target != nullptr && target->AllowApplySpell( spell, hero ) );
 
-        target = GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( dst, hero->GetColor() ) );
-
-        if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
+        if ( consideredTargets.insert( target ).second ) {
             res.defender = target;
 
             targets.push_back( res );

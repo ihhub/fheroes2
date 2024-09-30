@@ -210,8 +210,10 @@ namespace Battle
 
         // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
         const Unit * getLastTroopFromGraveyard( const int32_t index ) const;
+
         // Returns the last dead unit on the cell with the given index, which can be affected by resurrection spells
         // during the current turn, or nullptr if there is no such unit.
+        Unit * getLastResurrectableTroopFromGraveyard( const int32_t index );
         const Unit * getLastResurrectableTroopFromGraveyard( const int32_t index ) const;
 
         bool CanSurrenderOpponent( int color ) const;

@@ -992,6 +992,16 @@ const Battle::Unit * Battle::Arena::getLastTroopFromGraveyard( const int32_t ind
     return GetTroopUID( graveyard.GetUIDOfLastTroop( index ) );
 }
 
+Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int32_t index )
+{
+    const HeroBase * hero = GetCurrentCommander();
+    if ( hero == nullptr ) {
+        return nullptr;
+    }
+
+    return GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ) );
+}
+
 const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int32_t index ) const
 {
     const HeroBase * hero = GetCurrentCommander();
