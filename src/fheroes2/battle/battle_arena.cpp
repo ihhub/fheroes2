@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <iterator>
 #include <map>
 #include <numeric>
