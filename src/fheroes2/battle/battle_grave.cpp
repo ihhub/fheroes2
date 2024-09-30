@@ -110,10 +110,6 @@ uint32_t Battle::Graveyard::GetUIDOfLastTroopWithColor( const int32_t index, con
 
     const auto & [dummy, graves] = *graveyardIter;
 
-    if ( graves.empty() ) {
-        return 0;
-    }
-
     const auto gravesIter = std::find_if( graves.rbegin(), graves.rend(), [color]( const Grave & grave ) { return grave.color == color; } );
     if ( gravesIter == graves.rend() ) {
         return 0;
