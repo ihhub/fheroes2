@@ -43,7 +43,6 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
