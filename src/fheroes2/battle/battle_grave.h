@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_GRAVEYARD_H
-#define H2BATTLE_GRAVEYARD_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -30,14 +29,24 @@
 #include <vector>
 
 #include "battle_board.h"
+#include "battle_troop.h"
 
 namespace Battle
 {
-    class Unit;
+    struct Grave
+    {
+        Grave( const Unit & unit )
+            : uid( unit.GetUID() )
+            , color( unit.GetArmyColor() )
+        {}
 
-    using TroopUIDs = std::vector<uint32_t>;
+        uint32_t uid;
+        int color;
+    };
 
-    class Graveyard : public std::map<int32_t, TroopUIDs>
+    using Graves = std::vector<Grave>;
+
+    class Graveyard : public std::map<int32_t, Graves>
     {
     public:
         Graveyard() = default;
@@ -48,11 +57,13 @@ namespace Battle
         Graveyard & operator=( const Graveyard & ) = delete;
 
         Indexes GetOccupiedCells() const;
+
         void AddTroop( const Unit & unit );
         void RemoveTroop( const Unit & unit );
-        uint32_t GetLastTroopUID( const int32_t index ) const;
-        TroopUIDs GetTroopUIDs( const int32_t index ) const;
+
+        uint32_t GetUIDOfLastTroop( const int32_t index ) const;
+        uint32_t GetUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
+
+        Graves GetGraves( const int32_t index ) const;
     };
 }
-
-#endif

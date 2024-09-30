@@ -1087,11 +1087,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     Unit * target = GetTroopBoard( dst );
 
-    // from spells
     switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
-        // skip center
         target = nullptr;
         break;
 
@@ -1103,16 +1101,17 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     TargetInfo res;
 
-    // first target
     if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
         res.defender = target;
 
         targets.push_back( res );
     }
 
-    // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
+    if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
+        // Only the commanding hero can cast resurrection spells
+        assert( hero != nullptr );
+
+        target = GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( dst, hero->GetColor() ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
             res.defender = target;
@@ -1121,7 +1120,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
         }
     }
     else {
-        // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
@@ -1146,7 +1144,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check abroads
         case Spell::FIREBALL:
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
@@ -1167,7 +1164,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check all troops
         case Spell::DEATHRIPPLE:
         case Spell::DEATHWAVE:
         case Spell::ELEMENTALSTORM:

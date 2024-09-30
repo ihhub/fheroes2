@@ -782,32 +782,37 @@ int Battle::Arena::GetOppositeColor( const int col ) const
 
 Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
-    Units::iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
-    Units::const_iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
-    if ( _interface )
-        _interface->FadeArena( clearMessageLog );
+    if ( !_interface ) {
+        return;
+    }
+
+    _interface->FadeArena( clearMessageLog );
 }
 
 const SpellStorage & Battle::Arena::GetUsageSpells() const
@@ -873,7 +878,6 @@ bool Battle::Arena::isSpellcastDisabled() const
 
 bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ ) const
 {
-    // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
         if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
@@ -883,7 +887,6 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
     const HeroBase * current_commander = GetCurrentCommander();
 
-    // check casted
     if ( current_commander ) {
         if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
             if ( msg ) {
@@ -910,7 +913,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
                 return true;
             }
 
-            if ( 0 > GetFreePositionNearHero( GetCurrentColor() ) ) {
+            if ( GetFreePositionNearHero( GetCurrentColor() ) < 0 ) {
                 if ( msg ) {
                     *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
@@ -918,20 +921,16 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
             }
         }
         else if ( spell.isValid() ) {
-            // check army
-            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const Battle::Unit * b = ( *it ).GetUnit();
+            for ( const Cell & cell : board ) {
+                const Battle::Unit * unit = cell.GetUnit();
 
-                if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander ) ) {
+                if ( unit ) {
+                    if ( unit->AllowApplySpell( spell, current_commander ) ) {
                         return false;
                     }
                 }
-                else {
-                    // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
-                        return false;
-                    }
+                else if ( isAbleToResurrectFromGraveyard( cell.GetIndex(), spell ) ) {
+                    return false;
                 }
             }
 
@@ -945,7 +944,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
     return false;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const
+bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const
 {
     if ( !spell.isResurrect() ) {
         return false;
@@ -956,7 +955,7 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
         return false;
     }
 
-    const Unit * unit = GraveyardLastTroop( index );
+    const Unit * unit = getLastResurrectableTroopFromGraveyard( index );
     if ( unit == nullptr ) {
         return false;
     }
@@ -988,29 +987,39 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastTroopFromGraveyard( const int32_t index ) const
 {
-    return GetTroopUID( graveyard.GetLastTroopUID( index ) );
+    return GetTroopUID( graveyard.GetUIDOfLastTroop( index ) );
 }
 
-std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int32_t index ) const
 {
-    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
+    const HeroBase * hero = GetCurrentCommander();
+    if ( hero == nullptr ) {
+        return nullptr;
+    }
+
+    return GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ) );
+}
+
+std::vector<const Battle::Unit *> Battle::Arena::getGraveyardTroops( const int32_t index ) const
+{
+    const Graves graves = graveyard.GetGraves( index );
 
     std::vector<const Unit *> result;
-    result.reserve( troopUIDs.size() );
+    result.reserve( graves.size() );
 
-    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
+    for ( const auto & [uid, dummy] : graves ) {
         const Unit * unit = GetTroopUID( uid );
         assert( unit != nullptr );
 
         result.push_back( unit );
-    } );
+    }
 
     return result;
 }
 
-Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
+Battle::Indexes Battle::Arena::getCellsOccupiedByGraveyard() const
 {
     return graveyard.GetOccupiedCells();
 }

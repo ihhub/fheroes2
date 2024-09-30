@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "battle_bridge.h"
+
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_cell.h"
@@ -35,8 +36,8 @@ bool Battle::Bridge::isOccupied()
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
     // Yes if there are any troops (alive or dead) on CELL_MOAT and CELL_GATES tiles
-    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->GetLastTroopUID( CELL_MOAT )
-           || graveyard->GetLastTroopUID( CELL_GATES );
+    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->GetUIDOfLastTroop( CELL_MOAT )
+           || graveyard->GetUIDOfLastTroop( CELL_GATES );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const

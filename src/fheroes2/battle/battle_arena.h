@@ -203,10 +203,16 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
-        bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
-        const Unit * GraveyardLastTroop( const int32_t index ) const;
-        std::vector<const Unit *> GetGraveyardTroops( const int32_t index ) const;
-        Indexes GraveyardOccupiedCells() const;
+        bool isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const;
+
+        Indexes getCellsOccupiedByGraveyard() const;
+        std::vector<const Unit *> getGraveyardTroops( const int32_t index ) const;
+
+        // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
+        const Unit * getLastTroopFromGraveyard( const int32_t index ) const;
+        // Returns the last dead unit on the cell with the given index, which can be affected by resurrection spells
+        // during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableTroopFromGraveyard( const int32_t index ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
