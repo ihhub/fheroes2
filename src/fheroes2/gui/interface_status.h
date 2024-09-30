@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <cstdint>
 
 #include "interface_border.h"
+#include "resource.h"
 #include "timing.h"
 
 namespace Interface
@@ -46,23 +47,34 @@ namespace Interface
     class StatusWindow final : public BorderWindow
     {
     public:
-        explicit StatusWindow( BaseInterface & interface );
+        explicit StatusWindow( BaseInterface & interface )
+            : BorderWindow( { 0, 0, 144, 72 } )
+            , _interface( interface )
+        {
+            // Do nothing.
+        }
+
         StatusWindow( const StatusWindow & ) = delete;
 
         ~StatusWindow() override = default;
 
         StatusWindow & operator=( const StatusWindow & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( const int32_t ox, const int32_t oy ) override;
         void SavePosition() override;
         void SetRedraw() const;
 
-        void Reset();
+        void Reset()
+        {
+            _state = StatusType::STATUS_DAY;
+            _lastResource = Resource::UNKNOWN;
+            _lastResourceCount = 0;
+        }
 
         void NextState();
 
         void SetState( const StatusType status );
-        void SetResource( int, uint32_t );
+        void SetResource( const int resource, const uint32_t count );
         void DrawAITurnProgress( const uint32_t progressValue );
         void QueueEventProcessing();
         void TimerEventProcessing();
@@ -72,21 +84,21 @@ namespace Interface
         void _redraw() const;
 
     private:
-        void DrawKingdomInfo( int oh = 0 ) const;
-        void DrawDayInfo( int oh = 0 ) const;
-        void DrawArmyInfo( int oh = 0 ) const;
-        void DrawResourceInfo( int oh = 0 ) const;
-        void DrawBackground() const;
-        void DrawAITurns() const;
+        void _drawKingdomInfo( const int32_t offsetY = 0 ) const;
+        void _drawDayInfo( const int32_t offsetY = 0 ) const;
+        void _drawArmyInfo( const int32_t offsetY = 0 ) const;
+        void _drawResourceInfo( const int32_t offsetY = 0 ) const;
+        void _drawBackground() const;
+        void _drawAITurns() const;
 
         BaseInterface & _interface;
 
-        StatusType _state;
-        int lastResource;
-        uint32_t countLastResource;
-        uint32_t turn_progress;
+        StatusType _state{ StatusType::STATUS_UNKNOWN };
+        int _lastResource{ Resource::UNKNOWN };
+        uint32_t _lastResourceCount{ 0 };
+        uint32_t _aiTurnProgress{ 0 };
 
-        fheroes2::TimeDelay showLastResourceDelay;
+        fheroes2::TimeDelay _showLastResourceDelay{ 2500 };
     };
 }
 
