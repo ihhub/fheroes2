@@ -1008,7 +1008,7 @@ Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int3
     }
 
     if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
-        GetTroopUID( *uid );
+        return GetTroopUID( *uid );
     }
 
     return nullptr;
@@ -1022,7 +1022,7 @@ const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( cons
     }
 
     if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
-        GetTroopUID( *uid );
+        return GetTroopUID( *uid );
     }
 
     return nullptr;
