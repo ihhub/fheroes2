@@ -35,7 +35,7 @@ namespace Battle
 {
     struct Grave
     {
-        Grave( const Unit & unit )
+        explicit Grave( const Unit & unit )
             : uid( unit.GetUID() )
             , color( unit.GetArmyColor() )
         {}
