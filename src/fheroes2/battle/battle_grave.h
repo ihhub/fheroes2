@@ -65,6 +65,6 @@ namespace Battle
         std::optional<uint32_t> getUIDOfLastTroop( const int32_t index ) const;
         std::optional<uint32_t> getUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
 
-        const Graves * getGraves( const int32_t index ) const;
+        Graves getGraves( const int32_t index ) const;
     };
 }
