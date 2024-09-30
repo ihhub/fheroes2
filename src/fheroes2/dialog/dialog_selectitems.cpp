@@ -66,6 +66,8 @@
 
 namespace
 {
+    const int32_t dialogHeightDeduction = 150;
+
     // Returns the town type according the given player color, race and castle/town state.
     int getPackedTownType( const int townRace, const bool isCastle )
     {
@@ -668,7 +670,7 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
-    const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 200 );
+    const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - dialogHeightDeduction );
     const int32_t itemsHeight = std::max( 100 + SelectKingdomCastle::itemsOffsetY * static_cast<int32_t>( castles.size() ), 100 + SelectKingdomCastle::itemsOffsetY * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
@@ -823,7 +825,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
         }
     }
 
-    SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Skill:" ) );
+    SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Skill:" ) );
 
     listbox.SetListContent( skills );
     if ( skillId != Skill::Secondary::UNKNOWN ) {
@@ -851,7 +853,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
         }
     }
 
-    SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - 200 }, _( "Select Spell:" ) );
+    SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Spell:" ) );
 
     listbox.SetListContent( spells );
     if ( spellId != Spell::NONE ) {
@@ -900,7 +902,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
         artifacts.emplace_back( id );
     }
 
-    SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
+    SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     listbox.SetListContent( artifacts );
     if ( artifactId != Artifact::UNKNOWN ) {
@@ -920,7 +922,7 @@ Monster Dialog::selectMonster( const int monsterId )
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
-    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
     listbox.SetListContent( monsters );
     if ( monsterId != Monster::UNKNOWN ) {
@@ -941,7 +943,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
-    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
+    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Hero:" ) );
 
     listbox.SetListContent( heroes );
     if ( heroId != Heroes::UNKNOWN ) {
@@ -1135,7 +1137,7 @@ int Dialog::selectMonsterType( const int monsterType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
-    MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
     return selectObjectType( monsterType, objectInfo.size(), listbox );
 }
@@ -1144,7 +1146,7 @@ int Dialog::selectArtifactType( const int artifactType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
 
-    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
+    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     return selectObjectType( artifactType, objectInfo.size(), listbox );
 }
@@ -1153,7 +1155,7 @@ int Dialog::selectTreasureType( const int resourceType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
 
-    TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Treasure:" ) );
+    TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Treasure:" ) );
 
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
@@ -1162,7 +1164,7 @@ int Dialog::selectOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
-    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Ocean Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
@@ -1171,7 +1173,7 @@ int Dialog::selectLandscapeOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_WATER );
 
-    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Ocean Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
