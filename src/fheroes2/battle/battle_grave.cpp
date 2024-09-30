@@ -27,7 +27,7 @@
 #include <cassert>
 #include <utility>
 
-Battle::Indexes Battle::Graveyard::GetOccupiedCells() const
+Battle::Indexes Battle::Graveyard::getOccupiedCells() const
 {
     Indexes result;
     result.reserve( size() );
@@ -43,7 +43,7 @@ Battle::Indexes Battle::Graveyard::GetOccupiedCells() const
     return result;
 }
 
-void Battle::Graveyard::AddTroop( const Unit & unit )
+void Battle::Graveyard::addTroop( const Unit & unit )
 {
     assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
@@ -56,7 +56,7 @@ void Battle::Graveyard::AddTroop( const Unit & unit )
     }
 }
 
-void Battle::Graveyard::RemoveTroop( const Unit & unit )
+void Battle::Graveyard::removeTroop( const Unit & unit )
 {
     assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
@@ -69,9 +69,11 @@ void Battle::Graveyard::RemoveTroop( const Unit & unit )
         auto & [dummy, graves] = *graveyardIter;
 
         const auto gravesIter = std::find_if( graves.begin(), graves.end(), [uid]( const Grave & grave ) { return grave.uid == uid; } );
-        if ( gravesIter != graves.end() ) {
-            graves.erase( gravesIter );
+        if ( gravesIter == graves.end() ) {
+            return;
         }
+
+        graves.erase( gravesIter );
     };
 
     removeUIDFromIndex( unit.GetHeadIndex(), unit.GetUID() );
@@ -81,7 +83,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & unit )
     }
 }
 
-std::optional<uint32_t> Battle::Graveyard::GetUIDOfLastTroop( const int32_t index ) const
+std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroop( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
@@ -97,7 +99,7 @@ std::optional<uint32_t> Battle::Graveyard::GetUIDOfLastTroop( const int32_t inde
     return graves.back().uid;
 }
 
-std::optional<uint32_t> Battle::Graveyard::GetUIDOfLastTroopWithColor( const int32_t index, const int color ) const
+std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroopWithColor( const int32_t index, const int color ) const
 {
     const auto graveyardIter = find( index );
     if ( graveyardIter == end() ) {
@@ -114,10 +116,14 @@ std::optional<uint32_t> Battle::Graveyard::GetUIDOfLastTroopWithColor( const int
     return gravesIter->uid;
 }
 
-Battle::Graves Battle::Graveyard::GetGraves( const int32_t index ) const
+std::optional<std::reference_wrapper<const Battle::Graves>> Battle::Graveyard::getGraves( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
+        return {};
+    }
+
+    if ( iter->second.empty() ) {
         return {};
     }
 

@@ -1002,7 +1002,7 @@ bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const S
 
 const Battle::Unit * Battle::Arena::getLastTroopFromGraveyard( const int32_t index ) const
 {
-    if ( const auto uid = graveyard.GetUIDOfLastTroop( index ); uid ) {
+    if ( const auto uid = graveyard.getUIDOfLastTroop( index ); uid ) {
         return GetTroopUID( *uid );
     }
 
@@ -1016,7 +1016,7 @@ Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int3
         return nullptr;
     }
 
-    if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
+    if ( const auto uid = graveyard.getUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
         return GetTroopUID( *uid );
     }
 
@@ -1030,7 +1030,7 @@ const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( cons
         return nullptr;
     }
 
-    if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
+    if ( const auto uid = graveyard.getUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
         return GetTroopUID( *uid );
     }
 
@@ -1039,12 +1039,15 @@ const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( cons
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardTroops( const int32_t index ) const
 {
-    const Graves graves = graveyard.GetGraves( index );
+    const auto graves = graveyard.getGraves( index );
+    if ( !graves ) {
+        return {};
+    }
 
     std::vector<const Unit *> result;
-    result.reserve( graves.size() );
+    result.reserve( graves->get().size() );
 
-    for ( const auto & [uid, dummy] : graves ) {
+    for ( const auto & [uid, dummy] : graves->get() ) {
         const Unit * unit = GetTroopUID( uid );
         assert( unit != nullptr );
 
@@ -1056,7 +1059,7 @@ std::vector<const Battle::Unit *> Battle::Arena::getGraveyardTroops( const int32
 
 Battle::Indexes Battle::Arena::getCellsOccupiedByGraveyard() const
 {
-    return graveyard.GetOccupiedCells();
+    return graveyard.getOccupiedCells();
 }
 
 void Battle::Arena::applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage )

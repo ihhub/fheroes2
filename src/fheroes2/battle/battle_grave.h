@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <optional>
 #include <vector>
@@ -57,14 +58,14 @@ namespace Battle
 
         Graveyard & operator=( const Graveyard & ) = delete;
 
-        Indexes GetOccupiedCells() const;
+        Indexes getOccupiedCells() const;
 
-        void AddTroop( const Unit & unit );
-        void RemoveTroop( const Unit & unit );
+        void addTroop( const Unit & unit );
+        void removeTroop( const Unit & unit );
 
-        std::optional<uint32_t> GetUIDOfLastTroop( const int32_t index ) const;
-        std::optional<uint32_t> GetUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
+        std::optional<uint32_t> getUIDOfLastTroop( const int32_t index ) const;
+        std::optional<uint32_t> getUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
 
-        Graves GetGraves( const int32_t index ) const;
+        std::optional<std::reference_wrapper<const Graves>> getGraves( const int32_t index ) const;
     };
 }

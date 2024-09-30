@@ -732,7 +732,7 @@ void Battle::Unit::PostKilledAction()
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
-        graveyard->AddTroop( *this );
+        graveyard->addTroop( *this );
     }
 
     Cell * head = position.GetHead();
@@ -1572,7 +1572,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             Graveyard * graveyard = Arena::GetGraveyard();
             assert( graveyard != nullptr );
 
-            graveyard->RemoveTroop( *this );
+            graveyard->removeTroop( *this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
