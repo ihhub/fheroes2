@@ -885,63 +885,66 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
         return true;
     }
 
-    const HeroBase * current_commander = GetCurrentCommander();
+    const HeroBase * commander = GetCurrentCommander();
+    if ( commander && commander->Modes( Heroes::SPELLCASTED ) ) {
+        if ( msg ) {
+            *msg = _( "You have already cast a spell this round." );
+        }
+        return true;
+    }
 
-    if ( current_commander ) {
-        if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
+    // An empty spell can be used to test the ability to cast spells in principle
+    if ( !spell.isValid() ) {
+        return false;
+    }
+
+    if ( spell == Spell::EARTHQUAKE && !castle ) {
+        if ( msg ) {
+            *msg = _( "That spell will have no effect!" );
+        }
+        return true;
+    }
+
+    if ( spell.isSummon() ) {
+        const Monster mons( spell );
+        assert( mons.isValid() && mons.isElemental() );
+
+        const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
+        if ( elem && elem->GetID() != mons.GetID() ) {
             if ( msg ) {
-                *msg = _( "You have already cast a spell this round." );
+                *msg = _( "You may only summon one type of elemental per combat." );
             }
             return true;
         }
 
-        if ( spell == Spell::EARTHQUAKE && !castle ) {
+        if ( GetFreePositionNearHero( GetCurrentColor() ) < 0 ) {
             if ( msg ) {
-                *msg = _( "That spell will have no effect!" );
+                *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
             }
             return true;
         }
-        else if ( spell.isSummon() ) {
-            const Monster mons( spell );
-            assert( mons.isValid() && mons.isElemental() );
 
-            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            if ( elem && elem->GetID() != mons.GetID() ) {
-                if ( msg ) {
-                    *msg = _( "You may only summon one type of elemental per combat." );
-                }
-                return true;
+        return false;
+    }
+
+    for ( const Cell & cell : board ) {
+        if ( const Battle::Unit * unit = cell.GetUnit(); unit != nullptr ) {
+            if ( unit->AllowApplySpell( spell, commander ) ) {
+                return false;
             }
 
-            if ( GetFreePositionNearHero( GetCurrentColor() ) < 0 ) {
-                if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
-                }
-                return true;
-            }
+            continue;
         }
-        else if ( spell.isValid() ) {
-            for ( const Cell & cell : board ) {
-                const Battle::Unit * unit = cell.GetUnit();
 
-                if ( unit ) {
-                    if ( unit->AllowApplySpell( spell, current_commander ) ) {
-                        return false;
-                    }
-                }
-                else if ( isAbleToResurrectFromGraveyard( cell.GetIndex(), spell ) ) {
-                    return false;
-                }
-            }
-
-            if ( msg ) {
-                *msg = _( "That spell will have no effect!" );
-            }
-            return true;
+        if ( isAbleToResurrectFromGraveyard( cell.GetIndex(), spell ) ) {
+            return false;
         }
     }
 
-    return false;
+    if ( msg ) {
+        *msg = _( "That spell will have no effect!" );
+    }
+    return true;
 }
 
 bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const
