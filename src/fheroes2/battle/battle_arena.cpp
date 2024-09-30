@@ -887,7 +887,16 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    if ( commander && commander->Modes( Heroes::SPELLCASTED ) ) {
+    if ( commander == nullptr ) {
+        // This should not normally happen, but there are places where the ability to "basically"
+        // cast a spell is checked before checking for the presence of a commanding hero.
+        if ( msg ) {
+            *msg = _( "You cannot cast spells without a commanding hero." );
+        }
+        return true;
+    }
+
+    if ( commander->Modes( Heroes::SPELLCASTED ) ) {
         if ( msg ) {
             *msg = _( "You have already cast a spell this round." );
         }
