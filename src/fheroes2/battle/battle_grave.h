@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <vector>
 
 #include "battle_board.h"
@@ -61,8 +62,8 @@ namespace Battle
         void AddTroop( const Unit & unit );
         void RemoveTroop( const Unit & unit );
 
-        uint32_t GetUIDOfLastTroop( const int32_t index ) const;
-        uint32_t GetUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
+        std::optional<uint32_t> GetUIDOfLastTroop( const int32_t index ) const;
+        std::optional<uint32_t> GetUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
 
         Graves GetGraves( const int32_t index ) const;
     };

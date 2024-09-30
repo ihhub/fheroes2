@@ -992,7 +992,11 @@ bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const S
 
 const Battle::Unit * Battle::Arena::getLastTroopFromGraveyard( const int32_t index ) const
 {
-    return GetTroopUID( graveyard.GetUIDOfLastTroop( index ) );
+    if ( const auto uid = graveyard.GetUIDOfLastTroop( index ); uid ) {
+        return GetTroopUID( *uid );
+    }
+
+    return nullptr;
 }
 
 Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int32_t index )
@@ -1002,7 +1006,11 @@ Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int3
         return nullptr;
     }
 
-    return GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ) );
+    if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
+        GetTroopUID( *uid );
+    }
+
+    return nullptr;
 }
 
 const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( const int32_t index ) const
@@ -1012,7 +1020,11 @@ const Battle::Unit * Battle::Arena::getLastResurrectableTroopFromGraveyard( cons
         return nullptr;
     }
 
-    return GetTroopUID( graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ) );
+    if ( const auto uid = graveyard.GetUIDOfLastTroopWithColor( index, hero->GetColor() ); uid ) {
+        GetTroopUID( *uid );
+    }
+
+    return nullptr;
 }
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardTroops( const int32_t index ) const
