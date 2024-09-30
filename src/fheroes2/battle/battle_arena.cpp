@@ -29,6 +29,7 @@
 #include <iterator>
 #include <map>
 #include <numeric>
+#include <optional>
 #include <ostream>
 #include <random>
 #include <type_traits>
