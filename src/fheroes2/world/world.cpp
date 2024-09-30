@@ -1405,31 +1405,30 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 
     stream.put32( static_cast<uint32_t>( objectsRef.size() ) );
 
-    std::for_each( objectsRef.begin(), objectsRef.end(), [&stream]( const auto & item ) {
-        const auto & [uid, obj] = item;
+    for ( const auto & [uid, obj] : objectsRef ) {
         assert( obj && obj->GetUID() == uid );
 
         if ( auto * objPtr = dynamic_cast<MapEvent *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_EVENT << *objPtr;
 
-            return;
+            continue;
         }
 
         if ( auto * objPtr = dynamic_cast<MapSphinx *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_SPHINX << *objPtr;
 
-            return;
+            continue;
         }
 
         if ( auto * objPtr = dynamic_cast<MapSign *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_SIGN << *objPtr;
 
-            return;
+            continue;
         }
 
         // Unknown object type
         assert( 0 );
-    } );
+    }
 
     return stream;
 }
