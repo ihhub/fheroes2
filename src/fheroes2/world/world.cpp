@@ -299,7 +299,7 @@ void CapturedObjects::ResetColor( const int color )
 
         auto & [objectType, col] = objCol;
 
-        col = ( objectType == MP2::OBJ_CASTLE ) ? Color::UNUSED : Color::NONE;
+        col = Color::NONE;
         world.GetTiles( idx ).setOwnershipFlag( objectType, col );
     }
 }
@@ -870,12 +870,12 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int color ) const
 {
-    return map_captureobj.GetCount( obj, col );
+    return map_captureobj.GetCount( obj, color );
 }
 
-uint32_t World::CountCapturedMines( int type, int color ) const
+uint32_t World::CountCapturedMines( const int type, const int color ) const
 {
     switch ( type ) {
     case Resource::WOOD:
@@ -889,32 +889,34 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-void World::CaptureObject( int32_t index, int color )
+void World::CaptureObject( const int32_t index, const int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color ) {
+        assert( color != Color::UNUSED );
+
         castle->ChangeColor( color );
     }
 
-    if ( color & ( Color::ALL | Color::UNUSED ) ) {
+    if ( color == Color::NONE || ( color & Color::ALL ) ) {
         GetTiles( index ).setOwnershipFlag( objectType, color );
     }
 }
 
-int World::ColorCapturedObject( int32_t index ) const
+int World::ColorCapturedObject( const int32_t index ) const
 {
     return map_captureobj.GetColor( index );
 }
 
-CapturedObject & World::GetCapturedObject( int32_t index )
+CapturedObject & World::GetCapturedObject( const int32_t index )
 {
     return map_captureobj.Get( index );
 }
 
-void World::ResetCapturedObjects( int color )
+void World::ResetCapturedObjects( const int color )
 {
     map_captureobj.ResetColor( color );
 }

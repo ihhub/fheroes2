@@ -1123,7 +1123,7 @@ Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
     return nullptr;
 }
 
-void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const int color )
+void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, int color )
 {
     // All flags in FLAG32.ICN are actually the same except the fact of having different offset.
     // Set the default value for the UNUSED color.
@@ -1152,7 +1152,8 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         objectSpriteIndex = 5;
         break;
     case Color::UNUSED:
-        // Neutral (gray) flag. Index '6' is already set.
+        // Should never be called using this color as an argument.
+        assert( 0 );
         break;
     default:
         // Did you add a new color type? Add logic above!
@@ -1215,6 +1216,11 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         break;
 
     case MP2::OBJ_CASTLE:
+        // Neutral castles always have flags on both sides of the gate, they should not be completely removed.
+        if ( color == Color::NONE ) {
+            color = Color::UNUSED;
+        }
+
         objectSpriteIndex *= 2;
         if ( isValidDirection( _index, Direction::LEFT ) ) {
             Tiles & tile = world.GetTiles( GetDirectionIndex( _index, Direction::LEFT ) );
@@ -1231,11 +1237,6 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
     default:
         break;
     }
-}
-
-void Maps::Tiles::removeOwnershipFlag( const MP2::MapObjectType objectType )
-{
-    setOwnershipFlag( objectType, Color::NONE );
 }
 
 void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )

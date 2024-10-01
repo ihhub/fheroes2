@@ -339,13 +339,16 @@ public:
     int32_t NextWhirlpool( const int32_t index ) const;
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
-    void CaptureObject( int32_t, int col );
-    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const int col ) const;
-    uint32_t CountCapturedMines( int type, int col ) const;
+    void CaptureObject( const int32_t index, const int color );
+
+    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const int color ) const;
+    uint32_t CountCapturedMines( const int type, const int color ) const;
     uint32_t CountObeliskOnMaps();
-    int ColorCapturedObject( int32_t ) const;
-    void ResetCapturedObjects( int );
-    CapturedObject & GetCapturedObject( int32_t );
+
+    int ColorCapturedObject( const int32_t index ) const;
+    void ResetCapturedObjects( const int color );
+
+    CapturedObject & GetCapturedObject( const int32_t index );
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
