@@ -1408,19 +1408,19 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
     for ( const auto & [uid, obj] : objectsRef ) {
         assert( obj && obj->GetUID() == uid );
 
-        if ( auto * objPtr = dynamic_cast<const MapEvent *>( obj.get() ); objPtr != nullptr ) {
+        if ( const auto * objPtr = dynamic_cast<const MapEvent *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_EVENT << *objPtr;
 
             continue;
         }
 
-        if ( auto * objPtr = dynamic_cast<const MapSphinx *>( obj.get() ); objPtr != nullptr ) {
+        if ( const auto * objPtr = dynamic_cast<const MapSphinx *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_SPHINX << *objPtr;
 
             continue;
         }
 
-        if ( auto * objPtr = dynamic_cast<const MapSign *>( obj.get() ); objPtr != nullptr ) {
+        if ( const auto * objPtr = dynamic_cast<const MapSign *>( obj.get() ); objPtr != nullptr ) {
             stream << uid << MP2::OBJ_SIGN << *objPtr;
 
             continue;
