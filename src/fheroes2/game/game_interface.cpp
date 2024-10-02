@@ -32,7 +32,6 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_border.h"
@@ -45,6 +44,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -69,7 +69,7 @@ void Interface::AdventureMap::reset()
     if ( isHideInterface ) {
         conf.SetShowControlPanel( true );
 
-        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
+        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - fheroes2::borderWidthPx, 0 );
 
         fheroes2::Point radrPos = conf.PosRadar();
         fheroes2::Point bttnPos = conf.PosButtons();
@@ -93,11 +93,11 @@ void Interface::AdventureMap::reset()
         }
     }
     else {
-        const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
+        const int32_t px = display.width() - fheroes2::borderWidthPx - fheroes2::radarWidthPx;
 
-        _radar.SetPos( px, BORDERWIDTH );
-        iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
-        buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
+        _radar.SetPos( px, fheroes2::borderWidthPx );
+        iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + fheroes2::borderWidthPx );
+        buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + fheroes2::borderWidthPx );
         _statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
@@ -197,19 +197,19 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     };
 
     const fheroes2::Rect & gameAreaROI = _gameArea.GetROI();
-    const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
+    const bool isFadingEnabled = ( gameAreaROI.width > fheroes2::tileWidthPx * distance ) || ( gameAreaROI.height > fheroes2::tileWidthPx * distance );
 
     const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
         const fheroes2::Point heroPos = _gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
 
-        const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
-        const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
+        const int32_t x = heroPos.x - fheroes2::tileWidthPx * ( distance / 2 );
+        const int32_t y = heroPos.y - fheroes2::tileWidthPx * ( distance / 2 );
 
         // We need to add an extra cell since the hero stands exactly in the middle of a cell
-        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.width );
-        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.height );
+        const int32_t w = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.width );
+        const int32_t h = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.height );
 
-        return { isHideInterface ? x : std::max( x, BORDERWIDTH ), isHideInterface ? y : std::max( y, BORDERWIDTH ), w, h };
+        return { isHideInterface ? x : std::max( x, fheroes2::borderWidthPx ), isHideInterface ? y : std::max( y, fheroes2::borderWidthPx ), w, h };
     }();
 
     if ( isHideInterface ) {

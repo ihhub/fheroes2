@@ -248,26 +248,37 @@ namespace Battle
     class PopupDamageInfo : public Dialog::FrameBorder
     {
     public:
-        PopupDamageInfo();
+        PopupDamageInfo()
+            : Dialog::FrameBorder( 5 )
+        {
+            // Do nothing.
+        }
+
         PopupDamageInfo( const PopupDamageInfo & ) = delete;
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
-        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
-        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
-        void Reset();
-        void Redraw() const;
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect )
+        {
+            _battleUIRect = battleUIRect;
+        }
+
+        void setAttackInfo( const Unit * attacker, const Unit * defender );
+        void setSpellAttackInfo( const HeroBase * hero, const Unit * defender, const Spell & spell );
+        void reset();
+        void redraw() const;
 
     private:
-        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+        bool _setDamageInfoBase( const Unit * defender );
+        void _makeDamageImage();
 
+        fheroes2::Sprite _damageImage;
         fheroes2::Rect _battleUIRect;
-        const Cell * _cell;
-        const Unit * _defender;
-        uint32_t _minDamage;
-        uint32_t _maxDamage;
-        bool _redraw;
+        const Battle::Unit * _defender{ nullptr };
+        uint32_t _minDamage{ 0 };
+        uint32_t _maxDamage{ 0 };
+        bool _redraw{ false };
+        bool _needDelay{ true };
     };
 
     class Interface

@@ -20,6 +20,7 @@
 
 #include "pal.h"
 
+#include <array>
 #include <cassert>
 #include <cstring>
 
@@ -160,7 +161,8 @@ std::vector<uint8_t> PAL::GetCyclingPalette( const uint32_t stepId )
 {
     std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
-    static const std::vector<CyclingColorSet> cycleSet = { { 214, 4, false }, { 218, 4, false }, { 231, 5, true }, { 238, 4, false } };
+    static const std::array<CyclingColorSet, 4> cycleSet{ CyclingColorSet{ 214, 4, false }, CyclingColorSet{ 218, 4, false }, CyclingColorSet{ 231, 5, true },
+                                                          CyclingColorSet{ 238, 4, false } };
 
     for ( const CyclingColorSet & colorSet : cycleSet ) {
         for ( uint32_t id = 0; id < colorSet.length; ++id ) {

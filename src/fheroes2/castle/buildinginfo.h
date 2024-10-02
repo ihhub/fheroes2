@@ -91,7 +91,7 @@ struct DwellingItem
     const uint32_t dwType;
 };
 
-class DwellingsBar : public Interface::ItemsBar<DwellingItem>
+class DwellingsBar final : public Interface::ItemsBar<DwellingItem>
 {
 public:
     DwellingsBar( Castle & cstl, const fheroes2::Size & sz );
@@ -102,7 +102,7 @@ public:
     bool ActionBarLeftMouseSingleClick( DwellingItem & dwl ) override;
     bool ActionBarRightMouseHold( DwellingItem & dwl ) override;
 
-protected:
+private:
     Castle & castle;
     fheroes2::Image backsf;
     std::vector<DwellingItem> content;

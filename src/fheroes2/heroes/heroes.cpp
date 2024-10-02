@@ -30,7 +30,6 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
@@ -45,7 +44,6 @@
 #include "direction.h"
 #include "game_io.h"
 #include "game_static.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
 #include "image.h"
@@ -885,7 +883,7 @@ double Heroes::getMeetingValue( const Heroes & receivingHero ) const
 
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
-    const uint32_t canFit = HEROESMAXARTIFACT - receivingHero.bag_artifacts.CountArtifacts();
+    const uint32_t canFit = BagArtifacts::maxCapacity - receivingHero.bag_artifacts.CountArtifacts();
 
     double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
@@ -904,7 +902,7 @@ int Heroes::GetAttack() const
 int Heroes::GetAttack( std::string * strs ) const
 {
     int result = attack + GetAttackModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 int Heroes::GetDefense() const
@@ -915,7 +913,7 @@ int Heroes::GetDefense() const
 int Heroes::GetDefense( std::string * strs ) const
 {
     int result = defense + GetDefenseModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 int Heroes::GetPower() const
@@ -926,7 +924,7 @@ int Heroes::GetPower() const
 int Heroes::GetPower( std::string * strs ) const
 {
     const int result = power + GetPowerModificator( strs );
-    return result < 1 ? 1 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 1, 255 );
 }
 
 int Heroes::GetKnowledge() const
@@ -937,7 +935,7 @@ int Heroes::GetKnowledge() const
 int Heroes::GetKnowledge( std::string * strs ) const
 {
     int result = knowledge + GetKnowledgeModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 void Heroes::IncreasePrimarySkill( int skill )
@@ -1703,7 +1701,7 @@ uint32_t Heroes::GetSecondarySkillValue( int skill ) const
 
 bool Heroes::HasMaxSecondarySkill() const
 {
-    return HEROESMAXSKILL <= secondary_skills.Count();
+    return maxNumOfSecSkills <= secondary_skills.Count();
 }
 
 int Heroes::GetLevelSkill( int skill ) const
@@ -1907,7 +1905,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
         return false;
     }
 
-    if ( path.isValidForMovement() && !ignorePath ) {
+    if ( !ignorePath && path.isValidForMovement() ) {
         return path.hasAllowedSteps();
     }
 
@@ -2145,7 +2143,7 @@ std::string Heroes::String() const
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
         for ( const auto & info : visit_object ) {
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
+            os << MP2::StringObject( info.second ) << "(" << info.first << "), ";
         }
 
         os << std::endl;
@@ -2493,11 +2491,8 @@ OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero )
     stream << base;
 
     // Heroes
-    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-
-    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
-                  << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
-                  << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
+    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race << hero._objectTypeUnderHero
+                  << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
@@ -2533,9 +2528,6 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
         }
     }
 
-    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
-
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
@@ -2554,11 +2546,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
         }
     }
     else {
-        ObjectTypeUnderHeroType temp = 0;
-
-        stream >> temp;
-
-        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        stream >> hero._objectTypeUnderHero;
     }
 
     stream >> hero.path >> hero.direction >> hero.sprite_index;
@@ -2578,6 +2566,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
+
     return stream;
 }
 

@@ -1156,7 +1156,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
 
     setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
 
-    PostLoad( true );
+    PostLoad( true, false );
 
     vec_kingdoms.ApplyPlayWithStartingHero();
 

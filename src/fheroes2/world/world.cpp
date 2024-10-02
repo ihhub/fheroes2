@@ -42,7 +42,6 @@
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -190,36 +189,39 @@ void MapObjects::remove( uint32_t uid )
     erase( it );
 }
 
-CapturedObject & CapturedObjects::Get( int32_t index )
+CapturedObject & CapturedObjects::Get( const int32_t index )
 {
-    std::map<int32_t, CapturedObject> & my = *this;
-    return my[index];
+    return operator[]( index );
 }
 
-void CapturedObjects::SetColor( int32_t index, int col )
+void CapturedObjects::SetColor( const int32_t index, const int col )
 {
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( int32_t index, int obj, int col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const int col )
 {
-    CapturedObject & co = Get( index );
+    CapturedObject & capturedObj = Get( index );
 
-    if ( co.GetColor() != col && co.guardians.isValid() )
-        co.guardians.Reset();
+    if ( capturedObj.GetColor() != col && capturedObj.guardians.isValid() ) {
+        capturedObj.guardians.Reset();
+    }
 
-    co.Set( obj, col );
+    capturedObj.Set( obj, col );
 }
 
-uint32_t CapturedObjects::GetCount( int obj, int col ) const
+uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col ) const
 {
     uint32_t result = 0;
 
-    const ObjectColor objcol( obj, col );
+    const ObjectColor objCol( obj, col );
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( objcol == ( *it ).second.objcol )
-            ++result;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objCol != objCol ) {
+            continue;
+        }
+
+        ++result;
     }
 
     return result;
@@ -228,63 +230,77 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
 uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
     uint32_t count = 0;
-    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
-    for ( const auto & [tileIndex, objectInfo] : *this ) {
-        if ( correctObject == objectInfo.objcol ) {
-            const int32_t mineResource = Maps::getDailyIncomeObjectResources( world.GetTiles( tileIndex ) ).getFirstValidResource().first;
-            if ( resourceType == mineResource ) {
-                ++count;
-            }
+    const ObjectColor objCol( MP2::OBJ_MINE, ownerColor );
+
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objCol != objCol ) {
+            continue;
         }
+
+        if ( resourceType != Maps::getDailyIncomeObjectResources( world.GetTiles( idx ) ).getFirstValidResource().first ) {
+            continue;
+        }
+
+        ++count;
     }
 
     return count;
 }
 
-int CapturedObjects::GetColor( int32_t index ) const
+int CapturedObjects::GetColor( const int32_t index ) const
 {
-    const_iterator it = find( index );
-    return it != end() ? ( *it ).second.GetColor() : Color::NONE;
+    const auto iter = find( index );
+    if ( iter == end() ) {
+        return Color::NONE;
+    }
+
+    return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( int colors )
+void CapturedObjects::ClearFog( const int colors ) const
 {
-    // clear abroad objects
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        const ObjectColor & objCol = capturedObj.objCol;
 
-        if ( objcol.isColor( colors ) ) {
-            int scoutingDistance = 0;
-
-            switch ( objcol.first ) {
-            case MP2::OBJ_MINE:
-            case MP2::OBJ_ALCHEMIST_LAB:
-            case MP2::OBJ_SAWMILL:
-                scoutingDistance = 2;
-                break;
-
-            default:
-                break;
-            }
-
-            if ( scoutingDistance )
-                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
+        if ( !objCol.isColor( colors ) ) {
+            continue;
         }
+
+        int scoutingDistance = 0;
+
+        switch ( objCol.first ) {
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_SAWMILL:
+            scoutingDistance = 2;
+            break;
+
+        default:
+            break;
+        }
+
+        if ( scoutingDistance == 0 ) {
+            continue;
+        }
+
+        Maps::ClearFog( idx, scoutingDistance, colors );
     }
 }
 
-void CapturedObjects::ResetColor( int color )
+void CapturedObjects::ResetColor( const int color )
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        ObjectColor & objcol = ( *it ).second.objcol;
+    for ( auto & [idx, capturedObj] : *this ) {
+        ObjectColor & objCol = capturedObj.objCol;
 
-        if ( objcol.isColor( color ) ) {
-            const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
-
-            objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
+        if ( !objCol.isColor( color ) ) {
+            continue;
         }
+
+        auto & [objectType, col] = objCol;
+
+        col = ( objectType == MP2::OBJ_CASTLE ) ? Color::UNUSED : Color::NONE;
+        world.GetTiles( idx ).setOwnershipFlag( objectType, col );
     }
 }
 
@@ -464,37 +480,37 @@ Heroes * World::GetHero( const Castle & castle ) const
 
 int World::GetDay() const
 {
-    return LastDay() ? DAYOFWEEK : day % DAYOFWEEK;
+    return LastDay() ? numOfDaysPerWeek : day % numOfDaysPerWeek;
 }
 
 int World::GetWeek() const
 {
-    return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
+    return LastWeek() ? numOfWeeksPerMonth : week % numOfWeeksPerMonth;
 }
 
 bool World::BeginWeek() const
 {
-    return 1 == ( day % DAYOFWEEK );
+    return 1 == ( day % numOfDaysPerWeek );
 }
 
 bool World::BeginMonth() const
 {
-    return 1 == ( week % WEEKOFMONTH ) && BeginWeek();
+    return 1 == ( week % numOfWeeksPerMonth ) && BeginWeek();
 }
 
 bool World::LastDay() const
 {
-    return ( 0 == ( day % DAYOFWEEK ) );
+    return ( 0 == ( day % numOfDaysPerWeek ) );
 }
 
 bool World::FirstWeek() const
 {
-    return ( 1 == ( week % WEEKOFMONTH ) );
+    return ( 1 == ( week % numOfWeeksPerMonth ) );
 }
 
 bool World::LastWeek() const
 {
-    return ( 0 == ( week % WEEKOFMONTH ) );
+    return ( 0 == ( week % numOfWeeksPerMonth ) );
 }
 
 const Week & World::GetWeekType() const
@@ -794,9 +810,11 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
+
+        assert( teleportTile.getHero() == nullptr );
 
         result.push_back( teleportIndex );
     }
@@ -829,9 +847,11 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.getHero() != nullptr ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
             continue;
         }
+
+        assert( whirlpoolTile.getHero() == nullptr );
 
         result.push_back( whirlpoolIndex );
     }
@@ -850,7 +870,7 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( int obj, int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
@@ -1305,7 +1325,7 @@ void World::updatePassabilities()
     }
 }
 
-void World::PostLoad( const bool setTilePassabilities )
+void World::PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum )
 {
     if ( setTilePassabilities ) {
         updatePassabilities();
@@ -1327,6 +1347,30 @@ void World::PostLoad( const bool setTilePassabilities )
 
     resetPathfinder();
     ComputeStaticAnalysis();
+
+    // Find the maximum UID value.
+    uint32_t maxUid = 0;
+
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        maxUid = std::max( tile.getMainObjectPart()._uid, maxUid );
+
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+
+        for ( const auto & addon : tile.getTopLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+    }
+
+    if ( updateUidCounterToMaximum ) {
+        // And set the UID counter value with the found maximum.
+        Maps::setLastObjectUID( maxUid );
+    }
+    else {
+        // Check that 'getNewObjectUID()' will return values that will not match the existing ones on the started map.
+        assert( Maps::getLastObjectUID() >= maxUid );
+    }
 }
 
 uint32_t World::GetMapSeed() const
@@ -1357,12 +1401,12 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )
 {
-    return stream << obj.objcol << obj.guardians;
+    return stream << obj.objCol << obj.guardians;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 {
-    return stream >> obj.objcol >> obj.guardians;
+    return stream >> obj.objCol >> obj.guardians;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
@@ -1473,7 +1517,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
 
     stream >> w.map_objects >> w._seed;
 
-    w.PostLoad( false );
+    w.PostLoad( false, true );
 
     return stream;
 }

@@ -48,7 +48,6 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "history_manager.h"
@@ -78,6 +77,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
@@ -616,15 +616,17 @@ namespace Interface
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
-        _radar.SetPos( xOffset, BORDERWIDTH );
+        const int32_t xOffset = display.width() - fheroes2::borderWidthPx - fheroes2::radarWidthPx;
+        _radar.SetPos( xOffset, fheroes2::borderWidthPx );
 
-        _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + ( ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ? BORDERWIDTH : 0 ) );
+        _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height
+                                          + ( ( display.height() > fheroes2::Display::DEFAULT_HEIGHT + fheroes2::borderWidthPx ) ? fheroes2::borderWidthPx : 0 ) );
 
         const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
         const fheroes2::Rect prevRoi = _gameArea.GetROI();
 
-        _gameArea.SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
+        _gameArea.SetAreaPosition( fheroes2::borderWidthPx, fheroes2::borderWidthPx, display.width() - fheroes2::radarWidthPx - 3 * fheroes2::borderWidthPx,
+                                   display.height() - 2 * fheroes2::borderWidthPx );
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
 
@@ -857,8 +859,8 @@ namespace Interface
 
             isCursorOverGamearea = false;
 
-            // cursor is over the radar
-            if ( le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
+            // Cursor is over the radar.
+            if ( le.isMouseCursorPosInArea( _radar.GetArea() ) ) {
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
@@ -866,23 +868,22 @@ namespace Interface
                     _radar.QueueEventProcessing();
                 }
             }
-            // cursor is over the game area
-            else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
-                isCursorOverGamearea = true;
-            }
-            // cursor is over the buttons area
-            else if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
-                cursor.SetThemes( Cursor::POINTER );
-
-                if ( !_gameArea.NeedScroll() ) {
-                    res = _editorPanel.queueEventProcessing();
-                }
-            }
-            // cursor is somewhere else
             else if ( !_gameArea.NeedScroll() ) {
-                cursor.SetThemes( Cursor::POINTER );
+                if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
+                    // Cursor is over the game area.
+                    isCursorOverGamearea = true;
+                }
+                else {
+                    // Cursor is not over the game area.
+                    cursor.SetThemes( Cursor::POINTER );
 
-                _gameArea.ResetCursorPosition();
+                    _gameArea.ResetCursorPosition();
+
+                    if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
+                        // Cursor is over the buttons area.
+                        res = _editorPanel.queueEventProcessing();
+                    }
+                }
             }
 
             // gamearea
@@ -890,7 +891,7 @@ namespace Interface
                 if ( !_radar.isDragRadar() ) {
                     _gameArea.QueueEventProcessing( isCursorOverGamearea );
                 }
-                else if ( !le.isMouseLeftButtonPressed() ) {
+                else if ( le.isMouseLeftButtonReleased() ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -898,7 +899,7 @@ namespace Interface
             if ( isCursorOverGamearea ) {
                 // Get relative tile position under the cursor. This position can be outside the map size.
                 const fheroes2::Point posInGameArea = _gameArea.getInternalPosition( le.getMouseCursorPos() );
-                const fheroes2::Point tilePos{ posInGameArea.x / TILEWIDTH, posInGameArea.y / TILEWIDTH };
+                const fheroes2::Point tilePos{ posInGameArea.x / fheroes2::tileWidthPx, posInGameArea.y / fheroes2::tileWidthPx };
                 const bool isValidTile = ( tilePos.x >= 0 && tilePos.y >= 0 && tilePos.x < world.w() && tilePos.y < world.h() );
                 const bool isBrushEmpty = ( _editorPanel.getBrushArea() == fheroes2::Rect() );
 
@@ -926,7 +927,7 @@ namespace Interface
                     }
                 }
 
-                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && le.isMouseLeftButtonPressed() ) {
+                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && !_radar.isDragRadar() && le.isMouseLeftButtonPressed() ) {
                     _areaSelectionStartTileId = tilePos.y * world.w() + tilePos.x;
                     _redraw |= REDRAW_GAMEAREA;
                 }
@@ -1046,7 +1047,8 @@ namespace Interface
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Since the original image contains shadow it is important to remove it from calculation of window's position.
-        const fheroes2::Point rb( ( display.width() - background.width() - BORDERWIDTH ) / 2, ( display.height() - background.height() + BORDERWIDTH ) / 2 );
+        const fheroes2::Point rb( ( display.width() - background.width() - fheroes2::borderWidthPx ) / 2,
+                                  ( display.height() - background.height() + fheroes2::borderWidthPx ) / 2 );
         fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
         fheroes2::Blit( background, display, rb.x, rb.y );
 
@@ -1667,9 +1669,9 @@ namespace Interface
                     }
                 }
 
-                if ( obeliskCount >= PUZZLETILES ) {
+                if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
-                    StringReplace( warning, "%{count}", PUZZLETILES );
+                    StringReplace( warning, "%{count}", numOfPuzzleTiles );
                     _warningMessage.reset( std::move( warning ) );
                     return;
                 }
