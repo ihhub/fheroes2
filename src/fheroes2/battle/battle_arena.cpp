@@ -72,6 +72,58 @@
 
 namespace
 {
+    template <typename T, typename U>
+    auto arenaGetLastResurrectableUnitFromGraveyardTmpl( T * const arena, const int32_t index, const U & spells ) -> decltype( arena->GetTroopUID( 0 ) )
+    {
+        assert( arena != nullptr );
+
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr bool isSingleSpell{ std::is_same_v<std::remove_cv_t<std::remove_reference_t<decltype( spells )>>, Spell> };
+
+        if constexpr ( isSingleSpell ) {
+            if ( !spells.isResurrect() ) {
+                return nullptr;
+            }
+        }
+        else {
+            if ( !std::all_of( spells.begin(), spells.end(), []( const Spell & spell ) { return spell.isResurrect(); } ) ) {
+                return nullptr;
+            }
+        }
+
+        const HeroBase * hero = arena->GetCurrentCommander();
+        if ( hero == nullptr ) {
+            return nullptr;
+        }
+
+        const Battle::Graveyard * const graveyard = Battle::Arena::GetGraveyard();
+        assert( graveyard != nullptr );
+
+        const Battle::Graves graves = graveyard->getGraves( index );
+
+        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [arena, &spells, hero]( const Battle::Grave & grave ) {
+            const Battle::Unit * unit = arena->GetTroopUID( grave.uid );
+            assert( unit != nullptr && !unit->isValid() );
+
+            if ( unit->GetArmyColor() != hero->GetColor() ) {
+                return false;
+            }
+
+            if constexpr ( isSingleSpell ) {
+                return unit->AllowApplySpell( spells, hero );
+            }
+            else {
+                return std::any_of( spells.begin(), spells.end(), [hero, unit]( const Spell & spell ) { return unit->AllowApplySpell( spell, hero ); } );
+            }
+        } );
+
+        if ( iter == graves.rend() ) {
+            return nullptr;
+        }
+
+        return arena->GetTroopUID( iter->uid );
+    }
+
     Battle::Arena * arena = nullptr;
 
     int GetCovr( int ground, std::mt19937 & gen )
@@ -233,58 +285,6 @@ namespace
         }
 
         return 0;
-    }
-
-    template <typename T, typename U>
-    auto arenaGetLastResurrectableUnitFromGraveyardTmpl( T * const arena, const int32_t index, const U & spells ) -> decltype( arena->GetTroopUID( 0 ) )
-    {
-        assert( arena != nullptr );
-
-        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
-        static constexpr bool isSingleSpell{ std::is_same_v<std::remove_cv_t<std::remove_reference_t<decltype( spells )>>, Spell> };
-
-        if constexpr ( isSingleSpell ) {
-            if ( !spells.isResurrect() ) {
-                return nullptr;
-            }
-        }
-        else {
-            if ( !std::all_of( spells.begin(), spells.end(), []( const Spell & spell ) { return spell.isResurrect(); } ) ) {
-                return nullptr;
-            }
-        }
-
-        const HeroBase * hero = arena->GetCurrentCommander();
-        if ( hero == nullptr ) {
-            return nullptr;
-        }
-
-        const Battle::Graveyard * const graveyard = Battle::Arena::GetGraveyard();
-        assert( graveyard != nullptr );
-
-        const Battle::Graves graves = graveyard->getGraves( index );
-
-        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [arena, &spells, hero]( const Battle::Grave & grave ) {
-            const Battle::Unit * unit = arena->GetTroopUID( grave.uid );
-            assert( unit != nullptr && !unit->isValid() );
-
-            if ( unit->GetArmyColor() != hero->GetColor() ) {
-                return false;
-            }
-
-            if constexpr ( isSingleSpell ) {
-                return unit->AllowApplySpell( spells, hero );
-            }
-            else {
-                return std::any_of( spells.begin(), spells.end(), [hero, unit]( const Spell & spell ) { return unit->AllowApplySpell( spell, hero ); } );
-            }
-        } );
-
-        if ( iter == graves.rend() ) {
-            return nullptr;
-        }
-
-        return arena->GetTroopUID( iter->uid );
     }
 }
 
