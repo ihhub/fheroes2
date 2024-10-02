@@ -43,24 +43,26 @@ Battle::Indexes Battle::Graveyard::getOccupiedCells() const
     return result;
 }
 
-void Battle::Graveyard::addUnit( const Unit & unit )
+void Battle::Graveyard::addUnit( Unit * unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( unit != nullptr && Board::isValidIndex( unit->GetHeadIndex() )
+            && ( unit->isWide() ? Board::isValidIndex( unit->GetTailIndex() ) : !Board::isValidIndex( unit->GetTailIndex() ) ) );
 
     Graveyard & graveyard = *this;
 
-    graveyard[unit.GetHeadIndex()].emplace_back( unit );
+    graveyard[unit->GetHeadIndex()].push_back( unit );
 
-    if ( unit.isWide() ) {
-        graveyard[unit.GetTailIndex()].emplace_back( unit );
+    if ( unit->isWide() ) {
+        graveyard[unit->GetTailIndex()].push_back( unit );
     }
 }
 
-void Battle::Graveyard::removeUnit( const Unit & unit )
+void Battle::Graveyard::removeUnit( Unit * unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( unit != nullptr && Board::isValidIndex( unit->GetHeadIndex() )
+            && ( unit->isWide() ? Board::isValidIndex( unit->GetTailIndex() ) : !Board::isValidIndex( unit->GetTailIndex() ) ) );
 
-    const auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
+    const auto removeFromIndex = [this, unit]( const int32_t idx ) {
         const auto graveyardIter = find( idx );
         if ( graveyardIter == end() ) {
             return;
@@ -68,7 +70,7 @@ void Battle::Graveyard::removeUnit( const Unit & unit )
 
         auto & [dummy, graves] = *graveyardIter;
 
-        const auto gravesIter = std::find_if( graves.begin(), graves.end(), [uid]( const Grave & grave ) { return grave.uid == uid; } );
+        const auto gravesIter = std::find( graves.begin(), graves.end(), unit );
         if ( gravesIter == graves.end() ) {
             return;
         }
@@ -76,27 +78,27 @@ void Battle::Graveyard::removeUnit( const Unit & unit )
         graves.erase( gravesIter );
     };
 
-    removeUIDFromIndex( unit.GetHeadIndex(), unit.GetUID() );
+    removeFromIndex( unit->GetHeadIndex() );
 
-    if ( unit.isWide() ) {
-        removeUIDFromIndex( unit.GetTailIndex(), unit.GetUID() );
+    if ( unit->isWide() ) {
+        removeFromIndex( unit->GetTailIndex() );
     }
 }
 
-std::optional<uint32_t> Battle::Graveyard::getUIDOfLastUnit( const int32_t index ) const
+Battle::Unit * Battle::Graveyard::getLastUnit( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
-        return {};
+        return nullptr;
     }
 
     const auto & [dummy, graves] = *iter;
 
     if ( graves.empty() ) {
-        return {};
+        return nullptr;
     }
 
-    return graves.back().uid;
+    return graves.back();
 }
 
 Battle::Graves Battle::Graveyard::getGraves( const int32_t index ) const

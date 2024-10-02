@@ -34,16 +34,7 @@
 
 namespace Battle
 {
-    struct Grave
-    {
-        explicit Grave( const Unit & unit )
-            : uid( unit.GetUID() )
-        {}
-
-        uint32_t uid;
-    };
-
-    using Graves = std::vector<Grave>;
+    using Graves = std::vector<Unit *>;
 
     class Graveyard : public std::map<int32_t, Graves>
     {
@@ -57,10 +48,10 @@ namespace Battle
 
         Indexes getOccupiedCells() const;
 
-        void addUnit( const Unit & unit );
-        void removeUnit( const Unit & unit );
+        void addUnit( Unit * unit );
+        void removeUnit( Unit * unit );
 
-        std::optional<uint32_t> getUIDOfLastUnit( const int32_t index ) const;
+        Unit * getLastUnit( const int32_t index ) const;
 
         Graves getGraves( const int32_t index ) const;
     };

@@ -217,11 +217,7 @@ namespace Battle
 
         // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
         // during the current turn, or nullptr if there is no such unit.
-        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell );
-
-        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
-        // during the current turn, or nullptr if there is no such unit.
-        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
+        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -340,7 +336,7 @@ namespace Battle
         std::unique_ptr<Interface> _interface;
         Result result_game;
 
-        Graveyard graveyard;
+        Graveyard _graveyard;
         SpellStorage usage_spells;
 
         Board board;
