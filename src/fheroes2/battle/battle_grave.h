@@ -38,11 +38,9 @@ namespace Battle
     {
         explicit Grave( const Unit & unit )
             : uid( unit.GetUID() )
-            , color( unit.GetArmyColor() )
         {}
 
         uint32_t uid;
-        int color;
     };
 
     using Graves = std::vector<Grave>;
@@ -59,11 +57,10 @@ namespace Battle
 
         Indexes getOccupiedCells() const;
 
-        void addTroop( const Unit & unit );
-        void removeTroop( const Unit & unit );
+        void addUnit( const Unit & unit );
+        void removeUnit( const Unit & unit );
 
-        std::optional<uint32_t> getUIDOfLastTroop( const int32_t index ) const;
-        std::optional<uint32_t> getUIDOfLastTroopWithColor( const int32_t index, const int color ) const;
+        std::optional<uint32_t> getUIDOfLastUnit( const int32_t index ) const;
 
         Graves getGraves( const int32_t index ) const;
     };

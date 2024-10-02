@@ -1572,7 +1572,7 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                for ( const Unit * deadUnit : arena.getGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     if ( deadUnit && cellId != deadUnit->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnit );
@@ -1700,7 +1700,7 @@ void Battle::Interface::RedrawArmies()
                 const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
-                for ( const Unit * deadUnit : arena.getGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
                         if ( overlaySprite.unitId == deadUnit->GetUID() ) {
                             troopOverlaySprite.emplace_back( &overlaySprite );
@@ -2540,7 +2540,7 @@ void Battle::Interface::RedrawKilled()
 {
     // Redraw killed troops.
     for ( const int32_t & cell : arena.getCellsOccupiedByGraveyard() ) {
-        for ( const Unit * unit : arena.getGraveyardTroops( cell ) ) {
+        for ( const Unit * unit : arena.getGraveyardUnits( cell ) ) {
             if ( unit && cell != unit->GetTailIndex() ) {
                 RedrawTroopSprite( *unit );
             }
@@ -2673,7 +2673,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
         // Cursor is over some dead unit that we can resurrect
         if ( unitOnCell == nullptr && arena.isAbleToResurrectFromGraveyard( _curentCellIndex, spell ) ) {
-            unitOnCell = arena.getLastResurrectableTroopFromGraveyard( _curentCellIndex );
+            unitOnCell = arena.getLastResurrectableUnitFromGraveyard( _curentCellIndex, spell );
             assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
@@ -3268,11 +3268,11 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
             return unit;
         }
 
-        if ( const Unit * unit = arena.getLastResurrectableTroopFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+        if ( const Unit * unit = arena.getLastResurrectableUnitFromGraveyard( cell.GetIndex(), {} ); unit != nullptr ) {
             return unit;
         }
 
-        if ( const Unit * unit = arena.getLastTroopFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+        if ( const Unit * unit = arena.getLastUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
             return unit;
         }
 

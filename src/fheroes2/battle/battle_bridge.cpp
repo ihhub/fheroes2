@@ -38,8 +38,8 @@ bool Battle::Bridge::isOccupied()
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
     // Yes if there are any troops (alive or dead) on CELL_MOAT and CELL_GATES tiles
-    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->getUIDOfLastTroop( CELL_MOAT )
-           || graveyard->getUIDOfLastTroop( CELL_GATES );
+    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->getUIDOfLastUnit( CELL_MOAT )
+           || graveyard->getUIDOfLastUnit( CELL_GATES );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const

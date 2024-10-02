@@ -1107,7 +1107,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
     }
 
     if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
-        target = getLastResurrectableTroopFromGraveyard( dst );
+        target = getLastResurrectableUnitFromGraveyard( dst, spell );
         assert( target != nullptr && !target->isValid() && target->AllowApplySpell( spell, hero ) );
 
         if ( consideredTargets.insert( target ).second ) {

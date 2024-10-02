@@ -43,7 +43,7 @@ Battle::Indexes Battle::Graveyard::getOccupiedCells() const
     return result;
 }
 
-void Battle::Graveyard::addTroop( const Unit & unit )
+void Battle::Graveyard::addUnit( const Unit & unit )
 {
     assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
@@ -56,7 +56,7 @@ void Battle::Graveyard::addTroop( const Unit & unit )
     }
 }
 
-void Battle::Graveyard::removeTroop( const Unit & unit )
+void Battle::Graveyard::removeUnit( const Unit & unit )
 {
     assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
@@ -83,7 +83,7 @@ void Battle::Graveyard::removeTroop( const Unit & unit )
     }
 }
 
-std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroop( const int32_t index ) const
+std::optional<uint32_t> Battle::Graveyard::getUIDOfLastUnit( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
@@ -97,23 +97,6 @@ std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroop( const int32_t inde
     }
 
     return graves.back().uid;
-}
-
-std::optional<uint32_t> Battle::Graveyard::getUIDOfLastTroopWithColor( const int32_t index, const int color ) const
-{
-    const auto graveyardIter = find( index );
-    if ( graveyardIter == end() ) {
-        return {};
-    }
-
-    const auto & [dummy, graves] = *graveyardIter;
-
-    const auto gravesIter = std::find_if( graves.rbegin(), graves.rend(), [color]( const Grave & grave ) { return grave.color == color; } );
-    if ( gravesIter == graves.rend() ) {
-        return {};
-    }
-
-    return gravesIter->uid;
 }
 
 Battle::Graves Battle::Graveyard::getGraves( const int32_t index ) const

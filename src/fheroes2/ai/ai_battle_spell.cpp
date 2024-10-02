@@ -560,7 +560,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellResurrectValue( const Spell & spell
             continue;
         }
 
-        const Battle::Unit * unit = arena.getLastResurrectableTroopFromGraveyard( idx );
+        const Battle::Unit * unit = arena.getLastResurrectableUnitFromGraveyard( idx, spell );
         assert( unit != nullptr && !unit->isValid() );
 
         updateBestOutcome( unit );
