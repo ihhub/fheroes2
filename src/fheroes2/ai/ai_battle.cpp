@@ -240,27 +240,24 @@ namespace
                     continue;
                 }
 
-                const auto [dummy, inserted] = processedPositions.insert( pos );
-                if ( !inserted ) {
+                if ( const auto [dummy, inserted] = processedPositions.insert( pos ); !inserted ) {
                     continue;
                 }
 
                 const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
-                const auto iter = result.find( pos );
 
-                if ( iter == result.end() ) {
-                    result.try_emplace( pos, attackValue );
-                }
-                // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
-                // account
-                else if ( attacker.isAllAdjacentCellsAttack() ) {
-                    assert( iter->second == attackValue );
-                }
-                else if ( enemyUnit->isArchers() ) {
-                    iter->second += attackValue;
-                }
-                else {
-                    iter->second = std::max( iter->second, attackValue );
+                if ( const auto [iter, inserted] = result.try_emplace( pos, attackValue ); !inserted ) {
+                    // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
+                    // account
+                    if ( attacker.isAllAdjacentCellsAttack() ) {
+                        assert( iter->second == attackValue );
+                    }
+                    else if ( enemyUnit->isArchers() ) {
+                        iter->second += attackValue;
+                    }
+                    else {
+                        iter->second = std::max( iter->second, attackValue );
+                    }
                 }
             }
         }

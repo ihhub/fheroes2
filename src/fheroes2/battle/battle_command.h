@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -151,11 +151,11 @@ namespace std
     {
         std::size_t operator()( const Battle::CommandType key ) const noexcept
         {
-            using UnderlyingCommandType = typename std::underlying_type<Battle::CommandType>::type;
+            using BattleCommandTypeUnderlyingType = std::underlying_type_t<Battle::CommandType>;
 
-            std::hash<UnderlyingCommandType> hasher;
+            const std::hash<BattleCommandTypeUnderlyingType> hasher;
 
-            return hasher( static_cast<UnderlyingCommandType>( key ) );
+            return hasher( static_cast<BattleCommandTypeUnderlyingType>( key ) );
         }
     };
 }

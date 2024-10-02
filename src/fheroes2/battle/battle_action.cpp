@@ -1595,8 +1595,7 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
             continue;
         }
 
-        const auto [dummy, inserted] = earthquakeDamage.try_emplace( target, std::min( damage, targetCondition ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = earthquakeDamage.try_emplace( target, std::min( damage, targetCondition ) ); !inserted ) {
             assert( 0 );
         }
     }
