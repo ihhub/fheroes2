@@ -230,8 +230,7 @@ std::optional<Funds> AI::calculateMarketplaceTransaction( const Kingdom & kingdo
         const Funds fundsDiff = kingdom.GetFunds() - fundsToObtain;
 
         Resource::forEach( Resource::ALL, [&plannedBalance, &fundsDiff]( const int res ) {
-            const auto [dummy, inserted] = plannedBalance.try_emplace( res, fundsDiff.Get( res ) );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = plannedBalance.try_emplace( res, fundsDiff.Get( res ) ); !inserted ) {
                 assert( 0 );
             }
         } );

@@ -593,8 +593,6 @@ OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero )
 
 IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero )
 {
-    stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
-        >> hero.bag_artifacts;
-
-    return stream;
+    return stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
+           >> hero.bag_artifacts;
 }

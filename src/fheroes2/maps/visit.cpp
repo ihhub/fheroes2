@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,20 +28,20 @@
 
 bool Visit::isDayLife( const IndexObject & visit )
 {
-    return MP2::isDayLife( static_cast<MP2::MapObjectType>( visit.second ) );
+    return MP2::isDayLife( visit.second );
 }
 
 bool Visit::isWeekLife( const IndexObject & visit )
 {
-    return MP2::isWeekLife( static_cast<MP2::MapObjectType>( visit.second ) );
+    return MP2::isWeekLife( visit.second );
 }
 
 bool Visit::isMonthLife( const IndexObject & visit )
 {
-    return MP2::isMonthLife( static_cast<MP2::MapObjectType>( visit.second ) );
+    return MP2::isMonthLife( visit.second );
 }
 
 bool Visit::isBattleLife( const IndexObject & visit )
 {
-    return MP2::isBattleLife( static_cast<MP2::MapObjectType>( visit.second ) );
+    return MP2::isBattleLife( visit.second );
 }

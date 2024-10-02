@@ -3296,12 +3296,9 @@ namespace Maps
                     }
                 }
 
-                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
-                    // Top layer addons don't have layer type.
-                    if ( addon._uid != 0 ) {
-                        objectsUids.insert( addon._uid );
-                    }
-                }
+                // The top layer objects are not taken into account to correspond the original editor
+                // and because they can be small or even zero-sized parts of the Main or Bottom layer
+                // objects which can be selected by their non-top parts.
             }
         }
 
