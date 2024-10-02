@@ -234,6 +234,48 @@ namespace
 
         return 0;
     }
+
+    template <typename T, std::enable_if_t<std::is_same_v<T, Battle::Arena> || std::is_same_v<T, const Battle::Arena>, bool> = true>
+    auto arenaGetLastResurrectableUnitFromGraveyardTmpl( T * const arena, const int32_t index, const std::optional<Spell> & spell ) -> decltype( arena->GetTroopUID( 0 ) )
+    {
+        assert( arena != nullptr );
+
+        if ( spell && !spell->isResurrect() ) {
+            return nullptr;
+        }
+
+        const HeroBase * hero = arena->GetCurrentCommander();
+        if ( hero == nullptr ) {
+            return nullptr;
+        }
+
+        const Battle::Graveyard * const graveyard = Battle::Arena::GetGraveyard();
+        assert( graveyard != nullptr );
+
+        const Battle::Graves graves = graveyard->getGraves( index );
+
+        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [arena, &spell, hero]( const Battle::Grave & grave ) {
+            const Battle::Unit * unit = arena->GetTroopUID( grave.uid );
+            assert( unit != nullptr && !unit->isValid() );
+
+            if ( unit->GetArmyColor() != hero->GetColor() ) {
+                return false;
+            }
+
+            // An empty spell is OK here, it means "any resurrection spell"
+            if ( !spell ) {
+                return true;
+            }
+
+            return unit->AllowApplySpell( *spell, hero );
+        } );
+
+        if ( iter == graves.rend() ) {
+            return nullptr;
+        }
+
+        return arena->GetTroopUID( iter->uid );
+    }
 }
 
 Battle::Arena * Battle::GetArena()
@@ -1011,72 +1053,12 @@ const Battle::Unit * Battle::Arena::getLastUnitFromGraveyard( const int32_t inde
 
 Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell )
 {
-    if ( spell && !spell->isResurrect() ) {
-        return nullptr;
-    }
-
-    const HeroBase * hero = GetCurrentCommander();
-    if ( hero == nullptr ) {
-        return nullptr;
-    }
-
-    const Graves graves = graveyard.getGraves( index );
-
-    const auto iter = std::find_if( graves.rbegin(), graves.rend(), [this, &spell, hero]( const Grave & grave ) {
-        const Unit * unit = GetTroopUID( grave.uid );
-        assert( unit != nullptr && !unit->isValid() );
-
-        if ( unit->GetArmyColor() != hero->GetColor() ) {
-            return false;
-        }
-
-        if ( !spell ) {
-            return true;
-        }
-
-        return unit->AllowApplySpell( *spell, hero );
-    } );
-
-    if ( iter == graves.rend() ) {
-        return nullptr;
-    }
-
-    return GetTroopUID( iter->uid );
+    return arenaGetLastResurrectableUnitFromGraveyardTmpl( this, index, spell );
 }
 
 const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell ) const
 {
-    if ( spell && !spell->isResurrect() ) {
-        return nullptr;
-    }
-
-    const HeroBase * hero = GetCurrentCommander();
-    if ( hero == nullptr ) {
-        return nullptr;
-    }
-
-    const Graves graves = graveyard.getGraves( index );
-
-    const auto iter = std::find_if( graves.rbegin(), graves.rend(), [this, &spell, hero]( const Grave & grave ) {
-        const Unit * unit = GetTroopUID( grave.uid );
-        assert( unit != nullptr && !unit->isValid() );
-
-        if ( unit->GetArmyColor() != hero->GetColor() ) {
-            return false;
-        }
-
-        if ( !spell ) {
-            return true;
-        }
-
-        return unit->AllowApplySpell( *spell, hero );
-    } );
-
-    if ( iter == graves.rend() ) {
-        return nullptr;
-    }
-
-    return GetTroopUID( iter->uid );
+    return arenaGetLastResurrectableUnitFromGraveyardTmpl( this, index, spell );
 }
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardUnits( const int32_t index ) const
