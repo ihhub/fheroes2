@@ -144,49 +144,35 @@ namespace
     }
 }
 
-MapObjects::~MapObjects()
+MapObjectSimple * MapObjects::get( const uint32_t uid ) const
 {
-    clear();
-}
-
-void MapObjects::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete ( *it ).second;
-    std::map<uint32_t, MapObjectSimple *>::clear();
-}
-
-void MapObjects::add( MapObjectSimple * obj )
-{
-    if ( obj ) {
-        std::map<uint32_t, MapObjectSimple *> & currentMap = *this;
-        if ( currentMap[obj->GetUID()] )
-            delete currentMap[obj->GetUID()];
-        currentMap[obj->GetUID()] = obj;
+    if ( const auto iter = _objects.find( uid ); iter != _objects.end() ) {
+        return iter->second.get();
     }
+
+    return nullptr;
 }
 
-MapObjectSimple * MapObjects::get( uint32_t uid )
+std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) const
 {
-    iterator it = find( uid );
-    return it != end() ? ( *it ).second : nullptr;
+    std::list<MapObjectSimple *> result;
+
+    for ( const auto & [dummy, obj] : _objects ) {
+        assert( obj );
+
+        if ( !obj->isPosition( pos ) ) {
+            continue;
+        }
+
+        result.push_back( obj.get() );
+    }
+
+    return result;
 }
 
-std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
+void MapObjects::remove( const uint32_t uid )
 {
-    std::list<MapObjectSimple *> res;
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            res.push_back( ( *it ).second );
-    return res;
-}
-
-void MapObjects::remove( uint32_t uid )
-{
-    iterator it = find( uid );
-    if ( it != end() )
-        delete ( *it ).second;
-    erase( it );
+    _objects.erase( uid );
 }
 
 CapturedObject & CapturedObjects::Get( const int32_t index )
@@ -919,7 +905,7 @@ void World::ResetCapturedObjects( int color )
     map_captureobj.ResetColor( color );
 }
 
-void World::ClearFog( int colors )
+void World::ClearFog( int colors ) const
 {
     colors = Players::GetPlayerFriends( colors );
 
@@ -1017,7 +1003,11 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
+    if ( res.empty() ) {
+        return nullptr;
+    }
+
+    return dynamic_cast<MapEvent *>( res.front() );
 }
 
 MapObjectSimple * World::GetMapObject( uint32_t uid )
@@ -1411,74 +1401,109 @@ IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    stream << static_cast<uint32_t>( objs.size() );
-    for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
-        if ( ( *it ).second ) {
-            const MapObjectSimple & obj = *( *it ).second;
-            stream << ( *it ).first << obj.GetType();
+    const std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
-            switch ( obj.GetType() ) {
-            case MP2::OBJ_EVENT:
-                stream << dynamic_cast<const MapEvent &>( obj );
-                break;
+    stream.put32( static_cast<uint32_t>( objectsRef.size() ) );
 
-            case MP2::OBJ_SPHINX:
-                stream << dynamic_cast<const MapSphinx &>( obj );
-                break;
+    for ( const auto & [uid, obj] : objectsRef ) {
+        assert( obj && obj->GetUID() == uid );
 
-            case MP2::OBJ_SIGN:
-                stream << dynamic_cast<const MapSign &>( obj );
-                break;
+        if ( auto * objPtr = dynamic_cast<MapEvent *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_EVENT << *objPtr;
 
-            default:
-                stream << obj;
-                break;
-            }
+            continue;
         }
+
+        if ( auto * objPtr = dynamic_cast<MapSphinx *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SPHINX << *objPtr;
+
+            continue;
+        }
+
+        if ( auto * objPtr = dynamic_cast<MapSign *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SIGN << *objPtr;
+
+            continue;
+        }
+
+        // Unknown object type
+        assert( 0 );
+    }
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
-    uint32_t size = 0;
-    stream >> size;
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
-    objs.clear();
+    const uint32_t size = stream.get32();
 
-    for ( uint32_t ii = 0; ii < size; ++ii ) {
-        int32_t index;
-        int type;
-        stream >> index >> type;
+    objectsRef.clear();
 
-        switch ( type ) {
-        case MP2::OBJ_EVENT: {
-            MapEvent * ptr = new MapEvent();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+    for ( uint32_t i = 0; i < size; ++i ) {
+        uint32_t uid{ 0 };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
+        stream >> uid;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+            int temp{ MP2::OBJ_NONE };
+            stream >> temp;
+
+            type = static_cast<MP2::MapObjectType>( temp );
+        }
+        else {
+            stream >> type;
         }
 
-        case MP2::OBJ_SPHINX: {
-            MapSphinx * ptr = new MapSphinx();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+        std::unique_ptr<MapObjectSimple> obj = [&stream, type]() -> std::unique_ptr<MapObjectSimple> {
+            switch ( type ) {
+            case MP2::OBJ_EVENT: {
+                auto ptr = std::make_unique<MapEvent>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SPHINX: {
+                auto ptr = std::make_unique<MapSphinx>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SIGN: {
+                auto ptr = std::make_unique<MapSign>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            default:
+                break;
+            }
+
+            return {};
+        }();
+
+        if ( !obj ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
         }
 
-        case MP2::OBJ_SIGN: {
-            MapSign * ptr = new MapSign();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+        if ( obj->GetUID() != uid ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
         }
 
-        default: {
-            MapObjectSimple * ptr = new MapObjectSimple();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
-        }
+        if ( const auto [dummy, inserted] = objectsRef.try_emplace( uid, std::move( obj ) ); !inserted ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
         }
     }
 
