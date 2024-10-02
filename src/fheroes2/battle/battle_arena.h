@@ -211,17 +211,17 @@ namespace Battle
         // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
         const Unit * getLastUnitFromGraveyard( const int32_t index ) const;
 
-        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
-        // during the current turn, or nullptr if there is no such unit. If an empty spell is specified, then it returns the
-        // last dead unit on the cell with the given index, which can be potentially affected by any resurrection spell during
-        // the current turn, or nullptr if there is no such unit.
-        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell );
+        // Returns the last dead unit on the cell with the given index, which can be potentially affected by any resurrection
+        // spell during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index ) const;
 
         // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
-        // during the current turn, or nullptr if there is no such unit. If an empty spell is specified, then it returns the
-        // last dead unit on the cell with the given index, which can be potentially affected by any resurrection spell during
-        // the current turn, or nullptr if there is no such unit.
-        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell ) const;
+        // during the current turn, or nullptr if there is no such unit.
+        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell );
+
+        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
+        // during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;

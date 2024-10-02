@@ -235,13 +235,23 @@ namespace
         return 0;
     }
 
-    template <typename T, std::enable_if_t<std::is_same_v<T, Battle::Arena> || std::is_same_v<T, const Battle::Arena>, bool> = true>
-    auto arenaGetLastResurrectableUnitFromGraveyardTmpl( T * const arena, const int32_t index, const std::optional<Spell> & spell ) -> decltype( arena->GetTroopUID( 0 ) )
+    template <typename T, typename U>
+    auto arenaGetLastResurrectableUnitFromGraveyardTmpl( T * const arena, const int32_t index, const U & spells ) -> decltype( arena->GetTroopUID( 0 ) )
     {
         assert( arena != nullptr );
 
-        if ( spell && !spell->isResurrect() ) {
-            return nullptr;
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr bool isSingleSpell{ std::is_same_v<std::remove_cv_t<std::remove_reference_t<decltype( spells )>>, Spell> };
+
+        if constexpr ( isSingleSpell ) {
+            if ( !spells.isResurrect() ) {
+                return nullptr;
+            }
+        }
+        else {
+            if ( !std::all_of( spells.begin(), spells.end(), []( const Spell & spell ) { return spell.isResurrect(); } ) ) {
+                return nullptr;
+            }
         }
 
         const HeroBase * hero = arena->GetCurrentCommander();
@@ -254,7 +264,7 @@ namespace
 
         const Battle::Graves graves = graveyard->getGraves( index );
 
-        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [arena, &spell, hero]( const Battle::Grave & grave ) {
+        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [arena, &spells, hero]( const Battle::Grave & grave ) {
             const Battle::Unit * unit = arena->GetTroopUID( grave.uid );
             assert( unit != nullptr && !unit->isValid() );
 
@@ -262,12 +272,12 @@ namespace
                 return false;
             }
 
-            // An empty spell is OK here, it means "any resurrection spell"
-            if ( !spell ) {
-                return true;
+            if constexpr ( isSingleSpell ) {
+                return unit->AllowApplySpell( spells, hero );
             }
-
-            return unit->AllowApplySpell( *spell, hero );
+            else {
+                return std::any_of( spells.begin(), spells.end(), [hero, unit]( const Spell & spell ) { return unit->AllowApplySpell( spell, hero ); } );
+            }
         } );
 
         if ( iter == graves.rend() ) {
@@ -1051,12 +1061,32 @@ const Battle::Unit * Battle::Arena::getLastUnitFromGraveyard( const int32_t inde
     return nullptr;
 }
 
-Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell )
+const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index ) const
+{
+    static const std::vector<Spell> resurrectionSpells = []() {
+        std::vector<Spell> result;
+
+        for ( int spellId = Spell::NONE; spellId < Spell::SPELL_COUNT; ++spellId ) {
+            const Spell spell( spellId );
+            if ( !spell.isResurrect() ) {
+                continue;
+            }
+
+            result.push_back( spell );
+        }
+
+        return result;
+    }();
+
+    return arenaGetLastResurrectableUnitFromGraveyardTmpl( this, index, resurrectionSpells );
+}
+
+Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell )
 {
     return arenaGetLastResurrectableUnitFromGraveyardTmpl( this, index, spell );
 }
 
-const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const std::optional<Spell> spell ) const
+const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const
 {
     return arenaGetLastResurrectableUnitFromGraveyardTmpl( this, index, spell );
 }

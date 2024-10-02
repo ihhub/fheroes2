@@ -3268,7 +3268,7 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
             return unit;
         }
 
-        if ( const Unit * unit = arena.getLastResurrectableUnitFromGraveyard( cell.GetIndex(), {} ); unit != nullptr ) {
+        if ( const Unit * unit = arena.getLastResurrectableUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
             return unit;
         }
 
