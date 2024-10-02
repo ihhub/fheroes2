@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cstdint>
 #include <map>
-#include <optional>
 #include <vector>
 
 #include "battle_board.h"
