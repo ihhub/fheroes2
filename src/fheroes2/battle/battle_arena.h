@@ -142,7 +142,7 @@ namespace Battle
         Unit * GetTroopUID( uint32_t );
         const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells() const;
+        const SpellStorage & GetUsedSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
         int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
@@ -337,7 +337,7 @@ namespace Battle
         Result result_game;
 
         Graveyard _graveyard;
-        SpellStorage usage_spells;
+        SpellStorage _usedSpells;
 
         Board board;
         BattlePathfinder _battlePathfinder;

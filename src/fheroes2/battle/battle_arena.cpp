@@ -350,7 +350,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     , _isTown( castle != nullptr )
     , _randomGenerator( randomGenerator )
 {
-    usage_spells.reserve( 20 );
+    _usedSpells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
@@ -861,9 +861,9 @@ void Battle::Arena::FadeArena( bool clearMessageLog ) const
     _interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells() const
+const SpellStorage & Battle::Arena::GetUsedSpells() const
 {
-    return usage_spells;
+    return _usedSpells;
 }
 
 int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const

@@ -502,7 +502,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
     commander->SpellCasted( spell );
 
     // Save the spell for the Eagle Eye skill
-    usage_spells.Append( spell );
+    _usedSpells.Append( spell );
 }
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
