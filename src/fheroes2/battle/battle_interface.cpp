@@ -1166,7 +1166,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
 
     const int32_t unitsToDraw = std::min( _area.width / turnOrderMonsterIconSize, validUnitCount );
 
-    if ( _rects.size() != unitsToDraw ) {
+    if ( _rects.size() != static_cast<size_t>( unitsToDraw ) ) {
         // Update units icons positions.
 
         width = turnOrderMonsterIconSize * unitsToDraw;
