@@ -56,16 +56,16 @@ void Battle::Units::SortFastest()
 
 Battle::Unit * Battle::Units::FindUID( const uint32_t uid ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    const auto iter = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
 Battle::Unit * Battle::Units::FindMode( const uint32_t mod ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const auto iter = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
 Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
