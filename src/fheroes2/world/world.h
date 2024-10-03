@@ -27,7 +27,9 @@
 #include <cstdint>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "army_troop.h"
@@ -36,6 +38,7 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
@@ -47,9 +50,6 @@
 class IStreamBase;
 class OStreamBase;
 
-class MapObjectSimple;
-
-struct MapEvent;
 struct Week;
 
 namespace MP2
@@ -67,22 +67,45 @@ inline constexpr int numOfDaysPerWeek{ 7 };
 // Number of weeks in the game month
 inline constexpr int numOfWeeksPerMonth{ 4 };
 
-struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
+class MapObjects
 {
+public:
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
     MapObjects( MapObjects && other ) = delete;
 
-    ~MapObjects();
+    ~MapObjects() = default;
 
     MapObjects & operator=( const MapObjects & other ) = delete;
     MapObjects & operator=( MapObjects && other ) = delete;
 
-    void clear();
-    void add( MapObjectSimple * );
-    std::list<MapObjectSimple *> get( const fheroes2::Point & );
-    MapObjectSimple * get( uint32_t uid );
-    void remove( uint32_t uid );
+    void clear()
+    {
+        _objects.clear();
+    }
+
+    template <typename T, std::enable_if_t<std::is_base_of_v<MapObjectSimple, T>, bool> = true>
+    void add( std::unique_ptr<T> && obj )
+    {
+        if ( !obj ) {
+            return;
+        }
+
+        if ( const auto [iter, inserted] = _objects.try_emplace( obj->GetUID(), std::move( obj ) ); !inserted ) {
+            iter->second = std::move( obj );
+        }
+    }
+
+    void remove( const uint32_t uid );
+
+    MapObjectSimple * get( const uint32_t uid ) const;
+    std::list<MapObjectSimple *> get( const fheroes2::Point & pos ) const;
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
+
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> _objects;
 };
 
 struct CapturedObject
@@ -351,7 +374,7 @@ public:
     CapturedObject & GetCapturedObject( const int32_t index );
 
     void ActionForMagellanMaps( int color );
-    void ClearFog( int color );
+    void ClearFog( int color ) const;
 
     bool KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const;
     bool KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const;
@@ -450,9 +473,6 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj );
 IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj );
-
-OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
-IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
 
 extern World & world;
 

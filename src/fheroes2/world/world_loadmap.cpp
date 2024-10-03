@@ -598,26 +598,28 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
                 if ( MP2::MP2_SIGN_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
-                    MapSign * obj = new MapSign();
+                    auto obj = std::make_unique<MapSign>();
                     obj->LoadFromMP2( objectTileId, pblock );
-                    map_objects.add( obj );
+
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             case MP2::OBJ_EVENT:
                 if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
-                    MapEvent * obj = new MapEvent();
+                    auto obj = std::make_unique<MapEvent>();
                     obj->LoadFromMP2( objectTileId, pblock );
-                    map_objects.add( obj );
+
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             case MP2::OBJ_SPHINX:
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
-                    MapSphinx * obj = new MapSphinx();
+                    auto obj = std::make_unique<MapSphinx>();
                     obj->LoadFromMP2( objectTileId, pblock );
 
                     obj->validate();
 
-                    map_objects.add( obj );
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             default:
@@ -852,7 +854,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
 
                     // TODO: change MapEvent to support map format functionality.
-                    MapEvent * eventObject = new MapEvent();
+                    auto eventObject = std::make_unique<MapEvent>();
                     eventObject->resources = eventInfo.resources;
                     eventObject->artifact = eventInfo.artifact;
                     if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
@@ -865,7 +867,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
-                    map_objects.add( eventObject );
+
+                    map_objects.add( std::move( eventObject ) );
 
                     break;
                 }
@@ -904,14 +907,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
                     auto & signInfo = map.signMetadata[object.id];
 
-                    MapSign * signObject = new MapSign();
+                    auto signObject = std::make_unique<MapSign>();
                     signObject->message = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     if ( signObject->message.empty() ) {
                         signObject->setDefaultMessage();
                     }
 
-                    map_objects.add( signObject );
+                    map_objects.add( std::move( signObject ) );
 
                     break;
                 }
@@ -923,8 +926,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     assert( map.sphinxMetadata.find( object.id ) != map.sphinxMetadata.end() );
                     auto & sphinxInfo = map.sphinxMetadata[object.id];
 
-                    MapSphinx * sphinxObject = new MapSphinx();
-
+                    auto sphinxObject = std::make_unique<MapSphinx>();
                     sphinxObject->riddle = std::move( sphinxInfo.riddle );
 
                     for ( auto & answer : sphinxInfo.answers ) {
@@ -951,7 +953,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     // However, it seems logically incorrect.
                     sphinxObject->isTruncatedAnswer = false;
 
-                    map_objects.add( sphinxObject );
+                    map_objects.add( std::move( sphinxObject ) );
 
                     break;
                 }
@@ -970,14 +972,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
                     auto & signInfo = map.signMetadata[object.id];
 
-                    MapSign * signObject = new MapSign();
+                    auto signObject = std::make_unique<MapSign>();
                     signObject->message = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     if ( signObject->message.empty() ) {
                         signObject->setDefaultMessage();
                     }
 
-                    map_objects.add( signObject );
+                    map_objects.add( std::move( signObject ) );
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {

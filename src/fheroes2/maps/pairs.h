@@ -72,12 +72,12 @@ public:
 
 inline IStreamBase & operator>>( IStreamBase & stream, IndexObject & indexObject )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE,
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1103_RELEASE,
                    "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
 
     stream >> indexObject.first;
 
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1103_RELEASE ) {
         int32_t temp = MP2::OBJ_NONE;
         stream >> temp;
 
@@ -92,10 +92,10 @@ inline IStreamBase & operator>>( IStreamBase & stream, IndexObject & indexObject
 
 inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE,
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1103_RELEASE,
                    "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
 
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1103_RELEASE ) {
         int32_t temp = MP2::OBJ_NONE;
         stream >> temp;
 
