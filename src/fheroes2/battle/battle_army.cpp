@@ -54,14 +54,14 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
+Battle::Unit * Battle::Units::FindUID( const uint32_t uid ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const_iterator it = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     return it == end() ? nullptr : *it;
 }
 
-Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
+Battle::Unit * Battle::Units::FindMode( const uint32_t mod ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
