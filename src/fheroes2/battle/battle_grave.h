@@ -28,10 +28,11 @@
 #include <vector>
 
 #include "battle_board.h"
-#include "battle_troop.h"
 
 namespace Battle
 {
+    class Unit;
+
     class Graveyard : public std::map<int32_t, std::vector<Unit *>>
     {
     public:

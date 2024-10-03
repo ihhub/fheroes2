@@ -27,6 +27,8 @@
 #include <cassert>
 #include <utility>
 
+#include "battle_troop.h"
+
 Battle::Indexes Battle::Graveyard::getOccupiedCells() const
 {
     Indexes result;
