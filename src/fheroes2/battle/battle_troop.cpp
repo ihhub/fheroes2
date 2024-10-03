@@ -750,16 +750,17 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     hp += points;
 
-    if ( allow_overflow ) {
-        if ( _initialCount < GetCount() )
+    if ( allowToExceedInitialCount ) {
+        if ( _initialCount < GetCount() ) {
             _initialCount = GetCount();
+        }
     }
     else if ( GetCount() > _initialCount ) {
         resurrect -= GetCount() - _initialCount;
@@ -767,8 +768,9 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
         hp = ArmyTroop::GetHitPoints();
     }
 
-    if ( !skip_dead )
+    if ( !isTemporary ) {
         dead -= ( resurrect < dead ? resurrect : dead );
+    }
 
     return resurrect;
 }
