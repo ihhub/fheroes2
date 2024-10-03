@@ -33,9 +33,7 @@
 
 namespace Battle
 {
-    using Graves = std::vector<Unit *>;
-
-    class Graveyard : public std::map<int32_t, Graves>
+    class Graveyard : public std::map<int32_t, std::vector<Unit *>>
     {
     public:
         Graveyard() = default;
@@ -52,6 +50,6 @@ namespace Battle
 
         Unit * getLastUnit( const int32_t index ) const;
 
-        Graves getGraves( const int32_t index ) const;
+        std::vector<Unit *> getUnits( const int32_t index ) const;
     };
 }

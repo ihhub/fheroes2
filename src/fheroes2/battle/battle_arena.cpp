@@ -95,9 +95,9 @@ namespace
             }
         }
 
-        const Battle::Graves graves = graveyard.getGraves( index );
+        const std::vector<Battle::Unit *> units = graveyard.getUnits( index );
 
-        const auto iter = std::find_if( graves.rbegin(), graves.rend(), [commander, &spells]( const Battle::Unit * unit ) {
+        const auto iter = std::find_if( units.rbegin(), units.rend(), [commander, &spells]( const Battle::Unit * unit ) {
             assert( unit != nullptr && !unit->isValid() );
 
             if ( unit->GetArmyColor() != commander->GetColor() ) {
@@ -112,7 +112,7 @@ namespace
             }
         } );
 
-        if ( iter == graves.rend() ) {
+        if ( iter == units.rend() ) {
             return nullptr;
         }
 
@@ -1077,18 +1077,9 @@ Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardUnits( const int32_t index ) const
 {
-    const Graves graves = _graveyard.getGraves( index );
+    const std::vector<Battle::Unit *> units = _graveyard.getUnits( index );
 
-    std::vector<const Unit *> result;
-    result.reserve( graves.size() );
-
-    for ( const Unit * unit : graves ) {
-        assert( unit != nullptr );
-
-        result.push_back( unit );
-    }
-
-    return result;
+    return { units.begin(), units.end() };
 }
 
 Battle::Indexes Battle::Arena::getCellsOccupiedByGraveyard() const

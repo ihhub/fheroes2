@@ -32,8 +32,8 @@ Battle::Indexes Battle::Graveyard::getOccupiedCells() const
     Indexes result;
     result.reserve( size() );
 
-    for ( const auto & [idx, graves] : *this ) {
-        if ( graves.empty() ) {
+    for ( const auto & [idx, units] : *this ) {
+        if ( units.empty() ) {
             continue;
         }
 
@@ -68,14 +68,14 @@ void Battle::Graveyard::removeUnit( Unit * unit )
             return;
         }
 
-        auto & [dummy, graves] = *graveyardIter;
+        auto & [dummy, units] = *graveyardIter;
 
-        const auto gravesIter = std::find( graves.begin(), graves.end(), unit );
-        if ( gravesIter == graves.end() ) {
+        const auto unitsIter = std::find( units.begin(), units.end(), unit );
+        if ( unitsIter == units.end() ) {
             return;
         }
 
-        graves.erase( gravesIter );
+        units.erase( unitsIter );
     };
 
     removeFromIndex( unit->GetHeadIndex() );
@@ -92,16 +92,16 @@ Battle::Unit * Battle::Graveyard::getLastUnit( const int32_t index ) const
         return nullptr;
     }
 
-    const auto & [dummy, graves] = *iter;
+    const auto & [dummy, units] = *iter;
 
-    if ( graves.empty() ) {
+    if ( units.empty() ) {
         return nullptr;
     }
 
-    return graves.back();
+    return units.back();
 }
 
-Battle::Graves Battle::Graveyard::getGraves( const int32_t index ) const
+std::vector<Battle::Unit *> Battle::Graveyard::getUnits( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
