@@ -23,7 +23,6 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
-#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>

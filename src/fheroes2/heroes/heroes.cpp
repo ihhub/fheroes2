@@ -23,6 +23,7 @@
 
 #include "heroes.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>

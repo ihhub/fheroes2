@@ -20,7 +20,6 @@
 
 #include "castle_building_info.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 
