@@ -2356,15 +2356,18 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
     std::vector<int> heroesForHireNotRecruits = heroesForHire;
 
     heroesForHireNotRecruits.erase( std::remove_if( heroesForHireNotRecruits.begin(), heroesForHireNotRecruits.end(),
-                                                    [this]( const int heroID ) { return _heroes.at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                                    [this]( const int heroID ) {
+                                                        assert( heroID >= 0 && static_cast<size_t>( heroID ) < _heroes.size() && _heroes[heroID] );
+
+                                                        return _heroes[heroID]->Modes( Heroes::RECRUIT );
+                                                    } ),
                                     heroesForHireNotRecruits.end() );
 
-    if ( !heroesForHireNotRecruits.empty() ) {
-        return _heroes.at( Rand::Get( heroesForHireNotRecruits ) ).get();
-    }
+    // If there are no heroes who are not yet available for recruitment, then allow heroes to be available for recruitment in several kingdoms at the same time
+    const int heroID = heroesForHireNotRecruits.empty() ? Rand::Get( heroesForHire ) : Rand::Get( heroesForHireNotRecruits );
+    assert( heroID >= 0 && static_cast<size_t>( heroID ) < _heroes.size() && _heroes[heroID] );
 
-    // There are no heroes who are not yet available for recruitment, allow heroes to be available for recruitment in several kingdoms at the same time
-    return _heroes.at( Rand::Get( heroesForHire ) ).get();
+    return _heroes[heroID].get();
 }
 
 Heroes * AllHeroes::Get( const int hid ) const
@@ -2372,6 +2375,8 @@ Heroes * AllHeroes::Get( const int hid ) const
     if ( !Heroes::isValidId( hid ) ) {
         return nullptr;
     }
+
+    assert( hid >= 0 && static_cast<size_t>( hid ) < _heroes.size() && _heroes[hid] );
 
     return _heroes[hid].get();
 }
@@ -2402,10 +2407,47 @@ void AllHeroes::Scout( int colors ) const
     }
 }
 
+void AllHeroes::ResetModes( const uint32_t modes ) const
+{
+    std::for_each( begin(), end(), [modes]( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ResetModes( modes );
+    } );
+}
+
+void AllHeroes::NewDay() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewDay();
+    } );
+}
+
+void AllHeroes::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewWeek();
+    } );
+}
+
+void AllHeroes::NewMonth() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewMonth();
+    } );
+}
+
 Heroes * AllHeroes::FromJail( int32_t index ) const
 {
     for ( Heroes * hero : *this ) {
         assert( hero != nullptr );
+
         if ( hero->Modes( Heroes::JAIL ) && index == hero->GetIndex() ) {
             return hero;
         }

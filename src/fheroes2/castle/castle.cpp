@@ -2482,6 +2482,8 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
         return nullptr;
     }
 
+    assert( iter->second < _castles.size() );
+
     return _castles[iter->second].get();
 }
 
@@ -2496,6 +2498,33 @@ void AllCastles::Scout( const int colors ) const
 
         castle->Scout();
     }
+}
+
+void AllCastles::NewDay() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewDay();
+    } );
+}
+
+void AllCastles::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewWeek();
+    } );
+}
+
+void AllCastles::NewMonth() const
+{
+    std::for_each( begin(), end(), []( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewMonth();
+    } );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )

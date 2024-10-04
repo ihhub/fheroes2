@@ -815,25 +815,11 @@ public:
 
     void Scout( const int colors ) const;
 
-    void ResetModes( const uint32_t modes ) const
-    {
-        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
-    }
+    void ResetModes( const uint32_t modes ) const;
 
-    void NewDay() const
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
-    }
-
-    void NewWeek() const
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
-    }
-
-    void NewMonth() const
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
-    }
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;

@@ -499,20 +499,9 @@ public:
 
     void Scout( const int colors ) const;
 
-    void NewDay() const
-    {
-        std::for_each( begin(), end(), []( Castle * castle ) { castle->ActionNewDay(); } );
-    }
-
-    void NewWeek() const
-    {
-        std::for_each( begin(), end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
-    }
-
-    void NewMonth() const
-    {
-        std::for_each( begin(), end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
-    }
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator
