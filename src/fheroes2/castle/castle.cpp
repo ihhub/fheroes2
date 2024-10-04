@@ -2482,7 +2482,7 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
         return nullptr;
     }
 
-    assert( iter->second < _castles.size() );
+    assert( iter->second < _castles.size() && _castles[iter->second] );
 
     return _castles[iter->second].get();
 }
