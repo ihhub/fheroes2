@@ -288,19 +288,19 @@ public:
 
     CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog );
 
-    int GetAttackModificator( const std::string * strs ) const
+    int GetAttackModificator( const std::string * /* unused */ ) const
     {
         return 0;
     }
 
-    int GetDefenseModificator( const std::string * strs ) const
+    int GetDefenseModificator( const std::string * /* unused */ ) const
     {
         return 0;
     }
 
     int GetPowerModificator( std::string * strs ) const;
 
-    int GetKnowledgeModificator( const std::string * strs ) const
+    int GetKnowledgeModificator( const std::string * /* unused */ ) const
     {
         return 0;
     }
