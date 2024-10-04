@@ -74,8 +74,7 @@ namespace
     Battle::Arena * arena = nullptr;
 
     template <typename T>
-    Battle::Unit * arenaGetLastResurrectableUnitFromGraveyardTmpl( const Battle::Graveyard & graveyard, const HeroBase * commander, const int32_t index,
-                                                                   const T & spells )
+    Battle::Unit * getLastResurrectableUnitFromGraveyardTmpl( const Battle::Graveyard & graveyard, const HeroBase * commander, const int32_t index, const T & spells )
     {
         if ( commander == nullptr ) {
             return nullptr;
@@ -1067,12 +1066,12 @@ const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const
         return result;
     }();
 
-    return arenaGetLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, resurrectionSpells );
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, resurrectionSpells );
 }
 
 Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const
 {
-    return arenaGetLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, spell );
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, spell );
 }
 
 std::vector<const Battle::Unit *> Battle::Arena::getGraveyardUnits( const int32_t index ) const
