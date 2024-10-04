@@ -419,26 +419,26 @@ size_t StreamFile::size()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     const long len = std::ftell( _file.get() );
     if ( len < 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
@@ -458,7 +458,7 @@ void StreamFile::seek( size_t pos )
     }
 
     if ( std::fseek( _file.get(), static_cast<long>( pos ), SEEK_SET ) != 0 ) {
-        setFail( true );
+        setFail();
     }
 }
 
@@ -470,33 +470,33 @@ size_t StreamFile::sizeg()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     const long len = std::ftell( _file.get() );
     if ( len < 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     // Something weird has happened
     if ( len < pos ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
@@ -512,7 +512,7 @@ size_t StreamFile::tellg()
 
     const long pos = std::ftell( _file.get() );
     if ( pos < 0 ) {
-        setFail( true );
+        setFail();
 
         return 0;
     }
@@ -537,7 +537,7 @@ void StreamFile::skip( size_t pos )
     }
 
     if ( std::fseek( _file.get(), static_cast<long int>( pos ), SEEK_CUR ) != 0 ) {
-        setFail( true );
+        setFail();
     }
 }
 
@@ -601,7 +601,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     std::vector<uint8_t> v( chunkSize );
 
     if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
-        setFail( true );
+        setFail();
 
         return {};
     }
@@ -621,7 +621,7 @@ void StreamFile::putRaw( const void * ptr, size_t sz )
     }
 
     if ( std::fwrite( ptr, sz, 1, _file.get() ) != 1 ) {
-        setFail( true );
+        setFail();
     }
 }
 
@@ -635,7 +635,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
     RWStreamBuf buffer( chunkSize );
 
     if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
-        setFail( true );
+        setFail();
 
         return {};
     }

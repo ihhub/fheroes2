@@ -26,8 +26,6 @@
 #include <cstdint>
 #include <vector>
 
-#define DEFAULT_SPELL_DURATION 3
-
 class IStreamBase;
 class OStreamBase;
 

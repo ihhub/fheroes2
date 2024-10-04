@@ -558,8 +558,7 @@ namespace EventProcessing
 
         static void setEventProcessingState( const uint32_t eventType, const bool enable )
         {
-            const auto [dummy, inserted] = eventTypeStatus.emplace( eventType );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = eventTypeStatus.emplace( eventType ); !inserted ) {
                 assert( 0 );
             }
 

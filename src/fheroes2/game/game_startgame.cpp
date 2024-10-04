@@ -1163,6 +1163,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
+
         isCursorOverButtons = false;
         isCursorOverGamearea = false;
 
@@ -1199,8 +1200,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            if ( !_gameArea.isDragScroll() )
+            if ( !_gameArea.isDragScroll() ) {
                 _radar.QueueEventProcessing();
+            }
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
@@ -1221,10 +1223,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         // gamearea
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !_radar.isDragRadar() )
+            if ( !_radar.isDragRadar() ) {
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.isMouseLeftButtonPressed() )
+            }
+            else if ( le.isMouseLeftButtonReleased() ) {
                 _radar.QueueEventProcessing();
+            }
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {

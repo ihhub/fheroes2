@@ -25,6 +25,7 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <filesystem>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -63,15 +64,18 @@ namespace System
     // are no files matching the pattern, it will be appended to the 'fileNames' as is.
     void globFiles( const std::string_view glob, std::vector<std::string> & fileNames );
 
-    // Converts the given string from local encoding to SDL encoding (UTF-8). It is used mainly on Windows, because on Windows
-    // this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding is used,
-    // and the original string is simply returned unchanged.
-    std::string encLocalToSDL( const std::string_view str );
+    // Converts the given string from local encoding to UTF-8 encoding (used by SDL). It is used mainly on Windows, because on
+    // Windows this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding
+    // is used, and the original string is simply returned unchanged.
+    std::string encLocalToUTF8( const std::string_view str );
 
-    // Converts the given string from SDL encoding (UTF-8) to local encoding. It is used mainly on Windows, because on Windows
-    // this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding is used,
-    // and the original string is simply returned unchanged.
-    std::string encSDLToLocal( const std::string_view str );
+    // Converts the given string from UTF-8 encoding (used by SDL) to local encoding. It is used mainly on Windows, because on
+    // Windows this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding
+    // is used, and the original string is simply returned unchanged.
+    std::string encUTF8ToLocal( const std::string_view str );
+
+    // Performs a safe conversion of an std::filesystem::path instance to a string. See the implementation for details.
+    std::string fsPathToString( const std::filesystem::path & path );
 
     tm GetTM( const time_t time );
 }

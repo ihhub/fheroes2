@@ -31,7 +31,6 @@
 #include "artifact.h"
 #include "artifact_info.h"
 #include "game_static.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -46,11 +45,11 @@
 
 namespace
 {
-    constexpr std::array<int, MAXSECONDARYSKILL> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS,
-                                                                     Skill::Secondary::SCOUTING,    Skill::Secondary::DIPLOMACY,  Skill::Secondary::NAVIGATION,
-                                                                     Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,     Skill::Secondary::MYSTICISM,
-                                                                     Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
-                                                                     Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
+    constexpr std::array<int, Skill::numOfSecondarySkills> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS,
+                                                                               Skill::Secondary::SCOUTING,    Skill::Secondary::DIPLOMACY,  Skill::Secondary::NAVIGATION,
+                                                                               Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,     Skill::Secondary::MYSTICISM,
+                                                                               Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
+                                                                               Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
     static_assert( !allSecondarySkills.empty() && allSecondarySkills.back() != 0, "All existing secondary skills must be present in this array" );
 
     int SecondaryGetWeightSkillFromRace( const int race, const int skill )
@@ -99,7 +98,7 @@ namespace
 
     int SecondaryPriorityFromRace( const int race, const std::unordered_set<int> & blacklist, const uint32_t seed )
     {
-        Rand::Queue parts( MAXSECONDARYSKILL );
+        Rand::Queue parts( Skill::numOfSecondarySkills );
 
         for ( auto skill : allSecondarySkills ) {
             if ( blacklist.find( skill ) != blacklist.end() ) {
@@ -137,13 +136,6 @@ uint32_t Skill::Secondary::GetValue() const
 
     return 0;
 }
-
-Skill::Primary::Primary()
-    : attack( 0 )
-    , defense( 0 )
-    , power( 0 )
-    , knowledge( 0 )
-{}
 
 void Skill::Primary::LoadDefaults( int type, int race )
 {
@@ -202,7 +194,7 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
         }
     }
 
-    return skill == POWER ? 1 : 0;
+    return ( skill == POWER || skill == KNOWLEDGE ) ? 1 : 0;
 }
 
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
@@ -212,7 +204,7 @@ int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
         return UNKNOWN;
     }
 
-    Rand::Queue percents( MAXPRIMARYSKILL );
+    Rand::Queue percents( numOfPrimarySkills );
 
     if ( ptr->boundaryBetweenLowAndHighLevels > level ) {
         percents.Push( ATTACK, ptr->weightsOfPrimarySkillsForLowLevels.attack );
@@ -667,12 +659,12 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 
 Skill::SecSkills::SecSkills()
 {
-    reserve( HEROESMAXSKILL );
+    reserve( Heroes::maxNumOfSecSkills );
 }
 
 Skill::SecSkills::SecSkills( int race )
 {
-    reserve( HEROESMAXSKILL );
+    reserve( Heroes::maxNumOfSecSkills );
 
     if ( !( race & Race::ALL ) ) {
         return;
@@ -765,18 +757,27 @@ int Skill::SecSkills::GetTotalLevel() const
 
 void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 {
-    if ( skill.isValid() ) {
-        const int skillValue = skill.Skill();
-        iterator it = std::find_if( begin(), end(), [skillValue]( const Secondary & v ) { return v.isSkill( skillValue ); } );
-        if ( it != end() )
-            ( *it ).SetLevel( skill.Level() );
-        else {
-            it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isValid(); } );
-            if ( it != end() )
-                ( *it ).Set( skill );
-            else if ( size() < HEROESMAXSKILL )
-                push_back( skill );
-        }
+    if ( !skill.isValid() ) {
+        return;
+    }
+
+    // If there is already such a skill, then just update its level
+    if ( const auto iter = std::find_if( begin(), end(), [skillValue = skill.Skill()]( const Secondary & v ) { return v.isSkill( skillValue ); } ); iter != end() ) {
+        iter->SetLevel( skill.Level() );
+
+        return;
+    }
+
+    // If there is an invalid skill, then replace it with the given skill
+    if ( const auto iter = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isValid(); } ); iter != end() ) {
+        iter->Set( skill );
+
+        return;
+    }
+
+    // If there is room for a new skill, then add the given skill
+    if ( size() < Heroes::maxNumOfSecSkills ) {
+        push_back( skill );
     }
 }
 
@@ -812,15 +813,16 @@ std::string Skill::SecSkills::String() const
 
 void Skill::SecSkills::FillMax( const Skill::Secondary & skill )
 {
-    if ( size() < HEROESMAXSKILL )
-        resize( HEROESMAXSKILL, skill );
+    if ( size() < Heroes::maxNumOfSecSkills ) {
+        resize( Heroes::maxNumOfSecSkills, skill );
+    }
 }
 
 std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed,
                                                                                       uint32_t const secondSkillSeed ) const
 {
     std::unordered_set<int> blacklist;
-    blacklist.reserve( MAXSECONDARYSKILL + HEROESMAXSKILL );
+    blacklist.reserve( numOfSecondarySkills + Heroes::maxNumOfSecSkills );
 
     for ( const Secondary & skill : *this ) {
         if ( skill.Level() != Level::EXPERT ) {
@@ -830,7 +832,7 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
         blacklist.insert( skill.Skill() );
     }
 
-    if ( Count() >= HEROESMAXSKILL ) {
+    if ( Count() >= Heroes::maxNumOfSecSkills ) {
         for ( const int skill : allSecondarySkills ) {
             if ( GetLevel( skill ) != Level::NONE ) {
                 continue;
@@ -963,8 +965,8 @@ IStreamBase & Skill::operator>>( IStreamBase & stream, SecSkills & ss )
     std::vector<Secondary> & v = ss;
     stream >> v;
 
-    if ( v.size() > HEROESMAXSKILL ) {
-        v.resize( HEROESMAXSKILL );
+    if ( v.size() > Heroes::maxNumOfSecSkills ) {
+        v.resize( Heroes::maxNumOfSecSkills );
     }
 
     return stream;

@@ -31,7 +31,6 @@
 #include "army_troop.h"
 #include "artifact_info.h"
 #include "castle.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -49,7 +48,7 @@ HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
     , move_point( 0 )
 {
-    bag_artifacts.assign( HEROESMAXARTIFACT, Artifact::UNKNOWN );
+    bag_artifacts.assign( BagArtifacts::maxCapacity, Artifact::UNKNOWN );
     LoadDefaults( type, race );
 }
 
@@ -594,8 +593,6 @@ OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero )
 
 IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero )
 {
-    stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
-        >> hero.bag_artifacts;
-
-    return stream;
+    return stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
+           >> hero.bag_artifacts;
 }

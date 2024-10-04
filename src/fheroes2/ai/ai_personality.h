@@ -20,11 +20,12 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace AI
 {
-    enum class Personality : int
+    enum class Personality : int32_t
     {
         NONE,
         WARRIOR,

@@ -315,7 +315,7 @@ namespace fheroes2
     class CustomAnimationDialogElement : public DialogElement
     {
     public:
-        explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset, const uint32_t animationIndexOffset,
+        explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point & animationPositionOffset, const uint32_t animationIndexOffset,
                                                const uint64_t delay );
 
         ~CustomAnimationDialogElement() override = default;

@@ -23,6 +23,7 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <cstddef>
 #include <cstdint>
 #include <set>
 #include <string>
@@ -298,6 +299,9 @@ struct ArtifactSetData
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
+    // Maximum number of artifacts that can be placed in an artifact bag
+    static constexpr size_t maxCapacity{ 14 };
+
     BagArtifacts();
 
     bool ContainSpell( const int spellId ) const;

@@ -39,7 +39,6 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_gamearea.h"
@@ -53,6 +52,7 @@
 #include "serialize.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -96,7 +96,7 @@ namespace
         for ( size_t i = 0; i < pzl.size(); ++i ) {
             const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
-            fheroes2::Blit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
+            fheroes2::Blit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx );
         }
     }
 
@@ -136,7 +136,7 @@ namespace
                     if ( pzl.test( i ) )
                         pieceAlpha = static_cast<uint8_t>( alpha );
 
-                    fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
+                    fheroes2::AlphaBlit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx, pieceAlpha );
                 }
 
                 if ( drawControlPanel ) {
@@ -167,7 +167,7 @@ namespace
         Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
         const fheroes2::Rect & radarArea = adventureMapInterface.getRadar().GetArea();
 
-        fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
+        fheroes2::ImageRestorer back( display, fheroes2::borderWidthPx, fheroes2::borderWidthPx, sf.width(), sf.height() );
         fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
         fheroes2::fadeOutDisplay( back.rect(), false );
@@ -179,13 +179,13 @@ namespace
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
         buttonExit.draw();
 
-        drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
+        drawPuzzle( pzl, sf, fheroes2::borderWidthPx, fheroes2::borderWidthPx );
 
         display.updateNextRenderRoi( radarArea );
 
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        const bool earlyExit = revealPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH, buttonExit );
+        const bool earlyExit = revealPuzzle( pzl, sf, fheroes2::borderWidthPx, fheroes2::borderWidthPx, buttonExit );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -302,7 +302,7 @@ Puzzle & Puzzle::operator=( const char * str )
 
 void Puzzle::Update( uint32_t open_obelisk, uint32_t total_obelisk )
 {
-    const uint32_t open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
+    const uint32_t open_puzzle = open_obelisk * numOfPuzzleTiles / total_obelisk;
     size_t need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
 
     if ( need_puzzle && ClosedTilesExists( *this, zone1_order ) )
@@ -346,22 +346,25 @@ OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl )
 {
     stream << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
 
-    // orders
     stream << static_cast<uint8_t>( pzl.zone1_order.size() );
-    for ( const uint8_t tile : pzl.zone1_order )
+    for ( const uint8_t tile : pzl.zone1_order ) {
         stream << tile;
+    }
 
     stream << static_cast<uint8_t>( pzl.zone2_order.size() );
-    for ( const uint8_t tile : pzl.zone2_order )
+    for ( const uint8_t tile : pzl.zone2_order ) {
         stream << tile;
+    }
 
     stream << static_cast<uint8_t>( pzl.zone3_order.size() );
-    for ( const uint8_t tile : pzl.zone3_order )
+    for ( const uint8_t tile : pzl.zone3_order ) {
         stream << tile;
+    }
 
     stream << static_cast<uint8_t>( pzl.zone4_order.size() );
-    for ( const uint8_t tile : pzl.zone4_order )
+    for ( const uint8_t tile : pzl.zone4_order ) {
         stream << tile;
+    }
 
     return stream;
 }
@@ -373,27 +376,31 @@ IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl )
     stream >> str;
     pzl = str.c_str();
 
-    uint8_t size;
+    uint8_t size{ 0 };
 
     stream >> size;
     pzl.zone1_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        stream >> pzl.zone1_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone1_order[i];
+    }
 
     stream >> size;
     pzl.zone2_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        stream >> pzl.zone2_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone2_order[i];
+    }
 
     stream >> size;
     pzl.zone3_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        stream >> pzl.zone3_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone3_order[i];
+    }
 
     stream >> size;
     pzl.zone4_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        stream >> pzl.zone4_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone4_order[i];
+    }
 
     return stream;
 }

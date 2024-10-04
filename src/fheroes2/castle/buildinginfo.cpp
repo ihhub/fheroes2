@@ -51,6 +51,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 
@@ -478,15 +479,15 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     int32_t requirementHeight = 0;
     if ( requirementsPresent ) {
-        requirementHeight = requirementTitle.height() + requirementText.height( BOXAREA_WIDTH ) + elementOffset;
+        requirementHeight = requirementTitle.height() + requirementText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     }
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), fheroes2::boxAreaWidthPx );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
-    const int32_t totalDialogHeight
-        = elementOffset + buildingFrame.height() + elementOffset + descriptionText.height( BOXAREA_WIDTH ) + elementOffset + requirementHeight + rbs.GetArea().height;
+    const int32_t totalDialogHeight = elementOffset + buildingFrame.height() + elementOffset + descriptionText.height( fheroes2::boxAreaWidthPx ) + elementOffset
+                                      + requirementHeight + rbs.GetArea().height;
 
     const Dialog::FrameBox dialogFrame( totalDialogHeight, buttons );
     const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
@@ -522,18 +523,18 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     pos.x = dialogRoi.x;
     pos.y = dialogRoi.y + elementOffset + buildingFrame.height() + elementOffset;
-    descriptionText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    descriptionText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-    pos.y += descriptionText.height( BOXAREA_WIDTH ) + elementOffset;
+    pos.y += descriptionText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     if ( requirementsPresent ) {
         pos.x = dialogRoi.x + ( dialogRoi.width - requirementTitle.width() ) / 2;
         requirementTitle.draw( pos.x, pos.y + 2, display );
 
         pos.x = dialogRoi.x;
         pos.y += requirementTitle.height();
-        requirementText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+        requirementText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-        pos.y += requirementText.height( BOXAREA_WIDTH ) + elementOffset;
+        pos.y += requirementText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     }
 
     rbs.SetPos( pos.x, pos.y );

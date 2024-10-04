@@ -899,7 +899,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() )
 
-    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
 
     if ( spell.isDamage() ) {
         SpellApplyDamage( spell, spoint, applyingHero, target );

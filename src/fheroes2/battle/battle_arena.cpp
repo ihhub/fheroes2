@@ -76,6 +76,7 @@ namespace
     int GetCovr( int ground, std::mt19937 & gen )
     {
         std::vector<int> covrs;
+        covrs.reserve( 6 );
 
         switch ( ground ) {
         case Maps::Ground::SNOW:
@@ -684,8 +685,8 @@ void Battle::Arena::CatapultAction()
 
     std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
     for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
-        const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+             !inserted ) {
             assert( 0 );
         }
     }
@@ -1313,7 +1314,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     }
 
     // penalty does not apply if the target unit is exposed due to the broken castle wall
-    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), Cell::widthPx / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )

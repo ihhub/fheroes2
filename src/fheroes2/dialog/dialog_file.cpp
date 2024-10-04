@@ -28,7 +28,6 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -36,6 +35,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_window.h"
 
@@ -52,8 +52,8 @@ namespace
         const int32_t totalDialogHeight = 252;
 
         // Prepare restorer of the adventure map when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - BORDERWIDTH ) / 2, ( display.height() - totalDialogHeight + BORDERWIDTH ) / 2,
-                                      totalDialogWidth, totalDialogHeight );
+        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - fheroes2::borderWidthPx ) / 2,
+                                      ( display.height() - totalDialogHeight + fheroes2::borderWidthPx ) / 2, totalDialogWidth, totalDialogHeight );
 
         fheroes2::StandardWindow background( 289, 204, true, display );
 

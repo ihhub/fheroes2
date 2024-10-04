@@ -43,6 +43,7 @@
 #include "system.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -455,10 +456,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
-    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
+    const fheroes2::ImageRestorer background( display, rt.x - fheroes2::shadowWidthPx, rt.y, rt.width + fheroes2::shadowWidthPx, rt.height + fheroes2::shadowWidthPx );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
-    fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
+    fheroes2::Blit( shadow, display, rt.x - fheroes2::shadowWidthPx, rt.y + fheroes2::shadowWidthPx );
 
     const fheroes2::Rect countPlayers( rt.x + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );
     const fheroes2::Rect sizeMaps( rt.x + SCENARIO_LIST_MAP_SIZE_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );

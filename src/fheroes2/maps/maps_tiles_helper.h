@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
@@ -178,5 +179,6 @@ namespace Maps
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
     // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
+    // This function does not take into account object parts in the top layer.
     std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }

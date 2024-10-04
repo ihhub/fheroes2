@@ -31,9 +31,6 @@
 
 #include "math_base.h"
 
-#define CELLW 44
-#define CELLH 52
-
 namespace Battle
 {
     class Unit;
@@ -56,6 +53,11 @@ namespace Battle
     class Cell final
     {
     public:
+        // Width of the rendered cell in pixels
+        static constexpr int widthPx{ 44 };
+        // Height of the rendered cell in pixels
+        static constexpr int heightPx{ 52 };
+
         explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;

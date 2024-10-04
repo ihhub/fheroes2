@@ -42,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -60,7 +61,7 @@ namespace
             , _key( key )
         {
             // Text always occupies the whole width of the dialog.
-            _area = { BOXAREA_WIDTH, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
+            _area = { fheroes2::boxAreaWidthPx, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
         }
 
         ~HotKeyElement() override = default;
@@ -73,9 +74,9 @@ namespace
             text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
 
-            _restorer.update( offset.x, offset.y, BOXAREA_WIDTH, text.height() );
+            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height() );
 
-            text.draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+            text.draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
         }
 
         void processEvents( const fheroes2::Point & /*offset*/ ) const override

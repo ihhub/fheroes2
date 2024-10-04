@@ -30,12 +30,9 @@
 #include <string>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
 #include "math_base.h"
-
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -173,7 +170,7 @@ namespace Dialog
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {
