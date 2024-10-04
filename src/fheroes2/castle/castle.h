@@ -433,8 +433,8 @@ namespace CastleDialog
             return buildingType == static_cast<uint32_t>( id );
         }
 
-        fheroes2::Rect coord;
         BuildingType id;
+        fheroes2::Rect coord;
     };
 
     struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>
