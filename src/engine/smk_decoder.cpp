@@ -21,6 +21,7 @@
 #include "smk_decoder.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -83,7 +84,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     uint8_t channelsPerTrack[audioChannelCount] = { 0 };
     uint8_t audioBitDepth[audioChannelCount] = { 0 };
     unsigned long audioRate[audioChannelCount] = { 0 };
-    std::vector<std::vector<uint8_t>> soundBuffer( audioChannelCount );
+    std::array<std::vector<uint8_t>, audioChannelCount> soundBuffer;
 
     unsigned long width = 0;
     unsigned long height = 0;

@@ -761,7 +761,7 @@ namespace fheroes2
         return false;
     }
 
-    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset,
+    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point & animationPositionOffset,
                                                                 const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
         , _staticImage( std::move( staticImage ) )

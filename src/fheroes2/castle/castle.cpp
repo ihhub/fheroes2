@@ -28,6 +28,7 @@
 #include <cassert>
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 #include "agg_image.h"
 #include "ai_planner.h"
@@ -2427,31 +2428,16 @@ Castle * VecCastles::GetFirstCastle() const
 
 AllCastles::AllCastles()
 {
-    // reserve memory
     _castles.reserve( maximumCastles );
 }
 
-AllCastles::~AllCastles()
+void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
-    Clear();
-}
+    assert( castle );
 
-void AllCastles::Init()
-{
-    Clear();
-}
+    const fheroes2::Point & center = castle->GetCenter();
 
-void AllCastles::Clear()
-{
-    for ( auto it = begin(); it != end(); ++it )
-        delete *it;
-    _castles.clear();
-    _castleTiles.clear();
-}
-
-void AllCastles::AddCastle( Castle * castle )
-{
-    _castles.push_back( castle );
+    _castles.emplace_back( std::move( castle ) );
 
     /* Register position of all castle elements on the map
     Castle element positions are:
@@ -2467,7 +2453,6 @@ void AllCastles::AddCastle( Castle * castle )
     */
 
     const size_t id = _castles.size() - 1;
-    const fheroes2::Point & center = castle->GetCenter();
 
     // Castles are added from top to bottom, from left to right.
     // Tiles containing castle ID cannot be overwritten.
@@ -2479,24 +2464,67 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id ); !inserted ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
             }
         }
     }
 
-    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id ); !inserted ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
     }
 }
 
-void AllCastles::Scout( int colors ) const
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
-    for ( auto it = begin(); it != end(); ++it )
-        if ( colors & ( *it )->GetColor() )
-            ( *it )->Scout();
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return nullptr;
+    }
+
+    assert( iter->second < _castles.size() && _castles[iter->second] );
+
+    return _castles[iter->second].get();
+}
+
+void AllCastles::Scout( const int colors ) const
+{
+    for ( const Castle * castle : *this ) {
+        assert( castle != nullptr );
+
+        if ( !( castle->GetColor() & colors ) ) {
+            continue;
+        }
+
+        castle->Scout();
+    }
+}
+
+void AllCastles::NewDay() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewDay();
+    } );
+}
+
+void AllCastles::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewWeek();
+    } );
+}
+
+void AllCastles::NewMonth() const
+{
+    std::for_each( begin(), end(), []( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewMonth();
+    } );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
@@ -2504,7 +2532,9 @@ OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
     const ColorBase & color = castle;
 
     stream << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
-           << color << castle.name << castle.mageguild << static_cast<uint32_t>( castle.dwelling.size() );
+           << color << castle.name << castle.mageguild;
+
+    stream.put32( static_cast<uint32_t>( castle.dwelling.size() ) );
 
     for ( const uint32_t dwelling : castle.dwelling ) {
         stream << dwelling;
@@ -2530,12 +2560,9 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
     ColorBase & color = castle;
     stream >> castle.captain >> color >> castle.name >> castle.mageguild;
 
-    uint32_t dwellingcount;
-    stream >> dwellingcount;
-
-    if ( dwellingcount != castle.dwelling.size() ) {
-        // Is it a corrupted save?
-        assert( 0 );
+    if ( const uint32_t size = stream.get32(); castle.dwelling.size() != size ) {
+        // Most likely the save file is corrupted.
+        stream.setFail();
 
         castle.dwelling = { 0 };
     }
@@ -2553,26 +2580,37 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 
 OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles )
 {
-    stream << static_cast<uint32_t>( castles.size() );
+    stream.put32( static_cast<uint32_t>( castles.size() ) );
 
-    for ( auto it = castles.begin(); it != castles.end(); ++it )
-        stream << ( *it ? ( *it )->GetIndex() : static_cast<int32_t>( -1 ) );
+    std::for_each( castles.begin(), castles.end(), [&stream]( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        stream << castle->GetIndex();
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles )
 {
-    int32_t index;
-    uint32_t size;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
-    castles.resize( size, nullptr );
+    castles.clear();
+    castles.reserve( size );
 
-    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
+    for ( uint32_t i = 0; i < size; ++i ) {
+        int32_t index{ -1 };
         stream >> index;
-        *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
-        assert( *it != nullptr );
+
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
+        if ( castle == nullptr ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
+        }
+
+        castles.push_back( castle );
     }
 
     return stream;
@@ -2580,25 +2618,26 @@ IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles )
 
 OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles )
 {
-    stream << static_cast<uint32_t>( castles.Size() );
+    stream.put32( static_cast<uint32_t>( castles.Size() ) );
 
-    for ( const Castle * castle : castles )
+    for ( const Castle * castle : castles ) {
         stream << *castle;
+    }
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles )
 {
-    uint32_t size;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
     castles.Clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        Castle * castle = new Castle();
+        auto castle = std::make_unique<Castle>();
         stream >> *castle;
-        castles.AddCastle( castle );
+
+        castles.AddCastle( std::move( castle ) );
     }
 
     return stream;

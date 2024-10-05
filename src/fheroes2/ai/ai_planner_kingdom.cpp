@@ -22,7 +22,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <map>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -55,7 +54,6 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "mus.h"
-#include "pairs.h"
 #include "players.h"
 #include "resource.h"
 #include "skill.h"
@@ -614,6 +612,8 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         return false;
     }
 
+    DEBUG_LOG( DBG_AI, DBG_TRACE, castle.GetName() << " is threatened by enemy army at " << enemyArmy.index )
+
     double enemyStrength = enemyArmy.strength;
 
     --daysToReach;
@@ -623,20 +623,12 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         --daysToReach;
     }
 
-    auto attackTask = _priorityTargets.find( enemyArmy.index );
-    if ( attackTask == _priorityTargets.end() ) {
-        _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, castleIndex };
-    }
-    else {
-        attackTask->second.secondaryTaskTileId.insert( castleIndex );
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( enemyArmy.index, PriorityTaskType::ATTACK, castleIndex ); !inserted ) {
+        iter->second.secondaryTaskTileId.insert( castleIndex );
     }
 
-    auto defenseTask = _priorityTargets.find( castleIndex );
-    if ( defenseTask == _priorityTargets.end() ) {
-        _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyArmy.index };
-    }
-    else {
-        defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( castleIndex, PriorityTaskType::DEFEND, enemyArmy.index ); !inserted ) {
+        iter->second.secondaryTaskTileId.insert( enemyArmy.index );
     }
 
     // If the castle guard (including the garrison and the guest hero) is weaker than the enemy, then the
@@ -696,14 +688,20 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 {
     const int32_t tileIndex = tile.GetIndex();
 
-    _enemyArmies.erase( tileIndex );
-
     const auto enemyArmy = getEnemyArmyOnTile( kingdom.GetColor(), tile );
-    if ( enemyArmy ) {
-        _enemyArmies[enemyArmy->index] = *enemyArmy;
+    if ( !enemyArmy ) {
+        _enemyArmies.erase( tileIndex );
 
-        updatePriorityForEnemyArmy( kingdom, *enemyArmy );
+        return;
     }
+
+    assert( enemyArmy->index == tileIndex );
+
+    if ( const auto [iter, inserted] = _enemyArmies.try_emplace( tileIndex, *enemyArmy ); !inserted ) {
+        iter->second = *enemyArmy;
+    }
+
+    updatePriorityForEnemyArmy( kingdom, *enemyArmy );
 }
 
 void AI::Planner::KingdomTurn( Kingdom & kingdom )
@@ -737,6 +735,16 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
 #endif
 
+    _mapActionObjects.clear();
+    _priorityTargets.clear();
+    _enemyArmies.clear();
+
+    // Clear the tile army strength cache because the strength of the respective armies might have changed since last time
+    _tileArmyStrengthValues.clear();
+
+    _regions.clear();
+    _regions.resize( world.getRegionCount() );
+
     const int myColor = kingdom.GetColor();
 
     if ( kingdom.isLoss() || myColor == Color::NONE ) {
@@ -752,9 +760,6 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     VecHeroes & heroes = kingdom.GetHeroes();
     const VecCastles & castles = kingdom.GetCastles();
-
-    // Clear the cache of neutral monsters as their strength might have changed.
-    _neutralMonsterStrengthCache.clear();
 
     DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
     DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )
@@ -781,12 +786,6 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         underViewSpell = true;
     }
 
-    _priorityTargets.clear();
-    _enemyArmies.clear();
-    _mapActionObjects.clear();
-    _regions.clear();
-    _regions.resize( world.getRegionCount() );
-
     const int mapSize = world.w() * world.h();
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
@@ -808,7 +807,9 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
-        _mapActionObjects.emplace_back( idx, objectType );
+        if ( const auto [dummy, inserted] = _mapActionObjects.try_emplace( idx, objectType ); !inserted ) {
+            assert( 0 );
+        }
 
         if ( objectType == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
@@ -841,7 +842,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         const auto enemyArmy = getEnemyArmyOnTile( myColor, tile );
         if ( enemyArmy ) {
-            _enemyArmies[enemyArmy->index] = *enemyArmy;
+            assert( enemyArmy->index == idx );
+
+            if ( const auto [dummy, inserted] = _enemyArmies.try_emplace( idx, *enemyArmy ); !inserted ) {
+                assert( 0 );
+            }
 
             if ( stats.highestThreat < enemyArmy->strength ) {
                 stats.highestThreat = enemyArmy->strength;
@@ -849,17 +854,18 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
     }
 
+    DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
+
     evaluateRegionSafety();
 
     updateKingdomBudget( kingdom );
 
-    DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
-
     uint32_t progressStatus = 1;
     status.DrawAITurnProgress( progressStatus );
 
-    std::vector<AICastle> sortedCastleList;
     std::set<int> castlesInDanger;
+    std::vector<AICastle> sortedCastleList;
+
     while ( true ) {
         // Step 2. Do some hero stuff.
         // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
@@ -896,8 +902,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
+
             updateMapActionObjectCache( heroes.back()->GetIndex() );
+
             ++availableHeroCount;
+
             continue;
         }
 
@@ -908,8 +917,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
                 assert( castle != nullptr );
 
                 if ( castle->GetHero() == nullptr ) {
-                    const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE );
-                    if ( inserted ) {
+                    if ( const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE ); inserted ) {
                         DEBUG_LOG( DBG_AI, DBG_INFO, castle->GetName() << " is designated as a priority target to reinforce nearby heroes" )
 
                         moreTaskForHeroes = true;

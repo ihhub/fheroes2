@@ -1118,9 +1118,9 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Return to the battle." ), Dialog::ZERO );
         }
 
-        if ( statusMessage != status.GetMessage() ) {
-            status.SetMessage( statusMessage );
-            status.Redraw( display );
+        if ( statusMessage != status.getMessage() ) {
+            status.setMessage( statusMessage, false );
+            status.redraw( display );
             display.render( status );
         }
     }

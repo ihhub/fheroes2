@@ -127,23 +127,34 @@ namespace
         return false;
     }
 
-    uint32_t getDistanceToObject( const Heroes & hero, const AIWorldPathfinder & pathfinder, const int32_t index )
+    bool shouldUseDimensionDoor( const uint32_t regularMovementDist, const uint32_t dimensionDoorDist )
     {
-        const uint32_t dist = pathfinder.getDistance( index );
-
-        const std::list<Route::Step> dimensionDoorSteps = pathfinder.getDimensionDoorPath( hero, index );
-        if ( dimensionDoorSteps.empty() ) {
-            return dist;
+        if ( dimensionDoorDist == 0 ) {
+            return false;
         }
 
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorSteps );
+        return ( regularMovementDist == 0 || dimensionDoorDist < regularMovementDist / 2 );
+    }
+
+    // Returns a pair consisting of a distance and a boolean value set to true if this distance was calculated
+    // for the case of movement using the Dimension Door spell, otherwise this value is set to false
+    std::pair<uint32_t, bool> getDistanceToTile( AIWorldPathfinder & pathfinder, const int32_t index )
+    {
+        const uint32_t regularMovementDist = pathfinder.getDistance( index );
+
+        const std::list<Route::Step> dimensionDoorPath = pathfinder.buildDimensionDoorPath( index );
+        if ( dimensionDoorPath.empty() ) {
+            return { regularMovementDist, false };
+        }
+
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorPath );
         assert( dimensionDoorDist > 0 );
 
-        if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
-            return dimensionDoorDist;
+        if ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+            return { dimensionDoorDist, true };
         }
 
-        return dist;
+        return { regularMovementDist, false };
     }
 
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
@@ -175,10 +186,9 @@ namespace
         return heroArmyStrength > castleStrength;
     }
 
-    bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Planner & ai, const double heroArmyStrength,
-                             const double targetStrengthMultiplier )
+    bool isHeroStrongerThan( const Maps::Tiles & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
     {
-        return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
+        return heroArmyStrength > ai.getTileArmyStrength( tile ) * targetStrengthMultiplier;
     }
 
     bool isArmyValuableToObtain( const Troop & monster, double armyStrengthThreshold, const bool armyHasMonster )
@@ -248,7 +258,7 @@ namespace
         return true;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Planner & ai,
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
                             const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
@@ -290,7 +300,7 @@ namespace
         case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
                 if ( isCaptureObjectProtected( tile ) ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
+                    return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
                 return true;
@@ -298,7 +308,7 @@ namespace
             break;
 
         case MP2::OBJ_ABANDONED_MINE:
-            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+            return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
 
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
@@ -332,7 +342,7 @@ namespace
             }
 
             if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
             // No conditions to capture an artifact exist.
@@ -460,7 +470,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -482,7 +492,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -543,7 +553,7 @@ namespace
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
             if ( Color::NONE == getColorFromTile( tile ) ) {
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
             return isArmyValuableToHire( army, kingdom, tile, armyStrengthThreshold );
@@ -565,7 +575,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            const auto [distance, dummy] = getDistanceToTile( pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -582,7 +592,7 @@ namespace
         case MP2::OBJ_SHIPWRECK:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
-                return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
+                return enemy.isValid() && isHeroStrongerThan( tile, ai, heroArmyStrength, 2 );
             }
             break;
 
@@ -590,19 +600,19 @@ namespace
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+                       && isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
             if ( doesTileContainValuableItems( tile ) ) {
                 // AI always chooses to fight the demon's servants and doesn't roll the dice
-                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             break;
 
         case MP2::OBJ_MONSTER:
-            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
+            return isHeroStrongerThan( tile, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
@@ -698,7 +708,7 @@ namespace
     class ObjectValidator
     {
     public:
-        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder, AI::Planner & ai )
+        explicit ObjectValidator( const Heroes & hero, AIWorldPathfinder & pathfinder, AI::Planner & ai )
             : _hero( hero )
             , _pathfinder( pathfinder )
             , _ai( ai )
@@ -722,7 +732,7 @@ namespace
 
     private:
         const Heroes & _hero;
-        const AIWorldPathfinder & _pathfinder;
+        AIWorldPathfinder & _pathfinder;
         AI::Planner & _ai;
 
         // Hero's strength value is valid till any action is done.
@@ -745,24 +755,21 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
+        double value( const IndexObject & objectInfo, const uint32_t distance )
         {
-            auto iter = _objectValue.find( objectInfo );
-            if ( iter != _objectValue.end() ) {
-                return iter->second;
+            const auto [iter, inserted] = _objectValue.try_emplace( objectInfo, 0.0 );
+            if ( inserted ) {
+                iter->second = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
             }
 
-            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
-
-            _objectValue[objectInfo] = value;
-            return value;
+            return iter->second;
         }
 
     private:
         const Heroes & _hero;
         const AI::Planner & _ai;
         const double _ignoreValue;
-        std::map<std::pair<int, int>, double> _objectValue;
+        std::map<IndexObject, double> _objectValue;
     };
 
     double getMonsterUpgradeValue( const Army & army, const int monsterId )
@@ -970,7 +977,7 @@ namespace
 }
 
 // TODO: In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
-double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // In the future these hardcoded values could be configured by the mod
     // 1 tile distance is 100.0 value approximately
@@ -1607,7 +1614,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int index,
     return 0;
 }
 
-double AI::Planner::getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Fighters have higher priority for battles and smaller values for other objects.
     assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
@@ -1911,7 +1918,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int index,
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::COURIER );
@@ -2026,7 +2033,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int index,
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::SCOUT );
@@ -2073,7 +2080,8 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int index, c
     return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
 }
 
-double AI::Planner::getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
+double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
+                                    const uint32_t distanceToObject ) const
 {
     assert( objectType == world.GetTiles( index ).GetObject() );
 
@@ -2100,9 +2108,10 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int index, const 
     return 0;
 }
 
-int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const
+int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestPossibleValue )
 {
     assert( hero.getAIRole() == Heroes::Role::COURIER );
+
     int targetIndex = -1;
 
     const Kingdom & kingdom = hero.GetKingdom();
@@ -2112,21 +2121,26 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
     double bestTargetValue = lowestPossibleValue;
 
     for ( const Heroes * otherHero : allHeroes ) {
-        if ( !otherHero || hero.GetID() == otherHero->GetID() )
+        if ( !otherHero || hero.GetID() == otherHero->GetID() ) {
             continue;
+        }
 
         const Heroes::Role role = otherHero->getAIRole();
-        if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT )
+        if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
             continue;
+        }
 
         const int currentHeroIndex = otherHero->GetIndex();
-        const uint32_t dist = getDistanceToObject( hero, pathfinder, currentHeroIndex );
-        if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
+
+        const auto [dist, dummy] = getDistanceToTile( _pathfinder, currentHeroIndex );
+        if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) ) {
             continue;
+        }
 
         double value = hero.getMeetingValue( *otherHero );
-        if ( value < 500 )
+        if ( value < 500 ) {
             continue;
+        }
 
         if ( role == Heroes::Role::CHAMPION ) {
             value *= 2.5;
@@ -2139,25 +2153,29 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
         }
     }
 
-    if ( targetIndex != -1 )
+    if ( targetIndex != -1 ) {
         return targetIndex;
+    }
 
     // Reset the max value
     bestTargetValue = lowestPossibleValue;
 
     for ( const Castle * castle : kingdom.GetCastles() ) {
-        if ( !castle || castle->GetHero() != nullptr )
+        if ( castle == nullptr || castle->GetHero() != nullptr ) {
             continue;
+        }
 
         const int currentCastleIndex = castle->GetIndex();
-        const uint32_t dist = getDistanceToObject( hero, pathfinder, currentCastleIndex );
 
-        if ( dist == 0 )
+        const auto [dist, dummy] = getDistanceToTile( _pathfinder, currentCastleIndex );
+        if ( dist == 0 ) {
             continue;
+        }
 
         double value = castle->getVisitValue( hero );
-        if ( value < 250 )
+        if ( value < 250 ) {
             continue;
+        }
 
         const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
         if ( safetyFactor > 100 ) {
@@ -2175,6 +2193,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const AIWorldPathfin
             targetIndex = currentCastleIndex;
         }
     }
+
     return targetIndex;
 }
 
@@ -2187,23 +2206,21 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     int priorityTarget = -1;
     maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-    MP2::MapObjectType objectType = MP2::OBJ_NONE;
+    {
+        std::set<int> objectIndexes;
 
-    // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
-    assert( std::is_sorted( _mapActionObjects.begin(), _mapActionObjects.end() ) );
+        for ( const auto & [idx, objType] : _mapActionObjects ) {
+            if ( objType == MP2::OBJ_HERO ) {
+                assert( world.GetTiles( idx ).getHero() != nullptr );
+            }
 
-    std::set<int> objectIndexes;
-
-    for ( const auto & actionObject : _mapActionObjects ) {
-        if ( actionObject.second == MP2::OBJ_HERO ) {
-            assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
-        }
-
-        const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
-        if ( !inserted ) {
-            assert( 0 );
+            if ( const auto [dummy, inserted] = objectIndexes.emplace( idx ); !inserted ) {
+                assert( 0 );
+            }
         }
     }
+
+    MP2::MapObjectType objectType = MP2::OBJ_NONE;
 #endif
 
     // Pre-calculate penalties for tiles where there is a threat of enemy attack
@@ -2298,12 +2315,18 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
-                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
-                    const double extraValue = valueStorage.value( pair, 0 );
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
-                    }
+                if ( !objectValidator.isValid( pair.first ) ) {
+                    continue;
+                }
+
+                if ( const auto iter = _mapActionObjects.find( pair.first ); iter == _mapActionObjects.end() || iter->second != pair.second ) {
+                    continue;
+                }
+
+                const double extraValue = valueStorage.value( pair, 0 );
+                if ( extraValue > 0 ) {
+                    // There is no need to reduce the quality of the object even if the path has others.
+                    value += extraValue;
                 }
             }
         }
@@ -2339,7 +2362,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     // Set baseline target if it's a special role
     if ( hero.getAIRole() == Heroes::Role::COURIER ) {
-        const int courierTarget = getCourierMainTarget( hero, _pathfinder, lowestPossibleValue );
+        const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
         if ( courierTarget != -1 ) {
             // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
             maxPriority = 0;
@@ -2356,52 +2379,36 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
     }
 
-    for ( const IndexObject & node : _mapActionObjects ) {
-        if ( !objectValidator.isValid( node.first ) ) {
+    for ( const auto & [idx, objType] : _mapActionObjects ) {
+        if ( !objectValidator.isValid( idx ) ) {
             continue;
         }
 
-        uint32_t dist = _pathfinder.getDistance( node.first );
-
-        bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-        if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
-            dist = dimensionDoorDist;
-            useDimensionDoor = true;
-        }
-
+        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
         if ( dist == 0 ) {
             continue;
         }
 
-        double value = valueStorage.value( node, dist );
-        getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+        double value = valueStorage.value( { idx, objType }, dist );
+        getObjectValue( idx, dist, value, objType, useDimensionDoor );
 
-        if ( dist && value > maxPriority ) {
+        if ( dist > 0 && value > maxPriority ) {
             maxPriority = value;
-            priorityTarget = node.first;
+            priorityTarget = idx;
 #ifdef WITH_DEBUG
-            objectType = static_cast<MP2::MapObjectType>( node.second );
+            objectType = objType;
 #endif
 
-            DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                      << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ": valid object at " << idx << " value is " << value << " (" << MP2::StringObject( objType ) << ")" )
         }
     }
 
     double fogDiscoveryValue = getFogDiscoveryValue( hero );
+    // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
     const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
-    if ( fogDiscoveryTarget >= 0 ) {
-        uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
-        // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
-        bool useDimensionDoor = false;
-        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
-        if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
-            distanceToFogDiscovery = dimensionDoorDist;
-            useDimensionDoor = true;
-        }
+    if ( fogDiscoveryTarget >= 0 ) {
+        auto [distanceToFogDiscovery, useDimensionDoor] = getDistanceToTile( _pathfinder, fogDiscoveryTarget );
 
         if ( isTerritoryExpansion ) {
             // Over time the AI should focus more on territory expansion.
@@ -2505,24 +2512,24 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         }
     };
 
-    auto it = _priorityTargets.find( tileIndex );
-    if ( it == _priorityTargets.end() ) {
+    auto iter = _priorityTargets.find( tileIndex );
+    if ( iter == _priorityTargets.end() ) {
         // If the object is not a priority we have to update it after the battle as it can become the one.
         // Especially, when the opposite army has grown Skeletons or Ghosts.
         updateTile();
 
         // If the update did not add any priorities then nothing more to do.
-        it = _priorityTargets.find( tileIndex );
-        if ( it == _priorityTargets.end() ) {
+        iter = _priorityTargets.find( tileIndex );
+        if ( iter == _priorityTargets.end() ) {
             return;
         }
     }
 
-    const PriorityTask & task = it->second;
+    const PriorityTaskType taskType = iter->second.type;
 
-    switch ( task.type ) {
+    switch ( taskType ) {
     case PriorityTaskType::DEFEND:
-    case PriorityTaskType::REINFORCE: {
+    case PriorityTaskType::REINFORCE:
         if ( hero.GetIndex() != tileIndex ) {
             // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
             // one of these cases.
@@ -2547,16 +2554,26 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         assert( hero.isActive() );
 
         hero.SetModes( Heroes::SLEEPER );
+
+#ifdef WITH_DEBUG
+        {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            assert( castle != nullptr );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO,
+                       hero.GetName() << " stays in " << castle->GetName() << " to " << ( taskType == PriorityTaskType::DEFEND ? "defend the castle" : "reinforce" ) )
+        }
+#endif
+
         _priorityTargets.erase( tileIndex );
 
         break;
-    }
-    case PriorityTaskType::ATTACK: {
+    case PriorityTaskType::ATTACK:
         removePriorityAttackTarget( tileIndex );
 
         updateTile();
+
         break;
-    }
     default:
         // Did you add a new type of priority task? Add the logic above!
         assert( 0 );
@@ -2638,9 +2655,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
         }
     }
 
-    if ( isMonsterStrengthCacheable( objectType ) ) {
-        _neutralMonsterStrengthCache.erase( tileIndex );
-    }
+    _tileArmyStrengthValues.erase( tileIndex );
 
     updatePriorityTargets( hero, tileIndex, objectType );
 
@@ -2799,42 +2814,45 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
         int prevHeroPosition = bestHero->GetIndex();
 
-        // check if we want to use Dimension Door spell or move regularly
-        std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-        uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
-        uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
-        if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-            while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
-                    && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
-                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
-                dimensionDoorDistance -= dimensionPath.front().GetPenalty();
+        {
+            std::list<Route::Step> dimensionDoorPath = _pathfinder.buildDimensionDoorPath( bestTargetIndex );
+            uint32_t regularMovementDist = _pathfinder.getDistance( bestTargetIndex );
+            uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorPath );
 
-                _pathfinder.reEvaluateIfNeeded( *bestHero );
-                moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+                while ( shouldUseDimensionDoor( regularMovementDist, dimensionDoorDist ) ) {
+                    assert( !dimensionDoorPath.empty() && bestHero->MayStillMove( false, false ) );
 
-                dimensionPath.pop_front();
+                    HeroesCastDimensionDoor( *bestHero, dimensionDoorPath.front().GetIndex() );
+                    dimensionDoorDist -= dimensionDoorPath.front().GetPenalty();
 
-                // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
-                // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
+                    _pathfinder.reEvaluateIfNeeded( *bestHero );
+                    regularMovementDist = _pathfinder.getDistance( bestTargetIndex );
 
-                updateMapActionObjectCache( prevHeroPosition );
-                updateMapActionObjectCache( bestHero->GetIndex() );
+                    dimensionDoorPath.pop_front();
 
-                prevHeroPosition = bestHero->GetIndex();
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
+                }
+
+                if ( dimensionDoorDist > 0 ) {
+                    // The rest of the path the hero should do by foot.
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
+
+                    HeroesMove( *bestHero );
+                }
             }
-
-            if ( dimensionDoorDistance > 0 ) {
-                // The rest of the path the hero should do by foot.
+            else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                 HeroesMove( *bestHero );
             }
-        }
-        else {
-            bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
-
-            HeroesMove( *bestHero );
         }
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {

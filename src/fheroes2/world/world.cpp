@@ -30,7 +30,6 @@
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <utility>
 
 #include "ai_planner.h"
 #include "artifact.h"
@@ -144,81 +143,70 @@ namespace
     }
 }
 
-MapObjects::~MapObjects()
+MapObjectSimple * MapObjects::get( const uint32_t uid ) const
 {
-    clear();
-}
-
-void MapObjects::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete ( *it ).second;
-    std::map<uint32_t, MapObjectSimple *>::clear();
-}
-
-void MapObjects::add( MapObjectSimple * obj )
-{
-    if ( obj ) {
-        std::map<uint32_t, MapObjectSimple *> & currentMap = *this;
-        if ( currentMap[obj->GetUID()] )
-            delete currentMap[obj->GetUID()];
-        currentMap[obj->GetUID()] = obj;
+    if ( const auto iter = _objects.find( uid ); iter != _objects.end() ) {
+        return iter->second.get();
     }
+
+    return nullptr;
 }
 
-MapObjectSimple * MapObjects::get( uint32_t uid )
+std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos ) const
 {
-    iterator it = find( uid );
-    return it != end() ? ( *it ).second : nullptr;
+    std::list<MapObjectSimple *> result;
+
+    for ( const auto & [dummy, obj] : _objects ) {
+        assert( obj );
+
+        if ( !obj->isPosition( pos ) ) {
+            continue;
+        }
+
+        result.push_back( obj.get() );
+    }
+
+    return result;
 }
 
-std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
+void MapObjects::remove( const uint32_t uid )
 {
-    std::list<MapObjectSimple *> res;
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            res.push_back( ( *it ).second );
-    return res;
+    _objects.erase( uid );
 }
 
-void MapObjects::remove( uint32_t uid )
+CapturedObject & CapturedObjects::Get( const int32_t index )
 {
-    iterator it = find( uid );
-    if ( it != end() )
-        delete ( *it ).second;
-    erase( it );
+    return operator[]( index );
 }
 
-CapturedObject & CapturedObjects::Get( int32_t index )
-{
-    std::map<int32_t, CapturedObject> & my = *this;
-    return my[index];
-}
-
-void CapturedObjects::SetColor( int32_t index, int col )
+void CapturedObjects::SetColor( const int32_t index, const int col )
 {
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( int32_t index, int obj, int col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const int col )
 {
-    CapturedObject & co = Get( index );
+    CapturedObject & capturedObj = Get( index );
 
-    if ( co.GetColor() != col && co.guardians.isValid() )
-        co.guardians.Reset();
+    if ( capturedObj.GetColor() != col && capturedObj.guardians.isValid() ) {
+        capturedObj.guardians.Reset();
+    }
 
-    co.Set( obj, col );
+    capturedObj.Set( obj, col );
 }
 
-uint32_t CapturedObjects::GetCount( int obj, int col ) const
+uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col ) const
 {
     uint32_t result = 0;
 
-    const ObjectColor objcol( obj, col );
+    const ObjectColor objCol( obj, col );
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( objcol == ( *it ).second.objcol )
-            ++result;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objCol != objCol ) {
+            continue;
+        }
+
+        ++result;
     }
 
     return result;
@@ -227,63 +215,77 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
 uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
     uint32_t count = 0;
-    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
-    for ( const auto & [tileIndex, objectInfo] : *this ) {
-        if ( correctObject == objectInfo.objcol ) {
-            const int32_t mineResource = Maps::getDailyIncomeObjectResources( world.GetTiles( tileIndex ) ).getFirstValidResource().first;
-            if ( resourceType == mineResource ) {
-                ++count;
-            }
+    const ObjectColor objCol( MP2::OBJ_MINE, ownerColor );
+
+    for ( const auto & [idx, capturedObj] : *this ) {
+        if ( capturedObj.objCol != objCol ) {
+            continue;
         }
+
+        if ( resourceType != Maps::getDailyIncomeObjectResources( world.GetTiles( idx ) ).getFirstValidResource().first ) {
+            continue;
+        }
+
+        ++count;
     }
 
     return count;
 }
 
-int CapturedObjects::GetColor( int32_t index ) const
+int CapturedObjects::GetColor( const int32_t index ) const
 {
-    const_iterator it = find( index );
-    return it != end() ? ( *it ).second.GetColor() : Color::NONE;
+    const auto iter = find( index );
+    if ( iter == end() ) {
+        return Color::NONE;
+    }
+
+    return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( int colors )
+void CapturedObjects::ClearFog( const int colors ) const
 {
-    // clear abroad objects
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
+    for ( const auto & [idx, capturedObj] : *this ) {
+        const ObjectColor & objCol = capturedObj.objCol;
 
-        if ( objcol.isColor( colors ) ) {
-            int scoutingDistance = 0;
-
-            switch ( objcol.first ) {
-            case MP2::OBJ_MINE:
-            case MP2::OBJ_ALCHEMIST_LAB:
-            case MP2::OBJ_SAWMILL:
-                scoutingDistance = 2;
-                break;
-
-            default:
-                break;
-            }
-
-            if ( scoutingDistance )
-                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
+        if ( !objCol.isColor( colors ) ) {
+            continue;
         }
+
+        int scoutingDistance = 0;
+
+        switch ( objCol.first ) {
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_SAWMILL:
+            scoutingDistance = 2;
+            break;
+
+        default:
+            break;
+        }
+
+        if ( scoutingDistance == 0 ) {
+            continue;
+        }
+
+        Maps::ClearFog( idx, scoutingDistance, colors );
     }
 }
 
-void CapturedObjects::ResetColor( int color )
+void CapturedObjects::ResetColor( const int color )
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        ObjectColor & objcol = ( *it ).second.objcol;
+    for ( auto & [idx, capturedObj] : *this ) {
+        ObjectColor & objCol = capturedObj.objCol;
 
-        if ( objcol.isColor( color ) ) {
-            const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
-
-            objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
+        if ( !objCol.isColor( color ) ) {
+            continue;
         }
+
+        auto & [objectType, col] = objCol;
+
+        col = ( objectType == MP2::OBJ_CASTLE ) ? Color::UNUSED : Color::NONE;
+        world.GetTiles( idx ).setOwnershipFlag( objectType, col );
     }
 }
 
@@ -332,7 +334,7 @@ void World::Reset()
     vec_castles.Clear();
 
     // heroes
-    vec_heroes.clear();
+    vec_heroes.Clear();
 
     // extra
     map_captureobj.clear();
@@ -793,9 +795,11 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
+
+        assert( teleportTile.getHero() == nullptr );
 
         result.push_back( teleportIndex );
     }
@@ -828,9 +832,11 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.getHero() != nullptr ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
             continue;
         }
+
+        assert( whirlpoolTile.getHero() == nullptr );
 
         result.push_back( whirlpoolIndex );
     }
@@ -849,7 +855,7 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( int obj, int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
@@ -898,7 +904,7 @@ void World::ResetCapturedObjects( int color )
     map_captureobj.ResetColor( color );
 }
 
-void World::ClearFog( int colors )
+void World::ClearFog( int colors ) const
 {
     colors = Players::GetPlayerFriends( colors );
 
@@ -996,7 +1002,11 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
+    if ( res.empty() ) {
+        return nullptr;
+    }
+
+    return dynamic_cast<MapEvent *>( res.front() );
 }
 
 MapObjectSimple * World::GetMapObject( uint32_t uid )
@@ -1304,7 +1314,7 @@ void World::updatePassabilities()
     }
 }
 
-void World::PostLoad( const bool setTilePassabilities )
+void World::PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum )
 {
     if ( setTilePassabilities ) {
         updatePassabilities();
@@ -1326,6 +1336,30 @@ void World::PostLoad( const bool setTilePassabilities )
 
     resetPathfinder();
     ComputeStaticAnalysis();
+
+    // Find the maximum UID value.
+    uint32_t maxUid = 0;
+
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        maxUid = std::max( tile.getMainObjectPart()._uid, maxUid );
+
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+
+        for ( const auto & addon : tile.getTopLayerAddons() ) {
+            maxUid = std::max( addon._uid, maxUid );
+        }
+    }
+
+    if ( updateUidCounterToMaximum ) {
+        // And set the UID counter value with the found maximum.
+        Maps::setLastObjectUID( maxUid );
+    }
+    else {
+        // Check that 'getNewObjectUID()' will return values that will not match the existing ones on the started map.
+        assert( Maps::getLastObjectUID() >= maxUid );
+    }
 }
 
 uint32_t World::GetMapSeed() const
@@ -1356,84 +1390,119 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )
 {
-    return stream << obj.objcol << obj.guardians;
+    return stream << obj.objCol << obj.guardians;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj )
 {
-    return stream >> obj.objcol >> obj.guardians;
+    return stream >> obj.objCol >> obj.guardians;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs )
 {
-    stream << static_cast<uint32_t>( objs.size() );
-    for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
-        if ( ( *it ).second ) {
-            const MapObjectSimple & obj = *( *it ).second;
-            stream << ( *it ).first << obj.GetType();
+    const std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
-            switch ( obj.GetType() ) {
-            case MP2::OBJ_EVENT:
-                stream << dynamic_cast<const MapEvent &>( obj );
-                break;
+    stream.put32( static_cast<uint32_t>( objectsRef.size() ) );
 
-            case MP2::OBJ_SPHINX:
-                stream << dynamic_cast<const MapSphinx &>( obj );
-                break;
+    for ( const auto & [uid, obj] : objectsRef ) {
+        assert( obj && obj->GetUID() == uid );
 
-            case MP2::OBJ_SIGN:
-                stream << dynamic_cast<const MapSign &>( obj );
-                break;
+        if ( const auto * objPtr = dynamic_cast<const MapEvent *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_EVENT << *objPtr;
 
-            default:
-                stream << obj;
-                break;
-            }
+            continue;
         }
+
+        if ( const auto * objPtr = dynamic_cast<const MapSphinx *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SPHINX << *objPtr;
+
+            continue;
+        }
+
+        if ( const auto * objPtr = dynamic_cast<const MapSign *>( obj.get() ); objPtr != nullptr ) {
+            stream << uid << MP2::OBJ_SIGN << *objPtr;
+
+            continue;
+        }
+
+        // Unknown object type
+        assert( 0 );
+    }
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 {
-    uint32_t size = 0;
-    stream >> size;
+    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> & objectsRef = objs._objects;
 
-    objs.clear();
+    const uint32_t size = stream.get32();
 
-    for ( uint32_t ii = 0; ii < size; ++ii ) {
-        int32_t index;
-        int type;
-        stream >> index >> type;
+    objectsRef.clear();
 
-        switch ( type ) {
-        case MP2::OBJ_EVENT: {
-            MapEvent * ptr = new MapEvent();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+    for ( uint32_t i = 0; i < size; ++i ) {
+        uint32_t uid{ 0 };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
+        stream >> uid;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+            int temp{ MP2::OBJ_NONE };
+            stream >> temp;
+
+            type = static_cast<MP2::MapObjectType>( temp );
+        }
+        else {
+            stream >> type;
         }
 
-        case MP2::OBJ_SPHINX: {
-            MapSphinx * ptr = new MapSphinx();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+        std::unique_ptr<MapObjectSimple> obj = [&stream, type]() -> std::unique_ptr<MapObjectSimple> {
+            switch ( type ) {
+            case MP2::OBJ_EVENT: {
+                auto ptr = std::make_unique<MapEvent>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SPHINX: {
+                auto ptr = std::make_unique<MapSphinx>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            case MP2::OBJ_SIGN: {
+                auto ptr = std::make_unique<MapSign>();
+                stream >> *ptr;
+
+                return ptr;
+            }
+
+            default:
+                break;
+            }
+
+            return {};
+        }();
+
+        if ( !obj ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
         }
 
-        case MP2::OBJ_SIGN: {
-            MapSign * ptr = new MapSign();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
+        if ( obj->GetUID() != uid ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
         }
 
-        default: {
-            MapObjectSimple * ptr = new MapObjectSimple();
-            stream >> *ptr;
-            objs[index] = ptr;
-            break;
-        }
+        if ( const auto [dummy, inserted] = objectsRef.try_emplace( uid, std::move( obj ) ); !inserted ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
         }
     }
 
@@ -1472,7 +1541,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
 
     stream >> w.map_objects >> w._seed;
 
-    w.PostLoad( false );
+    w.PostLoad( false, true );
 
     return stream;
 }

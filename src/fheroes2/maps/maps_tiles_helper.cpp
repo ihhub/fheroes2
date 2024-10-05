@@ -2735,27 +2735,27 @@ namespace Maps
     {
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // No object exists on this tile. Add one.
-            tile.getMainObjectPart()._uid = getNewObjectUID();
-            tile.getMainObjectPart()._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
-        }
-        else if ( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( tile.getMainObjectPart() );
+        Maps::TilesAddon & mainAddon = tile.getMainObjectPart();
+
+        if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                // If there is another object sprite here (shadow for example) push it down to add-ons.
+                tile.pushBottomLayerAddon( mainAddon );
+            }
 
             // Set unique UID for placed monster.
-            tile.getMainObjectPart()._uid = getNewObjectUID();
-            tile.getMainObjectPart()._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
+            mainAddon._uid = getNewObjectUID();
+            mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
+            mainAddon._layerType = OBJECT_LAYER;
         }
 
-        using TileImageIndexType = decltype( tile.getMainObjectPart()._imageIndex );
+        using TileImageIndexType = decltype( mainAddon._imageIndex );
         static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
 
-        tile.getMainObjectPart()._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
+        mainAddon._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
         const bool setDefinedCount = ( count > 0 );
 
@@ -3296,12 +3296,9 @@ namespace Maps
                     }
                 }
 
-                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
-                    // Top layer addons don't have layer type.
-                    if ( addon._uid != 0 ) {
-                        objectsUids.insert( addon._uid );
-                    }
-                }
+                // The top layer objects are not taken into account to correspond the original editor
+                // and because they can be small or even zero-sized parts of the Main or Bottom layer
+                // objects which can be selected by their non-top parts.
             }
         }
 

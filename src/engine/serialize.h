@@ -116,6 +116,11 @@ public:
 
     StreamBase & operator=( const StreamBase & ) = delete;
 
+    void setFail()
+    {
+        setFail( true );
+    }
+
     void setBigendian( bool f );
 
     bool fail() const
@@ -187,6 +192,17 @@ public:
 
     IStreamBase & operator>>( fheroes2::Point & v );
 
+    template <typename Type, std::enable_if_t<std::is_enum_v<Type>, bool> = true>
+    IStreamBase & operator>>( Type & v )
+    {
+        std::underlying_type_t<Type> temp{};
+        *this >> temp;
+
+        v = static_cast<Type>( temp );
+
+        return *this;
+    }
+
     template <class Type1, class Type2>
     IStreamBase & operator>>( std::pair<Type1, Type2> & v )
     {
@@ -236,7 +252,7 @@ public:
     {
         const uint32_t size = get32();
         if ( size != v.size() ) {
-            setFail( true );
+            setFail();
 
             v = {};
 
@@ -302,6 +318,12 @@ public:
     OStreamBase & operator<<( const std::string_view v );
 
     OStreamBase & operator<<( const fheroes2::Point & v );
+
+    template <typename Type, std::enable_if_t<std::is_enum_v<Type>, bool> = true>
+    OStreamBase & operator<<( const Type v )
+    {
+        return *this << static_cast<std::underlying_type_t<Type>>( v );
+    }
 
     template <class Type1, class Type2>
     OStreamBase & operator<<( const std::pair<Type1, Type2> & v )
@@ -372,7 +394,7 @@ protected:
 };
 
 // Class template for a stream with an in-memory storage backend that can store either const or non-const data as desired
-template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
+template <typename T, std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>, bool> = true>
 class StreamBufTmpl : public IStreamBuf
 {
 public:
@@ -520,7 +542,7 @@ protected:
             return *( _itget++ );
         }
 
-        setFail( true );
+        setFail();
 
         return 0;
     }
@@ -662,7 +684,7 @@ private:
         T val;
 
         if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+            setFail();
 
             return 0;
         }
@@ -678,7 +700,7 @@ private:
         }
 
         if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+            setFail();
         }
     }
 
@@ -688,7 +710,7 @@ private:
 namespace fheroes2
 {
     // Get a value of type T in the system byte order from the buffer in which it was originally stored in the little-endian byte order
-    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>>>
+    template <typename T, std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, bool> = true>
     T getLEValue( const char * data, const size_t base, const size_t offset = 0 )
     {
         const char * begin = data + base + offset * sizeof( T );
