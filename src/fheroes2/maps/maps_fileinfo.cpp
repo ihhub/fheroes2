@@ -694,8 +694,8 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 
     stream >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < UPDATE_FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < UPDATE_FORMAT_VERSION_1103_RELEASE ) {
         fi.mainLanguage = fheroes2::SupportedLanguage::English;
     }
     else {
