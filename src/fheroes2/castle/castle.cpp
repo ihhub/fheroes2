@@ -28,6 +28,7 @@
 #include <cassert>
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 #include "agg_image.h"
 #include "ai_planner.h"
@@ -2427,35 +2428,16 @@ Castle * VecCastles::GetFirstCastle() const
 
 AllCastles::AllCastles()
 {
-    // reserve memory
     _castles.reserve( maximumCastles );
 }
 
-AllCastles::~AllCastles()
+void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
-    Clear();
-}
+    assert( castle );
 
-void AllCastles::Init()
-{
-    Clear();
-}
+    const fheroes2::Point & center = castle->GetCenter();
 
-void AllCastles::Clear()
-{
-    std::for_each( begin(), end(), []( const Castle * castle ) {
-        assert( castle != nullptr );
-
-        delete castle;
-    } );
-
-    _castles.clear();
-    _castleTiles.clear();
-}
-
-void AllCastles::AddCastle( Castle * castle )
-{
-    _castles.push_back( castle );
+    _castles.emplace_back( std::move( castle ) );
 
     /* Register position of all castle elements on the map
     Castle element positions are:
@@ -2471,7 +2453,6 @@ void AllCastles::AddCastle( Castle * castle )
     */
 
     const size_t id = _castles.size() - 1;
-    const fheroes2::Point & center = castle->GetCenter();
 
     // Castles are added from top to bottom, from left to right.
     // Tiles containing castle ID cannot be overwritten.
@@ -2494,11 +2475,56 @@ void AllCastles::AddCastle( Castle * castle )
     }
 }
 
-void AllCastles::Scout( int colors ) const
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
-    for ( auto it = begin(); it != end(); ++it )
-        if ( colors & ( *it )->GetColor() )
-            ( *it )->Scout();
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return nullptr;
+    }
+
+    assert( iter->second < _castles.size() && _castles[iter->second] );
+
+    return _castles[iter->second].get();
+}
+
+void AllCastles::Scout( const int colors ) const
+{
+    for ( const Castle * castle : *this ) {
+        assert( castle != nullptr );
+
+        if ( !( castle->GetColor() & colors ) ) {
+            continue;
+        }
+
+        castle->Scout();
+    }
+}
+
+void AllCastles::NewDay() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewDay();
+    } );
+}
+
+void AllCastles::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewWeek();
+    } );
+}
+
+void AllCastles::NewMonth() const
+{
+    std::for_each( begin(), end(), []( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewMonth();
+    } );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
@@ -2608,10 +2634,10 @@ IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles )
     castles.Clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        Castle * castle = new Castle();
+        auto castle = std::make_unique<Castle>();
         stream >> *castle;
 
-        castles.AddCastle( castle );
+        castles.AddCastle( std::move( castle ) );
     }
 
     return stream;

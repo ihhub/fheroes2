@@ -30,7 +30,6 @@
 #include <ostream>
 #include <set>
 #include <tuple>
-#include <utility>
 
 #include "ai_planner.h"
 #include "artifact.h"
@@ -335,7 +334,7 @@ void World::Reset()
     vec_castles.Clear();
 
     // heroes
-    vec_heroes.clear();
+    vec_heroes.Clear();
 
     // extra
     map_captureobj.clear();
