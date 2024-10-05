@@ -509,7 +509,7 @@ public:
             : BaseIterator( std::move( other ) )
         {}
 
-        auto operator*() const noexcept
+        auto * operator*() const noexcept
         {
             return BaseIterator::operator*().get();
         }
