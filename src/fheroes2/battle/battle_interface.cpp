@@ -1109,13 +1109,14 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
         fheroes2::DrawRect( output, pos, currentUnitColor );
     }
     else {
-        uint8_t color = ARMY_COLOR_BLUE;
+        uint8_t color = ARMY_COLOR_GRAY;
 
         switch ( unit.GetCurrentColor() ) {
         case -1: // Berserkers
             color = ARMY_COLOR_BLACK;
             break;
         case Color::BLUE:
+            color = ARMY_COLOR_BLUE;
             break;
         case Color::GREEN:
             color = ARMY_COLOR_GREEN;
@@ -1133,7 +1134,6 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
             color = ARMY_COLOR_PURPLE;
             break;
         case Color::NONE:
-            color = ARMY_COLOR_GRAY;
             break;
         default:
             assert( 0 ); // Did you add another player color?
