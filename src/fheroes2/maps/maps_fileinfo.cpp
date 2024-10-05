@@ -679,8 +679,8 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     }
 
     stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
-           >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
-           >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
+        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < UPDATE_FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < UPDATE_FORMAT_VERSION_1103_RELEASE ) {
