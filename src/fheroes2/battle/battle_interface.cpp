@@ -1010,13 +1010,7 @@ Battle::Status::Status()
     height = _upperBackground.height() + _lowerBackground.height();
 }
 
-void Battle::Status::SetPosition( const int32_t cx, const int32_t cy )
-{
-    x = cx;
-    y = cy;
-}
-
-void Battle::Status::SetMessage( const std::string & messageString, const bool top )
+void Battle::Status::setMessage( std::string messageString, const bool top )
 {
     if ( top ) {
         _upperText.set( messageString, fheroes2::FontType::normalWhite() );
@@ -1024,7 +1018,7 @@ void Battle::Status::SetMessage( const std::string & messageString, const bool t
         _upperText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
 
         if ( _battleStatusLog ) {
-            _battleStatusLog->AddMessage( messageString );
+            _battleStatusLog->AddMessage( std::move( messageString ) );
         }
     }
     else if ( messageString != _lastMessage ) {
@@ -1032,23 +1026,21 @@ void Battle::Status::SetMessage( const std::string & messageString, const bool t
         // The text cannot go beyond the text area so it is important to truncate it when necessary.
         _lowerText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
 
-        _lastMessage = messageString;
+        _lastMessage = std::move( messageString );
     }
 }
 
-void Battle::Status::Redraw( fheroes2::Image & output ) const
+void Battle::Status::redraw( fheroes2::Image & output ) const
 {
     fheroes2::Copy( _upperBackground, 0, 0, output, x, y, _upperBackground.width(), _upperBackground.height() );
     fheroes2::Copy( _lowerBackground, 0, 0, output, x, y + _upperBackground.height(), _lowerBackground.width(), _lowerBackground.height() );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     if ( !_upperText.empty() ) {
-        _upperText.draw( x + ( _upperBackground.width() - _upperText.width() ) / 2, y + 4, display );
+        _upperText.draw( x + ( _upperBackground.width() - _upperText.width() ) / 2, y + 4, output );
     }
 
     if ( !_lowerText.empty() ) {
-        _lowerText.draw( x + ( _lowerBackground.width() - _lowerText.width() ) / 2, y + _upperBackground.height(), display );
+        _lowerText.draw( x + ( _lowerBackground.width() - _lowerText.width() ) / 2, y + _upperBackground.height(), output );
     }
 }
 
@@ -1056,6 +1048,7 @@ void Battle::Status::clear()
 {
     _upperText.set( "", fheroes2::FontType::normalWhite() );
     _lowerText.set( "", fheroes2::FontType::normalWhite() );
+    _lastMessage = "";
 }
 
 void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
@@ -1324,7 +1317,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
-    status.SetPosition( area.x + settingsRect.width, satusOffsetY );
+    status.setPosition( area.x + settingsRect.width, satusOffsetY );
 
     listlog = std::make_unique<StatusListBox>();
 
@@ -1333,7 +1326,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     if ( listlog ) {
         listlog->SetPosition( area.x, area.y + battlefieldHeight );
     }
-    status.SetLogs( listlog.get() );
+    status.setLogs( listlog.get() );
 
     // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
@@ -1376,15 +1369,14 @@ fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
     return LocalEvent::Get().getMouseCursorPos() - _interfacePosition.getPosition();
 }
 
-void Battle::Interface::SetStatus( const std::string & message, const bool top /* = false */ )
+void Battle::Interface::setStatus( const std::string & message, const bool top )
 {
+    status.setMessage( message, top );
+
     if ( top ) {
-        status.SetMessage( message, true );
-        status.SetMessage( "", false );
+        status.setMessage( "", false );
     }
-    else {
-        status.SetMessage( message );
-    }
+
     humanturn_redraw = true;
 }
 
@@ -1493,7 +1485,7 @@ void Battle::Interface::redrawPreRender()
 
 void Battle::Interface::RedrawInterface()
 {
-    status.Redraw( fheroes2::Display::instance() );
+    status.redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
     btn_settings.draw();
@@ -2774,8 +2766,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
         }
 
         // update status
-        if ( msg != status.GetMessage() ) {
-            status.SetMessage( msg );
+        if ( msg != status.getMessage() ) {
+            status.setMessage( msg, false );
             humanturn_redraw = true;
         }
 
@@ -3159,7 +3151,7 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
 
     if ( clearMessageLog ) {
         status.clear();
-        status.Redraw( display );
+        status.redraw( display );
     }
 
     Redraw();
@@ -3478,7 +3470,7 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & unit )
     std::string msg = _n( "The %{name} skips their turn.", "The %{name} skip their turn.", unit.GetCount() );
     StringReplaceWithLowercase( msg, "%{name}", unit.GetName() );
 
-    status.SetMessage( msg, true );
+    setStatus( msg, true );
 }
 
 void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, const double angle, const uint32_t monsterID )
@@ -3700,25 +3692,23 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
             }
         }
 
-        status.SetMessage( msg, true );
-        status.SetMessage( "", false );
+        setStatus( msg, true );
 
         if ( resurrects != 0 ) {
-            const auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+            const auto updateStatusBar = [this]( std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
                 StringReplace( localMsg, "%{count}", localRes );
                 StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
 
-                statusBar.SetMessage( localMsg, true );
-                statusBar.SetMessage( "", false );
+                setStatus( localMsg, true );
             };
 
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 msg = _n( "1 soul is incorporated.", "%{count} souls are incorporated.", resurrects );
-                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+                updateStatusBar( msg, resurrects, attacker.GetPluralName( resurrects ) );
             }
             else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
                 msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
-                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+                updateStatusBar( msg, resurrects, attacker.GetPluralName( resurrects ) );
             }
         }
     }
@@ -4176,7 +4166,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     StringReplace( msg, "%{dst}",
                    std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
-    status.SetMessage( msg, true );
+    status.setMessage( msg, true );
 
     assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
@@ -4305,7 +4295,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{dst}",
                    std::to_string( ( unit.GetHeadIndex() / Board::widthInCells ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % Board::widthInCells ) + 1 ) );
 
-    status.SetMessage( msg, true );
+    status.setMessage( msg, true );
 
     assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
@@ -4317,8 +4307,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, const bool
     }
     std::string str( _n( "The %{name} resists the spell!", "The %{name} resist the spell!", target.GetCount() ) );
     StringReplaceWithLowercase( str, "%{name}", target.GetName() );
-    status.SetMessage( str, true );
-    status.SetMessage( "", false );
+    setStatus( str, true );
 }
 
 void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
@@ -4339,8 +4328,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
 
-        status.SetMessage( msg, true );
-        status.SetMessage( "", false );
+        setStatus( msg, true );
     }
 }
 
@@ -4577,19 +4565,19 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
                     msg = _( "The %{spell} does %{damage} damage to one undead creature." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", totalDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
 
                     if ( killed > 0 ) {
                         msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
                         StringReplace( msg, "%{count}", killed );
-                        status.SetMessage( msg, true );
+                        status.setMessage( msg, true );
                     }
                 }
                 else {
                     msg = _( "The %{spell} does %{damage} damage to all undead creatures." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", maximumDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
 
                     if ( killed > 0 ) {
                         msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
@@ -4601,7 +4589,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", totalDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
                 }
             }
             else if ( spell.isAliveOnly() ) {
@@ -4609,19 +4597,19 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
                     msg = _( "The %{spell} does %{damage} damage to one living creature." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", totalDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
 
                     if ( killed > 0 ) {
                         msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
                         StringReplace( msg, "%{count}", killed );
-                        status.SetMessage( msg, true );
+                        status.setMessage( msg, true );
                     }
                 }
                 else {
                     msg = _( "The %{spell} does %{damage} damage to all living creatures." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", maximumDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
 
                     if ( killed > 0 ) {
                         msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
@@ -4633,25 +4621,25 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 
                     StringReplace( msg, "%{spell}", spell.GetName() );
                     StringReplace( msg, "%{damage}", totalDamage );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
                 }
             }
             else {
                 msg = _( "The %{spell} does %{damage} damage." );
                 StringReplace( msg, "%{spell}", spell.GetName() );
                 StringReplace( msg, "%{damage}", totalDamage );
-                status.SetMessage( msg, true );
+                status.setMessage( msg, true );
 
                 if ( killed > 0 ) {
                     msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
                     StringReplace( msg, "%{count}", killed );
-                    status.SetMessage( msg, true );
+                    status.setMessage( msg, true );
                 }
             }
         }
     }
 
-    status.SetMessage( " ", false );
+    status.setMessage( " ", false );
 
     // TODO: remove this temporary assertion
     assert( _movingUnit == nullptr );
@@ -4689,8 +4677,7 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
     StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
     StringReplaceWithLowercase( msg, "%{target}", target.defender->GetName() );
 
-    status.SetMessage( msg, true );
-    status.SetMessage( "", false );
+    setStatus( msg, true );
 }
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
@@ -4707,7 +4694,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
     StringReplaceWithLowercase( msg, "%{attacker}", unit.GetName() );
-    status.SetMessage( msg, true );
+    setStatus( msg, true );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
@@ -4870,13 +4857,13 @@ void Battle::Interface::RedrawActionMorale( Unit & unit, const bool isGoodMorale
     if ( isGoodMorale ) {
         msg = _( "High morale enables the %{monster} to attack again." );
         StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-        status.SetMessage( msg, true );
+        setStatus( msg, true );
         RedrawTroopWithFrameAnimation( unit, ICN::MORALEG, M82::GOODMRLE, NONE );
     }
     else {
         msg = _( "Low morale causes the %{monster} to freeze in panic." );
         StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
-        status.SetMessage( msg, true );
+        setStatus( msg, true );
         RedrawTroopWithFrameAnimation( unit, ICN::MORALEB, M82::BADMRLE, WINCE );
     }
 }
@@ -4917,8 +4904,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     }
 
     if ( !isMirror ) {
-        status.SetMessage( msg, true );
-        status.SetMessage( "", false );
+        setStatus( msg, true );
     }
 
     // TODO: remove this temporary assertion
@@ -5216,7 +5202,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         }
     }
 
-    status.SetMessage( _( "The mirror image is created." ), true );
+    setStatus( _( "The mirror image is created." ), true );
 }
 
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )
@@ -6073,7 +6059,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
             --frameId;
         }
     }
-    status.SetMessage( _( "The mirror image is destroyed!" ), true );
+    setStatus( _( "The mirror image is destroyed!" ), true );
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const int32_t dst, const TargetsInfo & targets, const int icn, const int m82, int repeatCount /* = 0 */ )
@@ -6506,8 +6492,8 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                 }
                 else {
                     const std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
-                        status.SetMessage( statusStr );
-                        status.Redraw( fheroes2::Display::instance() );
+                        setStatus( statusStr, false );
+                        status.redraw( fheroes2::Display::instance() );
                     };
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, statusCallback );

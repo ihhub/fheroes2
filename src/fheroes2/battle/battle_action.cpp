@@ -928,7 +928,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
                     std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
                     StringReplace( str, "%{name}", attacker.GetName() );
 
-                    iface->SetStatus( str, true );
+                    iface->setStatus( str, true );
                 }
             }
         }
@@ -1373,7 +1373,7 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
         std::string msg = ( _autoBattleColors & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
         StringReplace( msg, "%{name}", player->GetName() );
 
-        _interface->SetStatus( msg, true );
+        _interface->setStatus( msg, true );
     }
 }
 
@@ -1698,7 +1698,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
 
         if ( _interface ) {
-            _interface->SetStatus( _( "Spell failed!" ), true );
+            _interface->setStatus( _( "Spell failed!" ), true );
         }
     }
 }
