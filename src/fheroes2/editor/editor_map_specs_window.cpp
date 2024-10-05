@@ -2311,7 +2311,7 @@ namespace Editor
                 const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
                 if ( mapFormat.mainLanguage != fheroes2::SupportedLanguage::English && language != mapFormat.mainLanguage ) {
                     std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
-                                                              "Some texts might not be displayed properly. Do you want to proceed?" );
+                                                              "Some texts might not be displayed properly after this. Do you want to proceed?" );
                     StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
                     StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
 

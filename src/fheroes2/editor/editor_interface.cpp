@@ -731,7 +731,7 @@ namespace Interface
 
         // If the language of the map is different from the game's language show a warning message.
         if ( _mapFormat.mainLanguage != gameLanguage && _mapFormat.mainLanguage != fheroes2::SupportedLanguage::English ) {
-            std::string differentLanguageWarning = _( "The game's language is set as %{gameLanguage} which is different for map's language  %{mapLanguage}. "
+            std::string differentLanguageWarning = _( "The game's language is set as %{gameLanguage} which is different for map's language %{mapLanguage}. "
                                                       "Some texts might not be displayed properly." );
             StringReplace( differentLanguageWarning, "%{gameLanguage}", fheroes2::getLanguageName( gameLanguage ) );
             StringReplace( differentLanguageWarning, "%{mapLanguage}", fheroes2::getLanguageName( _mapFormat.mainLanguage ) );
