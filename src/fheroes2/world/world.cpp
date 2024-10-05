@@ -1445,8 +1445,8 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
         MP2::MapObjectType type{ MP2::OBJ_NONE };
         stream >> uid;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
             int temp{ MP2::OBJ_NONE };
             stream >> temp;
 
