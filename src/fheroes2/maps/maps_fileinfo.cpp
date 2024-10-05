@@ -645,8 +645,6 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
         stream << fi.races[i] << fi.unions[i];
     }
 
-    using LanguageUnderlyingType = std::underlying_type_t<decltype( fi.mainLanguage )>;
-
     return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
                   << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
@@ -687,12 +685,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         fi.mainLanguage = fheroes2::SupportedLanguage::English;
     }
     else {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( fi.mainLanguage )>;
-        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
-        LanguageUnderlyingType language;
-
-        stream >> language;
-        fi.mainLanguage = static_cast<fheroes2::SupportedLanguage>( language );
+        stream >> fi.mainLanguage;
     }
 
     return stream;
