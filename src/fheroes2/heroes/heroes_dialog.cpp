@@ -71,8 +71,8 @@ namespace
     const uint32_t spellPointsMaxValue{ 999 };
 }
 
-int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog,
-                        const bool isEditor, const fheroes2::SupportedLanguage language )
+int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                        const fheroes2::SupportedLanguage language )
 {
     // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
