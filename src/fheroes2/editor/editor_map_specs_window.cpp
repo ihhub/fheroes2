@@ -2100,7 +2100,7 @@ namespace Editor
         fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
@@ -2264,13 +2264,13 @@ namespace Editor
         const fheroes2::Rect buttonLanguageRoi( buttonLanguage.area() );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
-            text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
+            text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
             fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
             text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
         };
 
         auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
-            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+            text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
 
             // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
             if ( text.rows( descriptionTextRoi.width ) > 5 ) {
@@ -2346,7 +2346,6 @@ namespace Editor
                     if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                         mapFormat.mainLanguage = language;
 
-                        const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
                         renderMapName();
                         renderMapDescription();
 
