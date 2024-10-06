@@ -155,7 +155,8 @@ namespace
 
 namespace Editor
 {
-    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                                const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -248,7 +249,7 @@ namespace Editor
 
             if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 Maps::Map_Format::DailyEvent temp;
-                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors, language ) ) {
                     dailyEvents.emplace_back( std::move( temp ) );
 
                     sortEvents( dailyEvents );
@@ -267,7 +268,7 @@ namespace Editor
                 eventList.resetDoubleClickedState();
 
                 Maps::Map_Format::DailyEvent temp = eventList.GetCurrent();
-                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors, language ) ) {
                     eventList.GetCurrent() = std::move( temp );
 
                     sortEvents( dailyEvents );

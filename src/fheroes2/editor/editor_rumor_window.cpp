@@ -139,7 +139,7 @@ namespace
 
 namespace Editor
 {
-    bool openRumorWindow( std::vector<std::string> & rumors )
+    bool openRumorWindow( std::vector<std::string> & rumors, const fheroes2::SupportedLanguage language )
     {
         // Remove all empty rumors.
         assert( std::all_of( rumors.begin(), rumors.end(), []( const auto & rumor ) { return !rumor.empty(); } ) );
@@ -237,7 +237,9 @@ namespace Editor
 
             if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newRumor;
-                if ( Dialog::inputString( _( "Rumor:" ), newRumor, {}, longestRumor, true, true ) ) {
+
+                const fheroes2::LanguageSwitcher switcher( language );
+                if ( Dialog::inputString( _( "Rumor:" ), newRumor, {}, longestRumor, true ) ) {
                     if ( std::any_of( rumors.begin(), rumors.end(), [&newRumor]( const auto & rumor ) { return rumor == newRumor; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );
                         continue;
@@ -258,7 +260,9 @@ namespace Editor
                 rumorList.resetDoubleClickedState();
 
                 std::string temp = rumorList.GetCurrent();
-                if ( Dialog::inputString( _( "Rumor:" ), temp, {}, longestRumor, true, true ) ) {
+
+                const fheroes2::LanguageSwitcher switcher( language );
+                if ( Dialog::inputString( _( "Rumor:" ), temp, {}, longestRumor, true ) ) {
                     const auto count = std::count_if( rumors.begin(), rumors.end(), [&temp]( const auto & rumor ) { return rumor == temp; } );
                     if ( rumorList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );

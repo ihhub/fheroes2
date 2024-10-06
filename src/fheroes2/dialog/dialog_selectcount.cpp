@@ -155,8 +155,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     return result == Dialog::OK;
 }
 
-bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
-                          const bool englishOnlyVirtualKeyboard )
+bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -279,14 +278,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
         }
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
-            // TODO: remove this logic once the Editor is ready to support other languages.
-            if ( englishOnlyVirtualKeyboard ) {
-                const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                fheroes2::openVirtualKeyboard( result );
-            }
-            else {
-                fheroes2::openVirtualKeyboard( result );
-            }
+            fheroes2::openVirtualKeyboard( result );
 
             if ( charLimit > 0 && result.size() > charLimit ) {
                 result.resize( charLimit );

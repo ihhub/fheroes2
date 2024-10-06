@@ -2292,7 +2292,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
                 auto temp = mapFormat.rumors;
-                if ( openRumorWindow( temp ) ) {
+                if ( openRumorWindow( temp, mapFormat.mainLanguage ) ) {
                     mapFormat.rumors = std::move( temp );
                 }
 
@@ -2300,7 +2300,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
                 auto temp = mapFormat.dailyEvents;
-                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors ) ) {
+                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors, mapFormat.mainLanguage ) ) {
                     mapFormat.dailyEvents = std::move( temp );
                 }
 
@@ -2327,7 +2327,9 @@ namespace Editor
                 // TODO: Edit texts directly in this dialog.
 
                 std::string editableMapName = mapFormat.name;
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false, true ) ) {
+
+                const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
+                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false ) ) {
                     mapFormat.name = std::move( editableMapName );
                     text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
                     fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
@@ -2341,7 +2343,8 @@ namespace Editor
                 // TODO: Limit description to 5 text lines.
 
                 std::string signText = mapFormat.description;
-                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true, true ) ) {
+                const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
+                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true ) ) {
                     mapFormat.description = std::move( signText );
 
                     text.set( mapFormat.description, fheroes2::FontType::normalWhite() );

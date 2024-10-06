@@ -1088,7 +1088,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         if ( le.MouseClickLeft( portraitArea ) && heroForHeroScreen != nullptr ) {
             LocalEvent::Get().reset();
 
-            heroForHeroScreen->OpenDialog( true, true, true, true, false, false );
+            heroForHeroScreen->OpenDialog( true, true, true, true, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
