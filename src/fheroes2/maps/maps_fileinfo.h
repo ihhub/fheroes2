@@ -32,7 +32,6 @@
 #include "game_language.h"
 #include "math_base.h"
 #include "players.h"
-#include "ui_language.h"
 
 class IStreamBase;
 class OStreamBase;
