@@ -146,11 +146,6 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
-        void setLanguage( const SupportedLanguage language )
-        {
-            _language = language;
-        }
-
         const std::optional<SupportedLanguage> & getLanguage() const
         {
             return _language;
