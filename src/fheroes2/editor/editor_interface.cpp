@@ -722,8 +722,6 @@ namespace Interface
 
         _historyManager.reset();
 
-        const auto gameLanguage = fheroes2::getCurrentLanguage();
-
         if ( isNewMap ) {
             _mapFormat = {};
             Maps::saveMapInEditor( _mapFormat );
