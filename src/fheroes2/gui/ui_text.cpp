@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "agg_image.h"
+#include "ui_language.h"
 
 namespace
 {

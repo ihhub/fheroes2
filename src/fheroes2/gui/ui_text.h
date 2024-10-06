@@ -30,10 +30,11 @@
 
 #include "image.h"
 #include "math_base.h"
-#include "ui_language.h"
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     enum class FontSize : uint8_t
     {
         SMALL,
