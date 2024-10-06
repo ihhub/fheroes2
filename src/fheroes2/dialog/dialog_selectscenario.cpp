@@ -337,12 +337,12 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
         const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
         const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
         const int32_t yCoordinate = baseYOffset + MAP_LIST_ROW_SPACING_Y - 1;
-         mapName.draw( xCoordinate, yCoordinate, display );
+        mapName.draw( xCoordinate, yCoordinate, display );
     }
     else {
         const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
         const int32_t yCoordinate = baseYOffset + MAP_LIST_ROW_SPACING_Y - 1;
-         mapName.draw( xCoordinate, yCoordinate, display );
+        mapName.draw( xCoordinate, yCoordinate, display );
     }
 }
 
