@@ -110,17 +110,9 @@ namespace
 
     void RedrawMapTitle( const fheroes2::Rect & roi )
     {
-        fheroes2::Text text;
         const auto & info = Settings::Get().getCurrentMapInfo();
-        text.set( info.name, fheroes2::FontType::normalWhite() );
-
-        if ( info.version == GameVersion::RESURRECTION ) {
-            const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
-            text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
-        }
-        else {
-            text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
-        }
+        const fheroes2::Text text{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
+        text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
