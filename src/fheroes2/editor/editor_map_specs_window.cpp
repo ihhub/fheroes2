@@ -2175,7 +2175,7 @@ namespace Editor
         background.applyTextBackgroundShading( { descriptionTextRoi.x - 6, descriptionTextRoi.y - 6, descriptionTextRoi.width + 12, descriptionTextRoi.height + 12 } );
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
 
-        text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+        text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
         // Victory conditions.
@@ -2281,7 +2281,7 @@ namespace Editor
                 // As a temporary solution we cut the end of the text to fit 5 rows.
                 while ( text.rows( descriptionTextRoi.width ) > 5 ) {
                     mapFormat.description.pop_back();
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+                    text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
                 }
             }
 

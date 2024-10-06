@@ -329,8 +329,8 @@ namespace Editor
         const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Castle name text.
-        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
-            fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
+        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown, language]() {
+            fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite(), language );
             if ( castleMetadata.customName.empty() ) {
                 text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
             }
