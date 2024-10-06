@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstring>
 #include <string>
 
 namespace fheroes2
