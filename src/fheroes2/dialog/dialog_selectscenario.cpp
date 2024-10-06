@@ -142,6 +142,11 @@ namespace
             break;
         }
 
+        if ( info->version == GameVersion::RESURRECTION ) {
+            body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
+            body.add( { fheroes2::getLanguageName( info->mainLanguage ), fheroes2::FontType::normalWhite() } );
+        }
+
         body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
         body.add( { info->filename, fheroes2::FontType::smallWhite() } );
 
