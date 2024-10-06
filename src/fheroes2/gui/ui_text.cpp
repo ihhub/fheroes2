@@ -326,11 +326,12 @@ namespace
 
     std::unique_ptr<fheroes2::LanguageSwitcher> getLanguageSwitcher( const fheroes2::TextBase & text )
     {
-        if ( !text.getLanguage().has_value() ) {
+        const auto & language = text.getLanguage();
+        if ( !language ) {
             return {};
         }
 
-        return std::make_unique<fheroes2::LanguageSwitcher>( text.getLanguage().value() );
+        return std::make_unique<fheroes2::LanguageSwitcher>( language.value() );
     }
 }
 
