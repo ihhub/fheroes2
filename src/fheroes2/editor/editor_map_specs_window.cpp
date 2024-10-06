@@ -2263,6 +2263,32 @@ namespace Editor
                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
         const fheroes2::Rect buttonLanguageRoi( buttonLanguage.area() );
 
+        auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
+            text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
+            fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+            text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
+        };
+
+        auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
+            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+
+            // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
+            if ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
+                    Dialog::OK );
+
+                // As a temporary solution we cut the end of the text to fit 5 rows.
+                while ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                    mapFormat.description.pop_back();
+                    text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+                }
+            }
+
+            descriptionBackground.restore();
+            text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+        };
+
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
@@ -2319,9 +2345,16 @@ namespace Editor
 
                     if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                         mapFormat.mainLanguage = language;
+
+                        const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
+                        renderMapName();
+                        renderMapDescription();
+
+                        display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
                     }
                 }
                 else {
+                    // No need to render map name and description as it was written in English which is supported by every code page.
                     mapFormat.mainLanguage = language;
                 }
             }
@@ -2333,10 +2366,8 @@ namespace Editor
                 const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
                 if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false ) ) {
                     mapFormat.name = std::move( editableMapName );
-                    text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
-                    fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
-                    text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
+                    renderMapName();
                     display.render( scenarioBoxRoi );
                 }
             }
@@ -2349,23 +2380,7 @@ namespace Editor
                 if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true ) ) {
                     mapFormat.description = std::move( signText );
 
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
-
-                    // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
-                    if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                        fheroes2::showStandardTextMessage(
-                            _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                            Dialog::OK );
-
-                        // As a temporary solution we cut the end of the text to fit 5 rows.
-                        while ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                            mapFormat.description.pop_back();
-                            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
-                        }
-                    }
-
-                    descriptionBackground.restore();
-                    text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+                    renderMapDescription();
                     display.render( descriptionTextRoi );
                 }
             }

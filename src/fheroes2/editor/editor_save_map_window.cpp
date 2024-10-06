@@ -104,31 +104,22 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-
-            if ( info.version == GameVersion::RESURRECTION ) {
-                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
-                body.add( { info.name, fheroes2::FontType::normalWhite() } );
-            }
-            else {
-                body.add( { info.name, fheroes2::FontType::normalWhite() } );
-            }
+            body.add( { info.name, fheroes2::FontType::normalWhite() } );
 
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
-
-            if ( info.version == GameVersion::RESURRECTION ) {
-                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
-                body.add( { info.description, fheroes2::FontType::normalWhite() } );
-            }
-            else {
-                body.add( { info.description, fheroes2::FontType::normalWhite() } );
-            }
-
+            body.add( { info.description, fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
             body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
-            fheroes2::showMessage( header, body, Dialog::ZERO );
+            if ( info.version == GameVersion::RESURRECTION ) {
+                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
+                fheroes2::showMessage( header, body, Dialog::ZERO );
+            }
+            else {
+                fheroes2::showMessage( header, body, Dialog::ZERO );
+            }
         }
 
         int getCurrentId() const

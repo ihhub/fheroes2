@@ -94,16 +94,15 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    fheroes2::Text text;
+    fheroes2::Text text{ mapInfo.name, fheroes2::FontType::normalWhite() };
 
     if ( mapInfo.version == GameVersion::RESURRECTION ) {
         const fheroes2::LanguageSwitcher switcher( mapInfo.mainLanguage );
-        text.set( mapInfo.name, fheroes2::FontType::normalWhite() );
+        text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
     }
     else {
-        text.set( mapInfo.name, fheroes2::FontType::normalWhite() );
+        text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
     }
-    text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
@@ -129,15 +128,15 @@ void Dialog::GameInfo()
     text.set( Maps::SizeString( mapInfo.width ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
+    text.set( mapInfo.description, fheroes2::FontType::smallWhite() );
+
     if ( mapInfo.version == GameVersion::RESURRECTION ) {
         const fheroes2::LanguageSwitcher switcher( mapInfo.mainLanguage );
-        text.set( mapInfo.description, fheroes2::FontType::smallWhite() );
+        text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
     }
     else {
-        text.set( mapInfo.description, fheroes2::FontType::smallWhite() );
+        text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
     }
-
-    text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 152, DIALOG_CONTENT_WIDTH, display );

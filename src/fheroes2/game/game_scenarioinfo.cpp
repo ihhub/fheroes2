@@ -112,16 +112,15 @@ namespace
     {
         fheroes2::Text text;
         const auto & info = Settings::Get().getCurrentMapInfo();
+        text.set( info.name, fheroes2::FontType::normalWhite() );
 
         if ( info.version == GameVersion::RESURRECTION ) {
             const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
-            text.set( info.name, fheroes2::FontType::normalWhite() );
+            text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
         }
         else {
-            text.set( info.name, fheroes2::FontType::normalWhite() );
+            text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
         }
-
-        text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
