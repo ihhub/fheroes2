@@ -2413,6 +2413,9 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonEventsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Events" ), _( "Click to edit daily events." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonLanguageRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
             }
