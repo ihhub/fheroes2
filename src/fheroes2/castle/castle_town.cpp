@@ -126,8 +126,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
-    const Settings & conf = Settings::Get();
-    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
     pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
