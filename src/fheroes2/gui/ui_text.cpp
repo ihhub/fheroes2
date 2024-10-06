@@ -326,7 +326,7 @@ namespace
 
     std::unique_ptr<fheroes2::LanguageSwitcher> getLanguageSwitcher( const fheroes2::TextBase & text )
     {
-        if ( !text.getLanguage() ) {
+        if ( !text.getLanguage().has_value() ) {
             return {};
         }
 
