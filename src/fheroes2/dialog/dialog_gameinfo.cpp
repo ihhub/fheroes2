@@ -94,7 +94,7 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    fheroes2::Text text{ mapInfo.name, fheroes2::FontType::normalWhite() };
+    fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite() );
 
     if ( mapInfo.version == GameVersion::RESURRECTION ) {
         const fheroes2::LanguageSwitcher switcher( mapInfo.mainLanguage );

@@ -143,14 +143,7 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-
-            if ( info.version == GameVersion::RESURRECTION ) {
-                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
-                body.add( { info.name, fheroes2::FontType::normalWhite() } );
-            }
-            else {
-                body.add( { info.name, fheroes2::FontType::normalWhite() } );
-            }
+            body.add( { info.name, fheroes2::FontType::normalWhite() } );
 
             if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
                 body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );
@@ -164,7 +157,13 @@ namespace
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
             body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
-            fheroes2::showMessage( header, body, Dialog::ZERO );
+            if ( info.version == GameVersion::RESURRECTION ) {
+                const fheroes2::LanguageSwitcher switcher( info.mainLanguage );
+                fheroes2::showMessage( header, body, Dialog::ZERO );
+            }
+            else {
+                fheroes2::showMessage( header, body, Dialog::ZERO );
+            }
         }
 
         int getCurrentId() const
