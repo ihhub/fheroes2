@@ -60,7 +60,7 @@ void Interface::StatusWindow::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::StatusWindow::SetRedraw() const
+void Interface::StatusWindow::setRedraw() const
 {
     _interface.setRedraw( REDRAW_STATUS );
 }
@@ -382,8 +382,18 @@ void Interface::StatusWindow::_drawAITurns() const
 
     posX += glass.width() - 3;
 
-    // TODO: Make smooth sand grains animation. Image indices (11-20) are for the start and indices (21-30) in a loop.
-    const fheroes2::Sprite & sandGains = fheroes2::AGG::GetICN( ICN::HOURGLAS, 21 + ( _aiTurnProgress % 10 ) );
+    uint32_t animationIndex = Game::getAdventureMapAnimationIndex() - _grainsAnimationIndexOffset;
+
+    if ( animationIndex < 10 ) {
+        // Start of the sand grains animation.
+        animationIndex = 11 + ( animationIndex % 10 );
+    }
+    else {
+        // Sand grains animation loop.
+        animationIndex = 21 + ( animationIndex % 10 );
+    }
+
+    const fheroes2::Sprite & sandGains = fheroes2::AGG::GetICN( ICN::HOURGLAS, animationIndex );
     fheroes2::Blit( sandGains, display, posX - sandGains.width() - sandGains.x(), posY + sandGains.y() );
 
     const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( _aiTurnProgress % 10 ) );
@@ -427,20 +437,19 @@ void Interface::StatusWindow::QueueEventProcessing()
 {
     // Move border window
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
-        SetRedraw();
+        setRedraw();
         return;
     }
 
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Rect & drawnArea = GetArea();
+    const fheroes2::Rect & pos = GetArea();
 
-    if ( le.MouseClickLeft( drawnArea ) ) {
+    if ( le.MouseClickLeft( pos ) ) {
         NextState();
-        SetRedraw();
+        setRedraw();
     }
-    if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-        const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
             fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ),
@@ -473,22 +482,37 @@ void Interface::StatusWindow::TimerEventProcessing()
         break;
     }
 
-    SetRedraw();
+    setRedraw();
 }
 
-void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
+void Interface::StatusWindow::drawAITurnProgress( const uint32_t progressValue )
 {
+    const bool updateProgress = ( progressValue != _aiTurnProgress );
+    const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );
+
+    if ( !updateProgress && !isMapAnimation ) {
+        return;
+    }
+
     // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
     LocalEvent::Get().HandleEvents( false );
 
-    _aiTurnProgress = progressValue;
+    if ( updateProgress ) {
+        if ( progressValue == 0 ) {
+            // If turn progress is just started start the grain animation from the beginning.
+            _grainsAnimationIndexOffset = Game::getAdventureMapAnimationIndex();
+        }
 
-    _interface.setRedraw( REDRAW_STATUS );
+        _aiTurnProgress = progressValue;
+    }
 
-    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+    if ( isMapAnimation ) {
         Game::updateAdventureMapAnimationIndex();
 
-        _interface.redraw( REDRAW_GAMEAREA );
-        fheroes2::Display::instance().render();
+        _interface.setRedraw( REDRAW_GAMEAREA );
     }
+
+    _interface.redraw( REDRAW_STATUS );
+
+    fheroes2::Display::instance().render();
 }
