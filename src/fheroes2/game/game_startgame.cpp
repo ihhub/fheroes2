@@ -1168,35 +1168,41 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
-            // hero is moving, set the appropriate cursor
+            // Hero is moving, set the appropriate cursor
             cursor.SetThemes( Cursor::WAIT );
 
-            // if the hero is currently moving, pressing any mouse button should stop him
+            // If the hero is currently moving, pressing any mouse button should stop him
             if ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) {
                 stopHero = true;
             }
         }
-        // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() )
-                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
-            iconsPanel.QueueEventProcessing();
-        }
-        // cursor is over the status window
+        //
+        // When processing events in the "no interface" mode, care should be taken about the order in which events are handled by different
+        // UI elements, since they may overlap. The order of their rendering on the screen is as follows: the status window is the topmost,
+        // followed by the buttons area, followed by the icons panel, followed by the radar, followed by the control panel, and under all of
+        // them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
+        //
+        // Cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _statusWindow.QueueEventProcessing();
         }
-        // cursor is over the buttons area
+        // Cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( buttonsArea.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
-        // cursor is over the radar
+        // Cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() )
+                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            iconsPanel.QueueEventProcessing();
+        }
+        // Cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
@@ -1204,17 +1210,17 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 _radar.QueueEventProcessing();
             }
         }
-        // cursor is over the control panel
+        // Cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor is over the game area
+        // Cursor is over the game area
         else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
-        // cursor is somewhere else
+        // Cursor is somewhere else
         else if ( !_gameArea.NeedScroll() ) {
             cursor.SetThemes( Cursor::POINTER );
 
