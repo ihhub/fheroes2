@@ -2787,7 +2787,9 @@ namespace
                 elementUI.emplace_back( artifactUI.get() );
             }
 
-            fheroes2::showStandardTextMessage( {}, event_maps->message, Dialog::OK, elementUI );
+            const fheroes2::Text header( {}, fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( event_maps->message, fheroes2::FontType::normalWhite(), Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
+            fheroes2::showMessage( header, body, Dialog::OK, elementUI );
 
             // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
             // and the fullness of the bag. Is also displays appropriate text when an artifact cannot be picked up.

@@ -234,7 +234,7 @@ namespace Editor
             mapName = fileName;
         }
 
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite(), language );
         const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );

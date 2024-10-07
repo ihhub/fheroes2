@@ -356,7 +356,7 @@ public:
     void NewWeek();
     void NewMonth();
 
-    std::string getCurrentRumor() const;
+    std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;

@@ -62,7 +62,12 @@ namespace
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListSingleClick;
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListPressRight;
 
-        using ListBox::ListBox;
+        EventListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
+            : ListBox( pt )
+            , _language( language )
+        {
+            // Do nothing.
+        }
 
         void RedrawItem( const Maps::Map_Format::DailyEvent & event, int32_t posX, int32_t posY, bool current ) override
         {
@@ -71,12 +76,20 @@ namespace
 
             if ( !event.message.empty() ) {
                 message += " \"";
-                message += event.message;
-                message += '\"';
             }
 
-            fheroes2::Text text{ message, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
-            text.fitToOneRow( eventsArea.width - 10 );
+            fheroes2::Text dateText{ message, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
+            const int32_t dateLength = dateText.width();
+            assert( dateLength < eventsArea.width - 10 );
+
+            fheroes2::MultiFontText text;
+            text.add( std::move( dateText ) );
+
+            if ( !event.message.empty() ) {
+                fheroes2::Text messageText{ event.message + '\"', ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ), _language };
+                messageText.fitToOneRow( eventsArea.width - 10 - dateLength );
+                text.add( std::move( messageText ) );
+            }
 
             text.draw( posX + 5, posY + 5, fheroes2::Display::instance() );
         }
@@ -144,6 +157,8 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
 
         bool _isDoubleClicked{ false };
+
+        const fheroes2::SupportedLanguage _language;
     };
 
     void sortEvents( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents )
@@ -177,7 +192,7 @@ namespace Editor
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        EventListBox eventList( eventsRoi.getPosition() );
+        EventListBox eventList( eventsRoi.getPosition(), language );
         eventList.initListBackgroundRestorer( eventsRoi );
 
         eventList.SetAreaItems( { eventsRoi.x, eventsRoi.y, eventsRoi.width, eventsRoi.height - listAreaHeightDeduction } );

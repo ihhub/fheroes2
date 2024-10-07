@@ -37,12 +37,17 @@
 
 void Castle::OpenTavern() const
 {
+    auto rumorInfo = world.getCurrentRumor();
+
     std::string body( _( "A generous tip for the barkeep yields the following rumor:" ) );
     body += "\n\n";
-    body += world.getCurrentRumor();
+
+    auto text = std::make_shared<fheroes2::MultiFontText>();
+    text->add( fheroes2::Text{ std::move( body ), fheroes2::FontType::normalWhite() } );
+    text->add( fheroes2::Text{ std::move( rumorInfo.first ), fheroes2::FontType::normalWhite(), rumorInfo.second } );
 
     const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
-    const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( std::move( body ), fheroes2::FontType::normalWhite() ) );
+    const fheroes2::TextDialogElement textBodyUI( text );
 
     fheroes2::showStandardTextMessage( GetStringBuilding( BUILD_TAVERN ), {}, Dialog::OK, { &imageUI, &textBodyUI } );
 }

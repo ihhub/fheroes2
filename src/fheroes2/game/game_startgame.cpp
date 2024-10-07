@@ -956,12 +956,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         myKingdom.ActionNewDayResourceUpdate( []( const EventDate & event, const Funds & funds ) {
+            const auto & language = Settings::Get().getCurrentMapInfo().getSupportedLanguage();
+
             if ( funds.GetValidItemsCount() ) {
-                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow(), language ),
+                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite(), language ), Dialog::OK, funds );
             }
             else if ( !event.message.empty() ) {
-                fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
+                const fheroes2::Text header( event.title, fheroes2::FontType::normalYellow(), language );
+                const fheroes2::Text body( event.message, fheroes2::FontType::normalWhite(), language );
+                fheroes2::showMessage( header, body, Dialog::OK );
             }
         } );
 

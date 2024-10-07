@@ -63,11 +63,16 @@ namespace
         using Interface::ListBox<std::string>::ActionListSingleClick;
         using Interface::ListBox<std::string>::ActionListPressRight;
 
-        using ListBox::ListBox;
+        RumorListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
+            : ListBox( pt )
+            , _language( language )
+        {
+            // Do nothing.
+        }
 
         void RedrawItem( const std::string & rumor, int32_t posX, int32_t posY, bool current ) override
         {
-            fheroes2::Text text{ rumor, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
+            fheroes2::Text text{ rumor, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ), _language };
             text.fitToOneRow( rumorArea.width - 10 );
             text.draw( posX + 5, posY + 5, fheroes2::Display::instance() );
         }
@@ -135,6 +140,8 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
 
         bool _isDoubleClicked{ false };
+
+        const fheroes2::SupportedLanguage _language;
     };
 }
 
@@ -166,7 +173,7 @@ namespace Editor
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        RumorListBox rumorList( rumorsRoi.getPosition() );
+        RumorListBox rumorList( rumorsRoi.getPosition(), language );
         rumorList.initListBackgroundRestorer( rumorsRoi );
 
         rumorList.SetAreaItems( { rumorsRoi.x, rumorsRoi.y, rumorsRoi.width, rumorsRoi.height - listAreaHeightDeduction } );
