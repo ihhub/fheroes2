@@ -1227,7 +1227,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             _gameArea.ResetCursorPosition();
         }
 
-        // gamearea
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !_radar.isDragRadar() ) {
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
@@ -1245,7 +1244,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             break;
         }
 
-        // animation of the hero's movement
+        // Animation of the hero's movement
         if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
@@ -1369,7 +1368,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
         }
 
-        // fast scroll
+        // Scrolling the game area
         if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
@@ -1417,7 +1416,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         if ( myKingdom.isPlay() ) {
-            // these warnings should be shown at the end of the turn
+            // These warnings should be shown at the end of the turn
             if ( myCastles.empty() ) {
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
