@@ -67,7 +67,7 @@ namespace
         for ( const std::string & dir : directories ) {
             ListFiles musicFilePaths;
 
-            musicFilePaths.ReadDir( dir, fileName, false );
+            musicFilePaths.ReadDir( dir, fileName );
             if ( musicFilePaths.empty() ) {
                 continue;
             }
@@ -197,7 +197,7 @@ namespace
         const std::vector<uint8_t> & body = getDataFromAggFile( M82::GetString( m82 ), false );
 
         if ( !body.empty() ) {
-            StreamBuf wavHeader( 44 );
+            RWStreamBuf wavHeader( 44 );
             wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
             wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // Total size minus the size of this and previous fields
             wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")

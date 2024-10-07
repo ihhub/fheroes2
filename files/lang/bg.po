@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3461,6 +3461,20 @@ msgstr "Избери максимален брой чудовища, които 
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Избери само 1 чудовище, което да бъде наето."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Избери резолюция на играта"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
@@ -11671,15 +11685,15 @@ msgstr "Магически увеличава защитните умения н
 msgid "Stoneskin"
 msgstr "Каменна кожа"
 
+msgid "Steelskin"
+msgstr "Стоманена кожа"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Увеличава защитните умения на набелязаните същества. Това е подобрена версия "
 "на Каменна кожа."
-
-msgid "Steelskin"
-msgstr "Стоманена кожа"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Кара избраните същества да нанасят минимални щети."

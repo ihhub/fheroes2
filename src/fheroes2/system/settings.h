@@ -36,7 +36,10 @@
 #include "players.h"
 #include "screen.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
+
+inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
 {
@@ -345,8 +348,8 @@ public:
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Settings & );
-    friend StreamBase & operator>>( StreamBase &, Settings & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+    friend IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
 
     Settings();
 
@@ -389,7 +392,7 @@ private:
     Players players;
 };
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf );
-StreamBase & operator>>( StreamBase & msg, Settings & conf );
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
 
 #endif

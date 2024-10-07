@@ -109,29 +109,22 @@ namespace
     {
         const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !System::IsDirectory( configDir ) ) {
-            System::MakeDirectory( configDir );
-        }
+        System::MakeDirectory( configDir );
     }
 
     void InitDataDir()
     {
         const std::string dataDir = System::GetDataDirectory( "fheroes2" );
 
-        if ( dataDir.empty() )
+        if ( dataDir.empty() ) {
             return;
+        }
 
         const std::string dataFiles = System::concatPath( dataDir, "files" );
         const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
-        if ( !System::IsDirectory( dataDir ) )
-            System::MakeDirectory( dataDir );
-
-        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
-            System::MakeDirectory( dataFiles );
-
-        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
-            System::MakeDirectory( dataFilesSave );
+        // This call will also create dataDir and dataFiles
+        System::MakeDirectory( dataFilesSave );
     }
 
     void displayMissingResourceWindow()

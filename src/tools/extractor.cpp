@@ -22,23 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include <iterator>
 #include <map>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include "agg_file.h"
 #include "serialize.h"
 #include "system.h"
 #include "tools.h"
@@ -49,34 +47,17 @@ namespace
 
     struct AGGItemInfo
     {
-        // Hash of this item's name, see calculateHash() for details
+        // Hash of this item's name, see fheroes2::calculateAggFilenameHash() for details
         uint32_t hash;
         uint32_t offset;
         uint32_t size;
     };
-
-    uint32_t calculateHash( const std::string_view str )
-    {
-        uint32_t hash = 0;
-        uint32_t sum = 0;
-
-        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const unsigned char c = static_cast<unsigned char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
-
-            hash = ( hash << 5 ) + ( hash >> 25 );
-
-            sum += c;
-            hash += sum + c;
-        }
-
-        return hash;
-    }
 }
 
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " extracts the contents of the specified AGG file(s)." << std::endl
                   << "Syntax: " << baseName << " dst_dir input_file.agg ..." << std::endl;
@@ -121,9 +102,9 @@ int main( int argc, char ** argv )
         const size_t inputStreamSize = inputStream.size();
         const uint16_t itemsCount = inputStream.getLE16();
 
-        StreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
+        RWStreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
-        StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
+        RWStreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
         std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
@@ -145,7 +126,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const uint32_t hash = calculateHash( name );
+            const uint32_t hash = fheroes2::calculateAggFilenameHash( name );
             if ( hash != info.hash ) {
                 ++itemsFailed;
 

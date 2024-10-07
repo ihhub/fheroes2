@@ -24,14 +24,14 @@
 #include <cassert>
 
 #include "agg_image.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 
 namespace
 {
-    const int32_t borderSize{ BORDERWIDTH };
+    const int32_t borderSize{ fheroes2::borderWidthPx };
 
     // Offset from border edges (size of evil interface corners is 43 pixels) - these edges (corners) will not be copied to fill the border.
     const int32_t borderEdgeOffset{ 43 };
@@ -71,7 +71,7 @@ namespace fheroes2
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        // Notice: ICN::SURDRBKE and ICN::SURDRBKG has 16 (equals to BORDERWIDTH) pixels shadow from the left and the bottom sides.
+        // Notice: ICN::SURDRBKE and ICN::SURDRBKG has 16 (equals to borderWidthPx) pixels shadow from the left and the bottom sides.
         const Sprite & horizontalSprite = AGG::GetICN( ( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
         const Sprite & verticalSprite = AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
 
@@ -192,7 +192,7 @@ namespace fheroes2
         CreateDitheringTransition( verticalSprite, rightCornerSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightCornerOffsetX, optputBottomCornerEdgeY,
                                    cornerSize, transitionSize, false, false );
 
-        // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to BORDERWIDTH) pixels of shadow at the left and bottom sides.
+        // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to borderWidthPx) pixels of shadow at the left and bottom sides.
         const int32_t horizontalSpriteCopyWidth = std::min( _windowArea.width, horizontalSpriteWidth ) - doubleBorderEdgeOffset;
         const int32_t horizontalSpriteCopies
             = ( _windowArea.width - doubleBorderEdgeOffset - 1 - transitionSize ) / ( horizontalSpriteWidth - doubleBorderEdgeOffset - transitionSize );

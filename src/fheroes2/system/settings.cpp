@@ -35,7 +35,6 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_io.h"
-#include "gamedefs.h"
 #include "logging.h"
 #include "render_processor.h"
 #include "save_format_version.h"
@@ -108,7 +107,7 @@ Settings::Settings()
     , heroes_speed( defaultSpeedDelay )
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
-    , battle_speed( DEFAULT_BATTLE_SPEED )
+    , battle_speed( defaultBattleSpeed )
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
@@ -624,10 +623,10 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
-                res.FindFileInDir( path, fileNameFilter, false );
+                res.FindFileInDir( path, fileNameFilter );
             }
             else {
-                res.ReadDir( path, fileNameFilter, false );
+                res.ReadDir( path, fileNameFilter );
             }
         }
     }
@@ -1086,20 +1085,20 @@ void Settings::resetFirstGameRun()
     _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
+    return stream << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
 }
 
-StreamBase & operator>>( StreamBase & msg, Settings & conf )
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
+    stream >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
         int temp;
-        msg >> temp;
+        stream >> temp;
     }
 
-    return msg >> conf.players;
+    return stream >> conf.players;
 }

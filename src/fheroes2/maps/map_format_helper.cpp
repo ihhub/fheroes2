@@ -34,7 +34,6 @@
 #include "army_troop.h"
 #include "castle.h"
 #include "color.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -43,6 +42,7 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "race.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -224,12 +224,12 @@ namespace Maps
         std::set<std::pair<uint32_t, uint8_t>> roadParts;
         std::set<std::pair<uint32_t, uint8_t>> streamParts;
 
-        const MP2::ObjectIcnType mainObjectIcnType = tile.getObjectIcnType();
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart()._objectIcnType;
         if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-            roadParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
         }
         else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            streamParts.emplace( tile.GetObjectUID(), tile.GetObjectSpriteIndex() );
+            streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
         }
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
@@ -409,7 +409,7 @@ namespace Maps
         static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
         static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
 
-        constexpr size_t mainColors{ KINGDOMMAX };
+        constexpr size_t mainColors{ maxNumOfPlayers };
 
         if ( map.playerRace.size() != mainColors ) {
             // Possibly corrupted map.

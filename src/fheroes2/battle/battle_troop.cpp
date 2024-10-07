@@ -539,7 +539,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         if ( !isHandFighting() && !isHandFighting( *this, enemy ) ) {
             // Hero's Archery skill may increase damage
             if ( GetCommander() ) {
-                dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
+                dmg += ( dmg * GetCommander()->GetSecondarySkillValue( Skill::Secondary::ARCHERY ) / 100 );
             }
 
             const Arena * arena = GetArena();
@@ -899,7 +899,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() )
 
-    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
 
     if ( spell.isDamage() ) {
         SpellApplyDamage( spell, spoint, applyingHero, target );
@@ -1585,7 +1585,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
             StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
-            Arena::GetInterface()->SetStatus( str, true );
+            Arena::GetInterface()->setStatus( str, true );
         }
         break;
     }

@@ -117,7 +117,7 @@ namespace Battle
     class OpponentSprite
     {
     public:
-        OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect );
+        OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
 
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
@@ -141,7 +141,7 @@ namespace Battle
             return _currentAnim.isLastFrame();
         }
 
-        const HeroBase * GetHero() const
+        HeroBase * GetHero() const
         {
             return _heroBase;
         }
@@ -162,7 +162,7 @@ namespace Battle
         };
 
     private:
-        const HeroBase * _heroBase;
+        HeroBase * _heroBase;
         AnimationSequence _currentAnim;
         int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
@@ -182,17 +182,21 @@ namespace Battle
 
         Status & operator=( const Status & ) = delete;
 
-        void SetPosition( const int32_t cx, const int32_t cy );
+        void setPosition( const int32_t cx, const int32_t cy )
+        {
+            x = cx;
+            y = cy;
+        }
 
-        void SetLogs( StatusListBox * logs )
+        void setLogs( StatusListBox * logs )
         {
             _battleStatusLog = logs;
         }
 
-        void SetMessage( const std::string & messageString, const bool top = false );
-        void Redraw( fheroes2::Image & output ) const;
+        void setMessage( std::string messageString, const bool top );
+        void redraw( fheroes2::Image & output ) const;
 
-        const std::string & GetMessage() const
+        const std::string & getMessage() const
         {
             return _lastMessage;
         }
@@ -248,26 +252,37 @@ namespace Battle
     class PopupDamageInfo : public Dialog::FrameBorder
     {
     public:
-        PopupDamageInfo();
+        PopupDamageInfo()
+            : Dialog::FrameBorder( 5 )
+        {
+            // Do nothing.
+        }
+
         PopupDamageInfo( const PopupDamageInfo & ) = delete;
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
-        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
-        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
-        void Reset();
-        void Redraw() const;
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect )
+        {
+            _battleUIRect = battleUIRect;
+        }
+
+        void setAttackInfo( const Unit * attacker, const Unit * defender );
+        void setSpellAttackInfo( const HeroBase * hero, const Unit * defender, const Spell & spell );
+        void reset();
+        void redraw() const;
 
     private:
-        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+        bool _setDamageInfoBase( const Unit * defender );
+        void _makeDamageImage();
 
+        fheroes2::Sprite _damageImage;
         fheroes2::Rect _battleUIRect;
-        const Cell * _cell;
-        const Unit * _defender;
-        uint32_t _minDamage;
-        uint32_t _maxDamage;
-        bool _redraw;
+        const Battle::Unit * _defender{ nullptr };
+        uint32_t _minDamage{ 0 };
+        uint32_t _maxDamage{ 0 };
+        bool _redraw{ false };
+        bool _needDelay{ true };
     };
 
     class Interface
@@ -301,7 +316,7 @@ namespace Battle
 
         fheroes2::Point getRelativeMouseCursorPos() const;
 
-        void SetStatus( const std::string & message, const bool top = false );
+        void setStatus( const std::string & message, const bool top );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
         void FadeArena( const bool clearMessageLog );
 

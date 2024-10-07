@@ -59,13 +59,13 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
 #include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
-#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
@@ -76,6 +76,7 @@ namespace
     int GetCovr( int ground, std::mt19937 & gen )
     {
         std::vector<int> covrs;
+        covrs.reserve( 6 );
 
         switch ( ground ) {
         case Maps::Ground::SNOW:
@@ -684,8 +685,8 @@ void Battle::Arena::CatapultAction()
 
     std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
     for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
-        const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+             !inserted ) {
             assert( 0 );
         }
     }
@@ -743,12 +744,12 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1() const
+HeroBase * Battle::Arena::GetCommander1() const
 {
     return _army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2() const
+HeroBase * Battle::Arena::GetCommander2() const
 {
     return _army2->GetCommander();
 }
@@ -1313,7 +1314,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     }
 
     // penalty does not apply if the target unit is exposed due to the broken castle wall
-    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), Cell::widthPx / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )

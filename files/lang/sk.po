@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3442,6 +3442,20 @@ msgstr "Zvoľ najväčší možný počet bojovníkov k nájmu."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Zvoľ iba jedného bojovníka k nájmu."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Zvoľ rozlíšenie hry"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Zvoľ rozlíšenie hry:"
@@ -11570,15 +11584,15 @@ msgstr "Magicky zvýši obrannú schopnosť vybraných tvorov."
 msgid "Stoneskin"
 msgstr "Kamenná koža"
 
+msgid "Steelskin"
+msgstr "Oceľová koža"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Zvyšuje obrannú schopnosť cielených tvorov. Ide o vylepšenú verziu Kamennej "
 "kože."
-
-msgid "Steelskin"
-msgstr "Oceľová koža"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Zapríčiní, že vybrané bytosti spôsobia minimálne poškodenie."

@@ -33,7 +33,8 @@
 #include "monster.h"
 #include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Castle;
 class HeroBase;
@@ -256,8 +257,8 @@ public:
     void ArrangeForWhirlpool();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Army & );
-    friend StreamBase & operator>>( StreamBase &, Army & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Army & army );
+    friend IStreamBase & operator>>( IStreamBase & stream, Army & army );
 
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
@@ -269,8 +270,5 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-StreamBase & operator<<( StreamBase &, const Army & );
-StreamBase & operator>>( StreamBase &, Army & );
 
 #endif

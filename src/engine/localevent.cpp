@@ -62,9 +62,9 @@
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
-#include "tools.h"
 
 namespace
 {
@@ -558,8 +558,7 @@ namespace EventProcessing
 
         static void setEventProcessingState( const uint32_t eventType, const bool enable )
         {
-            const auto [dummy, inserted] = eventTypeStatus.emplace( eventType );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = eventTypeStatus.emplace( eventType ); !inserted ) {
                 assert( 0 );
             }
 

@@ -46,7 +46,6 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -66,6 +65,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 #include "ui_text.h"
@@ -90,7 +90,7 @@ namespace
             , _finished( false )
             , _loop( loop )
         {
-            _frameId = ICN::AnimationFrame( _icnId, 1, _counter );
+            _frameId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
         }
 
         uint32_t frameId()
@@ -99,11 +99,11 @@ namespace
                 return _frameId;
 
             ++_counter;
-            uint32_t nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+            uint32_t nextId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
             if ( nextId < _frameId ) {
                 if ( _loop ) {
                     _counter = 0;
-                    nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+                    nextId = ICN::getAnimatedIcnIndex( _icnId, 1, _counter );
                     std::swap( nextId, _frameId );
                     return nextId;
                 }
@@ -258,13 +258,14 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-        fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                            dialog.height() + fheroes2::borderWidthPx );
         const fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
         fheroes2::Fill( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height, 0 );
-        fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, pos_rt.x - fheroes2::borderWidthPx, pos_rt.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
         const fheroes2::Sprite & panelSprite = fheroes2::AGG::GetICN( ICN::CSPANEL, 0 );
@@ -830,12 +831,13 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
+    const fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                        dialog.height() + fheroes2::borderWidthPx - 1 );
     const fheroes2::Rect renderArea( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
-    fheroes2::Blit( dialogShadow, display, renderArea.x - BORDERWIDTH, renderArea.y + BORDERWIDTH - 1 );
+    fheroes2::Blit( dialogShadow, display, renderArea.x - fheroes2::borderWidthPx, renderArea.y + fheroes2::borderWidthPx - 1 );
     fheroes2::Blit( dialog, display, renderArea.x, renderArea.y );
 
     LoopedAnimationSequence sequence;
@@ -908,7 +910,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     }
 }
 
-int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const
+int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -916,7 +918,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     cursor.SetThemes( Cursor::POINTER );
 
     const int currentColor = GetCurrentColor();
-    const bool readonly = currentColor != hero.GetColor() || !buttons;
+    const bool readonly = ( currentColor != hero.GetColor() || !buttons );
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
     const fheroes2::Point dialogShadow( 15, 15 );
@@ -934,7 +936,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     pos_rt.width -= dialogShadow.x;
 
     const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
-    const Heroes * actionHero = ( currentColor == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
@@ -997,14 +998,21 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     fheroes2::Button btnSurrender( pos_rt.x + 133, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
     fheroes2::Button btnClose( pos_rt.x + 192, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
 
-    if ( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) )
+    if ( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) ) {
         btnCast.disable();
+    }
 
-    if ( readonly || !CanRetreatOpponent( hero.GetColor() ) )
+    if ( readonly || !CanRetreatOpponent( hero.GetColor() ) ) {
         btnRetreat.disable();
+    }
 
-    if ( readonly || !CanSurrenderOpponent( hero.GetColor() ) )
+    if ( readonly || !CanSurrenderOpponent( hero.GetColor() ) ) {
         btnSurrender.disable();
+    }
+
+    if ( !buttons ) {
+        btnClose.disable();
+    }
 
     btnCast.draw();
     btnRetreat.draw();
@@ -1015,6 +1023,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
     display.render( pos_rt );
 
+    // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
+    Heroes * heroForHeroScreen = ( currentColor == hero.GetColor() ) ? dynamic_cast<Heroes *>( &hero ) : nullptr;
+
     std::string statusMessage = _( "Hero's Options" );
 
     LocalEvent & le = LocalEvent::Get();
@@ -1024,39 +1035,38 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         btnSurrender.isEnabled() && le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
         le.isMouseLeftButtonPressedInArea( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
 
-        if ( buttons ) {
-            // The Cast Spell is available for a hero and a captain.
-            if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
-                statusMessage = _( "Cast Spell" );
-            }
-            // The retreat is available during a player's turn only. A captain cannot retreat.
-            else if ( le.isMouseCursorPosInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
-                statusMessage = _( "Retreat" );
-            }
-            // The surrender is available during a player's turn only. A captain cannot surrender.
-            else if ( le.isMouseCursorPosInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
-                statusMessage = _( "Surrender" );
-            }
-            else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
-                statusMessage = _( "Cancel" );
-            }
-            // The Hero Screen is available for a Hero only (not Captain) and when UI is not read-only.
-            else if ( le.isMouseCursorPosInArea( portraitArea ) && actionHero != nullptr && actionHero->isHeroes() && !readonly ) {
-                statusMessage = _( "Hero Screen" );
-            }
-            else if ( hero.isCaptain() ) {
-                statusMessage = _( "Captain's Options" );
-            }
-            else {
-                statusMessage = _( "Hero's Options" );
-            }
-        }
-        else {
+        if ( !buttons ) {
             if ( !le.isMouseRightButtonPressed() ) {
                 break;
             }
 
             continue;
+        }
+
+        // The Cast Spell is available for a hero and a captain.
+        if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
+            statusMessage = _( "Cast Spell" );
+        }
+        // The retreat is available during a player's turn only. A captain cannot retreat.
+        else if ( le.isMouseCursorPosInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            statusMessage = _( "Retreat" );
+        }
+        // The surrender is available during a player's turn only. A captain cannot surrender.
+        else if ( le.isMouseCursorPosInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            statusMessage = _( "Surrender" );
+        }
+        else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
+            statusMessage = _( "Cancel" );
+        }
+        // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
+        else if ( le.isMouseCursorPosInArea( portraitArea ) && heroForHeroScreen != nullptr ) {
+            statusMessage = _( "Hero Screen" );
+        }
+        else if ( hero.isCaptain() ) {
+            statusMessage = _( "Captain's Options" );
+        }
+        else {
+            statusMessage = _( "Hero's Options" );
         }
 
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) ) {
@@ -1075,10 +1085,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             result = 3;
         }
 
-        if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
+        if ( le.MouseClickLeft( portraitArea ) && heroForHeroScreen != nullptr ) {
             LocalEvent::Get().reset();
-            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
-            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false, false );
+
+            heroForHeroScreen->OpenDialog( true, true, true, true, false, false );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
@@ -1101,16 +1111,16 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again. The cost of surrender is half of the total cost of the non-temporary troops remaining in the army." ),
                 Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( portraitArea ) && actionHero != nullptr ) {
+        else if ( le.isMouseRightButtonPressedInArea( portraitArea ) && heroForHeroScreen != nullptr ) {
             fheroes2::showStandardTextMessage( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( btnClose.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Return to the battle." ), Dialog::ZERO );
         }
 
-        if ( statusMessage != status.GetMessage() ) {
-            status.SetMessage( statusMessage );
-            status.Redraw( display );
+        if ( statusMessage != status.getMessage() ) {
+            status.setMessage( statusMessage, false );
+            status.redraw( display );
             display.render( status );
         }
     }

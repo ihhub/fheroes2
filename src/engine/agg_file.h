@@ -26,6 +26,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -64,8 +65,10 @@ namespace fheroes2
         uint8_t animationFrames{ 0 };
         uint32_t offsetData{ 0 };
     };
+
+    uint32_t calculateAggFilenameHash( const std::string_view str );
 }
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
+IStreamBase & operator>>( IStreamBase & stream, fheroes2::ICNHeader & icn );
 
 #endif

@@ -29,8 +29,6 @@
 
 #include "math_base.h"
 
-#define TILEWIDTH 32
-
 class Heroes;
 
 namespace MP2

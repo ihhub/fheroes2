@@ -31,7 +31,8 @@
 
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 struct Cost
 {
@@ -134,8 +135,8 @@ struct Funds
     int32_t gold{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const Funds & res );
-StreamBase & operator>>( StreamBase &, Funds & res );
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res );
+IStreamBase & operator>>( IStreamBase & stream, Funds & res );
 
 namespace Resource
 {
@@ -169,7 +170,7 @@ namespace Resource
     };
 
     // Applies the given function object 'fn' to every valid resource in the 'resources' set
-    template <typename T, typename F, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+    template <typename T, typename F, std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, bool> = true>
     void forEach( const T resources, const F & fn )
     {
         const auto forEachImpl = [&fn]( const auto res ) {

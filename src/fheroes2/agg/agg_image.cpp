@@ -272,7 +272,7 @@ namespace
             return {};
         }
 
-        StreamBuf imageStream( data );
+        ROStreamBuf imageStream( data );
 
         const uint8_t blackColor = imageStream.get();
         const uint8_t whiteColor = 11;
@@ -455,7 +455,7 @@ namespace
     }
 
     void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
-                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size buttonSize, const fheroes2::FontColor fontColor )
+                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size & buttonSize, const fheroes2::FontColor fontColor )
     {
         const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
         const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
@@ -585,13 +585,13 @@ namespace
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
-        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
 
         if ( body.empty() ) {
             return;
         }
 
-        StreamBuf imageStream( body );
+        ROStreamBuf imageStream( body );
 
         const uint32_t count = imageStream.getLE16();
         const uint32_t blockSize = imageStream.getLE32();
@@ -2423,6 +2423,32 @@ namespace
         generateDefaultImages( id );
     }
 
+    void generateGradientFont( const int fontId, const int originalFontId, const uint8_t gradientInnerColor, const uint8_t gradientOuterColor,
+                               const uint8_t contourInnerColor, const uint8_t contourOuterColor )
+    {
+        assert( fontId != originalFontId );
+
+        fheroes2::AGG::GetICN( originalFontId, 0 );
+        const std::vector<fheroes2::Sprite> & original = _icnVsSprite[originalFontId];
+
+        _icnVsSprite[fontId].resize( original.size() );
+
+        for ( size_t i = 0; i < original.size(); ++i ) {
+            const fheroes2::Sprite & in = original[i];
+            fheroes2::Sprite & out = _icnVsSprite[fontId][i];
+            out.resize( in.width() + 6, in.height() + 6 );
+            out.reset();
+            Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
+            out.setPosition( in.x() - 2, in.y() - 2 );
+
+            applyFontVerticalGradient( out, gradientInnerColor, gradientOuterColor );
+
+            Blit( CreateContour( out, contourInnerColor ), out );
+            Blit( CreateContour( out, 0 ), out );
+            Blit( CreateContour( out, contourOuterColor ), out );
+        }
+    }
+
     // This function must return true is resources have been modified, false otherwise.
     bool LoadModifiedICN( const int id )
     {
@@ -2453,7 +2479,7 @@ namespace
                 throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
             }
 
-            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
             const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
 
             if ( id == ICN::SMALFONT ) {
@@ -2555,6 +2581,18 @@ namespace
             return true;
         case ICN::GRAY_SMALL_FONT:
             CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
+            return true;
+        case ICN::GOLDEN_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 108, 133, 55, 62 );
+            return true;
+        case ICN::GOLDEN_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 108, 127, 55, 62 );
+            return true;
+        case ICN::SILVER_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 10, 31, 29, 0 );
+            return true;
+        case ICN::SILVER_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 10, 26, 29, 0 );
             return true;
         case ICN::SPELLS:
             LoadOriginalICN( id );
@@ -2889,9 +2927,10 @@ namespace
                     _icnVsSprite[id].emplace_back( std::move( originalFrame ) );
 
                     const size_t frameID = golemICNSize + i;
-                    // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the
-                    // left and reduce this shift every next frame by "CELLW/(7*4)".
-                    _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * CELLW / 28, _icnVsSprite[id][frameID].y() );
+                    // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by
+                    // "6 * Battle::Cell::widthPx / ( 4 * 7 )" to the left and reduce this shift every next frame by "Battle::Cell::widthPx / ( 7 * 4 )".
+                    _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * Battle::Cell::widthPx / 28,
+                                                           _icnVsSprite[id][frameID].y() );
                 }
             }
             return true;
@@ -3331,7 +3370,7 @@ namespace
 
                 // Since we cannot access game settings from here we are checking an existence
                 // of one of POL resources as an indicator for this version.
-                if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                if ( !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ) ).empty() ) {
                     fheroes2::Sprite editorIcon;
                     fheroes2::h2d::readImage( "main_menu_editor_icon.image", editorIcon );
 
@@ -4747,22 +4786,27 @@ namespace
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
 
             if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
-                released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
-                pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                released.resize( originalReleased.width() + 1, originalReleased.height() );
+                pressed.resize( originalPressed.width() + 1, originalPressed.height() );
                 released.reset();
                 pressed.reset();
 
-                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
-                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() );
+                // Shorten the button by 1 pixel in the height so that it is evenly divided by 5 in resizeButton() in ui_button.cpp
+                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 7 );
+                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() - 7 );
+                Copy( originalReleased, 0, originalReleased.height() - 7, released, 1, originalReleased.height() - 8, originalReleased.width(),
+                      originalReleased.height() - 7 );
+                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(), originalPressed.height() - 7 );
+
                 FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
 
                 // Fix the carried over broken transform layer of the original vertical button that is being used.
                 fheroes2::Image exitCommonMask = fheroes2::ExtractCommonPattern( { &released, &pressed } );
                 // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
-                FillTransform( exitCommonMask, 4, 2, 1, 115, 1 );
-                FillTransform( exitCommonMask, 5, 116, 1, 1, 1 );
-                FillTransform( exitCommonMask, 5, 117, 18, 1, 1 );
-                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
+                FillTransform( exitCommonMask, 4, 2, 1, 114, 1 );
+                FillTransform( exitCommonMask, 5, 115, 1, 2, 1 );
+                FillTransform( exitCommonMask, 6, 116, 17, 1, 1 );
+                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 113, 1, 2, 1 );
 
                 invertTransparency( exitCommonMask );
                 // Make the extended width and height lines transparent.
@@ -4775,23 +4819,20 @@ namespace
                 // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
                 const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
 
-                Copy( originalReleased, 0, 4, released, 1, 4, 1, released.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, released.height() - 1, 22, 1 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 1, released.height() - 1, 1, 1 );
-
-                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, pressed.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, pressed.height() - 1, 22, 1 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 1, pressed.height() - 1, 1, 1 );
+                Copy( originalReleased, 0, 4, released, 1, 4, 1, originalReleased.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, originalReleased.height() - 1, 22, 1 );
+                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, originalPressed.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, originalPressed.height() - 1, 22, 1 );
 
                 // Clean the button states' text areas.
-                Fill( released, 6, 4, 18, 111, getButtonFillingColor( true ) );
-                Fill( pressed, 5, 5, 18, 111, getButtonFillingColor( false ) );
+                Fill( released, 6, 4, 18, 110, getButtonFillingColor( true ) );
+                Fill( pressed, 5, 5, 18, 110, getButtonFillingColor( false ) );
 
-                // Make the background transparent by removing remaining red background pieces.
+                // Make the pressed background transparent by removing remaining red parts.
                 FillTransform( pressed, 5, 0, 21, 1, 1 );
                 FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
                 FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
+                FillTransform( pressed, pressed.width() - 1, 3, 1, originalPressed.height() - 5, 1 );
             }
 
             return true;
@@ -5029,7 +5070,7 @@ namespace
                 return 0;
             }
 
-            StreamBuf buffer( data );
+            ROStreamBuf buffer( data );
 
             const size_t count = buffer.getLE16();
             const int32_t width = buffer.getLE16();
@@ -5234,6 +5275,10 @@ namespace fheroes2::AGG
                 return GetICN( ICN::GRAY_FONT, character - 0x20 );
             case FontColor::YELLOW:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            case FontColor::GOLDEN_GRADIENT:
+                return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
+            case FontColor::SILVER_GRADIENT:
+                return GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -5244,6 +5289,10 @@ namespace fheroes2::AGG
             switch ( fontType.color ) {
             case FontColor::WHITE:
                 return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+            case FontColor::GOLDEN_GRADIENT:
+                return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
+            case FontColor::SILVER_GRADIENT:
+                return GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );

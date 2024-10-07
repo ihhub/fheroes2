@@ -23,27 +23,34 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
-#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "army.h"
 #include "bitmodes.h"
 #include "captain.h"
 #include "color.h"
-#include "gamedefs.h"
 #include "mageguild.h"
 #include "math_base.h"
 #include "monster.h"
 #include "players.h"
 #include "position.h"
+
+class IStreamBase;
+class OStreamBase;
+
+class HeroBase;
+class Heroes;
+class Troop;
+
+struct Funds;
 
 namespace fheroes2
 {
@@ -55,12 +62,6 @@ namespace Maps::Map_Format
 {
     struct CastleMetadata;
 }
-
-struct Funds;
-class HeroBase;
-class Heroes;
-class StreamBase;
-class Troop;
 
 enum BuildingType : uint32_t
 {
@@ -119,9 +120,12 @@ enum class BuildingStatus : int32_t
     LACK_RESOURCES
 };
 
-class Castle : public MapPosition, public BitModes, public ColorBase, public Control
+class Castle final : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
+    // Maximum number of creature dwellings that can be built in a castle
+    static constexpr int maxNumOfDwellings{ 6 };
+
     enum : uint32_t
     {
         UNUSED_ALLOW_CASTLE_CONSTRUCTION = ( 1 << 1 ),
@@ -333,7 +337,7 @@ private:
 
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
-    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> & monsterAnimInfo ) const;
 
     void _setDefaultBuildings();
 
@@ -341,8 +345,8 @@ private:
     bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
-    friend StreamBase & operator<<( StreamBase &, const Castle & );
-    friend StreamBase & operator>>( StreamBase &, Castle & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
+    friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
     int race;
     uint32_t _constructedBuildings;
@@ -353,7 +357,7 @@ private:
     std::string name;
 
     MageGuild mageguild;
-    std::array<uint32_t, CASTLEMAXMONSTER> dwelling;
+    std::array<uint32_t, maxNumOfDwellings> dwelling;
     Army army;
 };
 
@@ -447,6 +451,7 @@ struct VecCastles : public std::vector<Castle *>
     ~VecCastles() = default;
 
     VecCastles & operator=( const VecCastles & ) = delete;
+    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };
@@ -457,50 +462,29 @@ public:
     AllCastles();
     AllCastles( const AllCastles & ) = delete;
 
-    ~AllCastles();
+    ~AllCastles() = default;
 
     AllCastles & operator=( const AllCastles & ) = delete;
 
-    void Init();
-    void Clear();
-
-    void AddCastle( Castle * castle );
-
-    Castle * Get( const fheroes2::Point & position ) const
+    auto begin() const noexcept
     {
-        auto iter = _castleTiles.find( position );
-        if ( iter == _castleTiles.end() )
-            return nullptr;
-
-        return _castles[iter->second];
+        return Iterator( _castles.begin() );
     }
 
-    void Scout( int ) const;
-
-    void NewDay()
+    auto end() const noexcept
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+        return Iterator( _castles.end() );
     }
 
-    void NewWeek()
+    void Init()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+        Clear();
     }
 
-    void NewMonth()
+    void Clear()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
-    }
-
-    // begin/end methods so we can iterate through the elements
-    std::vector<Castle *>::const_iterator begin() const
-    {
-        return _castles.begin();
-    }
-
-    std::vector<Castle *>::const_iterator end() const
-    {
-        return _castles.end();
+        _castles.clear();
+        _castleTiles.clear();
     }
 
     size_t Size() const
@@ -508,18 +492,38 @@ public:
         return _castles.size();
     }
 
+    void AddCastle( std::unique_ptr<Castle> && castle );
+
+    Castle * Get( const fheroes2::Point & position ) const;
+
+    void Scout( const int colors ) const;
+
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        explicit Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        auto operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
 private:
-    std::vector<Castle *> _castles;
+    std::vector<std::unique_ptr<Castle>> _castles;
     std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
-StreamBase & operator<<( StreamBase &, const VecCastles & );
-StreamBase & operator>>( StreamBase &, VecCastles & );
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
-StreamBase & operator<<( StreamBase &, const AllCastles & );
-StreamBase & operator>>( StreamBase &, AllCastles & );
-
-StreamBase & operator<<( StreamBase &, const Castle & );
-StreamBase & operator>>( StreamBase &, Castle & );
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
 
 #endif

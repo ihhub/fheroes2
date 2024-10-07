@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -262,12 +262,12 @@ std::string ArmyTroop::GetDefenseString() const
     return output;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Troop & troop )
+OStreamBase & operator<<( OStreamBase & stream, const Troop & troop )
 {
-    return msg << troop.id << troop.count;
+    return stream << troop.id << troop.count;
 }
 
-StreamBase & operator>>( StreamBase & msg, Troop & troop )
+IStreamBase & operator>>( IStreamBase & stream, Troop & troop )
 {
-    return msg >> troop.id >> troop.count;
+    return stream >> troop.id >> troop.count;
 }

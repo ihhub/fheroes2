@@ -116,10 +116,11 @@ namespace Battle
 
         Result & GetResult();
 
+        HeroBase * GetCommander1() const;
+        HeroBase * GetCommander2() const;
+
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1() const;
-        const HeroBase * GetCommander2() const;
         const HeroBase * GetCurrentCommander() const;
 
         Force & GetForce1() const;
@@ -144,7 +145,7 @@ namespace Battle
         const SpellStorage & GetUsageSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
-        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
+        int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;

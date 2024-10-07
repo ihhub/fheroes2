@@ -28,6 +28,7 @@
 #include <cassert>
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 #include "agg_image.h"
 #include "ai_planner.h"
@@ -233,7 +234,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     // - unused 29 bytes
     //    Always zeros.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {
@@ -1932,7 +1933,7 @@ bool Castle::HasSeaAccess() const
             return false;
         }
 
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
             // The main addon does not exist on this tile.
             // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
             return true;
@@ -2009,7 +2010,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
+        return ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
@@ -2134,7 +2135,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
         }
     }
 
@@ -2156,7 +2157,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_TAVERN, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2167,7 +2168,7 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2184,7 +2185,7 @@ int Castle::GetLuckModificator( std::string * strs ) const
         result += mod;
         if ( strs ) {
             strs->append( Castle::GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2427,31 +2428,16 @@ Castle * VecCastles::GetFirstCastle() const
 
 AllCastles::AllCastles()
 {
-    // reserve memory
     _castles.reserve( maximumCastles );
 }
 
-AllCastles::~AllCastles()
+void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
-    Clear();
-}
+    assert( castle );
 
-void AllCastles::Init()
-{
-    Clear();
-}
+    const fheroes2::Point & center = castle->GetCenter();
 
-void AllCastles::Clear()
-{
-    for ( auto it = begin(); it != end(); ++it )
-        delete *it;
-    _castles.clear();
-    _castleTiles.clear();
-}
-
-void AllCastles::AddCastle( Castle * castle )
-{
-    _castles.push_back( castle );
+    _castles.emplace_back( std::move( castle ) );
 
     /* Register position of all castle elements on the map
     Castle element positions are:
@@ -2467,7 +2453,6 @@ void AllCastles::AddCastle( Castle * castle )
     */
 
     const size_t id = _castles.size() - 1;
-    const fheroes2::Point & center = castle->GetCenter();
 
     // Castles are added from top to bottom, from left to right.
     // Tiles containing castle ID cannot be overwritten.
@@ -2479,43 +2464,88 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id ); !inserted ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
             }
         }
     }
 
-    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id ); !inserted ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
     }
 }
 
-void AllCastles::Scout( int colors ) const
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
-    for ( auto it = begin(); it != end(); ++it )
-        if ( colors & ( *it )->GetColor() )
-            ( *it )->Scout();
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return nullptr;
+    }
+
+    assert( iter->second < _castles.size() && _castles[iter->second] );
+
+    return _castles[iter->second].get();
 }
 
-StreamBase & operator<<( StreamBase & msg, const Castle & castle )
+void AllCastles::Scout( const int colors ) const
+{
+    for ( const Castle * castle : *this ) {
+        assert( castle != nullptr );
+
+        if ( !( castle->GetColor() & colors ) ) {
+            continue;
+        }
+
+        castle->Scout();
+    }
+}
+
+void AllCastles::NewDay() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewDay();
+    } );
+}
+
+void AllCastles::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewWeek();
+    } );
+}
+
+void AllCastles::NewMonth() const
+{
+    std::for_each( begin(), end(), []( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewMonth();
+    } );
+}
+
+OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
 {
     const ColorBase & color = castle;
 
-    msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
-        << color << castle.name << castle.mageguild << static_cast<uint32_t>( castle.dwelling.size() );
+    stream << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle._constructedBuildings << castle._disabledBuildings << castle.captain
+           << color << castle.name << castle.mageguild;
+
+    stream.put32( static_cast<uint32_t>( castle.dwelling.size() ) );
 
     for ( const uint32_t dwelling : castle.dwelling ) {
-        msg << dwelling;
+        stream << dwelling;
     }
 
-    return msg << castle.army;
+    return stream << castle.army;
 }
 
-StreamBase & operator>>( StreamBase & msg, Castle & castle )
+IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 {
-    msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings;
+    stream >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle._constructedBuildings;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1101_RELEASE ) {
@@ -2524,84 +2554,93 @@ StreamBase & operator>>( StreamBase & msg, Castle & castle )
         }
     }
     else {
-        msg >> castle._disabledBuildings;
+        stream >> castle._disabledBuildings;
     }
 
     ColorBase & color = castle;
-    msg >> castle.captain >> color >> castle.name >> castle.mageguild;
+    stream >> castle.captain >> color >> castle.name >> castle.mageguild;
 
-    uint32_t dwellingcount;
-    msg >> dwellingcount;
-
-    if ( dwellingcount != castle.dwelling.size() ) {
-        // Is it a corrupted save?
-        assert( 0 );
+    if ( const uint32_t size = stream.get32(); castle.dwelling.size() != size ) {
+        // Most likely the save file is corrupted.
+        stream.setFail();
 
         castle.dwelling = { 0 };
     }
     else {
         for ( uint32_t & dwelling : castle.dwelling ) {
-            msg >> dwelling;
+            stream >> dwelling;
         }
     }
 
-    msg >> castle.army;
+    stream >> castle.army;
     castle.army.SetCommander( &castle.captain );
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles )
 {
-    msg << static_cast<uint32_t>( castles.size() );
+    stream.put32( static_cast<uint32_t>( castles.size() ) );
 
-    for ( auto it = castles.begin(); it != castles.end(); ++it )
-        msg << ( *it ? ( *it )->GetIndex() : static_cast<int32_t>( -1 ) );
+    std::for_each( castles.begin(), castles.end(), [&stream]( const Castle * castle ) {
+        assert( castle != nullptr );
 
-    return msg;
+        stream << castle->GetIndex();
+    } );
+
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles )
 {
-    int32_t index;
-    uint32_t size;
-    msg >> size;
+    const uint32_t size = stream.get32();
 
-    castles.resize( size, nullptr );
+    castles.clear();
+    castles.reserve( size );
 
-    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
-        msg >> index;
-        *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
-        assert( *it != nullptr );
+    for ( uint32_t i = 0; i < size; ++i ) {
+        int32_t index{ -1 };
+        stream >> index;
+
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
+        if ( castle == nullptr ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
+        }
+
+        castles.push_back( castle );
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles )
 {
-    msg << static_cast<uint32_t>( castles.Size() );
+    stream.put32( static_cast<uint32_t>( castles.Size() ) );
 
-    for ( const Castle * castle : castles )
-        msg << *castle;
+    for ( const Castle * castle : castles ) {
+        stream << *castle;
+    }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles )
 {
-    uint32_t size;
-    msg >> size;
+    const uint32_t size = stream.get32();
 
     castles.Clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        Castle * castle = new Castle();
-        msg >> *castle;
-        castles.AddCastle( castle );
+        auto castle = std::make_unique<Castle>();
+        stream >> *castle;
+
+        castles.AddCastle( std::move( castle ) );
     }
 
-    return msg;
+    return stream;
 }
 
 std::string Castle::GetStringBuilding( uint32_t build ) const

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3503,6 +3503,20 @@ msgstr "Velg maksimalt antall vervbare krigere."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Velg kun én kriger til å verves."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Velg spilloppløsning"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Velg en oppløsning:"
@@ -11847,6 +11861,9 @@ msgstr "Øker på magisk vis forsvarsevnen til den utvalgte krigeren."
 msgid "Stoneskin"
 msgstr "Stenhud"
 
+msgid "Steelskin"
+msgstr "Stålhud"
+
 #, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
@@ -11854,9 +11871,6 @@ msgid ""
 msgstr ""
 "Øker forsvarsevnen til de utvalgte krigerne. Dette er en forbedret utgave av "
 "stenhud."
-
-msgid "Steelskin"
-msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Får den utvalgte krigeren til å gjøre minst mulig skade."

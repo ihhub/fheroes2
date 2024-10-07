@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 01:49+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3466,6 +3466,20 @@ msgstr "Sélectionnez les forces maximales à recruter."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Ne sélectionnez qu'une seule unité à recruter."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Choisir la résolution d'écran"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Choisir la résolution d'écran:"
@@ -11666,15 +11680,15 @@ msgstr "Augmente la statistique de défense des créatures sélectionnées."
 msgid "Stoneskin"
 msgstr "Chair de pierre"
 
+msgid "Steelskin"
+msgstr "Chair d'acier"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Augmente la caractéristique de défense des créatures ciblées. Il s'agit "
 "d'une version améliorée de chair de pierre."
-
-msgid "Steelskin"
-msgstr "Chair d'acier"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "La créature choisie inflige des dégâts minimums."

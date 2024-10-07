@@ -28,7 +28,6 @@
 #include <cassert>
 #include <utility>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "localevent.h"
 
@@ -463,7 +462,7 @@ namespace Interface
             return curItemPos.first;
         }
 
-        void SetContentItems() override
+        void SetContentItems() final
         {
             ResetSelected();
         }

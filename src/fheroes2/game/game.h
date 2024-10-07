@@ -37,7 +37,6 @@ namespace Game
 {
     void Init();
 
-    // type_t
     enum
     {
         TYPE_MENU = 0,

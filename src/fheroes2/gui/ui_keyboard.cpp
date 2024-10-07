@@ -138,7 +138,7 @@ namespace
         }
 
         // Returns true if keyboard dialog resize was made.
-        bool resize( const fheroes2::Size size )
+        bool resize( const fheroes2::Size & size )
         {
             if ( _window && size.width == _window->activeArea().width && size.height == _window->activeArea().height ) {
                 // This is the same window size. Nothing to do.
@@ -508,7 +508,7 @@ namespace
         }
     }
 
-    fheroes2::Rect getButtonsRoi( const std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point offset )
+    fheroes2::Rect getButtonsRoi( const std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset )
     {
         std::vector<int32_t> offsets;
 
@@ -557,7 +557,7 @@ namespace
         return roi;
     }
 
-    void renderButtons( std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point offset, fheroes2::Image & output )
+    void renderButtons( std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset, fheroes2::Image & output )
     {
         std::vector<int32_t> offsets;
 

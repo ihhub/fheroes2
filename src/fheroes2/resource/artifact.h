@@ -23,6 +23,7 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <cstddef>
 #include <cstdint>
 #include <set>
 #include <string>
@@ -35,9 +36,11 @@
 #include "math_base.h"
 #include "ui_tool.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
 class StatusBar;
-class StreamBase;
 
 namespace MP2
 {
@@ -47,7 +50,7 @@ namespace MP2
 class Artifact
 {
 public:
-    enum level_t
+    enum ArtLevel
     {
         ART_NONE = 0,
         ART_LEVEL_TREASURE = 0x01,
@@ -61,7 +64,7 @@ public:
 
     // All artifact IDs are by value 1 bigger than in the original game.
     // This is done to support new artifact addition and also align with the rest of object types.
-    enum type_t : int
+    enum : int
     {
         UNKNOWN = 0,
 
@@ -256,20 +259,17 @@ public:
         return fheroes2::getArtifactData( id ).getDescription( ext );
     }
 
-    static int Rand( level_t );
+    static int Rand( ArtLevel );
     static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Artifact & );
-    friend StreamBase & operator>>( StreamBase &, Artifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Artifact & art );
+    friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
     int id;
     int ext;
 };
-
-StreamBase & operator<<( StreamBase &, const Artifact & );
-StreamBase & operator>>( StreamBase &, Artifact & );
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
@@ -299,6 +299,9 @@ struct ArtifactSetData
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
+    // Maximum number of artifacts that can be placed in an artifact bag
+    static constexpr size_t maxCapacity{ 14 };
+
     BagArtifacts();
 
     bool ContainSpell( const int spellId ) const;
@@ -348,7 +351,7 @@ public:
     using Interface::ItemsActionBar<Artifact>::RedrawItem;
     using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
 
-    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
+    ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
@@ -371,7 +374,7 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool read_only;
