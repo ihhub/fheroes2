@@ -764,7 +764,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 }
             }
 
-            // A player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
+            // Player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
             skipTurns = false;
 
             const int playerColor = player->GetColor();
