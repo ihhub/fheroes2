@@ -417,9 +417,9 @@ bool Interface::IconsPanel::isMouseCaptured()
 
     const LocalEvent & le = LocalEvent::Get();
 
-    _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
+    _isMouseCaptured = le.isMouseLeftButtonPressed();
 
-    // If the mouse has just been released from the capture, then consider it still captured at this
+    // Even if the mouse has just been released from the capture, consider it still captured at this
     // stage to ensure that events directly related to the release (for instance, releasing the mouse
     // button) will not be handled by other UI elements.
     return true;
