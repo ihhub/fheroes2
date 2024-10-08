@@ -301,6 +301,7 @@ Interface::IconsPanel::IconsPanel( AdventureMap & basic )
 {
     sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
     sfMarker.reset();
+
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
