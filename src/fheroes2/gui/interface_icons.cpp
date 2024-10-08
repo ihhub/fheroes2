@@ -33,6 +33,7 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
@@ -409,11 +410,18 @@ void Interface::IconsPanel::QueueEventProcessing()
 
 bool Interface::IconsPanel::isMouseCaptured()
 {
+    if ( !_isMouseCaptured ) {
+        return false;
+    }
+
     const LocalEvent & le = LocalEvent::Get();
 
     _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
 
-    return _isMouseCaptured;
+    // If the mouse has just been released from the capture, then consider it still captured at this
+    // stage to ensure that events directly related to the release (for instance, releasing the mouse
+    // button) will not be handled by other UI elements.
+    return true;
 }
 
 void Interface::IconsPanel::Select( Heroes * const hr )
