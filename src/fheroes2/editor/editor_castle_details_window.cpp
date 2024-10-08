@@ -333,7 +333,7 @@ namespace Editor
         auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown, language]() {
             fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite(), language );
             if ( castleMetadata.customName.empty() ) {
-                text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
+                text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite(), language );
             }
 
             text.fitToOneRow( nameArea.width );

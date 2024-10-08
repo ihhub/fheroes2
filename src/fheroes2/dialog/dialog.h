@@ -46,7 +46,6 @@ struct ArtifactSetData;
 namespace fheroes2
 {
     class DialogElement;
-
     class TextBase;
 }
 
