@@ -21,8 +21,10 @@
 #include "editor_daily_events_window.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 
