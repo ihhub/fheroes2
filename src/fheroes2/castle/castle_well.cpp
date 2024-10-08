@@ -145,7 +145,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         if ( recruitableNumber == 0 ) {
             continue;
         }
-        const Monster recruitableMonster( race, GetActualDwelling( dwellingType ) );
+        const Monster recruitableMonster( _race, GetActualDwelling( dwellingType ) );
 
         totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
         totalMonstersCost += currentMonsterCost;
@@ -164,7 +164,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
 
         for ( const uint32_t dwellingType : castleDwellings ) {
             if ( getMonstersInDwelling( dwellingType ) > 0 ) {
-                const Monster monsters( race, dwellingType );
+                const Monster monsters( _race, dwellingType );
                 const Funds payment = monsters.GetCost();
 
                 if ( GetKingdom().AllowPayment( payment ) ) {
@@ -199,7 +199,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
     return false;
 }
 
-void Castle::OpenWell()
+void Castle::_openWell()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -226,9 +226,9 @@ void Castle::OpenWell()
             fheroes2::Rect( roi.x + 334, roi.y + 168, 288, 124 ), fheroes2::Rect( roi.x + 334, roi.y + 318, 288, 124 ) };
 
     const std::array<Monster, maxNumOfDwellings> castleMonster
-        = { Monster( race, GetActualDwelling( castleDwellings[0] ) ), Monster( race, GetActualDwelling( castleDwellings[1] ) ),
-            Monster( race, GetActualDwelling( castleDwellings[2] ) ), Monster( race, GetActualDwelling( castleDwellings[3] ) ),
-            Monster( race, GetActualDwelling( castleDwellings[4] ) ), Monster( race, GetActualDwelling( castleDwellings[5] ) ) };
+        = { Monster( _race, GetActualDwelling( castleDwellings[0] ) ), Monster( _race, GetActualDwelling( castleDwellings[1] ) ),
+            Monster( _race, GetActualDwelling( castleDwellings[2] ) ), Monster( _race, GetActualDwelling( castleDwellings[3] ) ),
+            Monster( _race, GetActualDwelling( castleDwellings[4] ) ), Monster( _race, GetActualDwelling( castleDwellings[5] ) ) };
 
     std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> monsterAnimInfo
         = { fheroes2::RandomMonsterAnimation( castleMonster[0] ), fheroes2::RandomMonsterAnimation( castleMonster[1] ),
@@ -267,7 +267,7 @@ void Castle::OpenWell()
         for ( size_t dwellingId = 0; dwellingId < maxNumOfDwellings; ++dwellingId ) {
             if ( _constructedBuildings & castleDwellings[dwellingId] ) {
                 if ( le.MouseClickLeft( rectMonster[dwellingId] ) || pressedHotkeyBuildingID == castleDwellings[dwellingId] ) {
-                    if ( RecruitMonster( Dialog::RecruitMonster( castleMonster[dwellingId], dwelling[dwellingId], true, 2 ) ) ) {
+                    if ( RecruitMonster( Dialog::RecruitMonster( castleMonster[dwellingId], _dwelling[dwellingId], true, 2 ) ) ) {
                         // Update available monster count on background.
 
                         _wellRedrawAvailableMonsters( castleDwellings[dwellingId], true, background );
@@ -277,7 +277,7 @@ void Castle::OpenWell()
                 }
 
                 if ( le.isMouseRightButtonPressedInArea( rectMonster[dwellingId] ) ) {
-                    Dialog::DwellingInfo( castleMonster[dwellingId], dwelling[dwellingId] );
+                    Dialog::DwellingInfo( castleMonster[dwellingId], _dwelling[dwellingId] );
 
                     break;
                 }
@@ -316,27 +316,27 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
 
     switch ( dwellingType ) {
     case DWELLING_MONSTER1:
-        population = dwelling[0];
+        population = _dwelling[0];
         break;
     case DWELLING_MONSTER2:
-        population = dwelling[1];
+        population = _dwelling[1];
         offset.y += 150;
         break;
     case DWELLING_MONSTER3:
-        population = dwelling[2];
+        population = _dwelling[2];
         offset.y += 300;
         break;
     case DWELLING_MONSTER4:
         offset.x += 314;
-        population = dwelling[3];
+        population = _dwelling[3];
         break;
     case DWELLING_MONSTER5:
-        population = dwelling[4];
+        population = _dwelling[4];
         offset.x += 314;
         offset.y += 150;
         break;
     case DWELLING_MONSTER6:
-        population = dwelling[5];
+        population = _dwelling[5];
         offset.x += 314;
         offset.y += 300;
         break;
@@ -427,15 +427,15 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
         }
 
         const uint32_t actualDwellindType = GetActualDwelling( dwellingType );
-        const Monster monster( race, actualDwellindType );
+        const Monster monster( _race, actualDwellindType );
 
         // Dwelling building image.
         fheroes2::Point renderPoint( offset.x + 21, offset.y + 35 );
-        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( race ), icnIndex );
+        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( _race ), icnIndex );
         fheroes2::Copy( dwellingImage, 0, 0, background, renderPoint.x, renderPoint.y, dwellingImage.width(), dwellingImage.height() );
 
         // Dwelling name.
-        text.set( GetStringBuilding( actualDwellindType, race ), statsFontType );
+        text.set( GetStringBuilding( actualDwellindType, _race ), statsFontType );
         renderPoint.x = offset.x + 86 - text.width() / 2;
         renderPoint.y = offset.y + 104;
         text.draw( renderPoint.x, renderPoint.y, background );
@@ -568,7 +568,7 @@ void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array
             break;
         }
 
-        const Monster monster( race, GetActualDwelling( castleDwellings[monsterId] ) );
+        const Monster monster( _race, GetActualDwelling( castleDwellings[monsterId] ) );
 
         // monster
         const bool flipMonsterSprite = ( monsterId > 2 );

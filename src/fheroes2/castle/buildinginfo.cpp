@@ -721,9 +721,9 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( BuildingStatus::NEED_CASTLE ), Dialog::OK );
     else {
-        const BuildingInfo dwelling( castle, static_cast<BuildingType>( dwType ) );
+        const BuildingInfo _dwelling( castle, static_cast<BuildingType>( dwType ) );
 
-        if ( dwelling.DialogBuyBuilding( true ) ) {
+        if ( _dwelling.DialogBuyBuilding( true ) ) {
             AudioManager::PlaySound( M82::BUILDTWN );
             castle.BuyBuilding( dwType );
         }

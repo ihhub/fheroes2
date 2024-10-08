@@ -149,7 +149,7 @@ bool RowSpells::QueueEventProcessing()
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const Heroes * hero ) const
+void Castle::_openMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -195,7 +195,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     const int level = GetLevelMageGuild();
     // sprite
     int icn = ICN::UNKNOWN;
-    switch ( race ) {
+    switch ( _race ) {
     case Race::KNGT:
         icn = ICN::MAGEGLDK;
         break;
