@@ -630,7 +630,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 std::string res = name;
 
                 const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( _( "Enter hero's name" ), res, {}, 30, false ) && !res.empty() ) {
+                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Enter hero's name" ), fheroes2::FontType::normalWhite() }, res, 30, false )
+                     && !res.empty() ) {
                     name = std::move( res );
                     drawTitleText( name, _race, true );
                     needRedraw = true;

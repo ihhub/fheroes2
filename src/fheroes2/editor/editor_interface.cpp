@@ -1205,7 +1205,8 @@ namespace Interface
                     std::string signText = originalMessage;
 
                     const fheroes2::LanguageSwitcher switcher( _mapFormat.mainLanguage );
-                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) && originalMessage != signText ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ std::move( header ), fheroes2::FontType::normalWhite() }, signText, 0, true )
+                                              && originalMessage != signText ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMessage = std::move( signText );
                         action.commit();

@@ -331,7 +331,7 @@ namespace Editor
                 std::string temp = eventMetadata.message;
 
                 const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Message:" ), fheroes2::FontType::normalWhite() }, temp, 200, true ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();

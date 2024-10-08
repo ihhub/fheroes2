@@ -489,7 +489,8 @@ namespace Editor
                 if ( le.MouseClickLeft() ) {
                     std::string res = castleMetadata.customName;
                     const fheroes2::LanguageSwitcher switcher( language );
-                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false ) && !res.empty() ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() }, res, 30, false )
+                         && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }

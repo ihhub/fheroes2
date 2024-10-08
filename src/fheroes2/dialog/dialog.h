@@ -46,6 +46,8 @@ struct ArtifactSetData;
 namespace fheroes2
 {
     class DialogElement;
+
+    class TextBase;
 }
 
 namespace Skill
@@ -115,7 +117,7 @@ namespace Dialog
     int SelectSkillFromArena();
     bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
                       const fheroes2::DialogElement * uiElement = nullptr );
-    bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine );
+    bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );

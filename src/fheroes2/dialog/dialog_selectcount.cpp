@@ -153,7 +153,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     return result == Dialog::OK;
 }
 
-bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine )
+bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -165,12 +165,9 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     const bool hasTitle = !title.empty();
 
-    const fheroes2::Text titlebox( std::move( title ), fheroes2::FontType::normalYellow() );
-    const fheroes2::Text textbox( std::move( header ), fheroes2::FontType::normalWhite() );
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const int32_t titleHeight = hasTitle ? titlebox.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
+    const int32_t titleHeight = hasTitle ? title.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
     const int32_t keyBoardButtonExtraHeight = 20;
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
@@ -178,7 +175,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
-    const int32_t textboxHeight = textbox.height( fheroes2::boxAreaWidthPx );
+    const int32_t textboxHeight = body.height( fheroes2::boxAreaWidthPx );
 
     const int32_t frameBoxHeight = 10 + titleHeight + textboxHeight + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
     const FrameBox box( frameBoxHeight, true );
@@ -186,11 +183,11 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     // Title text.
     if ( hasTitle ) {
-        titlebox.draw( frameBoxArea.x, frameBoxArea.y + 12, fheroes2::boxAreaWidthPx, display );
+        title.draw( frameBoxArea.x, frameBoxArea.y + 12, fheroes2::boxAreaWidthPx, display );
     }
 
     // Header text.
-    textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, fheroes2::boxAreaWidthPx, display );
+    body.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, fheroes2::boxAreaWidthPx, display );
 
     fheroes2::Point dst_pt{ frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2, frameBoxArea.y + 10 + titleHeight + textboxHeight + 10 };
 
