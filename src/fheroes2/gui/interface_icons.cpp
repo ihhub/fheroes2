@@ -376,7 +376,18 @@ void Interface::IconsPanel::_redraw()
 
 void Interface::IconsPanel::QueueEventProcessing()
 {
-    // Move border window
+    {
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( le.isMouseLeftButtonPressedInArea( GetRect() ) ) {
+            _isMouseCaptured = true;
+        }
+        else {
+            _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
+        }
+    }
+
+    // Move the window border
     if ( Settings::Get().ShowIcons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
     }
@@ -394,6 +405,15 @@ void Interface::IconsPanel::QueueEventProcessing()
 
         SetRedraw();
     }
+}
+
+bool Interface::IconsPanel::isMouseCaptured()
+{
+    const LocalEvent & le = LocalEvent::Get();
+
+    _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
+
+    return _isMouseCaptured;
 }
 
 void Interface::IconsPanel::Select( Heroes * const hr )

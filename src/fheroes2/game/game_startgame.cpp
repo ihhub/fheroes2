@@ -1176,12 +1176,22 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 stopHero = true;
             }
         }
-        //
         // When processing events in the "no interface" mode, care should be taken about the order in which events are handled by different
         // UI elements, since they may overlap. The order of their rendering on the screen is as follows: the status window is the topmost,
         // followed by the buttons area, followed by the icons panel, followed by the radar, followed by the control panel, and under all of
         // them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
         //
+        // Mouse is captured by the icons panel (e.g. for scrolling by dragging, when events must be processed even when the mouse cursor is
+        // outside this UI element)
+        else if ( iconsPanel.isMouseCaptured() ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            // When the mouse is captured by the icons panel, events should not be processed by other UI elements, even if the icons panel
+            // itself cannot process them (e.g. because it was hidden after the mouse was captured by it)
+            if ( !isHiddenInterface || conf.ShowIcons() ) {
+                iconsPanel.QueueEventProcessing();
+            }
+        }
         // Cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
@@ -1196,8 +1206,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             isCursorOverButtons = true;
         }
         // Cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() )
-                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( iconsPanel.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             iconsPanel.QueueEventProcessing();
