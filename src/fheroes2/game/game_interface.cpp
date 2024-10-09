@@ -53,7 +53,7 @@ Interface::AdventureMap::AdventureMap()
     , _iconsPanel( *this )
     , _buttonsPanel( *this )
     , _controlPanel( *this )
-    , _statusWindow( *this )
+    , _statusPanel( *this )
     , _lockRedraw( false )
 {
     AdventureMap::reset();
@@ -82,14 +82,14 @@ void Interface::AdventureMap::reset()
             _radar.SetPos( radrPos.x, radrPos.y );
             _iconsPanel.SetPos( iconPos.x, iconPos.y );
             _buttonsPanel.SetPos( bttnPos.x, bttnPos.y );
-            _statusWindow.SetPos( statPos.x, statPos.y );
+            _statusPanel.SetPos( statPos.x, statPos.y );
         }
         else {
             _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
             _iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
             _buttonsPanel.SetPos( display.width(), _iconsPanel.GetRect().y + _iconsPanel.GetRect().height );
-            _statusWindow.SetPos( display.width(), _buttonsPanel.GetRect().y + _buttonsPanel.GetRect().height );
+            _statusPanel.SetPos( display.width(), _buttonsPanel.GetRect().y + _buttonsPanel.GetRect().height );
         }
     }
     else {
@@ -98,7 +98,7 @@ void Interface::AdventureMap::reset()
         _radar.SetPos( px, fheroes2::borderWidthPx );
         _iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + fheroes2::borderWidthPx );
         _buttonsPanel.SetPos( px, _iconsPanel.GetArea().y + _iconsPanel.GetArea().height + fheroes2::borderWidthPx );
-        _statusWindow.SetPos( px, _buttonsPanel.GetArea().y + _buttonsPanel.GetArea().height );
+        _statusPanel.SetPos( px, _buttonsPanel.GetArea().y + _buttonsPanel.GetArea().height );
     }
 
     const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
@@ -158,7 +158,7 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     }
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
-        _statusWindow._redraw();
+        _statusPanel._redraw();
     }
 
     if ( combinedRedraw & REDRAW_BORDER ) {

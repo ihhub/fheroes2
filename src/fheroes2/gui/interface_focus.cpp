@@ -84,7 +84,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
     }
 
     _gameArea.SetCenter( hero->GetCenter() );
-    _statusWindow.SetState( StatusType::STATUS_ARMY );
+    _statusPanel.SetState( StatusType::STATUS_ARMY );
 
     const int heroIndex = hero->GetIndex();
     if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
@@ -125,7 +125,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
 
     _iconsPanel.Select( castle );
     _gameArea.SetCenter( castle->GetCenter() );
-    _statusWindow.SetState( StatusType::STATUS_FUNDS );
+    _statusPanel.SetState( StatusType::STATUS_FUNDS );
 
     if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
@@ -299,5 +299,5 @@ void Interface::AdventureMap::RedrawFocus()
         _iconsPanel.SetRedraw( ICON_CASTLES );
     }
 
-    _statusWindow.SetRedraw();
+    _statusPanel.SetRedraw();
 }

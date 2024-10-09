@@ -104,9 +104,9 @@ namespace Interface
             return _controlPanel;
         }
 
-        StatusWindow & getStatusWindow()
+        StatusPanel & getStatusPanel()
         {
-            return _statusWindow;
+            return _statusPanel;
         }
 
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
@@ -173,7 +173,7 @@ namespace Interface
         IconsPanel _iconsPanel;
         ButtonsPanel _buttonsPanel;
         ControlPanel _controlPanel;
-        StatusWindow _statusWindow;
+        StatusPanel _statusPanel;
 
         bool _lockRedraw;
     };

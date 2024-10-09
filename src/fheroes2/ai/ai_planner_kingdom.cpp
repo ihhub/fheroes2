@@ -753,7 +753,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     }
 
     // Reset the turn progress indicator
-    Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
+    Interface::StatusPanel & status = Interface::AdventureMap::Get().getStatusPanel();
     status.DrawAITurnProgress( 0 );
 
     AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );

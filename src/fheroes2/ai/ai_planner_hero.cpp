@@ -2737,7 +2737,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         addHeroToMove( hero, availableHeroes );
     }
 
-    Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
+    Interface::StatusPanel & status = Interface::AdventureMap::Get().getStatusPanel();
 
     uint32_t currentProgressValue = startProgressValue;
 
