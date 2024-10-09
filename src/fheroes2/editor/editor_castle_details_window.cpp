@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -42,6 +41,7 @@
 #include "dialog.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
