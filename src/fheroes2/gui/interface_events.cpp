@@ -91,7 +91,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
         _gameArea.SetRedraw();
-        buttonsArea.SetRedraw();
+        _buttonsPanel.SetRedraw();
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
@@ -408,7 +408,7 @@ void Interface::AdventureMap::EventSwitchHeroSleeping()
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         setRedraw( REDRAW_HEROES );
-        buttonsArea.SetRedraw();
+        _buttonsPanel.SetRedraw();
     }
 }
 
@@ -547,7 +547,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
         }
         else {
             conf.SetShowButtons( true );
-            buttonsArea.SetRedraw();
+            _buttonsPanel.SetRedraw();
         }
     }
 }

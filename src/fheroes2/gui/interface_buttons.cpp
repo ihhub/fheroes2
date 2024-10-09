@@ -40,12 +40,12 @@
 #include "ui_dialog.h"
 #include "world.h"
 
-Interface::ButtonsArea::ButtonsArea( AdventureMap & basic )
+Interface::ButtonsPanel::ButtonsPanel( AdventureMap & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
 
-void Interface::ButtonsArea::SavePosition()
+void Interface::ButtonsPanel::SavePosition()
 {
     Settings & conf = Settings::Get();
 
@@ -53,12 +53,12 @@ void Interface::ButtonsArea::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::ButtonsArea::SetRedraw() const
+void Interface::ButtonsPanel::SetRedraw() const
 {
     interface.setRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
+void Interface::ButtonsPanel::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 
@@ -107,7 +107,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::_redraw()
+void Interface::ButtonsPanel::_redraw()
 {
     const Settings & conf = Settings::Get();
 
@@ -128,7 +128,7 @@ void Interface::ButtonsArea::_redraw()
     }
 }
 
-void Interface::ButtonsArea::ResetButtons()
+void Interface::ButtonsPanel::ResetButtons()
 {
     buttonNextHero.drawOnRelease();
     buttonHeroMovement.drawOnRelease();
@@ -140,7 +140,7 @@ void Interface::ButtonsArea::ResetButtons()
     buttonSystem.drawOnRelease();
 }
 
-fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
+fheroes2::GameMode Interface::ButtonsPanel::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -219,7 +219,7 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     return res;
 }
 
-void Interface::ButtonsArea::SetButtonStatus()
+void Interface::ButtonsPanel::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
 

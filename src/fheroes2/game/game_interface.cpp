@@ -51,7 +51,7 @@
 Interface::AdventureMap::AdventureMap()
     : BaseInterface( false )
     , iconsPanel( *this )
-    , buttonsArea( *this )
+    , _buttonsPanel( *this )
     , controlPanel( *this )
     , _statusWindow( *this )
     , _lockRedraw( false )
@@ -81,15 +81,15 @@ void Interface::AdventureMap::reset()
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
             _radar.SetPos( radrPos.x, radrPos.y );
             iconsPanel.SetPos( iconPos.x, iconPos.y );
-            buttonsArea.SetPos( bttnPos.x, bttnPos.y );
+            _buttonsPanel.SetPos( bttnPos.x, bttnPos.y );
             _statusWindow.SetPos( statPos.x, statPos.y );
         }
         else {
             _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
             iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
-            buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
-            _statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
+            _buttonsPanel.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
+            _statusWindow.SetPos( display.width(), _buttonsPanel.GetRect().y + _buttonsPanel.GetRect().height );
         }
     }
     else {
@@ -97,8 +97,8 @@ void Interface::AdventureMap::reset()
 
         _radar.SetPos( px, fheroes2::borderWidthPx );
         iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + fheroes2::borderWidthPx );
-        buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + fheroes2::borderWidthPx );
-        _statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        _buttonsPanel.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + fheroes2::borderWidthPx );
+        _statusWindow.SetPos( px, _buttonsPanel.GetArea().y + _buttonsPanel.GetArea().height );
     }
 
     const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
@@ -154,7 +154,7 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     }
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
-        buttonsArea._redraw();
+        _buttonsPanel._redraw();
     }
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {

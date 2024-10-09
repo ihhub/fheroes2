@@ -1199,10 +1199,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             _statusWindow.QueueEventProcessing();
         }
         // Cursor is over the buttons area
-        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( buttonsArea.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( _buttonsPanel.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            res = buttonsArea.QueueEventProcessing();
+            res = _buttonsPanel.QueueEventProcessing();
             isCursorOverButtons = true;
         }
         // Cursor is over the icons panel
@@ -1246,7 +1246,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
-            buttonsArea.ResetButtons();
+            _buttonsPanel.ResetButtons();
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {

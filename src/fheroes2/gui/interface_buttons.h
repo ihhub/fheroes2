@@ -35,15 +35,15 @@ namespace Interface
 {
     class AdventureMap;
 
-    class ButtonsArea final : public BorderWindow
+    class ButtonsPanel final : public BorderWindow
     {
     public:
-        explicit ButtonsArea( AdventureMap & );
-        ButtonsArea( const ButtonsArea & ) = delete;
+        explicit ButtonsPanel( AdventureMap & );
+        ButtonsPanel( const ButtonsPanel & ) = delete;
 
-        ~ButtonsArea() override = default;
+        ~ButtonsPanel() override = default;
 
-        ButtonsArea & operator=( const ButtonsArea & ) = delete;
+        ButtonsPanel & operator=( const ButtonsPanel & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;

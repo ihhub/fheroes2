@@ -171,7 +171,7 @@ namespace Interface
         fheroes2::GameMode HumanTurn( const bool isload );
 
         IconsPanel iconsPanel;
-        ButtonsArea buttonsArea;
+        ButtonsPanel _buttonsPanel;
         ControlPanel controlPanel;
         StatusWindow _statusWindow;
 
