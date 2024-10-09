@@ -25,6 +25,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog_resolution.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -224,6 +225,8 @@ namespace fheroes2
 {
     bool openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
+        const CursorRestorer cursorRestorer( true, ::Cursor::POINTER );
+
         Settings & conf = Settings::Get();
 
         bool saveConfiguration = false;
