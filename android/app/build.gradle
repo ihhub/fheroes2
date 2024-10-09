@@ -80,14 +80,14 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.2'
 
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
 
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
 
 tasks.register('copyH2D', Copy) {

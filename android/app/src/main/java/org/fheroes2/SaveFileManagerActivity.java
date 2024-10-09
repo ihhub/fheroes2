@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,18 +23,11 @@ package org.fheroes2;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.function.Predicate;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -56,8 +49,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import org.apache.commons.io.IOUtils;
 
 public final class SaveFileManagerActivity extends AppCompatActivity
 {
@@ -111,7 +102,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             new Thread( () -> {
                 try {
                     // Reading the list of save files should not by itself change the visible status of the last background task, unless an error occurred while reading
-                    liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_NONE, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    liveStatus.postValue(
+                        new Status( false, BackgroundTaskResult.RESULT_NONE, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to get a list of save files.", ex );
@@ -132,42 +124,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
+                boolean atLeastOneSaveFileImported = false;
                 Exception caughtException = null;
 
-                final Predicate<String> checkExtension = ( String name ) ->
-                {
-                    final String lowercaseName = name.toLowerCase( Locale.ROOT );
-
-                    for ( final String extension : allowedSaveFileExtensions ) {
-                        if ( lowercaseName.endsWith( extension ) ) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                };
-
-                boolean atLeastOneSaveFileImported = false;
-
-                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
-                    Files.createDirectories( saveFileDir.toPath() );
-
-                    for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
-                        if ( zEntry.isDirectory() ) {
-                            continue;
-                        }
-
-                        final String zEntryFileName = new File( zEntry.getName() ).getName();
-                        if ( !checkExtension.test( zEntryFileName ) ) {
-                            continue;
-                        }
-
-                        try ( final OutputStream out = Files.newOutputStream( ( new File( saveFileDir, zEntryFileName ) ).toPath() ) ) {
-                            IOUtils.copy( zin, out );
-                        }
-
-                        atLeastOneSaveFileImported = true;
-                    }
+                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
+                    atLeastOneSaveFileImported = FileManagement.importFilesFromZip( saveFileDir, allowedSaveFileExtensions, in );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to import save files.", ex );
@@ -178,12 +139,12 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                         else {
                             liveStatus.postValue(
                                 new Status( false, atLeastOneSaveFileImported ? BackgroundTaskResult.RESULT_SUCCESS : BackgroundTaskResult.RESULT_NO_SAVE_FILES, "",
-                                            getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                            FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
@@ -209,14 +170,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             new Thread( () -> {
                 Exception caughtException = null;
 
-                try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
-                    for ( final String saveFileName : saveFileNames ) {
-                        zout.putNextEntry( new ZipEntry( saveFileName ) );
-
-                        try ( final InputStream in = Files.newInputStream( ( new File( saveFileDir, saveFileName ) ).toPath() ) ) {
-                            IOUtils.copy( in, zout );
-                        }
-                    }
+                try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ) ) {
+                    FileManagement.exportFilesToZip( saveFileDir, saveFileNames, out );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to export save files.", ex );
@@ -227,11 +182,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                         else {
                             liveStatus.postValue(
-                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
@@ -257,11 +212,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 Exception caughtException = null;
 
                 try {
-                    for ( final String saveFileName : saveFileNames ) {
-                        final File saveFile = new File( saveFileDir, saveFileName );
-
-                        Files.deleteIfExists( saveFile.toPath() );
-                    }
+                    FileManagement.deleteFiles( saveFileDir, saveFileNames );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to delete save files.", ex );
@@ -272,11 +223,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     try {
                         if ( caughtException != null ) {
                             liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
-                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                                              FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                         else {
                             liveStatus.postValue(
-                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", FileManagement.getFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                         }
                     }
                     catch ( final Exception ex ) {
@@ -286,39 +237,6 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     }
                 }
             } ).start();
-        }
-
-        private List<String> getSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
-        {
-            final List<String> saveFileNames = new ArrayList<>();
-
-            final File[] saveFilesList = saveFileDir.listFiles( ( dir, name ) -> {
-                if ( !dir.equals( saveFileDir ) ) {
-                    return false;
-                }
-
-                final String lowercaseName = name.toLowerCase( Locale.ROOT );
-
-                for ( final String extension : allowedSaveFileExtensions ) {
-                    if ( lowercaseName.endsWith( extension ) ) {
-                        return true;
-                    }
-                }
-
-                return false;
-            } );
-
-            if ( saveFilesList != null ) {
-                for ( final File saveFile : saveFilesList ) {
-                    if ( saveFile.isFile() ) {
-                        saveFileNames.add( saveFile.getName() );
-                    }
-                }
-
-                Collections.sort( saveFileNames );
-            }
-
-            return saveFileNames;
         }
     }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -97,7 +97,7 @@ namespace
 
 namespace MUS
 {
-    std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension )
+    std::string getFileName( const int musicTrackId, const ExternalMusicNamingScheme namingScheme, const char * fileExtension )
     {
         assert( fileExtension != nullptr );
 
@@ -107,7 +107,7 @@ namespace MUS
             return {};
         }
 
-        if ( musicType == EXTERNAL_MUSIC_TYPE::MAPPED ) {
+        if ( namingScheme == ExternalMusicNamingScheme::MAPPED ) {
             std::string output;
             addTrackId( output, musicTrackId );
             output += ' ';
@@ -117,7 +117,7 @@ namespace MUS
             return output;
         }
 
-        if ( musicType == EXTERNAL_MUSIC_TYPE::DOS_VERSION ) {
+        if ( namingScheme == ExternalMusicNamingScheme::DOS_VERSION ) {
             std::string output( "homm2_" );
 
             // GOG version format, data track was ignored there so 02 becomes 01
@@ -126,7 +126,7 @@ namespace MUS
             return output;
         }
 
-        if ( musicType == EXTERNAL_MUSIC_TYPE::WIN_VERSION ) {
+        if ( namingScheme == ExternalMusicNamingScheme::WIN_VERSION ) {
             std::string output( "Track" );
             addTrackId( output, musicTrackId );
             output += fileExtension;

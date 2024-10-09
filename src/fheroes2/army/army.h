@@ -33,7 +33,8 @@
 #include "monster.h"
 #include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Castle;
 class HeroBase;
@@ -56,7 +57,7 @@ public:
 
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop *, const Troop * );
+    void Assign( const Troop * itbeg, const Troop * itend );
     void Assign( const Troops & );
     void Insert( const Troops & );
     void PushBack( const Monster &, uint32_t );
@@ -173,9 +174,6 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    // Returns the strength of the average starting army for a given hero (not taking into account the hero's bonuses)
-    static double getStrengthOfAverageStartingArmy( const Heroes * hero );
-
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
@@ -259,8 +257,8 @@ public:
     void ArrangeForWhirlpool();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Army & );
-    friend StreamBase & operator>>( StreamBase &, Army & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Army & army );
+    friend IStreamBase & operator>>( IStreamBase & stream, Army & army );
 
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
@@ -272,8 +270,5 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-StreamBase & operator<<( StreamBase &, const Army & );
-StreamBase & operator>>( StreamBase &, Army & );
 
 #endif

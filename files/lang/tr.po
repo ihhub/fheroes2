@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:34+0000\n"
+"POT-Creation-Date: 2024-09-19 08:28+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -44,6 +44,21 @@ msgid "INFO"
 msgstr ""
 
 msgid "QUIT"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
 
 msgid "CANCEL"
@@ -188,6 +203,9 @@ msgstr ""
 msgid "TOWN"
 msgstr ""
 
+msgid "RESTRICT"
+msgstr ""
+
 msgid ""
 "D\n"
 "I\n"
@@ -203,6 +221,15 @@ msgid ""
 "X\n"
 "I\n"
 "T"
+msgstr ""
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
 msgstr ""
 
 msgid ""
@@ -225,6 +252,12 @@ msgid ""
 "A\n"
 "R\n"
 "D"
+msgstr ""
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -342,6 +375,11 @@ msgstr "Birlikleri %{count} hizala -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Gruptaki bazı ölümsüzler -1"
 
+msgid ""
+"Default\n"
+"troop"
+msgstr ""
+
 msgid "View %{name}"
 msgstr "Görünüm %{name}"
 
@@ -366,8 +404,9 @@ msgstr "Son birlik hareket ettirilemiyor"
 msgid "Move the %{name}"
 msgstr "%{name} 'i hareket ettir"
 
-msgid "Set Count"
-msgstr "Sayıyı Ayarla"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "%{monster} vur"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -963,18 +1002,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
-
-msgid "Set Attack Skill"
-msgstr "Saldırı Becerisini Ayarla"
-
-msgid "Set Defense Skill"
-msgstr "Savunma Becerisini Ayarla"
-
-msgid "Set Power Skill"
-msgstr "Güç Becerisini Ayarla"
-
-msgid "Set Knowledge Skill"
-msgstr "Bilgi Becerisini Ayarla"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -1778,6 +1805,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr ""
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 
@@ -1785,12 +1818,6 @@ msgid "Requires:"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr ""
-
-msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2244,6 +2271,55 @@ msgstr ""
 msgid "Shrine"
 msgstr ""
 
+msgid "Special"
+msgstr ""
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Büyü hedefini seç"
+
+msgid "Upg. Dwelling 2"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Büyü hedefini seç"
+
+msgid "Upg. Dwelling 3"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Büyü hedefini seç"
+
+msgid "Upg. Dwelling 4"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Büyü hedefini seç"
+
+msgid "Upg. Dwelling 6"
+msgstr ""
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2285,6 +2361,14 @@ msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
 msgstr ""
 
 msgid "Thieves' Guild"
@@ -2507,10 +2591,10 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
-msgid "Max"
+msgid "Hire all creatures in the town."
 msgstr ""
 
-msgid "Hire all creatures in the town."
+msgid "Max"
 msgstr ""
 
 msgid "Available"
@@ -2688,16 +2772,13 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr ""
-
-msgid "No save files to load."
-msgstr ""
-
 msgid "New Game"
 msgstr ""
 
 msgid "Start a single or multi-player game."
+msgstr ""
+
+msgid "Load Game"
 msgstr ""
 
 msgid "Load a previously saved game."
@@ -2924,6 +3005,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "n/a"
+msgstr ""
+
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
@@ -2953,9 +3037,6 @@ msgid "Your Resources"
 msgstr ""
 
 msgid "Available Trades"
-msgstr ""
-
-msgid "n/a"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -3064,6 +3145,19 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+msgid "Select this game resolution."
+msgstr ""
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr ""
 
@@ -3079,10 +3173,10 @@ msgstr ""
 msgid "Open Virtual Keyboard"
 msgstr ""
 
-msgid "How many units do you wish to move?"
+msgid "How many creatures do you wish to move?"
 msgstr ""
 
-msgid "Select how many slots to separate into:"
+msgid "Select how many units to separate into:"
 msgstr ""
 
 msgid "Map: "
@@ -3106,16 +3200,16 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "Click to save the current game."
-msgstr ""
-
-msgid "Click to load a previously saved game."
-msgstr ""
-
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
 msgstr ""
 
 msgid "File to Save:"
@@ -3124,13 +3218,10 @@ msgstr ""
 msgid "File to Load:"
 msgstr ""
 
-msgid "Accept the choice made."
-msgstr ""
-
-msgid "%{color} %{race} hero"
-msgstr ""
-
 msgid "Terrain object"
+msgstr ""
+
+msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
@@ -3148,6 +3239,25 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected hero."
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{name} %{race}"
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Büyü hedefini seç"
@@ -3160,9 +3270,6 @@ msgid "Castle/town placing"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
-
-msgid "race|Random"
 msgstr ""
 
 msgid "Click to start placing the selected castle/town."
@@ -3178,15 +3285,6 @@ msgid "%{color} %{race} %{townOrCastle}"
 msgstr ""
 
 msgid "race|Neutral"
-msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-msgid "Click to select this class."
-msgstr ""
-
-msgid "Click to select this color."
 msgstr ""
 
 #, fuzzy
@@ -3231,6 +3329,32 @@ msgstr "Büyü hedefini seç"
 #, fuzzy
 msgid "Select Adventure Object:"
 msgstr "Büyü hedefini seç"
+
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
 
 msgid "Map Type:\n"
 msgstr ""
@@ -3317,32 +3441,6 @@ msgid "All Maps"
 msgstr ""
 
 msgid "View all maps, regardless of size."
-msgstr ""
-
-msgid "Players Icon"
-msgstr ""
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-
-msgid "Size Icon"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-
-msgid "Map Type"
 msgstr ""
 
 msgid "Selected Name"
@@ -3486,7 +3584,183 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
-msgid "Map filename"
+msgid "Random Castle Name"
+msgstr ""
+
+msgid "Random Town Name"
+msgstr ""
+
+msgid "Allow Castle build"
+msgstr ""
+
+msgid "Default Buildings"
+msgstr ""
+
+msgid "Default Army"
+msgstr ""
+
+msgid "Castle Army"
+msgstr ""
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Kahraman Ekranı"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+msgid "Enter Castle name"
+msgstr ""
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
+msgid "Message Text:"
+msgstr "Mesaj Çubuğu"
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Mesaj Çubuğu"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr ""
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Add Event"
+msgstr ""
+
+msgid "Add an additional event."
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Artifact"
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete Artifact"
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+msgid "%{objects} cannot be placed on water."
+msgstr ""
+
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr ""
+
+msgid "%{objects} must be placed on water."
+msgstr ""
+
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
+msgid "Action objects must be placed on clear tiles."
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+
+msgid "Editor"
 msgstr ""
 
 msgid ""
@@ -3499,8 +3773,7 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
+msgid "Create a new map from scratch."
 msgstr ""
 
 msgid "New Map"
@@ -3521,19 +3794,22 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Input %{object} text"
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
+msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
-msgid "Choose a tile which does not contain any objects."
+msgid "%{object} has no properties to change."
 msgstr ""
 
-msgid "Treasures cannot be placed on water."
+msgid "This artifact"
 msgstr ""
 
-msgid "Heroes cannot be placed on water."
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3543,37 +3819,33 @@ msgstr ""
 msgid "Failed to update player information."
 msgstr ""
 
-msgid "Artifacts cannot be placed on water."
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
-msgid "Mountains cannot be placed on water."
+msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-msgid "Rocks cannot be placed on water."
+#, fuzzy
+msgid "The map is corrupted."
+msgstr "Ayna görüntüsü oluşturuldu."
+
+msgid "Unable to locate data directory to save the map."
 msgstr ""
 
-msgid "Trees cannot be placed on water."
+msgid "Unable to create a directory to save the map."
 msgstr ""
 
-msgid "Ocean object must be placed on water."
+msgid "Unable to locate a directory to save the map."
 msgstr ""
 
-msgid "Landscape objects cannot be placed on water."
+#, fuzzy
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Otomatik savaşı kesmek istediğine emin misin?"
+
+msgid "Map saved to: "
 msgstr ""
 
-msgid "Towns cannot be placed on water."
-msgstr ""
-
-msgid "Mines cannot be placed on water."
-msgstr ""
-
-msgid "Dwellings cannot be placed on water."
-msgstr ""
-
-msgid "Power-ups cannot be placed on water."
-msgstr ""
-
-msgid "Adventure objects cannot be placed on water."
+msgid "Failed to save the map."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -3597,12 +3869,6 @@ msgstr "Lütfen başka bir kahraman seç."
 msgid ""
 "Cell\n"
 "Details"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid "Erase"
@@ -3638,10 +3904,10 @@ msgstr ""
 msgid "Treasures"
 msgstr ""
 
-msgid "Towns"
+msgid "Heroes"
 msgstr ""
 
-msgid "Heroes"
+msgid "Towns"
 msgstr ""
 
 #, fuzzy
@@ -3742,7 +4008,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of monsters, heroes and towns."
+msgid "Used for special editing of action objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -3796,9 +4062,6 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -3846,6 +4109,187 @@ msgstr ""
 msgid "Warning"
 msgstr "Uyarı"
 
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "None."
+msgstr "Hiç"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Lütfen başka bir kahraman seç."
+
+msgid "Accumulate gold."
+msgstr ""
+
+msgid "Run out of time."
+msgstr ""
+
+#, fuzzy
+msgid "alliance|1st"
+msgstr "Mancınık"
+
+msgid "alliance|2nd"
+msgstr ""
+
+msgid "alliance|3rd"
+msgstr ""
+
+msgid "alliance|4th"
+msgstr ""
+
+msgid "alliance|5th"
+msgstr ""
+
+msgid "Special Loss Condition"
+msgstr ""
+
+msgid "Special Victory Condition"
+msgstr ""
+
+msgid "Allow standard victory conditions"
+msgstr ""
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr "Dev İttifakı"
+
+#
+msgid "{%number} alliance: "
+msgstr ""
+
+msgid "Gold:"
+msgstr ""
+
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Map Difficulty"
+msgstr ""
+
+msgid "Map Description"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+msgid "Change Map Description"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Events"
+msgstr ""
+
+msgid "Click to change your map name."
+msgstr ""
+
+msgid "Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+msgid "Player Type"
+msgstr ""
+
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+
 msgid "Animation"
 msgstr ""
 
@@ -3856,6 +4300,96 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Add Rumor"
+msgstr ""
+
+msgid "Add an additional rumor."
+msgstr ""
+
+msgid "Edit Rumor"
+msgstr ""
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+
+msgid "Save Map:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4112,6 +4646,9 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "High Scores"
+msgstr ""
+
 msgid "Your Name"
 msgstr ""
 
@@ -4234,6 +4771,13 @@ msgstr "Sistem seçeneklerini özelleştirin"
 #, fuzzy
 msgid "hotkey|redo last action"
 msgstr "Sistem seçeneklerini özelleştirin"
+
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Sistem seçeneklerini özelleştirin"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -4495,9 +5039,6 @@ msgstr "Kahraman Ekranı"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Ayna görüntüsü oluşturuldu."
@@ -4525,11 +5066,14 @@ msgstr ""
 msgid "' language, but the current language of the game is '"
 msgstr ""
 
+msgid "No save files to load."
+msgstr ""
+
 msgid "Hot Seat"
 msgstr ""
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
@@ -4593,9 +5137,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
@@ -4605,10 +5146,10 @@ msgstr ""
 msgid "View the credits screen."
 msgstr ""
 
-msgid "High Scores"
+msgid "View the high scores screen."
 msgstr ""
 
-msgid "View the high scores screen."
+msgid "Create new or modify existing maps."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
@@ -4674,7 +5215,7 @@ msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
@@ -5107,9 +5648,6 @@ msgstr ""
 msgid "Month: %{month} Week: %{week}"
 msgstr ""
 
-msgid "Day: %{day}"
-msgstr ""
-
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
@@ -5179,7 +5717,24 @@ msgid ""
 "resources per turn."
 msgstr ""
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Saldırı Becerisini Ayarla"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
+msgstr ""
+
+msgid ""
+"Default\n"
+"skill"
 msgstr ""
 
 msgid "Keyboard|123"
@@ -5427,6 +5982,9 @@ msgid " gives you maximum morale"
 msgstr ""
 
 msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot have multiple spell books."
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
@@ -6522,6 +7080,53 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
+msgid "Random hero (Level %{level})"
+msgstr ""
+
+msgid "Random %{race} hero (Level %{level})"
+msgstr ""
+
+#, fuzzy
+msgid "Hero race:"
+msgstr "Kahraman Ekranı"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr ""
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+msgid "Set Experience value"
+msgstr ""
+
+msgid "View Experience Info"
+msgstr ""
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Büyü Puanları"
+
+msgid "View Spell Points Info"
+msgstr ""
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+msgid "Enter hero's name"
+msgstr ""
+
+msgid "Click to change race."
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -6530,21 +7135,6 @@ msgstr ""
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
-msgstr ""
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr ""
-
-msgid "View Experience Info"
-msgstr ""
-
-msgid "View Spell Points Info"
-msgstr ""
-
-msgid "Set army combat formation to 'Spread'"
-msgstr ""
-
-msgid "Set army combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Hero Screen"
@@ -6564,6 +7154,34 @@ msgstr ""
 
 msgid "Show next hero"
 msgstr ""
+
+msgid "Set army combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Blood Morale"
 msgstr ""
@@ -7442,9 +8060,6 @@ msgid_plural "Windmills"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Artifact"
-msgstr ""
-
 msgid "Mermaid"
 msgstr ""
 
@@ -7685,10 +8300,28 @@ msgstr "Bataklık"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
 msgstr ""
 
 msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Unknown Monster"
 msgstr ""
 
 msgid "Peasant"
@@ -9134,13 +9767,21 @@ msgstr ""
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} büyüye direndi!"
 
-msgid "Dummy 1"
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
@@ -9304,19 +9945,19 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid ""
-"An old seaman tells you a tale of an enchanted masthead that he used in his "
-"youth to rally his crew during times of trouble. He then hands you a faded "
-"map that shows where he hid it. After much exploring, you find it stashed "
-"underneath a nearby dock."
-msgstr ""
-
 msgid "Masthead"
 msgstr ""
 
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
+msgstr ""
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
 msgstr ""
 
 msgid "Sphere of Negation"
@@ -9526,12 +10167,12 @@ msgstr ""
 msgid "Stoneskin"
 msgstr ""
 
+msgid "Steelskin"
+msgstr ""
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
-msgstr ""
-
-msgid "Steelskin"
 msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
@@ -9562,7 +10203,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
@@ -9886,7 +10527,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr ""
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"
@@ -9991,6 +10632,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Multiple"
-#~ msgstr "Çoklu"

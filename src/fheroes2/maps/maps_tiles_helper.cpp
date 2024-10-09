@@ -85,7 +85,7 @@ namespace
 
         uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
         if ( uidResource == 0 ) {
-            uidResource = tile.GetObjectUID();
+            uidResource = tile.getMainObjectPart()._uid;
         }
 
         Maps::Tiles::updateTileObjectIcnIndex( tile, uidResource, resourceSprite );
@@ -123,7 +123,7 @@ namespace
         if ( !art.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
@@ -131,7 +131,7 @@ namespace
 
         uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
         if ( uidArtifact == 0 ) {
-            uidArtifact = tile.GetObjectUID();
+            uidArtifact = tile.getMainObjectPart()._uid;
         }
 
         static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileObjectIcnIndex ), void( Maps::Tiles &, uint32_t, uint8_t )>,
@@ -180,62 +180,18 @@ namespace
         if ( !mons.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set a monster over a random monster on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
-            tile.setAsEmpty();
+            tile.updateObjectType();
             return;
         }
 
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+        using TileImageIndexType = decltype( tile.getMainObjectPart()._imageIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
 
         assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
 
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( mons.GetID() - 1 ) ); // ICN::MONS32 starts from PEASANT
-    }
-
-    void removeJailSprite( Maps::Tiles & tile )
-    {
-        assert( tile.GetObject() == MP2::OBJ_JAIL );
-
-        // remove left sprite
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            const int32_t left = Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT );
-            world.GetTiles( left ).Remove( tile.GetObjectUID() );
-
-            // remove left left sprite
-            if ( Maps::isValidDirection( left, Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( left, Direction::LEFT ) ).Remove( tile.GetObjectUID() );
-        }
-
-        // remove top sprite
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::TOP ) ) {
-            const int32_t top = Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP );
-            Maps::Tiles & topTile = world.GetTiles( top );
-            topTile.Remove( tile.GetObjectUID() );
-
-            if ( topTile.GetObject() == MP2::OBJ_JAIL && topTile.GetObjectUID() == 0 ) {
-                // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
-                // This is not ideal but it doesn't break things.
-                topTile.setAsEmpty();
-                topTile.FixObject();
-            }
-
-            // remove top left sprite
-            if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
-                Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
-                leftTile.Remove( tile.GetObjectUID() );
-
-                if ( leftTile.GetObject() == MP2::OBJ_JAIL && leftTile.GetObjectUID() == 0 ) {
-                    // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
-                    // This is not ideal but it doesn't break things.
-                    leftTile.setAsEmpty();
-                    leftTile.FixObject();
-                }
-            }
-        }
-
-        tile.Remove( tile.GetObjectUID() );
+        tile.getMainObjectPart()._imageIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
     }
 
     // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
@@ -291,12 +247,22 @@ namespace
     int getStreamDirecton( const Maps::Tiles & tile )
     {
         const int32_t centerTileIndex = tile.GetIndex();
-        int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
+        // Stream includes also the Deltas. Here we need to check only streams excluding Deltas.
+        int streamDirection = ( tile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } ) ) ? Direction::CENTER : 0;
 
         // For streams we can check only the next four directions.
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-            if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
-                streamDirection |= direction;
+            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
+                const Maps::Tiles & currentTile = world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) );
+
+                // Check also for Deltas connection.
+                if ( currentTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
+                     || ( direction == Direction::TOP && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
+                     || ( direction == Direction::BOTTOM && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) )
+                     || ( direction == Direction::RIGHT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 ) )
+                     || ( direction == Direction::LEFT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 13 ) ) ) {
+                    streamDirection |= direction;
+                }
             }
         }
 
@@ -852,11 +818,19 @@ namespace
     {
         // To place some roads we need to check not only the road directions around this tile, but also the road ICN index at the nearby tile.
         auto checkRoadIcnIndex = []( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
-            for ( const Maps::TilesAddon & addon : world.GetTiles( tileIndex ).getBottomLayerAddons() ) {
+            const Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+
+            if ( currentTile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(),
+                                    [&currentTile]( const uint8_t index ) { return currentTile.getMainObjectPart()._imageIndex == index; } );
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
                 if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
                     return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&addon]( const uint8_t index ) { return addon._imageIndex == index; } );
                 }
             }
+
             return false;
         };
 
@@ -921,6 +895,14 @@ namespace
         }
 
         // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
+
+        // There might be a castle entrance above. Check for it to properly connect the road to it.
+        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
+            const MP2::MapObjectType aboveObject = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).GetObject( false );
+            if ( aboveObject == MP2::OBJ_CASTLE || aboveObject == MP2::OBJ_RANDOM_TOWN || aboveObject == MP2::OBJ_RANDOM_CASTLE ) {
+                return 31U;
+            }
+        }
 
         if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
              && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
@@ -1180,17 +1162,21 @@ namespace
 
     bool placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
+        // If this assertion blows up then what kind of object you are trying to place if it's empty?
         assert( !info.empty() );
 
         // Verify that the object is allowed to be placed.
         const fheroes2::Point mainTilePos = tile.GetCenter();
 
         for ( const auto & partInfo : info.groundLevelParts ) {
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
+                continue;
+            }
 
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) && isMainObject ) {
-                // Only shadow and terrain layer object parts are allowed not to be placed.
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
                 assert( 0 );
                 return false;
             }
@@ -1209,48 +1195,85 @@ namespace
 
         for ( const auto & partInfo : info.groundLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
-
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                assert( !isMainObject );
+                // Make sure that the above condition about object placement is correct.
+                assert( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER );
+
+                // Ignore this tile since it is out of the map.
                 continue;
             }
 
+            // We need to be very careful to update tile object type to make sure that this is a correct type.
+            // Additionally, all object parts must be sorted based on their layer type.
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            if ( !isMainObject ) {
-                // Shadows and terrain object do not change main tile information.
-                currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
-                continue;
+            bool setObjectType = false;
+            // The first case if the existing tile has no object type being set.
+            const MP2::MapObjectType tileObjectType = currentTile.GetObject();
+
+            // Always move the current object part to the back of the bottom layer list to make proper sorting later.
+            currentTile.moveMainAddonToBottomLayer();
+
+            if ( tileObjectType == MP2::OBJ_NONE ) {
+                setObjectType = ( partInfo.objectType != MP2::OBJ_NONE );
             }
+            else if ( partInfo.objectType != MP2::OBJ_NONE ) {
+                if ( MP2::isOffGameActionObject( partInfo.objectType ) ) {
+                    // Since this is an action object we must enforce setting its type.
+                    setObjectType = true;
+                }
+                else if ( !MP2::isOffGameActionObject( tileObjectType ) ) {
+                    // The current tile does not have an action object.
+                    // We need to run through each object part present at the tile and see if it has "higher" layer object.
+                    bool higherObjectFound = false;
 
-            // It is important that the type of the object is set properly for this layer.
-            assert( partInfo.objectType != MP2::OBJ_NONE );
-
-            bool setObjectType = true;
-            if ( !MP2::isActionObject( partInfo.objectType ) ) {
-                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
-                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
-                    if ( type != MP2::OBJ_NONE ) {
-                        setObjectType = false;
-                        break;
+                    for ( const auto & topPart : currentTile.getTopLayerAddons() ) {
+                        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( topPart._objectIcnType, topPart._imageIndex );
+                        if ( type != MP2::OBJ_NONE ) {
+                            // A top object part is present.
+                            higherObjectFound = true;
+                            break;
+                        }
                     }
+
+                    if ( !higherObjectFound ) {
+                        for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                            if ( groundPart._layerType >= partInfo.layerType ) {
+                                // A ground object part is has "lower" or equal layer type. Skip it.
+                                continue;
+                            }
+
+                            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( groundPart._objectIcnType, groundPart._imageIndex );
+                            if ( type != MP2::OBJ_NONE ) {
+                                // A ground object part is present and it has "higher" layer type.
+                                higherObjectFound = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    setObjectType = !higherObjectFound;
                 }
             }
 
+#if defined( WITH_DEBUG )
+            // Check that we don't put the same object part.
+            for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                assert( groundPart._uid != uid || groundPart._imageIndex != static_cast<uint8_t>( partInfo.icnIndex ) || groundPart._objectIcnType != partInfo.icnType
+                        || groundPart._layerType != partInfo.layerType );
+            }
+#endif
+
+            // Push the object to the ground (bottom) object parts.
+            currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            // Sort all objects.
+            currentTile.AddonsSort();
+
+            // Set object type if needed.
             if ( setObjectType ) {
                 currentTile.SetObject( partInfo.objectType );
             }
-
-            currentTile.moveMainAddonToBottomLayer();
-
-            currentTile.setObjectUID( uid );
-            currentTile.setObjectIcnType( partInfo.icnType );
-
-            using TileImageIndexType = decltype( currentTile.GetObjectSpriteIndex() );
-            static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-            currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
         }
 
         for ( const auto & partInfo : info.topLevelParts ) {
@@ -1262,15 +1285,54 @@ namespace
             }
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
-
+            // Top object parts do not need sorting.
             currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
-            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+            // Set object type only if the current object part has a type and the object is not an action object.
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.GetObject() ) ) {
                 currentTile.SetObject( partInfo.objectType );
             }
         }
 
         return true;
+    }
+
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
+    {
+        assert( startTileIndex >= 0 && startTileIndex < world.w() * world.h() );
+
+        assert( objectUID > 0 );
+
+        std::vector<int32_t> tiles;
+        tiles.push_back( startTileIndex );
+
+        std::set<int32_t> processedTileIndicies;
+
+        for ( size_t currentId = 0; currentId < tiles.size(); ++currentId ) {
+            if ( processedTileIndicies.count( tiles[currentId] ) == 1 ) {
+                // This tile is already processed, skip it.
+                continue;
+            }
+
+            if ( world.GetTiles( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
+                // This tile has the object. Get neighboring tiles to see if they have the same.
+                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
+                for ( const int tileIndex : tileIndices ) {
+                    if ( tileIndex < 0 ) {
+                        // Invalid tile index.
+                        continue;
+                    }
+
+                    if ( processedTileIndicies.count( tileIndex ) == 0 ) {
+                        tiles.push_back( tileIndex );
+                    }
+                }
+            }
+
+            processedTileIndicies.emplace( tiles[currentId] );
+        }
+
+        return !processedTileIndicies.empty();
     }
 }
 
@@ -1306,7 +1368,7 @@ namespace Maps
 
     bool updateRoadOnTile( Tiles & tile, const bool setRoad )
     {
-        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setRoad == tile.isRoad() || ( tile.isWater() && setRoad ) ) {
             // We cannot place roads on the water or above already placed roads.
             return false;
         }
@@ -1342,7 +1404,7 @@ namespace Maps
 
     bool updateStreamOnTile( Tiles & tile, const bool setStream )
     {
-        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER ) ) {
+        if ( setStream == tile.isStream() || ( tile.isWater() && setStream ) ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }
@@ -1373,6 +1435,14 @@ namespace Maps
         }
 
         return true;
+    }
+
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection )
+    {
+        const int32_t tileIndex = tile.GetIndex();
+        if ( isValidDirection( tileIndex, deltaDirection ) ) {
+            updateStreamSpritesAround( world.GetTiles( GetDirectionIndex( tileIndex, deltaDirection ) ) );
+        }
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
@@ -1573,7 +1643,7 @@ namespace Maps
         case MP2::OBJ_BARROW_MOUNDS:
             return { Monster::GHOST };
         case MP2::OBJ_MONSTER:
-            return { tile.GetObjectSpriteIndex() + 1 };
+            return { tile.getMainObjectPart()._imageIndex + 1 };
         default:
             break;
         }
@@ -1854,16 +1924,6 @@ namespace Maps
         }
     }
 
-    void resetObjectInfoOnTile( Tiles & tile )
-    {
-        resetObjectMetadata( tile );
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-        if ( MP2::isPickupObject( objectType ) ) {
-            tile.setAsEmpty();
-        }
-    }
-
     uint32_t getMonsterCountFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
@@ -2099,7 +2159,21 @@ namespace Maps
         case MP2::OBJ_ARTIFACT: {
             assert( isFirstLoad );
 
-            const int art = Artifact::FromMP2IndexSprite( tile.GetObjectSpriteIndex() ).GetID();
+            uint8_t artifactSpriteIndex = Artifact::UNKNOWN;
+            if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                artifactSpriteIndex = tile.getMainObjectPart()._imageIndex;
+            }
+            else {
+                // On some hacked original maps artifact can be placed to the bottom layer addons.
+                for ( const auto & addon : tile.getBottomLayerAddons() ) {
+                    if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                        artifactSpriteIndex = addon._imageIndex;
+                        break;
+                    }
+                }
+            }
+
+            const int art = Artifact::getArtifactFromMapSpriteIndex( artifactSpriteIndex ).GetID();
             if ( Artifact::UNKNOWN == art ) {
                 // This is an unknown artifact. Did you add a new one?
                 assert( 0 );
@@ -2110,7 +2184,11 @@ namespace Maps
                 static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
 
                 // Spell ID has a value of 1 bigger than in the original game.
-                const uint32_t spell = std::clamp( tile.metadata()[0] + 1, static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
+                Artifact tempArt( art );
+                tempArt.SetSpell( static_cast<int>( tile.metadata()[0] ) + 1 );
+
+                const uint32_t spell
+                    = std::clamp( static_cast<uint32_t>( tempArt.getSpellId() ), static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
 
                 tile.metadata()[1] = spell;
                 tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
@@ -2139,17 +2217,17 @@ namespace Maps
 
             int resourceType = Resource::UNKNOWN;
 
-            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                 // The resource is located at the top.
-                resourceType = Resource::FromIndexSprite( tile.GetObjectSpriteIndex() );
+                resourceType = Resource::FromIndexSprite( tile.getMainObjectPart()._imageIndex );
             }
             else {
-                for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
+                for ( const auto & addon : tile.getBottomLayerAddons() ) {
                     if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                         resourceType = Resource::FromIndexSprite( addon._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
-                        // Let's swap the addon and main tile objects
-                        tile.swap( addon );
+                        // Let's update the tile's object type to properly show the action object.
+                        tile.updateObjectType();
 
                         break;
                     }
@@ -2174,8 +2252,8 @@ namespace Maps
             default:
                 // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getObjectIcnType() << ", image index "
-                                   << tile.GetObjectSpriteIndex() )
+                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getMainObjectPart()._objectIcnType
+                                   << ", image index " << tile.getMainObjectPart()._imageIndex )
                 resourceType = Resource::WOOD;
                 count = 0;
                 break;
@@ -2475,13 +2553,13 @@ namespace Maps
         case MP2::OBJ_BARRIER:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromBarrierSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+            setColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) );
             break;
 
         case MP2::OBJ_TRAVELLER_TENT:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) );
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB: {
@@ -2507,7 +2585,7 @@ namespace Maps
         case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
-            switch ( tile.GetObjectSpriteIndex() ) {
+            switch ( tile.getMainObjectPart()._imageIndex ) {
             case 0: {
                 const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
                 assert( resourceCount.has_value() && resourceCount > 0U );
@@ -2562,8 +2640,8 @@ namespace Maps
             assert( isFirstLoad );
 
             // This is a special case. Boats are different in the original editor.
-            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_BOAT32 );
-            tile.setObjectSpriteIndex( 18 );
+            tile.getMainObjectPart()._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
+            tile.getMainObjectPart()._imageIndex = 18;
             break;
 
         case MP2::OBJ_RANDOM_ARTIFACT:
@@ -2649,7 +2727,7 @@ namespace Maps
 
     void updateMonsterInfoOnTile( Tiles & tile )
     {
-        const Monster mons = Monster( tile.GetObjectSpriteIndex() + 1 ); // ICN::MONS32 start from PEASANT
+        const Monster mons = Monster( tile.getMainObjectPart()._imageIndex + 1 ); // ICN::MONS32 start from PEASANT
         setMonsterOnTile( tile, mons, tile.metadata()[0] );
     }
 
@@ -2657,27 +2735,27 @@ namespace Maps
     {
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // No object exists on this tile. Add one.
-            tile.setObjectUID( getNewObjectUID() );
-            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
-        }
-        else if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        Maps::TilesAddon & mainAddon = tile.getMainObjectPart();
+
+        if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                // If there is another object sprite here (shadow for example) push it down to add-ons.
+                tile.pushBottomLayerAddon( mainAddon );
+            }
 
             // Set unique UID for placed monster.
-            tile.setObjectUID( getNewObjectUID() );
-            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
+            mainAddon._uid = getNewObjectUID();
+            mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
+            mainAddon._layerType = OBJECT_LAYER;
         }
 
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+        using TileImageIndexType = decltype( mainAddon._imageIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
 
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
+        mainAddon._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
         const bool setDefinedCount = ( count > 0 );
 
@@ -2781,7 +2859,7 @@ namespace Maps
     void restoreAbandonedMine( Tiles & tile, const int resource )
     {
         assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
-        assert( tile.GetObjectUID() != 0 );
+        assert( tile.getMainObjectPart()._uid != 0 );
 
         const Funds info = ProfitConditions::FromMine( resource );
         std::optional<uint32_t> resourceCount;
@@ -2858,22 +2936,22 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
-                          || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
+                     && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getBottomLayerAddon( tile.getMainObjectPart()._uid )
+                          || mineTile.getTopLayerAddon( tile.getMainObjectPart()._uid ) ) ) {
                     mineTile.SetObject( MP2::OBJ_NON_ACTION_MINE );
                 }
             }
         };
 
-        MP2::ObjectIcnType objectIcnTypeTemp{ tile.getObjectIcnType() };
-        uint8_t imageIndexTemp{ tile.GetObjectSpriteIndex() };
+        MP2::ObjectIcnType objectIcnTypeTemp{ tile.getMainObjectPart()._objectIcnType };
+        uint8_t imageIndexTemp{ tile.getMainObjectPart()._imageIndex };
 
         restoreLeftSprite( objectIcnTypeTemp, imageIndexTemp );
-        tile.setObjectIcnType( objectIcnTypeTemp );
-        tile.setObjectSpriteIndex( imageIndexTemp );
+        tile.getMainObjectPart()._objectIcnType = objectIcnTypeTemp;
+        tile.getMainObjectPart()._imageIndex = imageIndexTemp;
 
-        for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._uid == tile.GetObjectUID() ) {
+        for ( auto & addon : tile.getBottomLayerAddons() ) {
+            if ( addon._uid == tile.getMainObjectPart()._uid ) {
                 restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
             }
         }
@@ -2881,16 +2959,16 @@ namespace Maps
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
             Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
 
-            if ( rightTile.GetObjectUID() == tile.GetObjectUID() ) {
-                objectIcnTypeTemp = rightTile.getObjectIcnType();
-                imageIndexTemp = rightTile.GetObjectSpriteIndex();
+            if ( rightTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid ) {
+                objectIcnTypeTemp = rightTile.getMainObjectPart()._objectIcnType;
+                imageIndexTemp = rightTile.getMainObjectPart()._imageIndex;
                 restoreRightSprite( objectIcnTypeTemp, imageIndexTemp );
 
-                rightTile.setObjectIcnType( objectIcnTypeTemp );
-                rightTile.setObjectSpriteIndex( imageIndexTemp );
+                rightTile.getMainObjectPart()._objectIcnType = objectIcnTypeTemp;
+                rightTile.getMainObjectPart()._imageIndex = imageIndexTemp;
             }
 
-            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.GetObjectUID() );
+            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.getMainObjectPart()._uid );
 
             if ( addon ) {
                 restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
@@ -2904,44 +2982,45 @@ namespace Maps
         restoreMineObjectType( Direction::TOP_RIGHT );
     }
 
-    void removeObjectSprite( Tiles & tile )
+    void removeMainObjectFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_MONSTER:
-            tile.Remove( tile.GetObjectUID() );
-            break;
-        case MP2::OBJ_JAIL:
-            removeJailSprite( tile );
-            tile.resetPassability();
-            break;
-        case MP2::OBJ_ARTIFACT: {
-            const uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
-            tile.Remove( uidArtifact );
+        removeObjectFromTileByType( tile, tile.GetObject() );
+    }
 
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidArtifact );
-            break;
-        }
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_RESOURCE: {
-            const uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
-            tile.Remove( uidResource );
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        assert( objectType != MP2::OBJ_NONE );
 
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidResource );
-            break;
-        }
-        case MP2::OBJ_BARRIER:
-            tile.resetPassability();
-            [[fallthrough]];
-        default:
-            // remove shadow sprite from left cell
-            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( tile.GetObjectUID() );
+        // Verify that this tile indeed contains an object with given object type.
+        uint32_t objectUID = 0;
 
-            tile.Remove( tile.GetObjectUID() );
-            break;
+        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == objectType ) {
+            objectUID = tile.getMainObjectPart()._uid;
         }
+
+        if ( objectUID == 0 ) {
+            for ( auto iter = tile.getTopLayerAddons().rbegin(); iter != tile.getTopLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
+                    break;
+                }
+            }
+        }
+
+        if ( objectUID == 0 ) {
+            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                    objectUID = iter->_uid;
+                    break;
+                }
+            }
+        }
+
+        if ( objectUID == 0 ) {
+            return false;
+        }
+
+        return removeObjectFromMapByUID( tile.GetIndex(), objectUID );
     }
 
     bool isClearGround( const Tiles & tile )
@@ -2959,9 +3038,9 @@ namespace Maps
             break;
         }
 
-        if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
-             || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
-            return !MP2::isActionObject( objectType, tile.isWater() );
+        if ( ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart()._layerType == Maps::SHADOW_LAYER )
+             || ( tile.getMainObjectPart()._layerType == Maps::TERRAIN_LAYER ) ) {
+            return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
         return false;
@@ -3133,6 +3212,39 @@ namespace Maps
                 world.updatePassabilities();
             }
             return true;
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJ_RANDOM_CASTLE:
+        case MP2::OBJ_RANDOM_TOWN:
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            if ( hasBits( getRoadDirecton( tile ), Direction::BOTTOM ) ) {
+                // There is a road in front of the castle entrance, connect it with the castle.
+                Tiles & bottomTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM ) );
+
+                updateRoadSpriteOnTile( bottomTile, false );
+            }
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
+        case MP2::OBJ_MAGIC_GARDEN:
+            // Magic Garden uses the metadata to indicate whether it is empty or not.
+            // The Editor does not allow to edit this object but it is important to show it non-empty.
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
+
+            // These values will be replaced during map loading.
+            tile.metadata()[0] = 1;
+            tile.metadata()[1] = 1;
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
+            return true;
         default:
             break;
         }
@@ -3174,21 +3286,19 @@ namespace Maps
             for ( int32_t x = startX; x <= endX; ++x ) {
                 const Maps::Tiles & currentTile = world.GetTiles( x + tileOffset );
 
-                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() == OBJECT_LAYER || currentTile.getLayerType() == TERRAIN_LAYER ) ) {
-                    objectsUids.insert( currentTile.GetObjectUID() );
+                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart()._layerType != SHADOW_LAYER ) ) {
+                    objectsUids.insert( currentTile.getMainObjectPart()._uid );
                 }
 
-                for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                for ( const auto & addon : currentTile.getBottomLayerAddons() ) {
+                    if ( addon._uid != 0 && ( addon._layerType != SHADOW_LAYER ) ) {
                         objectsUids.insert( addon._uid );
                     }
                 }
 
-                for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
-                        objectsUids.insert( addon._uid );
-                    }
-                }
+                // The top layer objects are not taken into account to correspond the original editor
+                // and because they can be small or even zero-sized parts of the Main or Bottom layer
+                // objects which can be selected by their non-top parts.
             }
         }
 

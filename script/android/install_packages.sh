@@ -23,7 +23,7 @@
 set -e -o pipefail
 
 PKG_FILE="android.zip"
-PKG_FILE_SHA256="a966b73f745f79bcc3868a621597b2edd3be5fe29fc83fe0f6640ba0fe00085d"
+PKG_FILE_SHA256="c571a2513b21acd9529880cd7e864b3a98eb4c07374460018ad89f61344c22a0"
 PKG_URL="https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/$PKG_FILE"
 
 TMP_DIR="$(mktemp -d)"

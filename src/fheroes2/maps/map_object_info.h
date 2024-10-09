@@ -35,7 +35,7 @@ namespace Maps
     // All object's parts shares images from the same ICN source (MP2::ObjectIcnType).
     struct ObjectPartInfo
     {
-        ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
+        ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point & offset, const MP2::MapObjectType type )
             : tileOffset( offset )
             , icnIndex( index )
             , objectType( type )
@@ -63,7 +63,7 @@ namespace Maps
 
     struct LayeredObjectPartInfo : public ObjectPartInfo
     {
-        LayeredObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type,
+        LayeredObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point & offset, const MP2::MapObjectType type,
                                const ObjectLayerType layer )
             : ObjectPartInfo( icn, index, offset, type )
             , layerType( layer )
@@ -118,9 +118,11 @@ namespace Maps
     //
     // !!! IMPORTANT !!!
     // Do NOT change the order of the items as they are used for the map format.
-    enum class ObjectGroup : int32_t
+    enum class ObjectGroup : uint8_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.
+        NONE,
+
         ROADS,
         STREAMS,
 
@@ -151,12 +153,17 @@ namespace Maps
         // Monsters.
         MONSTERS,
 
+        // Extra map objects that are not placed in editor (currently).
+        MAP_EXTRAS,
+
         // IMPORTANT!!!
         // Put all new entries just above this entry.
         GROUP_COUNT
     };
 
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
+
+    const ObjectInfo & getObjectInfo( const ObjectGroup group, const int32_t objectIndex );
 
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
 

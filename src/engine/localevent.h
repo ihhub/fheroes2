@@ -27,16 +27,18 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <optional>
 #include <string>
 #include <utility>
 
-#include <SDL_events.h>
-#include <SDL_gamecontroller.h>
-#include <SDL_touch.h>
-
 #include "math_base.h"
 #include "timing.h"
+
+namespace EventProcessing
+{
+    class EventEngine;
+}
 
 namespace fheroes2
 {
@@ -164,16 +166,14 @@ namespace fheroes2
     enum KeyModifier : int32_t
     {
         KEY_MODIFIER_NONE = 0,
-        KEY_MODIFIER_CTRL = 0x1,
-        KEY_MODIFIER_SHIFT = 0x2,
-        KEY_MODIFIER_ALT = 0x4,
-        KEY_MODIFIER_CAPS = 0x8,
-        KEY_MODIFIER_NUM = 0x10
+        KEY_MODIFIER_CTRL = ( 1 << 0 ),
+        KEY_MODIFIER_SHIFT = ( 1 << 1 ),
+        KEY_MODIFIER_ALT = ( 1 << 2 ),
+        KEY_MODIFIER_CAPS = ( 1 << 3 ),
+        KEY_MODIFIER_NUM = ( 1 << 4 )
     };
 
     const char * KeySymGetName( const Key key );
-
-    bool PressIntKey( uint32_t max, uint32_t & result );
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
@@ -181,8 +181,23 @@ namespace fheroes2
 class LocalEvent
 {
 public:
+    friend class EventProcessing::EventEngine;
+
     static LocalEvent & Get();
-    static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
+
+    static void initEventEngine();
+
+    static int32_t getCurrentKeyModifiers();
+
+    // Only one instance of the class can exist.
+    LocalEvent( const LocalEvent & ) = delete;
+    LocalEvent & operator=( const LocalEvent & ) = delete;
+
+    // Reset all previous event statuses.
+    void reset()
+    {
+        _actionStates = 0;
+    }
 
     void setGlobalMouseMotionEventHook( std::function<fheroes2::Rect( const int32_t, const int32_t )> hook )
     {
@@ -194,200 +209,216 @@ public:
         _globalKeyDownEventHook = std::move( hook );
     }
 
-    static void setEventProcessingStates();
-
+    // Return false when event handling should be stopped, true otherwise.
     bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
 
-    bool MouseMotion() const
+    bool hasMouseMoved() const
     {
-        return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
+        return ( _actionStates & MOUSE_MOTION ) == MOUSE_MOTION;
     }
 
-    const fheroes2::Point & GetMouseCursor() const
+    const fheroes2::Point & getMouseCursorPos() const
     {
-        return mouse_cu;
+        return _mouseCursorPos;
     }
 
-    const fheroes2::Point & GetMousePressLeft() const
+    const fheroes2::Point & getMouseLeftButtonPressedPos() const
     {
-        return mouse_pl;
+        return _mousePressLeftPos;
     }
 
     bool MouseClickLeft();
     bool MouseClickMiddle();
     bool MouseClickRight();
 
-    bool MouseClickLeft( const fheroes2::Rect & rt );
-    bool MouseClickRight( const fheroes2::Rect & rt );
+    bool MouseClickLeft( const fheroes2::Rect & area );
+    bool MouseClickRight( const fheroes2::Rect & area );
 
     // The long press event is triggered only once. If this event was triggered (i.e. this method was called
     // and returned true), then after releasing the mouse button, the click event will not be triggered.
     bool MouseLongPressLeft( const fheroes2::Rect & rt );
 
-    bool MouseWheelUp() const;
-    bool MouseWheelDn() const;
-
-    bool MousePressLeft() const;
-
-    bool MousePressLeft( const fheroes2::Rect & rt ) const
+    bool isMouseWheelUp() const
     {
-        return MousePressLeft() && ( rt & mouse_pl );
+        return ( _actionStates & MOUSE_WHEEL ) && _mouseWheelMovementOffset.y > 0;
     }
 
-    bool MousePressRight() const;
-
-    bool MousePressRight( const fheroes2::Rect & rt ) const
+    bool isMouseWheelDown() const
     {
-        return MousePressRight() && ( rt & mouse_pr );
+        return ( _actionStates & MOUSE_WHEEL ) && _mouseWheelMovementOffset.y < 0;
     }
 
-    bool MouseReleaseLeft() const;
-
-    bool MouseReleaseLeft( const fheroes2::Rect & rt ) const
+    bool isMouseLeftButtonPressed() const
     {
-        return MouseReleaseLeft() && ( rt & mouse_rl );
+        return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_LEFT;
     }
 
-    bool MouseWheelUp( const fheroes2::Rect & rt ) const
+    bool isMouseLeftButtonPressedInArea( const fheroes2::Rect & area ) const
     {
-        return MouseWheelUp() && ( rt & mouse_cu );
+        return isMouseLeftButtonPressed() && ( area & _mousePressLeftPos );
     }
 
-    bool MouseWheelDn( const fheroes2::Rect & rt ) const
+    bool isMouseRightButtonPressed() const
     {
-        return MouseWheelDn() && ( rt & mouse_cu );
+        return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_RIGHT;
     }
 
-    bool MouseCursor( const fheroes2::Rect & rt ) const
+    bool isMouseRightButtonPressedInArea( const fheroes2::Rect & area ) const
     {
-        return rt & mouse_cu;
+        return isMouseRightButtonPressed() && ( area & _mousePressRightPos );
+    }
+
+    bool isMouseLeftButtonReleased() const
+    {
+        return ( _actionStates & MOUSE_RELEASED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_LEFT;
+    }
+
+    bool isMouseLeftButtonReleasedInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseLeftButtonReleased() && ( area & _mouseReleaseLeftPos );
+    }
+
+    bool isMouseWheelUpInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseWheelUp() && ( area & _mouseCursorPos );
+    }
+
+    bool isMouseWheelDownInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseWheelDown() && ( area & _mouseCursorPos );
+    }
+
+    bool isMouseCursorPosInArea( const fheroes2::Rect & area ) const
+    {
+        return area & _mouseCursorPos;
     }
 
     // Returns true if the current mouse event is triggered by the touchpad and not the mouse (in other words,
     // this event is emulated using the touchpad). It is assumed that there is only one mouse in the system,
     // and touchpad events have priority in this sense - that is, as long as the touchpad emulates pressing any
     // mouse button, it is assumed that all mouse events are triggered by the touchpad.
-    bool MouseEventFromTouchpad() const
+    bool isMouseEventFromTouchpad() const
     {
-        return modes & MOUSE_TOUCH;
+        return _actionStates & MOUSE_TOUCH;
     }
 
-    bool KeyPress() const
+    bool isAnyKeyPressed() const
     {
-        return modes & KEY_PRESSED;
+        return _actionStates & KEY_PRESSED;
     }
 
-    bool KeyPress( fheroes2::Key key ) const
+    bool isKeyPressed( const fheroes2::Key key ) const
     {
-        return key == key_value && ( modes & KEY_PRESSED );
+        return key == _currentKeyboardValue && ( _actionStates & KEY_PRESSED );
     }
 
-    bool KeyHold() const
+    bool isKeyBeingHold() const
     {
-        return ( modes & KEY_HOLD ) != 0;
+        return ( _actionStates & KEY_HOLD ) != 0;
     }
 
-    fheroes2::Key KeyValue() const
+    fheroes2::Key getPressedKeyValue() const
     {
-        return key_value;
+        return _currentKeyboardValue;
     }
 
-    static int32_t getCurrentKeyModifiers();
-
-    void OpenController();
+    void initController();
     void CloseController();
-
-    static void OpenTouchpad();
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
         if ( newSpeed > 0 ) {
-            _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+            _controllerPointerSpeed = newSpeed / _constrollerSpeedModifier;
         }
     }
 
     bool isDragInProgress() const
     {
-        return modes & DRAG_ONGOING;
+        return _actionStates & DRAG_ONGOING;
     }
 
     void registerDrag()
     {
-        SetModes( DRAG_ONGOING );
+        setStates( DRAG_ONGOING );
     }
 
 private:
-    LocalEvent();
+    enum class MouseButtonType : uint8_t
+    {
+        MOUSE_BUTTON_UNKNOWN,
+        MOUSE_BUTTON_LEFT,
+        MOUSE_BUTTON_MIDDLE,
+        MOUSE_BUTTON_RIGHT
+    };
 
-    void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
-    void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
-    void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+    enum class KeyboardEventState : uint8_t
+    {
+        KEY_UNKNOWN,
+        KEY_DOWN,
+        KEY_UP
+    };
 
-    static void StopSounds();
-    static void ResumeSounds();
+    enum class ControllerAxisType : uint8_t
+    {
+        CONTROLLER_AXIS_UNKNOWN,
+        CONTROLLER_AXIS_LEFT_X,
+        CONTROLLER_AXIS_LEFT_Y,
+        CONTROLLER_AXIS_RIGHT_X,
+        CONTROLLER_AXIS_RIGHT_Y
+    };
 
-    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
-    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
-    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
-    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+    enum class ControllerButtonType : uint8_t
+    {
+        CONTROLLER_BUTTON_UNKNOWN,
+        CONTROLLER_BUTTON_A,
+        CONTROLLER_BUTTON_B,
+        CONTROLLER_BUTTON_X,
+        CONTROLLER_BUTTON_Y,
+        CONTROLLER_BUTTON_RIGHT_SHOULDER,
+        CONTROLLER_BUTTON_LEFT_SHOULDER,
+        CONTROLLER_BUTTON_DPAD_UP,
+        CONTROLLER_BUTTON_DPAD_DOWN,
+        CONTROLLER_BUTTON_DPAD_RIGHT,
+        CONTROLLER_BUTTON_DPAD_LEFT,
+        CONTROLLER_BUTTON_BACK,
+        CONTROLLER_BUTTON_START,
+        CONTROLLER_BUTTON_GUIDE
+    };
 
-    // Returns true if frame rendering is required.
-    static bool HandleWindowEvent( const SDL_WindowEvent & event );
-    static void HandleRenderDeviceResetEvent();
-
-    void ProcessControllerAxisMotion();
+    enum class TouchFingerEventType : uint8_t
+    {
+        FINGER_EVENT_UNKNOWN,
+        FINGER_EVENT_DOWN,
+        FINGER_EVENT_UP,
+        FINGER_EVENT_MOTION
+    };
 
     enum : uint32_t
     {
+        NO_EVENT = 0,
         // Key on the keyboard has been pressed
-        KEY_PRESSED = 0x0001,
+        KEY_PRESSED = ( 1 << 0 ),
         // Mouse cursor has been moved
-        MOUSE_MOTION = 0x0002,
+        MOUSE_MOTION = ( 1 << 1 ),
         // Mouse button is currently pressed
-        MOUSE_PRESSED = 0x0004,
+        MOUSE_PRESSED = ( 1 << 2 ),
         // Mouse button has just been released
-        MOUSE_RELEASED = 0x0008,
+        MOUSE_RELEASED = ( 1 << 3 ),
         // Mouse wheel has been rotated
-        MOUSE_WHEEL = 0x0010,
+        MOUSE_WHEEL = ( 1 << 4 ),
         // Current mouse event has been triggered by the touchpad
-        MOUSE_TOUCH = 0x0020,
+        MOUSE_TOUCH = ( 1 << 5 ),
         // Key on the keyboard is currently being held down
-        KEY_HOLD = 0x0040,
+        KEY_HOLD = ( 1 << 6 ),
         // Some UI component registered the start of drag motion
-        DRAG_ONGOING = 0x0080,
+        DRAG_ONGOING = ( 1 << 7 ),
     };
 
-    enum
+    enum : int16_t
     {
         CONTROLLER_L_DEADZONE = 4000,
         CONTROLLER_R_DEADZONE = 25000
     };
-
-    void SetModes( const uint32_t f )
-    {
-        modes |= f;
-    }
-
-    void ResetModes( const uint32_t f )
-    {
-        modes &= ~f;
-    }
-
-    uint32_t modes;
-    fheroes2::Key key_value;
-    int mouse_button;
-
-    fheroes2::Point mouse_pl; // press left
-    fheroes2::Point mouse_pm; // press middle
-    fheroes2::Point mouse_pr; // press right
-
-    fheroes2::Point mouse_rl; // release left
-    fheroes2::Point mouse_rm; // release middle
-    fheroes2::Point mouse_rr; // release right
-
-    fheroes2::Point mouse_cu; // point cursor
-
-    fheroes2::Point mouse_wm; // wheel movement
 
     class LongPressDelay final : public fheroes2::TimeDelay
     {
@@ -415,6 +446,24 @@ private:
         bool _triggered{ false };
     };
 
+    std::unique_ptr<EventProcessing::EventEngine> _engine;
+
+    uint32_t _actionStates{ NO_EVENT };
+    fheroes2::Key _currentKeyboardValue{ fheroes2::Key::NONE };
+    MouseButtonType _currentMouseButton{ MouseButtonType::MOUSE_BUTTON_UNKNOWN };
+
+    fheroes2::Point _mousePressLeftPos;
+    fheroes2::Point _mousePressMiddlePos;
+    fheroes2::Point _mousePressRightPos;
+
+    fheroes2::Point _mouseReleaseLeftPos;
+    fheroes2::Point _mouseReleaseMiddlePos;
+    fheroes2::Point _mouseReleaseRightPos;
+
+    fheroes2::Point _mouseCursorPos;
+
+    fheroes2::Point _mouseWheelMovementOffset;
+
     LongPressDelay _mouseButtonLongPressDelay;
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
@@ -423,27 +472,52 @@ private:
     fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more usable ones
-    const double CONTROLLER_SPEED_MOD = 2000000.0;
-    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
-    double _emulatedPointerPosX = 0;
-    double _emulatedPointerPosY = 0;
+    const double _constrollerSpeedModifier{ 2000000.0 };
+    double _controllerPointerSpeed{ 10.0 / _constrollerSpeedModifier };
+    fheroes2::PointBase2D<double> _emulatedPointerPos;
 
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values
-    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
-    const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
+    const double _controllerAxisSpeedup{ 1.03 };
+    const double _controllerTriggerCursorSpeedup{ 2.0 };
 
-    SDL_GameController * _gameController = nullptr;
     fheroes2::Time _controllerTimer;
-    int16_t _controllerLeftXAxis = 0;
-    int16_t _controllerLeftYAxis = 0;
-    int16_t _controllerRightXAxis = 0;
-    int16_t _controllerRightYAxis = 0;
-    bool _controllerScrollActive = false;
+    int16_t _controllerLeftXAxis{ 0 };
+    int16_t _controllerLeftYAxis{ 0 };
+    int16_t _controllerRightXAxis{ 0 };
+    int16_t _controllerRightYAxis{ 0 };
+    bool _controllerScrollActive{ false };
 
     // IDs of currently active (touching the touchpad) fingers, if any. These IDs consist of a touch device id and a finger id.
-    std::pair<std::optional<std::pair<SDL_TouchID, SDL_FingerID>>, std::optional<std::pair<SDL_TouchID, SDL_FingerID>>> _fingerIds;
+    std::pair<std::optional<std::pair<int64_t, int64_t>>, std::optional<std::pair<int64_t, int64_t>>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
+
+    static void StopSounds();
+    static void ResumeSounds();
+
+    static void onRenderDeviceResetEvent();
+
+    LocalEvent();
+
+    void onMouseMotionEvent( fheroes2::Point position );
+    void onMouseButtonEvent( const bool isPressed, const MouseButtonType buttonType, fheroes2::Point position );
+    void onKeyboardEvent( const fheroes2::Key key, const int32_t keyModifier, const KeyboardEventState keyState );
+    void onMouseWheelEvent( fheroes2::Point position );
+    void onControllerAxisEvent( const ControllerAxisType axisType, const int16_t value );
+    void onControllerButtonEvent( const bool isPressed, const ControllerButtonType buttonType );
+    void onTouchFingerEvent( const TouchFingerEventType eventType, const int64_t touchId, const int64_t fingerId, fheroes2::PointBase2D<float> position );
+
+    void ProcessControllerAxisMotion();
+
+    void setStates( const uint32_t states )
+    {
+        _actionStates |= states;
+    }
+
+    void resetStates( const uint32_t states )
+    {
+        _actionStates &= ~states;
+    }
 };
 
 #endif

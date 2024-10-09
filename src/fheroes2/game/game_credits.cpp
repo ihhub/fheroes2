@@ -310,7 +310,8 @@ namespace
                                 "Bolsch\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
-                                "Christophe Didion\n" );
+                                "Christophe Didion\n"
+                                "Christopher Elliott" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
@@ -757,7 +758,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
             break;
         }
 

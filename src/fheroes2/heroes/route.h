@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,13 +25,14 @@
 
 #include <cstdint>
 #include <list>
-#include <memory>
 #include <string>
 
 #include "direction.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
-class StreamBase;
 
 namespace Route
 {
@@ -67,8 +68,8 @@ namespace Route
         }
 
     protected:
-        friend StreamBase & operator<<( StreamBase &, const Step & );
-        friend StreamBase & operator>>( StreamBase &, Step & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Step & step );
+        friend IStreamBase & operator>>( IStreamBase & stream, Step & step );
 
         int32_t currentIndex = -1;
         int32_t from = -1;
@@ -190,17 +191,18 @@ namespace Route
         static int GetIndexSprite( const int from, const int to, const int cost );
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const Path & );
-        friend StreamBase & operator>>( StreamBase &, Path & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Path & path );
+        friend IStreamBase & operator>>( IStreamBase & stream, Path & path );
 
         const Heroes * _hero;
         bool _hide;
     };
 
-    StreamBase & operator<<( StreamBase &, const Step & );
-    StreamBase & operator<<( StreamBase &, const Path & );
-    StreamBase & operator>>( StreamBase &, Step & );
-    StreamBase & operator>>( StreamBase &, Path & );
+    OStreamBase & operator<<( OStreamBase & stream, const Step & step );
+    IStreamBase & operator>>( IStreamBase & stream, Step & step );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Path & path );
+    IStreamBase & operator>>( IStreamBase & stream, Path & path );
 
     uint32_t calculatePathPenalty( const std::list<Step> & path );
 }

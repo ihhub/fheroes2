@@ -59,7 +59,7 @@ bool Cursor::SetThemes( int name, bool force )
         fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
 
         // Apply new offset.
-        const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
+        const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
         Move( currentPos.x, currentPos.y );
         return true;
     }
@@ -74,7 +74,7 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
     fheroes2::cursor().update( image, -offset.x, -offset.y );
 
     // Immediately apply new mouse offset.
-    const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
+    const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
     _offset = offset;
 
     Move( currentPos.x, currentPos.y );
@@ -237,7 +237,22 @@ CursorRestorer::CursorRestorer( const bool visible, const int theme )
 
 CursorRestorer::~CursorRestorer()
 {
-    Cursor::Get().SetThemes( _theme );
+    fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
 
-    fheroes2::cursor().show( _visible );
+    const bool isShown = _visible && !cursorRenderer.isVisible();
+
+    cursorRenderer.show( _visible );
+
+    Cursor & cursor = Cursor::Get();
+
+    const bool noThemeChange = ( cursor.Themes() == _theme );
+
+    cursor.SetThemes( _theme );
+
+    // In case of software emulated cursor when cursor theme is not changed and it is shown after it was hidden
+    // we force render the cursor area. It is needed to reduce the cursor show delay.
+    if ( isShown && noThemeChange && cursorRenderer.isSoftwareEmulation() ) {
+        const fheroes2::Point & pos = LocalEvent::Get().getMouseCursorPos();
+        fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );
+    }
 }

@@ -33,10 +33,6 @@
 #include "battle_cell.h"
 #include "math_base.h"
 
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
-
 namespace Maps
 {
     class Tiles;
@@ -46,13 +42,13 @@ namespace Battle
 {
     class Unit;
 
-    inline direction_t & operator++( direction_t & d )
+    inline CellDirection & operator++( CellDirection & d )
     {
-        return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );
+        return d = ( CENTER == d ? TOP_LEFT : CellDirection( d << 1 ) );
     }
-    inline direction_t & operator--( direction_t & d )
+    inline CellDirection & operator--( CellDirection & d )
     {
-        return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
+        return d = ( TOP_LEFT == d ? CENTER : CellDirection( d >> 1 ) );
     }
 
     using Indexes = std::vector<int32_t>;
@@ -60,6 +56,13 @@ namespace Battle
     class Board : public std::vector<Cell>
     {
     public:
+        // Width of the battlefield, measured in cells
+        static constexpr int widthInCells{ 11 };
+        // Height of the battlefield, measured in cells
+        static constexpr int heightInCells{ 9 };
+        // Total number of cells on the battlefield
+        static constexpr int sizeInCells{ widthInCells * heightInCells };
+
         Board();
         Board( const Board & ) = delete;
 

@@ -36,7 +36,10 @@
 #include "players.h"
 #include "screen.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
+
+inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
 {
@@ -79,16 +82,17 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( const Maps::FileInfo & );
+
+    void setCurrentMapInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     Maps::FileInfo & getCurrentMapInfo()
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     int HeroesMoveSpeed() const
@@ -188,7 +192,6 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    bool isEditorEnabled() const;
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -319,13 +322,6 @@ public:
         players.setCurrentColor( color );
     }
 
-    int PreferablyCountPlayers() const
-    {
-        return preferably_count_players;
-    }
-
-    void SetPreferablyCountPlayers( int );
-
     int controllerPointerSpeed() const
     {
         return _controllerPointerSpeed;
@@ -352,8 +348,8 @@ public:
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Settings & );
-    friend StreamBase & operator>>( StreamBase &, Settings & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+    friend IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
 
     Settings();
 
@@ -374,7 +370,7 @@ private:
     // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 
-    Maps::FileInfo current_maps_file;
+    Maps::FileInfo _currentMapInfo;
 
     int sound_volume;
     int music_volume;
@@ -386,7 +382,6 @@ private:
     int battle_speed;
 
     int game_type;
-    int preferably_count_players;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
@@ -397,7 +392,7 @@ private:
     Players players;
 };
 
-StreamBase & operator<<( StreamBase &, const Settings & );
-StreamBase & operator>>( StreamBase &, Settings & );
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
 
 #endif

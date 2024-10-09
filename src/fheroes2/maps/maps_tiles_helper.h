@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
@@ -26,12 +27,17 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
 class Monster;
 class Spell;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+    enum ObjectIcnType : uint8_t;
+}
 
 namespace Maps
 {
@@ -129,8 +135,6 @@ namespace Maps
 
     void resetObjectMetadata( Tiles & tile );
 
-    void resetObjectInfoOnTile( Tiles & tile );
-
     uint32_t getMonsterCountFromTile( const Tiles & tile );
     void setMonsterCountOnTile( Tiles & tile, uint32_t count );
 
@@ -154,7 +158,9 @@ namespace Maps
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
-    void removeObjectSprite( Tiles & tile );
+    void removeMainObjectFromTile( const Tiles & tile );
+
+    bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType );
 
     bool isClearGround( const Tiles & tile );
 
@@ -167,8 +173,12 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
+    // Update the existing streams to connect them to the river delta.
+    void updateStreamsToDeltaConnection( const Tiles & tile, const int deltaDirection );
+
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
     // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
+    // This function does not take into account object parts in the top layer.
     std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }

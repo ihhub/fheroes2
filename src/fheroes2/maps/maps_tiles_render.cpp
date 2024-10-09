@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <list>
 #include <map>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -46,9 +45,11 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "monster_anim.h"
+#include "mp2.h"
 #include "race.h"
 #include "spell.h"
 #include "til.h"
+#include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
 
@@ -111,21 +112,21 @@ namespace
 
         // Ideally we need to check that the image is within a tile area. However, flags are among those for which this rule doesn't apply.
         if ( icn == ICN::FLAG32 ) {
-            assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+            assert( sprite.width() <= fheroes2::tileWidthPx && sprite.height() <= fheroes2::tileWidthPx );
         }
         else {
-            assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
+            assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= fheroes2::tileWidthPx && sprite.y() >= 0 && sprite.height() + sprite.y() <= fheroes2::tileWidthPx );
         }
 
         area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
+        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
         if ( animationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
+            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
 
             area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
         }
@@ -133,33 +134,33 @@ namespace
 
     void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tiles & tile )
     {
-        assert( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.GetObjectSpriteIndex() != 255 );
+        assert( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._imageIndex != 255 );
 
-        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getObjectIcnType() );
+        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart()._objectIcnType );
         if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.GetObject() ) ) {
             return;
         }
 
-        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( tile.GetObjectUID() );
+        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
 
-        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.GetObjectSpriteIndex() );
+        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.getMainObjectPart()._imageIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= TILEWIDTH && mainObjectSprite.y() >= 0
-                && mainObjectSprite.height() + mainObjectSprite.y() <= TILEWIDTH );
+        assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= fheroes2::tileWidthPx && mainObjectSprite.y() >= 0
+                && mainObjectSprite.height() + mainObjectSprite.y() <= fheroes2::tileWidthPx );
 
         area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
 
         // Render possible animation image.
         // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
         const uint32_t mainObjectAnimationIndex
-            = ICN::AnimationFrame( mainObjectIcn, tile.GetObjectSpriteIndex(), Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
+            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart()._imageIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
         if ( mainObjectAnimationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
+            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
 
             area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
         }
@@ -668,11 +669,11 @@ namespace Maps
         }
 
         if ( renderFlyingGhosts ) {
-            // This sprite is bigger than TILEWIDTH but rendering is correct for heroes and boats.
+            // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
             // TODO: consider adding this sprite as a part of an addon.
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
 
-            const uint8_t alphaValue = area.getObjectAlphaValue( tile.GetObjectUID() );
+            const uint8_t alphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
 
             area.BlitOnTile( dst, image, image.x(), image.y(), Maps::GetPoint( tile.GetIndex() ), false, alphaValue );
         }
@@ -907,11 +908,11 @@ namespace Maps
             }
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
-            area.BlitOnTile( dst, sprite, ( revert ? TILEWIDTH - sprite.x() - sprite.width() : sprite.x() ), sprite.y(), mp, revert, 255 );
+            area.BlitOnTile( dst, sprite, ( revert ? fheroes2::tileWidthPx - sprite.x() - sprite.width() : sprite.x() ), sprite.y(), mp, revert, 255 );
         }
     }
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
+    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
@@ -921,7 +922,7 @@ namespace Maps
         (void)friendColors;
 #endif
 
-        const bool isActionObject = MP2::isActionObject( tile.GetObject() );
+        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.GetObject() ) : MP2::isInGameActionObject( tile.GetObject() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
@@ -943,7 +944,7 @@ namespace Maps
         std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
         size_t postRenderAddonCount = 0;
 
-        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._layerType != level ) {
                 continue;
             }
@@ -964,8 +965,8 @@ namespace Maps
             renderAddonObject( dst, area, mp, addon );
         }
 
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getLayerType() == level
-             && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) ) ) {
+        if ( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._layerType == level
+             && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) ) ) {
             renderMainObject( dst, area, mp, tile );
         }
 
@@ -980,17 +981,17 @@ namespace Maps
     {
         const fheroes2::Point & tileOffset = Maps::GetPoint( tile.GetIndex() );
 
-        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
         }
 
-        if ( tile.getObjectIcnType() == objectIcnType ) {
+        if ( tile.getMainObjectPart()._objectIcnType == objectIcnType ) {
             renderMainObject( output, area, tileOffset, tile );
         }
 
-        for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
+        for ( const auto & addon : tile.getTopLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
@@ -1010,7 +1011,7 @@ namespace Maps
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1027,7 +1028,7 @@ namespace Maps
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
             const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + monsterImageOffset.x, secondaryMonsterSprite.y() + monsterImageOffset.y );
 
-            fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+            fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
             assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1053,7 +1054,7 @@ namespace Maps
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1070,7 +1071,7 @@ namespace Maps
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
             const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + monsterImageOffset.x, secondaryMonsterSprite.y() + monsterImageOffset.y );
 
-            fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+            fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
             assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1088,7 +1089,7 @@ namespace Maps
         // TODO: combine both boat image generation for heroes and empty boats.
         assert( tile.GetObject() == MP2::OBJ_BOAT );
 
-        const uint32_t spriteIndex = ( tile.GetObjectSpriteIndex() == 255 ) ? 18 : tile.GetObjectSpriteIndex();
+        const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
 
         const bool isReflected = ( spriteIndex > 128 );
 
@@ -1096,12 +1097,12 @@ namespace Maps
         const uint32_t icnIndex = spriteIndex % 128;
         const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
 
-        const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ),
-                                                boatSprite.y() + TILEWIDTH - 11 );
+        const fheroes2::Point boatSpriteOffset( ( isReflected ? ( fheroes2::tileWidthPx + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ),
+                                                boatSprite.y() + fheroes2::tileWidthPx - 11 );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1119,17 +1120,17 @@ namespace Maps
         assert( tile.GetObject() == MP2::OBJ_BOAT );
 
         // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
-        const uint32_t spriteIndex = ( tile.GetObjectSpriteIndex() == 255 ) ? 18 : tile.GetObjectSpriteIndex();
+        const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
 
         const int icnId{ ICN::BOATSHAD };
         const uint32_t icnIndex = spriteIndex % 128;
         const fheroes2::Sprite & boatShadowSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
-        const fheroes2::Point boatShadowSpriteOffset( boatShadowSprite.x(), TILEWIDTH + boatShadowSprite.y() - 11 );
+        const fheroes2::Point boatShadowSpriteOffset( boatShadowSprite.x(), fheroes2::tileWidthPx + boatShadowSprite.y() - 11 );
 
         // Shadows cannot be flipped so flip flag is always false.
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1163,7 +1164,7 @@ namespace Maps
 
             std::vector<fheroes2::Point> outputSquareInfo;
             std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-            fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, outputSquareInfo, outputImageInfo );
+            fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
             assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1206,12 +1207,12 @@ namespace Maps
         getHeroSpriteInfo( hero, hero.GetSpriteIndex(), false, icnId, icnIndex );
 
         const fheroes2::Sprite & spriteHero = fheroes2::AGG::GetICN( icnId, icnIndex );
-        const fheroes2::Point heroSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() ) : spriteHero.x() ),
-                                                offset.y + spriteHero.y() + TILEWIDTH );
+        const fheroes2::Point heroSpriteOffset( offset.x + ( reflect ? ( fheroes2::tileWidthPx + 1 - spriteHero.x() - spriteHero.width() ) : spriteHero.x() ),
+                                                offset.y + spriteHero.y() + fheroes2::tileWidthPx );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1228,10 +1229,11 @@ namespace Maps
 
         const fheroes2::Sprite & spriteFlag = fheroes2::AGG::GetICN( icnId, icnIndex );
         const fheroes2::Point flagSpriteOffset( offset.x
-                                                    + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
-                                                offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
+                                                    + ( reflect ? ( fheroes2::tileWidthPx - spriteFlag.x() - flagOffset.x - spriteFlag.width() )
+                                                                : spriteFlag.x() + flagOffset.x ),
+                                                offset.y + spriteFlag.y() + flagOffset.y + fheroes2::tileWidthPx );
 
-        fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1246,10 +1248,10 @@ namespace Maps
             // TODO: draw froth for all boats in deep water, not only for a moving boat.
             getFrothSpriteInfo( hero, hero.GetSpriteIndex(), icnId, icnIndex );
             const fheroes2::Sprite & spriteFroth = fheroes2::AGG::GetICN( icnId, icnIndex );
-            const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
-                                                     offset.y + spriteFroth.y() + TILEWIDTH );
+            const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? fheroes2::tileWidthPx - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
+                                                     offset.y + spriteFroth.y() + fheroes2::tileWidthPx );
 
-            fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, outputSquareInfo, outputImageInfo );
+            fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
             for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
                 objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect,
@@ -1276,11 +1278,11 @@ namespace Maps
         getShadowSpriteInfo( hero, hero.GetSpriteIndex(), icnId, icnIndex );
 
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( icnId, icnIndex );
-        const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + TILEWIDTH );
+        const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + fheroes2::tileWidthPx );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1296,7 +1298,7 @@ namespace Maps
     {
         assert( tile.GetObject() == MP2::OBJ_HERO );
 
-        const uint32_t icnIndex = tile.GetObjectSpriteIndex();
+        const uint32_t icnIndex = tile.getMainObjectPart()._imageIndex;
         const int icnId{ ICN::MINIHERO };
 
         const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
@@ -1305,7 +1307,7 @@ namespace Maps
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, fheroes2::tileWidthPx, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 

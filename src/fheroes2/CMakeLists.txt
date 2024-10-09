@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -60,7 +60,12 @@ else(MACOS_APP_BUNDLE)
 		OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
 		)
 
-	add_executable(fheroes2 ${FHEROES2_SOURCES})
+	add_executable(
+		fheroes2
+		${FHEROES2_SOURCES}
+		${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.manifest
+		${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.rc
+		)
 
 	target_compile_definitions(
 		fheroes2
@@ -102,8 +107,6 @@ target_include_directories(
 	kingdom
 	maps
 	monster
-	objects
-	pocketpc
 	resource
 	spell
 	system

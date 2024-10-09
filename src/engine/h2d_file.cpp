@@ -142,7 +142,7 @@ namespace fheroes2
         }
 
         for ( const auto & data : _fileData ) {
-            fileStream.putRaw( reinterpret_cast<const char *>( data.second.data() ), data.second.size() );
+            fileStream.putRaw( data.second.data(), data.second.size() );
         }
 
         return true;
@@ -182,7 +182,7 @@ namespace fheroes2
             return false;
         }
 
-        StreamBuf stream( data );
+        ROStreamBuf stream( data );
         const int32_t width = static_cast<int32_t>( stream.getLE32() );
         const int32_t height = static_cast<int32_t>( stream.getLE32() );
         const int32_t x = static_cast<int32_t>( stream.getLE32() );
@@ -206,16 +206,16 @@ namespace fheroes2
         // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
         assert( !image.empty() && !image.singleLayer() );
 
-        StreamBuf stream;
+        RWStreamBuf stream;
         stream.putLE32( static_cast<uint32_t>( image.width() ) );
         stream.putLE32( static_cast<uint32_t>( image.height() ) );
         stream.putLE32( static_cast<uint32_t>( image.x() ) );
         stream.putLE32( static_cast<uint32_t>( image.y() ) );
 
         const size_t imageSize = static_cast<size_t>( image.width() ) * static_cast<size_t>( image.height() );
-        stream.putRaw( reinterpret_cast<const char *>( image.image() ), imageSize );
-        stream.putRaw( reinterpret_cast<const char *>( image.transform() ), imageSize );
+        stream.putRaw( image.image(), imageSize );
+        stream.putRaw( image.transform(), imageSize );
 
-        return writer.add( name, stream.getRaw() );
+        return writer.add( name, stream.getRaw( 0 ) );
     }
 }

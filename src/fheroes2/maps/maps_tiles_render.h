@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
 
 class Heroes;
 
@@ -38,6 +38,11 @@ namespace Interface
     class GameArea;
 }
 
+namespace MP2
+{
+    enum ObjectIcnType : uint8_t;
+}
+
 namespace Maps
 {
     class Tiles;
@@ -50,7 +55,7 @@ namespace Maps
 
     void drawFog( const Tiles & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area );
+    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor );
 
     void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
 
