@@ -700,7 +700,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     _radar.Build();
     _radar.SetHide( true );
-    iconsPanel.HideIcons( ICON_ANY );
+    _iconsPanel.HideIcons( ICON_ANY );
     _statusWindow.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
@@ -782,7 +782,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        iconsPanel.HideIcons( ICON_ANY );
+                        _iconsPanel.HideIcons( ICON_ANY );
                         _statusWindow.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
@@ -805,8 +805,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    iconsPanel.ShowIcons( ICON_ANY );
-                    iconsPanel.SetRedraw();
+                    _iconsPanel.ShowIcons( ICON_ANY );
+                    _iconsPanel.SetRedraw();
 
                     res = HumanTurn( loadedFromSave );
 
@@ -1183,13 +1183,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         //
         // Mouse is captured by the icons panel (e.g. for scrolling by dragging, when events must be processed even when the mouse cursor is
         // outside this UI element)
-        else if ( iconsPanel.isMouseCaptured() ) {
+        else if ( _iconsPanel.isMouseCaptured() ) {
             cursor.SetThemes( Cursor::POINTER );
 
             // When the mouse is captured by the icons panel, events should not be processed by other UI elements, even if the icons panel
             // itself cannot process them (e.g. because it was hidden after the mouse was captured by it)
             if ( !isHiddenInterface || conf.ShowIcons() ) {
-                iconsPanel.QueueEventProcessing();
+                _iconsPanel.QueueEventProcessing();
             }
         }
         // Cursor is over the status window
@@ -1206,10 +1206,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             isCursorOverButtons = true;
         }
         // Cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( iconsPanel.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( _iconsPanel.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            iconsPanel.QueueEventProcessing();
+            _iconsPanel.QueueEventProcessing();
         }
         // Cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
@@ -1220,10 +1220,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
         }
         // Cursor is over the control panel
-        else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
+        else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( _controlPanel.GetArea() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            res = controlPanel.QueueEventProcessing();
+            res = _controlPanel.QueueEventProcessing();
         }
         // Cursor is over the game area
         else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {

@@ -211,7 +211,7 @@ void Interface::AdventureMap::EventKingdomInfo() const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
 
-    iconsPanel.SetRedraw();
+    _iconsPanel.SetRedraw();
 }
 
 void Interface::AdventureMap::EventCastSpell()
@@ -579,7 +579,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetRedraw();
+            _iconsPanel.SetRedraw();
         }
     }
 }

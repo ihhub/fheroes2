@@ -96,12 +96,12 @@ namespace Interface
 
         IconsPanel & GetIconsPanel()
         {
-            return iconsPanel;
+            return _iconsPanel;
         }
 
         ControlPanel & getControlPanel()
         {
-            return controlPanel;
+            return _controlPanel;
         }
 
         StatusWindow & getStatusWindow()
@@ -170,9 +170,9 @@ namespace Interface
 
         fheroes2::GameMode HumanTurn( const bool isload );
 
-        IconsPanel iconsPanel;
+        IconsPanel _iconsPanel;
         ButtonsPanel _buttonsPanel;
-        ControlPanel controlPanel;
+        ControlPanel _controlPanel;
         StatusWindow _statusWindow;
 
         bool _lockRedraw;

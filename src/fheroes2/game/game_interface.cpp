@@ -50,9 +50,9 @@
 
 Interface::AdventureMap::AdventureMap()
     : BaseInterface( false )
-    , iconsPanel( *this )
+    , _iconsPanel( *this )
     , _buttonsPanel( *this )
-    , controlPanel( *this )
+    , _controlPanel( *this )
     , _statusWindow( *this )
     , _lockRedraw( false )
 {
@@ -69,7 +69,7 @@ void Interface::AdventureMap::reset()
     if ( isHideInterface ) {
         conf.SetShowControlPanel( true );
 
-        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - fheroes2::borderWidthPx, 0 );
+        _controlPanel.SetPos( display.width() - _controlPanel.GetArea().width - fheroes2::borderWidthPx, 0 );
 
         fheroes2::Point radrPos = conf.PosRadar();
         fheroes2::Point bttnPos = conf.PosButtons();
@@ -80,15 +80,15 @@ void Interface::AdventureMap::reset()
 
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
             _radar.SetPos( radrPos.x, radrPos.y );
-            iconsPanel.SetPos( iconPos.x, iconPos.y );
+            _iconsPanel.SetPos( iconPos.x, iconPos.y );
             _buttonsPanel.SetPos( bttnPos.x, bttnPos.y );
             _statusWindow.SetPos( statPos.x, statPos.y );
         }
         else {
             _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
-            iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
-            _buttonsPanel.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
+            _iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
+            _buttonsPanel.SetPos( display.width(), _iconsPanel.GetRect().y + _iconsPanel.GetRect().height );
             _statusWindow.SetPos( display.width(), _buttonsPanel.GetRect().y + _buttonsPanel.GetRect().height );
         }
     }
@@ -96,8 +96,8 @@ void Interface::AdventureMap::reset()
         const int32_t px = display.width() - fheroes2::borderWidthPx - fheroes2::radarWidthPx;
 
         _radar.SetPos( px, fheroes2::borderWidthPx );
-        iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + fheroes2::borderWidthPx );
-        _buttonsPanel.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + fheroes2::borderWidthPx );
+        _iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + fheroes2::borderWidthPx );
+        _buttonsPanel.SetPos( px, _iconsPanel.GetArea().y + _iconsPanel.GetArea().height + fheroes2::borderWidthPx );
         _statusWindow.SetPos( px, _buttonsPanel.GetArea().y + _buttonsPanel.GetArea().height );
     }
 
@@ -134,7 +134,7 @@ void Interface::AdventureMap::redraw( const uint32_t force )
         _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
         if ( hideInterface && conf.ShowControlPanel() ) {
-            controlPanel._redraw();
+            _controlPanel._redraw();
         }
     }
 
@@ -144,13 +144,13 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
-        iconsPanel._redraw();
+        _iconsPanel._redraw();
     }
     else if ( combinedRedraw & REDRAW_HEROES ) {
-        iconsPanel._redrawIcons( ICON_HEROES );
+        _iconsPanel._redrawIcons( ICON_HEROES );
     }
     else if ( combinedRedraw & REDRAW_CASTLES ) {
-        iconsPanel._redrawIcons( ICON_CASTLES );
+        _iconsPanel._redrawIcons( ICON_CASTLES );
     }
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
