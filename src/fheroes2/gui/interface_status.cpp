@@ -425,7 +425,7 @@ void Interface::StatusWindow::_drawBackground() const
 
 void Interface::StatusWindow::QueueEventProcessing()
 {
-    // Move border window
+    // Move the window border
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
         return;

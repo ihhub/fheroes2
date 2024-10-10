@@ -1064,8 +1064,9 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
     // Tiles on which the entrances to the allied castles are located are inaccessible
     if ( _mainObjectType == MP2::OBJ_CASTLE ) {
         const Castle * castle = world.getCastleEntrance( GetCenter() );
+        assert( castle != nullptr );
 
-        if ( castle && castle->GetColor() != heroColor && castle->isFriends( heroColor ) ) {
+        if ( castle->GetColor() != heroColor && castle->isFriends( heroColor ) ) {
             return false;
         }
     }

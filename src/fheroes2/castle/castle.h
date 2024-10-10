@@ -23,15 +23,14 @@
 #ifndef H2CASTLE_H
 #define H2CASTLE_H
 
-#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -121,7 +120,7 @@ enum class BuildingStatus : int32_t
     LACK_RESOURCES
 };
 
-class Castle : public MapPosition, public BitModes, public ColorBase, public Control
+class Castle final : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
     // Maximum number of creature dwellings that can be built in a castle
@@ -463,50 +462,29 @@ public:
     AllCastles();
     AllCastles( const AllCastles & ) = delete;
 
-    ~AllCastles();
+    ~AllCastles() = default;
 
     AllCastles & operator=( const AllCastles & ) = delete;
 
-    void Init();
-    void Clear();
-
-    void AddCastle( Castle * castle );
-
-    Castle * Get( const fheroes2::Point & position ) const
+    auto begin() const noexcept
     {
-        auto iter = _castleTiles.find( position );
-        if ( iter == _castleTiles.end() )
-            return nullptr;
-
-        return _castles[iter->second];
+        return Iterator( _castles.begin() );
     }
 
-    void Scout( int ) const;
-
-    void NewDay()
+    auto end() const noexcept
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+        return Iterator( _castles.end() );
     }
 
-    void NewWeek()
+    void Init()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+        Clear();
     }
 
-    void NewMonth()
+    void Clear()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
-    }
-
-    // begin/end methods so we can iterate through the elements
-    std::vector<Castle *>::const_iterator begin() const
-    {
-        return _castles.begin();
-    }
-
-    std::vector<Castle *>::const_iterator end() const
-    {
-        return _castles.end();
+        _castles.clear();
+        _castleTiles.clear();
     }
 
     size_t Size() const
@@ -514,8 +492,31 @@ public:
         return _castles.size();
     }
 
+    void AddCastle( std::unique_ptr<Castle> && castle );
+
+    Castle * Get( const fheroes2::Point & position ) const;
+
+    void Scout( const int colors ) const;
+
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        explicit Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        auto * operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
 private:
-    std::vector<Castle *> _castles;
+    std::vector<std::unique_ptr<Castle>> _castles;
     std::map<fheroes2::Point, size_t> _castleTiles;
 };
 

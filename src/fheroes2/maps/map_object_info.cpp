@@ -20,7 +20,6 @@
 
 #include "map_object_info.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>

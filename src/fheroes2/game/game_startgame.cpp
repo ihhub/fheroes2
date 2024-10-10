@@ -739,7 +739,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             world.NewDay();
         }
 
-        // check if the game is over at the beginning of a new day
+        // Check if the game is over at the beginning of a new day
         res = gameResult.checkGameOver();
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -764,7 +764,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 }
             }
 
-            // player with conf.CurrentColor() was found, there is no need for further skips
+            // Player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
             skipTurns = false;
 
             const int playerColor = player->GetColor();
@@ -793,7 +793,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         validateFadeInAndRender();
 
-                        // reset the music after closing the dialog
+                        // Reset the music after closing the dialog
                         const AudioManager::MusicRestorer musicRestorer;
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
@@ -879,7 +879,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     break;
                 }
 
-                // check if the game is over after each player's turn
+                // Check if the game is over after each player's turn
                 res = gameResult.checkGameOver();
 
                 if ( res != fheroes2::GameMode::CANCEL ) {
@@ -889,12 +889,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 res = fheroes2::GameMode::END_TURN;
             }
 
-            // reset this after potential HumanTurn() call, but regardless of whether current kingdom
+            // Reset this after potential HumanTurn() call, but regardless of whether current kingdom
             // is vanquished - next alive kingdom should start a new day from scratch
             loadedFromSave = false;
         }
 
-        // we went through all the players, but the current player from the save file is still not found,
+        // We went through all the players, but the current player from the save file is still not found,
         // something is clearly wrong here
         if ( skipTurns ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -908,7 +908,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         conf.SetCurrentColor( Color::NONE );
     }
 
-    // if we are here, the res value should never be fheroes2::GameMode::END_TURN
+    // If we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
     Game::setDisplayFadeIn();
@@ -974,7 +974,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
     GameOver::Result & gameResult = GameOver::Result::Get();
 
-    // check if the game is over at the beginning of each human-controlled player's turn
+    // Check if the game is over at the beginning of each human-controlled player's turn
     fheroes2::GameMode res = gameResult.checkGameOver();
 
     const VecCastles & myCastles = myKingdom.GetCastles();
@@ -1021,16 +1021,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 #endif
 
-        // pending timer events
+        // Pending timer events
         _statusWindow.TimerEventProcessing();
 
-        // hotkeys
+        // Hotkeys
         if ( le.isAnyKeyPressed() ) {
-            // if the hero is currently moving, pressing any key should stop him
+            // If the hero is currently moving, pressing any key should stop him
             if ( isMovingHero ) {
                 stopHero = true;
             }
-            // adventure map control
+            // Adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) )
@@ -1077,7 +1077,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 res = EventDigArtifact();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
-            // hero movement control
+            // Hero movement control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_RIGHT ) )
@@ -1094,7 +1094,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
-            // map scrolling control
+            // Adventure map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
                 _gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
@@ -1103,10 +1103,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 _gameArea.SetScroll( SCROLL_TOP );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
                 _gameArea.SetScroll( SCROLL_BOTTOM );
-            // default action
+            // Default action
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
                 res = EventDefaultAction();
-            // open focus
+            // Open the focused object (hero or castle)
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
             else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
@@ -1156,7 +1156,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             fastScrollRepeatCount = 0;
         }
 
-        // Re-enable fast scroll if the cursor movement indicates the need
+        // Re-enable fast scrolling if the cursor movement indicates the need
         if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.getMouseCursorPos() ) ) {
             _gameArea.setFastScrollStatus( true );
         }
@@ -1168,35 +1168,50 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
-            // hero is moving, set the appropriate cursor
+            // Hero is moving, set the appropriate cursor
             cursor.SetThemes( Cursor::WAIT );
 
-            // if the hero is currently moving, pressing any mouse button should stop him
+            // If the hero is currently moving, pressing any mouse button should stop him
             if ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) {
                 stopHero = true;
             }
         }
-        // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() )
-                  && ( le.isMouseCursorPosInArea( iconsPanel.GetRect() ) || le.isMouseLeftButtonPressedInArea( iconsPanel.GetRect() ) ) ) {
+        // When processing events in the "no interface" mode, care should be taken about the order in which events are handled by different
+        // UI elements, since they may overlap. The order of their rendering on the screen is as follows: the status window is the topmost,
+        // followed by the buttons area, followed by the icons panel, followed by the radar, followed by the control panel, and under all of
+        // them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
+        //
+        // Mouse is captured by the icons panel (e.g. for scrolling by dragging, when events must be processed even when the mouse cursor is
+        // outside this UI element)
+        else if ( iconsPanel.isMouseCaptured() ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            iconsPanel.QueueEventProcessing();
+            // When the mouse is captured by the icons panel, events should not be processed by other UI elements, even if the icons panel
+            // itself cannot process them (e.g. because it was hidden after the mouse was captured by it)
+            if ( !isHiddenInterface || conf.ShowIcons() ) {
+                iconsPanel.QueueEventProcessing();
+            }
         }
-        // cursor is over the status window
+        // Cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _statusWindow.QueueEventProcessing();
         }
-        // cursor is over the buttons area
+        // Cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( buttonsArea.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
-        // cursor is over the radar
+        // Cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( iconsPanel.GetRect() ) ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            iconsPanel.QueueEventProcessing();
+        }
+        // Cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
@@ -1204,24 +1219,23 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 _radar.QueueEventProcessing();
             }
         }
-        // cursor is over the control panel
+        // Cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( controlPanel.GetArea() ) ) {
             cursor.SetThemes( Cursor::POINTER );
 
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor is over the game area
+        // Cursor is over the game area
         else if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
-        // cursor is somewhere else
+        // Cursor is somewhere else
         else if ( !_gameArea.NeedScroll() ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _gameArea.ResetCursorPosition();
         }
 
-        // gamearea
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !_radar.isDragRadar() ) {
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
@@ -1239,7 +1253,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             break;
         }
 
-        // animation of the hero's movement
+        // Animation of the hero's movement
         if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
@@ -1287,8 +1301,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             }
                         }
                         else {
-                            const fheroes2::Point movement( hero->MovementDirection() );
-                            if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                            // Don't waste resources if there is no movement
+                            if ( const fheroes2::Point movement( hero->MovementDirection() ); movement != fheroes2::Point() ) {
                                 // Do not generate a frame as we are going to do it later.
                                 Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
@@ -1363,7 +1377,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
         }
 
-        // fast scroll
+        // Scrolling the game area
         if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
@@ -1411,7 +1425,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         if ( myKingdom.isPlay() ) {
-            // these warnings should be shown at the end of the turn
+            // These warnings should be shown at the end of the turn
             if ( myCastles.empty() ) {
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
