@@ -206,7 +206,7 @@ void Interface::StatusPanel::NextState()
     if ( _state == StatusType::STATUS_ARMY ) {
         const Castle * castle = GetFocusCastle();
 
-        // skip empty army for castle
+        // Skip an empty army in the castle
         if ( castle && !castle->GetArmy().isValid() ) {
             NextState();
         }
