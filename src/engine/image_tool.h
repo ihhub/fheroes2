@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,8 @@
 
 namespace fheroes2
 {
+    struct ICNHeader;
+
     bool Save( const Image & image, const std::string & path );
 
     // Save an image into file. 'background' represents palette index from the original palette. Recommended value is 23.
@@ -36,7 +38,7 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image );
 
-    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
+    Sprite decodeICNSprite( const uint8_t * data, const uint8_t * dataEnd, const ICNHeader & icnHeader );
 
     void decodeTILImages( const uint8_t * data, const size_t imageCount, const int32_t width, const int32_t height, std::vector<Image> & output );
 
