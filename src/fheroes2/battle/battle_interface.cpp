@@ -3223,7 +3223,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Dialog::FrameBox box( 100, true );
+    const Dialog::FrameBox box( 100, true );
     const fheroes2::Rect roiArea = box.GetArea();
     fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - fheroes2::AGG::GetICN( ICN::UNIFORM_GOOD_CANCEL_BUTTON, 0 ).width() / 2, roiArea.y + roiArea.height - 20,
                              ICN::UNIFORM_GOOD_CANCEL_BUTTON, 0, 1 );
@@ -3255,11 +3255,11 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        else if ( le.MouseClickLeft( autoResolve.area() ) ) {
+        if ( le.MouseClickLeft( autoResolve.area() ) ) {
             EventAutoFinish( actions );
             return;
         }
-        else if ( le.MouseClickLeft( autoCombat.area() ) ) {
+        if ( le.MouseClickLeft( autoCombat.area() ) ) {
             EventStartAutoBattle( unit, actions );
             return;
         }
