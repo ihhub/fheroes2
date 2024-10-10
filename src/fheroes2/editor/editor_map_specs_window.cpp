@@ -46,7 +46,6 @@
 #include "editor_rumor_window.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
-#include "game_language.h"
 #include "game_over.h"
 #include "icn.h"
 #include "image.h"
