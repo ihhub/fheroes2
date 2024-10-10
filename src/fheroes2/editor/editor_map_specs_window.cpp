@@ -2382,8 +2382,7 @@ namespace Editor
                 const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
 
                 const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
-                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150,
-                                          true ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true ) ) {
                     mapFormat.description = std::move( descripton );
 
                     renderMapDescription();
