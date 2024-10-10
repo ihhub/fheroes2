@@ -247,8 +247,13 @@ namespace Editor
             if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newRumor;
 
-                const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Rumor:" ), fheroes2::FontType::normalWhite() }, newRumor, longestRumor, true ) ) {
+                const fheroes2::Text body{ _( "Rumor:" ), fheroes2::FontType::normalWhite() };
+
+                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
+                if ( Dialog::inputString( fheroes2::Text{}, body, newRumor, longestRumor, true ) ) {
+                    // We have to reset the language as it was only for the above dialog.
+                    switcher.reset();
+
                     if ( std::any_of( rumors.begin(), rumors.end(), [&newRumor]( const auto & rumor ) { return rumor == newRumor; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );
                         continue;
@@ -270,8 +275,13 @@ namespace Editor
 
                 std::string temp = rumorList.GetCurrent();
 
-                const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Rumor:" ), fheroes2::FontType::normalWhite() }, temp, longestRumor, true ) ) {
+                const fheroes2::Text body{ _( "Rumor:" ), fheroes2::FontType::normalWhite() };
+
+                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestRumor, true ) ) {
+                    // We have to reset the language as it was only for the above dialog.
+                    switcher.reset();
+
                     const auto count = std::count_if( rumors.begin(), rumors.end(), [&temp]( const auto & rumor ) { return rumor == temp; } );
                     if ( rumorList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Rumor" ), _( "This rumor already exists in the list." ), Dialog::OK );

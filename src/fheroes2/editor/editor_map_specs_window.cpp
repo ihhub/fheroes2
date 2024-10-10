@@ -2363,9 +2363,10 @@ namespace Editor
 
                 std::string editableMapName = mapFormat.name;
 
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+
                 const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
-                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() }, editableMapName,
-                                          maxMapNameLength, false ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false ) ) {
                     mapFormat.name = std::move( editableMapName );
 
                     renderMapName();
@@ -2377,8 +2378,11 @@ namespace Editor
                 // TODO: Limit description to 5 text lines.
 
                 std::string descripton = mapFormat.description;
+
+                const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
+
                 const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
-                if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() }, descripton, 150,
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150,
                                           true ) ) {
                     mapFormat.description = std::move( descripton );
 
