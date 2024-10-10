@@ -33,7 +33,6 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
-#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
