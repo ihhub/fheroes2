@@ -67,6 +67,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_option_item.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -1088,7 +1089,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         if ( le.MouseClickLeft( portraitArea ) && heroForHeroScreen != nullptr ) {
             LocalEvent::Get().reset();
 
-            heroForHeroScreen->OpenDialog( true, true, true, true, false, false );
+            heroForHeroScreen->OpenDialog( true, true, true, true, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );

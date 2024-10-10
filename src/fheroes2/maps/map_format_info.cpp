@@ -164,7 +164,7 @@ namespace
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.language << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
 
         return !stream.fail();
     }
@@ -185,7 +185,7 @@ namespace
             return false;
         }
 
-        stream >> map.language >> map.name >> map.description;
+        stream >> map.mainLanguage >> map.name >> map.description;
 
         return !stream.fail();
     }

@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -52,6 +53,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -81,11 +83,16 @@ namespace
         using Interface::ListBox<std::string>::ActionListSingleClick;
         using Interface::ListBox<std::string>::ActionListPressRight;
 
-        using ListBox::ListBox;
+        AnswerListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
+            : ListBox( pt )
+            , _language( language )
+        {
+            // Do nothing.
+        }
 
         void RedrawItem( const std::string & answer, int32_t posX, int32_t posY, bool current ) override
         {
-            fheroes2::Text text{ answer, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
+            fheroes2::Text text{ answer, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ), _language };
             text.fitToOneRow( answerArea.width - 10 );
             text.draw( posX + 5, posY + 5, fheroes2::Display::instance() );
         }
@@ -153,12 +160,14 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
 
         bool _isDoubleClicked{ false };
+
+        const fheroes2::SupportedLanguage _language;
     };
 }
 
 namespace Editor
 {
-    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata )
+    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata, const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -183,7 +192,7 @@ namespace Editor
 
         text.draw( riddleRoi.x + ( riddleRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+        text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
         text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
 
         const fheroes2::Rect answerRoi{ windowArea.x + elementOffset + riddleRoi.width + elementOffset, offsetY + text.height(), answerArea.width, answerArea.height };
@@ -194,7 +203,7 @@ namespace Editor
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        AnswerListBox answerList( answerRoi.getPosition() );
+        AnswerListBox answerList( answerRoi.getPosition(), language );
         answerList.initListBackgroundRestorer( answerRoi );
 
         answerList.SetAreaItems( { answerRoi.x, answerRoi.y, answerRoi.width, answerRoi.height - listAreaHeightDeduction } );
@@ -317,18 +326,27 @@ namespace Editor
             if ( le.MouseClickLeft( riddleRoi ) ) {
                 std::string temp = metadata.riddle;
 
-                if ( Dialog::inputString( _( "Riddle:" ), temp, {}, longestRiddle, true, true ) ) {
+                const fheroes2::Text body{ _( "Riddle:" ), fheroes2::FontType::normalWhite() };
+
+                const fheroes2::LanguageSwitcher switcher( language );
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestRiddle, true ) ) {
                     metadata.riddle = std::move( temp );
 
                     riddleRoiRestorer.restore();
-                    text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+                    text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
                     text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }
             }
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
-                if ( Dialog::inputString( _( "Answer:" ), newAnswer, {}, longestAnswer, false, true ) ) {
+                const fheroes2::Text body{ _( "Answer:" ), fheroes2::FontType::normalWhite() };
+
+                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
+                if ( Dialog::inputString( fheroes2::Text{}, body, newAnswer, longestAnswer, false ) ) {
+                    // We have to reset the language as it was only for the above dialog.
+                    switcher.reset();
+
                     if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const auto & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
@@ -349,7 +367,14 @@ namespace Editor
                 answerList.resetDoubleClickedState();
 
                 std::string temp = answerList.GetCurrent();
-                if ( Dialog::inputString( _( "Answer:" ), temp, {}, longestAnswer, false, true ) ) {
+
+                const fheroes2::Text body{ _( "Answer:" ), fheroes2::FontType::normalWhite() };
+
+                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestAnswer, false ) ) {
+                    // We have to reset the language as it was only for the above dialog.
+                    switcher.reset();
+
                     const auto count = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );

@@ -41,6 +41,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -102,7 +103,8 @@ namespace
 
         const Dialog::FrameBox box( box1.height( fheroes2::boxAreaWidthPx ) + spacer + box2.height( fheroes2::boxAreaWidthPx ) + 10 + sprite_frame.height(), true );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
 
         fheroes2::Point pt;
@@ -182,7 +184,7 @@ namespace
 
             if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 LocalEvent::Get().reset();
-                hero.OpenDialog( false, true, true, true, true, false );
+                hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
             }
 

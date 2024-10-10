@@ -109,7 +109,8 @@ namespace
 
     void RedrawMapTitle( const fheroes2::Rect & roi )
     {
-        const fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
+        const auto & info = Settings::Get().getCurrentMapInfo();
+        const fheroes2::Text text{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
         text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 

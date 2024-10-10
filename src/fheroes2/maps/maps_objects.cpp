@@ -322,8 +322,8 @@ OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
         int dummy;
 
         stream >> dummy >> obj.uid >> static_cast<MapPosition &>( obj );

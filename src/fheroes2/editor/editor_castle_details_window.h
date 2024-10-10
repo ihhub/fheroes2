@@ -20,12 +20,19 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace Maps::Map_Format
 {
     struct CastleMetadata;
 }
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color );
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color, const fheroes2::SupportedLanguage language );
 }

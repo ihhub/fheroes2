@@ -41,6 +41,7 @@
 #include "dialog.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -55,6 +56,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -293,7 +295,7 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color )
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color, const fheroes2::SupportedLanguage language )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -329,6 +331,7 @@ namespace Editor
 
         // Castle name text.
         auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
+            // TODO: use language for castle name. At the moment it is disabled.
             fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
             if ( castleMetadata.customName.empty() ) {
                 text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
@@ -486,7 +489,14 @@ namespace Editor
                 bool redrawName = false;
                 if ( le.MouseClickLeft() ) {
                     std::string res = castleMetadata.customName;
-                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false, true ) && !res.empty() ) {
+
+                    // TODO: use the provided language to set the castle's name.
+                    (void)language;
+
+                    const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
+
+                    const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }

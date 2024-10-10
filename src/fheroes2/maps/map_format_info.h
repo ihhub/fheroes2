@@ -298,7 +298,8 @@ namespace Maps::Map_Format
         // The world width in tiles. It is equal to the world height since currently all maps are square maps.
         int32_t size{ 0 };
 
-        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
+        // This is the main language of the map. At the moment only one language is being supported.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;
