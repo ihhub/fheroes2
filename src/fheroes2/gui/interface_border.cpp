@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -425,6 +426,22 @@ const fheroes2::Rect & Interface::BorderWindow::GetRect() const
     return Settings::Get().isHideInterfaceEnabled() && border.isValid() ? border.GetRect() : GetArea();
 }
 
+bool Interface::BorderWindow::isMouseCaptured()
+{
+    if ( !_isMouseCaptured ) {
+        return false;
+    }
+
+    const LocalEvent & le = LocalEvent::Get();
+
+    _isMouseCaptured = le.isMouseLeftButtonPressed();
+
+    // Even if the mouse has just been released from the capture, consider it still captured at this
+    // stage to ensure that events directly related to the release (for instance, releasing the mouse
+    // button) will not be handled by other UI elements.
+    return true;
+}
+
 void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
@@ -458,39 +475,54 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
     }
 }
 
+void Interface::BorderWindow::captureMouse()
+{
+    const LocalEvent & le = LocalEvent::Get();
+
+    if ( le.isMouseLeftButtonPressedInArea( GetRect() ) ) {
+        _isMouseCaptured = true;
+    }
+    else {
+        _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
+    }
+}
+
 bool Interface::BorderWindow::QueueEventProcessing()
 {
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    if ( conf.isHideInterfaceEnabled() && le.isMouseLeftButtonPressedInArea( border.GetTop() ) ) {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Point & mp = le.getMouseCursorPos();
-        const fheroes2::Rect & pos = GetRect();
-
-        fheroes2::MovableSprite moveIndicator( pos.width, pos.height, pos.x, pos.y );
-        moveIndicator.reset();
-        fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ), 6 );
-
-        const int32_t ox = mp.x - pos.x;
-        const int32_t oy = mp.y - pos.y;
-
-        moveIndicator.setPosition( pos.x, pos.y );
-        moveIndicator.redraw();
-        display.render();
-
-        while ( le.HandleEvents() && le.isMouseLeftButtonPressed() ) {
-            if ( le.hasMouseMoved() ) {
-                moveIndicator.setPosition( mp.x - ox, mp.y - oy );
-                display.render();
-            }
-        }
-
-        SetPos( mp.x - ox, mp.y - oy );
-
-        return true;
+    if ( !Settings::Get().isHideInterfaceEnabled() || !le.isMouseLeftButtonPressedInArea( border.GetTop() ) ) {
+        return false;
     }
 
-    return false;
+    // Reset the cursor when dragging, because if the window border is close to the edge of the game window,
+    // then the mouse cursor could be changed to a scroll cursor.
+    Cursor::Get().SetThemes( Cursor::POINTER );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    const fheroes2::Point & mp = le.getMouseCursorPos();
+    const fheroes2::Rect & pos = GetRect();
+
+    fheroes2::MovableSprite moveIndicator( pos.width, pos.height, pos.x, pos.y );
+    moveIndicator.reset();
+    fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ), 6 );
+
+    const int32_t ox = mp.x - pos.x;
+    const int32_t oy = mp.y - pos.y;
+
+    moveIndicator.setPosition( pos.x, pos.y );
+    moveIndicator.redraw();
+    display.render();
+
+    while ( le.HandleEvents() && le.isMouseLeftButtonPressed() ) {
+        if ( le.hasMouseMoved() ) {
+            moveIndicator.setPosition( mp.x - ox, mp.y - oy );
+            display.render();
+        }
+    }
+
+    SetPos( mp.x - ox, mp.y - oy );
+
+    return true;
 }

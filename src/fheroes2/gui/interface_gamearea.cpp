@@ -910,30 +910,30 @@ int Interface::GameArea::GetScrollCursor() const
     return Cursor::NONE;
 }
 
-void Interface::GameArea::SetScroll( int direct )
+void Interface::GameArea::SetScroll( const int direction )
 {
-    if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
+    if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
-    else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
+    else if ( ( direction & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
         if ( _topLeftTileOffset.x < _maxLeftOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
 
-    if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
+    if ( ( direction & SCROLL_TOP ) == SCROLL_TOP ) {
         if ( _topLeftTileOffset.y > _minTopOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
-    else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
+    else if ( ( direction & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
         if ( _topLeftTileOffset.y < _maxTopOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
@@ -1010,7 +1010,7 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
     return false;
 }
 
-void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
+void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
@@ -1020,7 +1020,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
     }
-    else if ( isCursorOverGamearea && _interface.useMouseDragMovement() ) {
+    else if ( _interface.useMouseDragMovement() ) {
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
@@ -1041,11 +1041,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
             SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
             _lastMouseDragPosition = mousePosition;
         }
-        return;
-    }
 
-    if ( !isCursorOverGamearea ) {
-        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
         return;
     }
 
@@ -1055,6 +1051,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
         if ( updateCursor || index != _prevIndexPos ) {
             _interface.updateCursor( index );
+
             _prevIndexPos = index;
             updateCursor = false;
         }
@@ -1089,6 +1086,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
         _interface.updateCursor( index );
+
         _prevIndexPos = index;
         updateCursor = false;
     }
