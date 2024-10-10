@@ -70,6 +70,11 @@
 #include "ui_tool.h"
 #include "ui_window.h"
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace
 {
     // In original Editor map name is limited to 17 characters. We keep this limit to fit the Select Scenario dialog.
