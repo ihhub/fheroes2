@@ -153,7 +153,7 @@ namespace Maps
                 return mainLanguage;
             }
 
-            return std::nullopt;
+            return {};
         }
 
         enum VictoryCondition : uint8_t
