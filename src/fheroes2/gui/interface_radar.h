@@ -75,11 +75,6 @@ namespace Interface
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
-        bool isDragRadar() const
-        {
-            return _mouseDraggingMovement;
-        }
-
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw( const bool redrawMapObjects );
@@ -105,7 +100,6 @@ namespace Interface
         fheroes2::Rect _roi;
         double _zoom{ 1.0 };
         bool _hide{ true };
-        bool _mouseDraggingMovement{ false };
     };
 }
 

@@ -54,14 +54,23 @@ namespace Interface
             return area;
         }
 
+        // Checks if the mouse is still captured by this UI element. See the implementation for details.
+        bool isMouseCaptured();
+
     protected:
         void Redraw() const;
 
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
         void SetPosition( int32_t, int32_t );
 
+        // Captures the mouse by this UI element if necessary. The conditions for capturing imply that
+        // the mouse cursor is on this UI element and the left mouse button is pressed.
+        void captureMouse();
+
         fheroes2::Rect area;
         Dialog::FrameBorder border;
+
+        bool _isMouseCaptured{ false };
     };
 }
 

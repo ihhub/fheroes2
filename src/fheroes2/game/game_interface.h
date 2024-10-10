@@ -168,7 +168,7 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
         void _startHeroMove( Heroes & hero );
 
-        fheroes2::GameMode HumanTurn( const bool isload );
+        fheroes2::GameMode HumanTurn( const bool isLoadedFromSave );
 
         IconsPanel _iconsPanel;
         ButtonsPanel _buttonsPanel;

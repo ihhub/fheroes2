@@ -425,6 +425,22 @@ const fheroes2::Rect & Interface::BorderWindow::GetRect() const
     return Settings::Get().isHideInterfaceEnabled() && border.isValid() ? border.GetRect() : GetArea();
 }
 
+bool Interface::BorderWindow::isMouseCaptured()
+{
+    if ( !_isMouseCaptured ) {
+        return false;
+    }
+
+    const LocalEvent & le = LocalEvent::Get();
+
+    _isMouseCaptured = le.isMouseLeftButtonPressed();
+
+    // Even if the mouse has just been released from the capture, consider it still captured at this
+    // stage to ensure that events directly related to the release (for instance, releasing the mouse
+    // button) will not be handled by other UI elements.
+    return true;
+}
+
 void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
@@ -455,6 +471,18 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
     else {
         area.x = px;
         area.y = py;
+    }
+}
+
+void Interface::BorderWindow::captureMouse()
+{
+    const LocalEvent & le = LocalEvent::Get();
+
+    if ( le.isMouseLeftButtonPressedInArea( GetRect() ) ) {
+        _isMouseCaptured = true;
+    }
+    else {
+        _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
     }
 }
 

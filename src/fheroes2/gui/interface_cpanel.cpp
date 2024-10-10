@@ -102,16 +102,21 @@ fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( rt_radar ) )
+    if ( le.MouseClickLeft( rt_radar ) ) {
         interface.EventSwitchShowRadar();
-    else if ( le.MouseClickLeft( rt_icons ) )
+    }
+    else if ( le.MouseClickLeft( rt_icons ) ) {
         interface.EventSwitchShowIcons();
-    else if ( le.MouseClickLeft( rt_buttons ) )
+    }
+    else if ( le.MouseClickLeft( rt_buttons ) ) {
         interface.EventSwitchShowButtons();
-    else if ( le.MouseClickLeft( rt_status ) )
+    }
+    else if ( le.MouseClickLeft( rt_status ) ) {
         interface.EventSwitchShowStatus();
-    else if ( le.MouseClickLeft( rt_end ) )
+    }
+    else if ( le.MouseClickLeft( rt_end ) ) {
         return interface.EventEndTurn();
+    }
 
     return fheroes2::GameMode::CANCEL;
 }

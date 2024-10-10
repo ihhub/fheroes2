@@ -142,6 +142,8 @@ void Interface::ButtonsPanel::ResetButtons()
 
 fheroes2::GameMode Interface::ButtonsPanel::QueueEventProcessing()
 {
+    captureMouse();
+
     LocalEvent & le = LocalEvent::Get();
 
     le.isMouseLeftButtonPressedInArea( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
