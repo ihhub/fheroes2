@@ -2119,7 +2119,7 @@ void AI::HeroesMove( Heroes & hero )
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
 
-                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_STATUS );
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( adventureMapInterface.getRedrawMask() == 0 );
@@ -2186,6 +2186,8 @@ void AI::HeroesMove( Heroes & hero )
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
+
+                adventureMapInterface.setRedraw( Interface::REDRAW_STATUS );
             }
 
             adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );

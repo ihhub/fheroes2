@@ -190,7 +190,7 @@ namespace AI
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
 
         // Returns true if heroes can still do tasks but they have no move points.
-        bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
+        bool HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue );
 
         bool recruitHero( Castle & castle, bool buyArmy );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
