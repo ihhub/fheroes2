@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
@@ -233,6 +234,8 @@ namespace Editor
 {
     void openEditorSettings()
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
