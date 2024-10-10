@@ -1004,6 +1004,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
         _gameArea.SetUpdateCursor();
     };
 
+    // Resets the cursor to a regular pointer and instructs the game area to update the cursor at the first opportunity,
+    // but only if the game area does not need to be scrolled
+    const auto resetCursorIfNoNeedToScroll = [this, &resetCursor]() {
+        if ( _gameArea.NeedScroll() ) {
+            return;
+        }
+
+        resetCursor();
+    };
+
     while ( res == fheroes2::GameMode::CANCEL ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
             if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
@@ -1265,31 +1275,31 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
                 // Cursor is over the status window
                 if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusPanel.GetRect() ) ) {
-                    resetCursor();
+                    resetCursorIfNoNeedToScroll();
 
                     _statusPanel.QueueEventProcessing();
                 }
                 // Cursor is over the buttons area
                 else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( _buttonsPanel.GetRect() ) ) {
-                    resetCursor();
+                    resetCursorIfNoNeedToScroll();
 
                     res = _buttonsPanel.QueueEventProcessing();
                 }
                 // Cursor is over the icons panel
                 else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( _iconsPanel.GetRect() ) ) {
-                    resetCursor();
+                    resetCursorIfNoNeedToScroll();
 
                     _iconsPanel.QueueEventProcessing();
                 }
                 // Cursor is over the radar
                 else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
-                    resetCursor();
+                    resetCursorIfNoNeedToScroll();
 
                     _radar.QueueEventProcessing();
                 }
                 // Cursor is over the control panel
                 else if ( isHiddenInterface && conf.ShowControlPanel() && le.isMouseCursorPosInArea( _controlPanel.GetArea() ) ) {
-                    resetCursor();
+                    resetCursorIfNoNeedToScroll();
 
                     res = _controlPanel.QueueEventProcessing();
                 }
