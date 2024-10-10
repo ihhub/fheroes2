@@ -337,7 +337,7 @@ namespace Editor
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();
-                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
                     text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }

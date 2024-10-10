@@ -192,7 +192,7 @@ namespace Editor
 
         text.draw( riddleRoi.x + ( riddleRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+        text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
         text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
 
         const fheroes2::Rect answerRoi{ windowArea.x + elementOffset + riddleRoi.width + elementOffset, offsetY + text.height(), answerArea.width, answerArea.height };
@@ -333,7 +333,7 @@ namespace Editor
                     metadata.riddle = std::move( temp );
 
                     riddleRoiRestorer.restore();
-                    text.set( metadata.riddle, fheroes2::FontType::normalWhite() );
+                    text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
                     text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }

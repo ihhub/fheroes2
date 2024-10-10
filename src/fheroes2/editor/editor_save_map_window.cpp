@@ -389,7 +389,7 @@ namespace Editor
                     }
 
                     mapName = std::move( editableMapName );
-                    mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
+                    mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
