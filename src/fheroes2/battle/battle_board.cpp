@@ -390,17 +390,15 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
 
 void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
 {
-    bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
-    int ground = tile.GetGround();
     std::vector<int> objs;
 
-    if ( grave ) {
+    if ( tile.GetObject( false ) == MP2::OBJ_GRAVEYARD ) {
         objs.push_back( ICN::COBJ0000 );
         objs.push_back( ICN::COBJ0001 );
         objs.push_back( ICN::COBJ0025 );
     }
-    else
-        switch ( ground ) {
+    else {
+        switch ( tile.GetGround() ) {
         case Maps::Ground::DESERT:
             objs.push_back( ICN::COBJ0009 );
             objs.push_back( ICN::COBJ0024 );
@@ -479,6 +477,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         default:
             break;
         }
+    }
 
     Rand::ShuffleWithGen( objs, gen );
 

@@ -127,7 +127,6 @@ namespace Battle
         }();
 
         std::vector<BattleNodeIndex> nodesToExplore;
-
         nodesToExplore.reserve( Board::sizeInCells * 2 );
         nodesToExplore.push_back( _pathStart );
 

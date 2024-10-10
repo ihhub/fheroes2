@@ -27,82 +27,83 @@
 #include <cassert>
 #include <utility>
 
-#include "battle_board.h"
 #include "battle_troop.h"
 
-Battle::Indexes Battle::Graveyard::GetOccupiedCells() const
+Battle::Indexes Battle::Graveyard::getOccupiedCells() const
 {
     Indexes result;
     result.reserve( size() );
 
-    std::for_each( begin(), end(), [&result]( const auto & item ) {
-        const auto & [idx, troopUIDs] = item;
-
-        if ( !troopUIDs.empty() ) {
-            result.push_back( idx );
+    for ( const auto & [idx, units] : *this ) {
+        if ( units.empty() ) {
+            continue;
         }
-    } );
+
+        result.push_back( idx );
+    }
 
     return result;
 }
 
-void Battle::Graveyard::AddTroop( const Unit & unit )
+void Battle::Graveyard::addUnit( Unit * unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( unit != nullptr && Board::isValidIndex( unit->GetHeadIndex() )
+            && ( unit->isWide() ? Board::isValidIndex( unit->GetTailIndex() ) : !Board::isValidIndex( unit->GetTailIndex() ) ) );
 
     Graveyard & graveyard = *this;
 
-    graveyard[unit.GetHeadIndex()].push_back( unit.GetUID() );
+    graveyard[unit->GetHeadIndex()].push_back( unit );
 
-    if ( unit.isWide() ) {
-        graveyard[unit.GetTailIndex()].push_back( unit.GetUID() );
+    if ( unit->isWide() ) {
+        graveyard[unit->GetTailIndex()].push_back( unit );
     }
 }
 
-void Battle::Graveyard::RemoveTroop( const Unit & unit )
+void Battle::Graveyard::removeUnit( Unit * unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( unit != nullptr && Board::isValidIndex( unit->GetHeadIndex() )
+            && ( unit->isWide() ? Board::isValidIndex( unit->GetTailIndex() ) : !Board::isValidIndex( unit->GetTailIndex() ) ) );
 
-    const auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
-        const auto idxIter = find( idx );
-        if ( idxIter == end() ) {
+    const auto removeFromIndex = [this, unit]( const int32_t idx ) {
+        const auto graveyardIter = find( idx );
+        if ( graveyardIter == end() ) {
             return;
         }
 
-        auto & [dummy, troopUIDs] = *idxIter;
+        auto & [dummy, units] = *graveyardIter;
 
-        const auto troopUIDIter = std::find( troopUIDs.begin(), troopUIDs.end(), uid );
-        if ( troopUIDIter != troopUIDs.end() ) {
-            troopUIDs.erase( troopUIDIter );
+        const auto unitsIter = std::find( units.begin(), units.end(), unit );
+        if ( unitsIter == units.end() ) {
+            return;
         }
+
+        units.erase( unitsIter );
     };
 
-    removeUIDFromIndex( unit.GetHeadIndex(), unit.GetUID() );
+    removeFromIndex( unit->GetHeadIndex() );
 
-    if ( unit.isWide() ) {
-        removeUIDFromIndex( unit.GetTailIndex(), unit.GetUID() );
+    if ( unit->isWide() ) {
+        removeFromIndex( unit->GetTailIndex() );
     }
 }
 
-uint32_t Battle::Graveyard::GetLastTroopUID( const int32_t index ) const
+Battle::Unit * Battle::Graveyard::getLastUnit( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
-        return 0;
+        return nullptr;
     }
 
-    const auto & [dummy, troopUIDs] = *iter;
+    const auto & [dummy, units] = *iter;
 
-    if ( troopUIDs.empty() ) {
-        return 0;
+    if ( units.empty() ) {
+        return nullptr;
     }
 
-    assert( troopUIDs.back() > 0 );
-
-    return troopUIDs.back();
+    return units.back();
 }
 
-Battle::TroopUIDs Battle::Graveyard::GetTroopUIDs( const int32_t index ) const
+std::vector<Battle::Unit *> Battle::Graveyard::getUnits( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {

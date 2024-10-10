@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "battle_bridge.h"
+
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_cell.h"
@@ -33,10 +34,11 @@
 bool Battle::Bridge::isOccupied()
 {
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
+    assert( graveyard != nullptr );
 
     // Yes if there are any troops (alive or dead) on CELL_MOAT and CELL_GATES tiles
-    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->GetLastTroopUID( CELL_MOAT )
-           || graveyard->GetLastTroopUID( CELL_GATES );
+    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->getLastUnit( CELL_MOAT )
+           || graveyard->getLastUnit( CELL_GATES );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const

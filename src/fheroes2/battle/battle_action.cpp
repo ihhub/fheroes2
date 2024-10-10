@@ -43,7 +43,6 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
@@ -503,7 +502,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
     commander->SpellCasted( spell );
 
     // Save the spell for the Eagle Eye skill
-    usage_spells.Append( spell );
+    _usedSpells.Append( spell );
 }
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
@@ -1087,11 +1086,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     Unit * target = GetTroopBoard( dst );
 
-    // from spells
     switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
-        // skip center
         target = nullptr;
         break;
 
@@ -1103,25 +1100,23 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     TargetInfo res;
 
-    // first target
     if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
         res.defender = target;
 
         targets.push_back( res );
     }
 
-    // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
+    if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
+        target = getLastResurrectableUnitFromGraveyard( dst, spell );
+        assert( target != nullptr && !target->isValid() );
 
-        if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
+        if ( consideredTargets.insert( target ).second ) {
             res.defender = target;
 
             targets.push_back( res );
         }
     }
     else {
-        // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
@@ -1146,7 +1141,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check abroads
         case Spell::FIREBALL:
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
@@ -1167,7 +1161,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check all troops
         case Spell::DEATHRIPPLE:
         case Spell::DEATHWAVE:
         case Spell::ELEMENTALSTORM:
