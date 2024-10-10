@@ -313,31 +313,31 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         switch ( castleType ) {
         case 0x00:
         case 0x80:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::KNGT ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::KNGT ) );
             break;
         case 0x01:
         case 0x81:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::BARB ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::BARB ) );
             break;
         case 0x02:
         case 0x82:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::SORC ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::SORC ) );
             break;
         case 0x03:
         case 0x83:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::WRLK ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::WRLK ) );
             break;
         case 0x04:
         case 0x84:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::WZRD ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::WZRD ) );
             break;
         case 0x05:
         case 0x85:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::NECR ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::NECR ) );
             break;
         case 0x06:
         case 0x86:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::NONE ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::NONE ) );
             break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -759,15 +759,23 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_TENT ) != castleInfo.builtBuildings.end() )
                         == ( townObjects[object.index].metadata[1] == 0 ) );
 
-                Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
-                castle->SetColor( color );
-                castle->loadFromResurrectionMap( castleInfo );
+                fheroes2::Point castleCenter;
+                bool isCastle;
 
-                vec_castles.AddCastle( castle );
+                {
+                    auto castle = std::make_unique<Castle>( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
+                    castle->SetColor( color );
+                    castle->loadFromResurrectionMap( castleInfo );
+
+                    castleCenter = castle->GetCenter();
+                    isCastle = castle->isCastle();
+
+                    vec_castles.AddCastle( std::move( castle ) );
+                }
 
                 if ( isRandom ) {
-                    Maps::UpdateCastleSprite( castle->GetCenter(), race, castle->isCastle(), true );
-                    Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
+                    Maps::UpdateCastleSprite( castleCenter, race, isCastle, true );
+                    Maps::ReplaceRandomCastleObjectId( castleCenter );
                 }
 
                 map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, color );

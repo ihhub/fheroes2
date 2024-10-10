@@ -33,6 +33,7 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
@@ -300,6 +301,7 @@ Interface::IconsPanel::IconsPanel( AdventureMap & basic )
 {
     sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
     sfMarker.reset();
+
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
@@ -376,7 +378,18 @@ void Interface::IconsPanel::_redraw()
 
 void Interface::IconsPanel::QueueEventProcessing()
 {
-    // Move border window
+    {
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( le.isMouseLeftButtonPressedInArea( GetRect() ) ) {
+            _isMouseCaptured = true;
+        }
+        else {
+            _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
+        }
+    }
+
+    // Move the window border
     if ( Settings::Get().ShowIcons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
     }
@@ -394,6 +407,22 @@ void Interface::IconsPanel::QueueEventProcessing()
 
         SetRedraw();
     }
+}
+
+bool Interface::IconsPanel::isMouseCaptured()
+{
+    if ( !_isMouseCaptured ) {
+        return false;
+    }
+
+    const LocalEvent & le = LocalEvent::Get();
+
+    _isMouseCaptured = le.isMouseLeftButtonPressed();
+
+    // Even if the mouse has just been released from the capture, consider it still captured at this
+    // stage to ensure that events directly related to the release (for instance, releasing the mouse
+    // button) will not be handled by other UI elements.
+    return true;
 }
 
 void Interface::IconsPanel::Select( Heroes * const hr )
