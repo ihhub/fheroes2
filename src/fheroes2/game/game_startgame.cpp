@@ -963,7 +963,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             }
         } );
 
-        // The amount of the kingdom resources has changed, the status window needs to be updated
+        // The amount of the kingdom resources has changed, the status panel needs to be updated
         redraw( REDRAW_STATUS );
         fheroes2::Display::instance().render();
 
@@ -1273,13 +1273,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                     _gameArea.setFastScrollStatus( true );
                 }
 
-                // Cursor is over the status window
+                // Cursor is over the status panel
                 if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.isMouseCursorPosInArea( _statusPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
                     _statusPanel.QueueEventProcessing();
                 }
-                // Cursor is over the buttons area
+                // Cursor is over the buttons panel
                 else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( _buttonsPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
