@@ -59,6 +59,7 @@
 #include "interface_radar.h"
 #include "localevent.h"
 #include "map_format_helper.h"
+#include "map_generator.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -786,6 +787,34 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
+#if defined( WITH_DEBUG )
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    Maps::Generator::Configuration rmgConfig;
+                    rmgConfig.playerCount = _playerCount;
+                    rmgConfig.regionSizeLimit = _regionSizeLimit;
+
+                    if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
+                        _redraw |= mapUpdateFlags;
+
+                        action.commit();
+                    }
+                    else {
+                        _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                    }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
+                    uint32_t newCount = _playerCount;
+                    if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
+                        _playerCount = newCount;
+                    }
+                    newCount = _regionSizeLimit;
+                    if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
+                        _regionSizeLimit = newCount;
+                    }
+                }
+#endif
                 // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     _gameArea.SetScroll( SCROLL_LEFT );
