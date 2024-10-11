@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -79,7 +80,6 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
-#include "ui_language.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
