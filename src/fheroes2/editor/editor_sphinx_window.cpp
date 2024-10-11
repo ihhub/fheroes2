@@ -327,9 +327,7 @@ namespace Editor
                 std::string temp = metadata.riddle;
 
                 const fheroes2::Text body{ _( "Riddle:" ), fheroes2::FontType::normalWhite() };
-
-                const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestRiddle, true ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestRiddle, true, language ) ) {
                     metadata.riddle = std::move( temp );
 
                     riddleRoiRestorer.restore();
@@ -341,12 +339,7 @@ namespace Editor
             else if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 std::string newAnswer;
                 const fheroes2::Text body{ _( "Answer:" ), fheroes2::FontType::normalWhite() };
-
-                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
-                if ( Dialog::inputString( fheroes2::Text{}, body, newAnswer, longestAnswer, false ) ) {
-                    // We have to reset the language as it was only for the above dialog.
-                    switcher.reset();
-
+                if ( Dialog::inputString( fheroes2::Text{}, body, newAnswer, longestAnswer, false, language ) ) {
                     if ( std::any_of( metadata.answers.begin(), metadata.answers.end(), [&newAnswer]( const auto & answer ) { return answer == newAnswer; } ) ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );
                         continue;
@@ -369,12 +362,7 @@ namespace Editor
                 std::string temp = answerList.GetCurrent();
 
                 const fheroes2::Text body{ _( "Answer:" ), fheroes2::FontType::normalWhite() };
-
-                auto switcher = std::make_unique<fheroes2::LanguageSwitcher>( language );
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestAnswer, false ) ) {
-                    // We have to reset the language as it was only for the above dialog.
-                    switcher.reset();
-
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestAnswer, false, language ) ) {
                     const auto count = std::count_if( metadata.answers.begin(), metadata.answers.end(), [&temp]( const auto & answer ) { return answer == temp; } );
                     if ( answerList.GetCurrent() != temp && count > 0 ) {
                         fheroes2::showStandardTextMessage( _( "Answer" ), _( "This answer exists in the list." ), Dialog::OK );

@@ -215,6 +215,8 @@ namespace Editor
 
         bool isRedrawNeeded = false;
 
+        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
@@ -330,10 +332,8 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
-
-                const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true ) ) {
+                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite(), gameLanguage };
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();

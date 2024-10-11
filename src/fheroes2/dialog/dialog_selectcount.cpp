@@ -45,6 +45,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -153,7 +154,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     return result == Dialog::OK;
 }
 
-bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine )
+bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
+                          const std::optional<fheroes2::SupportedLanguage> & textLanguage )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -207,7 +209,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     bool isCursorVisible = true;
     const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
-    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
+    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
     if ( !isMultiLine ) {
         text.fitToOneRow( textInputArea.width, false );
     }
@@ -273,7 +275,13 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         }
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
-            fheroes2::openVirtualKeyboard( result );
+            if ( textLanguage.has_value() ) {
+                const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
+                fheroes2::openVirtualKeyboard( result );
+            }
+            else {
+                fheroes2::openVirtualKeyboard( result );
+            }
 
             if ( charLimit > 0 && result.size() > charLimit ) {
                 result.resize( charLimit );
@@ -329,7 +337,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
+            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
 
             if ( !isMultiLine ) {
                 text.fitToOneRow( textInputArea.width, false );

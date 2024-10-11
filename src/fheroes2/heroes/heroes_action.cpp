@@ -3445,7 +3445,7 @@ namespace
             questionText.add( { _( "sphinx|'\n\nYour answer?" ), fheroes2::FontType::normalWhite() } );
 
             std::string answer;
-            Dialog::inputString( fheroes2::Text{ title, fheroes2::FontType::normalYellow() }, questionText, answer, 0, false );
+            Dialog::inputString( fheroes2::Text{ title, fheroes2::FontType::normalYellow() }, questionText, answer, 0, false, {} );
 
             if ( !riddle->isCorrectAnswer( answer ) ) {
                 fheroes2::showStandardTextMessage(

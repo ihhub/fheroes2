@@ -297,9 +297,7 @@ namespace Editor
                 std::string temp = eventMetadata.message;
 
                 const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
-
-                const fheroes2::LanguageSwitcher switcher( language );
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();

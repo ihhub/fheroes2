@@ -265,7 +265,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( isAfterGameCompletion ) {
         const auto inputPlayerName = []( std::string & playerName ) {
-            Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Your Name" ), fheroes2::FontType::normalWhite() }, playerName, 15, false );
+            Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Your Name" ), fheroes2::FontType::normalWhite() }, playerName, 15, false, {} );
             if ( playerName.empty() ) {
                 playerName = _( "Unknown Hero" );
             }

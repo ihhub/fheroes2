@@ -389,7 +389,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
 
         std::string res = player->GetName();
-        if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ str, fheroes2::FontType::normalWhite() }, res, 0, false ) && !res.empty() ) {
+        if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ str, fheroes2::FontType::normalWhite() }, res, 0, false, {} ) && !res.empty() ) {
             player->SetName( res );
         }
 

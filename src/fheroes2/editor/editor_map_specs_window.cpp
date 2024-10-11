@@ -2364,9 +2364,7 @@ namespace Editor
                 std::string editableMapName = mapFormat.name;
 
                 const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
-
-                const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
-                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, mapFormat.mainLanguage ) ) {
                     mapFormat.name = std::move( editableMapName );
 
                     renderMapName();
@@ -2380,9 +2378,7 @@ namespace Editor
                 std::string descripton = mapFormat.description;
 
                 const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
-
-                const fheroes2::LanguageSwitcher switcher( mapFormat.mainLanguage );
-                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true, mapFormat.mainLanguage ) ) {
                     mapFormat.description = std::move( descripton );
 
                     renderMapDescription();

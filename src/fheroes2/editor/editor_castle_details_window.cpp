@@ -494,9 +494,7 @@ namespace Editor
                     (void)language;
 
                     const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
-
-                    const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false ) && !res.empty() ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, fheroes2::SupportedLanguage::English ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
