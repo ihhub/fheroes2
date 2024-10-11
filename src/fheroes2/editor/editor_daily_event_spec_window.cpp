@@ -215,8 +215,6 @@ namespace Editor
 
         bool isRedrawNeeded = false;
 
-        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
