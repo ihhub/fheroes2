@@ -890,9 +890,9 @@ namespace Interface
                 }
                 // Cursor is over the editor panel
                 else if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
-                    // Editor panel has no border at the bottom. If the mouse cursor is over this bottom section,
-                    // then the game area may scroll. In this case, the mouse cursor shouldn't be changed, but the
-                    // editor panel should still handle events.
+                    // At lower resolutions, the Editor panel has no border at the bottom. If the mouse cursor is over
+                    // this bottom section, then the game area may scroll. In this case, the mouse cursor shouldn't be
+                    // changed, but the editor panel should still handle events.
                     if ( !_gameArea.NeedScroll() ) {
                         cursor.SetThemes( Cursor::POINTER );
                     }
