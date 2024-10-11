@@ -193,7 +193,7 @@ public:
         return _theme;
     }
 
-    bool SetThemes( int name, bool force = false );
+    void SetThemes( const int theme, const bool force = false );
 
     void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
 
