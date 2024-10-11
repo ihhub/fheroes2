@@ -54,7 +54,7 @@ namespace Interface
 
         Radar & operator=( const Radar & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
 
         // Set the render redraw flag from Interface::Redraw enumeration:
         // - 'REDRAW_RADAR' - to redraw the radar map image fully or in ROI and render the cursor over it.

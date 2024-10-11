@@ -65,16 +65,16 @@ void Interface::StatusPanel::SetRedraw() const
     _interface.setRedraw( REDRAW_STATUS );
 }
 
-void Interface::StatusPanel::SetPos( const int32_t ox, const int32_t oy )
+void Interface::StatusPanel::SetPos( int32_t x, int32_t y )
 {
-    const uint32_t ow = 144;
-    uint32_t oh = 72;
+    const uint32_t width = 144;
+    uint32_t height = 72;
 
     if ( !Settings::Get().isHideInterfaceEnabled() ) {
-        oh = fheroes2::Display::instance().height() - oy - fheroes2::borderWidthPx;
+        height = fheroes2::Display::instance().height() - y - fheroes2::borderWidthPx;
     }
 
-    BorderWindow::SetPosition( ox, oy, ow, oh );
+    BorderWindow::SetPosition( x, y, width, height );
 }
 
 void Interface::StatusPanel::SetState( const StatusType status )

@@ -170,7 +170,7 @@ namespace Interface
 
         IconsPanel & operator=( const IconsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;

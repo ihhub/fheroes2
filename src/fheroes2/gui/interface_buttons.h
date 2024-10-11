@@ -45,7 +45,7 @@ namespace Interface
 
         ButtonsPanel & operator=( const ButtonsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
 

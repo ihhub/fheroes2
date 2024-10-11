@@ -447,31 +447,31 @@ void Interface::BorderWindow::Redraw() const
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 
-void Interface::BorderWindow::SetPosition( int32_t px, int32_t py, uint32_t pw, uint32_t ph )
+void Interface::BorderWindow::SetPosition( const int32_t x, const int32_t y, const uint32_t width, const uint32_t height )
 {
-    area.width = pw;
-    area.height = ph;
+    area.width = width;
+    area.height = height;
 
-    SetPosition( px, py );
+    SetPosition( x, y );
 }
 
-void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
+void Interface::BorderWindow::SetPosition( int32_t x, int32_t y )
 {
     if ( Settings::Get().isHideInterfaceEnabled() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        px = std::max( 0, std::min( px, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
-        py = std::max( 0, std::min( py, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
+        x = std::max( 0, std::min( x, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
+        y = std::max( 0, std::min( y, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
 
-        area.x = px + border.BorderWidth();
-        area.y = py + border.BorderHeight();
+        area.x = x + border.BorderWidth();
+        area.y = y + border.BorderHeight();
 
-        border.SetPosition( px, py, area.width, area.height );
+        border.SetPosition( x, y, area.width, area.height );
         SavePosition();
     }
     else {
-        area.x = px;
-        area.y = py;
+        area.x = x;
+        area.y = y;
     }
 }
 

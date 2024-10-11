@@ -171,9 +171,9 @@ void Interface::Radar::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::Radar::SetPos( int32_t ox, int32_t oy )
+void Interface::Radar::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 }
 
 void Interface::Radar::Build()

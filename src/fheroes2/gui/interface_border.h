@@ -36,14 +36,14 @@ namespace Interface
     class BorderWindow
     {
     public:
-        explicit BorderWindow( const fheroes2::Rect & );
+        explicit BorderWindow( const fheroes2::Rect & rt );
         BorderWindow( const BorderWindow & ) = delete;
 
         virtual ~BorderWindow() = default;
 
         BorderWindow & operator=( const BorderWindow & ) = delete;
 
-        virtual void SetPos( int32_t, int32_t ) = 0;
+        virtual void SetPos( int32_t x, int32_t y ) = 0;
         virtual void SavePosition() = 0;
 
         bool QueueEventProcessing();
@@ -60,8 +60,8 @@ namespace Interface
     protected:
         void Redraw() const;
 
-        void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
-        void SetPosition( int32_t, int32_t );
+        void SetPosition( const int32_t x, const int32_t y, const uint32_t width, const uint32_t height );
+        void SetPosition( int32_t x, int32_t y );
 
         // Captures the mouse by this UI element if necessary. The conditions for capturing imply that
         // the mouse cursor is on this UI element and the left mouse button is pressed.

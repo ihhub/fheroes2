@@ -60,7 +60,7 @@ namespace Interface
 
         StatusPanel & operator=( const StatusPanel & ) = delete;
 
-        void SetPos( const int32_t ox, const int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
 

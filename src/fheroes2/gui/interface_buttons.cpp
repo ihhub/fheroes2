@@ -58,9 +58,9 @@ void Interface::ButtonsPanel::SetRedraw() const
     interface.setRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsPanel::SetPos( int32_t ox, int32_t oy )
+void Interface::ButtonsPanel::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 
     const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
@@ -75,35 +75,35 @@ void Interface::ButtonsPanel::SetPos( int32_t ox, int32_t oy )
 
     SetButtonStatus();
 
-    ox = GetArea().x;
-    oy = GetArea().y;
+    x = GetArea().x;
+    y = GetArea().y;
 
     // Top row
-    buttonNextHero.setPosition( ox, oy );
+    buttonNextHero.setPosition( x, y );
     nextHeroRect = buttonNextHero.area();
 
-    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, oy );
+    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, y );
     heroMovementRect = buttonHeroMovement.area();
 
-    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, oy );
+    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, y );
     kingdomRect = buttonKingdom.area();
 
-    buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, oy );
+    buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, y );
     spellRect = buttonSpell.area();
 
     // Bottom row
-    oy = nextHeroRect.y + nextHeroRect.height;
+    y = nextHeroRect.y + nextHeroRect.height;
 
-    buttonEndTurn.setPosition( ox, oy );
+    buttonEndTurn.setPosition( x, y );
     endTurnRect = buttonEndTurn.area();
 
-    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.width, oy );
+    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.width, y );
     adventureRect = buttonAdventure.area();
 
-    buttonFile.setPosition( adventureRect.x + adventureRect.width, oy );
+    buttonFile.setPosition( adventureRect.x + adventureRect.width, y );
     fileRect = buttonFile.area();
 
-    buttonSystem.setPosition( fileRect.x + fileRect.width, oy );
+    buttonSystem.setPosition( fileRect.x + fileRect.width, y );
     systemRect = buttonSystem.area();
 }
 
