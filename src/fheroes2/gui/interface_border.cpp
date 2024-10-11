@@ -447,7 +447,7 @@ void Interface::BorderWindow::Redraw() const
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 
-void Interface::BorderWindow::SetPosition( const int32_t x, const int32_t y, const uint32_t width, const uint32_t height )
+void Interface::BorderWindow::SetPosition( const int32_t x, const int32_t y, const int32_t width, const int32_t height )
 {
     area.width = width;
     area.height = height;

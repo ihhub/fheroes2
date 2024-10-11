@@ -67,8 +67,8 @@ void Interface::StatusPanel::SetRedraw() const
 
 void Interface::StatusPanel::SetPos( int32_t x, int32_t y )
 {
-    const uint32_t width = 144;
-    uint32_t height = 72;
+    const int32_t width = 144;
+    int32_t height = 72;
 
     if ( !Settings::Get().isHideInterfaceEnabled() ) {
         height = fheroes2::Display::instance().height() - y - fheroes2::borderWidthPx;

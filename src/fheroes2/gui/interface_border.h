@@ -60,7 +60,7 @@ namespace Interface
     protected:
         void Redraw() const;
 
-        void SetPosition( const int32_t x, const int32_t y, const uint32_t width, const uint32_t height );
+        void SetPosition( const int32_t x, const int32_t y, const int32_t width, const int32_t height );
         void SetPosition( int32_t x, int32_t y );
 
         // Captures the mouse by this UI element if necessary. The conditions for capturing imply that
