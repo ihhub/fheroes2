@@ -29,7 +29,6 @@
 #include <optional>
 #include <string>
 
-#include "game_language.h"
 #include "game_mode.h"
 #include "image.h"
 #include "math_base.h"
@@ -48,6 +47,7 @@ namespace fheroes2
 {
     class DialogElement;
     class TextBase;
+    enum class SupportedLanguage : uint8_t;
 }
 
 namespace Skill
