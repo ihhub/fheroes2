@@ -23,6 +23,8 @@
 
 #include "color.h"
 
+#include <cassert>
+
 #include "players.h"
 #include "serialize.h"
 #include "tools.h"
@@ -227,6 +229,7 @@ bool ColorBase::isFriends( const int col ) const
 void ColorBase::SetColor( const int col )
 {
     switch ( col ) {
+    case Color::NONE:
     case Color::BLUE:
     case Color::GREEN:
     case Color::RED:
@@ -234,12 +237,14 @@ void ColorBase::SetColor( const int col )
     case Color::ORANGE:
     case Color::PURPLE:
         color = col;
-        return;
+        break;
     default:
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+        color = Color::NONE;
         break;
     }
-
-    color = Color::NONE;
 }
 
 Kingdom & ColorBase::GetKingdom() const
