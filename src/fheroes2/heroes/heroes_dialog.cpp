@@ -39,6 +39,7 @@
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "game_language.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -71,8 +72,8 @@ namespace
     const uint32_t spellPointsMaxValue{ 999 };
 }
 
-int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog,
-                        const bool isEditor )
+int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                        const fheroes2::SupportedLanguage language )
 {
     // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
@@ -627,7 +628,12 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( isEditor ) {
             if ( le.MouseClickLeft( titleRoi ) ) {
                 std::string res = name;
-                if ( Dialog::inputString( _( "Enter hero's name" ), res, {}, 30, false, true ) && !res.empty() ) {
+
+                // TODO: add support for languages. As of now we do not support any other language except English.
+                (void)language;
+
+                const fheroes2::Text body{ _( "Enter hero's name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, fheroes2::SupportedLanguage::English ) && !res.empty() ) {
                     name = std::move( res );
                     drawTitleText( name, _race, true );
                     needRedraw = true;

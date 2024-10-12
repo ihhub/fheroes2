@@ -65,6 +65,7 @@
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -78,6 +79,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "week.h"
@@ -361,7 +363,8 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false,
+                                      fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() ) );
 
         if ( needFade ) {
             needFade = false;
@@ -954,12 +957,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
         }
 
         myKingdom.ActionNewDayResourceUpdate( []( const EventDate & event, const Funds & funds ) {
+            const auto & language = Settings::Get().getCurrentMapInfo().getSupportedLanguage();
+
             if ( funds.GetValidItemsCount() ) {
-                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow(), language ),
+                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite(), language ), Dialog::OK, funds );
             }
             else if ( !event.message.empty() ) {
-                fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
+                const fheroes2::Text header( event.title, fheroes2::FontType::normalYellow(), language );
+                const fheroes2::Text body( event.message, fheroes2::FontType::normalWhite(), language );
+                fheroes2::showMessage( header, body, Dialog::OK );
             }
         } );
 

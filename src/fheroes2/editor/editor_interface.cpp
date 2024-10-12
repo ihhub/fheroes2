@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -1199,7 +1200,7 @@ namespace Interface
                     hero.SetColor( color );
                     hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
 
-                    hero.OpenDialog( false, false, true, true, true, true );
+                    hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
                     Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
                     if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -1216,7 +1217,7 @@ namespace Interface
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
-                    Editor::castleDetailsDialog( newCastleMetadata, race, color );
+                    Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage );
                     if ( castleMetadata != newCastleMetadata ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         castleMetadata = std::move( newCastleMetadata );
@@ -1230,7 +1231,8 @@ namespace Interface
                     auto & originalMessage = _mapFormat.signMetadata[object.id].message;
                     std::string signText = originalMessage;
 
-                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true, true ) && originalMessage != signText ) {
+                    const fheroes2::Text body{ std::move( header ), fheroes2::FontType::normalWhite() };
+                    if ( Dialog::inputString( fheroes2::Text{}, body, signText, 0, true, _mapFormat.mainLanguage ) && originalMessage != signText ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMessage = std::move( signText );
                         action.commit();
@@ -1242,7 +1244,8 @@ namespace Interface
                     auto & eventMetadata = _mapFormat.adventureMapEventMetadata[object.id];
                     Maps::Map_Format::AdventureMapEventMetadata newEventData = eventMetadata;
 
-                    if ( Editor::eventDetailsDialog( newEventData, _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors ) && newEventData != eventMetadata ) {
+                    if ( Editor::eventDetailsDialog( newEventData, _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors, _mapFormat.mainLanguage )
+                         && newEventData != eventMetadata ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         eventMetadata = std::move( newEventData );
                         action.commit();
@@ -1324,7 +1327,7 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.sphinxMetadata[object.id];
                     Maps::Map_Format::SphinxMetadata newMetadata = originalMetadata;
 
-                    if ( Editor::openSphinxWindow( newMetadata ) && newMetadata != originalMetadata ) {
+                    if ( Editor::openSphinxWindow( newMetadata, _mapFormat.mainLanguage ) && newMetadata != originalMetadata ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
@@ -1831,7 +1834,7 @@ namespace Interface
         std::string fullPath;
 
         while ( true ) {
-            if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
+            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage ) ) {
                 return;
             }
 

@@ -266,7 +266,7 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );

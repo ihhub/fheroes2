@@ -237,7 +237,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
         fheroes2::validateFadeInAndRender();
 
-        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
 
         if ( System::isHandheldDevice() ) {
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
