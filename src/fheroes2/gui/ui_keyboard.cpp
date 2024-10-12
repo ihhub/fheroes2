@@ -313,7 +313,7 @@ namespace
         case fheroes2::SupportedLanguage::Slovak:
             return { "\xCF\xBC\x8A\xC8\x8D\x8E\xDD\xC1\xCD\xC9\xD3", "QWERTZUIOP\xDA", "ASDFGHJKL\xD4\xD2", "\xC4YXCVBNM\xC5\xC0" };
         case fheroes2::SupportedLanguage::Czech:
-            return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM"  };
+            return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xAF", "\xD4\xB2\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xAA", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA5" };
         default:
