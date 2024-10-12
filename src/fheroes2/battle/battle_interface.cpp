@@ -442,26 +442,18 @@ namespace
 
     fheroes2::Image DrawHexagon( const uint8_t colorId )
     {
-        const int32_t r = 22;
-        const int32_t l = 10;
-        const int32_t w = Battle::Cell::widthPx;
-        const int32_t h = Battle::Cell::heightPx;
+        const fheroes2::Sprite & originalGrid = fheroes2::AGG::GetICN( ICN::CMBTMISC, 0 );
 
-        fheroes2::Image sf( w + 1, h + 1 );
-        sf.reset();
+        // Move hexagon by 1 pixel down to match the original game's grid.
+        fheroes2::Image hexagonSprite( originalGrid.width(), originalGrid.height() + 1 );
 
-        fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
-        fheroes2::SetPixel( sf, r, 1, colorId );
-        fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
+        // Make the upper image line transparent. The other part will be filled with the copied image.
+        fheroes2::FillTransform( hexagonSprite, 0, 0, originalGrid.width(), 1, 1 );
+        fheroes2::Copy( originalGrid, 0, 0, hexagonSprite, 0, 1, originalGrid.width(), originalGrid.height() );
 
-        fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
-        fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
+        fheroes2::ReplaceColorId( hexagonSprite, 0, colorId );
 
-        fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
-        fheroes2::SetPixel( sf, r, h, colorId );
-        fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
-
-        return sf;
+        return hexagonSprite;
     }
 
     fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
@@ -1557,7 +1549,7 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     if ( deadUnit && cellId != deadUnit->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnit );
@@ -1685,7 +1677,7 @@ void Battle::Interface::RedrawArmies()
                 const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
-                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
                         if ( overlaySprite.unitId == deadUnit->GetUID() ) {
                             troopOverlaySprite.emplace_back( &overlaySprite );
@@ -2524,8 +2516,8 @@ void Battle::Interface::RedrawHighObjects( const int32_t cellId )
 void Battle::Interface::RedrawKilled()
 {
     // Redraw killed troops.
-    for ( const int32_t & cell : arena.GraveyardOccupiedCells() ) {
-        for ( const Unit * unit : arena.GetGraveyardTroops( cell ) ) {
+    for ( const int32_t & cell : arena.getCellsOccupiedByGraveyard() ) {
+        for ( const Unit * unit : arena.getGraveyardUnits( cell ) ) {
             if ( unit && cell != unit->GetTailIndex() ) {
                 RedrawTroopSprite( *unit );
             }
@@ -2657,8 +2649,8 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         const Unit * unitOnCell = cell->GetUnit();
 
         // Cursor is over some dead unit that we can resurrect
-        if ( unitOnCell == nullptr && arena.GraveyardAllowResurrect( _curentCellIndex, spell ) ) {
-            unitOnCell = arena.GraveyardLastTroop( _curentCellIndex );
+        if ( unitOnCell == nullptr && arena.isAbleToResurrectFromGraveyard( _curentCellIndex, spell ) ) {
+            unitOnCell = arena.getLastResurrectableUnitFromGraveyard( _curentCellIndex, spell );
             assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
@@ -3248,16 +3240,24 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
 
 void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
-    const Unit * unitOnCell = cell.GetUnit();
-
-    if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
-    }
-    else {
-        unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
-        if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
+    const auto getUnit = [this, &cell]() -> const Unit * {
+        if ( const Unit * unit = cell.GetUnit(); unit != nullptr ) {
+            return unit;
         }
+
+        if ( const Unit * unit = arena.getLastResurrectableUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+            return unit;
+        }
+
+        if ( const Unit * unit = arena.getLastUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+            return unit;
+        }
+
+        return nullptr;
+    };
+
+    if ( const Unit * unit = getUnit(); unit != nullptr ) {
+        Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
     }
 }
 

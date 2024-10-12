@@ -35,7 +35,7 @@
 #include "ui_text.h"
 #include "world.h"
 
-void Castle::OpenTavern() const
+void Castle::_openTavern() const
 {
     std::string body( _( "A generous tip for the barkeep yields the following rumor:" ) );
     body += "\n\n";

@@ -2722,7 +2722,7 @@ void AI::Planner::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     }
 }
 
-bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
+bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue )
 {
     if ( heroes.empty() ) {
         // No heroes so we indicate that all heroes moved.
@@ -2730,6 +2730,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
     }
 
     std::vector<Heroes *> availableHeroes;
+    availableHeroes.reserve( heroes.size() );
 
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
@@ -2739,7 +2740,17 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
 
     Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
 
-    uint32_t currentProgressValue = startProgressValue;
+    uint32_t heroesToMoveTotalCount = static_cast<uint32_t>( availableHeroes.size() );
+    uint32_t startProgressValue = currentProgressValue;
+
+    if ( endProgressValue - currentProgressValue >= heroesToMoveTotalCount * 2 ) {
+        // An extra case when there is only one hero and we have more than 2 points to display the turn progress.
+        // We increase the start value to display this progress after the pathfinder ends his work
+        // and the next progress increase will be aster the hero makes his move.
+        ++startProgressValue;
+    }
+
+    uint32_t turnProgressScale = 4 * ( endProgressValue - startProgressValue );
 
     while ( !availableHeroes.empty() ) {
         const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
@@ -2770,12 +2781,25 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
                         bestTargetIndex = targetIndex;
                         bestHero = hero;
                     }
+
+                    // This loop may take many time for computations so update hourglass grains animation.
+                    status.drawAITurnProgress( currentProgressValue );
                 }
 
                 if ( bestTargetIndex != -1 ) {
                     break;
                 }
             }
+        }
+
+        // Calculate turn progress taking into account that the current 'bestHero' most likely will end his turn
+        // and will be removed from 'availableHeroes' vector: we add 3/4 (not 1/2) to help rounding the result.
+        uint32_t progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + 3 * heroesToMoveTotalCount )
+                                     / ( 4 * heroesToMoveTotalCount )
+                                 + startProgressValue;
+        if ( currentProgressValue < progressValue ) {
+            currentProgressValue = progressValue;
+            status.drawAITurnProgress( currentProgressValue );
         }
 
         if ( bestTargetIndex == -1 ) {
@@ -2805,7 +2829,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         }
 
         if ( bestTargetIndex == -1 ) {
-            // Nothing to do. Stop everything
+            // Nothing to do. Stop everything.
             break;
         }
 
@@ -2865,28 +2889,36 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
             }
         }
 
+        // The size of heroes can be increased if a new hero is released from Jail.
         if ( heroes.size() > heroesBefore ) {
+            const size_t availableHeroesBefore = availableHeroes.size();
+
             addHeroToMove( heroes.back(), availableHeroes );
+
+            if ( availableHeroesBefore < availableHeroes.size() ) {
+                ++heroesToMoveTotalCount;
+
+                if ( endProgressValue < 8 ) {
+                    ++endProgressValue;
+                    turnProgressScale += 4;
+                }
+            }
         }
 
         availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
                                                []( const Heroes * hero ) { return !hero->MayStillMove( false, false ); } ),
                                availableHeroes.end() );
 
-        // The size of heroes can be increased if a new hero is released from Jail.
-        const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
-
-        if ( maxHeroCount > 0 ) {
-            // At least one hero still exist in the kingdom.
-            const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
-            if ( currentProgressValue < progressValue ) {
-                currentProgressValue = static_cast<uint32_t>( progressValue );
-                status.DrawAITurnProgress( currentProgressValue );
-            }
+        progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + heroesToMoveTotalCount )
+                            / ( 4 * heroesToMoveTotalCount )
+                        + startProgressValue;
+        if ( currentProgressValue < progressValue ) {
+            currentProgressValue = progressValue;
+            status.drawAITurnProgress( currentProgressValue );
         }
     }
 
-    status.DrawAITurnProgress( endProgressValue );
+    status.drawAITurnProgress( endProgressValue );
 
     return availableHeroes.empty();
 }
