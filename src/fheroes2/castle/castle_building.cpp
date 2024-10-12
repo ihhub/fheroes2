@@ -233,7 +233,7 @@ namespace
         }
 
         // Building animation sprite.
-        if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, index, frame ); index2 != index ) {
+        if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, index, frame ); index2 != 0 ) {
             fheroes2::drawCastleDialogBuilding( icn, index2, castle, offset, roi, alpha );
         }
 
