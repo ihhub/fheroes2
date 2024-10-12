@@ -155,7 +155,7 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    // Move border window
+    // Move the window border
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
     }

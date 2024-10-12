@@ -20,12 +20,19 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace Maps::Map_Format
 {
     struct SphinxMetadata;
 }
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace Editor
 {
-    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata );
+    bool openSphinxWindow( Maps::Map_Format::SphinxMetadata & metadata, const fheroes2::SupportedLanguage language );
 }

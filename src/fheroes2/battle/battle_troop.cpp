@@ -732,7 +732,7 @@ void Battle::Unit::PostKilledAction()
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
-        graveyard->AddTroop( *this );
+        graveyard->addUnit( this );
     }
 
     Cell * head = position.GetHead();
@@ -750,16 +750,17 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     hp += points;
 
-    if ( allow_overflow ) {
-        if ( _initialCount < GetCount() )
+    if ( allowToExceedInitialCount ) {
+        if ( _initialCount < GetCount() ) {
             _initialCount = GetCount();
+        }
     }
     else if ( GetCount() > _initialCount ) {
         resurrect -= GetCount() - _initialCount;
@@ -767,8 +768,9 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
         hp = ArmyTroop::GetHitPoints();
     }
 
-    if ( !skip_dead )
+    if ( !isTemporary ) {
         dead -= ( resurrect < dead ? resurrect : dead );
+    }
 
     return resurrect;
 }
@@ -1572,7 +1574,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             Graveyard * graveyard = Arena::GetGraveyard();
             assert( graveyard != nullptr );
 
-            graveyard->RemoveTroop( *this );
+            graveyard->removeUnit( this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
@@ -1585,7 +1587,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
             StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
-            Arena::GetInterface()->SetStatus( str, true );
+            Arena::GetInterface()->setStatus( str, true );
         }
         break;
     }

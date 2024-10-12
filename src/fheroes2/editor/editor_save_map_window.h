@@ -20,9 +20,15 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName );
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language );
 }

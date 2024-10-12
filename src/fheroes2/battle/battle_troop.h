@@ -297,7 +297,7 @@ namespace Battle
 
     private:
         uint32_t ApplyDamage( const uint32_t dmg );
-        uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
+        uint32_t Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
 
         // Applies a damage-causing spell to this unit
         void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target );

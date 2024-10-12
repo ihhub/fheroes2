@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2024-10-12 11:25+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -325,6 +325,9 @@ msgstr "ЧУТКИ"
 msgid "EVENTS"
 msgstr "ПОДІЇ"
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Воїн"
 
@@ -493,6 +496,9 @@ msgid ""
 msgstr ""
 "На полі бою діє артефакт Сфера Заперечення. Використання бойової магії "
 "заборонене."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Ви вже використали чари у цьому раунді."
@@ -3227,6 +3233,10 @@ msgstr "Встановлює швидкість прокручування ві�
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Обрати мову гри:"
+
 msgid "Click to choose the selected language."
 msgstr "Тицніть, щоб вибрати мову."
 
@@ -3628,6 +3638,13 @@ msgstr "Ціна Вірності"
 
 msgid "Resurrection"
 msgstr "Воскресіння"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Мова"
 
 msgid "Lose all your heroes and towns."
 msgstr "Втратити всіх ваших героїв та міста."
@@ -4527,18 +4544,24 @@ msgstr ""
 msgid "Map Description"
 msgstr "Опис мапи"
 
-msgid "Change Map Name"
-msgstr "Змінити назву мапи"
-
-msgid "Change Map Description"
-msgstr "Змінити опис мапи"
-
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
 "Введений опис мапи перевищує максимально дозволені 5 рядків. Його буде "
 "скорочено до розміру поля опису мапи."
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr "Змінити назву мапи"
+
+msgid "Change Map Description"
+msgstr "Змінити опис мапи"
 
 msgid "Click to accept the changes made."
 msgstr "Тицьніть, щоб прийняти внесені зміни."
@@ -4554,6 +4577,10 @@ msgstr "Тицьніть для редагування щоденних поді
 
 msgid "Events"
 msgstr "Події"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Змінити мову гри."
 
 msgid "Click to change your map name."
 msgstr "Тицьніть, щоб змінити назву вашої мапи."
@@ -7728,18 +7755,23 @@ msgstr ""
 "\"Я маю для тебе загадку, - каже Сфінкс. \"Відповідай правильно і будеш "
 "винагороджений. Відповіси неправильно - будеш з'їдений. Ти приймаєш виклик?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Сфінкс задає вам наступну загадку:\n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Ваша відповідь?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
