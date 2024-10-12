@@ -250,7 +250,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    AudioManager::PlayMusicAsync( MUS::FromRace( _race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     int alphaHero = 255;
     CastleDialog::FadeBuilding fadeBuilding;
@@ -261,7 +261,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     auto constructionDialogHandler = [this, &display, &dialogRoi, &fadeBuilding, &hero, &surfaceHero, &alphaHero]() {
         uint32_t build = BUILD_NOTHING;
-        const Castle::ConstructionDialogResult result = openConstructionDialog( build );
+        const Castle::ConstructionDialogResult result = _openConstructionDialog( build );
 
         switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
@@ -341,7 +341,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     };
 
     // Castle army (top) bar.
-    ArmyBar topArmyBar( &army, false, false );
+    ArmyBar topArmyBar( &_army, false, false );
     setArmyBarParameters( topArmyBar, { dialogRoi.x + 112, rectSign1.y } );
     topArmyBar.Redraw( display );
 
@@ -365,7 +365,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     const CastleDialog::CacheBuildings cacheBuildings( *this, dialogRoi.getPosition() );
 
     // Render castle buildings.
-    CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+    CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, 0 );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -528,7 +528,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 if ( le.isMouseRightButtonPressedInArea( it->coord ) ) {
                     // Check mouse right click.
                     if ( isMonsterDwelling ) {
-                        Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
+                        Dialog::DwellingInfo( Monster( _race, it->id ), getMonstersInDwelling( it->id ) );
                     }
                     else {
                         fheroes2::showStandardTextMessage( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Dialog::ZERO );
@@ -556,14 +556,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             needRedraw = true;
                         }
 
-                        OpenMageGuild( hero );
+                        _openMageGuild( hero );
                     }
                     else if ( isMonsterDwelling ) {
                         const fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
                         const int32_t recruitMonsterWindowOffsetY = -65;
                         const Troop monsterToRecruit
-                            = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true, recruitMonsterWindowOffsetY );
+                            = Dialog::RecruitMonster( Monster( _race, monsterDwelling ), getMonstersInDwelling( it->id ), true, recruitMonsterWindowOffsetY );
                         if ( Castle::RecruitMonster( monsterToRecruit ) ) {
                             needRedraw = true;
                         }
@@ -576,7 +576,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                         case BUILD_TAVERN: {
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            OpenTavern();
+                            _openTavern();
                             break;
                         }
 
@@ -615,7 +615,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         }
 
                         case BUILD_WELL:
-                            OpenWell();
+                            _openWell();
                             needRedraw = true;
                             break;
 
@@ -703,7 +703,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // In this case we must revert the queue and finding the first suitable building.
         for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
             if ( isBuild( it->id ) && le.isMouseCursorPosInArea( it->coord ) ) {
-                statusMessage = buildingStatusMessage( race, it->id );
+                statusMessage = buildingStatusMessage( _race, it->id );
                 break;
             }
         }
