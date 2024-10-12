@@ -30,6 +30,8 @@
 
 #include "artifact.h"
 #include "artifact_info.h"
+#include "battle_arena.h"
+#include "battle_army.h"
 #include "heroes_base.h"
 #include "monster.h"
 #include "race.h"
@@ -438,6 +440,38 @@ bool Spell::isMindInfluence() const
 uint32_t Spell::IndexSprite() const
 {
     return spells[id].imageId;
+}
+
+bool Spell::canCastCombatSpell() const
+{
+    const Battle::Arena * arena = Battle::GetArena();
+    assert( arena != nullptr );
+    const Battle::Force & playerForce = arena->GetCurrentForce();
+    const Battle::Force & opposingForce = arena->getOpposingForce();
+
+    if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
+        if ( playerForce.onlyHasMonster( Monster::PEASANT ) || playerForce.allUnitsAreUndead() ) {
+            return false;
+        }
+    }
+    else if ( *this == Spell::CURSE || *this == Spell::MASSCURSE ) {
+        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) || opposingForce.allUnitsAreUndead() || opposingForce.onlyHasMonster( Monster::CRUSADER )
+             || opposingForce.onlyHasUndeadAndMonsters( { Monster::CRUSADER } ) || opposingForce.onlyHasUndeadAndMonsters( { Monster::PEASANT } )
+             || opposingForce.onlyHasUndeadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
+            return false;
+        }
+    }
+    else if ( *this == Spell::SHIELD || *this == Spell::MASSSHIELD ) {
+        if ( !opposingForce.hasArchers() ) {
+            return false;
+        }
+    }
+    else if ( *this == Spell::DRAGONSLAYER ) {
+        if ( !opposingForce.hasDragons() ) {
+            return false;
+        }
+    }
+    return true;
 }
 
 uint32_t Spell::Restore() const
