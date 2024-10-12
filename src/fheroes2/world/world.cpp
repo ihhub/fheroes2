@@ -876,19 +876,21 @@ uint32_t World::CountCapturedMines( const int type, const int color ) const
 
 void World::CaptureObject( const int32_t index, const int color )
 {
+    assert( CountBits( color ) <= 1 );
+
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
 
+    if ( color != Color::NONE && !( color & Color::ALL ) ) {
+        return;
+    }
+
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color ) {
-        assert( color != Color::UNUSED );
-
         castle->ChangeColor( color );
     }
 
-    if ( color == Color::NONE || ( color & Color::ALL ) ) {
-        GetTiles( index ).setOwnershipFlag( objectType, color );
-    }
+    GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
 int World::ColorCapturedObject( const int32_t index ) const
