@@ -555,12 +555,12 @@ AI::SpellcastOutcome AI::BattlePlanner::spellResurrectValue( const Spell & spell
     }
 
     // Then consider the stacks from the graveyard
-    for ( const int32_t idx : arena.GraveyardOccupiedCells() ) {
-        if ( !arena.GraveyardAllowResurrect( idx, spell ) ) {
+    for ( const int32_t idx : arena.getCellsOccupiedByGraveyard() ) {
+        if ( !arena.isAbleToResurrectFromGraveyard( idx, spell ) ) {
             continue;
         }
 
-        const Battle::Unit * unit = arena.GraveyardLastTroop( idx );
+        const Battle::Unit * unit = arena.getLastResurrectableUnitFromGraveyard( idx, spell );
         assert( unit != nullptr && !unit->isValid() );
 
         updateBestOutcome( unit );

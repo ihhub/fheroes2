@@ -754,7 +754,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     // Reset the turn progress indicator
     Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
-    status.DrawAITurnProgress( 0 );
+    status.drawAITurnProgress( 0 );
 
     AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -861,7 +861,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     updateKingdomBudget( kingdom );
 
     uint32_t progressStatus = 1;
-    status.DrawAITurnProgress( progressStatus );
+    status.drawAITurnProgress( progressStatus );
 
     std::set<int> castlesInDanger;
     std::vector<AICastle> sortedCastleList;
@@ -889,15 +889,12 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
-        const uint32_t startProgressValue = progressStatus;
-        const uint32_t endProgressValue = ( progressStatus == 1 ) ? 8 : std::max( progressStatus + 1U, 9U );
+        // If AI has less than three heroes at the start of the turn we assume
+        // that he will buy another one in this turn and allow progress to increase only for 2 points.
+        uint32_t const endProgressValue
+            = ( progressStatus == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( progressStatus + 2U, 9U );
 
-        bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
-
-        if ( progressStatus == 1 ) {
-            progressStatus = 8;
-            status.DrawAITurnProgress( progressStatus );
-        }
+        bool moreTaskForHeroes = HeroesTurn( heroes, progressStatus, endProgressValue );
 
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
@@ -933,7 +930,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         break;
     }
 
-    status.DrawAITurnProgress( 9 );
+    status.drawAITurnProgress( 9 );
 
     // Sync the list of castles (if new ones were captured during the turn)
     if ( castles.size() != sortedCastleList.size() ) {
@@ -960,7 +957,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         transferSlowestTroopsToGarrison( hero, castle );
     }
 
-    status.DrawAITurnProgress( 10 );
+    status.resetAITurnProgress();
 }
 
 bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,

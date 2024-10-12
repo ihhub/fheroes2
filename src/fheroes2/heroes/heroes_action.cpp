@@ -2943,10 +2943,10 @@ namespace
             Death
         };
 
-        const uint32_t demonSlayingExperience = 1000;
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr uint32_t demonSlayingExperience = 1000;
 
-        // Implicitly capture everything by reference because different compilers disagree on whether there is a need to capture the 'demonSlayingExperience' or not
-        const Outcome outcome = [&]() {
+        const Outcome outcome = [&hero = std::as_const( hero ), dst_index, &title]() {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
 
             const Maps::Tiles & tile = world.GetTiles( dst_index );

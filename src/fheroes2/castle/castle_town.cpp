@@ -178,13 +178,13 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     return Dialog::CANCEL;
 }
 
-int Castle::DialogBuyCastle( bool buttons ) const
+int Castle::DialogBuyCastle( const bool hasButtons /* = true */ ) const
 {
     const BuildingInfo info( *this, BUILD_CASTLE );
-    return info.DialogBuyBuilding( buttons ) ? Dialog::OK : Dialog::CANCEL;
+    return info.DialogBuyBuilding( hasButtons ) ? Dialog::OK : Dialog::CANCEL;
 }
 
-Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwellingTobuild )
+Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwellingTobuild )
 {
     if ( !isBuild( BUILD_CASTLE ) ) {
         // It is not possible to open this dialog without a built castle!
@@ -286,7 +286,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && ( conf.getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
+    const bool isSkipTavernInteraction = ( Race::NECR == _race ) && ( conf.getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();
@@ -377,35 +377,35 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.y = cur_pt.y + 170;
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetAttack() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetDefense() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetPower() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetPower() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         fheroes2::Copy( spriteSpreadArmyFormat, 0, 0, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y, rectSpreadArmyFormat.width, rectSpreadArmyFormat.height );
         fheroes2::Copy( spriteGroupedArmyFormat, 0, 0, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y, rectGroupedArmyFormat.width,
                         rectGroupedArmyFormat.height );
 
-        if ( army.isSpreadFormation() ) {
+        if ( _army.isSpreadFormation() ) {
             cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
         }
         else {
@@ -581,7 +581,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             return ConstructionDialogResult::Build;
         }
         if ( !isSkipTavernInteraction && le.isMouseCursorPosInArea( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) ) {
-            dwellingTobuild = ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
+            dwellingTobuild = ( Race::NECR == _race ? BUILD_SHRINE : BUILD_TAVERN );
             return ConstructionDialogResult::Build;
         }
         if ( le.isMouseCursorPosInArea( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) ) {
@@ -638,15 +638,15 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
 
         if ( isCaptainBuilt ) {
-            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !_army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( true );
+                _army.SetSpreadFormation( true );
             }
-            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
+            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && _army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( false );
+                _army.SetSpreadFormation( false );
             }
             else if ( le.isMouseRightButtonPressedInArea( rectSpreadArmyFormat ) ) {
                 fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );

@@ -471,7 +471,7 @@ void Interface::Radar::QueueEventProcessing()
         _mouseDraggingMovement = false;
     }
 
-    // Move border window
+    // Move the window border
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
         _interface.setRedraw( REDRAW_RADAR_CURSOR );

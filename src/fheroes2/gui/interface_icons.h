@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -185,6 +185,8 @@ namespace Interface
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
 
+        bool isMouseCaptured();
+
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw();
@@ -198,6 +200,8 @@ namespace Interface
 
         CastleIcons castleIcons;
         HeroesIcons heroesIcons;
+
+        bool _isMouseCaptured{ false };
     };
 }
 

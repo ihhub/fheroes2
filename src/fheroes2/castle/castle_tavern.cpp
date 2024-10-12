@@ -35,7 +35,7 @@
 #include "ui_text.h"
 #include "world.h"
 
-void Castle::OpenTavern() const
+void Castle::_openTavern() const
 {
     auto [rumor, language] = world.getCurrentRumor();
 
