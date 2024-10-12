@@ -2792,7 +2792,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
             }
         }
 
-        // Calculate turn progress taking into account that the current 'betsHero' most likely will end his turn
+        // Calculate turn progress taking into account that the current 'bestHero' most likely will end his turn
         // and will be removed from 'availableHeroes' vector: we add 3/4 (not 1/2) to help rounding the result.
         uint32_t progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + 3 * heroesToMoveTotalCount )
                                      / ( 4 * heroesToMoveTotalCount )
