@@ -26,9 +26,11 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
+#include "game_language.h"
 #include "math_base.h"
 #include "players.h"
 
@@ -144,6 +146,16 @@ namespace Maps
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
 
+        // Only Resurrection Maps contain supported language.
+        std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
+        {
+            if ( version == GameVersion::RESURRECTION ) {
+                return mainLanguage;
+            }
+
+            return {};
+        }
+
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
@@ -200,6 +212,10 @@ namespace Maps
         uint32_t worldDay;
         uint32_t worldWeek;
         uint32_t worldMonth;
+
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
     private:
         void FillUnions( const int side1Colors, const int side2Colors );

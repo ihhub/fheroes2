@@ -59,6 +59,7 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_kingdom.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -204,7 +205,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -284,7 +286,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == _race ) && ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
+    const bool isSkipTavernInteraction = ( Race::NECR == _race ) && ( conf.getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();
@@ -657,14 +659,14 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         // Right click
         if ( hero1 && le.isMouseRightButtonPressedInArea( rectHero1 ) ) {
             LocalEvent::Get().reset();
-            hero1->OpenDialog( true, true, false, false, false, false );
+            hero1->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.isMouseRightButtonPressedInArea( rectHero2 ) ) {
             LocalEvent::Get().reset();
-            hero2->OpenDialog( true, true, false, false, false, false );
+            hero2->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );

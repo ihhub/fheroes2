@@ -26,6 +26,7 @@
 #include <ctime>
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -104,7 +105,7 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
@@ -194,7 +195,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName )
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -234,7 +235,7 @@ namespace Editor
             mapName = fileName;
         }
 
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite(), language );
         const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );
@@ -376,15 +377,17 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
+
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, 17, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
                     }
 
                     mapName = std::move( editableMapName );
-                    mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
+                    mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 

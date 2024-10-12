@@ -707,7 +707,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-std::string World::getCurrentRumor() const
+std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
@@ -717,7 +717,7 @@ std::string World::getCurrentRumor() const
     case 0: {
         std::string rumor( _( "The ultimate artifact is really the %{name}." ) );
         StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
-        return rumor;
+        return { rumor, std::nullopt };
     }
     case 1: {
         std::string rumor( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
@@ -755,30 +755,30 @@ std::string World::getCurrentRumor() const
         else {
             StringReplace( rumor, "%{name}", _( "south-east" ) );
         }
-        return rumor;
+        return { rumor, std::nullopt };
     }
     case 2:
-        return _( "The truth is out there." );
+        return { _( "The truth is out there." ), std::nullopt };
     case 3:
-        return _( "The dark side is stronger." );
+        return { _( "The dark side is stronger." ), std::nullopt };
     case 4:
-        return _( "The end of the world is near." );
+        return { _( "The end of the world is near." ), std::nullopt };
     case 5:
-        return _( "The bones of Lord Slayer are buried in the foundation of the arena." );
+        return { _( "The bones of Lord Slayer are buried in the foundation of the arena." ), std::nullopt };
     case 6:
-        return _( "A Black Dragon will take out a Titan any day of the week." );
+        return { _( "A Black Dragon will take out a Titan any day of the week." ), std::nullopt };
     case 7:
-        return _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." );
+        return { _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." ), std::nullopt };
     case 8:
-        return _( "An unknown force is being resurrected..." );
+        return { _( "An unknown force is being resurrected..." ), std::nullopt };
     case 9:
-        return _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" );
+        return { _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ), std::nullopt };
     default:
         break;
     }
 
     assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
-    return _customRumors[chosenRumorId - standardRumorCount];
+    return { _customRumors[chosenRumorId - standardRumorCount], Settings::Get().getCurrentMapInfo().getSupportedLanguage() };
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -1449,8 +1449,8 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
         MP2::MapObjectType type{ MP2::OBJ_NONE };
         stream >> uid;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
             int temp{ MP2::OBJ_NONE };
             stream >> temp;
 
