@@ -299,5 +299,5 @@ void Interface::AdventureMap::RedrawFocus()
         _iconsPanel.SetRedraw( ICON_CASTLES );
     }
 
-    _statusPanel.SetRedraw();
+    _statusPanel.setRedraw();
 }
