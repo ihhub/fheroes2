@@ -246,7 +246,7 @@ namespace
         }
 
         // Set up restorers.
-        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 113, scenarioBoxRoi.y + 5, 141, scenarioBoxRoi.height );
+        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 6, scenarioBoxRoi.y + 5, 279, scenarioBoxRoi.height );
         fheroes2::ImageRestorer opponentsArea( display, roi.x, pointOpponentInfo.y, roi.width, 65 );
         fheroes2::ImageRestorer classArea( display, roi.x, pointClassInfo.y, roi.width, 69 );
         fheroes2::ImageRestorer handicapArea( display, roi.x, pointClassInfo.y + 69, roi.width, 31 );
