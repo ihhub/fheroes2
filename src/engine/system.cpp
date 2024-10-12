@@ -38,6 +38,7 @@
 #include "tools.h"
 
 #define WIN32_LEAN_AND_MEAN
+#define WC_ERR_INVALID_CHARS 0x00000080 // error for invalid chars
 #include <windows.h>
 #elif defined( TARGET_PS_VITA )
 #include <algorithm>
