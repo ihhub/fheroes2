@@ -857,10 +857,8 @@ namespace Interface
                     }
 
                     if ( scrollDirection != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
-                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
-                            if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
-                                ++fastScrollRepeatCount;
-                            }
+                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
+                            ++fastScrollRepeatCount;
                         }
 
                         if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
