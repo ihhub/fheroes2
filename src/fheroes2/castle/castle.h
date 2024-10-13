@@ -432,40 +432,40 @@ namespace CastleDialog
     public:
         FadeBuilding() = default;
 
-        void StartFadeBuilding( const uint32_t building )
+        void startFadeBuilding( const uint32_t building )
         {
             _alpha = 0;
             _building = building;
             _isOnlyBoat = false;
         }
 
-        void StartFadeBoat()
+        void startFadeBoat()
         {
             _alpha = 0;
             _building = BUILD_SHIPYARD;
             _isOnlyBoat = true;
         }
 
-        bool UpdateFade();
+        bool updateFadeAlpha();
 
-        bool IsFadeDone() const
+        bool isFadeDone() const
         {
             return _alpha == 255;
         }
 
-        void StopFade()
+        void stopFade()
         {
             _alpha = 255;
             _building = BUILD_NOTHING;
             _isOnlyBoat = false;
         }
 
-        uint8_t GetAlpha() const
+        uint8_t getAlpha() const
         {
             return _alpha;
         }
 
-        uint32_t GetBuilding() const
+        uint32_t getBuilding() const
         {
             return _building;
         }
@@ -476,34 +476,36 @@ namespace CastleDialog
         }
 
     private:
-        uint8_t _alpha{ 255 };
         uint32_t _building{ BUILD_NOTHING };
+        uint8_t _alpha{ 255 };
         bool _isOnlyBoat{ false };
     };
 
     struct BuildingRenderInfo
     {
-        BuildingRenderInfo( BuildingType b, const fheroes2::Rect & r )
-            : id( b )
-            , coord( r )
-        {}
-
-        bool operator==( uint32_t b ) const
+        BuildingRenderInfo( const BuildingType buildingType, const fheroes2::Rect & buildingRect )
+            : id( buildingType )
+            , coord( buildingRect )
         {
-            return b == static_cast<uint32_t>( id );
+            // Do nothing.
+        }
+
+        bool operator==( const uint32_t buildingType ) const
+        {
+            return buildingType == static_cast<uint32_t>( id );
         }
 
         BuildingType id;
         fheroes2::Rect coord;
     };
 
-    struct CacheBuildings : std::vector<BuildingRenderInfo>
+    struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>
     {
-        CacheBuildings( const Castle & castle, const fheroes2::Point & top );
+        BuildingsRenderQueue( const Castle & castle, const fheroes2::Point & top );
     };
 
-    void RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
-                             const uint32_t animationIndex );
+    void redrawAllBuildings( const Castle & castle, const fheroes2::Point & offset, const BuildingsRenderQueue & buildings,
+                             const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex );
 }
 
 struct VecCastles : public std::vector<Castle *>
