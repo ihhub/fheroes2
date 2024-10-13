@@ -50,7 +50,6 @@ namespace Interface
         void SetRedraw() const;
 
         fheroes2::GameMode QueueEventProcessing();
-        void ResetButtons();
 
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
