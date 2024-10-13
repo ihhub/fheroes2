@@ -5039,6 +5039,22 @@ namespace
 
             return true;
         }
+        case ICN::SCENIBKG_EVIL: {
+            const int32_t originalId = ICN::SCENIBKG;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() != 1 ) {
+                return true;
+            }
+
+            _icnVsSprite[id].resize( _icnVsSprite[originalId].size() );
+            for ( size_t i = 0; i < _icnVsSprite[originalId].size(); ++i ) {
+                _icnVsSprite[id][i] = _icnVsSprite[originalId][i];
+                convertToEvilInterface( _icnVsSprite[id][i], { 0, 0, _icnVsSprite[id][i].width(), _icnVsSprite[id][i].height() } );
+            }
+
+            return true;
+        }
         default:
             break;
         }
