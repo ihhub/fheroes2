@@ -7737,7 +7737,7 @@ msgid ""
 "\n"
 "Your answer?"
 msgstr ""
-"sphinx|'\n"
+"'\n"
 "\n"
 "Mit válaszolsz?"
 
