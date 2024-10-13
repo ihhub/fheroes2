@@ -217,14 +217,14 @@ namespace
         // TODO: plural forms are not in use: Plural-Forms.
         LocaleType locale{ LocaleType::LOCALE_EN };
         RWStreamBuf buf;
-        std::map<uint32_t, Chunk> hashOffsets;
+        std::unordered_map<uint32_t, Chunk> hashOffsets;
         std::string encoding;
         bool isValid{ false };
 
         const char * ngettext( const char * str, size_t plural )
         {
             const auto iter = std::as_const( hashOffsets ).find( crc32b( str ) );
-            if ( iter == hashOffsets.end() ) {
+            if ( iter == hashOffsets.cend() ) {
                 return stripContext( str );
             }
 
