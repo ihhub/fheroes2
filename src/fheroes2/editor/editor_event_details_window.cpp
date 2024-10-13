@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -68,7 +69,8 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                             const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
@@ -98,7 +100,7 @@ namespace Editor
 
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+        text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
         const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
@@ -293,11 +295,12 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true, true ) ) {
+                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();
-                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
                     text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }

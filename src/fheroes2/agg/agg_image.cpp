@@ -186,7 +186,9 @@ namespace
                                                 ICN::BUTTON_RUMORS_GOOD,
                                                 ICN::BUTTON_RUMORS_EVIL,
                                                 ICN::BUTTON_EVENTS_GOOD,
-                                                ICN::BUTTON_EVENTS_EVIL };
+                                                ICN::BUTTON_EVENTS_EVIL,
+                                                ICN::BUTTON_LANGUAGE_GOOD,
+                                                ICN::BUTTON_LANGUAGE_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -607,17 +609,20 @@ namespace
             fheroes2::ICNHeader header1;
             imageStream >> header1;
 
-            uint32_t sizeData = 0;
+            // There should be enough frames for ICNs with animation. When animationFrames is equal to 32 then it is a Monochromatic image
+            assert( header1.animationFrames == 32 || header1.animationFrames <= count );
+
+            uint32_t dataSize = 0;
             if ( i + 1 != count ) {
                 fheroes2::ICNHeader header2;
                 imageStream >> header2;
-                sizeData = header2.offsetData - header1.offsetData;
+                dataSize = header2.offsetData - header1.offsetData;
             }
             else {
-                sizeData = blockSize - header1.offsetData;
+                dataSize = blockSize - header1.offsetData;
             }
 
-            if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+            if ( headerSize + header1.offsetData + dataSize > body.size() ) {
                 // This is a corrupted AGG file.
                 throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
                                                       + " is being corrupted. "
@@ -625,8 +630,9 @@ namespace
             }
 
             const uint8_t * data = body.data() + headerSize + header1.offsetData;
+            const uint8_t * dataEnd = data + dataSize;
 
-            _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
+            _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
         }
     }
 
@@ -2090,6 +2096,17 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_LANGUAGE_GOOD:
+        case ICN::BUTTON_LANGUAGE_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_LANGUAGE_EVIL );
+
+            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LANGUAGE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
         default:
             // You're calling this function for non-specified ICN id. Check your logic!
             // Did you add a new image for one language without generating a default
@@ -2780,6 +2797,8 @@ namespace
         case ICN::BUTTON_RUMORS_EVIL:
         case ICN::BUTTON_EVENTS_GOOD:
         case ICN::BUTTON_EVENTS_EVIL:
+        case ICN::BUTTON_LANGUAGE_GOOD:
+        case ICN::BUTTON_LANGUAGE_EVIL:
             generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:

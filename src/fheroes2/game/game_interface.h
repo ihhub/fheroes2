@@ -96,17 +96,17 @@ namespace Interface
 
         IconsPanel & GetIconsPanel()
         {
-            return iconsPanel;
+            return _iconsPanel;
         }
 
         ControlPanel & getControlPanel()
         {
-            return controlPanel;
+            return _controlPanel;
         }
 
-        StatusWindow & getStatusWindow()
+        StatusPanel & getStatusPanel()
         {
-            return _statusWindow;
+            return _statusPanel;
         }
 
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
@@ -168,12 +168,12 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
         void _startHeroMove( Heroes & hero );
 
-        fheroes2::GameMode HumanTurn( const bool isload );
+        fheroes2::GameMode HumanTurn( const bool isLoadedFromSave );
 
-        IconsPanel iconsPanel;
-        ButtonsArea buttonsArea;
-        ControlPanel controlPanel;
-        StatusWindow _statusWindow;
+        IconsPanel _iconsPanel;
+        ButtonsPanel _buttonsPanel;
+        ControlPanel _controlPanel;
+        StatusPanel _statusPanel;
 
         bool _lockRedraw;
     };

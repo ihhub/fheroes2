@@ -300,6 +300,7 @@ Interface::IconsPanel::IconsPanel( AdventureMap & basic )
 {
     sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
     sfMarker.reset();
+
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
@@ -337,7 +338,7 @@ void Interface::IconsPanel::SetRedraw() const
     SetRedraw( ICON_ANY );
 }
 
-void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
+void Interface::IconsPanel::SetPos( int32_t x, int32_t y )
 {
     int32_t iconsCount = 0;
 
@@ -349,7 +350,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 
-    BorderWindow::SetPosition( ox, oy, 144, iconsCount * iconsCursorHeight );
+    BorderWindow::SetPosition( x, y, 144, iconsCount * iconsCursorHeight );
 
     heroesIcons.SetIconsCount( iconsCount );
     castleIcons.SetIconsCount( iconsCount );
@@ -376,7 +377,9 @@ void Interface::IconsPanel::_redraw()
 
 void Interface::IconsPanel::QueueEventProcessing()
 {
-    // Move border window
+    captureMouse();
+
+    // Move the window border
     if ( Settings::Get().ShowIcons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
     }

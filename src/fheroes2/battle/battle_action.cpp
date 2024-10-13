@@ -43,7 +43,6 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
@@ -503,7 +502,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
     commander->SpellCasted( spell );
 
     // Save the spell for the Eagle Eye skill
-    usage_spells.Append( spell );
+    _usedSpells.Append( spell );
 }
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
@@ -928,7 +927,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
                     std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
                     StringReplace( str, "%{name}", attacker.GetName() );
 
-                    iface->SetStatus( str, true );
+                    iface->setStatus( str, true );
                 }
             }
         }
@@ -1087,11 +1086,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     Unit * target = GetTroopBoard( dst );
 
-    // from spells
     switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
-        // skip center
         target = nullptr;
         break;
 
@@ -1103,25 +1100,23 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     TargetInfo res;
 
-    // first target
     if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
         res.defender = target;
 
         targets.push_back( res );
     }
 
-    // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
+    if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
+        target = getLastResurrectableUnitFromGraveyard( dst, spell );
+        assert( target != nullptr && !target->isValid() );
 
-        if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
+        if ( consideredTargets.insert( target ).second ) {
             res.defender = target;
 
             targets.push_back( res );
         }
     }
     else {
-        // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
@@ -1146,7 +1141,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check abroads
         case Spell::FIREBALL:
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
@@ -1167,7 +1161,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check all troops
         case Spell::DEATHRIPPLE:
         case Spell::DEATHWAVE:
         case Spell::ELEMENTALSTORM:
@@ -1373,7 +1366,7 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
         std::string msg = ( _autoBattleColors & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
         StringReplace( msg, "%{name}", player->GetName() );
 
-        _interface->SetStatus( msg, true );
+        _interface->setStatus( msg, true );
     }
 }
 
@@ -1698,7 +1691,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
 
         if ( _interface ) {
-            _interface->SetStatus( _( "Spell failed!" ), true );
+            _interface->setStatus( _( "Spell failed!" ), true );
         }
     }
 }

@@ -24,12 +24,12 @@
 #ifndef H2HEROES_H
 #define H2HEROES_H
 
-#include <algorithm>
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
 #include <cstdint>
 #include <exception>
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -70,6 +70,8 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 class Heroes final : public HeroBase, public ColorBase
@@ -477,7 +479,8 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                    const fheroes2::SupportedLanguage language );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -780,53 +783,70 @@ struct VecHeroes : public std::vector<Heroes *>
 
     VecHeroes & operator=( const VecHeroes & ) = delete;
     VecHeroes & operator=( VecHeroes && ) = default;
-
-    Heroes * Get( int hid ) const;
-    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
-struct AllHeroes : public VecHeroes
+class AllHeroes
 {
+public:
     AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
-    ~AllHeroes();
+    ~AllHeroes() = default;
 
     AllHeroes & operator=( const AllHeroes & ) = delete;
 
+    auto begin() const noexcept
+    {
+        return Iterator( _heroes.begin() );
+    }
+
+    auto end() const noexcept
+    {
+        return Iterator( _heroes.end() );
+    }
+
     void Init();
-    void clear();
 
-    void Scout( int colors ) const;
-
-    void ResetModes( const uint32_t modes ) const
+    void Clear()
     {
-        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+        _heroes.clear();
     }
 
-    void NewDay()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
-    }
+    Heroes * Get( const int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 
-    void NewWeek()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
-    }
+    void Scout( const int colors ) const;
 
-    void NewMonth()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
-    }
+    void ResetModes( const uint32_t modes ) const;
+
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        explicit Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        auto * operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+    friend IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
+
+    std::vector<std::unique_ptr<Heroes>> _heroes;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
-
-OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
-IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_GRAVEYARD_H
-#define H2BATTLE_GRAVEYARD_H
+#pragma once
 
-#include <algorithm>
 #include <cstdint>
 #include <map>
 #include <vector>
@@ -35,9 +33,7 @@ namespace Battle
 {
     class Unit;
 
-    using TroopUIDs = std::vector<uint32_t>;
-
-    class Graveyard : public std::map<int32_t, TroopUIDs>
+    class Graveyard : public std::map<int32_t, std::vector<Unit *>>
     {
     public:
         Graveyard() = default;
@@ -47,12 +43,13 @@ namespace Battle
 
         Graveyard & operator=( const Graveyard & ) = delete;
 
-        Indexes GetOccupiedCells() const;
-        void AddTroop( const Unit & unit );
-        void RemoveTroop( const Unit & unit );
-        uint32_t GetLastTroopUID( const int32_t index ) const;
-        TroopUIDs GetTroopUIDs( const int32_t index ) const;
+        Indexes getOccupiedCells() const;
+
+        void addUnit( Unit * unit );
+        void removeUnit( Unit * unit );
+
+        Unit * getLastUnit( const int32_t index ) const;
+
+        std::vector<Unit *> getUnits( const int32_t index ) const;
     };
 }
-
-#endif

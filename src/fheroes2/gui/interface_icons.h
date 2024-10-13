@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -170,7 +170,7 @@ namespace Interface
 
         IconsPanel & operator=( const IconsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;

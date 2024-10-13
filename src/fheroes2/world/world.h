@@ -28,13 +28,16 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
+#include "game_language.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -267,9 +270,10 @@ public:
 
     void addCastle( int32_t index, uint8_t race, uint8_t color )
     {
-        Castle * castle = new Castle( index % width, index / width, race );
+        auto castle = std::make_unique<Castle>( index % width, index / width, race );
         castle->SetColor( color );
-        vec_castles.AddCastle( castle );
+
+        vec_castles.AddCastle( std::move( castle ) );
     }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
@@ -354,7 +358,7 @@ public:
     void NewWeek();
     void NewMonth();
 
-    std::string getCurrentRumor() const;
+    std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;

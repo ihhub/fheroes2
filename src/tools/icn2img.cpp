@@ -148,7 +148,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), buf.data() + dataSize, header );
 
             std::ostringstream spriteIdxStream;
             spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
@@ -163,7 +163,17 @@ int main( int argc, char ** argv )
                 outputFileName += ".bmp";
             }
 
-            offsetStream << spriteIdxStr << " [" << header.offsetX << ", " << header.offsetY << "]" << std::endl;
+            offsetStream << spriteIdxStr << " [" << header.offsetX << ", " << header.offsetY << "]";
+            if ( header.animationFrames > 0 ) {
+                if ( header.animationFrames != 32 ) {
+                    offsetStream << ", animation frames count = " << std::to_string( header.animationFrames );
+                }
+                else {
+                    offsetStream << ", monochromatic image";
+                }
+            }
+            offsetStream << std::endl;
+
             if ( !offsetStream ) {
                 std::cerr << "Error writing to file " << offsetFilePath << std::endl;
                 return EXIT_FAILURE;

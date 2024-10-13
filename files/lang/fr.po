@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
-"PO-Revision-Date: 2024-03-16 00:13+0100\n"
+"POT-Creation-Date: 2024-10-12 11:25+0000\n"
+"PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -249,7 +249,9 @@ msgstr ""
 "N\n"
 "V\n"
 "O\n"
-"I"
+"Y\n"
+"E\n"
+"R"
 
 msgid ""
 "E\n"
@@ -316,6 +318,9 @@ msgid "RUMORS"
 msgstr ""
 
 msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
 msgstr ""
 
 msgid "Warrior"
@@ -487,6 +492,9 @@ msgid ""
 msgstr ""
 "L'artéfact Sphère de négation est en vigueur pour cette bataille, "
 "désactivant tous les sorts de combat."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Vous avez déjà jeté un sort pendant ce tour."
@@ -3289,6 +3297,10 @@ msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Choix de la langue :"
+
 msgid "Click to choose the selected language."
 msgstr "Cliquez pour valider la langue choisie."
 
@@ -3702,6 +3714,13 @@ msgstr "Le prix de la loyauté"
 
 msgid "Resurrection"
 msgstr "Résurrection"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Langue"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -4665,17 +4684,23 @@ msgstr ""
 "\n"
 "Emplacement : "
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Description sélectionnée"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4695,6 +4720,10 @@ msgstr "Cliquez pour quitter les résultats de la bataille."
 #, fuzzy
 msgid "Events"
 msgstr "Événement"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Changer la langue du jeu."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -7962,18 +7991,23 @@ msgstr ""
 "vous serez récompensé. Répondez incorrectement, et vous serez mangé. "
 "Acceptez-vous de relever le défi ?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Le Sphinx vous pose l'énigme suivante :\n"
 "\n"
 "\"%{riddle}\n"
 "\n"
 "Votre réponse ?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "

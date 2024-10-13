@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
@@ -233,6 +234,8 @@ namespace Editor
 {
     void openEditorSettings()
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
@@ -263,7 +266,7 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );

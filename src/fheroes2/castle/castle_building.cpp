@@ -147,7 +147,7 @@ namespace
         }
     }
 
-    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+    void redrawCastleBuilding( const Castle & castle, const fheroes2::Point & offset, const uint32_t building, const uint32_t frame,
                                const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
@@ -185,6 +185,16 @@ namespace
         }
 
         const int race = castle.GetRace();
+
+        // For the Sorceress town when Statue and Crystal Garden are both built they have an extra image ICN::TWNSEXT1
+        // that should be used instead of separate Statue and Crystal Garden images render.
+        // This extra image is rendered in redrawCastleBuildingExtended() function.
+        // When Statue is constructing (fade-in animation) its render is also skipped here and is done in redrawCastleBuildingExtended().
+        if ( race == Race::SORC && ( building == BUILD_STATUE || building == BUILD_WEL2 ) && castle.isBuild( BUILD_STATUE )
+             && isBuildingFullyBuilt( castle, BUILD_WEL2, buildingCurrentlyUnderConstruction ) ) {
+            return;
+        }
+
         const uint32_t index = [building, race]() -> uint32_t {
             switch ( building ) {
             case BUILD_MAGEGUILD2:
@@ -209,10 +219,10 @@ namespace
             return;
         }
 
-        const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
+        const fheroes2::Rect roi = CastleGetMaxArea( castle, offset );
 
         // Building main sprite.
-        fheroes2::drawCastleDialogBuilding( icn, index, castle, dst_pt, max, alpha );
+        fheroes2::drawCastleDialogBuilding( icn, index, castle, offset, roi, alpha );
 
         // Special case: Knight castle's flags are overlapped by Right Turret so we need to draw flags after drawing the Turret.
         const bool knightCastleCase = ( race == Race::KNGT && isBuildingFullyBuilt( castle, BUILD_RIGHTTURRET, buildingCurrentlyUnderConstruction )
@@ -223,8 +233,8 @@ namespace
         }
 
         // Building animation sprite.
-        if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, index, frame ) ) {
-            fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
+        if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, index, frame ); index2 != 0 ) {
+            fheroes2::drawCastleDialogBuilding( icn, index2, castle, offset, roi, alpha );
         }
 
         if ( knightCastleCase && building == BUILD_RIGHTTURRET ) {
@@ -232,12 +242,12 @@ namespace
             const int castleIcn = Castle::GetICNBuilding( BUILD_CASTLE, race );
             const uint32_t flagAnimFrame = ICN::getAnimatedIcnIndex( castleIcn, index, frame );
             if ( flagAnimFrame > 0 ) {
-                fheroes2::drawCastleDialogBuilding( castleIcn, flagAnimFrame, castle, dst_pt, max, alpha );
+                fheroes2::drawCastleDialogBuilding( castleIcn, flagAnimFrame, castle, offset, roi, alpha );
             }
         }
     }
 
-    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, const uint32_t building, const uint32_t frame,
+    void redrawCastleBuildingExtended( const Castle & castle, const fheroes2::Point & offset, const uint32_t building, const uint32_t frame,
                                        const uint32_t buildingCurrentlyUnderConstruction, const uint8_t alpha = 255 )
     {
         if ( building == BUILD_TENT ) {
@@ -245,72 +255,104 @@ namespace
             return;
         }
 
-        const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
-        const int icn = Castle::GetICNBuilding( building, castle.GetRace() );
+        const fheroes2::Rect roi = CastleGetMaxArea( castle, offset );
+        const int castleRace = castle.GetRace();
 
         if ( building == BUILD_SHIPYARD ) {
             if ( castle.HasBoatNearby() ) {
-                const int icn2 = Castle::GetICNBoat( castle.GetRace() );
+                const int icn2 = Castle::GetICNBoat( castleRace );
 
-                fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
+                fheroes2::drawCastleDialogBuilding( icn2, 0, castle, offset, roi, alpha );
 
                 if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn2, 0, frame ) ) {
-                    fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
+                    fheroes2::drawCastleDialogBuilding( icn2, index2, castle, offset, roi, alpha );
                 }
             }
             else {
+                const int icn = Castle::GetICNBuilding( building, castleRace );
                 if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn, 0, frame ) ) {
-                    fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
+                    fheroes2::drawCastleDialogBuilding( icn, index2, castle, offset, roi, alpha );
                 }
             }
         }
-        else if ( building == BUILD_WEL2 && Race::SORC == castle.GetRace() ) {
-            const int icn2 = isBuildingFullyBuilt( castle, BUILD_STATUE, buildingCurrentlyUnderConstruction ) ? ICN::TWNSEXT1 : icn;
+        else if ( building == BUILD_STATUE ) {
+            if ( castleRace == Race::SORC && buildingCurrentlyUnderConstruction == BUILD_STATUE
+                 && isBuildingFullyBuilt( castle, BUILD_WEL2, buildingCurrentlyUnderConstruction ) ) {
+                // This is an extra case for the Sorceress castle Statue fade-in animation when Crystal Garden is already built.
+                // It is done to swap render priority of these objects during this animation.
 
-            fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
+                const int gardenIcn = Castle::GetICNBuilding( BUILD_WEL2, castleRace );
 
-            if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( icn2, 0, frame ) ) {
-                fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
+                fheroes2::drawCastleDialogBuilding( gardenIcn, 0, castle, offset, roi );
+                if ( const uint32_t index = ICN::getAnimatedIcnIndex( gardenIcn, 0, frame ) ) {
+                    fheroes2::drawCastleDialogBuilding( gardenIcn, index, castle, offset, roi );
+                }
+
+                // Fade-in Statue.
+                fheroes2::drawCastleDialogBuilding( ICN::TWNSEXT1, 0, castle, offset, roi, alpha );
             }
         }
-        else if ( building == BUILD_WEL2 && castle.GetRace() == Race::KNGT && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
-            const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
-            const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
-            fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y() }, max,
-                                                alpha );
+        else if ( building == BUILD_WEL2 ) {
+            if ( castleRace == Race::SORC ) {
+                if ( buildingCurrentlyUnderConstruction != BUILD_STATUE && isBuildingFullyBuilt( castle, BUILD_STATUE, buildingCurrentlyUnderConstruction ) ) {
+                    // This is an extra case for the Sorceress castle when Statue and Crystal Garden are built.
+                    // They are both rendered using ICN::TWNSEXT1.
+
+                    fheroes2::drawCastleDialogBuilding( ICN::TWNSEXT1, 0, castle, offset, roi, alpha );
+                    if ( const uint32_t index2 = ICN::getAnimatedIcnIndex( ICN::TWNSEXT1, 0, frame ) ) {
+                        fheroes2::drawCastleDialogBuilding( ICN::TWNSEXT1, index2, castle, offset, roi, alpha );
+                    }
+                }
+            }
+            else if ( castleRace == Race::KNGT && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
+                const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
+                const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
+                fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { offset.x + rightFarm.x() - leftFarm.width(), offset.y + rightFarm.y() },
+                                                    roi, alpha );
+            }
         }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::BARB && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
-            const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
-            const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
-            fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
-                                                { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
-        }
-        else if ( building == BUILD_CAPTAIN && castle.GetRace() == Race::SORC && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
-            fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, dst_pt, max, alpha );
+        else if ( building == BUILD_CAPTAIN ) {
+            if ( castleRace == Race::BARB ) {
+                if ( !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
+                    const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
+                    const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
+                    fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
+                                                        { offset.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), offset.y + rightCaptainQuarters.y() }, roi,
+                                                        alpha );
+                }
+            }
+            else if ( castleRace == Race::SORC && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
+                fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, offset, roi, alpha );
+            }
         }
     }
 
-    void redrawCastleBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+    void redrawCastleBuildings( const Castle & castle, const fheroes2::Point & offset, const CastleDialog::BuildingsRenderQueue & buildings,
                                 const CastleDialog::FadeBuilding & fadeBuilding, const uint32_t animationIndex )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( getTownIcnId( castle.GetRace() ), 0 );
-        const fheroes2::Rect max( dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
-        fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, max.width, max.height );
+        const int castleRace = castle.GetRace();
 
-        if ( Race::BARB == castle.GetRace() ) {
+        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( getTownIcnId( castleRace ), 0 );
+        const fheroes2::Rect max( offset.x, offset.y, townbkg.width(), townbkg.height() );
+        fheroes2::Copy( townbkg, 0, 0, display, offset.x, offset.y, max.width, max.height );
+
+        if ( castleRace == Race::BARB ) {
+            // Render the river animation for the Barbarian castle.
             const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + animationIndex % 5 );
-            fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
+            fheroes2::Blit( sprite0, display, offset.x + sprite0.x(), offset.y + sprite0.y() );
         }
+
+        const uint32_t fadingInBuildingId = fadeBuilding.getBuilding();
 
         // Bay animation. The Wizard's castle is "special": its "bay" is not actually a bay, but a river flowing through a gorge in the wastelands, which must be drawn
         // and animated, even if the castle itself is not located on the seashore.
-        if ( castle.GetRace() == Race::WZRD || ( castle.HasSeaAccess() && ( !castle.isBuild( BUILD_SHIPYARD ) || fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) ) ) {
+        if ( castleRace == Race::WZRD || ( castle.HasSeaAccess() && ( !castle.isBuild( BUILD_SHIPYARD ) || fadingInBuildingId == BUILD_SHIPYARD ) ) ) {
             int bayIcnId = 0;
             const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
-            switch ( castle.GetRace() ) {
+            switch ( castleRace ) {
             case Race::KNGT:
                 bayIcnId = ICN::TWNKEXT0;
                 break;
@@ -335,87 +377,90 @@ namespace
                 break;
             }
 
-            fheroes2::drawCastleDialogBuilding( bayIcnId, 0, castle, dst_pt, max );
-            fheroes2::drawCastleDialogBuilding( bayIcnId, bayExtraIndex, castle, dst_pt, max );
+            fheroes2::drawCastleDialogBuilding( bayIcnId, 0, castle, offset, max );
+            fheroes2::drawCastleDialogBuilding( bayIcnId, bayExtraIndex, castle, offset, max );
         }
 
-        if ( fadeBuilding.GetBuilding() == BUILD_NOTHING ) {
-            for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
+        if ( fadingInBuildingId == BUILD_NOTHING ) {
+            for ( const CastleDialog::BuildingRenderInfo & currentBuild : buildings ) {
                 if ( !castle.isBuild( currentBuild.id ) ) {
                     continue;
                 }
 
                 // Only draw this building if an upgraded version of this building has not yet been built
-                const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
+                const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castleRace, currentBuild.id );
                 if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding ) ) {
                     continue;
                 }
 
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+                redrawCastleBuilding( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId );
+                redrawCastleBuildingExtended( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId );
 
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
+                    redrawBuildingConnection( castle, offset, currentBuild.id, fadingInBuildingId );
                 }
             }
 
             return;
         }
 
-        if ( std::find( orders.cbegin(), orders.cend(), fadeBuilding.GetBuilding() ) == orders.cend() ) {
+        if ( std::find( buildings.cbegin(), buildings.cend(), fadingInBuildingId ) == buildings.cend() ) {
+            // No building construction fade-in animation is needed.
             return;
         }
 
-        for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
+        const uint8_t fadeAlpha = fadeBuilding.getAlpha();
+
+        for ( const CastleDialog::BuildingRenderInfo & currentBuild : buildings ) {
             if ( !castle.isBuild( currentBuild.id ) ) {
                 continue;
             }
 
             // Only draw this building if an upgraded version of this building has either not been built yet, or is still under construction at the moment
-            const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castle.GetRace(), currentBuild.id );
-            if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding )
-                 && upgradeForCurrentBuilding != fadeBuilding.GetBuilding() ) {
+            const BuildingType upgradeForCurrentBuilding = fheroes2::getUpgradeForBuilding( castleRace, currentBuild.id );
+            if ( upgradeForCurrentBuilding != currentBuild.id && castle.isBuild( upgradeForCurrentBuilding ) && upgradeForCurrentBuilding != fadingInBuildingId ) {
                 continue;
             }
 
-            if ( currentBuild.id == fadeBuilding.GetBuilding() && !fadeBuilding.isOnlyBoat() ) {
-                redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+            if ( currentBuild.id == fadingInBuildingId && !fadeBuilding.isOnlyBoat() ) {
+                redrawCastleBuilding( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId, fadeAlpha );
+                redrawCastleBuildingExtended( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId, fadeAlpha );
 
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                    redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+                    redrawBuildingConnection( castle, offset, currentBuild.id, fadingInBuildingId, fadeAlpha );
                 }
 
                 continue;
             }
 
-            redrawCastleBuilding( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+            redrawCastleBuilding( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId );
 
-            if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuilding() == BUILD_SHIPYARD ) {
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
+            if ( currentBuild.id == BUILD_SHIPYARD && fadingInBuildingId == BUILD_SHIPYARD ) {
+                redrawCastleBuildingExtended( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId, fadeAlpha );
             }
             else {
-                redrawCastleBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex, fadeBuilding.GetBuilding() );
+                redrawCastleBuildingExtended( castle, offset, currentBuild.id, animationIndex, fadingInBuildingId );
             }
 
             if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
-                redrawBuildingConnection( castle, dst_pt, fadeBuilding.GetBuilding(), fadeBuilding.GetBuilding(), fadeBuilding.GetAlpha() );
-                redrawBuildingConnection( castle, dst_pt, currentBuild.id, fadeBuilding.GetBuilding() );
+                redrawBuildingConnection( castle, offset, fadingInBuildingId, fadingInBuildingId, fadeAlpha );
+                redrawBuildingConnection( castle, offset, currentBuild.id, fadingInBuildingId );
             }
         }
     }
 }
 
-CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
+CastleDialog::BuildingsRenderQueue::BuildingsRenderQueue( const Castle & castle, const fheroes2::Point & top )
 {
-    const std::vector<BuildingType> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().getCurrentMapInfo().version );
+    const int castleRace = castle.GetRace();
+    const std::vector<BuildingType> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castleRace, Settings::Get().getCurrentMapInfo().version );
 
     for ( const BuildingType buildingId : ordersBuildings ) {
-        emplace_back( buildingId, fheroes2::getCastleBuildingArea( castle.GetRace(), buildingId ) + top );
+        emplace_back( buildingId, fheroes2::getCastleBuildingArea( castleRace, buildingId ) + top );
     }
 }
 
-bool CastleDialog::FadeBuilding::UpdateFade()
+bool CastleDialog::FadeBuilding::updateFadeAlpha()
 {
     if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
         if ( _alpha < 255 - 15 ) {
@@ -431,9 +476,9 @@ bool CastleDialog::FadeBuilding::UpdateFade()
     return false;
 }
 
-void CastleDialog::RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
+void CastleDialog::redrawAllBuildings( const Castle & castle, const fheroes2::Point & offset, const BuildingsRenderQueue & buildings,
                                        const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex )
 {
-    redrawCastleBuildings( castle, dst_pt, orders, alphaBuilding, animationIndex );
-    fheroes2::drawCastleName( castle, fheroes2::Display::instance(), dst_pt );
+    redrawCastleBuildings( castle, offset, buildings, alphaBuilding, animationIndex );
+    fheroes2::drawCastleName( castle, fheroes2::Display::instance(), offset );
 }

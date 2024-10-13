@@ -66,6 +66,12 @@ jobs:
           cmake-vcpkg-cache-
     - name: Install dependencies
       run: |
+        # Temporary workaround for the vcpkg internal issue
+        # See https://github.com/microsoft/vcpkg/issues/41199#issuecomment-2378255699 for details
+        export SystemDrive=$SYSTEMDRIVE
+        export SystemRoot=$SYSTEMROOT
+        export windir=$WINDIR
+
         vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
     - name: Build
       run: |
