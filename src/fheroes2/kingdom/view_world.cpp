@@ -717,7 +717,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonZoom.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Zoom" ), _( "Click this button to change zoom." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Zoom" ), _( "Click this button to adjust the level of zoom." ), Dialog::ZERO );
         }
 
         if ( !le.isMouseLeftButtonPressedInArea( visibleScreenInPixels ) || !le.isMouseCursorPosInArea( visibleScreenInPixels ) ) {
