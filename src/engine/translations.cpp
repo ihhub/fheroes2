@@ -352,6 +352,20 @@ bool Translation::isDomainLoaded( const std::string & domain )
     return ( iter != domains.end() );
 }
 
+void Translation::markInvalidDomain( const std::string & domain )
+{
+    assert( !domain.empty() );
+
+    const auto iter = domains.find( domain );
+    if ( iter != domains.end() ) {
+        // Why are you calling this function for a domain which is valid?
+        assert( 0 );
+        return;
+    }
+
+    domains[domain].isValid = false;
+}
+
 bool Translation::bindDomain( const std::string & domain, const std::string & file )
 {
     assert( !domain.empty() );

@@ -529,6 +529,8 @@ bool Settings::setGameLanguage( const std::string & language )
         return Translation::bindDomain( language, translations.back() );
     }
 
+    Translation::markInvalidDomain( language );
+
     ERROR_LOG( "Translation file " << fileName << " was not found." )
     return false;
 }
