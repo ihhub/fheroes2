@@ -52,7 +52,6 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
-#include "ui_constants.h"
 #include "ui_tool.h"
 #include "world.h"
 
