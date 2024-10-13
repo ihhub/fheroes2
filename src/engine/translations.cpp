@@ -358,7 +358,7 @@ void Translation::markInvalidDomain( const std::string & domain )
 
     const auto iter = domains.find( domain );
     if ( iter != domains.end() ) {
-        // Why are you calling this function for a domain which is valid?
+        // Why are you calling this function for a valid domain?
         assert( 0 );
         return;
     }
