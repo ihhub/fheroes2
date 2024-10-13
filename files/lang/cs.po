@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-19 08:28+0000\n"
-"PO-Revision-Date: 2024-10-12 22:52+0200\n"
+"PO-Revision-Date: 2024-10-13 20:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
 "Language: cs\n"
@@ -50,7 +50,7 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid "QUIT"
-msgstr "UKONČIT"
+msgstr "KONEC"
 
 msgid ""
 "NEW\n"
@@ -83,16 +83,16 @@ msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
-msgstr "PŘIJMOUT"
+msgstr "PŘIJMI"
 
 msgid "DECLINE"
 msgstr "ZRUŠIT"
 
 msgid "LEARN"
-msgstr "NAUČIT"
+msgstr "UČIT"
 
 msgid "TRADE"
-msgstr "SMĚNIT"
+msgstr "ZAMĚŇ"
 
 msgid "YES"
 msgstr "ANO"
@@ -101,13 +101,13 @@ msgid "NO"
 msgstr "NE"
 
 msgid "EXIT"
-msgstr "ODEJÍT"
+msgstr "PRYČ"
 
 msgid "smallerButton|EXIT"
 msgstr "ZPĚT"
 
 msgid "DISMISS"
-msgstr "PROPUSTIT"
+msgstr "PROPUSŤ"
 
 msgid "UPGRADE"
 msgstr "VYLEPŠIT"
@@ -167,7 +167,7 @@ msgstr ""
 "HRÁČŮ"
 
 msgid "CONFIG"
-msgstr "NASTAVENÍ"
+msgstr "CONFIG"
 
 msgid ""
 "ORIGINAL\n"
@@ -181,7 +181,7 @@ msgid ""
 "CAMPAIGN"
 msgstr ""
 "KAMPAŇ\n"
-"DATADISKU"
+"DATADISK"
 
 msgid "HOT SEAT"
 msgstr "HORKÉ KŘESLO"
@@ -1041,7 +1041,7 @@ msgid "Start the battle."
 msgstr "Zahájit bitvu."
 
 msgid "Exit"
-msgstr "Odejít"
+msgstr "Pryč"
 
 msgid "Reset"
 msgstr "Reset"
@@ -1703,7 +1703,7 @@ msgstr ""
 "\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "„Trpasličí zhoubaaaa!!! Utíkejte o život!“"
+msgstr "„Trpasličí zhouba!!! Utíkejte jako o život!“"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Oživení mrtvých"
@@ -1998,7 +1998,7 @@ msgid "Exit this menu without doing anything."
 msgstr "Odejít z menu bez provedení změm."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr "%{name} nelze postavit, protože hrad je moc daleko od more."
+msgstr "%{name} nelze postavit, protože hrad je moc daleko od moře."
 
 msgid "This building has been disabled."
 msgstr "Tato budova není povolena."
@@ -3142,7 +3142,7 @@ msgid "Show extra information such as FPS and current time."
 msgstr "Zobraz extra informace jako FPS a místní čas."
 
 msgid "Hotkey: "
-msgstr "Klávesová zkratka "
+msgstr "Klávesová zkratka: "
 
 msgid "Category: "
 msgstr "Kategorie: "
@@ -6710,7 +6710,7 @@ msgstr ""
 "vaši armádu vítají a zvou vás, abyste se s nimi trénovali."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
-msgstr "\"Jdi pryč!“, zavrčí šaman, \"už umíš všechno, co já.“"
+msgstr "\"Jdi pryč!“, zavrčí čaroděj, \"už umíš všechno, co já.“"
 
 msgid ""
 "An Orcish witch doctor living in the hut deepens your knowledge of magic by "
