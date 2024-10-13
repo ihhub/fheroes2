@@ -320,7 +320,7 @@ msgid "EVENTS"
 msgstr "ESEMÉNYEK"
 
 msgid "LANGUAGE"
-msgstr ""
+msgstr "NYELV"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -3221,9 +3221,8 @@ msgstr "Beállítja az ablakok görgetésének sebességét."
 msgid "Select Game Language:"
 msgstr "Játék nyelvének kiválasztása:"
 
-#, fuzzy
 msgid "Select Language:"
-msgstr "Játék nyelvének kiválasztása:"
+msgstr "Nyelv kiválasztása:"
 
 msgid "Click to choose the selected language."
 msgstr "Kattints a kijelölt nyelv kiválasztásához."
@@ -3632,12 +3631,14 @@ msgstr "A hűség ára"
 msgid "Resurrection"
 msgstr "Feltámasztás"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Language:\n"
-msgstr "Nyelv"
+msgstr ""
+"\n"
+"\n"
+"Nyelv:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Összes hős és város elvesztése."
@@ -4567,9 +4568,8 @@ msgstr "Kattints a napi események szerkesztéséhez."
 msgid "Events"
 msgstr "Események"
 
-#, fuzzy
 msgid "Click to change the language of the map."
-msgstr "A játék nyelvének megváltoztatása."
+msgstr "Kattints a térkép nyelvének megváltoztatásához."
 
 msgid "Click to change your map name."
 msgstr "Kattints a térképed nevének megváltoztatásához."
