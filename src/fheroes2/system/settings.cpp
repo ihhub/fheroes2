@@ -513,9 +513,9 @@ bool Settings::setGameLanguage( const std::string & language )
         return true;
     }
 
-    // In order to avoid extra I/O operations we need to query a status of the domain first.
-    if ( Translation::isDomainLoaded( language ) ) {
-        return Translation::bindDomain( language, {} );
+    // First, let's see if the translation for the requested language is already cached
+    if ( const auto [isCached, isValid] = Translation::setLanguage( language ); isCached ) {
+        return isValid;
     }
 
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
@@ -525,14 +525,12 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
-    if ( !translations.empty() ) {
-        return Translation::bindDomain( language, translations.back() );
+    if ( translations.empty() ) {
+        ERROR_LOG( "Translation file " << fileName << " was not found." )
     }
 
-    Translation::markInvalidDomain( language );
-
-    ERROR_LOG( "Translation file " << fileName << " was not found." )
-    return false;
+    // If the translation for this language could not be loaded, it will still remain in the cache as invalid
+    return Translation::setLanguage( language, translations.empty() ? std::string_view{} : translations.back() );
 }
 
 void Settings::setEditorAnimation( const bool enable )

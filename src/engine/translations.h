@@ -25,16 +25,25 @@
 
 #include <cstddef>
 #include <string>
+#include <string_view>
+#include <utility>
 
 namespace Translation
 {
-    bool isDomainLoaded( const std::string & domain );
+    // Sets the language with the given name as the current language if the translation for this language is
+    // already cached and valid, otherwise does nothing. Returns a pair of two flags, the first of which is
+    // set to true if the translation for the given language is already present in the cache (even if this
+    // translation is invalid), and the second is set to true if this translation is both present in the cache
+    // and valid.
+    std::pair<bool, bool> setLanguage( const std::string_view name );
 
-    void markInvalidDomain( const std::string & domain );
+    // Sets the language with the given name as the current language if the translation for this language is
+    // already cached and valid. If this translation is not yet cached, then tries to load it from the given
+    // file. If the load fails, then adds this language to the cache as invalid and does nothing else. Returns
+    // true if the current language has been successfully set, otherwise returns false.
+    bool setLanguage( const std::string & name, const std::string_view fileName );
 
-    bool bindDomain( const std::string & domain, const std::string & file );
-
-    // Reset any translation to the default language - English.
+    // Resets the current language to the default language (English).
     void reset();
 
     const char * gettext( const char * str );
