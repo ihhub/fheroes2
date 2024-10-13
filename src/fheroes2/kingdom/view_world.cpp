@@ -32,6 +32,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
