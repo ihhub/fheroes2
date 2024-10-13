@@ -513,6 +513,11 @@ bool Settings::setGameLanguage( const std::string & language )
         return true;
     }
 
+    // In order to avoid extra I/O operations we need to query a status of the domain first.
+    if ( Translation::isDomainLoaded( language ) ) {
+        return Translation::bindDomain( language, {} );
+    }
+
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
@@ -521,7 +526,7 @@ bool Settings::setGameLanguage( const std::string & language )
 #endif
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
+        return Translation::bindDomain( language, translations.back() );
     }
 
     ERROR_LOG( "Translation file " << fileName << " was not found." )

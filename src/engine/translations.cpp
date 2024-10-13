@@ -221,6 +221,7 @@ namespace
         std::map<uint32_t, Chunk> hashOffsets;
         std::string domain;
         std::string encoding;
+        bool isValid{ false };
 
         const char * ngettext( const char * str, size_t plural )
         {
@@ -343,24 +344,41 @@ namespace
     std::map<std::string, MOFile, std::less<>> domains;
 }
 
-bool Translation::bindDomain( const char * domain, const char * file )
+bool Translation::isDomainLoaded( const std::string & domain )
 {
-    assert( domain != nullptr && *domain != 0 && file != nullptr );
+    assert( !domain.empty() );
+
+    const auto iter = domains.find( domain );
+    return ( iter != domains.end() );
+}
+
+bool Translation::bindDomain( const std::string & domain, const std::string & file )
+{
+    assert( !domain.empty() );
 
     // Search for already loaded domain or load from file
     {
         const auto iter = domains.find( domain );
         if ( iter != domains.end() ) {
+            if ( !iter->second.isValid ) {
+                return false;
+            }
+
             current = &iter->second;
             return true;
         }
     }
 
+    assert( !file.empty() );
+
     if ( !domains[domain].open( file ) ) {
+        // This flag is set during the constructor but to be verbose we set it again here.
+        current->isValid = false;
         return false;
     }
 
     current = &domains[domain];
+    current->isValid = true;
 
     // Update locale
     current->domain = domain;

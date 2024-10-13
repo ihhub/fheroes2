@@ -28,7 +28,9 @@
 
 namespace Translation
 {
-    bool bindDomain( const char * domain, const char * file );
+    bool isDomainLoaded( const std::string & domain );
+
+    bool bindDomain( const std::string & domain, const std::string & file );
 
     // Reset any translation to the default language - English.
     void reset();
