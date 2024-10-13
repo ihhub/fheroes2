@@ -128,18 +128,6 @@ void Interface::ButtonsPanel::_redraw()
     }
 }
 
-void Interface::ButtonsPanel::ResetButtons()
-{
-    buttonNextHero.drawOnRelease();
-    buttonHeroMovement.drawOnRelease();
-    buttonKingdom.drawOnRelease();
-    buttonSpell.drawOnRelease();
-    buttonEndTurn.drawOnRelease();
-    buttonAdventure.drawOnRelease();
-    buttonFile.drawOnRelease();
-    buttonSystem.drawOnRelease();
-}
-
 fheroes2::GameMode Interface::ButtonsPanel::QueueEventProcessing()
 {
     captureMouse();
