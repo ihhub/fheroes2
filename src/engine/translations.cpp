@@ -386,7 +386,7 @@ bool Translation::bindDomain( const std::string & domain, const std::string & fi
     assert( !file.empty() );
 
     if ( !domains[domain].open( file ) ) {
-        // This flag is set during the constructor but to be verbose we set it again here.
+        // This flag is set inside the constructor but to be verbose we set it again here.
         current->isValid = false;
         return false;
     }
