@@ -7752,7 +7752,7 @@ msgid ""
 "\n"
 "Your answer?"
 msgstr ""
-"sphinx|'\n"
+"'\n"
 "\n"
 "Ditt svar?"
 
