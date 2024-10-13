@@ -490,7 +490,7 @@ msgid ""
 msgstr "A Tagadás Gömbje varázstárgy hatására a csatában nem lehet varázsolni."
 
 msgid "You cannot cast spells without a commanding hero."
-msgstr ""
+msgstr "Nem varázsolhatsz hős nélkül."
 
 msgid "You have already cast a spell this round."
 msgstr "Már varázsoltál ebben a körben."
@@ -4546,6 +4546,9 @@ msgid ""
 "%{newLanguage}. Some texts might not be displayed properly after this. Do "
 "you want to proceed?"
 msgstr ""
+"A térkép nyelvét készülsz megváltoztatni. Régi nyelv: %{oldLanguage}, "
+"új nyelv: %{newLanguage}. Néhány szöveg nem biztos, hogy megfelelően "
+"jelenik meg ezután. Így is végre akarod hajtani a műveletet?"
 
 msgid "Change Map Name"
 msgstr "Térkép nevének megváltoztatása"
