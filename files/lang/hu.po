@@ -141,7 +141,7 @@ msgid "ALL"
 msgstr "MIND"
 
 msgid "SELECT"
-msgstr "KIVÁLASZT"
+msgstr "VÁLASZT"
 
 msgid ""
 "STANDARD\n"
