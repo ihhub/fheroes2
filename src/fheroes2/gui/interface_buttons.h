@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,17 +35,17 @@ namespace Interface
 {
     class AdventureMap;
 
-    class ButtonsArea final : public BorderWindow
+    class ButtonsPanel final : public BorderWindow
     {
     public:
-        explicit ButtonsArea( AdventureMap & );
-        ButtonsArea( const ButtonsArea & ) = delete;
+        explicit ButtonsPanel( AdventureMap & );
+        ButtonsPanel( const ButtonsPanel & ) = delete;
 
-        ~ButtonsArea() override = default;
+        ~ButtonsPanel() override = default;
 
-        ButtonsArea & operator=( const ButtonsArea & ) = delete;
+        ButtonsPanel & operator=( const ButtonsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
 

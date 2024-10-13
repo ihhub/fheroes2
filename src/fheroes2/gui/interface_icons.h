@@ -170,7 +170,7 @@ namespace Interface
 
         IconsPanel & operator=( const IconsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
@@ -185,8 +185,6 @@ namespace Interface
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
 
-        bool isMouseCaptured();
-
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw();
@@ -200,8 +198,6 @@ namespace Interface
 
         CastleIcons castleIcons;
         HeroesIcons heroesIcons;
-
-        bool _isMouseCaptured{ false };
     };
 }
 

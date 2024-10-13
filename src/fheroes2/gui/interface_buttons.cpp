@@ -40,12 +40,12 @@
 #include "ui_dialog.h"
 #include "world.h"
 
-Interface::ButtonsArea::ButtonsArea( AdventureMap & basic )
+Interface::ButtonsPanel::ButtonsPanel( AdventureMap & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
 
-void Interface::ButtonsArea::SavePosition()
+void Interface::ButtonsPanel::SavePosition()
 {
     Settings & conf = Settings::Get();
 
@@ -53,14 +53,14 @@ void Interface::ButtonsArea::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::ButtonsArea::SetRedraw() const
+void Interface::ButtonsPanel::SetRedraw() const
 {
     interface.setRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
+void Interface::ButtonsPanel::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 
     const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
@@ -75,39 +75,39 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 
     SetButtonStatus();
 
-    ox = GetArea().x;
-    oy = GetArea().y;
+    x = GetArea().x;
+    y = GetArea().y;
 
     // Top row
-    buttonNextHero.setPosition( ox, oy );
+    buttonNextHero.setPosition( x, y );
     nextHeroRect = buttonNextHero.area();
 
-    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, oy );
+    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, y );
     heroMovementRect = buttonHeroMovement.area();
 
-    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, oy );
+    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, y );
     kingdomRect = buttonKingdom.area();
 
-    buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, oy );
+    buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, y );
     spellRect = buttonSpell.area();
 
     // Bottom row
-    oy = nextHeroRect.y + nextHeroRect.height;
+    y = nextHeroRect.y + nextHeroRect.height;
 
-    buttonEndTurn.setPosition( ox, oy );
+    buttonEndTurn.setPosition( x, y );
     endTurnRect = buttonEndTurn.area();
 
-    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.width, oy );
+    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.width, y );
     adventureRect = buttonAdventure.area();
 
-    buttonFile.setPosition( adventureRect.x + adventureRect.width, oy );
+    buttonFile.setPosition( adventureRect.x + adventureRect.width, y );
     fileRect = buttonFile.area();
 
-    buttonSystem.setPosition( fileRect.x + fileRect.width, oy );
+    buttonSystem.setPosition( fileRect.x + fileRect.width, y );
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::_redraw()
+void Interface::ButtonsPanel::_redraw()
 {
     const Settings & conf = Settings::Get();
 
@@ -128,7 +128,7 @@ void Interface::ButtonsArea::_redraw()
     }
 }
 
-void Interface::ButtonsArea::ResetButtons()
+void Interface::ButtonsPanel::ResetButtons()
 {
     buttonNextHero.drawOnRelease();
     buttonHeroMovement.drawOnRelease();
@@ -140,8 +140,10 @@ void Interface::ButtonsArea::ResetButtons()
     buttonSystem.drawOnRelease();
 }
 
-fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
+fheroes2::GameMode Interface::ButtonsPanel::QueueEventProcessing()
 {
+    captureMouse();
+
     LocalEvent & le = LocalEvent::Get();
 
     le.isMouseLeftButtonPressedInArea( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
@@ -219,7 +221,7 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     return res;
 }
 
-void Interface::ButtonsArea::SetButtonStatus()
+void Interface::ButtonsPanel::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
 

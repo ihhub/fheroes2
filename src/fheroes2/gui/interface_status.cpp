@@ -52,7 +52,7 @@
 #include "ui_text.h"
 #include "world.h"
 
-void Interface::StatusWindow::SavePosition()
+void Interface::StatusPanel::SavePosition()
 {
     Settings & conf = Settings::Get();
 
@@ -60,24 +60,24 @@ void Interface::StatusWindow::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::StatusWindow::setRedraw() const
+void Interface::StatusPanel::setRedraw() const
 {
     _interface.setRedraw( REDRAW_STATUS );
 }
 
-void Interface::StatusWindow::SetPos( const int32_t ox, const int32_t oy )
+void Interface::StatusPanel::SetPos( int32_t x, int32_t y )
 {
-    const uint32_t ow = 144;
-    uint32_t oh = 72;
+    const int32_t width = 144;
+    int32_t height = 72;
 
     if ( !Settings::Get().isHideInterfaceEnabled() ) {
-        oh = fheroes2::Display::instance().height() - oy - fheroes2::borderWidthPx;
+        height = fheroes2::Display::instance().height() - y - fheroes2::borderWidthPx;
     }
 
-    BorderWindow::SetPosition( ox, oy, ow, oh );
+    BorderWindow::SetPosition( x, y, width, height );
 }
 
-void Interface::StatusWindow::SetState( const StatusType status )
+void Interface::StatusPanel::SetState( const StatusType status )
 {
     // SetResource() should be used to set this status
     assert( status != StatusType::STATUS_RESOURCE );
@@ -87,7 +87,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
     }
 }
 
-void Interface::StatusWindow::_redraw() const
+void Interface::StatusPanel::_redraw() const
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && !conf.ShowStatus() ) {
@@ -177,7 +177,7 @@ void Interface::StatusWindow::_redraw() const
     }
 }
 
-void Interface::StatusWindow::NextState()
+void Interface::StatusPanel::NextState()
 {
     const int32_t areaHeight = GetArea().height;
     const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -206,14 +206,14 @@ void Interface::StatusWindow::NextState()
     if ( _state == StatusType::STATUS_ARMY ) {
         const Castle * castle = GetFocusCastle();
 
-        // skip empty army for castle
+        // Skip an empty army in the castle
         if ( castle && !castle->GetArmy().isValid() ) {
             NextState();
         }
     }
 }
 
-void Interface::StatusWindow::_drawKingdomInfo( const int32_t offsetY ) const
+void Interface::StatusPanel::_drawKingdomInfo( const int32_t offsetY ) const
 {
     fheroes2::Point pos = GetArea().getPosition();
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
@@ -258,7 +258,7 @@ void Interface::StatusWindow::_drawKingdomInfo( const int32_t offsetY ) const
     text.draw( pos.x + 130 - text.width() / 2, pos.y, display );
 }
 
-void Interface::StatusWindow::_drawDayInfo( const int32_t offsetY ) const
+void Interface::StatusPanel::_drawDayInfo( const int32_t offsetY ) const
 {
     const fheroes2::Rect & pos = GetArea();
 
@@ -288,7 +288,7 @@ void Interface::StatusWindow::_drawDayInfo( const int32_t offsetY ) const
     text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 48 + offsetY, display );
 }
 
-void Interface::StatusWindow::SetResource( const int resource, const uint32_t count )
+void Interface::StatusPanel::SetResource( const int resource, const uint32_t count )
 {
     _lastResource = resource;
     _lastResourceCount = count;
@@ -297,7 +297,7 @@ void Interface::StatusWindow::SetResource( const int resource, const uint32_t co
     _showLastResourceDelay.reset();
 }
 
-void Interface::StatusWindow::_drawResourceInfo( const int32_t offsetY ) const
+void Interface::StatusPanel::_drawResourceInfo( const int32_t offsetY ) const
 {
     const fheroes2::Rect & pos = GetArea();
 
@@ -315,7 +315,7 @@ void Interface::StatusWindow::_drawResourceInfo( const int32_t offsetY ) const
     text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + offsetY + text.height() * 2 + spr.height() + 10, display );
 }
 
-void Interface::StatusWindow::_drawArmyInfo( const int32_t offsetY ) const
+void Interface::StatusPanel::_drawArmyInfo( const int32_t offsetY ) const
 {
     const Army * armies = nullptr;
 
@@ -332,7 +332,7 @@ void Interface::StatusWindow::_drawArmyInfo( const int32_t offsetY ) const
     }
 }
 
-void Interface::StatusWindow::_drawAITurns() const
+void Interface::StatusPanel::_drawAITurns() const
 {
     // restore background
     _drawBackground();
@@ -400,7 +400,7 @@ void Interface::StatusWindow::_drawAITurns() const
     fheroes2::Blit( sand, display, posX - sand.width() - sand.x(), posY + sand.y() );
 }
 
-void Interface::StatusWindow::_drawBackground() const
+void Interface::StatusPanel::_drawBackground() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -433,8 +433,10 @@ void Interface::StatusWindow::_drawBackground() const
     }
 }
 
-void Interface::StatusWindow::QueueEventProcessing()
+void Interface::StatusPanel::QueueEventProcessing()
 {
+    captureMouse();
+
     // Move the window border
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
         setRedraw();
@@ -464,7 +466,7 @@ void Interface::StatusWindow::QueueEventProcessing()
     }
 }
 
-void Interface::StatusWindow::TimerEventProcessing()
+void Interface::StatusPanel::TimerEventProcessing()
 {
     if ( _state != StatusType::STATUS_RESOURCE || !_showLastResourceDelay.isPassed() ) {
         return;
@@ -485,7 +487,7 @@ void Interface::StatusWindow::TimerEventProcessing()
     setRedraw();
 }
 
-void Interface::StatusWindow::drawAITurnProgress( const uint32_t progressValue )
+void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
 {
     const bool updateProgress = ( progressValue != _aiTurnProgress );
     const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );

@@ -732,7 +732,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
-                I.getStatusWindow().SetResource( resource.first, resource.second );
+                I.getStatusPanel().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
