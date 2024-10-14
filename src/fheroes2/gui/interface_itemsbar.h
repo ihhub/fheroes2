@@ -194,11 +194,6 @@ namespace Interface
             return items.end();
         }
 
-        virtual ItemsIterator GetCurItemIter()
-        {
-            return items.end();
-        }
-
         virtual void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & output )
         {
             RedrawItem( **it, pos, output );
@@ -453,7 +448,7 @@ namespace Interface
         using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
         using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
-        ItemsIterator GetCurItemIter() final
+        ItemsIterator GetCurItemIter()
         {
             return curItemPos.first;
         }
