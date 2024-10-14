@@ -179,10 +179,6 @@ namespace Interface
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
-        std::vector<Item *> items;
-
-        std::vector<int32_t> _customItemsCountInRow;
-
         virtual void SetContentItems()
         {
             // Do nothing.
@@ -269,6 +265,9 @@ namespace Interface
 
             return { items.end(), {} };
         }
+
+        std::vector<Item *> items;
+        std::vector<int32_t> _customItemsCountInRow;
 
     private:
         void calculateItemsPos()
@@ -454,9 +453,6 @@ namespace Interface
         using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
         using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
-        ItemsIterator topItem;
-        ItemIterPos curItemPos;
-
         ItemsIterator GetCurItemIter() final
         {
             return curItemPos.first;
@@ -586,6 +582,9 @@ namespace Interface
 
             return false;
         }
+
+        ItemsIterator topItem;
+        ItemIterPos curItemPos;
     };
 }
 
