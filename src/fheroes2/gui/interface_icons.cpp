@@ -32,6 +32,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "interface_base.h"
+#include "interface_status.h"
 #include "kingdom.h"
 #include "screen.h"
 #include "settings.h"

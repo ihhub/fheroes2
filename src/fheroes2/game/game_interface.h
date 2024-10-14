@@ -32,6 +32,7 @@
 #include "interface_cpanel.h"
 #include "interface_icons.h"
 #include "interface_status.h"
+#include "math_base.h"
 #include "players.h"
 
 class Castle;
@@ -109,7 +110,7 @@ namespace Interface
             return _statusPanel;
         }
 
-        const fheroes2::Rect & getButtonsPanelRect()
+        const fheroes2::Rect & getButtonsPanelRect() const
         {
             return _buttonsPanel.GetRect();
         }
