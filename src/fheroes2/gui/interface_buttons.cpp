@@ -133,7 +133,7 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    const bool isNotOverlapped = !( conf.isHideInterfaceEnabled() && ( _interface.getStatusPanel().GetRect() & GetArea() ) );
+    const bool isNotOverlapped = !( conf.isHideInterfaceEnabled() && conf.ShowStatus() && ( _interface.getStatusPanel().GetRect() & GetArea() ) );
 
     bool needRedraw = _buttonNextHero.drawOnState( le.isMouseLeftButtonPressedInArea( _nextHeroRect ), isNotOverlapped );
     needRedraw |= _buttonHeroMovement.drawOnState( le.isMouseLeftButtonPressedInArea( _heroMovementRect ), isNotOverlapped );

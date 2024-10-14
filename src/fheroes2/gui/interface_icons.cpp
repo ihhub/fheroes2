@@ -371,8 +371,10 @@ void Interface::IconsPanel::queueEventProcessing()
         setRedraw();
     }
     else {
-        const bool isNotOverlapped = !( Settings::Get().isHideInterfaceEnabled()
-                                        && ( ( _interface.getStatusPanel().GetRect() & GetArea() ) || ( _interface.getButtonsPanelRect() & GetArea() ) ) );
+        const Settings & conf = Settings::Get();
+        const bool isNotOverlapped = !( conf.isHideInterfaceEnabled()
+                                        && ( ( conf.ShowStatus() && ( _interface.getStatusPanel().GetRect() & GetArea() ) )
+                                             || ( conf.ShowButtons() && ( _interface.getButtonsPanelRect() & GetArea() ) ) ) );
 
         if ( _heroesIcons.QueueEventProcessing( isNotOverlapped ) ) {
             if ( _heroesIcons.isSelected() ) {
