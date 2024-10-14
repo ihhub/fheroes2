@@ -342,8 +342,9 @@ void Kingdom::AddCastle( Castle * castle )
         }
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) )
-            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
+        if ( player && player->isColor( GetColor() ) ) {
+            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( HeroesCastlesIcons::ICON_CASTLES );
+        }
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;

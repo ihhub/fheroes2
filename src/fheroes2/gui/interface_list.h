@@ -38,7 +38,7 @@ namespace Interface
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw() = 0;
-        virtual bool QueueEventProcessing() = 0;
+        virtual bool QueueEventProcessing( const bool doRnderToDisplay = true ) = 0;
 
         int getTopId() const
         {
@@ -330,12 +330,12 @@ namespace Interface
             }
         }
 
-        bool QueueEventProcessing() override
+        bool QueueEventProcessing( const bool doRnderToDisplay = true ) override
         {
             LocalEvent & le = LocalEvent::Get();
 
-            le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
+            bool needButtonsRedraw = buttonPgUp.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ), doRnderToDisplay );
+            needButtonsRedraw |= buttonPgDn.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ), doRnderToDisplay );
 
             if ( !IsValid() ) {
                 return false;
@@ -494,8 +494,9 @@ namespace Interface
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, mousePos ) )
+                    if ( ActionListCursor( item, mousePos ) ) {
                         return true;
+                    }
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
@@ -518,7 +519,8 @@ namespace Interface
                 needRedraw = false;
             }
 
-            return false;
+            // Return true if we need to render the drawn buttons.
+            return needButtonsRedraw && !doRnderToDisplay;
         }
 
     protected:
