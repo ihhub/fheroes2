@@ -457,7 +457,7 @@ namespace Interface
         ItemsIterator topItem;
         ItemIterPos curItemPos;
 
-        ItemsIterator GetCurItemIter() override
+        ItemsIterator GetCurItemIter() final
         {
             return curItemPos.first;
         }
