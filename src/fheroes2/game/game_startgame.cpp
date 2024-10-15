@@ -1200,40 +1200,31 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             // followed by the buttons panel, followed by the icons panel, followed by the radar, followed by the control panel, and under all
             // of them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
             //
-            // When the mouse is captured by any UI element, events should not be handled by other UI elements, even if the UI element that
-            // captured the mouse cannot handle them itself (for example, because it was hidden after the mouse was captured by it).
+            // When the mouse is captured by any UI element, events should not be handled by other UI elements.
             //
             // Mouse is captured by the status panel
             if ( _statusPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowStatus() ) {
-                    _statusPanel.QueueEventProcessing();
-                }
+                _statusPanel.QueueEventProcessing();
             }
             // Mouse is captured by the buttons panel
             else if ( _buttonsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowButtons() ) {
-                    res = _buttonsPanel.queueEventProcessing();
-                }
+                res = _buttonsPanel.queueEventProcessing();
             }
             // Mouse is captured by the icons panel
             else if ( _iconsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowIcons() ) {
-                    _iconsPanel.queueEventProcessing();
-                }
+                _iconsPanel.queueEventProcessing();
             }
             // Mouse is captured by radar
             else if ( _radar.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowRadar() ) {
-                    _radar.QueueEventProcessing();
-                }
+                _radar.QueueEventProcessing();
             }
             // Mouse is captured by the game area for scrolling by dragging
             else if ( _gameArea.isDragScroll() ) {
