@@ -343,7 +343,7 @@ void Kingdom::AddCastle( Castle * castle )
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) ) {
-            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( HeroesCastlesIcons::ICON_CASTLES );
+            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
         }
     }
 

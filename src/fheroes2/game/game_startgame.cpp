@@ -703,7 +703,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     _radar.Build();
     _radar.SetHide( true );
-    _iconsPanel.hideIcons( HeroesCastlesIcons::ICON_ANY );
+    _iconsPanel.hideIcons( ICON_ANY );
     _statusPanel.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
@@ -785,7 +785,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        _iconsPanel.hideIcons( HeroesCastlesIcons::ICON_ANY );
+                        _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
@@ -808,7 +808,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    _iconsPanel.showIcons( HeroesCastlesIcons::ICON_ANY );
+                    _iconsPanel.showIcons( ICON_ANY );
                     _iconsPanel.setRedraw();
 
                     res = HumanTurn( isLoadedFromSave );

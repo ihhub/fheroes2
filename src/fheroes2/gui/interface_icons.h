@@ -185,7 +185,7 @@ namespace Interface
 
         void setRedraw() const
         {
-            setRedraw( HeroesCastlesIcons::ICON_ANY );
+            setRedraw( ICON_ANY );
         }
 
         void setRedraw( const HeroesCastlesIcons type ) const;

@@ -147,10 +147,10 @@ void Interface::AdventureMap::redraw( const uint32_t force )
         _iconsPanel._redraw();
     }
     else if ( combinedRedraw & REDRAW_HEROES ) {
-        _iconsPanel._redrawIcons( HeroesCastlesIcons::ICON_HEROES );
+        _iconsPanel._redrawIcons( ICON_HEROES );
     }
     else if ( combinedRedraw & REDRAW_CASTLES ) {
-        _iconsPanel._redrawIcons( HeroesCastlesIcons::ICON_CASTLES );
+        _iconsPanel._redrawIcons( ICON_CASTLES );
     }
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {

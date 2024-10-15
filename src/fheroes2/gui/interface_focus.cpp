@@ -170,7 +170,7 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
     Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
     if ( !retainScrollBarPosition ) {
-        _iconsPanel.resetIcons( HeroesCastlesIcons::ICON_ANY );
+        _iconsPanel.resetIcons( ICON_ANY );
     }
 
     switch ( priority ) {
@@ -197,12 +197,12 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
         else if ( !myKingdom.GetHeroes().empty() ) {
             // Reset scrollbar here because the current focused hero might have
             // lost a battle and is not in the heroes list anymore.
-            _iconsPanel.resetIcons( HeroesCastlesIcons::ICON_HEROES );
+            _iconsPanel.resetIcons( ICON_HEROES );
             SetFocus( myKingdom.GetHeroes().front(), false );
         }
         else if ( !myKingdom.GetCastles().empty() ) {
             // There are no heroes left in the kingdom. Reset the heroes scrollbar and focus on the first castle.
-            _iconsPanel.setRedraw( HeroesCastlesIcons::ICON_HEROES );
+            _iconsPanel.setRedraw( ICON_HEROES );
             SetFocus( myKingdom.GetCastles().front() );
         }
         else {
@@ -217,12 +217,12 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
         }
         else if ( !myKingdom.GetCastles().empty() ) {
             // The previously focused castle is lost, so we update the castles scrollbar.
-            _iconsPanel.resetIcons( HeroesCastlesIcons::ICON_CASTLES );
+            _iconsPanel.resetIcons( ICON_CASTLES );
             SetFocus( myKingdom.GetCastles().front() );
         }
         else if ( !myKingdom.GetHeroes().empty() ) {
             // There are no castles left in the kingdom. Reset the castles scrollbar and focus on the first hero.
-            _iconsPanel.setRedraw( HeroesCastlesIcons::ICON_CASTLES );
+            _iconsPanel.setRedraw( ICON_CASTLES );
             SetFocus( myKingdom.GetHeroes().front(), false );
         }
         else {
@@ -272,8 +272,8 @@ void Interface::AdventureMap::RedrawFocus()
 {
     const int type = GetFocusType();
 
-    if ( type != FOCUS_HEROES && _iconsPanel.isSelected( HeroesCastlesIcons::ICON_HEROES ) ) {
-        _iconsPanel.resetIcons( HeroesCastlesIcons::ICON_HEROES );
+    if ( type != FOCUS_HEROES && _iconsPanel.isSelected( ICON_HEROES ) ) {
+        _iconsPanel.resetIcons( ICON_HEROES );
         _iconsPanel.setRedraw();
     }
     else if ( type == FOCUS_HEROES && !_iconsPanel.isSelected( ICON_HEROES ) ) {
@@ -281,11 +281,11 @@ void Interface::AdventureMap::RedrawFocus()
         _iconsPanel.setRedraw();
     }
 
-    if ( type != FOCUS_CASTLE && _iconsPanel.isSelected( HeroesCastlesIcons::ICON_CASTLES ) ) {
-        _iconsPanel.resetIcons( HeroesCastlesIcons::ICON_CASTLES );
+    if ( type != FOCUS_CASTLE && _iconsPanel.isSelected( ICON_CASTLES ) ) {
+        _iconsPanel.resetIcons( ICON_CASTLES );
         _iconsPanel.setRedraw();
     }
-    else if ( type == FOCUS_CASTLE && !_iconsPanel.isSelected( HeroesCastlesIcons::ICON_CASTLES ) ) {
+    else if ( type == FOCUS_CASTLE && !_iconsPanel.isSelected( ICON_CASTLES ) ) {
         _iconsPanel.select( GetFocusCastle() );
         _iconsPanel.setRedraw();
     }
@@ -293,10 +293,10 @@ void Interface::AdventureMap::RedrawFocus()
     setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     if ( type == FOCUS_HEROES ) {
-        _iconsPanel.setRedraw( HeroesCastlesIcons::ICON_HEROES );
+        _iconsPanel.setRedraw( ICON_HEROES );
     }
     else if ( type == FOCUS_CASTLE ) {
-        _iconsPanel.setRedraw( HeroesCastlesIcons::ICON_CASTLES );
+        _iconsPanel.setRedraw( ICON_CASTLES );
     }
 
     _statusPanel.setRedraw();
