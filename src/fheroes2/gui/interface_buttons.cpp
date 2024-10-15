@@ -108,22 +108,24 @@ void Interface::ButtonsPanel::_redraw()
 {
     const Settings & conf = Settings::Get();
 
-    if ( !conf.isHideInterfaceEnabled() || conf.ShowButtons() ) {
-        if ( conf.isHideInterfaceEnabled() ) {
-            BorderWindow::Redraw();
+    if ( conf.isHideInterfaceEnabled() ) {
+        if ( !conf.ShowButtons() ) {
+            return;
         }
 
-        _setButtonStatus();
-
-        _buttonNextHero.draw();
-        _buttonHeroMovement.draw();
-        _buttonKingdom.draw();
-        _buttonSpell.draw();
-        _buttonEndTurn.draw();
-        _buttonAdventure.draw();
-        _buttonFile.draw();
-        _buttonSystem.draw();
+        BorderWindow::Redraw();
     }
+
+    _setButtonStatus();
+
+    _buttonNextHero.draw();
+    _buttonHeroMovement.draw();
+    _buttonKingdom.draw();
+    _buttonSpell.draw();
+    _buttonEndTurn.draw();
+    _buttonAdventure.draw();
+    _buttonFile.draw();
+    _buttonSystem.draw();
 }
 
 fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
