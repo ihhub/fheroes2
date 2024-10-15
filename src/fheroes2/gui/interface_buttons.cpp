@@ -135,7 +135,7 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
 
     // In the "no interface" mode, the buttons panel may be overlapped by other UI elements, so we can't render the
     // pressed or released buttons exclusively in a usual way. The overlapping UI elements should also be rendered.
-    const auto redrawOnPressOrRelease = [this, &le]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
+    const auto drawOnPressOrRelease = [this, &le]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
         bool shouldRedraw = false;
 
         if ( le.isMouseLeftButtonPressedInArea( buttonRect ) ) {
@@ -156,14 +156,14 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
         }
     };
 
-    redrawOnPressOrRelease( _buttonNextHero, _nextHeroRect );
-    redrawOnPressOrRelease( _buttonHeroMovement, _heroMovementRect );
-    redrawOnPressOrRelease( _buttonKingdom, _kingdomRect );
-    redrawOnPressOrRelease( _buttonSpell, _spellRect );
-    redrawOnPressOrRelease( _buttonEndTurn, _endTurnRect );
-    redrawOnPressOrRelease( _buttonAdventure, _adventureRect );
-    redrawOnPressOrRelease( _buttonFile, _fileRect );
-    redrawOnPressOrRelease( _buttonSystem, _systemRect );
+    drawOnPressOrRelease( _buttonNextHero, _nextHeroRect );
+    drawOnPressOrRelease( _buttonHeroMovement, _heroMovementRect );
+    drawOnPressOrRelease( _buttonKingdom, _kingdomRect );
+    drawOnPressOrRelease( _buttonSpell, _spellRect );
+    drawOnPressOrRelease( _buttonEndTurn, _endTurnRect );
+    drawOnPressOrRelease( _buttonAdventure, _adventureRect );
+    drawOnPressOrRelease( _buttonFile, _fileRect );
+    drawOnPressOrRelease( _buttonSystem, _systemRect );
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
