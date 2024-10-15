@@ -121,27 +121,27 @@ void Interface::CastleIcons::ActionCurrentDn()
     Interface::AdventureMap::Get().SetFocus( GetCurrent() );
 }
 
-void Interface::CastleIcons::ActionListDoubleClick( CASTLE & castle )
+void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
 {
-    if ( castle ) {
-        Game::OpenCastleDialog( *castle );
+    if ( item ) {
+        Game::OpenCastleDialog( *item );
     }
 }
 
-void Interface::CastleIcons::ActionListSingleClick( CASTLE & castle )
+void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 {
-    if ( castle ) {
+    if ( item ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.SetFocus( castle );
+        I.SetFocus( item );
         I.RedrawFocus();
     }
 }
 
-void Interface::CastleIcons::ActionListPressRight( CASTLE & castle )
+void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
-    if ( castle ) {
-        Dialog::QuickInfoAtPosition( *castle, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+    if ( item ) {
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
     }
 }
 
@@ -196,8 +196,9 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, int32_t ox, int32_
     if ( item && _show ) {
         redrawHeroesIcon( *item, ox + 5, oy + 5 );
 
-        if ( current )
+        if ( current ) {
             fheroes2::Blit( _marker, fheroes2::Display::instance(), ox, oy );
+        }
     }
 }
 
@@ -216,27 +217,27 @@ void Interface::HeroesIcons::ActionCurrentDn()
     Interface::AdventureMap::Get().SetFocus( GetCurrent(), false );
 }
 
-void Interface::HeroesIcons::ActionListDoubleClick( HEROES & hero )
+void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
-    if ( hero ) {
-        Game::OpenHeroesDialog( *hero, false, true );
+    if ( item ) {
+        Game::OpenHeroesDialog( *item, false, true );
     }
 }
 
-void Interface::HeroesIcons::ActionListSingleClick( HEROES & hero )
+void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
-    if ( hero ) {
+    if ( item ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.SetFocus( hero, false );
+        I.SetFocus( item, false );
         I.RedrawFocus();
     }
 }
 
-void Interface::HeroesIcons::ActionListPressRight( HEROES & hero )
+void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
-    if ( hero ) {
-        Dialog::QuickInfoAtPosition( *hero, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+    if ( item ) {
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
     }
 }
 

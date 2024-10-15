@@ -52,8 +52,8 @@ namespace Interface
     class IconsBar
     {
     public:
-        IconsBar( const int32_t count, const fheroes2::Image & sf )
-            : _marker( sf )
+        IconsBar( const int32_t count, const fheroes2::Image & markerImage )
+            : _marker( markerImage )
             , _iconsCount( count )
         {
             assert( count >= 0 );
@@ -105,8 +105,8 @@ namespace Interface
     class HeroesIcons final : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
-        HeroesIcons( const int32_t count, const fheroes2::Image & sf )
-            : IconsBar( count, sf )
+        HeroesIcons( const int32_t count, const fheroes2::Image & markerImage )
+            : IconsBar( count, markerImage )
         {
             // Do nothing.
         }
@@ -127,9 +127,9 @@ namespace Interface
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
-        void ActionListDoubleClick( HEROES & hero ) override;
-        void ActionListSingleClick( HEROES & hero ) override;
-        void ActionListPressRight( HEROES & hero ) override;
+        void ActionListDoubleClick( HEROES & item ) override;
+        void ActionListSingleClick( HEROES & item ) override;
+        void ActionListPressRight( HEROES & item ) override;
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 
@@ -139,8 +139,8 @@ namespace Interface
     class CastleIcons final : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
-        CastleIcons( const int32_t count, const fheroes2::Image & sf )
-            : IconsBar( count, sf )
+        CastleIcons( const int32_t count, const fheroes2::Image & markerImage )
+            : IconsBar( count, markerImage )
         {
             // Do nothing.
         }
@@ -161,9 +161,9 @@ namespace Interface
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
-        void ActionListDoubleClick( CASTLE & castle ) override;
-        void ActionListSingleClick( CASTLE & castle ) override;
-        void ActionListPressRight( CASTLE & castle ) override;
+        void ActionListDoubleClick( CASTLE & item ) override;
+        void ActionListSingleClick( CASTLE & item ) override;
+        void ActionListPressRight( CASTLE & item ) override;
         void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 
