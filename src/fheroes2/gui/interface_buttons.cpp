@@ -133,6 +133,8 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
 
     LocalEvent & le = LocalEvent::Get();
 
+    // In the "no interface" mode, the buttons panel may be overlapped by other UI elements, so we can't render the
+    // pressed or released buttons exclusively in a usual way. The overlapping UI elements should also be rendered.
     const auto redrawOnPressOrRelease = [this, &le]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
         bool shouldRedraw = false;
 
