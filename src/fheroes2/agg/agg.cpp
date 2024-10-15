@@ -37,9 +37,9 @@ namespace
     fheroes2::AGGFile heroes2x_agg;
 }
 
-std::vector<uint8_t> AGG::getDataFromAggFile( const std::string & key )
+std::vector<uint8_t> AGG::getDataFromAggFile( const std::string & key, const bool ignoreExpansion )
 {
-    if ( heroes2x_agg.isGood() ) {
+    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         // Make sure that the below container is not const and not a reference
         // so returning it from the function will invoke a move constructor instead of copy constructor.
         std::vector<uint8_t> buf = heroes2x_agg.read( key );

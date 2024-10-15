@@ -56,7 +56,7 @@ namespace AGG
         std::string _expansionAGGFilePath;
     };
 
-    std::vector<uint8_t> getDataFromAggFile( const std::string & key );
+    std::vector<uint8_t> getDataFromAggFile( const std::string & key, const bool ignoreExpansion );
 }
 
 #endif
