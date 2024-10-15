@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-19 08:28+0000\n"
-"PO-Revision-Date: 2024-10-15 17:16+0200\n"
+"PO-Revision-Date: 2024-10-15 18:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
 "Language: cs\n"
@@ -92,7 +92,7 @@ msgid "LEARN"
 msgstr "UČIT"
 
 msgid "TRADE"
-msgstr "ZAMĚŇ"
+msgstr "VYMĚŇ"
 
 msgid "YES"
 msgstr "ANO"
@@ -856,7 +856,7 @@ msgid "Message Bar"
 msgstr "Pruh zpráv"
 
 msgid "Shows the results of individual monster's actions."
-msgstr "Zobrazuje následky počínání jednotlivých stvůr."
+msgstr "Zobrazuje následky počínání jednotlivých jednotek."
 
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Chceš zapnout automatický boj?"
@@ -1748,7 +1748,7 @@ msgid "campaignBonus|Defender Helm"
 msgstr "Helma obránce"
 
 msgid "campaignBonus|Breastplate"
-msgstr "Božské brnění ochrany"
+msgstr "Božský krunýř"
 
 msgid "campaignBonus|Dragon Sword"
 msgstr "Dračí meč"
@@ -1760,7 +1760,7 @@ msgid "campaignBonus|Foremost Scroll"
 msgstr "Vrcholný svitek poznání"
 
 msgid "campaignBonus|Gauntlets"
-msgstr "Ochranné brněné rukavice"
+msgstr "Obrněné rukavice"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Ohavná maska"
@@ -1790,7 +1790,7 @@ msgid "campaignBonus|Spiked Shield"
 msgstr "Štít s hroty"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr "Štít skryté ochrany"
+msgstr "Tajný štít"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Daňová zástava"
@@ -3371,7 +3371,7 @@ msgid "Select maximum monsters to be recruited."
 msgstr "Vybrat maximální počet k najmutí."
 
 msgid "Select only 1 monster to be recruited."
-msgstr "Vybrat pouze 1 stvůru k najmutí."
+msgstr "Vybrat pouze 1 jednotku k najmutí."
 
 msgid "Select this game resolution."
 msgstr "Vybrat rozlišení."
@@ -9130,7 +9130,7 @@ msgid "Unknown Monsters"
 msgstr "Neznámé jednotky"
 
 msgid "Unknown Monster"
-msgstr "Neznámá stvůra"
+msgstr "Neznámá jednotka"
 
 msgid "Peasant"
 msgstr "Rolník"
@@ -9857,7 +9857,7 @@ msgstr ""
 "najdete tajemnou zbraň."
 
 msgid "Armored Gauntlets of Protection"
-msgstr "Ochranné brněné rukavice"
+msgstr "Obrněné rukavice"
 
 msgid "The %{name} increase the hero's defense skill by %{count}."
 msgstr "%{name} zvyšují hrdinovu dovednost obrany o %{count}."
@@ -9880,15 +9880,15 @@ msgstr ""
 "keřem skrytou zlatou helmu."
 
 msgid "Giant Flail of Dominion"
-msgstr "Obří kladivo dominace"
+msgstr "Obří cep"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
-"Nešikovný obr se zabil vlastním kladivem. Vědom si svých dovedností s touto "
-"zbraní, s jistotou sebereš ohromné kladivo z těla padlého obra."
+"Nešikovný obr se zabil vlastní zbraní. Vědom si svých dovedností s touto "
+"zbraní, s jistotou sebereš ohromný cep z těla padlého obra."
 
 msgid "Ballista of Quickness"
 msgstr "Balista rychlosti"
@@ -9904,7 +9904,7 @@ msgstr ""
 "zničení, pečlivě vyrobenou balistu."
 
 msgid "Stealth Shield of Protection"
-msgstr "Štít skryté ochrany"
+msgstr "Tajný štít"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
@@ -9937,7 +9937,7 @@ msgstr ""
 "vytrhneš."
 
 msgid "Divine Breastplate of Protection"
-msgstr "Božské brnění ochrany"
+msgstr "Božský krunýř"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -9992,7 +9992,7 @@ msgstr ""
 "druida. Při prohledávání roucha objevíš svitek skrytý uvnitř."
 
 msgid "Endless Sack of Gold"
-msgstr "Nekonečný měšec zlata"
+msgstr "Bezedná taška zlata"
 
 msgid "The %{name} provides the hero with %{count} gold per day."
 msgstr "%{name} poskytuje hrdinovi %{count} zlata denně."
@@ -10019,14 +10019,14 @@ msgstr ""
 "Po doprovodu domů vás odmění pytlem plným zlata."
 
 msgid "Endless Purse of Gold"
-msgstr "Nekonečná brašna zlata"
+msgstr "Bezedná tobolka zlata"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
 "belonged to a great warrior king who had the ability to transform any "
 "inanimate object into gold."
 msgstr ""
-"Během svých cest naleznete kožený měšec plný zlata, který kdysi patřil "
+"Během svých cest naleznete koženou tobolku plnou zlata, který kdysi patřil "
 "velkému válečnému králi, jenž měl schopnost proměnit jakýkoli neživý objekt "
 "na zlato."
 
@@ -10435,7 +10435,7 @@ msgstr ""
 "medailonem, který dříve používal k uklidnění své mysli před bojem."
 
 msgid "Seeing-eye Pendant"
-msgstr "Medailon vidoucího oka"
+msgstr "Přívěsek vidění"
 
 msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr "%{name} činí všechny hrdinovy jednotky imunní vůči kouzlům oslepení."
@@ -10452,7 +10452,7 @@ msgstr ""
 "zavřenýma očima."
 
 msgid "Kinetic Pendant"
-msgstr "Medailon hybnosti"
+msgstr "Medailon pohybu"
 
 msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr ""
@@ -10642,7 +10642,7 @@ msgstr ""
 "Gromlucka Greena a vy v ní zůstáváte uvězněni."
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Nekonečná brašna síry"
+msgstr "Bezedná mošna síry"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} poskytuje %{count} síry denně."
@@ -10657,7 +10657,7 @@ msgstr ""
 "síry, aby pomohl s válečným úsilím."
 
 msgid "Endless Vial of Mercury"
-msgstr "Nekonečná ampule rtuti"
+msgstr "Bezedná ampule rtuti"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} poskytuje %{count} rtuti denně."
@@ -10672,7 +10672,7 @@ msgstr ""
 "uzavřete ji a schováte do kapsy."
 
 msgid "Endless Pouch of Gems"
-msgstr "Nekonečný sáček drahokamů"
+msgstr "Bezedná mošna drahokamů"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} poskytuje %{count} drahokamů denně."
@@ -10689,7 +10689,7 @@ msgstr ""
 "zlata. Přijímáte."
 
 msgid "Endless Cord of Wood"
-msgstr "Nekonečná otep dřeva"
+msgstr "Bezedný sáh dřeva"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} poskytuje %{count} jednotek dřeva denně."
@@ -10706,7 +10706,7 @@ msgstr ""
 "s sebou."
 
 msgid "Endless Cart of Ore"
-msgstr "Nekonečný vozík s kamením"
+msgstr "Bezedný vozík kamení"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} poskytuje %{count} kamení denně."
@@ -10721,7 +10721,7 @@ msgstr ""
 "Při prozkoumání najdete magický vozík s kamením, který se nikdy nevyčerpá."
 
 msgid "Endless Pouch of Crystal"
-msgstr "Nekonečný sáček krystalů"
+msgstr "Bezedná mošna krystalů"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} poskytuje %{count} krystalů denně."
@@ -10842,7 +10842,7 @@ msgstr ""
 "magická síla."
 
 msgid "Arm of the Martyr"
-msgstr "Ruka mučedníka"
+msgstr "Paže mučedníka"
 
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
@@ -11084,7 +11084,7 @@ msgstr ""
 "boj.“"
 
 msgid "Sword Breaker"
-msgstr "Mečobijec"
+msgstr "Meč drtič"
 
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr "%{name} zvyšuje hrdinovu obranu o %{count} a útok o 1."
@@ -11093,7 +11093,7 @@ msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
-"Bývalý kapitán stráže obdivuje tvou výpravu a podá ti kouzelný Mečobijec, na "
+"Bývalý kapitán stráže obdivuje tvou výpravu a podává ti kouzelný meč, na "
 "který spoléhali během jeho služby."
 
 msgid "Sword of Anduran"
@@ -11112,7 +11112,7 @@ msgstr ""
 "trolové mají tendenci chytat nesprávný konec ostrých předmětů."
 
 msgid "Spade of Necromancy"
-msgstr "Lopata nekromancie"
+msgstr "Rýč nekromancie"
 
 msgid "The %{name} gives the hero increased necromancy skill."
 msgstr "%{name} zvyšuje hrdinovu dovednost nekromancie."
@@ -11199,16 +11199,17 @@ msgid ""
 "harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 "Způsobí zásah vybrané jednotky bleskem elektrické energie ale následně "
-"zasáhne nejbližší stvůru s polovičním poškozením a poté zasáhne DALŠÍ "
-"nejbližší stvůru s opět polovičním poškozením a tak dále, dokud není příliš "
-"slabý na to, aby byl škodlivý. Pozor: Kouzlo může zasáhnout i tvou stranu!"
+"zasáhne nejbližší jednotku s polovičním poškozením a poté zasáhne DALŠÍ "
+"nejbližší jednotku a opět s polovičním poškozením a tak dále, dokud není "
+"příliš slabý na to, aby byl škodlivý. Pozor: Kouzlo může zasáhnout i tvou "
+"stranu!"
 
 msgid "Teleport"
 msgstr "Teleport"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr "Teleportuje vybranou stvůru na libovolné volné místo na bojišti."
+msgstr "Teleportuje vybranou jednotku na libovolné volné místo na bojišti."
 
 msgid "Cure"
 msgstr "Léčba"
