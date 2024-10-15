@@ -513,6 +513,11 @@ bool Settings::setGameLanguage( const std::string & language )
         return true;
     }
 
+    // First, let's see if the translation for the requested language is already cached
+    if ( const auto [isCached, isValid] = Translation::setLanguage( language ); isCached ) {
+        return isValid;
+    }
+
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
@@ -520,12 +525,12 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
-    if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
+    if ( translations.empty() ) {
+        ERROR_LOG( "Translation file " << fileName << " was not found." )
     }
 
-    ERROR_LOG( "Translation file " << fileName << " was not found." )
-    return false;
+    // If the translation for this language could not be loaded, it will still remain in the cache as invalid
+    return Translation::setLanguage( language, translations.empty() ? std::string_view{} : translations.back() );
 }
 
 void Settings::setEditorAnimation( const bool enable )

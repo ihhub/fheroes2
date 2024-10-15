@@ -336,7 +336,6 @@ namespace
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::NONE );
-            tile.removeOwnershipFlag( MP2::OBJ_MINE );
 
             // Update the color of haunted mine on radar.
             Interface::AdventureMap & I = Interface::AdventureMap::Get();

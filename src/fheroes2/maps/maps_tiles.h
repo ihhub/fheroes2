@@ -218,9 +218,7 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
-
-        void removeOwnershipFlag( const MP2::MapObjectType objectType );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, int color );
 
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
