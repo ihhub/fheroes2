@@ -80,9 +80,12 @@ namespace fheroes2
         bool press();
         bool release();
         void enable();
-        void disable(); // button becomes disabled and released
-        void show(); // this method doesn't call draw
-        void hide(); // this method doesn't call draw
+        // Button becomes disabled and released
+        void disable();
+        // This method doesn't call draw()
+        void show();
+        // This method doesn't call draw()
+        void hide();
 
         void setPosition( const int32_t offsetX_, const int32_t offsetY_ )
         {
@@ -90,22 +93,23 @@ namespace fheroes2
             _offsetY = offsetY_;
         }
 
-        bool draw( Image & output = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default
+        bool draw( Image & output = Display::instance() ) const;
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnPress();
+        bool drawOnPress( Display & output = Display::instance() );
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnRelease();
+        bool drawOnRelease( Display & output = Display::instance() );
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnState( const bool isPressedState )
+        bool drawOnState( const bool isPressedState, Display & output = Display::instance() )
         {
             if ( isPressedState ) {
-                return drawOnPress();
+                return drawOnPress( output );
             }
 
-            return drawOnRelease();
+            return drawOnRelease( output );
         }
 
         Rect area() const;
@@ -189,7 +193,8 @@ namespace fheroes2
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
         void addButton( ButtonSprite && button, int returnValue );
 
-        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default
+        void draw( Image & area = Display::instance() ) const;
 
         // Make sure that id is less than size!
         ButtonBase & button( size_t id );
@@ -224,7 +229,8 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default
+        void draw( Image & area = Display::instance() ) const;
 
     protected:
         void senderUpdate( const ActionObject * sender ) override;
