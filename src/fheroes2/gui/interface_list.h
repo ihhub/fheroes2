@@ -38,7 +38,7 @@ namespace Interface
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw() = 0;
-        virtual bool QueueEventProcessing( const bool doRenderToDisplay = true ) = 0;
+        virtual bool QueueEventProcessing() = 0;
 
         int getTopId() const
         {
@@ -330,12 +330,12 @@ namespace Interface
             }
         }
 
-        bool QueueEventProcessing( const bool doRenderToDisplay = true ) override
+        bool QueueEventProcessing() override
         {
             LocalEvent & le = LocalEvent::Get();
 
-            bool needButtonsRedraw = buttonPgUp.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ), doRenderToDisplay );
-            needButtonsRedraw |= buttonPgDn.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ), doRenderToDisplay );
+            le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
             if ( !IsValid() ) {
                 return false;
@@ -519,8 +519,7 @@ namespace Interface
                 needRedraw = false;
             }
 
-            // Return true if we need to render the drawn buttons.
-            return needButtonsRedraw && !doRenderToDisplay;
+            return false;
         }
 
     protected:

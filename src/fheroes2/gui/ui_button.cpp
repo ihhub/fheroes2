@@ -343,7 +343,7 @@ namespace fheroes2
         return true;
     }
 
-    bool ButtonBase::drawOnPress( const bool doRenderToDisplay /* = true */ )
+    bool ButtonBase::drawOnPress()
     {
         if ( isPressed() ) {
             return false;
@@ -358,14 +358,12 @@ namespace fheroes2
 
             draw( output );
 
-            if ( doRenderToDisplay ) {
-                output.render( area() );
-            }
+            output.render( area() );
         }
         return true;
     }
 
-    bool ButtonBase::drawOnRelease( const bool doRenderToDisplay /* = true */ )
+    bool ButtonBase::drawOnRelease()
     {
         if ( !isPressed() ) {
             return false;
@@ -380,9 +378,7 @@ namespace fheroes2
 
             draw( output );
 
-            if ( doRenderToDisplay ) {
-                output.render( area() );
-            }
+            output.render( area() );
         }
         return true;
     }
