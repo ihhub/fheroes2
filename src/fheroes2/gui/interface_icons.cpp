@@ -287,9 +287,9 @@ void Interface::HeroesIcons::setPos( const int32_t px, const int32_t py )
     }
 }
 
-Interface::IconsPanel::IconsPanel( AdventureMap & baseInterface )
+Interface::IconsPanel::IconsPanel( AdventureMap & interface )
     : BorderWindow( { 0, 0, 144, 128 } )
-    , _interface( baseInterface )
+    , _interface( interface )
 {
     _sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
     _sfMarker.reset();

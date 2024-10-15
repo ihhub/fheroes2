@@ -173,7 +173,7 @@ namespace Interface
     class IconsPanel final : public BorderWindow
     {
     public:
-        explicit IconsPanel( AdventureMap & basic );
+        explicit IconsPanel( AdventureMap & interface );
         IconsPanel( const IconsPanel & ) = delete;
 
         ~IconsPanel() override = default;
