@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-19 08:28+0000\n"
-"PO-Revision-Date: 2024-10-14 08:49+0200\n"
+"PO-Revision-Date: 2024-10-15 17:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
 "Language: cs\n"
@@ -2484,7 +2484,7 @@ msgid "Upg. Dwelling 6"
 msgstr "Upg. Obydlí 6"
 
 msgid "2x Upg. Dwelling 6"
-msgstr "Upg. Obydlí 6"
+msgstr "2x Upg. Obydlí 6"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -3395,7 +3395,7 @@ msgid "Select Game Resolution:"
 msgstr "Nastav rozlišení hry:"
 
 msgid "Click to apply the selected resolution."
-msgstr "Kliknutím se rozliśení změní na vybrané."
+msgstr "Kliknutím se rozlišení změní na vybrané."
 
 msgid "Click to apply the entered text."
 msgstr "Klikněte pro použití zadaného textu."
@@ -3500,7 +3500,7 @@ msgid "Select Treasure:"
 msgstr "Vyberte poklad:"
 
 msgid "Select Ocean Object:"
-msgstr "Vyberte oceánský object:"
+msgstr "Vyberte oceánský objekt:"
 
 msgid "Castle/town placing"
 msgstr "Umístění hradu/města"
@@ -4078,7 +4078,7 @@ msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
 msgid "The map is corrupted."
-msgstr "Mapy je poškozena."
+msgstr "Mapa je poškozena."
 
 msgid "Unable to locate data directory to save the map."
 msgstr "Nelze najít adresář s daty pro uložení mapy."
@@ -4426,10 +4426,10 @@ msgid "alliance|5th"
 msgstr "5."
 
 msgid "Special Loss Condition"
-msgstr "Podmínky pro prohru"
+msgstr "Speciální podmínky prohry"
 
 msgid "Special Victory Condition"
-msgstr "Podmínky pro výhru"
+msgstr "Speciální podmínky výhry"
 
 msgid "Allow standard victory conditions"
 msgstr "Povolit standardní podmínky vítězství"
@@ -4438,7 +4438,7 @@ msgid "Allow this condition also for AI"
 msgstr "Povolit tuto podmínku také pro AI"
 
 msgid "Set alliances:"
-msgstr "Nastevení aliancí:"
+msgstr "Nastavení aliancí:"
 
 msgid "{%number} alliance: "
 msgstr "{%number} aliancí: "
@@ -4539,7 +4539,7 @@ msgid "Indicates the player types in the scenario. Click to change."
 msgstr "Označuje typy hráčů ve scénáři. Kliknutím změňte."
 
 msgid "Player Type"
-msgstr "Tyh hráče"
+msgstr "Typ hráče"
 
 msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
@@ -4554,7 +4554,7 @@ msgid "Animation"
 msgstr "Animace"
 
 msgid "Passability"
-msgstr "Mřížka"
+msgstr "Průchodnost"
 
 msgid "Toggle animation of the objects."
 msgstr "Přepnout animaci objektů."
@@ -4876,7 +4876,7 @@ msgid "Designers"
 msgstr "Návrháři"
 
 msgid "Programming Lead"
-msgstr "Vedoucí programáto"
+msgstr "Vedoucí programátor"
 
 msgid "Art Lead"
 msgstr "Vedoucí umělec"
@@ -4945,7 +4945,7 @@ msgid "Campaign"
 msgstr "Kampaň"
 
 msgid "View High Scores for Campaigns."
-msgstr "Zobrazir nejlepší výsledky kampaně."
+msgstr "Zobrazit nejlepší výsledky kampaně."
 
 msgid "hotkey|default okay event"
 msgstr "Výchozí potvrzení události"
@@ -5011,7 +5011,7 @@ msgid "hotkey|select large map size"
 msgstr "Vybrat velkou mapu"
 
 msgid "hotkey|select extra large map size"
-msgstr "Vybra extra velkou mapu"
+msgstr "Vybrat extra velkou mapu"
 
 msgid "hotkey|select all map sizes"
 msgstr "Vybrat všechny mapy"
@@ -5248,7 +5248,7 @@ msgid "hotkey|mage guild"
 msgstr "Věž kouzel"
 
 msgid "hotkey|shipyard"
-msgstr "Přístap"
+msgstr "Přístav"
 
 msgid "hotkey|thieves guild"
 msgstr "Cech zlodějů"
@@ -5269,7 +5269,7 @@ msgid "hotkey|split stack by one"
 msgstr "Rozdělit jednotku po jednom"
 
 msgid "hotkey|join stacks"
-msgstr "Sloučit jednotku"
+msgstr "Sloučit jednotky"
 
 msgid "hotkey|upgrade troop"
 msgstr "Vylepšit jednotku"
@@ -5378,17 +5378,17 @@ msgid "Greetings!"
 msgstr "Vítej!"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
-msgstr "Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"
+msgstr "Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes2!\n"
+"Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!\n"
 "Před samotným startem je potřeba nastavit rozlišení."
 
 msgid "Please Remember"
-msgstr "Prosím pamatuj"
+msgstr "Prosím pamatujte"
 
 msgid ""
 "You can always change the language, resolution and settings of the game by "
@@ -5910,7 +5910,7 @@ msgid "Kingdom Summary"
 msgstr "Přehled Království"
 
 msgid "View a summary of your Kingdom."
-msgstr "Zobraz přehled království."
+msgstr "Zobrazte přehled království."
 
 msgid "Cast an adventure spell."
 msgstr "Seslat kouzlo."
@@ -6010,15 +6010,14 @@ msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date."
 msgstr ""
-"Zobrazuje informaci o stavu tvého království nebo hrdinech, dále zobrazuje "
-"datum."
+"Zobrazuje informaci o stavu království nebo hrdinech, dále zobrazuje datum."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
-"Toto okénko poskytuje informaci o stavu tvého království, zobrazuje datum. "
-"Levým kliknutím můžeš cyklovat zobrazované informace v okně."
+"Toto okénko poskytuje informaci o stavu království, zobrazuje datum. Levým "
+"kliknutím můžeš procházet zobrazované informace v okně."
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -6124,7 +6123,7 @@ msgstr "Příjem království za den."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"S každým dalším obsazeným majákem budou tvé lodě moci doplout každý den o "
+"S každým dalším obsazeným majákem budou vaše lodě moci doplout každý den o "
 "kus dál."
 
 msgid "English"
@@ -6366,7 +6365,7 @@ msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr "Abys mohl kouzlit, musíš si koupit knihu kouzel za %{gold} zlata."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
-msgstr "Bohužel to vypadá, že ti momentálně schází zlato."
+msgstr "Bohužel to vypadá, že vám momentálně schází zlato."
 
 msgid "Do you wish to buy one?"
 msgstr "Chceš ji zakoupit?"
@@ -6381,7 +6380,7 @@ msgid "two"
 msgstr "dva"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
-msgstr "Vodní vír pohltil tvou loď. Část posádky spadla přes palubu."
+msgstr "Vodní vír pohltil vaši loď. Část posádky spadla přes palubu."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Zamítnutí nabídky je urazilo a obratem na tebe zaútočili!"
@@ -6593,7 +6592,7 @@ msgstr ""
 "bitvu."
 
 msgid "You drink from the enchanted fountain, but nothing happens."
-msgstr "Pijete z kouzelné fontány, ale nic se nestane."
+msgstr "Napili jste se z kouzelné fontány, ale nic se nestalo."
 
 msgid "You enter the faerie ring, but nothing happens."
 msgstr "Vstoupíte do čarovného kruhu, ale nic se nestane."
@@ -7727,7 +7726,7 @@ msgstr ""
 "bodů, takže ho nemůžete seslat."
 
 msgid "The spell was not found."
-msgstr "Toto kouzlo nebude na nikoho učinkovat."
+msgstr "Kouzlo nenalezeno."
 
 msgid "Only heroes can cast this spell."
 msgstr "Toto kouzlo mohou sesílat pouze hrdinové."
