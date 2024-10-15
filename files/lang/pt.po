@@ -7814,7 +7814,7 @@ msgid ""
 "\n"
 "'"
 msgstr ""
-"A Esfinge lhe pergunta o seguinte enigma::\n"
+"A Esfinge lhe pergunta o seguinte enigma:\n"
 "\n"
 "'"
 
