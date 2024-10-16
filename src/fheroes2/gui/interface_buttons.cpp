@@ -152,7 +152,8 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
         if ( shouldRedraw ) {
             _interface.redraw( REDRAW_BUTTONS );
 
-            fheroes2::Display::instance().render();
+            // Render now only the changed part of the screen.
+            fheroes2::Display::instance().render( buttonRect );
         }
     };
 
