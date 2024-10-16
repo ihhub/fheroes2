@@ -134,44 +134,26 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
 
     LocalEvent & le = LocalEvent::Get();
 
-    const Settings & conf = Settings::Get();
-
-    // In the "no interface" mode, the buttons panel may be overlapped by the Status Panel, so we can't render the
+    // In the "no interface" mode, the buttons panel may be overlapped by other UI elements, so we can't render the
     // pressed or released buttons exclusively in a usual way. The overlapping UI elements should also be rendered.
-    const bool canBeOverlapped = conf.isHideInterfaceEnabled() && conf.ShowStatus() && ( _interface.getStatusPanel().GetRect() & GetArea() );
+    const auto drawOnPressOrRelease = [this, &le]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
+        bool shouldRedraw = false;
 
-    const auto drawOnPressOrRelease = [this, &le, canBeOverlapped]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
-        if ( canBeOverlapped ) {
-            bool shouldRedraw = false;
-
-            if ( le.isMouseLeftButtonPressedInArea( buttonRect ) ) {
-                if ( !button.isPressed() && button.press() ) {
-                    shouldRedraw = true;
-                }
-            }
-            else {
-                if ( !button.isReleased() && button.release() ) {
-                    shouldRedraw = true;
-                }
-            }
-
-            if ( shouldRedraw ) {
-                if ( buttonRect & _interface.getStatusPanel().GetRect() ) {
-                    // Only Status panel can overlap the buttons area so we should also redraw it and render in the button area.
-                    _interface.redraw( REDRAW_BUTTONS | REDRAW_STATUS );
-                    fheroes2::Display::instance().render( buttonRect );
-                }
-                else {
-                    // Button is not overlapped, draw it and render like in a usual way.
-                    fheroes2::Display & display = fheroes2::Display::instance();
-
-                    button.draw( display );
-                    display.render( buttonRect );
-                }
+        if ( le.isMouseLeftButtonPressedInArea( buttonRect ) ) {
+            if ( !button.isPressed() && button.press() ) {
+                shouldRedraw = true;
             }
         }
         else {
-            button.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRect ) );
+            if ( !button.isReleased() && button.release() ) {
+                shouldRedraw = true;
+            }
+        }
+
+        if ( shouldRedraw ) {
+            _interface.redraw( REDRAW_BUTTONS );
+
+            fheroes2::Display::instance().render();
         }
     };
 
@@ -187,7 +169,7 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     // Move the window border.
-    if ( conf.ShowButtons() && BorderWindow::QueueEventProcessing() ) {
+    if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
         setRedraw();
     }
     else if ( _buttonNextHero.isEnabled() && le.MouseClickLeft( _nextHeroRect ) ) {
