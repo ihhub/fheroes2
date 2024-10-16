@@ -636,6 +636,26 @@ namespace
         }
     }
 
+    void replacePoLAssetWithSW(const int assetICN, const int assetIndex) {
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( assetICN ), true );
+        ROStreamBuf imageStream( body );
+
+        imageStream.seek( headerSize + assetIndex * 13 );
+
+        fheroes2::ICNHeader header1;
+        imageStream >> header1;
+
+        uint32_t dataSize = 0;
+        fheroes2::ICNHeader header2;
+        imageStream >> header2;
+        dataSize = header2.offsetData - header1.offsetData;
+
+        const uint8_t * data = body.data() + headerSize + header1.offsetData;
+        const uint8_t * dataEnd = data + dataSize;
+
+        _icnVsSprite[assetICN][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
+    }
+
     // Helper function for LoadModifiedICN
     void CopyICNWithPalette( const int icnId, const int originalIcnId, const PAL::PaletteType paletteType )
     {
@@ -4199,24 +4219,7 @@ namespace
 
                 // The French PoL assets contain a wrong artifact sprite at index 6. Replace it with the correct sprite from SW assets.
                 if ( _icnVsSprite[id][6].width() == 21 ) {
-                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), true );
-                    ROStreamBuf imageStream( body );
-                    const int artifactID = 6;
-
-                    imageStream.seek( headerSize + artifactID * 13 );
-
-                    fheroes2::ICNHeader header1;
-                    imageStream >> header1;
-
-                    uint32_t dataSize = 0;
-                    fheroes2::ICNHeader header2;
-                    imageStream >> header2;
-                    dataSize = header2.offsetData - header1.offsetData;
-
-                    const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                    const uint8_t * dataEnd = data + dataSize;
-
-                    _icnVsSprite[id][artifactID] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
+                    replacePoLAssetWithSW( id, 6 );
                 }
             }
             return true;
