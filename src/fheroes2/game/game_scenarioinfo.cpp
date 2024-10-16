@@ -110,8 +110,9 @@ namespace
     void RedrawMapTitle( const fheroes2::Rect & roi )
     {
         const auto & info = Settings::Get().getCurrentMapInfo();
-        const fheroes2::Text text{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
-        text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
+        fheroes2::Text text{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
+        text.fitToOneRow( roi.width );
+        text.draw( roi.x, roi.y + 3, roi.width, fheroes2::Display::instance() );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
@@ -190,7 +191,7 @@ namespace
         coordDifficulty.emplace_back( roi.x + 238, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
         coordDifficulty.emplace_back( roi.x + 315, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
 
-        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
+        const uint32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
 
         fheroes2::Button buttonSelectMaps( scenarioBoxRoi.x + scenarioBoxRoi.width - 6 - buttonSelectWidth, scenarioBoxRoi.y + 5,
                                            isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD, 0, 1 );
@@ -245,8 +246,15 @@ namespace
             fheroes2::addGradientShadow( icon, display, { coordDifficulty[i].x, coordDifficulty[i].y }, { -5, 5 } );
         }
 
+        // We calculate the allowed text width according to the select button's width while ensuring symmetric placement of the map title.
+        const uint32_t boxBorder = 6;
+        const uint32_t halfBoxTextAreaWidth = ( scenarioBoxRoi.width - ( 2 * boxBorder ) ) / 2;
+        const uint32_t rightSideAvailableTextWidth
+            = halfBoxTextAreaWidth > buttonSelectWidth ? halfBoxTextAreaWidth - buttonSelectWidth : buttonSelectWidth - halfBoxTextAreaWidth;
+
         // Set up restorers.
-        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 6, scenarioBoxRoi.y + 5, 279, scenarioBoxRoi.height );
+        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + boxBorder + buttonSelectWidth, scenarioBoxRoi.y + 5, 2 * rightSideAvailableTextWidth,
+                                              scenarioBoxRoi.height );
         fheroes2::ImageRestorer opponentsArea( display, roi.x, pointOpponentInfo.y, roi.width, 65 );
         fheroes2::ImageRestorer classArea( display, roi.x, pointClassInfo.y, roi.width, 69 );
         fheroes2::ImageRestorer handicapArea( display, roi.x, pointClassInfo.y + 69, roi.width, 31 );
@@ -254,7 +262,7 @@ namespace
                                             roi.width - buttonOk.area().width - buttonCancel.area().width - 20 * 2, buttonOk.area().height );
 
         // Map name
-        RedrawMapTitle( scenarioBoxRoi );
+        RedrawMapTitle( mapTitleArea.rect() );
 
         playersInfo.RedrawInfo( false );
 
@@ -318,7 +326,7 @@ namespace
                     conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
-                    RedrawMapTitle( scenarioBoxRoi );
+                    RedrawMapTitle( mapTitleArea.rect() );
                     Game::LoadPlayers( fi->filename, players );
 
                     opponentsArea.restore();
