@@ -312,8 +312,8 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
 {
     fheroes2::Text mapName{ info.name,
-                                  { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
-                                  info.getSupportedLanguage() };
+                            { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
+                            info.getSupportedLanguage() };
     mapName.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
     const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
     const int32_t yCoordinate = baseYOffset + MAP_LIST_ROW_SPACING_Y - 1;
