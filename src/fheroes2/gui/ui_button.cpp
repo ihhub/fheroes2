@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"
