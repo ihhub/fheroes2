@@ -2541,7 +2541,7 @@ namespace
             }
             // The French version replaces several ASCII special characters with language-specific characters.
             // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
-            // of the original so that original French maps's text is displayed correctly.
+            // of the original so that original French maps' texts are displayed correctly.
             if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
                 // The engine expects that letter indexes correspond to charcode - 0x20, but the original French
                 // Price of Loyalty maps use 0x09 for lowercase i with circonflex. This is currently not supported
@@ -2560,27 +2560,11 @@ namespace
                 imageArray[232 - 32] = imageArray[64];
                 imageArray[233 - 32] = imageArray[94];
                 imageArray[234 - 32] = imageArray[92];
+                imageArray[238 - 32] = imageArray[93];
                 imageArray[239 - 32] = imageArray[91];
                 imageArray[244 - 32] = imageArray[3];
                 imageArray[249 - 32] = imageArray[6];
                 imageArray[251 - 32] = imageArray[4];
-                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
-                // area that we need to remove. Plus we need to add a missing pixel.
-                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
-                    imageArray[238 - 32].resize( 4, 9 );
-                    imageArray[238 - 32].reset();
-                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
-                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
-                    imageArray[238 - 32].setPosition( 0, -1 );
-                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
-                    // Copy the fixed sprite back.
-                    for ( const int & charCode : { 30, 93, 95 } ) {
-                        imageArray[charCode] = imageArray[238 - 32];
-                    }
-                }
-                else {
-                    imageArray[238 - 32] = imageArray[93];
-                }
                 imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
