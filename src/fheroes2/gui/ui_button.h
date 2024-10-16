@@ -88,17 +88,21 @@ namespace fheroes2
         bool press();
         bool release();
         void enable();
-        void disable(); // button becomes disabled and released
-        void show(); // this method doesn't call draw
-        void hide(); // this method doesn't call draw
+        // Button becomes disabled and released
+        void disable();
+        // This method doesn't call draw()
+        void show();
+        // This method doesn't call draw()
+        void hide();
 
-        void setPosition( const int32_t offsetX_, const int32_t offsetY_ )
+        void setPosition( const int32_t offsetX, const int32_t offsetY )
         {
-            _offsetX = offsetX_;
-            _offsetY = offsetY_;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
         }
 
-        bool draw( Image & output = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default
+        bool draw( Image & output = Display::instance() ) const;
 
         // Will draw on screen. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress();
@@ -239,7 +243,7 @@ namespace fheroes2
         void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
         void addButton( ButtonSprite && button, const int returnValue );
 
-        // Will draw on screen by default.
+        // Will draw on screen by default
         void draw( Image & output = Display::instance() ) const;
 
         // Make sure that id is less than size!
@@ -284,7 +288,8 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        void draw( Image & output = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default
+        void draw( Image & output = Display::instance() ) const;
 
     protected:
         void senderUpdate( const ActionObject * sender ) override;
