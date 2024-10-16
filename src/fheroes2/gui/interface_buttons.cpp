@@ -31,6 +31,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "interface_base.h"
+#include "interface_status.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "mp2.h"
