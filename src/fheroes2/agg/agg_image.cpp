@@ -4202,7 +4202,7 @@ namespace
                 if ( _icnVsSprite[id][assetIndex].width() == 21 ) {
                     const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), true );
                     ROStreamBuf imageStream( body );
-                    
+
                     imageStream.seek( headerSize + assetIndex * 13 );
 
                     fheroes2::ICNHeader header1;
