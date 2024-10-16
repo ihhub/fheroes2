@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -38,7 +39,13 @@ namespace fheroes2
     {
     public:
         ButtonBase() = default;
-        ButtonBase( const int32_t offsetX, const int32_t offsetY );
+        ButtonBase( const int32_t offsetX, const int32_t offsetY )
+            : _offsetX( offsetX )
+            , _offsetY( offsetY )
+        {
+            // Do nothing.
+        }
+
         ButtonBase( const ButtonBase & ) = delete;
         ButtonBase( ButtonBase && ) noexcept = default;
 
@@ -92,20 +99,20 @@ namespace fheroes2
 
         bool draw( Image & output = Display::instance() ) const; // will draw on screen by default
 
-        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnPress( Display & output = Display::instance() );
+        // Will draw on screen. Returns true in case of state change. This method calls render() internally.
+        bool drawOnPress();
 
-        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnRelease( Display & output = Display::instance() );
+        // Will draw on screen. Returns true in case of state change. This method calls render() internally.
+        bool drawOnRelease();
 
-        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnState( const bool isPressedState, Display & output = Display::instance() )
+        // Will draw on screen. Returns true in case of state change. This method calls render() internally.
+        bool drawOnState( const bool isPressedState )
         {
             if ( isPressedState ) {
-                return drawOnPress( output );
+                return drawOnPress();
             }
 
-            return drawOnRelease( output );
+            return drawOnRelease();
         }
 
         Rect area() const;
@@ -127,32 +134,68 @@ namespace fheroes2
         mutable std::unique_ptr<Sprite> _disabledSprite;
     };
 
-    class Button : public ButtonBase
+    class Button final : public ButtonBase
     {
     public:
-        Button( int32_t offsetX = 0, int32_t offsetY = 0 );
-        Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
+        explicit Button( const int32_t offsetX = 0, const int32_t offsetY = 0 )
+            : ButtonBase( offsetX, offsetY )
+        {
+            // Do nothing.
+        }
+
+        Button( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex )
+            : ButtonBase( offsetX, offsetY )
+            , _icnId( icnId )
+            , _releasedIndex( releasedIndex )
+            , _pressedIndex( pressedIndex )
+        {
+            // Do nothing.
+        }
+
         ~Button() override = default;
 
-        void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        void setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex );
+        void setICNInfo( const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex )
+        {
+            _icnId = icnId;
+            _releasedIndex = releasedIndex;
+            _pressedIndex = pressedIndex;
+        }
+
+        void setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
+        {
+            _releasedIndex = releasedIndex;
+            _pressedIndex = pressedIndex;
+        }
 
     protected:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
 
     private:
-        int _icnId;
-        uint32_t _releasedIndex;
-        uint32_t _pressedIndex;
+        int _icnId{ -1 };
+        uint32_t _releasedIndex{ 0 };
+        uint32_t _pressedIndex{ 0 };
     };
 
     // This button class is used for custom Sprites
-    class ButtonSprite : public ButtonBase
+    class ButtonSprite final : public ButtonBase
     {
     public:
-        ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ButtonSprite( int32_t offsetX, int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = Sprite() );
+        explicit ButtonSprite( const int32_t offsetX = 0, const int32_t offsetY = 0 )
+            : ButtonBase( offsetX, offsetY )
+        {
+            // Do nothing.
+        }
+
+        ButtonSprite( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = Sprite() )
+            : ButtonBase( offsetX, offsetY )
+            , _released( std::move( released ) )
+            , _pressed( std::move( pressed ) )
+            , _disabled( std::move( disabled ) )
+        {
+            // Do nothing.
+        }
+
         ButtonSprite( const ButtonSprite & ) = delete;
         ButtonSprite( ButtonSprite && ) noexcept = default;
 
@@ -161,7 +204,12 @@ namespace fheroes2
         ButtonSprite & operator=( const ButtonSprite & ) = delete;
         ButtonSprite & operator=( ButtonSprite && ) noexcept = default;
 
-        void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
+        void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() )
+        {
+            _released = released;
+            _pressed = pressed;
+            _disabled = disabled;
+        }
 
     protected:
         const Sprite & _getPressed() const override;
@@ -178,27 +226,38 @@ namespace fheroes2
     {
     public:
         // Please refer to dialog.h enumeration for states
-        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
+        explicit ButtonGroup( const Rect & area = Rect(), const int buttonTypes = 0 );
         ButtonGroup( const ButtonGroup & ) = delete;
 
-        ~ButtonGroup();
+        ~ButtonGroup() = default;
 
         ButtonGroup & operator=( const ButtonGroup & ) = delete;
 
-        void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
-        void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
-        void addButton( ButtonSprite && button, int returnValue );
+        void createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
+                           const int returnValue );
+        void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
+        void addButton( ButtonSprite && button, const int returnValue );
 
-        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        // Will draw on screen by default.
+        void draw( Image & output = Display::instance() ) const;
 
         // Make sure that id is less than size!
-        ButtonBase & button( size_t id );
-        const ButtonBase & button( size_t id ) const;
+        ButtonBase & button( const size_t id )
+        {
+            assert( id < _button.size() );
+            return *_button[id];
+        }
+
+        const ButtonBase & button( const size_t id ) const
+        {
+            assert( id < _button.size() );
+            return *_button[id];
+        }
 
         int processEvents();
 
     private:
-        std::vector<ButtonBase *> _button;
+        std::vector<std::unique_ptr<ButtonBase>> _button;
         std::vector<int> _value;
     };
 
@@ -219,12 +278,12 @@ namespace fheroes2
         bool _isEnabled;
     };
 
-    class OptionButtonGroup : public ActionObject
+    class OptionButtonGroup final : public ActionObject
     {
     public:
         void addButton( ButtonBase * button );
 
-        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        void draw( Image & output = Display::instance() ) const; // will draw on screen by default
 
     protected:
         void senderUpdate( const ActionObject * sender ) override;
