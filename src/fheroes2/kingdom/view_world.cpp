@@ -32,6 +32,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -48,8 +49,10 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -709,6 +712,12 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
         else if ( le.isMouseWheelDown() ) {
             changed = currentROI.zoomOut( false );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonZoom.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Zoom" ), _( "Click this button to adjust the level of zoom." ), Dialog::ZERO );
         }
 
         if ( !le.isMouseLeftButtonPressedInArea( visibleScreenInPixels ) || !le.isMouseCursorPosInArea( visibleScreenInPixels ) ) {
