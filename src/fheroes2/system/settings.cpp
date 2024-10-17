@@ -514,8 +514,8 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     // First, let's see if the translation for the requested language is already cached
-    if ( const auto [isCached, isValid] = Translation::setLanguage( language ); isCached ) {
-        return isValid;
+    if ( const auto [isCached, isSet] = Translation::setLanguage( language ); isCached ) {
+        return isSet;
     }
 
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
