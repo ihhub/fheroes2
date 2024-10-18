@@ -32,7 +32,6 @@
 #include "interface_cpanel.h"
 #include "interface_icons.h"
 #include "interface_status.h"
-#include "math_base.h"
 #include "players.h"
 
 class Castle;
