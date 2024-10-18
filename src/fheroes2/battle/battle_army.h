@@ -118,6 +118,7 @@ namespace Battle
     {
     public:
         Force( Army & parent, bool opposite, TroopsUidGenerator & generator );
+
         Force( const Force & ) = delete;
 
         ~Force() override;

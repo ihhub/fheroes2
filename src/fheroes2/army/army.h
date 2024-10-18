@@ -52,6 +52,7 @@ public:
     Troops() = default;
 
     Troops( const Troops & troops );
+    Troops( Troops && ) = default;
 
     virtual ~Troops();
 
@@ -182,12 +183,10 @@ public:
     explicit Army( const Maps::Tiles & tile );
 
     Army( const Army & ) = delete;
-    Army( Army && ) = delete;
-
-    Army & operator=( const Army & ) = delete;
-    Army & operator=( Army && ) = delete;
 
     ~Army() override = default;
+
+    Army & operator=( const Army & ) = delete;
 
     const Troops & getTroops() const;
 

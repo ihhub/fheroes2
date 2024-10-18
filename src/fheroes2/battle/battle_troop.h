@@ -74,8 +74,11 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
+        Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid );
+
         Unit( const Unit & ) = delete;
+
+        ~Unit() override = default;
 
         Unit & operator=( const Unit & ) = delete;
 

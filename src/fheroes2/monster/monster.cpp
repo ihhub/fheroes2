@@ -107,7 +107,7 @@ Monster::Monster( const Spell & sp )
     }
 }
 
-Monster::Monster( int race, uint32_t dw )
+Monster::Monster( const int race, const uint32_t dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
