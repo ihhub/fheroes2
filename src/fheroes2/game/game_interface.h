@@ -110,11 +110,6 @@ namespace Interface
             return _statusPanel;
         }
 
-        const fheroes2::Rect & getButtonsPanelRect() const
-        {
-            return _buttonsPanel.GetRect();
-        }
-
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
         void SetFocus( Castle * );
         void ResetFocus( const int priority, const bool retainScrollBarPosition );
