@@ -91,7 +91,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
         _gameArea.SetRedraw();
-        _buttonsPanel.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
@@ -211,7 +211,7 @@ void Interface::AdventureMap::EventKingdomInfo() const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
 
-    _iconsPanel.SetRedraw();
+    _iconsPanel.setRedraw();
 }
 
 void Interface::AdventureMap::EventCastSpell()
@@ -408,7 +408,7 @@ void Interface::AdventureMap::EventSwitchHeroSleeping()
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         setRedraw( REDRAW_HEROES );
-        _buttonsPanel.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
 }
 
@@ -547,7 +547,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
         }
         else {
             conf.SetShowButtons( true );
-            _buttonsPanel.SetRedraw();
+            _buttonsPanel.setRedraw();
         }
     }
 }
@@ -579,7 +579,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
         }
         else {
             conf.SetShowIcons( true );
-            _iconsPanel.SetRedraw();
+            _iconsPanel.setRedraw();
         }
     }
 }

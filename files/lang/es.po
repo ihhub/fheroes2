@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-12 11:25+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -8780,6 +8780,12 @@ msgstr "Fugaz"
 
 msgid "speed|Instant"
 msgstr "Instantáneo"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Ardilla"
