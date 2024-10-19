@@ -105,8 +105,6 @@ namespace Maps
     int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
     int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
 
-    bool doesTileContainObjectType( const Tiles & tile, const MP2::MapObjectType type );
-
     // Only works for action type of objects (ignoring top layer objects parts).
     const TilesAddon * getObjectPartByActionType( const Tiles & tile, const MP2::MapObjectType type );
 
