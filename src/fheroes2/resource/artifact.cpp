@@ -897,24 +897,16 @@ void BagArtifacts::exchangeArtifacts( Heroes & taker, Heroes & giver )
 
     std::vector<Artifact> combined;
 
-    for ( Artifact & artifact : takerBag ) {
-        if ( !artifact.isValid() || artifact.GetID() == Artifact::MAGIC_BOOK ) {
-            continue;
+    for ( BagArtifacts & bag : std::array<std::reference_wrapper<BagArtifacts>, 2>{ takerBag, giverBag } ) {
+        for ( Artifact & artifact : bag ) {
+            if ( !artifact.isValid() || artifact.GetID() == Artifact::MAGIC_BOOK ) {
+                continue;
+            }
+
+            combined.push_back( artifact );
+
+            artifact.Reset();
         }
-
-        combined.push_back( artifact );
-
-        artifact.Reset();
-    }
-
-    for ( Artifact & artifact : giverBag ) {
-        if ( !artifact.isValid() || artifact.GetID() == Artifact::MAGIC_BOOK ) {
-            continue;
-        }
-
-        combined.push_back( artifact );
-
-        artifact.Reset();
     }
 
     const auto isPureCursedArtifact = []( const Artifact & artifact ) {
