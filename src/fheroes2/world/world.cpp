@@ -1361,9 +1361,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
 
     // Cache all position of Eye of Magi objects.
     _allEyeOfMagi.clear();
-    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_EYE_OF_MAGI ) ) {
-        assert( objectPart != nullptr );
-
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI ) ) {
         _allEyeOfMagi.emplace_back( index );
     }
 

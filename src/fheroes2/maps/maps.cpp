@@ -479,6 +479,11 @@ bool Maps::doesObjectExistOnMap( const MP2::MapObjectType objectType )
     return false;
 }
 
+Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType )
+{
+    return MapsIndexesObject( objectType, true );
+}
+
 std::vector<std::pair<int32_t, const Maps::TilesAddon *>> Maps::getObjectParts( const MP2::MapObjectType objectType )
 {
     std::vector<std::pair<int32_t, const TilesAddon *>> result;
