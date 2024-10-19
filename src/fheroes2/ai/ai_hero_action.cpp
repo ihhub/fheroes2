@@ -1666,7 +1666,7 @@ namespace
         destinationTile.resetObjectSprite();
         hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
         destinationTile.SetObject( MP2::OBJ_HERO );
-        
+
         hero.SetShipMaster( true );
 
         // Boat is no longer empty so we reset color to default
