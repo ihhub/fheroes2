@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -64,11 +65,17 @@ namespace fheroes2
 
         uint8_t * transform()
         {
+            // Why do you want to get transform layer from the single-layer image?
+            assert( !_singleLayer );
+
             return _data.get() + width() * height();
         }
 
         const uint8_t * transform() const
         {
+            // Why do you want to get transform layer from the single-layer image?
+            assert( !_singleLayer );
+
             return _data.get() + width() * height();
         }
 
