@@ -2560,11 +2560,27 @@ namespace
                 imageArray[232 - 32] = imageArray[64];
                 imageArray[233 - 32] = imageArray[94];
                 imageArray[234 - 32] = imageArray[92];
-                imageArray[238 - 32] = imageArray[93];
                 imageArray[239 - 32] = imageArray[91];
                 imageArray[244 - 32] = imageArray[3];
                 imageArray[249 - 32] = imageArray[6];
                 imageArray[251 - 32] = imageArray[4];
+                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
+                // area that we need to remove. Plus we need to add a missing pixel.
+                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
+                    imageArray[238 - 32].resize( 4, 9 );
+                    imageArray[238 - 32].reset();
+                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
+                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
+                    imageArray[238 - 32].setPosition( 0, -1 );
+                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
+                    // Copy the fixed sprite back.
+                    for ( const int & charCode : { 30, 93, 95 } ) {
+                        imageArray[charCode] = imageArray[238 - 32];
+                    }
+                }
+                else {
+                    imageArray[238 - 32] = imageArray[93];
+                }
                 imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
