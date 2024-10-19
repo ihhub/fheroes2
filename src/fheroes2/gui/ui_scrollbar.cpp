@@ -68,10 +68,8 @@ namespace fheroes2
 
     bool Scrollbar::moveToIndex( const int indexId )
     {
-        if ( _currentIndex == indexId ) {
-            // Nothing to change.
-            return false;
-        }
+        // TODO: Make a function to update the Scrollbar position after its image is changed
+        // and call it in the code instead of this one with 'indexId' that is equal to '_currentId'.
 
         const int32_t roiWidth = _area.width - width();
         const int32_t roiHeight = _area.height - height();
