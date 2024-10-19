@@ -1535,12 +1535,12 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     }
     case MP2::OBJ_HUT_OF_MAGI: {
         // TODO: cache Maps::GetObjectPositions() call as this is a very heavy operation.
-        const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+        const auto eyeMagiIndexes = Maps::getObjectParts( MP2::OBJ_EYE_OF_MAGI );
         int fogCountToUncover = 0;
         const int heroColor = hero.GetColor();
         const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
-        for ( const int32_t eyeIndex : eyeMagiIndexes ) {
+        for ( const auto& [eyeIndex, objectPart] : eyeMagiIndexes ) {
             fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
         }
 

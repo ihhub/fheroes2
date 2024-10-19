@@ -1593,6 +1593,54 @@ namespace Maps
         return 0;
     }
 
+    bool doesTileContainObjectType( const Tiles & tile, const MP2::MapObjectType type )
+    {
+        MP2::MapObjectType objectType = getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex );
+        if ( objectType == type ) {
+            return true;
+        }
+
+        for ( const auto & objectPart : tile.getBottomLayerAddons() ) {
+            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            if ( objectType == type ) {
+                return true;
+            }
+        }
+
+        for ( const auto & objectPart : tile.getTopLayerAddons() ) {
+            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            if ( objectType == type ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    const TilesAddon * getObjectPartByType( const Tiles & tile, const MP2::MapObjectType type )
+    {
+        MP2::MapObjectType objectType = getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex );
+        if ( objectType == type ) {
+            return &tile.getMainObjectPart();
+        }
+
+        for ( const auto & objectPart : tile.getBottomLayerAddons() ) {
+            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            if ( objectType == type ) {
+                return &objectPart;
+            }
+        }
+
+        for ( const auto & objectPart : tile.getTopLayerAddons() ) {
+            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            if ( objectType == type ) {
+                return &objectPart;
+            }
+        }
+
+        return nullptr;
+    }
+
     Monster getMonsterFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {

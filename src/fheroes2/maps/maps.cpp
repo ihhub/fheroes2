@@ -479,9 +479,18 @@ bool Maps::doesObjectExistOnMap( const MP2::MapObjectType objectType )
     return false;
 }
 
-Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType )
+std::vector<std::pair<int32_t, const Maps::TilesAddon *>> Maps::getObjectParts( const MP2::MapObjectType objectType )
 {
-    return MapsIndexesObject( objectType, true );
+    std::vector<std::pair<int32_t, const TilesAddon *>> result;
+    const int32_t size = static_cast<int32_t>( world.getSize() );
+    for ( int32_t idx = 0; idx < size; ++idx ) {
+        const Maps::TilesAddon * objectPart = getObjectPartByType( world.GetTiles( idx ), objectType );
+        if ( objectPart != nullptr ) {
+            result.emplace_back( idx, objectPart );
+        }
+    }
+
+    return result;
 }
 
 Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes )

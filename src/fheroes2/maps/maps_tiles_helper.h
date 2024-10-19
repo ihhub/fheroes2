@@ -42,6 +42,7 @@ namespace MP2
 namespace Maps
 {
     class Tiles;
+    struct TilesAddon;
 
     struct ObjectInfo;
 
@@ -103,6 +104,10 @@ namespace Maps
 
     int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
     int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+
+    bool doesTileContainObjectType( const Tiles & tile, const MP2::MapObjectType type );
+
+    const TilesAddon * getObjectPartByType( const Tiles & tile, const MP2::MapObjectType type );
 
     Monster getMonsterFromTile( const Tiles & tile );
 

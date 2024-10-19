@@ -532,8 +532,21 @@ void Maps::Tiles::setHero( Heroes * hero )
         hero = getHero();
 
         if ( hero ) {
-            SetObject( hero->getObjectTypeUnderHero() );
+            const MP2::MapObjectType type = hero->getObjectTypeUnderHero();
             hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
+            // While updating the main object type when a hero moves away from a tile we can have 3 situations:
+            // - the underlying object type is MP2::OBJ_NONE. In this case we should update the tile object type.
+            // - the underlying object type is MP2::OBJ_NONE:
+            //   - if the object exists then we do nothing.
+            //   - if the object doesn't exist then we have to update the tile object type.
+            //
+            // The last case can happen only when a hero boards a boat which is under another sea object, like whirlpool.
+            if ( ( type == MP2::OBJ_NONE ) || !doesTileContainObjectType( *this, type ) ) {
+                updateObjectType();
+            }
+            else {
+                SetObject( type );
+            }
         }
         else {
             updateObjectType();

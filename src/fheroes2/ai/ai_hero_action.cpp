@@ -1728,9 +1728,9 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const auto eyeMagiIndexes = Maps::getObjectParts( MP2::OBJ_EYE_OF_MAGI );
             const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
-            for ( const int32_t index : eyeMagiIndexes ) {
+            for ( const auto& [index, objectPart] : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
             }
         }

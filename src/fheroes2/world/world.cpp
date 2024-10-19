@@ -792,8 +792,14 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByType( entranceTile, MP2::OBJ_STONE_LITHS );
+    if ( entranceObjectPart == nullptr ) {
+        assert( 0 );
+        return result;
+    }
+
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -829,24 +835,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    const auto getWhirlPoolObjectPart = []( const Maps::Tiles & tile ) -> const Maps::TilesAddon * {
-        // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-        // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
-            return &tile.getMainObjectPart();
-        }
-
-        for ( const auto & part : tile.getBottomLayerAddons() ) {
-            if ( Maps::getObjectTypeByIcn( part._objectIcnType, part._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
-                return &part;
-            }
-        }
-
-        assert( 0 );
-        return nullptr;
-    };
-
-    const Maps::TilesAddon * entranceObjectPart = getWhirlPoolObjectPart( entranceTile );
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByType( entranceTile, MP2::OBJ_WHIRLPOOL );
     if ( entranceObjectPart == nullptr ) {
         return result;
     }
@@ -857,7 +846,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
             continue;
         }
 
-        const Maps::TilesAddon * destinationObjectPart = getWhirlPoolObjectPart( whirlpoolTile );
+        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
         if ( destinationObjectPart == nullptr ) {
             continue;
         }
@@ -1357,15 +1346,18 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+    for ( const auto& [index, objectPart] : Maps::getObjectParts( MP2::OBJ_STONE_LITHS ) ) {
+        assert( objectPart != nullptr );
+        _allTeleports[objectPart->_imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+    for ( const auto& [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
+        assert( objectPart != nullptr );
+
+        _allWhirlpools[objectPart->_imageIndex].push_back( index );
     }
 
     resetPathfinder();
