@@ -732,7 +732,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
-                I.getStatusWindow().SetResource( resource.first, resource.second );
+                I.getStatusPanel().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
@@ -3308,7 +3308,7 @@ namespace
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
 
                 // Update the kingdom heroes list including the scrollbar.
-                Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+                Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_HEROES );
             }
         }
         else {

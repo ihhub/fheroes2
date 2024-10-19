@@ -278,7 +278,7 @@ namespace
 
     void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
     {
-        if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
+        if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) ) {
             Game::OpenHeroesDialog( *row.hero, false, false );
 
             needFadeIn = true;
@@ -287,7 +287,7 @@ namespace
 
     void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
     {
-        if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
+        if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) ) {
             Dialog::QuickInfoWithIndicationOnRadar( *row.hero, _windowArea );
         }
     }
@@ -334,7 +334,7 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), display, dstx, dsty );
 
         // base info
-        Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
+        Interface::redrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
 
         int32_t offsetX = dstx + 90;
         const int32_t offsetY = dsty + 22;
@@ -533,12 +533,12 @@ namespace
     {
         if ( row.castle ) {
             // click castle icon
-            if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) {
                 Game::OpenCastleDialog( *row.castle, false, false );
             }
 
             // click hero icon
-            else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) {
                 Heroes * hero = row.castle->GetHero();
 
                 if ( !hero ) {
@@ -558,10 +558,10 @@ namespace
     void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
     {
         if ( row.castle ) {
-            if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) {
                 Dialog::QuickInfoWithIndicationOnRadar( *row.castle, _windowArea );
             }
-            else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::getItemWidth(), Interface::IconsBar::getItemHeight() ) & cursor ) {
                 const Heroes * hero = row.castle->GetHero();
                 if ( hero ) {
                     Dialog::QuickInfoWithIndicationOnRadar( *hero, _windowArea );
@@ -620,12 +620,12 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), display, dstx, dsty );
 
         // base info
-        Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
+        Interface::redrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
 
         const Heroes * hero = row.castle->GetHero();
 
         if ( hero ) {
-            Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
+            Interface::redrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
             const std::string sep = "-";
 
             const fheroes2::Text text( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep

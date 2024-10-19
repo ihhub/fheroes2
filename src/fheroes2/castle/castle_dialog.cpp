@@ -70,8 +70,6 @@
 
 namespace
 {
-    uint32_t castleAnimationIndex = 0;
-
     BuildingType getPressedBuildingHotkey()
     {
         if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 ) ) {
@@ -284,7 +282,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
 
             AudioManager::PlaySound( M82::BUILDTWN );
-            fadeBuilding.StartFadeBuilding( build );
+            fadeBuilding.startFadeBuilding( build );
             break;
         }
 
@@ -362,10 +360,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
     // Cache a vector of castle buildings in the order they are rendered.
-    const CastleDialog::CacheBuildings cacheBuildings( *this, dialogRoi.getPosition() );
+    const CastleDialog::BuildingsRenderQueue cacheBuildings( *this, dialogRoi.getPosition() );
 
     // Render castle buildings.
-    CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, 0 );
+    CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, 0 );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -394,6 +392,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // This variable must be declared out of the loop for performance reasons.
     std::string statusMessage;
+    uint32_t castleAnimationIndex = 1;
 
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
 
@@ -403,7 +402,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         bool needFadeIn = false;
 
         // During hero purchase or building construction skip any interaction with the dialog.
-        if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
+        if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
                 le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
             }
@@ -602,7 +601,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                                 assert( 0 );
                             }
 
-                            fadeBuilding.StartFadeBoat();
+                            fadeBuilding.startFadeBoat();
                             needRedraw = true;
                             break;
                         }
@@ -635,7 +634,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             }
 
                             AudioManager::PlaySound( M82::BUILDTWN );
-                            fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
+                            fadeBuilding.startFadeBuilding( BUILD_CASTLE );
                             needRedraw = true;
                             break;
                         }
@@ -732,9 +731,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             statusMessage.clear();
         }
 
-        needRedraw = fadeBuilding.UpdateFade();
-        if ( fadeBuilding.IsFadeDone() ) {
-            const uint32_t build = fadeBuilding.GetBuilding();
+        needRedraw = fadeBuilding.updateFadeAlpha();
+        if ( fadeBuilding.isFadeDone() ) {
+            const uint32_t build = fadeBuilding.getBuilding();
 
             if ( build != BUILD_NOTHING ) {
                 if ( BUILD_CAPTAIN == build ) {
@@ -747,19 +746,19 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 display.render( dialogRoi );
             }
 
-            fadeBuilding.StopFade();
+            fadeBuilding.stopFade();
         }
-        else if ( fadeBuilding.GetBuilding() == BUILD_CAPTAIN ) {
+        else if ( fadeBuilding.getBuilding() == BUILD_CAPTAIN ) {
             // Fade-in the captain image while fading-in his quarters.
             const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
             fheroes2::Copy( crestImage, 0, 0, display, rectSign1.x, rectSign1.y, crestImage.width(), crestImage.height() );
             const fheroes2::Sprite & captainImage = GetCaptain().GetPortrait( PORT_BIG );
-            fheroes2::AlphaBlit( captainImage, display, rectSign1.x, rectSign1.y, fadeBuilding.GetAlpha() );
+            fheroes2::AlphaBlit( captainImage, display, rectSign1.x, rectSign1.y, fadeBuilding.getAlpha() );
         }
 
         // Castle dialog animation.
         if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) || needRedraw ) {
-            CastleDialog::RedrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+            CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
             display.render( dialogRoi );
 

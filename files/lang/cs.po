@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
-"PO-Revision-Date: 2024-10-15 18:47+0200\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
+"PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
 "Language: cs\n"
@@ -8597,6 +8597,12 @@ msgstr "Rychlá"
 
 msgid "speed|Instant"
 msgstr "Okamžitá"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Veverky"

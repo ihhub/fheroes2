@@ -171,9 +171,9 @@ void Interface::Radar::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::Radar::SetPos( int32_t ox, int32_t oy )
+void Interface::Radar::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 }
 
 void Interface::Radar::Build()
@@ -462,41 +462,40 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* = nu
 
 void Interface::Radar::QueueEventProcessing()
 {
-    const Settings & conf = Settings::Get();
-    LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Rect & rect = GetArea();
-    const fheroes2::Rect & borderArea = GetRect();
-
-    if ( !le.isMouseCursorPosInArea( borderArea ) || le.isMouseCursorPosInArea( rect ) ) {
-        _mouseDraggingMovement = false;
-    }
+    captureMouse();
 
     // Move the window border
-    if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
+    if ( Settings::Get().ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
         _interface.setRedraw( REDRAW_RADAR_CURSOR );
-    }
-    else if ( le.isMouseCursorPosInArea( rect ) ) {
-        // move cursor
-        if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
-            _mouseDraggingMovement = true;
-            const fheroes2::Point & pt = le.getMouseCursorPos();
 
-            if ( rect & pt ) {
-                GameArea & gamearea = _interface.getGameArea();
-                fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
-                const fheroes2::Point prev( visibleROI.x, visibleROI.y );
-                gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
-                visibleROI = gamearea.GetVisibleTileROI();
-                if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    _interface.setRedraw( REDRAW_RADAR_CURSOR );
-                    gamearea.SetRedraw();
-                }
+        return;
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+    const fheroes2::Rect & rect = GetArea();
+
+    if ( !le.isMouseCursorPosInArea( rect ) ) {
+        return;
+    }
+
+    if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
+        const fheroes2::Point & pt = le.getMouseCursorPos();
+
+        if ( rect & pt ) {
+            GameArea & gamearea = _interface.getGameArea();
+            fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
+            const fheroes2::Point prev( visibleROI.x, visibleROI.y );
+            gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
+            visibleROI = gamearea.GetVisibleTileROI();
+            if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
+                _interface.setRedraw( REDRAW_RADAR_CURSOR );
+                gamearea.SetRedraw();
             }
         }
-        else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
-            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
-        }
+    }
+    else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
+        fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
     }
 }
 

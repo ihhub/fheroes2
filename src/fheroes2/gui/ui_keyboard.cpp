@@ -68,6 +68,7 @@ namespace
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
             // English is a default language so it is not considered as an extra language.
             return false;
@@ -284,6 +285,7 @@ namespace
     {
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
@@ -302,6 +304,8 @@ namespace
     std::vector<std::string> getCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
+            return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Polish:
@@ -324,6 +328,8 @@ namespace
     std::vector<std::string> getNonCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
+            return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
         case fheroes2::SupportedLanguage::English:
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Polish:
@@ -371,6 +377,7 @@ namespace
         // Different languages have different number of letters per row.
         // We cannot expand the virtual keyboard window beyond 640 pixels but we can change the size of buttons.
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::Polish:
             return 30;
@@ -495,6 +502,7 @@ namespace
                           const bool isEvilInterface, const bool isExtraLanguageSupported )
     {
         switch ( language ) {
+        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:

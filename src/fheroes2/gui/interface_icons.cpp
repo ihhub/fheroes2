@@ -33,7 +33,6 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
-#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
@@ -43,36 +42,24 @@
 
 namespace
 {
-    const int32_t iconsWidth = 46;
-    const int32_t iconsHeight = 22;
     const int32_t iconsCursorWidth = 56;
     const int32_t iconsCursorHeight = 32;
 }
 
-bool Interface::IconsBar::IsVisible()
+bool Interface::IconsBar::isVisible()
 {
     const Settings & conf = Settings::Get();
     return !conf.isHideInterfaceEnabled() || conf.ShowIcons();
 }
 
-int32_t Interface::IconsBar::GetItemWidth()
+void Interface::redrawCastleIcon( const Castle & castle, const int32_t posX, const int32_t posY )
 {
-    return iconsWidth;
+    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), { posX, posY } );
 }
 
-int32_t Interface::IconsBar::GetItemHeight()
+void Interface::redrawHeroesIcon( const Heroes & hero, const int32_t posX, const int32_t posY )
 {
-    return iconsHeight;
-}
-
-void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy )
-{
-    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), { sx, sy } );
-}
-
-void Interface::RedrawHeroesIcon( const Heroes & hero, int32_t sx, int32_t sy )
-{
-    hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
+    hero.PortraitRedraw( posX, posY, PORT_SMALL, fheroes2::Display::instance() );
 }
 
 void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const
@@ -90,8 +77,8 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     int32_t internalOffsetY = offset.y + srcrt.height;
     srcrt.height = 32;
 
-    if ( iconsCount > 2 ) {
-        for ( int32_t i = 0; i < iconsCount - 2; ++i ) {
+    if ( _iconsCount > 2 ) {
+        for ( int32_t i = 0; i < _iconsCount - 2; ++i ) {
             fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, internalOffsetY, srcrt.width, srcrt.height );
             internalOffsetY += srcrt.height;
         }
@@ -101,25 +88,26 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     srcrt.height = 32;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, internalOffsetY, srcrt.width, srcrt.height );
 
-    for ( int32_t i = validItemCount; i < iconsCount; ++i ) {
+    for ( int32_t i = validItemCount; i < _iconsCount; ++i ) {
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 + i % 8 );
-        fheroes2::Blit( background, output, offset.x + 5, offset.y + 5 + i * ( IconsBar::GetItemHeight() + 10 ) );
+        fheroes2::Copy( background, 0, 0, output, offset.x + 5, offset.y + 5 + i * ( IconsBar::getItemHeight() + 10 ), background.width(), background.height() );
     }
 }
 
 void Interface::CastleIcons::RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current )
 {
-    if ( item && show ) {
-        RedrawCastleIcon( *item, ox + 5, oy + 5 );
+    if ( item && _show ) {
+        redrawCastleIcon( *item, ox + 5, oy + 5 );
 
-        if ( current )
-            fheroes2::Blit( marker, fheroes2::Display::instance(), ox, oy );
+        if ( current ) {
+            fheroes2::Blit( _marker, fheroes2::Display::instance(), ox, oy );
+        }
     }
 }
 
 void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
+    redrawBackground( fheroes2::Display::instance(), pos, _show ? _size() : 0 );
 }
 
 void Interface::CastleIcons::ActionCurrentUp()
@@ -156,19 +144,21 @@ void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
     }
 }
 
-void Interface::CastleIcons::SetShow( bool f )
+void Interface::CastleIcons::showIcons( const bool show )
 {
-    IconsBar::SetShow( f );
+    IconsBar::setShow( show );
 
-    if ( IconsBar::IsVisible() ) {
-        if ( f )
+    if ( IconsBar::isVisible() ) {
+        if ( show ) {
             GetScrollbar().show();
-        else
+        }
+        else {
             GetScrollbar().hide();
+        }
     }
 }
 
-void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
+void Interface::CastleIcons::setPos( const int32_t px, const int32_t py )
 {
     Castle * selectedCastle = isSelected() ? GetCurrent() : nullptr;
 
@@ -176,20 +166,20 @@ void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
-    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * iconsCount - 38 } );
+    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * _iconsCount - 38 } );
 
     VecCastles & castles = world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * iconsCount - 38, iconsCount, static_cast<int32_t>( castles.size() ),
+        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _iconsCount - 38, _iconsCount, static_cast<int32_t>( castles.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
     SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
-    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + iconsCount * iconsCursorHeight - 15 } );
-    SetAreaMaxItems( iconsCount );
-    SetAreaItems( { px, py, iconsCursorWidth, iconsCount * iconsCursorHeight } );
+    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + _iconsCount * iconsCursorHeight - 15 } );
+    SetAreaMaxItems( _iconsCount );
+    SetAreaItems( { px, py, iconsCursorWidth, _iconsCount * iconsCursorHeight } );
     DisableHotkeys( true );
 
     SetListContent( castles );
@@ -202,17 +192,18 @@ void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 
 void Interface::HeroesIcons::RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current )
 {
-    if ( item && show ) {
-        RedrawHeroesIcon( *item, ox + 5, oy + 5 );
+    if ( item && _show ) {
+        redrawHeroesIcon( *item, ox + 5, oy + 5 );
 
-        if ( current )
-            fheroes2::Blit( marker, fheroes2::Display::instance(), ox, oy );
+        if ( current ) {
+            fheroes2::Blit( _marker, fheroes2::Display::instance(), ox, oy );
+        }
     }
 }
 
 void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
+    redrawBackground( fheroes2::Display::instance(), pos, _show ? _size() : 0 );
 }
 
 void Interface::HeroesIcons::ActionCurrentUp()
@@ -249,19 +240,21 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
     }
 }
 
-void Interface::HeroesIcons::SetShow( bool f )
+void Interface::HeroesIcons::showIcons( const bool show )
 {
-    IconsBar::SetShow( f );
+    IconsBar::setShow( show );
 
-    if ( IconsBar::IsVisible() ) {
-        if ( f )
+    if ( IconsBar::isVisible() ) {
+        if ( show ) {
             GetScrollbar().show();
-        else
+        }
+        else {
             GetScrollbar().hide();
+        }
     }
 }
 
-void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
+void Interface::HeroesIcons::setPos( const int32_t px, const int32_t py )
 {
     Heroes * selectedHero = isSelected() ? GetCurrent() : nullptr;
 
@@ -269,20 +262,20 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
-    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * iconsCount - 38 } );
+    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * _iconsCount - 38 } );
 
     VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * iconsCount - 38, iconsCount, static_cast<int32_t>( heroes.size() ),
+        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _iconsCount - 38, _iconsCount, static_cast<int32_t>( heroes.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
     SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
-    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + iconsCount * iconsCursorHeight - 15 } );
-    SetAreaMaxItems( iconsCount );
-    SetAreaItems( { px, py, iconsCursorWidth, iconsCount * iconsCursorHeight } );
+    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + _iconsCount * iconsCursorHeight - 15 } );
+    SetAreaMaxItems( _iconsCount );
+    SetAreaItems( { px, py, iconsCursorWidth, _iconsCount * iconsCursorHeight } );
     DisableHotkeys( true );
 
     SetListContent( heroes );
@@ -293,16 +286,14 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
     }
 }
 
-Interface::IconsPanel::IconsPanel( AdventureMap & basic )
+Interface::IconsPanel::IconsPanel( AdventureMap & interface )
     : BorderWindow( { 0, 0, 144, 128 } )
-    , interface( basic )
-    , castleIcons( 4, sfMarker )
-    , heroesIcons( 4, sfMarker )
+    , _interface( interface )
 {
-    sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
-    sfMarker.reset();
+    _sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
+    _sfMarker.reset();
 
-    fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
+    fheroes2::DrawBorder( _sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
 void Interface::IconsPanel::SavePosition()
@@ -313,33 +304,28 @@ void Interface::IconsPanel::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::IconsPanel::SetRedraw( const icons_t type ) const
+void Interface::IconsPanel::setRedraw( const HeroesCastlesIcons type ) const
 {
-    if ( !IconsBar::IsVisible() ) {
+    if ( !IconsBar::isVisible() ) {
         return;
     }
 
     switch ( type ) {
     case ICON_HEROES:
-        interface.setRedraw( REDRAW_HEROES );
+        _interface.setRedraw( REDRAW_HEROES );
         break;
     case ICON_CASTLES:
-        interface.setRedraw( REDRAW_CASTLES );
+        _interface.setRedraw( REDRAW_CASTLES );
         break;
     case ICON_ANY:
-        interface.setRedraw( REDRAW_ICONS );
+        _interface.setRedraw( REDRAW_ICONS );
         break;
     default:
         break;
     }
 }
 
-void Interface::IconsPanel::SetRedraw() const
-{
-    SetRedraw( ICON_ANY );
-}
-
-void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
+void Interface::IconsPanel::SetPos( int32_t x, int32_t y )
 {
     int32_t iconsCount = 0;
 
@@ -351,20 +337,20 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 
-    BorderWindow::SetPosition( ox, oy, 144, iconsCount * iconsCursorHeight );
+    BorderWindow::SetPosition( x, y, 144, iconsCount * iconsCursorHeight );
 
-    heroesIcons.SetIconsCount( iconsCount );
-    castleIcons.SetIconsCount( iconsCount );
+    _heroesIcons.setIconsCount( iconsCount );
+    _castleIcons.setIconsCount( iconsCount );
 
     const fheroes2::Rect & rect = GetArea();
 
-    heroesIcons.SetPos( rect.x, rect.y );
-    castleIcons.SetPos( rect.x + 72, rect.y );
+    _heroesIcons.setPos( rect.x, rect.y );
+    _castleIcons.setPos( rect.x + 72, rect.y );
 }
 
 void Interface::IconsPanel::_redraw()
 {
-    if ( !IconsBar::IsVisible() ) {
+    if ( !IconsBar::isVisible() ) {
         return;
     }
 
@@ -372,72 +358,49 @@ void Interface::IconsPanel::_redraw()
         BorderWindow::Redraw();
     }
 
-    heroesIcons.Redraw();
-    castleIcons.Redraw();
+    _heroesIcons.Redraw();
+    _castleIcons.Redraw();
 }
 
-void Interface::IconsPanel::QueueEventProcessing()
+void Interface::IconsPanel::queueEventProcessing()
 {
-    {
-        const LocalEvent & le = LocalEvent::Get();
-
-        if ( le.isMouseLeftButtonPressedInArea( GetRect() ) ) {
-            _isMouseCaptured = true;
-        }
-        else {
-            _isMouseCaptured = _isMouseCaptured && le.isMouseLeftButtonPressed();
-        }
-    }
+    captureMouse();
 
     // Move the window border
     if ( Settings::Get().ShowIcons() && BorderWindow::QueueEventProcessing() ) {
-        SetRedraw();
+        setRedraw();
     }
-    else if ( heroesIcons.QueueEventProcessing() ) {
-        if ( heroesIcons.isSelected() ) {
-            castleIcons.Unselect();
+    else {
+        if ( _heroesIcons.QueueEventProcessing() ) {
+            if ( _heroesIcons.isSelected() ) {
+                _castleIcons.Unselect();
+            }
+
+            setRedraw();
         }
+        else if ( _castleIcons.QueueEventProcessing() ) {
+            if ( _castleIcons.isSelected() ) {
+                _heroesIcons.Unselect();
+            }
 
-        SetRedraw();
-    }
-    else if ( castleIcons.QueueEventProcessing() ) {
-        if ( castleIcons.isSelected() ) {
-            heroesIcons.Unselect();
+            setRedraw();
         }
-
-        SetRedraw();
     }
 }
 
-bool Interface::IconsPanel::isMouseCaptured()
+void Interface::IconsPanel::select( Heroes * const hero )
 {
-    if ( !_isMouseCaptured ) {
-        return false;
-    }
-
-    const LocalEvent & le = LocalEvent::Get();
-
-    _isMouseCaptured = le.isMouseLeftButtonPressed();
-
-    // Even if the mouse has just been released from the capture, consider it still captured at this
-    // stage to ensure that events directly related to the release (for instance, releasing the mouse
-    // button) will not be handled by other UI elements.
-    return true;
+    _castleIcons.Unselect();
+    _heroesIcons.SetCurrent( hero );
 }
 
-void Interface::IconsPanel::Select( Heroes * const hr )
+void Interface::IconsPanel::select( Castle * const castle )
 {
-    castleIcons.Unselect();
-    heroesIcons.SetCurrent( hr );
+    _heroesIcons.Unselect();
+    _castleIcons.SetCurrent( castle );
 }
 
-void Interface::IconsPanel::Select( Castle * const cs )
-{
-    heroesIcons.Unselect();
-    castleIcons.SetCurrent( cs );
-}
-
-void Interface::IconsPanel::ResetIcons( const icons_t type )
+void Interface::IconsPanel::resetIcons( const HeroesCastlesIcons type )
 {
     Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
@@ -447,66 +410,66 @@ void Interface::IconsPanel::ResetIcons( const icons_t type )
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
 
         if ( type & ICON_HEROES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * heroesIcons.getIconsCount() - 38,
-                                                                                       heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _heroesIcons.getIconsCount() - 38,
+                                                                                       _heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
                                                                                        { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-            heroesIcons.setScrollBarImage( scrollbarSlider );
-            heroesIcons.SetListContent( kingdom.GetHeroes() );
+            _heroesIcons.setScrollBarImage( scrollbarSlider );
+            _heroesIcons.SetListContent( kingdom.GetHeroes() );
 
             // SetListContent() selects the first item (hero) in the list. We reset it by unselecting.
-            heroesIcons.Unselect();
+            _heroesIcons.Unselect();
         }
 
         if ( type & ICON_CASTLES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * castleIcons.getIconsCount() - 38,
-                                                                                       castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _castleIcons.getIconsCount() - 38,
+                                                                                       _castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
                                                                                        { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-            castleIcons.setScrollBarImage( scrollbarSlider );
-            castleIcons.SetListContent( kingdom.GetCastles() );
+            _castleIcons.setScrollBarImage( scrollbarSlider );
+            _castleIcons.SetListContent( kingdom.GetCastles() );
 
             // SetListContent() selects the first item (castle/town) in the list. We reset it by unselecting.
-            castleIcons.Unselect();
+            _castleIcons.Unselect();
         }
     }
 }
 
-void Interface::IconsPanel::HideIcons( const icons_t type )
+void Interface::IconsPanel::hideIcons( const HeroesCastlesIcons type )
 {
     if ( type & ICON_HEROES ) {
-        heroesIcons.SetShow( false );
+        _heroesIcons.showIcons( false );
     }
     if ( type & ICON_CASTLES ) {
-        castleIcons.SetShow( false );
+        _castleIcons.showIcons( false );
     }
 }
 
-void Interface::IconsPanel::ShowIcons( const icons_t type )
+void Interface::IconsPanel::showIcons( const HeroesCastlesIcons type )
 {
     if ( type & ICON_HEROES ) {
-        heroesIcons.SetShow( true );
+        _heroesIcons.showIcons( true );
     }
     if ( type & ICON_CASTLES ) {
-        castleIcons.SetShow( true );
+        _castleIcons.showIcons( true );
     }
 }
 
-void Interface::IconsPanel::_redrawIcons( const icons_t type )
+void Interface::IconsPanel::_redrawIcons( const HeroesCastlesIcons type )
 {
     if ( type & ICON_HEROES ) {
-        heroesIcons.Redraw();
+        _heroesIcons.Redraw();
     }
     if ( type & ICON_CASTLES ) {
-        castleIcons.Redraw();
+        _castleIcons.Redraw();
     }
 }
 
-bool Interface::IconsPanel::IsSelected( const icons_t type ) const
+bool Interface::IconsPanel::isSelected( const HeroesCastlesIcons type ) const
 {
     if ( type & ICON_HEROES ) {
-        return heroesIcons.isSelected();
+        return _heroesIcons.isSelected();
     }
     if ( type & ICON_CASTLES ) {
-        return castleIcons.isSelected();
+        return _castleIcons.isSelected();
     }
 
     return false;

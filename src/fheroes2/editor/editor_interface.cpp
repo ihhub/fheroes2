@@ -747,8 +747,6 @@ namespace Interface
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;
 
-        bool isCursorOverGamearea = false;
-
         const std::vector<Game::DelayType> delayTypes = { Game::MAPS_DELAY };
 
         LocalEvent & le = LocalEvent::Get();
@@ -758,14 +756,15 @@ namespace Interface
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
+
                     break;
                 }
+
                 continue;
             }
 
-            // Process hot-keys.
+            // Hotkeys
             if ( le.isAnyKeyPressed() ) {
-                // adventure map control
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();
                 }
@@ -787,7 +786,6 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
-                // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     _gameArea.SetScroll( SCROLL_LEFT );
                 }
@@ -829,75 +827,96 @@ namespace Interface
                 break;
             }
 
-            if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
-                int scrollPosition = SCROLL_NONE;
+            bool isCursorOverGameArea = false;
 
-                if ( isScrollLeft( le.getMouseCursorPos() ) )
-                    scrollPosition |= SCROLL_LEFT;
-                else if ( isScrollRight( le.getMouseCursorPos() ) )
-                    scrollPosition |= SCROLL_RIGHT;
-                if ( isScrollTop( le.getMouseCursorPos() ) )
-                    scrollPosition |= SCROLL_TOP;
-                else if ( isScrollBottom( le.getMouseCursorPos() ) )
-                    scrollPosition |= SCROLL_BOTTOM;
+            // Mouse is captured by radar
+            if ( _radar.isMouseCaptured() ) {
+                cursor.SetThemes( Cursor::POINTER );
 
-                if ( scrollPosition != SCROLL_NONE ) {
-                    if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && ( fastScrollRepeatCount < fastScrollStartThreshold ) ) {
-                        ++fastScrollRepeatCount;
+                _radar.QueueEventProcessing();
+            }
+            // Mouse is captured by the game area for scrolling by dragging
+            else if ( _gameArea.isDragScroll() ) {
+                _gameArea.QueueEventProcessing();
+            }
+            else {
+                if ( fheroes2::cursor().isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                    int scrollDirection = SCROLL_NONE;
+
+                    if ( isScrollLeft( le.getMouseCursorPos() ) ) {
+                        scrollDirection |= SCROLL_LEFT;
+                    }
+                    else if ( isScrollRight( le.getMouseCursorPos() ) ) {
+                        scrollDirection |= SCROLL_RIGHT;
+                    }
+                    if ( isScrollTop( le.getMouseCursorPos() ) ) {
+                        scrollDirection |= SCROLL_TOP;
+                    }
+                    else if ( isScrollBottom( le.getMouseCursorPos() ) ) {
+                        scrollDirection |= SCROLL_BOTTOM;
                     }
 
-                    if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
-                        _gameArea.SetScroll( scrollPosition );
+                    if ( scrollDirection != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
+                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
+                            ++fastScrollRepeatCount;
+                        }
+
+                        if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
+                            _gameArea.SetScroll( scrollDirection );
+                        }
+                    }
+                    else {
+                        fastScrollRepeatCount = 0;
                     }
                 }
                 else {
                     fastScrollRepeatCount = 0;
                 }
-            }
-            else {
-                fastScrollRepeatCount = 0;
-            }
 
-            isCursorOverGamearea = false;
-
-            // Cursor is over the radar.
-            if ( le.isMouseCursorPosInArea( _radar.GetArea() ) ) {
-                cursor.SetThemes( Cursor::POINTER );
-
-                // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
-                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushArea().width > 0 || _areaSelectionStartTileId == -1 ) ) {
-                    _radar.QueueEventProcessing();
+                // Re-enable fast scrolling if the cursor movement indicates the need
+                if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.getMouseCursorPos() ) ) {
+                    _gameArea.setFastScrollStatus( true );
                 }
-            }
-            else if ( !_gameArea.NeedScroll() ) {
-                if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
-                    // Cursor is over the game area.
-                    isCursorOverGamearea = true;
-                }
-                else {
-                    // Cursor is not over the game area.
+
+                // Cursor is over the radar
+                if ( le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
                     cursor.SetThemes( Cursor::POINTER );
 
-                    _gameArea.ResetCursorPosition();
+                    // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
+                    if ( _editorPanel.getBrushArea().width > 0 || _areaSelectionStartTileId == -1 ) {
+                        _radar.QueueEventProcessing();
+                    }
+                }
+                // Cursor is over the editor panel
+                else if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
+                    // At lower resolutions, the Editor panel has no border at the bottom. If the mouse cursor is over
+                    // this bottom section, then the game area may scroll. In this case, the mouse cursor shouldn't be
+                    // changed, but the editor panel should still handle events.
+                    if ( !_gameArea.NeedScroll() ) {
+                        cursor.SetThemes( Cursor::POINTER );
+                    }
 
-                    if ( le.isMouseCursorPosInArea( _editorPanel.getRect() ) ) {
-                        // Cursor is over the buttons area.
-                        res = _editorPanel.queueEventProcessing();
+                    res = _editorPanel.queueEventProcessing();
+                }
+                else if ( !_gameArea.NeedScroll() ) {
+                    // Cursor is over the game area
+                    if ( le.isMouseCursorPosInArea( _gameArea.GetROI() ) ) {
+                        _gameArea.QueueEventProcessing();
+
+                        isCursorOverGameArea = true;
+                    }
+                    // Cursor is somewhere else
+                    else {
+                        cursor.SetThemes( Cursor::POINTER );
                     }
                 }
             }
 
-            // gamearea
-            if ( !_gameArea.NeedScroll() ) {
-                if ( !_radar.isDragRadar() ) {
-                    _gameArea.QueueEventProcessing( isCursorOverGamearea );
-                }
-                else if ( le.isMouseLeftButtonReleased() ) {
-                    _radar.QueueEventProcessing();
-                }
+            if ( res != fheroes2::GameMode::CANCEL ) {
+                break;
             }
 
-            if ( isCursorOverGamearea ) {
+            if ( isCursorOverGameArea ) {
                 // Get relative tile position under the cursor. This position can be outside the map size.
                 const fheroes2::Point posInGameArea = _gameArea.getInternalPosition( le.getMouseCursorPos() );
                 const fheroes2::Point tilePos{ posInGameArea.x / fheroes2::tileWidthPx, posInGameArea.y / fheroes2::tileWidthPx };
@@ -928,7 +947,7 @@ namespace Interface
                     }
                 }
 
-                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && !_radar.isDragRadar() && le.isMouseLeftButtonPressed() ) {
+                if ( _areaSelectionStartTileId == -1 && isValidTile && isBrushEmpty && le.isMouseLeftButtonPressed() ) {
                     _areaSelectionStartTileId = tilePos.y * world.w() + tilePos.x;
                     _redraw |= REDRAW_GAMEAREA;
                 }
@@ -939,7 +958,7 @@ namespace Interface
             }
 
             if ( _areaSelectionStartTileId > -1 && le.isMouseLeftButtonReleased() ) {
-                if ( isCursorOverGamearea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
+                if ( isCursorOverGameArea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -976,39 +995,45 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
 
-            // fast scroll
-            if ( ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && _gameArea.NeedScroll() ) || _gameArea.needDragScrollRedraw() ) {
-                if ( ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
-                       || isScrollBottom( le.getMouseCursorPos() ) )
-                     && !_gameArea.isDragScroll() ) {
+            // Scrolling the game area
+            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
+                assert( !_gameArea.isDragScroll() );
+
+                if ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
+                     || isScrollBottom( le.getMouseCursorPos() ) ) {
                     cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
 
                 _gameArea.Scroll();
 
-                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
+                setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
+            }
+            else if ( _gameArea.needDragScrollRedraw() ) {
+                setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
 
-            if ( res == fheroes2::GameMode::CANCEL ) {
-                // map objects animation
-                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    if ( conf.isEditorAnimationEnabled() ) {
-                        Game::updateAdventureMapAnimationIndex();
-                    }
-                    _redraw |= REDRAW_GAMEAREA;
+            assert( res == fheroes2::GameMode::CANCEL );
+
+            // Map objects animation
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                if ( conf.isEditorAnimationEnabled() ) {
+                    Game::updateAdventureMapAnimationIndex();
                 }
 
-                if ( needRedraw() ) {
-                    if ( conf.isEditorPassabilityEnabled() ) {
-                        _redraw |= REDRAW_PASSABILITIES;
-                    }
-                    redraw( 0 );
+                _redraw |= REDRAW_GAMEAREA;
+            }
 
-                    // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( getRedrawMask() == 0 );
-
-                    validateFadeInAndRender();
+            if ( needRedraw() ) {
+                if ( conf.isEditorPassabilityEnabled() ) {
+                    _redraw |= REDRAW_PASSABILITIES;
                 }
+
+                redraw( 0 );
+
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( getRedrawMask() == 0 );
+
+                validateFadeInAndRender();
             }
         }
 

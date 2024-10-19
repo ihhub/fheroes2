@@ -44,23 +44,23 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow final : public BorderWindow
+    class StatusPanel final : public BorderWindow
     {
     public:
-        explicit StatusWindow( BaseInterface & interface )
+        explicit StatusPanel( BaseInterface & interface )
             : BorderWindow( { 0, 0, 144, 72 } )
             , _interface( interface )
         {
             // Do nothing.
         }
 
-        StatusWindow( const StatusWindow & ) = delete;
+        StatusPanel( const StatusPanel & ) = delete;
 
-        ~StatusWindow() override = default;
+        ~StatusPanel() override = default;
 
-        StatusWindow & operator=( const StatusWindow & ) = delete;
+        StatusPanel & operator=( const StatusPanel & ) = delete;
 
-        void SetPos( const int32_t ox, const int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
         void setRedraw() const;
 
