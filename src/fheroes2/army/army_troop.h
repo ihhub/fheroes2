@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMYTROOP_H
-#define H2ARMYTROOP_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -118,5 +117,3 @@ public:
 private:
     const Army * _army;
 };
-
-#endif

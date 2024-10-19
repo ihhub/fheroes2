@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMY_H
-#define H2ARMY_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -269,5 +268,3 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-#endif
