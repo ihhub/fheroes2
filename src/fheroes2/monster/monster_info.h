@@ -63,7 +63,9 @@ namespace fheroes2
         AREA_SHOT,
         MORAL_DECREMENT,
         ENEMY_HALVING,
-        SOUL_EATER
+        SOUL_EATER,
+        DOUBLE_DAMAGE_TO_AIR,
+        DOUBLE_DAMAGE_TO_EARTH
     };
 
     enum class MonsterWeaknessType : int
@@ -71,9 +73,11 @@ namespace fheroes2
         // Basic abilities.
         NONE,
         // Advanced abilities.
-        EXTRA_DAMAGE_FROM_FIRE_SPELL,
-        EXTRA_DAMAGE_FROM_COLD_SPELL,
-        EXTRA_DAMAGE_FROM_CERTAIN_SPELL
+        EXTRA_DAMAGE_FROM_FIRE,
+        EXTRA_DAMAGE_FROM_COLD,
+        EXTRA_DAMAGE_FROM_CERTAIN_SPELL,
+        EXTRA_DAMAGE_FROM_AIR,
+        EXTRA_DAMAGE_FROM_EARTH
     };
 
     struct MonsterAbility
@@ -82,13 +86,17 @@ namespace fheroes2
             : type( type_ )
             , percentage( 0 )
             , value( 0 )
-        {}
+        {
+            // Do nothing.
+        }
 
         MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         bool operator==( const MonsterAbility & another ) const
         {
@@ -108,17 +116,26 @@ namespace fheroes2
             : type( type_ )
             , percentage( 0 )
             , value( 0 )
-        {}
+        {
+            // Do nothing.
+        }
 
         explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         bool operator<( const MonsterWeakness & another ) const
         {
             return type < another.type || ( type == another.type && value < another.value );
+        }
+
+        bool operator==( const MonsterWeakness & another ) const
+        {
+            return type == another.type;
         }
 
         MonsterWeaknessType type;
@@ -177,7 +194,9 @@ namespace fheroes2
             , sounds( sounds_ )
             , battleStats( battleStats_ )
             , generalStats( generalStats_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         int icnId;
 
@@ -200,5 +219,8 @@ namespace fheroes2
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
+
+    bool isAbilityPresent( const std::vector<MonsterAbility> & abilities, const MonsterAbilityType abilityType );
+    bool isWeaknessPresent( const std::vector<MonsterWeakness> & weaknesses, const MonsterWeaknessType weaknessType );
 }
 #endif
