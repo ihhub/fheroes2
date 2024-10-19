@@ -107,7 +107,8 @@ namespace Maps
 
     bool doesTileContainObjectType( const Tiles & tile, const MP2::MapObjectType type );
 
-    const TilesAddon * getObjectPartByType( const Tiles & tile, const MP2::MapObjectType type );
+    // Only works for action type of objects (ignoring top layer objects parts).
+    const TilesAddon * getObjectPartByActionType( const Tiles & tile, const MP2::MapObjectType type );
 
     Monster getMonsterFromTile( const Tiles & tile );
 

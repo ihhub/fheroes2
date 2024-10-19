@@ -791,7 +791,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
-    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByType( entranceTile, MP2::OBJ_STONE_LITHS );
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
     if ( entranceObjectPart == nullptr ) {
         assert( 0 );
         return result;
@@ -834,7 +834,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByType( entranceTile, MP2::OBJ_WHIRLPOOL );
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
     if ( entranceObjectPart == nullptr ) {
         return result;
     }
@@ -845,7 +845,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
             continue;
         }
 
-        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
+        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
         if ( destinationObjectPart == nullptr ) {
             continue;
         }

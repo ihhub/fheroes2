@@ -489,7 +489,7 @@ std::vector<std::pair<int32_t, const Maps::TilesAddon *>> Maps::getObjectParts( 
     std::vector<std::pair<int32_t, const TilesAddon *>> result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        const Maps::TilesAddon * objectPart = getObjectPartByType( world.GetTiles( idx ), objectType );
+        const Maps::TilesAddon * objectPart = getObjectPartByActionType( world.GetTiles( idx ), objectType );
         if ( objectPart != nullptr ) {
             result.emplace_back( idx, objectPart );
         }
