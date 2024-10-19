@@ -23,6 +23,8 @@
 
 #include "army_troop.h"
 
+#include <cassert>
+
 #include "army.h"
 #include "color.h"
 #include "heroes_base.h"

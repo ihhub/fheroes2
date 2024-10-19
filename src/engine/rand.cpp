@@ -23,10 +23,7 @@
 
 #include "rand.h"
 
-#include <cstdlib>
 #include <numeric>
-
-#include "logging.h"
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
