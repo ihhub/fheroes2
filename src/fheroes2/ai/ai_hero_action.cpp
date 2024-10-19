@@ -1730,7 +1730,7 @@ namespace
 
             const auto eyeMagiIndexes = Maps::getObjectParts( MP2::OBJ_EYE_OF_MAGI );
             const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
-            for ( const auto& [index, objectPart] : eyeMagiIndexes ) {
+            for ( const auto & [index, objectPart] : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
             }
         }

@@ -3344,7 +3344,7 @@ namespace
                 bool skipAnimation = false;
                 fheroes2::Rect radarRenderArea;
 
-                for ( const auto& [eyeIndex, objectPart] : eyeMagiIndexes ) {
+                for ( const auto & [eyeIndex, objectPart] : eyeMagiIndexes ) {
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );

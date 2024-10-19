@@ -1346,7 +1346,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const auto& [index, objectPart] : Maps::getObjectParts( MP2::OBJ_STONE_LITHS ) ) {
+    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_STONE_LITHS ) ) {
         assert( objectPart != nullptr );
         _allTeleports[objectPart->_imageIndex].push_back( index );
     }
@@ -1354,7 +1354,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const auto& [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
+    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
         assert( objectPart != nullptr );
 
         _allWhirlpools[objectPart->_imageIndex].push_back( index );

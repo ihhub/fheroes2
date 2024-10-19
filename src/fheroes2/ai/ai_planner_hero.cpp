@@ -1540,7 +1540,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         const int heroColor = hero.GetColor();
         const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
-        for ( const auto& [eyeIndex, objectPart] : eyeMagiIndexes ) {
+        for ( const auto & [eyeIndex, objectPart] : eyeMagiIndexes ) {
             fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
         }
 
