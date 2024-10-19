@@ -73,18 +73,18 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
         return 0;
     }
 
-    const uint32_t sum = std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const ValuePercent & vp ) { return total + vp.second; } );
+    const uint32_t sum = std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const ValueWeight & vw ) { return total + vw.second; } );
     assert( sum > 0 );
 
     uint32_t rand = randomFunc( sum - 1 );
     assert( rand < sum );
 
-    for ( const ValuePercent & vp : *this ) {
-        if ( rand < vp.second ) {
-            return vp.first;
+    for ( const ValueWeight & vw : *this ) {
+        if ( rand < vw.second ) {
+            return vw.first;
         }
 
-        rand -= vp.second;
+        rand -= vw.second;
     }
 
     assert( 0 );

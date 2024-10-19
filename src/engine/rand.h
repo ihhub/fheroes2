@@ -85,9 +85,9 @@ namespace Rand
         return vec[id];
     }
 
-    using ValuePercent = std::pair<int32_t, uint32_t>;
+    using ValueWeight = std::pair<int32_t, uint32_t>;
 
-    class Queue : private std::vector<ValuePercent>
+    class Queue : private std::vector<ValueWeight>
     {
     public:
         explicit Queue( uint32_t size = 0 )
