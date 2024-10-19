@@ -91,7 +91,7 @@ namespace Maps
     // This function always ignores heroes.
     bool doesObjectExistOnMap( const MP2::MapObjectType objectType );
 
-    // This function always ignores heroes.
+    // This is a very slow function by performance. Use it only while loading a map.
     std::vector<std::pair<int32_t, const TilesAddon *>> getObjectParts( const MP2::MapObjectType objectType );
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );

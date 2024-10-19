@@ -3332,7 +3332,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const auto eyeMagiIndexes = Maps::getObjectParts( MP2::OBJ_EYE_OF_MAGI );
+            const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
             if ( !eyeMagiIndexes.empty() ) {
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -3344,7 +3344,7 @@ namespace
                 bool skipAnimation = false;
                 fheroes2::Rect radarRenderArea;
 
-                for ( const auto & [eyeIndex, objectPart] : eyeMagiIndexes ) {
+                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
