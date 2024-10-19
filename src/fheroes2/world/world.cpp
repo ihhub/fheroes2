@@ -846,8 +846,6 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return nullptr;
     };
 
-    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
     const Maps::TilesAddon * entranceObjectPart = getWhirlPoolObjectPart( entranceTile );
     if ( entranceObjectPart == nullptr ) {
         return result;
