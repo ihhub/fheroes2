@@ -662,8 +662,11 @@ namespace
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
-        hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+
         destinationTile.resetObjectSprite();
+        hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
+        destinationTile.SetObject( MP2::OBJ_HERO );
+        
         hero.SetShipMaster( true );
 
         hero.ShowPath( true );
