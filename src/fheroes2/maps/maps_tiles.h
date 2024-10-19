@@ -203,8 +203,6 @@ namespace Maps
         {
             _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
             _mainAddon._imageIndex = 255;
-
-            updateObjectType();
         }
 
         uint32_t GetRegion() const

@@ -664,6 +664,7 @@ namespace
         hero.setDirection( boatDirection );
 
         destinationTile.resetObjectSprite();
+        destinationTile.updateObjectType();
         hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
         destinationTile.SetObject( MP2::OBJ_HERO );
 
