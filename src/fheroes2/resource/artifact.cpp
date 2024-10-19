@@ -1022,11 +1022,7 @@ void BagArtifacts::exchangeArtifacts( Heroes & taker, Heroes & giver )
         const ptrdiff_t emptySlotsCount = std::count_if( giverBag.begin(), giverBag.end(), []( const Artifact & artifact ) { return !artifact.isValid(); } );
         assert( emptySlotsCount >= 0 );
 
-        if ( combined.size() > static_cast<size_t>( emptySlotsCount ) ) {
-            if ( !takerBag.PushArtifact( combined.back() ) ) {
-                assert( 0 );
-            }
-
+        if ( combined.size() > static_cast<size_t>( emptySlotsCount ) && takerBag.PushArtifact( combined.back() ) ) {
             combined.pop_back();
         }
     }
