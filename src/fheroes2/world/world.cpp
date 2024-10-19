@@ -1345,14 +1345,23 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_STONE_LITHS ) ) {
-        assert( objectPart != nullptr );
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
+        const auto * objectPart = Maps::getObjectPartByActionType( GetTiles( index ), MP2::OBJ_STONE_LITHS );
+        if ( objectPart == nullptr ) {
+            // It looks like it is a broken map. No way the tile doesn't have this object.
+            assert( 0 );
+            continue;
+        }
+
         _allTeleports[objectPart->_imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
+    // Whirlpools are unique objects because they can have boats on them which are leftovers from heroes
+    // which disembarked on land. Tiles with boats and whirlpools are marked as Boat objects.
+    // So, searching by type is not accurate as these tiles will be skipped.
     for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
         assert( objectPart != nullptr );
 
