@@ -44,6 +44,7 @@
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles_helper.h"
@@ -829,10 +830,35 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     }
 
     // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
+    // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
+    const Maps::TilesAddon * objectPart = nullptr;
+    if ( Maps::getObjectTypeByIcn( entranceTile.getMainObjectPart()._objectIcnType, entranceTile.getMainObjectPart()._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
+        objectPart = &entranceTile.getMainObjectPart();
+    }
+    else {
+        bool objectFound = false;
+
+        for ( const auto & part : entranceTile.getBottomLayerAddons() ) {
+            if ( Maps::getObjectTypeByIcn( part._objectIcnType, part._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
+                objectPart = &part;
+                objectFound = true;
+                break;
+            }
+        }
+
+        if ( !objectFound ) {
+            // This tile is marked incorrectly!
+            assert( 0 );
+            return result;
+        }
+    }
+
+    assert( objectPart != nullptr );
+
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( objectPart->_imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+        if ( whirlpoolTile.getMainObjectPart()._uid == objectPart->_uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
             continue;
         }
 
