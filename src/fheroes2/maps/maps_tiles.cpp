@@ -540,7 +540,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             //   - if the object exists then we do nothing.
             //   - if the object doesn't exist then we have to update the tile object type.
             //
-            // The last case can happen only when a hero boards a boat which is under another sea object, like whirlpool.
+            // The last case can happen only when a hero boards a boat which is above another sea object, like whirlpool.
             if ( ( type == MP2::OBJ_NONE ) || !doesTileContainObjectType( *this, type ) ) {
                 updateObjectType();
             }
