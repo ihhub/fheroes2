@@ -1,4 +1,5 @@
 version 1.1.3 (20 October 2024)
+- fix French small font i with circumflex
 - add Czech Virtual Keyboard support
 - fix rendering of overlapped UI elements
 - shorten map title when too long in several places
