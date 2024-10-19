@@ -3308,7 +3308,7 @@ namespace
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
 
                 // Update the kingdom heroes list including the scrollbar.
-                Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+                Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_HEROES );
             }
         }
         else {

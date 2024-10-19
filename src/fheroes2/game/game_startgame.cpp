@@ -703,7 +703,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     _radar.Build();
     _radar.SetHide( true );
-    _iconsPanel.HideIcons( ICON_ANY );
+    _iconsPanel.hideIcons( ICON_ANY );
     _statusPanel.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
@@ -785,7 +785,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        _iconsPanel.HideIcons( ICON_ANY );
+                        _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
@@ -808,8 +808,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    _iconsPanel.ShowIcons( ICON_ANY );
-                    _iconsPanel.SetRedraw();
+                    _iconsPanel.showIcons( ICON_ANY );
+                    _iconsPanel.setRedraw();
 
                     res = HumanTurn( isLoadedFromSave );
 
@@ -1200,40 +1200,31 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             // followed by the buttons panel, followed by the icons panel, followed by the radar, followed by the control panel, and under all
             // of them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
             //
-            // When the mouse is captured by any UI element, events should not be handled by other UI elements, even if the UI element that
-            // captured the mouse cannot handle them itself (for example, because it was hidden after the mouse was captured by it).
+            // When the mouse is captured by any UI element, events should not be handled by other UI elements.
             //
             // Mouse is captured by the status panel
             if ( _statusPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowStatus() ) {
-                    _statusPanel.QueueEventProcessing();
-                }
+                _statusPanel.QueueEventProcessing();
             }
             // Mouse is captured by the buttons panel
             else if ( _buttonsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowButtons() ) {
-                    res = _buttonsPanel.QueueEventProcessing();
-                }
+                res = _buttonsPanel.queueEventProcessing();
             }
             // Mouse is captured by the icons panel
             else if ( _iconsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowIcons() ) {
-                    _iconsPanel.QueueEventProcessing();
-                }
+                _iconsPanel.queueEventProcessing();
             }
             // Mouse is captured by radar
             else if ( _radar.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowRadar() ) {
-                    _radar.QueueEventProcessing();
-                }
+                _radar.QueueEventProcessing();
             }
             // Mouse is captured by the game area for scrolling by dragging
             else if ( _gameArea.isDragScroll() ) {
@@ -1288,13 +1279,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( _buttonsPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
-                    res = _buttonsPanel.QueueEventProcessing();
+                    res = _buttonsPanel.queueEventProcessing();
                 }
                 // Cursor is over the icons panel
                 else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( _iconsPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
-                    _iconsPanel.QueueEventProcessing();
+                    _iconsPanel.queueEventProcessing();
                 }
                 // Cursor is over the radar
                 else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {

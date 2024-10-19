@@ -345,6 +345,7 @@ namespace fheroes2
         if ( isVisible() ) {
             Display & output = Display::instance();
             draw( output );
+
             output.render( area() );
         }
         return true;
@@ -363,6 +364,7 @@ namespace fheroes2
         if ( isVisible() ) {
             Display & output = Display::instance();
             draw( output );
+
             output.render( area() );
         }
         return true;
