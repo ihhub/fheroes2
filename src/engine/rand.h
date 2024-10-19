@@ -90,15 +90,37 @@ namespace Rand
     class Queue : private std::vector<ValuePercent>
     {
     public:
-        explicit Queue( uint32_t size = 0 );
+        explicit Queue( uint32_t size = 0 )
+        {
+            reserve( size );
+        }
 
-        void Push( int32_t value, uint32_t percent );
-        size_t Size() const;
-        int32_t Get();
-        int32_t GetWithSeed( uint32_t seed );
+        void Push( const int32_t value, const uint32_t weight )
+        {
+            if ( weight == 0 ) {
+                return;
+            }
+
+            emplace_back( value, weight );
+        }
+
+        size_t Size() const
+        {
+            return size();
+        }
+
+        int32_t Get() const
+        {
+            return Get( []( const uint32_t max ) { return Rand::Get( 0, max ); } );
+        }
+
+        int32_t GetWithSeed( const uint32_t seed ) const
+        {
+            return Get( [seed]( const uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
+        }
 
     private:
-        int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
+        int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
 
     // Specific random generator that keeps and update its state
