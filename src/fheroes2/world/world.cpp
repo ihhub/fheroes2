@@ -829,36 +829,42 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
-    const Maps::TilesAddon * objectPart = nullptr;
-    if ( Maps::getObjectTypeByIcn( entranceTile.getMainObjectPart()._objectIcnType, entranceTile.getMainObjectPart()._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
-        objectPart = &entranceTile.getMainObjectPart();
-    }
-    else {
-        bool objectFound = false;
+    const auto getWhirlPoolObjectPart = []( const Maps::Tiles & tile ) -> const Maps::TilesAddon * {
+        // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+        // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
+        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
+            return &tile.getMainObjectPart();
+        }
 
-        for ( const auto & part : entranceTile.getBottomLayerAddons() ) {
+        for ( const auto & part : tile.getBottomLayerAddons() ) {
             if ( Maps::getObjectTypeByIcn( part._objectIcnType, part._imageIndex ) == MP2::OBJ_WHIRLPOOL ) {
-                objectPart = &part;
-                objectFound = true;
-                break;
+                return &part;
             }
         }
 
-        if ( !objectFound ) {
-            // This tile is marked incorrectly!
-            assert( 0 );
-            return result;
-        }
+        assert( 0 );
+        return nullptr;
+    };
+
+    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+    // A whirlpool can be as a main addon / object part or bottom part. This is important to get a proper object part.
+    const Maps::TilesAddon * entranceObjectPart = getWhirlPoolObjectPart( entranceTile );
+    if ( entranceObjectPart == nullptr ) {
+        return result;
     }
 
-    assert( objectPart != nullptr );
-
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( objectPart->_imageIndex ) ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+        if ( whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+            continue;
+        }
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == objectPart->_uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+        const Maps::TilesAddon * destinationObjectPart = getWhirlPoolObjectPart( whirlpoolTile );
+        if ( destinationObjectPart == nullptr ) {
+            continue;
+        }
+
+        if ( destinationObjectPart->_uid == entranceObjectPart->_uid ) {
             continue;
         }
 
