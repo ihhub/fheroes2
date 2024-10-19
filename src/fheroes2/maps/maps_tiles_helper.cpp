@@ -2734,7 +2734,7 @@ namespace Maps
         case MP2::OBJ_EVENT:
             assert( isFirstLoad );
             // Event should be invisible on Adventure Map.
-            tile.resetObjectSprite();
+            tile.resetMainObjectPart();
             resetObjectMetadata( tile );
             break;
 
