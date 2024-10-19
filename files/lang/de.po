@@ -85,7 +85,7 @@ msgid "smallerButton|OKAY"
 msgstr "OKAY"
 
 msgid "ACCEPT"
-msgstr "AKZEPTIEREN"
+msgstr "AKZEPT."
 
 msgid "DECLINE"
 msgstr "ABLEHNEN"
