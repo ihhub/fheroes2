@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_TROOP_H
-#define H2BATTLE_TROOP_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -74,8 +73,11 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
+        Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid );
+
         Unit( const Unit & ) = delete;
+
+        ~Unit() override = default;
 
         Unit & operator=( const Unit & ) = delete;
 
@@ -332,5 +334,3 @@ namespace Battle
         uint8_t customAlphaMask;
     };
 }
-
-#endif

@@ -38,13 +38,12 @@
 #include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, const TowerType type, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, uid )
+    : Unit( Troop( Monster::ARCHER, std::min( castle.CountBuildings(), 20U ) ), {}, false, uid )
     , _towerType( type )
     , _attackBonus( castle.GetLevelMageGuild() )
     , _isValid( true )
 {
-    count = std::min( count, 20U );
-    count = std::max( _towerType == TowerType::TWR_CENTER ? count : count / 2, 1U );
+    SetCount( std::max( _towerType == TowerType::TWR_CENTER ? GetCount() : GetCount() / 2, 1U ) );
 
     // Virtual archers shooting from this tower should receive bonuses
     // to their attack skill from the commanding hero (if present)
