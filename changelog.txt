@@ -1,3 +1,43 @@
+version 1.1.3 (23 October 2024)
+- fix invalid behavior and crash during interaction with whirlpools by heroes on boats
+- fix French small font i with circumflex
+- add Czech Virtual Keyboard support
+- fix rendering of overlapped UI elements
+- shorten map title when too long in several places
+- add missing popup dialogs to buttons within View World mode
+- update the Hungarian translation
+- speed up language switching I/O operations
+- update the Swedish translation
+- fix Sorceress Statue construction fade-in animation
+- fix map titles not being cleared when changing map
+- add language support for fh2m map format
+- update the Portuguese translation
+- use an original image to draw hexagons on the battlefield
+- improve Dismiss button for French and Spanish languages
+- fix event handling for dialogs in No Interface mode
+- improve error handling for I/O operations
+- increase most of object selection windows in the Editor by 50 pixels 
+- update army information after battle before showing any dialogs
+- add missing sand animation for hourglass while waiting for a turn
+- speed up AI calculations on the Adventure Map
+- improve AI decision making while using Dimension Door spell
+- ease object requirements while erasing them in the Editor
+- split long phrases into two lines for battle log
+- fix blinking arrow cursor during scrolling in Editor
+- properly show damage info pop-up dialog for 2-hex monsters during battle
+- make default knowledge value for random hero 1
+- fix inability to erase monsters on the map under certain conditions within the Editor
+- fix the triggering of invalid drag events for the game area when casting certain spells
+- fix out of mini-map mouse dragging behavior in the Editor
+- update the Russian translation
+- add vertical gradient fonts
+- add a popup dialog to the list of resolutions
+- allow to resize vertical buttons for translations
+- fix issues with non-English path detection on Windows
+- center sprites and text in adventure map treasure chest dialog
+- do not discard area selection while moving mouse out of the map in the Editor
+- fix a crash while trying to distribute an army with 1 unit
+
 version 1.1.2 (15 September 2024)
 - preserve the order of artifacts when adding the Spell Book to the artifacts bag
 - update the Portuguese translation
