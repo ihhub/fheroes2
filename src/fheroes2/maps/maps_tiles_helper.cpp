@@ -1593,6 +1593,27 @@ namespace Maps
         return 0;
     }
 
+    const TilesAddon * getObjectPartByActionType( const Tiles & tile, const MP2::MapObjectType type )
+    {
+        if ( !MP2::isOffGameActionObject( type ) ) {
+            return nullptr;
+        }
+
+        MP2::MapObjectType objectType = getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex );
+        if ( objectType == type ) {
+            return &tile.getMainObjectPart();
+        }
+
+        for ( const auto & objectPart : tile.getBottomLayerAddons() ) {
+            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            if ( objectType == type ) {
+                return &objectPart;
+            }
+        }
+
+        return nullptr;
+    }
+
     Monster getMonsterFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
@@ -2713,7 +2734,7 @@ namespace Maps
         case MP2::OBJ_EVENT:
             assert( isFirstLoad );
             // Event should be invisible on Adventure Map.
-            tile.resetObjectSprite();
+            tile.resetMainObjectPart();
             resetObjectMetadata( tile );
             break;
 

@@ -199,10 +199,9 @@ namespace Maps
         void setBoat( const int direction, const int color );
         int getBoatDirection() const;
 
-        void resetObjectSprite()
+        void resetMainObjectPart()
         {
-            _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            _mainAddon._imageIndex = 255;
+            _mainAddon = {};
         }
 
         uint32_t GetRegion() const

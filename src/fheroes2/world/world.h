@@ -418,6 +418,11 @@ public:
 
     void updatePassabilities();
 
+    const std::vector<int32_t> & getAllEyeOfMagiPositions() const
+    {
+        return _allEyeOfMagi;
+    }
+
 private:
     World() = default;
 
@@ -468,6 +473,7 @@ private:
 
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
+    std::vector<int32_t> _allEyeOfMagi;
 
     uint8_t _waterPercentage{ 0 };
     double _landRoughness{ 1.0 };
