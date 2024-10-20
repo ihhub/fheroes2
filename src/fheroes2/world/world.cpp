@@ -1373,7 +1373,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
         _allWhirlpools[objectPart->_imageIndex].push_back( index );
     }
 
-    // Cache all position of Eye of Magi objects.
+    // Cache all positions of Eye of Magi objects.
     _allEyeOfMagi.clear();
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI ) ) {
         _allEyeOfMagi.emplace_back( index );
