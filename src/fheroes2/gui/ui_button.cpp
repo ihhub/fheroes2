@@ -332,7 +332,7 @@ namespace fheroes2
         return true;
     }
 
-    bool ButtonBase::drawOnPress()
+    bool ButtonBase::drawOnPress( Display & output /* = Display::instance() */ )
     {
         if ( isPressed() ) {
             return false;
@@ -343,7 +343,6 @@ namespace fheroes2
         }
 
         if ( isVisible() ) {
-            Display & output = Display::instance();
             draw( output );
 
             output.render( area() );
@@ -351,7 +350,7 @@ namespace fheroes2
         return true;
     }
 
-    bool ButtonBase::drawOnRelease()
+    bool ButtonBase::drawOnRelease( Display & output /* = Display::instance() */ )
     {
         if ( !isPressed() ) {
             return false;
@@ -362,7 +361,6 @@ namespace fheroes2
         }
 
         if ( isVisible() ) {
-            Display & output = Display::instance();
             draw( output );
 
             output.render( area() );
