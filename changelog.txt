@@ -26,7 +26,7 @@ version 1.1.3 (20 October 2024)
 - properly show damage info pop-up dialog for 2-hex monsters during battle
 - make default knowledge value for random hero 1
 - fix inability to erase monsters on the map under certain conditions within the Editor
-- fix the triggering of invalid drag events for the game area during certain spell casting
+- fix the triggering of invalid drag events for the game area when casting certain spells
 - fix out of mini-map mouse dragging behavior in the Editor
 - update the Russian translation
 - add vertical gradient fonts
