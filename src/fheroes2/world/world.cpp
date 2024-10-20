@@ -791,8 +791,15 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Stone Liths but somehow it doesn't even have Stone Liths' object parts.
+        assert( 0 );
+        return result;
+    }
+
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -828,11 +835,27 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
-        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+        assert( 0 );
+        return result;
+    }
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->_imageIndex ) ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+        if ( whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+            continue;
+        }
+
+        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
+        if ( destinationObjectPart == nullptr ) {
+            // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+            assert( 0 );
+            continue;
+        }
+
+        if ( destinationObjectPart->_uid == entranceObjectPart->_uid ) {
             continue;
         }
 
@@ -1328,14 +1351,32 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     _allTeleports.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+        const auto * objectPart = Maps::getObjectPartByActionType( GetTiles( index ), MP2::OBJ_STONE_LITHS );
+        if ( objectPart == nullptr ) {
+            // It looks like it is a broken map. No way the tile doesn't have this object.
+            assert( 0 );
+            continue;
+        }
+
+        _allTeleports[objectPart->_imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+    // Whirlpools are unique objects because they can have boats on them which are leftovers from heroes
+    // which disembarked on land. Tiles with boats and whirlpools are marked as Boat objects.
+    // So, searching by type is not accurate as these tiles will be skipped.
+    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
+        assert( objectPart != nullptr );
+
+        _allWhirlpools[objectPart->_imageIndex].push_back( index );
+    }
+
+    // Cache all positions of Eye of Magi objects.
+    _allEyeOfMagi.clear();
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI ) ) {
+        _allEyeOfMagi.emplace_back( index );
     }
 
     resetPathfinder();
