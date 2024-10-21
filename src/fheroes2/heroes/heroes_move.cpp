@@ -30,6 +30,7 @@
 #include "audio_manager.h"
 #include "castle.h"
 #include "direction.h"
+#include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -508,6 +509,14 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
             gamearea.ShiftCenter( offset );
         }
 
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            Game::updateAdventureMapAnimationIndex();
+            if ( isControlAI() ) {
+                // Draw hourglass sand grains animation.
+                iface.setRedraw( Interface::REDRAW_STATUS );
+            }
+        }
+
         _alphaValue = std::max( 0, _alphaValue - 8 * animSpeedMultiplier );
 
         iface.redraw( Interface::REDRAW_GAMEAREA );
@@ -541,6 +550,14 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
 
         if ( offset.x != 0 || offset.y != 0 ) {
             gamearea.ShiftCenter( offset );
+        }
+
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            Game::updateAdventureMapAnimationIndex();
+            if ( isControlAI() ) {
+                // Draw hourglass sand grains animation.
+                iface.setRedraw( Interface::REDRAW_STATUS );
+            }
         }
 
         _alphaValue = std::min( _alphaValue + 8 * animSpeedMultiplier, 255 );

@@ -28,6 +28,7 @@
 #include <initializer_list>
 #include <list>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -62,6 +63,7 @@
 #include "m82.h"
 #include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -660,8 +662,17 @@ namespace
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
-        hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-        destinationTile.resetObjectSprite();
+
+        // Remove boat object information from the tile.
+        destinationTile.resetMainObjectPart();
+        // Update tile's object type if any object exists after removing the boat.
+        destinationTile.updateObjectType();
+        // Set the newly updated object type to hero to remember it.
+        // It is needed in case of moving out from this tile and restoring the tile's original object type.
+        hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
+        // Set the tile's object type as Hero.
+        destinationTile.SetObject( MP2::OBJ_HERO );
+
         hero.SetShipMaster( true );
 
         hero.ShowPath( true );
@@ -730,7 +741,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
-                I.getStatusWindow().SetResource( resource.first, resource.second );
+                I.getStatusPanel().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
@@ -2787,7 +2798,9 @@ namespace
                 elementUI.emplace_back( artifactUI.get() );
             }
 
-            fheroes2::showStandardTextMessage( {}, event_maps->message, Dialog::OK, elementUI );
+            const fheroes2::Text header( {}, fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( event_maps->message, fheroes2::FontType::normalWhite(), Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
+            fheroes2::showMessage( header, body, Dialog::OK, elementUI );
 
             // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
             // and the fullness of the bag. Is also displays appropriate text when an artifact cannot be picked up.
@@ -2939,10 +2952,10 @@ namespace
             Death
         };
 
-        const uint32_t demonSlayingExperience = 1000;
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr uint32_t demonSlayingExperience = 1000;
 
-        // Implicitly capture everything by reference because different compilers disagree on whether there is a need to capture the 'demonSlayingExperience' or not
-        const Outcome outcome = [&]() {
+        const Outcome outcome = [&hero = std::as_const( hero ), dst_index, &title]() {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
 
             const Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -3304,7 +3317,7 @@ namespace
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
 
                 // Update the kingdom heroes list including the scrollbar.
-                Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+                Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_HEROES );
             }
         }
         else {
@@ -3328,7 +3341,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
             if ( !eyeMagiIndexes.empty() ) {
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -3434,11 +3447,15 @@ namespace
                 return Outcome::Ignore;
             }
 
-            std::string question( _( "The Sphinx asks you the following riddle:\n\n'%{riddle}'\n\nYour answer?" ) );
-            StringReplace( question, "%{riddle}", riddle->riddle );
+            const auto language = Settings::Get().getCurrentMapInfo().getSupportedLanguage();
+
+            fheroes2::MultiFontText questionText;
+            questionText.add( { _( "The Sphinx asks you the following riddle:\n\n'" ), fheroes2::FontType::normalWhite() } );
+            questionText.add( { riddle->riddle, fheroes2::FontType::normalWhite(), language } );
+            questionText.add( { _( "sphinx|'\n\nYour answer?" ), fheroes2::FontType::normalWhite() } );
 
             std::string answer;
-            Dialog::inputString( question, answer, title, 0, false, false );
+            Dialog::inputString( fheroes2::Text{ title, fheroes2::FontType::normalYellow() }, questionText, answer, 0, false, {} );
 
             if ( !riddle->isCorrectAnswer( answer ) ) {
                 fheroes2::showStandardTextMessage(

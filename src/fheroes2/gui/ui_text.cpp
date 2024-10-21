@@ -22,8 +22,10 @@
 
 #include <algorithm>
 #include <cassert>
+#include <memory>
 
 #include "agg_image.h"
+#include "ui_language.h"
 
 namespace
 {
@@ -321,6 +323,16 @@ namespace
 
         return std::max( maxWidth, width );
     }
+
+    std::unique_ptr<fheroes2::LanguageSwitcher> getLanguageSwitcher( const fheroes2::TextBase & text )
+    {
+        const auto & language = text.getLanguage();
+        if ( !language ) {
+            return {};
+        }
+
+        return std::make_unique<fheroes2::LanguageSwitcher>( language.value() );
+    }
 }
 
 namespace fheroes2
@@ -352,6 +364,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
     int32_t Text::width() const
     {
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
@@ -360,6 +373,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
     int32_t Text::height() const
     {
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         return getFontHeight( _fontType.size );
     }
 
@@ -369,6 +383,7 @@ namespace fheroes2
             return 0;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -412,6 +427,7 @@ namespace fheroes2
             return 0;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -426,6 +442,7 @@ namespace fheroes2
             return 0;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         std::vector<TextLineInfo> lineInfos;
         getTextLineInfos( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, 0, _fontType, height(), lineInfos );
 
@@ -439,6 +456,7 @@ namespace fheroes2
             return;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, charHandler );
@@ -456,6 +474,7 @@ namespace fheroes2
             return;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
 
         std::vector<TextLineInfo> lineInfos;
@@ -470,11 +489,6 @@ namespace fheroes2
         }
     }
 
-    bool Text::empty() const
-    {
-        return _text.empty();
-    }
-
     void Text::fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd /* = true */ )
     {
         assert( maxWidth > 0 ); // Why is the limit less than 1?
@@ -487,6 +501,7 @@ namespace fheroes2
             return;
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         const int32_t originalTextWidth
@@ -506,11 +521,6 @@ namespace fheroes2
 
         _text.resize( maxCharacterCount );
         _text += truncatedEnding;
-    }
-
-    std::string Text::text() const
-    {
-        return _text;
     }
 
     MultiFontText::~MultiFontText() = default;
@@ -549,6 +559,7 @@ namespace fheroes2
 
         std::vector<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
+            const auto langugeSwitcher = getLanguageSwitcher( text );
             getTextLineInfos( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth,
                               lineInfos.empty() ? 0 : lineInfos.back().lineWidth, text._fontType, maxFontHeight, lineInfos );
         }
@@ -567,6 +578,7 @@ namespace fheroes2
 
         std::vector<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
+            const auto langugeSwitcher = getLanguageSwitcher( text );
             getTextLineInfos( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth,
                               lineInfos.empty() ? 0 : lineInfos.back().lineWidth, text._fontType, maxFontHeight, lineInfos );
         }
@@ -587,6 +599,7 @@ namespace fheroes2
                 continue;
             }
 
+            const auto langugeSwitcher = getLanguageSwitcher( text );
             getTextLineInfos( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ),
                               lineInfos.empty() ? 0 : lineInfos.back().lineWidth, maxWidth, text._fontType, maxFontHeight, lineInfos );
         }
@@ -609,6 +622,7 @@ namespace fheroes2
 
         int32_t offsetX = x;
         for ( const Text & text : _texts ) {
+            const auto langugeSwitcher = getLanguageSwitcher( text );
             const int32_t fontHeight = getFontHeight( text._fontType.size );
             const fheroes2::FontCharHandler charHandler( text._fontType );
 
@@ -628,6 +642,7 @@ namespace fheroes2
 
         std::vector<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
+            const auto langugeSwitcher = getLanguageSwitcher( text );
             getTextLineInfos( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth,
                               lineInfos.empty() ? 0 : lineInfos.back().lineWidth, text._fontType, maxFontHeight, lineInfos );
         }
@@ -656,6 +671,7 @@ namespace fheroes2
         auto infoIter = lineInfos.cbegin();
 
         for ( const Text & singleText : _texts ) {
+            const auto langugeSwitcher = getLanguageSwitcher( singleText );
             const uint8_t * data = reinterpret_cast<const uint8_t *>( singleText._text.data() );
 
             const uint8_t * dataEnd = data + singleText._text.size();
@@ -677,11 +693,6 @@ namespace fheroes2
 
             --widthIter;
         }
-    }
-
-    bool MultiFontText::empty() const
-    {
-        return _texts.empty();
     }
 
     std::string MultiFontText::text() const

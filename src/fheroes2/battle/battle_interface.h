@@ -221,9 +221,15 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
-        void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const int opponentColor )
+        {
+            _area = roi;
+            _orderOfUnits = units;
+            _opponentColor = opponentColor;
+        }
+
+        void redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
+        void queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t
@@ -240,11 +246,11 @@ namespace Battle
 
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                         fheroes2::Image & output ) const;
+        void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                          fheroes2::Image & output ) const;
 
-        std::weak_ptr<const Units> _orders;
-        int _army2Color{ 0 };
+        std::weak_ptr<const Units> _orderOfUnits;
+        int _opponentColor{ 0 };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
     };

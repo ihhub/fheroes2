@@ -199,10 +199,9 @@ namespace Maps
         void setBoat( const int direction, const int color );
         int getBoatDirection() const;
 
-        void resetObjectSprite()
+        void resetMainObjectPart()
         {
-            _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            _mainAddon._imageIndex = 255;
+            _mainAddon = {};
         }
 
         uint32_t GetRegion() const
@@ -218,9 +217,7 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
-
-        void removeOwnershipFlag( const MP2::MapObjectType objectType );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, int color );
 
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const

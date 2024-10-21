@@ -284,7 +284,7 @@ void CapturedObjects::ResetColor( const int color )
 
         auto & [objectType, col] = objCol;
 
-        col = ( objectType == MP2::OBJ_CASTLE ) ? Color::UNUSED : Color::NONE;
+        col = Color::NONE;
         world.GetTiles( idx ).setOwnershipFlag( objectType, col );
     }
 }
@@ -707,7 +707,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-std::string World::getCurrentRumor() const
+std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
@@ -717,7 +717,7 @@ std::string World::getCurrentRumor() const
     case 0: {
         std::string rumor( _( "The ultimate artifact is really the %{name}." ) );
         StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
-        return rumor;
+        return { rumor, std::nullopt };
     }
     case 1: {
         std::string rumor( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
@@ -755,30 +755,30 @@ std::string World::getCurrentRumor() const
         else {
             StringReplace( rumor, "%{name}", _( "south-east" ) );
         }
-        return rumor;
+        return { rumor, std::nullopt };
     }
     case 2:
-        return _( "The truth is out there." );
+        return { _( "The truth is out there." ), std::nullopt };
     case 3:
-        return _( "The dark side is stronger." );
+        return { _( "The dark side is stronger." ), std::nullopt };
     case 4:
-        return _( "The end of the world is near." );
+        return { _( "The end of the world is near." ), std::nullopt };
     case 5:
-        return _( "The bones of Lord Slayer are buried in the foundation of the arena." );
+        return { _( "The bones of Lord Slayer are buried in the foundation of the arena." ), std::nullopt };
     case 6:
-        return _( "A Black Dragon will take out a Titan any day of the week." );
+        return { _( "A Black Dragon will take out a Titan any day of the week." ), std::nullopt };
     case 7:
-        return _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." );
+        return { _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." ), std::nullopt };
     case 8:
-        return _( "An unknown force is being resurrected..." );
+        return { _( "An unknown force is being resurrected..." ), std::nullopt };
     case 9:
-        return _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" );
+        return { _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ), std::nullopt };
     default:
         break;
     }
 
     assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
-    return _customRumors[chosenRumorId - standardRumorCount];
+    return { _customRumors[chosenRumorId - standardRumorCount], Settings::Get().getCurrentMapInfo().getSupportedLanguage() };
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -791,8 +791,15 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Stone Liths but somehow it doesn't even have Stone Liths' object parts.
+        assert( 0 );
+        return result;
+    }
+
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -828,11 +835,27 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
-        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+        assert( 0 );
+        return result;
+    }
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->_imageIndex ) ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+        if ( whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+            continue;
+        }
+
+        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
+        if ( destinationObjectPart == nullptr ) {
+            // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+            assert( 0 );
+            continue;
+        }
+
+        if ( destinationObjectPart->_uid == entranceObjectPart->_uid ) {
             continue;
         }
 
@@ -855,12 +878,12 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int color ) const
 {
-    return map_captureobj.GetCount( obj, col );
+    return map_captureobj.GetCount( obj, color );
 }
 
-uint32_t World::CountCapturedMines( int type, int color ) const
+uint32_t World::CountCapturedMines( const int type, const int color ) const
 {
     switch ( type ) {
     case Resource::WOOD:
@@ -874,32 +897,36 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-void World::CaptureObject( int32_t index, int color )
+void World::CaptureObject( const int32_t index, const int color )
 {
+    assert( CountBits( color ) <= 1 );
+
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
+
+    if ( color != Color::NONE && !( color & Color::ALL ) ) {
+        return;
+    }
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
     if ( castle && castle->GetColor() != color ) {
         castle->ChangeColor( color );
     }
 
-    if ( color & ( Color::ALL | Color::UNUSED ) ) {
-        GetTiles( index ).setOwnershipFlag( objectType, color );
-    }
+    GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
-int World::ColorCapturedObject( int32_t index ) const
+int World::ColorCapturedObject( const int32_t index ) const
 {
     return map_captureobj.GetColor( index );
 }
 
-CapturedObject & World::GetCapturedObject( int32_t index )
+CapturedObject & World::GetCapturedObject( const int32_t index )
 {
     return map_captureobj.Get( index );
 }
 
-void World::ResetCapturedObjects( int color )
+void World::ResetCapturedObjects( const int color )
 {
     map_captureobj.ResetColor( color );
 }
@@ -1324,14 +1351,32 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     _allTeleports.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+        const auto * objectPart = Maps::getObjectPartByActionType( GetTiles( index ), MP2::OBJ_STONE_LITHS );
+        if ( objectPart == nullptr ) {
+            // It looks like it is a broken map. No way the tile doesn't have this object.
+            assert( 0 );
+            continue;
+        }
+
+        _allTeleports[objectPart->_imageIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+    // Whirlpools are unique objects because they can have boats on them which are leftovers from heroes
+    // which disembarked on land. Tiles with boats and whirlpools are marked as Boat objects.
+    // So, searching by type is not accurate as these tiles will be skipped.
+    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
+        assert( objectPart != nullptr );
+
+        _allWhirlpools[objectPart->_imageIndex].push_back( index );
+    }
+
+    // Cache all positions of Eye of Magi objects.
+    _allEyeOfMagi.clear();
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI ) ) {
+        _allEyeOfMagi.emplace_back( index );
     }
 
     resetPathfinder();
@@ -1445,8 +1490,8 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
         MP2::MapObjectType type{ MP2::OBJ_NONE };
         stream >> uid;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
             int temp{ MP2::OBJ_NONE };
             stream >> temp;
 

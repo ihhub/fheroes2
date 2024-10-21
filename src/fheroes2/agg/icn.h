@@ -1123,6 +1123,8 @@ namespace ICN
         BUTTON_RUMORS_EVIL,
         BUTTON_EVENTS_GOOD,
         BUTTON_EVENTS_EVIL,
+        BUTTON_LANGUAGE_GOOD,
+        BUTTON_LANGUAGE_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

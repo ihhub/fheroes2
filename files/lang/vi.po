@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -315,6 +315,9 @@ msgstr ""
 msgid "EVENTS"
 msgstr ""
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Chiến binh"
 
@@ -484,6 +487,9 @@ msgid ""
 msgstr ""
 "Bảo vật Quả cầu Phủ định có hiệu lực trong trận chiến này, vô hiệu hóa tất "
 "cả các phép thuật chiến đấu."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Ngươi đã sử dụng một câu thần chú trong vòng này."
@@ -3270,6 +3276,10 @@ msgstr "Đặt tốc độ cuộn cửa sổ."
 msgid "Select Game Language:"
 msgstr "Chọn Ngôn ngữ Trò chơi:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Chọn Ngôn ngữ Trò chơi:"
+
 msgid "Click to choose the selected language."
 msgstr "Bấm để chọn ngôn ngữ đã chọn."
 
@@ -3690,6 +3700,13 @@ msgstr "Giá của Lòng Trung Thành"
 
 msgid "Resurrection"
 msgstr "Hồi sinh"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Ngôn ngữ"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mất tất cả các tướng và thành."
@@ -4646,17 +4663,23 @@ msgstr ""
 "\n"
 "Vị trí: "
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Chọn Mô tả"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4676,6 +4699,10 @@ msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 #, fuzzy
 msgid "Events"
 msgstr "Sự kiện"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Thay đổi ngôn ngữ của trò chơi."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -7910,18 +7937,23 @@ msgstr ""
 "“Ta có một câu đố dành cho ngươi,” Nhân sư nói. \"Trả lời đúng sẽ được khen "
 "thưởng. Trả lời sai sẽ bị ăn thịt. Ngươi có chấp nhận thử thách không?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Nhân sư hỏi ngươi câu đố sau:\n"
 " \n"
 "'%{riddle}'\n"
 " \n"
 "Câu trả lời của ngươi?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8898,6 +8930,12 @@ msgstr "Tốc độ"
 
 msgid "speed|Instant"
 msgstr "Tức thì"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Sóc"

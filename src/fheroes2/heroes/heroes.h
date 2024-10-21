@@ -70,6 +70,8 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 class Heroes final : public HeroBase, public ColorBase
@@ -477,7 +479,8 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                    const fheroes2::SupportedLanguage language );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -830,7 +833,7 @@ public:
             : BaseIterator( std::move( other ) )
         {}
 
-        auto operator*() const noexcept
+        auto * operator*() const noexcept
         {
             return BaseIterator::operator*().get();
         }

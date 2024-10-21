@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,7 +35,7 @@
 class Castle;
 class Heroes;
 
-enum icons_t : uint8_t
+enum HeroesCastlesIcons : uint8_t
 {
     ICON_HEROES = 0x01,
     ICON_CASTLES = 0x02,
@@ -52,10 +52,9 @@ namespace Interface
     class IconsBar
     {
     public:
-        IconsBar( const int32_t count, const fheroes2::Image & sf )
-            : marker( sf )
-            , iconsCount( count )
-            , show( true )
+        IconsBar( const int32_t count, const fheroes2::Image & markerImage )
+            : _marker( markerImage )
+            , _iconsCount( count )
         {
             assert( count >= 0 );
         }
@@ -66,42 +65,51 @@ namespace Interface
 
         IconsBar & operator=( const IconsBar & ) = delete;
 
-        void SetShow( bool f )
+        void setShow( bool show )
         {
-            show = f;
+            _show = show;
         }
 
         void redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const;
 
-        void SetIconsCount( const int32_t c )
+        void setIconsCount( const int32_t count )
         {
-            iconsCount = c;
+            _iconsCount = count;
         }
 
         int32_t getIconsCount() const
         {
-            return iconsCount;
+            return _iconsCount;
         }
 
-        static int32_t GetItemWidth();
-        static int32_t GetItemHeight();
-        static bool IsVisible();
+        static int32_t getItemWidth()
+        {
+            return 46;
+        }
+        static int32_t getItemHeight()
+        {
+            return 22;
+        }
+
+        static bool isVisible();
 
     protected:
-        const fheroes2::Image & marker;
-        int32_t iconsCount;
-        bool show;
+        const fheroes2::Image & _marker;
+        int32_t _iconsCount;
+        bool _show{ true };
     };
 
-    void RedrawHeroesIcon( const Heroes &, int32_t, int32_t );
-    void RedrawCastleIcon( const Castle &, int32_t, int32_t );
+    void redrawHeroesIcon( const Heroes & hero, const int32_t posX, const int32_t posY );
+    void redrawCastleIcon( const Castle & castle, const int32_t posX, const int32_t posY );
 
     class HeroesIcons final : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
-        HeroesIcons( const int32_t count, const fheroes2::Image & sf )
-            : IconsBar( count, sf )
-        {}
+        HeroesIcons( const int32_t count, const fheroes2::Image & markerImage )
+            : IconsBar( count, markerImage )
+        {
+            // Do nothing.
+        }
 
         HeroesIcons( const HeroesIcons & ) = delete;
 
@@ -109,8 +117,8 @@ namespace Interface
 
         HeroesIcons & operator=( const HeroesIcons & ) = delete;
 
-        void SetPos( int32_t px, int32_t py );
-        void SetShow( bool );
+        void setPos( const int32_t px, const int32_t py );
+        void showIcons( const bool show );
 
     private:
         using Interface::ListBox<HEROES>::ActionListDoubleClick;
@@ -119,11 +127,11 @@ namespace Interface
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
-        void ActionListDoubleClick( HEROES & ) override;
-        void ActionListSingleClick( HEROES & ) override;
-        void ActionListPressRight( HEROES & ) override;
+        void ActionListDoubleClick( HEROES & item ) override;
+        void ActionListSingleClick( HEROES & item ) override;
+        void ActionListPressRight( HEROES & item ) override;
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
-        void RedrawBackground( const fheroes2::Point & ) override;
+        void RedrawBackground( const fheroes2::Point & pos ) override;
 
         fheroes2::Point _topLeftCorner;
     };
@@ -131,9 +139,11 @@ namespace Interface
     class CastleIcons final : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
-        CastleIcons( const int32_t count, const fheroes2::Image & sf )
-            : IconsBar( count, sf )
-        {}
+        CastleIcons( const int32_t count, const fheroes2::Image & markerImage )
+            : IconsBar( count, markerImage )
+        {
+            // Do nothing.
+        }
 
         CastleIcons( const CastleIcons & ) = delete;
 
@@ -141,8 +151,8 @@ namespace Interface
 
         CastleIcons & operator=( const CastleIcons & ) = delete;
 
-        void SetPos( int32_t px, int32_t py );
-        void SetShow( bool );
+        void setPos( const int32_t px, const int32_t py );
+        void showIcons( const bool show );
 
     private:
         using Interface::ListBox<CASTLE>::ActionListDoubleClick;
@@ -151,11 +161,11 @@ namespace Interface
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
-        void ActionListDoubleClick( CASTLE & ) override;
-        void ActionListSingleClick( CASTLE & ) override;
-        void ActionListPressRight( CASTLE & ) override;
+        void ActionListDoubleClick( CASTLE & item ) override;
+        void ActionListSingleClick( CASTLE & item ) override;
+        void ActionListPressRight( CASTLE & item ) override;
         void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
-        void RedrawBackground( const fheroes2::Point & ) override;
+        void RedrawBackground( const fheroes2::Point & pos ) override;
 
         fheroes2::Point _topLeftCorner;
     };
@@ -163,41 +173,46 @@ namespace Interface
     class IconsPanel final : public BorderWindow
     {
     public:
-        explicit IconsPanel( AdventureMap & basic );
+        explicit IconsPanel( AdventureMap & interface );
         IconsPanel( const IconsPanel & ) = delete;
 
         ~IconsPanel() override = default;
 
         IconsPanel & operator=( const IconsPanel & ) = delete;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
-        void SetRedraw() const;
-        void SetRedraw( const icons_t type ) const;
 
-        void QueueEventProcessing();
+        void setRedraw() const
+        {
+            setRedraw( ICON_ANY );
+        }
 
-        void Select( Heroes * const );
-        void Select( Castle * const );
+        void setRedraw( const HeroesCastlesIcons type ) const;
 
-        bool IsSelected( const icons_t type ) const;
-        void ResetIcons( const icons_t type );
-        void HideIcons( const icons_t type );
-        void ShowIcons( const icons_t type );
+        void queueEventProcessing();
+
+        void select( Heroes * const hero );
+        void select( Castle * const castle );
+
+        bool isSelected( const HeroesCastlesIcons type ) const;
+        void resetIcons( const HeroesCastlesIcons type );
+        void hideIcons( const HeroesCastlesIcons type );
+        void showIcons( const HeroesCastlesIcons type );
 
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw();
         // The name of this method starts from _ on purpose to do not mix with other public methods.
-        void _redrawIcons( const icons_t type );
+        void _redrawIcons( const HeroesCastlesIcons type );
 
     private:
-        AdventureMap & interface;
+        AdventureMap & _interface;
 
-        fheroes2::Image sfMarker;
+        fheroes2::Image _sfMarker;
 
-        CastleIcons castleIcons;
-        HeroesIcons heroesIcons;
+        CastleIcons _castleIcons{ 4, _sfMarker };
+        HeroesIcons _heroesIcons{ 4, _sfMarker };
     };
 }
 

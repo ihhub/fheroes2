@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -260,6 +260,9 @@ msgstr ""
 msgid "EVENTS"
 msgstr ""
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Savaşçı"
 
@@ -428,6 +431,9 @@ msgid ""
 msgstr ""
 "Bu savaşta İnkar Alanı Eseri aktif, bütün savaş büyülerini devre dışı "
 "bırakıyor."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Bu turda zaten bir büyü yaptın."
@@ -2980,6 +2986,10 @@ msgstr ""
 msgid "Select Game Language:"
 msgstr ""
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Büyü hedefini seç"
+
 msgid "Click to choose the selected language."
 msgstr ""
 
@@ -3366,6 +3376,12 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Resurrection"
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -4231,15 +4247,21 @@ msgstr ""
 msgid "Map Description"
 msgstr ""
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 #, fuzzy
@@ -4259,6 +4281,10 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Events"
 msgstr ""
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Click to change your map name."
 msgstr ""
@@ -6950,7 +6976,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -7791,6 +7821,12 @@ msgid "speed|Blazing"
 msgstr ""
 
 msgid "speed|Instant"
+msgstr ""
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
 msgstr ""
 
 msgid "week|Squirrel"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,49 +35,54 @@ namespace Interface
 {
     class AdventureMap;
 
-    class ButtonsArea final : public BorderWindow
+    class ButtonsPanel final : public BorderWindow
     {
     public:
-        explicit ButtonsArea( AdventureMap & );
-        ButtonsArea( const ButtonsArea & ) = delete;
+        explicit ButtonsPanel( AdventureMap & baseInterface )
+            : BorderWindow( { 0, 0, 144, 72 } )
+            , _interface( baseInterface )
+        {
+            // Do nothing.
+        }
 
-        ~ButtonsArea() override = default;
+        ButtonsPanel( const ButtonsPanel & ) = delete;
 
-        ButtonsArea & operator=( const ButtonsArea & ) = delete;
+        ~ButtonsPanel() override = default;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        ButtonsPanel & operator=( const ButtonsPanel & ) = delete;
+
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
-        void SetRedraw() const;
+        void setRedraw() const;
 
-        fheroes2::GameMode QueueEventProcessing();
-        void ResetButtons();
+        fheroes2::GameMode queueEventProcessing();
 
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw();
 
     private:
-        void SetButtonStatus();
+        void _setButtonStatus();
 
-        AdventureMap & interface;
+        AdventureMap & _interface;
 
-        fheroes2::Button buttonNextHero;
-        fheroes2::Button buttonHeroMovement;
-        fheroes2::Button buttonKingdom;
-        fheroes2::Button buttonSpell;
-        fheroes2::Button buttonEndTurn;
-        fheroes2::Button buttonAdventure;
-        fheroes2::Button buttonFile;
-        fheroes2::Button buttonSystem;
+        fheroes2::Button _buttonNextHero;
+        fheroes2::Button _buttonHeroMovement;
+        fheroes2::Button _buttonKingdom;
+        fheroes2::Button _buttonSpell;
+        fheroes2::Button _buttonEndTurn;
+        fheroes2::Button _buttonAdventure;
+        fheroes2::Button _buttonFile;
+        fheroes2::Button _buttonSystem;
 
-        fheroes2::Rect nextHeroRect;
-        fheroes2::Rect heroMovementRect;
-        fheroes2::Rect kingdomRect;
-        fheroes2::Rect spellRect;
-        fheroes2::Rect endTurnRect;
-        fheroes2::Rect adventureRect;
-        fheroes2::Rect fileRect;
-        fheroes2::Rect systemRect;
+        fheroes2::Rect _nextHeroRect;
+        fheroes2::Rect _heroMovementRect;
+        fheroes2::Rect _kingdomRect;
+        fheroes2::Rect _spellRect;
+        fheroes2::Rect _endTurnRect;
+        fheroes2::Rect _adventureRect;
+        fheroes2::Rect _fileRect;
+        fheroes2::Rect _systemRect;
     };
 }
 

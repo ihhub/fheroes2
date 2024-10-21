@@ -35,17 +35,13 @@
 #include "localevent.h"
 #include "mp2.h"
 #include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "world.h"
 
-Interface::ButtonsArea::ButtonsArea( AdventureMap & basic )
-    : BorderWindow( { 0, 0, 144, 72 } )
-    , interface( basic )
-{}
-
-void Interface::ButtonsArea::SavePosition()
+void Interface::ButtonsPanel::SavePosition()
 {
     Settings & conf = Settings::Get();
 
@@ -53,194 +49,210 @@ void Interface::ButtonsArea::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::ButtonsArea::SetRedraw() const
+void Interface::ButtonsPanel::setRedraw() const
 {
-    interface.setRedraw( REDRAW_BUTTONS );
+    _interface.setRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
+void Interface::ButtonsPanel::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 
     const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    buttonNextHero.setICNInfo( icnbtn, 0, 1 );
-    buttonHeroMovement.setICNInfo( icnbtn, 2, 3 );
-    buttonKingdom.setICNInfo( icnbtn, 4, 5 );
-    buttonSpell.setICNInfo( icnbtn, 6, 7 );
-    buttonEndTurn.setICNInfo( icnbtn, 8, 9 );
-    buttonAdventure.setICNInfo( icnbtn, 10, 11 );
-    buttonFile.setICNInfo( icnbtn, 12, 13 );
-    buttonSystem.setICNInfo( icnbtn, 14, 15 );
+    _buttonNextHero.setICNInfo( icnbtn, 0, 1 );
+    _buttonHeroMovement.setICNInfo( icnbtn, 2, 3 );
+    _buttonKingdom.setICNInfo( icnbtn, 4, 5 );
+    _buttonSpell.setICNInfo( icnbtn, 6, 7 );
+    _buttonEndTurn.setICNInfo( icnbtn, 8, 9 );
+    _buttonAdventure.setICNInfo( icnbtn, 10, 11 );
+    _buttonFile.setICNInfo( icnbtn, 12, 13 );
+    _buttonSystem.setICNInfo( icnbtn, 14, 15 );
 
-    SetButtonStatus();
+    _setButtonStatus();
 
-    ox = GetArea().x;
-    oy = GetArea().y;
+    x = GetArea().x;
+    y = GetArea().y;
 
     // Top row
-    buttonNextHero.setPosition( ox, oy );
-    nextHeroRect = buttonNextHero.area();
+    _buttonNextHero.setPosition( x, y );
+    _nextHeroRect = _buttonNextHero.area();
 
-    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, oy );
-    heroMovementRect = buttonHeroMovement.area();
+    _buttonHeroMovement.setPosition( _nextHeroRect.x + _nextHeroRect.width, y );
+    _heroMovementRect = _buttonHeroMovement.area();
 
-    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, oy );
-    kingdomRect = buttonKingdom.area();
+    _buttonKingdom.setPosition( _heroMovementRect.x + _heroMovementRect.width, y );
+    _kingdomRect = _buttonKingdom.area();
 
-    buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, oy );
-    spellRect = buttonSpell.area();
+    _buttonSpell.setPosition( _kingdomRect.x + _kingdomRect.width, y );
+    _spellRect = _buttonSpell.area();
 
     // Bottom row
-    oy = nextHeroRect.y + nextHeroRect.height;
+    y = _nextHeroRect.y + _nextHeroRect.height;
 
-    buttonEndTurn.setPosition( ox, oy );
-    endTurnRect = buttonEndTurn.area();
+    _buttonEndTurn.setPosition( x, y );
+    _endTurnRect = _buttonEndTurn.area();
 
-    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.width, oy );
-    adventureRect = buttonAdventure.area();
+    _buttonAdventure.setPosition( _endTurnRect.x + _endTurnRect.width, y );
+    _adventureRect = _buttonAdventure.area();
 
-    buttonFile.setPosition( adventureRect.x + adventureRect.width, oy );
-    fileRect = buttonFile.area();
+    _buttonFile.setPosition( _adventureRect.x + _adventureRect.width, y );
+    _fileRect = _buttonFile.area();
 
-    buttonSystem.setPosition( fileRect.x + fileRect.width, oy );
-    systemRect = buttonSystem.area();
+    _buttonSystem.setPosition( _fileRect.x + _fileRect.width, y );
+    _systemRect = _buttonSystem.area();
 }
 
-void Interface::ButtonsArea::_redraw()
+void Interface::ButtonsPanel::_redraw()
 {
     const Settings & conf = Settings::Get();
 
-    if ( !conf.isHideInterfaceEnabled() || conf.ShowButtons() ) {
-        if ( conf.isHideInterfaceEnabled() )
-            BorderWindow::Redraw();
+    if ( conf.isHideInterfaceEnabled() ) {
+        if ( !conf.ShowButtons() ) {
+            return;
+        }
 
-        SetButtonStatus();
-
-        buttonNextHero.draw();
-        buttonHeroMovement.draw();
-        buttonKingdom.draw();
-        buttonSpell.draw();
-        buttonEndTurn.draw();
-        buttonAdventure.draw();
-        buttonFile.draw();
-        buttonSystem.draw();
+        BorderWindow::Redraw();
     }
+
+    _setButtonStatus();
+
+    _buttonNextHero.draw();
+    _buttonHeroMovement.draw();
+    _buttonKingdom.draw();
+    _buttonSpell.draw();
+    _buttonEndTurn.draw();
+    _buttonAdventure.draw();
+    _buttonFile.draw();
+    _buttonSystem.draw();
 }
 
-void Interface::ButtonsArea::ResetButtons()
+fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
 {
-    buttonNextHero.drawOnRelease();
-    buttonHeroMovement.drawOnRelease();
-    buttonKingdom.drawOnRelease();
-    buttonSpell.drawOnRelease();
-    buttonEndTurn.drawOnRelease();
-    buttonAdventure.drawOnRelease();
-    buttonFile.drawOnRelease();
-    buttonSystem.drawOnRelease();
-}
+    captureMouse();
 
-fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
-{
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( heroMovementRect ) ? buttonHeroMovement.drawOnPress() : buttonHeroMovement.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( kingdomRect ) ? buttonKingdom.drawOnPress() : buttonKingdom.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( endTurnRect ) ? buttonEndTurn.drawOnPress() : buttonEndTurn.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( adventureRect ) ? buttonAdventure.drawOnPress() : buttonAdventure.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
-    le.isMouseLeftButtonPressedInArea( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
+    // In the "no interface" mode, the buttons panel may be overlapped by other UI elements, so we can't render the
+    // pressed or released buttons exclusively in a usual way. The overlapping UI elements should also be rendered.
+    const auto drawOnPressOrRelease = [this, &le]( fheroes2::Button & button, const fheroes2::Rect & buttonRect ) {
+        bool shouldRedraw = false;
+
+        if ( le.isMouseLeftButtonPressedInArea( buttonRect ) ) {
+            if ( !button.isPressed() && button.press() ) {
+                shouldRedraw = true;
+            }
+        }
+        else {
+            if ( !button.isReleased() && button.release() ) {
+                shouldRedraw = true;
+            }
+        }
+
+        if ( shouldRedraw ) {
+            _interface.redraw( REDRAW_BUTTONS );
+
+            // Render now only the changed part of the screen.
+            fheroes2::Display::instance().render( buttonRect );
+        }
+    };
+
+    drawOnPressOrRelease( _buttonNextHero, _nextHeroRect );
+    drawOnPressOrRelease( _buttonHeroMovement, _heroMovementRect );
+    drawOnPressOrRelease( _buttonKingdom, _kingdomRect );
+    drawOnPressOrRelease( _buttonSpell, _spellRect );
+    drawOnPressOrRelease( _buttonEndTurn, _endTurnRect );
+    drawOnPressOrRelease( _buttonAdventure, _adventureRect );
+    drawOnPressOrRelease( _buttonFile, _fileRect );
+    drawOnPressOrRelease( _buttonSystem, _systemRect );
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    // Move border window
+    // Move the window border.
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
-        SetRedraw();
+        setRedraw();
     }
-    else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
-        interface.EventNextHero();
+    else if ( _buttonNextHero.isEnabled() && le.MouseClickLeft( _nextHeroRect ) ) {
+        _interface.EventNextHero();
     }
-    else if ( buttonHeroMovement.isEnabled() && le.MouseClickLeft( heroMovementRect ) ) {
-        res = interface.EventHeroMovement();
+    else if ( _buttonHeroMovement.isEnabled() && le.MouseClickLeft( _heroMovementRect ) ) {
+        res = _interface.EventHeroMovement();
     }
-    else if ( buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( heroMovementRect ) ) {
-        interface.EventResetHeroPath();
+    else if ( _buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( _heroMovementRect ) ) {
+        _interface.EventResetHeroPath();
     }
-    else if ( le.MouseClickLeft( kingdomRect ) ) {
-        interface.EventKingdomInfo();
+    else if ( le.MouseClickLeft( _kingdomRect ) ) {
+        _interface.EventKingdomInfo();
     }
-    else if ( buttonSpell.isEnabled() && le.MouseClickLeft( spellRect ) ) {
-        interface.EventCastSpell();
+    else if ( _buttonSpell.isEnabled() && le.MouseClickLeft( _spellRect ) ) {
+        _interface.EventCastSpell();
     }
-    else if ( le.MouseClickLeft( endTurnRect ) ) {
-        res = interface.EventEndTurn();
+    else if ( le.MouseClickLeft( _endTurnRect ) ) {
+        res = _interface.EventEndTurn();
     }
-    else if ( le.MouseClickLeft( adventureRect ) ) {
-        res = interface.EventAdventureDialog();
+    else if ( le.MouseClickLeft( _adventureRect ) ) {
+        res = _interface.EventAdventureDialog();
     }
-    else if ( le.MouseClickLeft( fileRect ) ) {
-        res = interface.EventFileDialog();
+    else if ( le.MouseClickLeft( _fileRect ) ) {
+        res = _interface.EventFileDialog();
     }
-    else if ( le.MouseClickLeft( systemRect ) ) {
-        interface.EventSystemDialog();
+    else if ( le.MouseClickLeft( _systemRect ) ) {
+        _interface.EventSystemDialog();
     }
-
-    if ( le.isMouseRightButtonPressedInArea( nextHeroRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _nextHeroRect ) ) {
         fheroes2::showStandardTextMessage( _( "Next Hero" ), _( "Select the next Hero." ), Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( heroMovementRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _heroMovementRect ) ) {
         fheroes2::showStandardTextMessage(
             _( "Hero Movement" ),
             _( "Start the Hero's movement along the current path or re-visit the object occupied by the Hero. Press and hold this button to reset the Hero's path." ),
             Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( kingdomRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _kingdomRect ) ) {
         fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a summary of your Kingdom." ), Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( spellRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _spellRect ) ) {
         fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( endTurnRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _endTurnRect ) ) {
         fheroes2::showStandardTextMessage( _( "End Turn" ), _( "End your turn and let the computer take its turn." ), Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( adventureRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _adventureRect ) ) {
         fheroes2::showStandardTextMessage( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( fileRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _fileRect ) ) {
         fheroes2::showStandardTextMessage( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ),
                                            Dialog::ZERO );
     }
-    else if ( le.isMouseRightButtonPressedInArea( systemRect ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( _systemRect ) ) {
         fheroes2::showStandardTextMessage( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Dialog::ZERO );
     }
 
     return res;
 }
 
-void Interface::ButtonsArea::SetButtonStatus()
+void Interface::ButtonsPanel::_setButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
 
     if ( currentHero && currentHero->GetPath().isValidForMovement() && currentHero->MayStillMove( false, true ) ) {
-        buttonHeroMovement.setICNIndexes( 2, 3 );
-        buttonHeroMovement.enable();
+        _buttonHeroMovement.setICNIndexes( 2, 3 );
+        _buttonHeroMovement.enable();
     }
     else if ( currentHero && MP2::isInGameActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
-        buttonHeroMovement.setICNIndexes( 16, 17 );
-        buttonHeroMovement.enable();
+        _buttonHeroMovement.setICNIndexes( 16, 17 );
+        _buttonHeroMovement.enable();
     }
     else {
-        buttonHeroMovement.setICNIndexes( 2, 3 );
-        buttonHeroMovement.disable();
+        _buttonHeroMovement.setICNIndexes( 2, 3 );
+        _buttonHeroMovement.disable();
     }
 
     if ( currentHero && currentHero->HaveSpellBook() && currentHero->MayCastAdventureSpells() ) {
-        buttonSpell.enable();
+        _buttonSpell.enable();
     }
     else {
-        buttonSpell.disable();
+        _buttonSpell.disable();
     }
 
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
@@ -253,9 +265,9 @@ void Interface::ButtonsArea::SetButtonStatus()
     } );
 
     if ( isMovableHeroPresent ) {
-        buttonNextHero.enable();
+        _buttonNextHero.enable();
     }
     else {
-        buttonNextHero.disable();
+        _buttonNextHero.disable();
     }
 }

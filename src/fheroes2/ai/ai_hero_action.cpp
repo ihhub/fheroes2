@@ -1661,8 +1661,17 @@ namespace
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
-        hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-        destinationTile.resetObjectSprite();
+
+        // Remove boat object information from the tile.
+        destinationTile.resetMainObjectPart();
+        // Update tile's object type if any object exists after removing the boat.
+        destinationTile.updateObjectType();
+        // Set the newly updated object type to hero to remember it.
+        // It is needed in case of moving out from this tile and restoring the tile's original object type.
+        hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
+        // Set the tile's object type as Hero.
+        destinationTile.SetObject( MP2::OBJ_HERO );
+
         hero.SetShipMaster( true );
 
         // Boat is no longer empty so we reset color to default
@@ -1728,7 +1737,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
             const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
@@ -2119,7 +2128,7 @@ void AI::HeroesMove( Heroes & hero )
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
 
-                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_STATUS );
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( adventureMapInterface.getRedrawMask() == 0 );
@@ -2186,6 +2195,8 @@ void AI::HeroesMove( Heroes & hero )
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
+
+                adventureMapInterface.setRedraw( Interface::REDRAW_STATUS );
             }
 
             adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
