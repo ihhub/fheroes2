@@ -2574,7 +2574,7 @@ namespace
                     imageArray[238 - 32].setPosition( 0, -1 );
                     fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
                     // Copy the fixed sprite back.
-                    for ( const int & charCode : { 30, 93, 95 } ) {
+                    for ( const int charCode : { 30, 93, 95 } ) {
                         imageArray[charCode] = imageArray[238 - 32];
                     }
                 }
