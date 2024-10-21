@@ -192,7 +192,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        ButtonSprite( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = Sprite() )
+        ButtonSprite( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = {} )
             : ButtonBase( offsetX, offsetY )
             , _released( std::move( released ) )
             , _pressed( std::move( pressed ) )
@@ -209,7 +209,7 @@ namespace fheroes2
         ButtonSprite & operator=( const ButtonSprite & ) = delete;
         ButtonSprite & operator=( ButtonSprite && ) noexcept = default;
 
-        void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() )
+        void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = {} )
         {
             _released = released;
             _pressed = pressed;

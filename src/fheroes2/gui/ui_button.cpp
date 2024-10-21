@@ -496,7 +496,7 @@ namespace fheroes2
 
         for ( const auto & button : _button ) {
             if ( button->isEnabled() ) {
-                le.isMouseLeftButtonPressedInArea( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
+                button->drawOnState( le.isMouseLeftButtonPressedInArea( button->area() ) );
             }
         }
 
