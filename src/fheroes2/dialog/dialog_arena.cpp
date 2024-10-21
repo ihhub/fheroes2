@@ -159,6 +159,7 @@ int Dialog::SelectSkillFromArena()
     dst_pt.x = box_rt.x + ( box_rt.width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    const fheroes2::Rect buttonOkArea = buttonOk.area();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -169,7 +170,7 @@ int Dialog::SelectSkillFromArena()
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
@@ -207,7 +208,7 @@ int Dialog::SelectSkillFromArena()
             display.render();
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkArea ) )
             break;
     }
 

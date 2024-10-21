@@ -152,6 +152,8 @@ void Dialog::GameInfo()
 
     const int buttonOkIcnId = ICN::BUTTON_SMALL_OKAY_GOOD;
     fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 0 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 0, 1 );
+    const fheroes2::Rect buttonOkArea = buttonOk.area();
+
     buttonOk.draw();
 
     display.render();
@@ -160,12 +162,12 @@ void Dialog::GameInfo()
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyCloseWindow() )
             break;
 
-        if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
         }
         else {

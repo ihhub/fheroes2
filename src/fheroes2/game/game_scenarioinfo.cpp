@@ -208,6 +208,10 @@ namespace
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
+        const fheroes2::Rect buttonSelectMapsArea = buttonSelectMaps.area();
+        const fheroes2::Rect buttonOkArea = buttonOk.area();
+        const fheroes2::Rect buttonCancelArea = buttonCancel.area();
+
         const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
             const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
             if ( currentMapinfo.filename.empty() ) {
@@ -258,8 +262,8 @@ namespace
         fheroes2::ImageRestorer opponentsArea( display, roi.x, pointOpponentInfo.y, roi.width, 65 );
         fheroes2::ImageRestorer classArea( display, roi.x, pointClassInfo.y, roi.width, 69 );
         fheroes2::ImageRestorer handicapArea( display, roi.x, pointClassInfo.y + 69, roi.width, 31 );
-        fheroes2::ImageRestorer ratingArea( display, buttonOk.area().x + buttonOk.area().width, buttonOk.area().y,
-                                            roi.width - buttonOk.area().width - buttonCancel.area().width - 20 * 2, buttonOk.area().height );
+        fheroes2::ImageRestorer ratingArea( display, buttonOkArea.x + buttonOkArea.width, buttonOkArea.y,
+                                            roi.width - buttonOkArea.width - buttonCancelArea.width - 20 * 2, buttonOkArea.height );
 
         // Map name
         RedrawMapTitle( mapTitleArea.rect() );
@@ -312,12 +316,12 @@ namespace
             }
 
             // press button
-            le.isMouseLeftButtonPressedInArea( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonSelectMaps.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMapsArea ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
 
             // click select
-            if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
+            if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMapsArea ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
                 const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
@@ -346,11 +350,11 @@ namespace
                 }
                 display.render();
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelArea ) ) {
                 result = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkArea ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
@@ -392,7 +396,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( roi ) ) {
-                if ( le.isMouseRightButtonPressedInArea( buttonSelectMaps.area() ) ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonSelectMapsArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
                 }
                 else if ( 0 <= GetRectIndex( coordDifficulty, le.getMouseCursorPos() ) ) {
@@ -407,10 +411,10 @@ namespace
                         _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                         Dialog::ZERO );
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+                else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Click to return to the main menu." ), Dialog::ZERO );
                 }
                 else {

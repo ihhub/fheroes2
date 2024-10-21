@@ -142,6 +142,9 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
     fheroes2::Button buttonCancel( pos.x, pos.y, cancelButtonIcnID, 0, 1 );
 
+    const fheroes2::Rect buttonOkayArea = buttonOkay.area();
+    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
+
     buttonOkay.draw();
     buttonCancel.draw();
 
@@ -149,28 +152,28 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkayArea ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
 
-        if ( buttonOkay.isEnabled() && ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
+        if ( buttonOkay.isEnabled() && ( le.MouseClickLeft( buttonOkayArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
             return Dialog::OK;
         }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
         }
 
         if ( le.isMouseRightButtonPressedInArea( heroPortraitArea ) ) {
             Dialog::QuickInfo( *hero );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOkayArea ) ) {
             std::string recruitHero = _( "Recruit %{name} the %{race}" );
             StringReplace( recruitHero, "%{name}", hero->GetName() );
             StringReplace( recruitHero, "%{race}", Race::String( hero->GetRace() ) );
             recruitHero += '.';
             fheroes2::showStandardTextMessage( _( "Okay" ), std::move( recruitHero ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }
@@ -521,21 +524,21 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExitArea ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
         if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
         if ( buttonPrevCastle.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonPrevCastleArea ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
+            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastleArea ) );
 
             if ( le.MouseClickLeft( buttonPrevCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::PrevConstructionWindow;
             }
         }
         if ( buttonNextCastle.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonNextCastleArea ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
+            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastleArea ) );
 
             if ( le.MouseClickLeft( buttonNextCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::NextConstructionWindow;

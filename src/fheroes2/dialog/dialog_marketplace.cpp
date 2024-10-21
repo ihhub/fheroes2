@@ -432,6 +432,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
+    const fheroes2::Rect buttonGiftArea = buttonGift.area();
+    const fheroes2::Rect buttonTradeArea = buttonTrade.area();
+    const fheroes2::Rect buttonLeftArea = buttonLeft.area();
+    const fheroes2::Rect buttonRightArea = buttonRight.area();
+
     buttonTrade.disable();
 
     buttonGift.draw();
@@ -445,22 +451,26 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( buttonGift.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonGift.area() ) ? buttonGift.drawOnPress() : buttonGift.drawOnRelease();
-        if ( buttonTrade.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) ? buttonTrade.drawOnPress() : buttonTrade.drawOnRelease();
-        if ( buttonLeft.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) ? buttonLeft.drawOnPress() : buttonLeft.drawOnRelease();
-        if ( buttonRight.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonRight.area() ) ? buttonRight.drawOnPress() : buttonRight.drawOnRelease();
+        if ( buttonGift.isEnabled() ) {
+            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGiftArea ) );
+        }
+        if ( buttonTrade.isEnabled() ) {
+            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTradeArea ) );
+        }
+        if ( buttonLeft.isEnabled() ) {
+            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeftArea ) );
+        }
+        if ( buttonRight.isEnabled() ) {
+            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRightArea ) );
+        }
 
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() )
             break;
 
         // gift resources
-        if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
+        if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGiftArea ) ) {
             Dialog::MakeGiftResource( kingdom );
 
             resourceTo = Resource::UNKNOWN;
@@ -582,7 +592,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // trade
-        if ( buttonTrade.isEnabled() && le.MouseClickLeft( buttonTrade.area() ) && count_sell && count_buy ) {
+        if ( buttonTrade.isEnabled() && le.MouseClickLeft( buttonTradeArea ) && count_sell && count_buy ) {
             kingdom.OddFundsResource( Funds( resourceFrom, count_sell ) );
             kingdom.AddFundsResource( Funds( resourceTo, count_buy ) );
 
@@ -602,7 +612,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // decrease trade resource
         if ( count_buy
-             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( buttonLeftArea ) || timedButtonLeft.isDelayPassed() ) )
                   || le.isMouseWheelDownInArea( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
@@ -615,7 +625,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // increase trade resource
         if ( count_buy < max_buy
-             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isDelayPassed() ) )
+             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRightArea ) || timedButtonRight.isDelayPassed() ) )
                   || le.isMouseWheelUpInArea( scrollbar.getArea() ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 

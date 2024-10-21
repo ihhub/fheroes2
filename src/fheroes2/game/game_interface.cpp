@@ -185,6 +185,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
 
     fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                  ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
 
     const auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
         if ( isHideInterface ) {
@@ -253,8 +254,8 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
         }

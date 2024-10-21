@@ -197,9 +197,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
     fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_EXIT_GOOD, 0, 1 );
 
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    const fheroes2::Rect buttonResetArea = buttonReset.area();
+    const fheroes2::Rect buttonStartArea = buttonStart.area();
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
+
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonResetArea.getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStartArea.getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExitArea.getPosition(), { -5, 5 } );
 
     buttonStart.draw();
     buttonExit.draw();
@@ -215,33 +219,39 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawOpponentsStats = false;
         bool needRedrawControlInfo = false;
 
-        buttonStart.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
-        buttonExit.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        buttonReset.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
+        if ( buttonStart.isEnabled() ) {
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStartArea ) );
+        }
+        if ( buttonExit.isEnabled() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+        }
+        if ( buttonReset.isEnabled() ) {
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonResetArea ) );
+        }
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStartArea ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
 
             break;
         }
-        if ( le.MouseClickLeft( buttonReset.area() ) ) {
+        if ( le.MouseClickLeft( buttonResetArea ) ) {
             reset = true;
             result = true;
 
             break;
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonStart.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonStartArea ) ) {
             fheroes2::showStandardTextMessage( _( "Start" ), _( "Start the battle." ), 0 );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonReset.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonResetArea ) ) {
             fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
         }
 

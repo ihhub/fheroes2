@@ -307,8 +307,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Button buttonPrevCastle( statusBarPosition.x, statusBarPosition.y, ICN::SMALLBAR, 1, 2 );
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
+    const fheroes2::Rect buttonPrevCastleArea = buttonPrevCastle.area();
 
-    statusBarPosition.x += buttonPrevCastle.area().width;
+    statusBarPosition.x += buttonPrevCastleArea.width;
 
     // Status bar at the bottom of dialog.
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
@@ -322,6 +323,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Button buttonNextCastle( statusBarPosition.x + bar.width(), statusBarPosition.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
+    const fheroes2::Rect buttonNextCastleArea = buttonNextCastle.area();
 
     // Position of the captain/crest and hero portrait to the left of army bars.
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
@@ -354,10 +356,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // Exit button.
     fheroes2::Button buttonExit( dialogRoi.x + 553, dialogRoi.y + 428, ICN::BUTTON_EXIT_TOWN, 0, 1 );
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
 
     // Kingdom resources.
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
-    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExitArea.y - rectResource.y - 3 );
 
     // Cache a vector of castle buildings in the order they are rendered.
     const CastleDialog::BuildingsRenderQueue cacheBuildings( *this, dialogRoi.getPosition() );
@@ -404,16 +407,16 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
-                le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
+                buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastleArea ) );
             }
             if ( buttonNextCastle.isEnabled() ) {
-                le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
+                buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastleArea ) );
             }
 
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
             // Check buttons for closing this castle's window.
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
 
                 // Disable fast scroll for resolutions where the exit button is directly above the border.
@@ -424,12 +427,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonPrevCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
             if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonNextCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::NextCastle;
                 break;
             }
@@ -442,13 +445,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else if ( le.isMouseRightButtonPressedInArea( resActiveArea ) ) {
                 fheroes2::showKingdomIncome( GetKingdom(), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
                 fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonNextCastleArea ) ) {
                 fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastleArea ) ) {
                 fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
             }
             else if ( isBuild( BUILD_CAPTAIN ) && le.isMouseRightButtonPressedInArea( rectSign1 ) ) {
@@ -707,16 +710,16 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
         }
 
-        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+        if ( le.isMouseCursorPosInArea( buttonExitArea ) ) {
             statusMessage = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
         }
         else if ( le.isMouseCursorPosInArea( resActiveArea ) ) {
             statusMessage = _( "Show Income" );
         }
-        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastleArea ) ) {
             statusMessage = _( "Show previous town" );
         }
-        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastleArea ) ) {
             statusMessage = _( "Show next town" );
         }
         else if ( hero && le.isMouseCursorPosInArea( rectSign2 ) ) {

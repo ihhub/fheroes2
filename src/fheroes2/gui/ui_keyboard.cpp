@@ -254,6 +254,8 @@ namespace
             makeButtonSprites( released, pressed, text, buttonWidth, isEvilInterface, false );
             button.setSprite( released, pressed );
 
+            buttonArea = button.area();
+
             // Make Image with shadow for button to Blit it during render.
             buttonShadow.resize( released.width() + std::abs( buttonShadowOffset.x ), released.height() + std::abs( buttonShadowOffset.y ) );
             buttonShadow.reset();
@@ -276,6 +278,7 @@ namespace
 
         fheroes2::ButtonSprite button;
         fheroes2::Image buttonShadow;
+        fheroes2::Rect buttonArea;
 
         // This is used only for buttons which should have pressed state for some layouts.
         bool isInvertedRenderingLogic{ false };
@@ -524,7 +527,7 @@ namespace
         for ( const auto & buttonRow : buttonLayout ) {
             int32_t length = 0;
             for ( const auto & buttonInfo : buttonRow ) {
-                length += buttonInfo.button.area().width;
+                length += buttonInfo.buttonArea.width;
             }
 
             length += ( static_cast<int32_t>( buttonRow.size() ) - 1 ) * buttonOffset;
@@ -548,7 +551,7 @@ namespace
             roi.x = newX;
 
             for ( const auto & buttonInfo : buttonLayout[i] ) {
-                xOffset += buttonInfo.button.area().width + buttonOffset;
+                xOffset += buttonInfo.buttonArea.width + buttonOffset;
             }
 
             roi.width = std::max( xOffset - buttonOffset - roi.x, roi.width );
@@ -573,7 +576,7 @@ namespace
         for ( const auto & buttonRow : buttonLayout ) {
             int32_t length = 0;
             for ( const auto & buttonInfo : buttonRow ) {
-                length += buttonInfo.button.area().width;
+                length += buttonInfo.buttonArea.width;
             }
 
             length += ( static_cast<int32_t>( buttonRow.size() ) - 1 ) * buttonOffset;
@@ -591,13 +594,16 @@ namespace
             int32_t xOffset = offset.x + offsets[i];
             for ( auto & buttonInfo : buttonLayout[i] ) {
                 buttonInfo.button.setPosition( xOffset, yOffset );
+                buttonInfo.buttonArea.x = xOffset;
+                buttonInfo.buttonArea.y = yOffset;
+
                 if ( buttonInfo.isInvertedRenderingLogic ) {
                     buttonInfo.button.press();
                 }
                 if ( buttonInfo.button.draw( output ) ) {
                     fheroes2::Blit( buttonInfo.buttonShadow, output, xOffset + buttonShadowOffset.x, yOffset );
                 }
-                xOffset += buttonInfo.button.area().width + buttonOffset;
+                xOffset += buttonInfo.buttonArea.width + buttonOffset;
             }
 
             yOffset += defaultButtonHeight + buttonOffset * 2;
@@ -608,7 +614,7 @@ namespace
     {
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
-                if ( buttonInfo.button.isVisible() && le.MouseClickLeft( buttonInfo.button.area() ) ) {
+                if ( buttonInfo.button.isVisible() && le.MouseClickLeft( buttonInfo.buttonArea ) ) {
                     assert( buttonInfo.action );
                     return buttonInfo.action( renderer );
                 }
@@ -623,10 +629,10 @@ namespace
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
                 if ( buttonInfo.isInvertedRenderingLogic ) {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
+                    buttonInfo.button.drawOnState( !le.isMouseLeftButtonPressedInArea( buttonInfo.buttonArea ) );
                 }
                 else {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
+                    buttonInfo.button.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.buttonArea ) );
                 }
             }
         }
@@ -671,6 +677,8 @@ namespace
             fheroes2::addGradientShadow( okayButtonReleasedImage, display, okayButtonPosition, buttonShadowOffset );
         }
 
+        const fheroes2::Rect okayButtonArea = okayButton.area();
+
         display.render();
 
         DialogAction action = DialogAction::DoNothing;
@@ -680,7 +688,9 @@ namespace
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButtonArea ) );
+
+            if ( le.MouseClickLeft( okayButtonArea ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
@@ -696,13 +706,6 @@ namespace
             }
 
             updateButtonStates( buttons, le );
-
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
 
             if ( le.MouseClickLeft( textRoi ) ) {
                 renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );

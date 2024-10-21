@@ -802,6 +802,9 @@ void Kingdom::openOverviewDialog()
     dst_pt.y += 48;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
+    const fheroes2::Rect buttonHeroesArea = buttonHeroes.area();
+    const fheroes2::Rect buttonCastleArea = buttonCastle.area();
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
     const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
 
@@ -848,15 +851,15 @@ void Kingdom::openOverviewDialog()
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        if ( le.isMouseRightButtonPressedInArea( buttonHeroes.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonHeroesArea ) ) {
             fheroes2::showStandardTextMessage( _( "Heroes" ), _( "View Heroes." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCastleArea ) ) {
             fheroes2::showStandardTextMessage( _( "Towns/Castles" ), _( "View Towns and Castles." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( rectIncome ) || le.isMouseRightButtonPressedInArea( rectGoldPerDay ) ) {
@@ -867,7 +870,7 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             // Disable fast scroll for resolutions where the exit button is directly above the border.
             Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
@@ -881,14 +884,14 @@ void Kingdom::openOverviewDialog()
         }
 
         // switch view: heroes/castle
-        if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
+        if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroesArea ) ) {
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
             listStats = &listHeroes;
             ResetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
         }
-        else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
+        else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastleArea ) ) {
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
             listStats = &listCastles;

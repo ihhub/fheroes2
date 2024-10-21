@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -519,69 +520,68 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + fheroes2::shadowWidthPx, sprite_dialog.width(), sprite_dialog.height() - 2 * fheroes2::shadowWidthPx );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
-    const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
-    fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 192;
-    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
-
-    const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
-
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
     const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
     const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
-    dst_pt.x = pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
-
-    if ( ( flags & ( BUTTONS | UPGRADE ) ) == ( BUTTONS | UPGRADE ) ) {
-        buttonUpgrade.enable();
-        buttonUpgrade.draw();
-    }
-    else {
-        buttonUpgrade.disable();
-    }
-
-    if ( ( flags & ( BUTTONS | DISMISS ) ) == ( BUTTONS | DISMISS ) ) {
-        buttonDismiss.enable();
-        buttonDismiss.draw();
-    }
-    else {
-        buttonDismiss.disable();
-    }
-
-    if ( flags & BUTTONS ) {
-        buttonExit.draw();
-    }
+    fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
 
     LocalEvent & le = LocalEvent::Get();
+
+    if ( !( flags & BUTTONS ) ) {
+        // This is a case when this dialog was called by the right mouse button press.
+
+        display.render( restorer.rect() );
+
+        while ( le.HandleEvents( true ) ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
+        }
+
+        return Dialog::ZERO;
+    }
+
+    std::unique_ptr<fheroes2::Button> buttonUpgrade;
+    std::unique_ptr<fheroes2::Button> buttonDismiss;
+    std::unique_ptr<fheroes2::Rect> buttonUpgradeArea;
+    std::unique_ptr<fheroes2::Rect> buttonDismissArea;
+
+    if ( flags & UPGRADE ) {
+        const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
+        buttonUpgrade = std::make_unique<fheroes2::Button>( pos_rt.x + 280, pos_rt.y + 192, upgradeButtonIcnID, 0, 1 );
+        buttonUpgradeArea = std::make_unique<fheroes2::Rect>( buttonUpgrade->area() );
+
+        buttonUpgrade->draw();
+    }
+
+    if ( flags & DISMISS ) {
+        const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
+        buttonDismiss = std::make_unique<fheroes2::Button>( pos_rt.x + 280, pos_rt.y + 221, dismissButtonIcnID, 0, 1 );
+        buttonDismissArea = std::make_unique<fheroes2::Rect>( buttonDismiss->area() );
+
+        buttonDismiss->draw();
+    }
+
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
+
+    buttonExit.draw();
+
     int result = Dialog::ZERO;
 
     display.render( restorer.rect() );
 
-    while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
-        if ( !( flags & BUTTONS ) ) {
-            if ( !le.isMouseRightButtonPressed() ) {
-                break;
-            }
-
-            continue;
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
+        if ( buttonUpgrade ) {
+            buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedInArea( *buttonUpgradeArea ) );
         }
 
-        if ( buttonUpgrade.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
+        if ( buttonDismiss ) {
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedInArea( *buttonDismissArea ) );
         }
 
-        if ( buttonDismiss.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
-        }
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-
-        if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+        if ( buttonUpgradeArea && ( le.MouseClickLeft( *buttonUpgradeArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
             // If this assertion blows up then you are executing this code for a monster which has no upgrades.
             assert( troop.isAllowUpgrade() );
 
@@ -600,7 +600,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             }
         }
 
-        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
+        if ( buttonDismissArea && ( le.MouseClickLeft( *buttonDismissArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
                     == fheroes2::showStandardTextMessage( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ),
                                                           Dialog::YES | Dialog::NO ) ) {
@@ -608,18 +608,18 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             break;
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             result = Dialog::CANCEL;
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
-        else if ( buttonUpgrade.isEnabled() && le.isMouseRightButtonPressedInArea( buttonUpgrade.area() ) ) {
+        else if ( buttonUpgradeArea && le.isMouseRightButtonPressedInArea( *buttonUpgradeArea ) ) {
             fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
         }
-        else if ( buttonDismiss.isEnabled() && le.isMouseRightButtonPressedInArea( buttonDismiss.area() ) ) {
+        else if ( buttonDismissArea && le.isMouseRightButtonPressedInArea( *buttonDismissArea ) ) {
             fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
         }
 
@@ -642,12 +642,12 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             DrawMonsterInfo( pos_rt.getPosition(), troop );
             DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
 
-            if ( buttonUpgrade.isEnabled() ) {
-                buttonUpgrade.draw();
+            if ( buttonUpgrade ) {
+                buttonUpgrade->draw();
             }
 
-            if ( buttonDismiss.isEnabled() ) {
-                buttonDismiss.draw();
+            if ( buttonDismiss ) {
+                buttonDismiss->draw();
             }
 
             if ( buttonExit.isEnabled() ) {
