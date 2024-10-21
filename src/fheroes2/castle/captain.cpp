@@ -253,8 +253,8 @@ void Captain::PortraitRedraw( const int32_t px, const int32_t py, const Portrait
 
     const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
 
-    const int iconWidth = Interface::IconsBar::GetItemWidth();
-    const int iconHeight = Interface::IconsBar::GetItemHeight();
+    const int iconWidth = Interface::IconsBar::getItemWidth();
+    const int iconHeight = Interface::IconsBar::getItemHeight();
     const int barWidth = 7;
 
     // background

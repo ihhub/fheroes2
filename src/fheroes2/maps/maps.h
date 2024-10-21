@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
@@ -40,6 +41,8 @@ using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
+    struct TilesAddon;
+
     enum mapsize_t : int
     {
         ZERO = 0,
@@ -90,6 +93,9 @@ namespace Maps
 
     // This function always ignores heroes.
     Indexes GetObjectPositions( const MP2::MapObjectType objectType );
+
+    // This is a very slow function by performance. Use it only while loading a map.
+    std::vector<std::pair<int32_t, const TilesAddon *>> getObjectParts( const MP2::MapObjectType objectType );
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 

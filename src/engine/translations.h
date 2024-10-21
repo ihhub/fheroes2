@@ -33,8 +33,8 @@ namespace Translation
     // Sets the language with the given name as the current language if the translation for this language is
     // already cached and valid, otherwise does nothing. Returns a pair of two flags, the first of which is
     // set to true if the translation for the given language is already present in the cache (even if this
-    // translation is invalid), and the second is set to true if this translation is both present in the cache
-    // and valid.
+    // translation is invalid), and the second is set to true if the current language has been successfully
+    // set.
     std::pair<bool, bool> setLanguage( const std::string_view name );
 
     // Sets the language with the given name as the current language if the translation for this language is
