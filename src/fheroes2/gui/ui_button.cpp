@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"
@@ -267,16 +266,6 @@ namespace
 
 namespace fheroes2
 {
-    ButtonBase::ButtonBase( const int32_t offsetX, const int32_t offsetY )
-        : _offsetX( offsetX )
-        , _offsetY( offsetY )
-        , _isPressed( false )
-        , _isEnabled( true )
-        , _isVisible( true )
-        , _releasedSprite( nullptr )
-        , _disabledSprite()
-    {}
-
     bool ButtonBase::press()
     {
         if ( !isEnabled() ) {
@@ -382,7 +371,7 @@ namespace fheroes2
     Rect ButtonBase::area() const
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
-        return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
+        return { _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() };
     }
 
     const Sprite & ButtonBase::_getDisabled() const
@@ -394,34 +383,7 @@ namespace fheroes2
             ApplyPalette( *_disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         }
 
-        return *_disabledSprite.get();
-    }
-
-    Button::Button( int32_t offsetX, int32_t offsetY )
-        : ButtonBase( offsetX, offsetY )
-        , _icnId( -1 )
-        , _releasedIndex( 0 )
-        , _pressedIndex( 0 )
-    {}
-
-    Button::Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
-        : ButtonBase( offsetX, offsetY )
-        , _icnId( icnId )
-        , _releasedIndex( releasedIndex )
-        , _pressedIndex( pressedIndex )
-    {}
-
-    void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
-    {
-        _icnId = icnId;
-        _releasedIndex = releasedIndex;
-        _pressedIndex = pressedIndex;
-    }
-
-    void Button::setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
-    {
-        _releasedIndex = releasedIndex;
-        _pressedIndex = pressedIndex;
+        return *_disabledSprite;
     }
 
     const Sprite & Button::_getPressed() const
@@ -432,24 +394,6 @@ namespace fheroes2
     const Sprite & Button::_getReleased() const
     {
         return AGG::GetICN( _icnId, _releasedIndex );
-    }
-
-    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY )
-        : ButtonBase( offsetX, offsetY )
-    {}
-
-    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled )
-        : ButtonBase( offsetX, offsetY )
-        , _released( std::move( released ) )
-        , _pressed( std::move( pressed ) )
-        , _disabled( std::move( disabled ) )
-    {}
-
-    void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
-    {
-        _released = released;
-        _pressed = pressed;
-        _disabled = disabled;
     }
 
     const Sprite & ButtonSprite::_getPressed() const
@@ -471,7 +415,7 @@ namespace fheroes2
         return _disabled;
     }
 
-    ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
+    ButtonGroup::ButtonGroup( const Rect & area /* = Rect() */, const int buttonTypes /* = 0 */ )
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -520,60 +464,39 @@ namespace fheroes2
         }
     }
 
-    ButtonGroup::~ButtonGroup()
+    void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
+                                    const int returnValue )
     {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            delete _button[i];
+        _button.push_back( std::make_unique<Button>( offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue )
+    {
+        _button.push_back( std::make_unique<ButtonSprite>( offsetX, offsetY, released, pressed ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::addButton( ButtonSprite && button, const int returnValue )
+    {
+        _button.push_back( std::make_unique<ButtonSprite>( std::move( button ) ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::draw( Image & output /* = Display::instance() */ ) const
+    {
+        for ( const auto & button : _button ) {
+            button->draw( output );
         }
-
-        _button.clear();
-        _value.clear();
-    }
-
-    void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue )
-    {
-        _button.push_back( new Button( offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
-        _value.emplace_back( returnValue );
-    }
-
-    void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue )
-    {
-        _button.push_back( new ButtonSprite( offsetX, offsetY, released, pressed ) );
-        _value.emplace_back( returnValue );
-    }
-
-    void ButtonGroup::addButton( ButtonSprite && button, int returnValue )
-    {
-        _button.push_back( new ButtonSprite( std::move( button ) ) );
-        _value.emplace_back( returnValue );
-    }
-
-    void ButtonGroup::draw( Image & area ) const
-    {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->draw( area );
-        }
-    }
-
-    ButtonBase & ButtonGroup::button( size_t id )
-    {
-        assert( id < _button.size() );
-        return *_button[id];
-    }
-
-    const ButtonBase & ButtonGroup::button( size_t id ) const
-    {
-        assert( id < _button.size() );
-        return *_button[id];
     }
 
     int ButtonGroup::processEvents()
     {
         LocalEvent & le = LocalEvent::Get();
 
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i]->isEnabled() ) {
-                le.isMouseLeftButtonPressedInArea( _button[i]->area() ) ? _button[i]->drawOnPress() : _button[i]->drawOnRelease();
+        for ( const auto & button : _button ) {
+            if ( button->isEnabled() ) {
+                button->drawOnState( le.isMouseLeftButtonPressedInArea( button->area() ) );
             }
         }
 
@@ -623,24 +546,29 @@ namespace fheroes2
 
     void OptionButtonGroup::addButton( ButtonBase * button )
     {
-        if ( button == nullptr )
+        if ( button == nullptr ) {
             return;
+        }
 
         _button.push_back( button );
         button->subscribe( this );
     }
 
-    void OptionButtonGroup::draw( Image & area ) const
+    void OptionButtonGroup::draw( Image & output /* = Display::instance() */ ) const
     {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->draw( area );
+        for ( const ButtonBase * button : _button ) {
+            button->draw( output );
         }
     }
 
     void OptionButtonGroup::senderUpdate( const ActionObject * sender )
     {
-        if ( sender == nullptr ) // how is it even possible?
+        if ( sender == nullptr ) {
+            // How is it even possible?
+            assert( 0 );
+
             return;
+        }
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
             if ( sender == _button[i] ) {
@@ -662,15 +590,15 @@ namespace fheroes2
 
     void OptionButtonGroup::subscribeAll()
     {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->subscribe( this );
+        for ( ButtonBase * button : _button ) {
+            button->subscribe( this );
         }
     }
 
     void OptionButtonGroup::unsubscribeAll()
     {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->unsubscribe();
+        for ( ButtonBase * button : _button ) {
+            button->unsubscribe();
         }
     }
 
