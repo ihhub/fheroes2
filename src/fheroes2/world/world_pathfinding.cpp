@@ -1280,7 +1280,8 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     uint32_t remainingSpellPoints = _remainingSpellPoints;
 
     // Reserve spell points only if the target is not an object that will replenish the lost spell points
-    if ( const MP2::MapObjectType objectType = world.GetTiles( targetIndex ).getMainObjectType(); objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
+    if ( const MP2::MapObjectType objectType = world.GetTiles( targetIndex ).getMainObjectType();
+         objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
         if ( remainingSpellPoints < _maxSpellPoints * _spellPointsReserveRatio ) {
             return {};
         }
