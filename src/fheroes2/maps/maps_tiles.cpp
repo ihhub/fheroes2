@@ -752,7 +752,8 @@ void Maps::Tiles::updatePassability()
             return part._objectIcnType != MP2::OBJ_ICN_TYPE_ROAD && part._objectIcnType != MP2::OBJ_ICN_TYPE_STREAM;
         } );
 
-        const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart._objectIcnType != _mainObjectPart._objectIcnType );
+        const bool singleObjectTile
+            = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart._objectIcnType != _mainObjectPart._objectIcnType );
 
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
         if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainObjectPart.isPassabilityTransparent()
@@ -1090,8 +1091,7 @@ bool Maps::Tiles::isStream() const
 {
     for ( const auto & part : _groundObjectPart ) {
         if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
-             || ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
-                  && ( part._imageIndex < 14 || ( part._imageIndex > 217 && part._imageIndex < ( 218 + 14 ) ) ) ) ) {
+             || ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( part._imageIndex < 14 || ( part._imageIndex > 217 && part._imageIndex < ( 218 + 14 ) ) ) ) ) {
             return true;
         }
     }
@@ -1864,13 +1864,15 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
 {
     // TODO: use operator<<() for _mainObjectPart.
     return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainObjectPart._uid
-                  << tile._mainObjectPart._objectIcnType << tile._mainObjectPart._imageIndex << tile._mainObjectType << tile._fogColors << tile._metadata << tile._occupantHeroId
-                  << tile._isTileMarkedAsRoad << tile._groundObjectPart << tile._topObjectPart << tile._mainObjectPart._layerType << tile._boatOwnerColor;
+                  << tile._mainObjectPart._objectIcnType << tile._mainObjectPart._imageIndex << tile._mainObjectType << tile._fogColors << tile._metadata
+                  << tile._occupantHeroId << tile._isTileMarkedAsRoad << tile._groundObjectPart << tile._topObjectPart << tile._mainObjectPart._layerType
+                  << tile._boatOwnerColor;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 {
-    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainObjectPart._uid >> tile._mainObjectPart._objectIcnType;
+    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainObjectPart._uid
+        >> tile._mainObjectPart._objectIcnType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
