@@ -77,9 +77,9 @@ namespace
 
     void updateRandomResource( Maps::Tiles & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_RANDOM_RESOURCE );
+        assert( tile.getMainObjectType() == MP2::OBJ_RANDOM_RESOURCE );
 
-        tile.SetObject( MP2::OBJ_RESOURCE );
+        tile.setMainObjectType( MP2::OBJ_RESOURCE );
 
         const uint8_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
 
@@ -101,7 +101,7 @@ namespace
     {
         Artifact art;
 
-        switch ( tile.GetObject() ) {
+        switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_RANDOM_ARTIFACT:
             art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
             break;
@@ -127,7 +127,7 @@ namespace
             return;
         }
 
-        tile.SetObject( MP2::OBJ_ARTIFACT );
+        tile.setMainObjectType( MP2::OBJ_ARTIFACT );
 
         uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
         if ( uidArtifact == 0 ) {
@@ -155,7 +155,7 @@ namespace
     {
         Monster mons;
 
-        switch ( tile.GetObject() ) {
+        switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_RANDOM_MONSTER:
             mons = Monster::Rand( Monster::LevelType::LEVEL_ANY );
             break;
@@ -184,7 +184,7 @@ namespace
             return;
         }
 
-        tile.SetObject( MP2::OBJ_MONSTER );
+        tile.setMainObjectType( MP2::OBJ_MONSTER );
 
         using TileImageIndexType = decltype( tile.getMainObjectPart()._imageIndex );
         static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
@@ -226,7 +226,7 @@ namespace
     {
         // Castle entrance (active tile) is considered as a road, but it is not a real road so it should not be taken into account here.
         // TODO: Redo the roads placing and direction check to use Map_Format instead of 'world' tiles.
-        MP2::MapObjectType objectType = tile.GetObject( true );
+        MP2::MapObjectType objectType = tile.getMainObjectType( true );
         int roadDirection
             = ( tile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) ? Direction::CENTER : 0;
         const int32_t centerTileIndex = tile.GetIndex();
@@ -234,7 +234,7 @@ namespace
 
         for ( const int32_t tileIndex : around ) {
             const Maps::Tiles & currentTile = world.GetTiles( tileIndex );
-            objectType = currentTile.GetObject( true );
+            objectType = currentTile.getMainObjectType( true );
             if ( currentTile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) {
                 roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
             }
@@ -898,7 +898,7 @@ namespace
 
         // There might be a castle entrance above. Check for it to properly connect the road to it.
         if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
-            const MP2::MapObjectType aboveObject = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).GetObject( false );
+            const MP2::MapObjectType aboveObject = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).getMainObjectType( false );
             if ( aboveObject == MP2::OBJ_CASTLE || aboveObject == MP2::OBJ_RANDOM_TOWN || aboveObject == MP2::OBJ_RANDOM_CASTLE ) {
                 return 31U;
             }
@@ -1209,7 +1209,7 @@ namespace
 
             bool setObjectType = false;
             // The first case if the existing tile has no object type being set.
-            const MP2::MapObjectType tileObjectType = currentTile.GetObject();
+            const MP2::MapObjectType tileObjectType = currentTile.getMainObjectType();
 
             // Always move the current object part to the back of the bottom layer list to make proper sorting later.
             currentTile.moveMainAddonToBottomLayer();
@@ -1272,7 +1272,7 @@ namespace
 
             // Set object type if needed.
             if ( setObjectType ) {
-                currentTile.SetObject( partInfo.objectType );
+                currentTile.setMainObjectType( partInfo.objectType );
             }
         }
 
@@ -1289,8 +1289,8 @@ namespace
             currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
             // Set object type only if the current object part has a type and the object is not an action object.
-            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.GetObject() ) ) {
-                currentTile.SetObject( partInfo.objectType );
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.getMainObjectType() ) ) {
+                currentTile.setMainObjectType( partInfo.objectType );
             }
         }
 
@@ -1447,7 +1447,7 @@ namespace Maps
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return Spell::NONE;
@@ -1458,7 +1458,7 @@ namespace Maps
 
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1469,7 +1469,7 @@ namespace Maps
 
     void removeMineSpellFromTile( Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1480,7 +1480,7 @@ namespace Maps
 
     Funds getDailyIncomeObjectResources( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
@@ -1496,7 +1496,7 @@ namespace Maps
 
     Spell getSpellFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
@@ -1513,7 +1513,7 @@ namespace Maps
 
     void setSpellOnTile( Tiles & tile, const int spellId )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
@@ -1534,7 +1534,7 @@ namespace Maps
 
     void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition )
     {
-        if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
             tile.metadata()[2] = condition;
         }
         else {
@@ -1545,7 +1545,7 @@ namespace Maps
 
     bool isMonsterOnTileJoinConditionSkip( const Tiles & tile )
     {
-        if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
             return ( tile.metadata()[2] == Monster::JOIN_CONDITION_SKIP );
         }
 
@@ -1556,7 +1556,7 @@ namespace Maps
 
     bool isMonsterOnTileJoinConditionFree( const Tiles & tile )
     {
-        if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
             return ( tile.metadata()[2] == Monster::JOIN_CONDITION_FREE );
         }
 
@@ -1616,7 +1616,7 @@ namespace Maps
 
     Monster getMonsterFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_WATCH_TOWER:
             return { Monster::ORC };
         case MP2::OBJ_EXCAVATION:
@@ -1669,7 +1669,7 @@ namespace Maps
             break;
         }
 
-        if ( MP2::isCaptureObject( tile.GetObject( false ) ) ) {
+        if ( MP2::isCaptureObject( tile.getMainObjectType( false ) ) ) {
             return { world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetID() };
         }
 
@@ -1678,7 +1678,7 @@ namespace Maps
 
     Artifact getArtifactFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_DAEMON_CAVE:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SEA_CHEST:
@@ -1709,7 +1709,7 @@ namespace Maps
 
     Skill::Secondary getArtifactSecondarySkillRequirement( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_ARTIFACT ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_ARTIFACT ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return {};
@@ -1731,7 +1731,7 @@ namespace Maps
 
     ArtifactCaptureCondition getArtifactCaptureCondition( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_ARTIFACT ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_ARTIFACT ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return ArtifactCaptureCondition::NO_CONDITIONS;
@@ -1742,7 +1742,7 @@ namespace Maps
 
     Funds getArtifactResourceRequirement( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_ARTIFACT ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_ARTIFACT ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return {};
@@ -1766,7 +1766,7 @@ namespace Maps
 
     DaemonCaveCaptureBonus getDaemonCaveBonusType( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_DAEMON_CAVE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_DAEMON_CAVE ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return DaemonCaveCaptureBonus::EMPTY;
@@ -1777,7 +1777,7 @@ namespace Maps
 
     Funds getDaemonPaymentCondition( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_DAEMON_CAVE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_DAEMON_CAVE ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return {};
@@ -1794,7 +1794,7 @@ namespace Maps
 
     ShipwreckCaptureCondition getShipwreckCaptureCondition( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_SHIPWRECK ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_SHIPWRECK ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return ShipwreckCaptureCondition::EMPTY;
@@ -1805,7 +1805,7 @@ namespace Maps
 
     Funds getTreeOfKnowledgeRequirement( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_TREE_OF_KNOWLEDGE ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_TREE_OF_KNOWLEDGE ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return {};
@@ -1816,7 +1816,7 @@ namespace Maps
 
     Skill::Secondary getSecondarySkillFromWitchsHut( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_WITCHS_HUT ) {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_WITCHS_HUT ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
             return {};
@@ -1833,7 +1833,7 @@ namespace Maps
 
     Funds getFundsFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_CAMPFIRE:
             // Campfire contains N of non-Gold resources and (N * 100) Gold.
             return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
@@ -1870,13 +1870,13 @@ namespace Maps
 
     Troop getTroopFromTile( const Tiles & tile )
     {
-        return MP2::isCaptureObject( tile.GetObject( false ) ) ? world.GetCapturedObject( tile.GetIndex() ).GetTroop()
+        return MP2::isCaptureObject( tile.getMainObjectType( false ) ) ? world.GetCapturedObject( tile.GetIndex() ).GetTroop()
                                                                : Troop( getMonsterFromTile( tile ), getMonsterCountFromTile( tile ) );
     }
 
     int getColorFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT:
             return static_cast<int>( tile.metadata()[0] );
@@ -1887,7 +1887,7 @@ namespace Maps
 
     void setColorOnTile( Tiles & tile, const int color )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT:
             tile.metadata()[0] = color;
@@ -1900,7 +1900,7 @@ namespace Maps
 
     bool doesTileContainValuableItems( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
@@ -1947,7 +1947,7 @@ namespace Maps
 
     uint32_t getMonsterCountFromTile( const Tiles & tile )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ABANDONED_MINE:
         case MP2::OBJ_AIR_ALTAR:
         case MP2::OBJ_ARCHER_HOUSE:
@@ -1984,7 +1984,7 @@ namespace Maps
 
     void setMonsterCountOnTile( Tiles & tile, uint32_t count )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ABANDONED_MINE:
         case MP2::OBJ_AIR_ALTAR:
         case MP2::OBJ_ARCHER_HOUSE:
@@ -2021,7 +2021,7 @@ namespace Maps
     void updateDwellingPopulationOnTile( Tiles & tile, const bool isFirstLoad )
     {
         uint32_t count = isFirstLoad ? 0 : getMonsterCountFromTile( tile );
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         switch ( objectType ) {
         // join monsters
@@ -2107,7 +2107,7 @@ namespace Maps
 
     void updateObjectInfoTile( Tiles & tile, const bool isFirstLoad )
     {
-        switch ( tile.GetObject( false ) ) {
+        switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_WITCHS_HUT:
             assert( isFirstLoad );
 
@@ -2416,7 +2416,7 @@ namespace Maps
             assert( isFirstLoad );
 
             if ( tile.isWater() ) {
-                tile.SetObject( MP2::OBJ_SEA_CHEST );
+                tile.setMainObjectType( MP2::OBJ_SEA_CHEST );
                 updateObjectInfoTile( tile, isFirstLoad );
                 return;
             }
@@ -2644,7 +2644,7 @@ namespace Maps
             }
             default:
                 // This is an unknown mine type. Most likely it was added by some hex editing.
-                tile.SetObject( MP2::OBJ_NONE );
+                tile.setMainObjectType( MP2::OBJ_NONE );
                 break;
             }
             break;
@@ -2754,7 +2754,7 @@ namespace Maps
 
     void setMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
     {
-        tile.SetObject( MP2::OBJ_MONSTER );
+        tile.setMainObjectType( MP2::OBJ_MONSTER );
 
         Maps::TilesAddon & mainAddon = tile.getMainObjectPart();
 
@@ -2857,7 +2857,7 @@ namespace Maps
 
     bool isCaptureObjectProtected( const Tiles & tile )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( !MP2::isCaptureObject( objectType ) ) {
             return false;
@@ -2879,7 +2879,7 @@ namespace Maps
 
     void restoreAbandonedMine( Tiles & tile, const int resource )
     {
-        assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
+        assert( tile.getMainObjectType( false ) == MP2::OBJ_ABANDONED_MINE );
         assert( tile.getMainObjectPart()._uid != 0 );
 
         const Funds info = ProfitConditions::FromMine( resource );
@@ -2956,10 +2956,10 @@ namespace Maps
         const auto restoreMineObjectType = [&tile]( int directionVector ) {
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
-                if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+                if ( ( mineTile.getMainObjectType() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
                      && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getBottomLayerAddon( tile.getMainObjectPart()._uid )
                           || mineTile.getTopLayerAddon( tile.getMainObjectPart()._uid ) ) ) {
-                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINE );
+                    mineTile.setMainObjectType( MP2::OBJ_NON_ACTION_MINE );
                 }
             }
         };
@@ -3005,7 +3005,7 @@ namespace Maps
 
     void removeMainObjectFromTile( const Tiles & tile )
     {
-        removeObjectFromTileByType( tile, tile.GetObject() );
+        removeObjectFromTileByType( tile, tile.getMainObjectType() );
     }
 
     bool removeObjectFromTileByType( const Tiles & tile, const MP2::MapObjectType objectType )
@@ -3046,7 +3046,7 @@ namespace Maps
 
     bool isClearGround( const Tiles & tile )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( true );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
 
         switch ( objectType ) {
         case MP2::OBJ_NONE:

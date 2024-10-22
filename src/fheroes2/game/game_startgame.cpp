@@ -442,7 +442,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
 
 int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * otherCastle = world.getCastle( tile.GetCenter() );
@@ -475,13 +475,13 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
 {
     const bool isWater = tile.isWater();
 
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+            if ( tile.getMainObjectType() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -526,7 +526,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
 
     default:
         if ( isWater ) {
-            if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
+            if ( MP2::isWaterActionObject( tile.getMainObjectType() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -543,7 +543,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
 
 int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
 {
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
@@ -576,13 +576,13 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return GetCursorFocusShipmaster( hero, tile );
     }
 
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
+            if ( tile.getMainObjectType() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
@@ -643,7 +643,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.getMainObjectType() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
@@ -1545,7 +1545,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
     }
 
     case Cursor::CASTLE: {
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType ) {
             break;
         }
@@ -1604,7 +1604,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
         Dialog::QuickInfo( tile );
     }
     else {
-        switch ( tile.GetObject() ) {
+        switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastle( tile.GetCenter() );
