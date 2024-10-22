@@ -1959,7 +1959,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
             return false;
         }
 
-        // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
+        // Mark the tile as worthy to a place a boat if the main object part does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
         return ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
