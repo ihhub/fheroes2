@@ -483,13 +483,6 @@ namespace
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
-    bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target )
-    {
-        if ( currentUnit.isFlying() == target.isFlying() )
-            return currentUnit.GetSpeed() > target.GetSpeed();
-        return currentUnit.isFlying();
-    }
-
     double commanderMaximumSpellDamageValue( const HeroBase & commander )
     {
         double bestValue = 0;
@@ -1536,10 +1529,6 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
         const Castle * castle = Battle::Arena::GetCastle();
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-        // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the total army value will be
-        // lost to make sure that the difference of 4 tiles matters.
-        const double attackDistanceModifier = _enemyArmyStrength / 5.0;
-
         double maxPriority = std::numeric_limits<double>::lowest();
 
         for ( const Battle::Unit * enemy : enemies ) {
@@ -1551,10 +1540,34 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             }
 
             // Do not pursue faster units that can move away and avoid an engagement
-            const uint32_t dist
-                = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ? nearestCellInfo.dist + Battle::Board::widthInCells + Battle::Board::heightInCells
-                                                                               : nearestCellInfo.dist );
-            const double unitPriority = enemy->evaluateThreatForUnit( currentUnit ) - dist * attackDistanceModifier;
+            const uint32_t dist = [&currentUnit, enemy, baseDist = nearestCellInfo.dist]() {
+                // If the current unit was flying, this enemy unit would have already been attacked by it
+                assert( !currentUnit.isFlying() );
+
+                // Penalty does not apply to archers because they always pose a threat
+                if ( enemy->isArchers() ) {
+                    return baseDist;
+                }
+
+                const uint32_t enemySpeed = enemy->GetSpeed( false, true );
+                // If the enemy unit is immovable, it will not be able to evade an engagement
+                if ( enemySpeed == Speed::STANDING ) {
+                    return baseDist;
+                }
+
+                const uint32_t penaltyDist = baseDist + Battle::Board::widthInCells + Battle::Board::heightInCells;
+
+                // Flying unit, even inferior in speed, can move around the entire battlefield and easily evade an engagement
+                if ( enemy->isFlying() ) {
+                    return penaltyDist;
+                }
+
+                return currentUnit.GetSpeed( false, true ) > enemySpeed ? baseDist : penaltyDist;
+            }();
+
+            // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each
+            // tile passed, 20% of the total threat value will be lost to make sure that the difference of 5 tiles matters.
+            const double unitPriority = enemy->evaluateThreatForUnit( currentUnit ) * ( 1.0 - dist * 0.20 );
 
             if ( unitPriority < maxPriority ) {
                 continue;
