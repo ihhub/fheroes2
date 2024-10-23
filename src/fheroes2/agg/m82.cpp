@@ -208,7 +208,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
         return LOOP0014;
     }
 
-    switch ( tile.GetObject( false ) ) {
+    switch ( tile.getMainObjectType( false ) ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:

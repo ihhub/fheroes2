@@ -422,7 +422,7 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
 
 bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 {
-    return isVisited( tile.GetIndex(), tile.GetObject( false ) );
+    return isVisited( tile.GetIndex(), tile.getMainObjectType( false ) );
 }
 
 bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) const
@@ -457,14 +457,14 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
         return false;
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
-    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
+    if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
         return color == tileColor || !Players::isFriends( color, tileColor );
     }
 
-    // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
+    // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
     if ( objectType == MP2::OBJ_HERO ) {
         const Heroes * hero = tile.getHero();
 

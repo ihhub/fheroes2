@@ -123,7 +123,7 @@ namespace Maps
 
         fheroes2::Point GetCenter() const;
 
-        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero = true ) const;
 
         const TilesAddon & getMainObjectPart() const
         {
@@ -148,11 +148,6 @@ namespace Maps
         bool isWater() const
         {
             return Ground::getGroundByImageIndex( _terrainImageIndex ) == Ground::WATER;
-        }
-
-        bool isSameMainObject( const MP2::MapObjectType objectType ) const
-        {
-            return objectType == _mainObjectType;
         }
 
         // Returns true if tile's main and bottom layer addons do not contain any objects: layer type is SHADOW or TERRAIN.
@@ -184,7 +179,9 @@ namespace Maps
         TilesAddon * getBottomLayerAddon( const uint32_t uid );
         TilesAddon * getTopLayerAddon( const uint32_t uid );
 
-        void SetObject( const MP2::MapObjectType objectType );
+        // Call this function with understanding that the object type you are setting
+        // actually exists on this tile.
+        void setMainObjectType( const MP2::MapObjectType objectType );
 
         void resetBoatOwnerColor()
         {
@@ -369,6 +366,9 @@ namespace Maps
 
         uint16_t _terrainImageIndex{ 0 };
 
+        // Each tile has a main object type which is served as an indicator
+        // whether the tile has any action type object and also as information
+        // for users to read about this tile.
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
         std::array<uint32_t, 3> _metadata{ 0 };

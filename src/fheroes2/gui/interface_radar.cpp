@@ -326,7 +326,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
             uint8_t fillColor = 0;
 
-            const MP2::MapObjectType objectType = tile.GetObject( revealOnlyVisible || revealHeroes );
+            const MP2::MapObjectType objectType = tile.getMainObjectType( revealOnlyVisible || revealHeroes );
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
                 if ( visibleTile || revealHeroes ) {

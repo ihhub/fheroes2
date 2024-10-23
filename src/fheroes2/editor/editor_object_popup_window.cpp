@@ -42,7 +42,7 @@ namespace
 {
     std::string getObjectInfoText( const Maps::Tiles & tile )
     {
-        const MP2::MapObjectType type = tile.GetObject();
+        const MP2::MapObjectType type = tile.getMainObjectType();
         switch ( type ) {
         case MP2::OBJ_NONE:
             if ( tile.isRoad() ) {

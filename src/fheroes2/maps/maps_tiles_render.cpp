@@ -137,7 +137,7 @@ namespace
         assert( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._imageIndex != 255 );
 
         const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart()._objectIcnType );
-        if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.GetObject() ) ) {
+        if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.getMainObjectType() ) ) {
             return;
         }
 
@@ -642,7 +642,7 @@ namespace Maps
         // Ghost animation is unique and can be rendered in multiple cases.
         bool renderFlyingGhosts = false;
 
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
             renderFlyingGhosts = true;
         }
@@ -922,7 +922,7 @@ namespace Maps
         (void)friendColors;
 #endif
 
-        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.GetObject() ) : MP2::isInGameActionObject( tile.GetObject() );
+        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.getMainObjectType() ) : MP2::isInGameActionObject( tile.getMainObjectType() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
@@ -1000,7 +1000,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode )
     {
-        assert( tile.GetObject() == MP2::OBJ_MONSTER );
+        assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
@@ -1043,7 +1043,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode )
     {
-        assert( tile.GetObject() == MP2::OBJ_MONSTER );
+        assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
@@ -1087,7 +1087,7 @@ namespace Maps
     std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tiles & tile )
     {
         // TODO: combine both boat image generation for heroes and empty boats.
-        assert( tile.GetObject() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
 
         const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
 
@@ -1117,7 +1117,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
 
         // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
         const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
@@ -1144,7 +1144,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject( false ) == MP2::OBJ_MINE );
+        assert( tile.getMainObjectType( false ) == MP2::OBJ_MINE );
 
         std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
 
@@ -1296,7 +1296,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_HERO );
+        assert( tile.getMainObjectType() == MP2::OBJ_HERO );
 
         const uint32_t icnIndex = tile.getMainObjectPart()._imageIndex;
         const int icnId{ ICN::MINIHERO };

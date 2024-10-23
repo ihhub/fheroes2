@@ -51,7 +51,7 @@ void AI::Planner::resetPathfinder()
 
 void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
 {
-    const MP2::MapObjectType object = tile.GetObject();
+    const MP2::MapObjectType object = tile.getMainObjectType();
     if ( !MP2::isInGameActionObject( object ) ) {
         return;
     }
@@ -179,7 +179,7 @@ double AI::Planner::getFundsValueBasedOnPriority( const Funds & funds ) const
 
 void AI::Planner::updateMapActionObjectCache( const int mapIndex )
 {
-    const MP2::MapObjectType objectType = world.GetTiles( mapIndex ).GetObject();
+    const MP2::MapObjectType objectType = world.GetTiles( mapIndex ).getMainObjectType();
 
     if ( !MP2::isInGameActionObject( objectType ) ) {
         _mapActionObjects.erase( mapIndex );
