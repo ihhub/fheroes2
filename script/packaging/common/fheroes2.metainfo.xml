@@ -37,6 +37,52 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-10-23" version="v1.1.3">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.3</url>
+      <description>
+        <p>Changes in v1.1.3 (23 October 2024):</p>
+        <ul>
+          <li>fix invalid behavior and crash during interaction with whirlpools by heroes on boats</li>
+          <li>fix French small font i with circumflex</li>
+          <li>add Czech Virtual Keyboard support</li>
+          <li>fix rendering of overlapped UI elements</li>
+          <li>shorten map title when too long in several places</li>
+          <li>add missing popup dialogs to buttons within View World mode</li>
+          <li>update the Hungarian translation</li>
+          <li>speed up language switching I/O operations</li>
+          <li>update the Swedish translation</li>
+          <li>fix Sorceress Statue construction fade-in animation</li>
+          <li>fix map titles not being cleared when changing map</li>
+          <li>add language support for fh2m map format</li>
+          <li>update the Portuguese translation</li>
+          <li>use an original image to draw hexagons on the battlefield</li>
+          <li>improve Dismiss button for French and Spanish languages</li>
+          <li>fix event handling for dialogs in No Interface mode</li>
+          <li>improve error handling for I/O operations</li>
+          <li>increase most of object selection windows in the Editor by 50 pixels </li>
+          <li>update army information after battle before showing any dialogs</li>
+          <li>add missing sand animation for hourglass while waiting for a turn</li>
+          <li>speed up AI calculations on the Adventure Map</li>
+          <li>improve AI decision making while using Dimension Door spell</li>
+          <li>ease object requirements while erasing them in the Editor</li>
+          <li>split long phrases into two lines for battle log</li>
+          <li>fix blinking arrow cursor during scrolling in Editor</li>
+          <li>properly show damage info pop-up dialog for 2-hex monsters during battle</li>
+          <li>make default knowledge value for random hero 1</li>
+          <li>fix inability to erase monsters on the map under certain conditions within the Editor</li>
+          <li>fix the triggering of invalid drag events for the game area when casting certain spells</li>
+          <li>fix out of mini-map mouse dragging behavior in the Editor</li>
+          <li>update the Russian translation</li>
+          <li>add vertical gradient fonts</li>
+          <li>add a popup dialog to the list of resolutions</li>
+          <li>allow to resize vertical buttons for translations</li>
+          <li>fix issues with non-English path detection on Windows</li>
+          <li>center sprites and text in adventure map treasure chest dialog</li>
+          <li>do not discard area selection while moving mouse out of the map in the Editor</li>
+          <li>fix a crash while trying to distribute an army with 1 unit</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-09-15" version="v1.1.2">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.2</url>
       <description>
