@@ -232,12 +232,12 @@ namespace Maps
             streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
         }
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                roadParts.emplace( addon._uid, addon._imageIndex );
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( part._uid, part._imageIndex );
             }
-            else if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                streamParts.emplace( addon._uid, addon._imageIndex );
+            else if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace( part._uid, part._imageIndex );
             }
         }
 

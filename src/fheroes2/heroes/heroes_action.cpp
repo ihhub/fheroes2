@@ -229,8 +229,8 @@ namespace
             objectUID = tile.getMainObjectPart()._uid;
         }
         else {
-            // In maps made by the original map editor the action object can be in the bottom layer addons.
-            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+            // In maps made by the original map editor the action object can be in the ground layer.
+            for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
                 if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
