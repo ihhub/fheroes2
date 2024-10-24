@@ -662,7 +662,7 @@ Skill::SecSkills::SecSkills()
     reserve( Heroes::maxNumOfSecSkills );
 }
 
-Skill::SecSkills::SecSkills( int race )
+Skill::SecSkills::SecSkills( const int race )
 {
     reserve( Heroes::maxNumOfSecSkills );
 

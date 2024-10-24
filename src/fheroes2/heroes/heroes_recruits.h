@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2RECRUITS_H
-#define H2RECRUITS_H
+#pragma once
 
 #include <cstdint>
 #include <utility>
@@ -38,12 +37,6 @@ public:
     Recruit();
     Recruit( const Heroes & hero, const uint32_t surrenderDay );
     explicit Recruit( const Heroes & hero );
-    Recruit( const Recruit & ) = delete;
-
-    ~Recruit() = default;
-
-    Recruit & operator=( const Recruit & ) = delete;
-    Recruit & operator=( Recruit && ) = default;
 
     int getID() const
     {
@@ -87,5 +80,3 @@ public:
 
 OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );
 IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
-
-#endif

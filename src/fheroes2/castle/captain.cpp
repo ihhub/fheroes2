@@ -82,9 +82,9 @@ namespace
     }
 }
 
-Captain::Captain( Castle & cstl )
-    : HeroBase( HeroBase::CAPTAIN, cstl.GetRace() )
-    , home( cstl )
+Captain::Captain( Castle & castle )
+    : HeroBase( HeroBase::CAPTAIN, castle.GetRace() )
+    , home( castle )
 {
     SetCenter( home.GetCenter() );
 }

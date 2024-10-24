@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CASTLE_H
-#define H2CASTLE_H
+
+#pragma once
 
 #include <array>
 #include <cstddef>
@@ -146,7 +146,9 @@ public:
 
     Castle() = default;
     Castle( const int32_t posX, const int32_t posY, int race );
+
     Castle( const Castle & ) = delete;
+
     ~Castle() override = default;
 
     Castle & operator=( const Castle & ) = delete;
@@ -511,12 +513,6 @@ namespace CastleDialog
 struct VecCastles : public std::vector<Castle *>
 {
     VecCastles() = default;
-    VecCastles( const VecCastles & ) = delete;
-
-    ~VecCastles() = default;
-
-    VecCastles & operator=( const VecCastles & ) = delete;
-    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };
@@ -590,5 +586,3 @@ IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
 OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
 IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
-
-#endif
