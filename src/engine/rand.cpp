@@ -79,12 +79,12 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
     uint32_t rand = randomFunc( sum - 1 );
     assert( rand < sum );
 
-    for ( const ValueWeight & vw : *this ) {
-        if ( rand < vw.second ) {
-            return vw.first;
+    for ( const auto & [value, weight] : *this ) {
+        if ( rand < weight ) {
+            return value;
         }
 
-        rand -= vw.second;
+        rand -= weight;
     }
 
     assert( 0 );
