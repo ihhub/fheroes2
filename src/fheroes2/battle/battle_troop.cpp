@@ -475,7 +475,7 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
     }
-    else if ( Modes( SP_SLOW ) ) {
+    if ( Modes( SP_SLOW ) ) {
         return Speed::GetSlowSpeedFromSpell( speed );
     }
 
