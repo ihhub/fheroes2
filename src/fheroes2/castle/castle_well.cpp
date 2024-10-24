@@ -216,9 +216,11 @@ void Castle::_openWell()
 
     // MAX button.
     fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUYMAX, 0, 1 );
+    const fheroes2::Rect buttonMaxArea = buttonMax.area();
 
     // EXIT button.
     fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
 
     const std::array<fheroes2::Rect, maxNumOfDwellings> rectMonster
         = { fheroes2::Rect( roi.x + 20, roi.y + 18, 288, 124 ),   fheroes2::Rect( roi.x + 20, roi.y + 168, 288, 124 ),
@@ -245,15 +247,15 @@ void Castle::_openWell()
     Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+        buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMaxArea ) );
         const BuildingType pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
+        if ( le.MouseClickLeft( buttonMaxArea ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
             const Troops & currentArmy = GetArmy();
             if ( _recruitCastleMax( currentArmy ) ) {
                 // Update available monster count on background.
@@ -294,11 +296,11 @@ void Castle::_openWell()
             display.render( roi );
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonMaxArea ) ) {
             fheroes2::showStandardTextMessage( _( "Max" ), _( "Hire all creatures in the town." ), Dialog::ZERO );
         }
     }

@@ -441,6 +441,8 @@ void Dialog::ThievesGuild( const bool oracle )
         drawBestMonsterIcons( colors, offset, stepX, display );
     }
 
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
+
     buttonExit.draw();
 
     // Fade-in thieves guild dialog.
@@ -455,12 +457,12 @@ void Dialog::ThievesGuild( const bool oracle )
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
     }

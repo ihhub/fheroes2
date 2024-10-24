@@ -349,6 +349,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
     fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
 
+    const fheroes2::Rect moveArmyToHero2Area = moveArmyToHero2.area();
+    const fheroes2::Rect moveArmyToHero1Area = moveArmyToHero1.area();
+
     fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
     fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
 
@@ -396,10 +399,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
     fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 384, display );
 
+    const fheroes2::Rect moveArtifactsToHero2Area = moveArtifactsToHero2.area();
+    const fheroes2::Rect moveArtifactsToHero1Area = moveArtifactsToHero1.area();
+
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_EXIT_HEROES_MEETING, 0, 1 );
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
@@ -418,13 +425,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
 
-        if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2Area ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero1Area ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
@@ -433,11 +440,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero2.drawOnRelease();
         }
 
-        if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2Area ) ) {
             moveArtifactsToHero2.drawOnPress();
             moveArtifactsToHero1.drawOnRelease();
         }
-        else if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero1.area() ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero1Area ) ) {
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
@@ -446,7 +453,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero2.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() )
             break;
 
         // selector troops event
@@ -566,7 +573,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.updateNextRenderRoi( restorerRoi );
             fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
         }
-        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+        else if ( le.MouseClickLeft( moveArmyToHero2Area ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             const ArmyTroop * keep = nullptr;
 
             if ( selectArmy1.isSelected() ) {
@@ -591,7 +598,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+        else if ( le.MouseClickLeft( moveArmyToHero1Area ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             const ArmyTroop * keep = nullptr;
 
             if ( selectArmy1.isSelected() ) {
@@ -616,7 +623,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
+        else if ( le.MouseClickLeft( moveArtifactsToHero2Area ) ) {
             moveArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
@@ -633,7 +640,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
+        else if ( le.MouseClickLeft( moveArtifactsToHero1Area ) ) {
             moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();

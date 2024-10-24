@@ -651,12 +651,16 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Zoom button
     const fheroes2::Point buttonZoomPosition( display.width() - fheroes2::radarWidthPx + 16, 2 * fheroes2::borderWidthPx + fheroes2::radarWidthPx + 128 );
     fheroes2::Button buttonZoom( buttonZoomPosition.x, buttonZoomPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 0, 1 );
+    const fheroes2::Rect buttonZoomArea = buttonZoom.area();
+
     buttonZoom.draw();
 
     // Exit button
     const fheroes2::Point buttonExitPosition( display.width() - fheroes2::radarWidthPx + 16, 2 * fheroes2::borderWidthPx + fheroes2::radarWidthPx + 236 );
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::BUTTON_VIEWWORLD_EXIT_EVIL : ICN::BUTTON_VIEWWORLD_EXIT_GOOD ), 0,
                                  1 );
+    const fheroes2::Rect buttonExitArea = buttonExit.area();
+
     buttonExit.draw();
 
     // Fade-in View World screen.
@@ -678,16 +682,16 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // message loop
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+        buttonZoom.drawOnState( le.isMouseLeftButtonPressedInArea( buttonZoomArea ) );
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
-        if ( le.MouseClickLeft( buttonZoom.area() ) ) {
+        if ( le.MouseClickLeft( buttonZoomArea ) ) {
             changed = currentROI.zoomOut( true );
         }
         else if ( le.isMouseCursorPosInArea( radar.GetRect() ) ) {
@@ -713,10 +717,10 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         else if ( le.isMouseWheelDown() ) {
             changed = currentROI.zoomOut( false );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonZoom.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonZoomArea ) ) {
             fheroes2::showStandardTextMessage( _( "Zoom" ), _( "Click this button to adjust the level of zoom." ), Dialog::ZERO );
         }
 

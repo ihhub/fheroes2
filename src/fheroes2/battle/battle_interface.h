@@ -448,9 +448,9 @@ namespace Battle
         int _battleGroundIcn{ ICN::UNKNOWN };
         int _borderObjectsIcn{ ICN::UNKNOWN };
 
-        fheroes2::Button btn_auto;
-        fheroes2::Button btn_settings;
-        fheroes2::Button btn_skip;
+        fheroes2::Button _buttonAuto;
+        fheroes2::Button _buttonSettings;
+        fheroes2::Button _buttonSkip;
         Status status;
 
         std::unique_ptr<OpponentSprite> _opponent1;

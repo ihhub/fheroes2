@@ -110,11 +110,11 @@ namespace
         fheroes2::Point pt;
         pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).width() - 20;
         pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button button_learn1( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        fheroes2::Button buttonLearnLeft( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
         pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
         pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button button_learn2( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        fheroes2::Button buttonLearnRight( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
         const fheroes2::Rect & boxArea = box.GetArea();
         fheroes2::Point pos( boxArea.x, boxArea.y );
@@ -155,34 +155,38 @@ namespace
         pt.y = box.GetArea().y + box.GetArea().height - 35;
 
         const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-        fheroes2::ButtonSprite button_hero
+        fheroes2::ButtonSprite buttonHero
             = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
         text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ), fheroes2::FontType::normalWhite() );
         text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 15, display );
 
-        button_learn1.draw();
-        button_learn2.draw();
-        button_hero.draw();
+        buttonLearnLeft.draw();
+        buttonLearnRight.draw();
+        buttonHero.draw();
+
+        const fheroes2::Rect buttonLearnLeftArea = buttonLearnLeft.area();
+        const fheroes2::Rect buttonLearnRightArea = buttonLearnRight.area();
+        const fheroes2::Rect buttonHeroArea = buttonHero.area();
 
         display.render();
         LocalEvent & le = LocalEvent::Get();
 
         // message loop
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( button_learn1.area() ) ? button_learn1.drawOnPress() : button_learn1.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
+            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeftArea ) );
+            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRightArea ) );
+            buttonHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHeroArea ) );
 
-            if ( le.MouseClickLeft( button_learn1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+            if ( le.MouseClickLeft( buttonLearnLeftArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
                 return sec1.Skill();
             }
 
-            if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+            if ( le.MouseClickLeft( buttonLearnRightArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
                 return sec2.Skill();
             }
 
-            if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( le.MouseClickLeft( buttonHeroArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 LocalEvent::Get().reset();
                 hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
@@ -203,7 +207,7 @@ namespace
                 fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
                 display.render();
             }
-            else if ( le.isMouseRightButtonPressedInArea( button_hero.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonHeroArea ) ) {
                 fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
             }
         }
