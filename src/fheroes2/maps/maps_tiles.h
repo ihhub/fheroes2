@@ -50,11 +50,11 @@ namespace Maps
         TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
     };
 
-    struct TilesAddon
+    struct ObjectPart
     {
-        TilesAddon() = default;
+        ObjectPart() = default;
 
-        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
+        ObjectPart( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
             : _uid( uid )
             , _layerType( layerType )
             , _objectIcnType( objectIcnType )
@@ -63,19 +63,19 @@ namespace Maps
             // Do nothing.
         }
 
-        TilesAddon( const TilesAddon & ) = default;
+        ObjectPart( const ObjectPart & ) = default;
 
-        ~TilesAddon() = default;
+        ~ObjectPart() = default;
 
-        // Returns true if it can be passed be hero/boat: addon's layer type is SHADOW or TERRAIN.
+        // Returns true if it can be passed be hero/boat: part's layer type is SHADOW or TERRAIN.
         bool isPassabilityTransparent() const
         {
             return _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER;
         }
 
-        bool operator==( const TilesAddon & addon ) const
+        bool operator==( const ObjectPart & part ) const
         {
-            return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
+            return ( _uid == part._uid ) && ( _layerType == part._layerType ) && ( _objectIcnType == part._objectIcnType ) && ( _imageIndex == part._imageIndex );
         }
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
@@ -98,8 +98,8 @@ namespace Maps
 
         bool operator==( const Tiles & tile ) const
         {
-            return ( _addonBottomLayer == tile._addonBottomLayer ) && ( _addonTopLayer == tile._addonTopLayer ) && ( _index == tile._index )
-                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainAddon == tile._mainAddon )
+            return ( _groundObjectPart == tile._groundObjectPart ) && ( _topObjectPart == tile._topObjectPart ) && ( _index == tile._index )
+                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainObjectPart == tile._mainObjectPart )
                    && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
                    && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
         }
@@ -125,14 +125,14 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        const TilesAddon & getMainObjectPart() const
+        const ObjectPart & getMainObjectPart() const
         {
-            return _mainAddon;
+            return _mainObjectPart;
         }
 
-        TilesAddon & getMainObjectPart()
+        ObjectPart & getMainObjectPart()
         {
-            return _mainAddon;
+            return _mainObjectPart;
         }
 
         uint16_t GetPassable() const
@@ -155,7 +155,7 @@ namespace Maps
             return objectType == _mainObjectType;
         }
 
-        // Returns true if tile's main and bottom layer addons do not contain any objects: layer type is SHADOW or TERRAIN.
+        // Returns true if tile's main and ground layer object parts do not contain any objects: layer type is SHADOW or TERRAIN.
         bool isPassabilityTransparent() const;
 
         // Checks whether it is possible to move into this tile from the specified direction
@@ -181,8 +181,8 @@ namespace Maps
         bool isStream() const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * getBottomLayerAddon( const uint32_t uid );
-        TilesAddon * getTopLayerAddon( const uint32_t uid );
+        ObjectPart * getGroundObjectPart( const uint32_t uid );
+        ObjectPart * getTopObjectPart( const uint32_t uid );
 
         void SetObject( const MP2::MapObjectType objectType );
 
@@ -201,7 +201,7 @@ namespace Maps
 
         void resetMainObjectPart()
         {
-            _mainAddon = {};
+            _mainObjectPart = {};
         }
 
         uint32_t GetRegion() const
@@ -225,41 +225,41 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushBottomLayerAddon( const MP2::MP2AddonInfo & ma );
+        void pushGroundObjectPart( const MP2::MP2AddonInfo & ma );
 
-        void pushBottomLayerAddon( TilesAddon ta );
+        void pushGroundObjectPart( ObjectPart ta );
 
-        void pushTopLayerAddon( const MP2::MP2AddonInfo & ma );
+        void pushTopObjectPart( const MP2::MP2AddonInfo & ma );
 
-        void pushTopLayerAddon( TilesAddon ta )
+        void pushTopObjectPart( ObjectPart ta )
         {
-            _addonTopLayer.emplace_back( ta );
+            _topObjectPart.emplace_back( ta );
         }
 
-        const std::list<TilesAddon> & getBottomLayerAddons() const
+        const std::list<ObjectPart> & getGroundObjectParts() const
         {
-            return _addonBottomLayer;
+            return _groundObjectPart;
         }
 
-        std::list<TilesAddon> & getBottomLayerAddons()
+        std::list<ObjectPart> & getGroundObjectParts()
         {
-            return _addonBottomLayer;
+            return _groundObjectPart;
         }
 
-        const std::list<TilesAddon> & getTopLayerAddons() const
+        const std::list<ObjectPart> & getTopObjectParts() const
         {
-            return _addonTopLayer;
+            return _topObjectPart;
         }
 
-        void moveMainAddonToBottomLayer()
+        void moveMainObjectPartToGroundLevel()
         {
-            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-                _addonBottomLayer.emplace_back( _mainAddon );
-                _mainAddon = {};
+            if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _groundObjectPart.emplace_back( _mainObjectPart );
+                _mainObjectPart = {};
             }
         }
 
-        void AddonsSort();
+        void sortObjectParts();
 
         // Returns true if any object part was removed.
         bool removeObjectPartsByUID( const uint32_t objectUID );
@@ -337,7 +337,7 @@ namespace Maps
     private:
         bool isShadow() const;
 
-        TilesAddon * getAddonWithFlag( const uint32_t uid );
+        ObjectPart * getObjectPartWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
@@ -359,11 +359,11 @@ namespace Maps
 
         // The following members are used in the Editor and in the game.
 
-        TilesAddon _mainAddon;
+        ObjectPart _mainObjectPart;
 
-        std::list<TilesAddon> _addonBottomLayer;
+        std::list<ObjectPart> _groundObjectPart;
 
-        std::list<TilesAddon> _addonTopLayer;
+        std::list<ObjectPart> _topObjectPart;
 
         int32_t _index{ 0 };
 
@@ -395,9 +395,9 @@ namespace Maps
         uint32_t _region{ REGION_NODE_BLOCKED };
     };
 
-    OStreamBase & operator<<( OStreamBase & stream, const TilesAddon & ta );
+    OStreamBase & operator<<( OStreamBase & stream, const ObjectPart & ta );
     OStreamBase & operator<<( OStreamBase & stream, const Tiles & tile );
-    IStreamBase & operator>>( IStreamBase & stream, TilesAddon & ta );
+    IStreamBase & operator>>( IStreamBase & stream, ObjectPart & ta );
     IStreamBase & operator>>( IStreamBase & stream, Tiles & tile );
 }
 
