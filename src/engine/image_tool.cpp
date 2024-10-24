@@ -357,39 +357,36 @@ namespace fheroes2
                     ++data;
 
                     const uint8_t transformValue = *data;
-                    const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
                     const uint32_t countValue = transformValue & 0x03;
                     const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
-                    if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                        memset( imageTransform + posX, transformType, pixelCount );
+                    if ( transformValue & 0x40 ) {
+                        // Transform layer data types:
+                        // 0 - no transparency,
+                        // 1 - full transparency (to skip image data),
+                        // from 5 (light) to 2 (strong) - for darkening,
+                        // from 10 (light) to 6 (strong) - for lightening
+                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 );
+
+                        if ( transformType < 16 ) {
+                            memset( imageTransform + posX, transformType, pixelCount );
+                        }
                     }
 
-                    posX += pixelCount;
-
-                    ++data;
-                }
-                else if ( *data == 0xC1 ) {
-                    // 0xC1 - next byte is the number of next pixels of same color.
-                    // The second next byte is the color of these pixels.
-
-                    ++data;
-                    const uint32_t pixelCount = *data;
-                    ++data;
-
-                    memset( imageData + posX, *data, pixelCount );
-                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                    // TODO: Use ( transformValue & 0x80 ) to detect and store shining contour data bit.
+                    // It is used for units on the Battlefield and for icons in the View World.
 
                     posX += pixelCount;
 
                     ++data;
                 }
                 else {
-                    // 0xC2 to 0xFF - number of pixels of same color plus 0xC0.
+                    // 0xC1 - next byte stores the number of next pixels of same color, or
+                    // 0xC2 to 0xFF - the number of pixels of same color plus 0xC0.
                     // Next byte is the color of these pixels.
 
-                    const uint32_t pixelCount = *data - 0xC0;
+                    const uint32_t pixelCount = ( *data == 0xC1 ) ? *( ++data ) : *data - 0xC0;
                     ++data;
 
                     memset( imageData + posX, *data, pixelCount );
