@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_GAMEAREA_H
-#define H2INTERFACE_GAMEAREA_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -153,13 +152,6 @@ namespace Interface
     {
     public:
         explicit GameArea( BaseInterface & interface );
-        GameArea( const GameArea & ) = default;
-        GameArea( GameArea && ) = delete;
-
-        ~GameArea() = default;
-
-        GameArea & operator=( const GameArea & ) = delete;
-        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -318,5 +310,3 @@ namespace Interface
         void updateObjectAnimationInfo() const;
     };
 }
-
-#endif
