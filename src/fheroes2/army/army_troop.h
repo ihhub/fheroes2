@@ -99,7 +99,7 @@ public:
 
     ~ArmyTroop() override = default;
 
-    ArmyTroop & operator=( const Troop & ) = delete;
+    ArmyTroop & operator=( const ArmyTroop & ) = delete;
 
     uint32_t GetAttack() const override;
     uint32_t GetDefense() const override;
