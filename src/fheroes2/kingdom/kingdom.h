@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2KINGDOM_H
-#define H2KINGDOM_H
+
+#pragma once
 
 #include <algorithm>
 #include <array>
@@ -60,7 +60,7 @@ class Kingdom : public BitModes, public Control
 public:
     enum
     {
-        // UNDEF      = 0x0001,
+        // UNUSED = 0x0001,
         IDENTIFYHERO = 0x0002,
         // UNUSED = 0x0004,
         KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
@@ -77,7 +77,9 @@ public:
     };
 
     Kingdom();
+
     Kingdom( const Kingdom & ) = delete;
+    Kingdom( Kingdom && ) = default;
 
     ~Kingdom() override = default;
 
@@ -268,5 +270,3 @@ private:
 
     std::array<Kingdom, maxNumOfPlayers + 1> _kingdoms;
 };
-
-#endif

@@ -325,7 +325,7 @@ namespace
         AI::OptimizeTroopsOrder( takerArmy );
         AI::OptimizeTroopsOrder( giverArmy );
 
-        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
+        BagArtifacts::exchangeArtifacts( taker, giver );
     }
 
     void AIToCastle( Heroes & hero, const int32_t dstIndex )

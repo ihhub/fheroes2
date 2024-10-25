@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMY_H
-#define H2ARMY_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -52,6 +51,7 @@ public:
     Troops() = default;
 
     Troops( const Troops & troops );
+    Troops( Troops && ) = default;
 
     virtual ~Troops();
 
@@ -182,12 +182,10 @@ public:
     explicit Army( const Maps::Tiles & tile );
 
     Army( const Army & ) = delete;
-    Army( Army && ) = delete;
-
-    Army & operator=( const Army & ) = delete;
-    Army & operator=( Army && ) = delete;
 
     ~Army() override = default;
+
+    Army & operator=( const Army & ) = delete;
 
     const Troops & getTroops() const;
 
@@ -270,5 +268,3 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-#endif

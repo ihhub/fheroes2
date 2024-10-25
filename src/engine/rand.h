@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2RAND_H
-#define H2RAND_H
+
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -85,20 +85,42 @@ namespace Rand
         return vec[id];
     }
 
-    using ValuePercent = std::pair<int32_t, uint32_t>;
+    using ValueWeight = std::pair<int32_t, uint32_t>;
 
-    class Queue : private std::vector<ValuePercent>
+    class Queue : private std::vector<ValueWeight>
     {
     public:
-        explicit Queue( uint32_t size = 0 );
+        explicit Queue( uint32_t size = 0 )
+        {
+            reserve( size );
+        }
 
-        void Push( int32_t value, uint32_t percent );
-        size_t Size() const;
-        int32_t Get();
-        int32_t GetWithSeed( uint32_t seed );
+        void Push( const int32_t value, const uint32_t weight )
+        {
+            if ( weight == 0 ) {
+                return;
+            }
+
+            emplace_back( value, weight );
+        }
+
+        size_t Size() const
+        {
+            return size();
+        }
+
+        int32_t Get() const
+        {
+            return Get( []( const uint32_t max ) { return Rand::Get( 0, max ); } );
+        }
+
+        int32_t GetWithSeed( const uint32_t seed ) const
+        {
+            return Get( [seed]( const uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
+        }
 
     private:
-        int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
+        int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
 
     // Specific random generator that keeps and update its state
@@ -127,5 +149,3 @@ namespace Rand
         uint32_t _currentSeed;
     };
 }
-
-#endif

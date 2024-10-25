@@ -275,12 +275,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.pushBottomLayerAddon( vec_mp2addons[addonIndex] );
-            tile.pushTopLayerAddon( vec_mp2addons[addonIndex] );
+            tile.pushGroundObjectPart( vec_mp2addons[addonIndex] );
+            tile.pushTopObjectPart( vec_mp2addons[addonIndex] );
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 
-        tile.AddonsSort();
+        tile.sortObjectParts();
 
         if ( MP2::doesObjectNeedExtendedMetadata( tile.GetObject() ) ) {
             vec_object.push_back( i );
