@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HEROES_H
-#define H2HEROES_H
+#pragma once
 
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
@@ -251,10 +250,6 @@ public:
         }
 
         AIHeroMeetingUpdater( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater( AIHeroMeetingUpdater && ) = delete;
-
-        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater & operator=( AIHeroMeetingUpdater && ) = delete;
 
         ~AIHeroMeetingUpdater()
         {
@@ -276,6 +271,8 @@ public:
             }
         }
 
+        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
+
     private:
         Heroes & _hero;
         const double _initialArmyStrength;
@@ -286,6 +283,7 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
+
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -777,12 +775,6 @@ private:
 struct VecHeroes : public std::vector<Heroes *>
 {
     VecHeroes() = default;
-    VecHeroes( const VecHeroes & ) = delete;
-
-    ~VecHeroes() = default;
-
-    VecHeroes & operator=( const VecHeroes & ) = delete;
-    VecHeroes & operator=( VecHeroes && ) = default;
 };
 
 class AllHeroes
@@ -848,5 +840,3 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
-
-#endif
