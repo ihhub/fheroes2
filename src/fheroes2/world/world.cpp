@@ -1004,8 +1004,7 @@ std::string World::DateString() const
 
 uint32_t World::CountObeliskOnMaps()
 {
-    const size_t res
-        = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return MP2::OBJ_OBELISK == tile.getMainObjectType( false ); } );
+    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return MP2::OBJ_OBELISK == tile.getMainObjectType( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 

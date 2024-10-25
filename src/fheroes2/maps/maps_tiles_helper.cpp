@@ -147,7 +147,7 @@ namespace
         // replace artifact shadow
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
             Maps::Tile::updateTileObjectIcnIndex( world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
-                                                   static_cast<uint8_t>( artSpriteIndex - 1 ) );
+                                                  static_cast<uint8_t>( artSpriteIndex - 1 ) );
         }
     }
 

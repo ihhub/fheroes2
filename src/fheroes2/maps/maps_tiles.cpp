@@ -1475,7 +1475,7 @@ void Maps::Tile::removeObjects( const MP2::ObjectIcnType objectIcnType )
 }
 
 void Maps::Tile::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
-                                 const uint8_t originalImageIndex, const uint8_t newImageIndex )
+                                const uint8_t originalImageIndex, const uint8_t newImageIndex )
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
     for ( auto & part : _groundObjectPart ) {
