@@ -5056,6 +5056,10 @@ namespace
             convertToEvilInterface( outputImage, { 0, 0, outputImage.width(), outputImage.height() } );
 
             loadICN( ICN::METALLIC_BORDERED_TEXTBOX_EVIL );
+            if ( _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL].empty() ) {
+                return true;
+            }
+
             const auto & evilTextBox = _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL][0];
 
             // The original text area is shorter than one we are using so we need to make 2 image copy operations to compensate this.
