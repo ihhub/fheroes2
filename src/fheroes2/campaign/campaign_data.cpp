@@ -744,7 +744,7 @@ namespace Campaign
         }
 
         if ( allAIPlayersInAlliance ) {
-            const Colors humanColors( mapInfo.colorsAvailableForHumans );
+            const Colors humanColors( mapInfo.humanPlayerColors );
             // Make sure that this is only one human player on the map.
             if ( humanColors.size() != 1 ) {
                 // Looks like somebody is modifying the original map.
@@ -752,7 +752,7 @@ namespace Campaign
                 return;
             }
 
-            const int aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
+            const int aiColors = ( mapInfo.availablePlayerColors & ( ~mapInfo.humanPlayerColors ) );
             if ( aiColors == 0 ) {
                 // This is definitely not the map to modify.
                 assert( 0 );

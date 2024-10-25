@@ -176,13 +176,13 @@ void Maps::FileInfo::Reset()
         unions[i] = Color::IndexToColor( i );
     }
 
-    kingdomColors = 0;
-    colorsAvailableForHumans = 0;
-    colorsAvailableForComp = 0;
+    availablePlayerColors = 0;
+    humanPlayerColors = 0;
+    computerPlayerColors = 0;
     colorsOfRandomRaces = 0;
 
     victoryConditionType = VICTORY_DEFEAT_EVERYONE;
-    compAlsoWins = false;
+    isVictoryConditionApplicableForAI = false;
     allowNormalVictory = false;
     victoryConditionParams.fill( 0 );
 
@@ -248,25 +248,25 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Colors used by kingdoms: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
         if ( fs.get() != 0 ) {
-            kingdomColors |= color;
+            availablePlayerColors |= color;
         }
     }
 
     // Colors available for human players: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
         if ( fs.get() != 0 ) {
-            colorsAvailableForHumans |= color;
+            humanPlayerColors |= color;
         }
     }
 
     // Colors available for computer players: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
         if ( fs.get() != 0 ) {
-            colorsAvailableForComp |= color;
+            computerPlayerColors |= color;
         }
     }
 
-    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+    if ( !isForEditor && humanPlayerColors == 0 ) {
         // This is not a valid map since no human players exist so it cannot be played.
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
         return false;
@@ -280,7 +280,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Victory condition type.
     victoryConditionType = fs.get();
     // Do the victory conditions apply to AI too?
-    compAlsoWins = ( fs.get() != 0 );
+    isVictoryConditionApplicableForAI = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here?
     allowNormalVictory = ( fs.get() != 0 );
     // Parameter of victory condition.
@@ -315,7 +315,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     bool skipUnionSetup = false;
     // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
     // If the color is under computer control only we have to make it as an ally for human player.
-    if ( lossConditionType == LOSS_HERO && victoryConditionType == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
+    if ( lossConditionType == LOSS_HERO && victoryConditionType == VICTORY_DEFEAT_EVERYONE && Colors( humanPlayerColors ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
         fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
 
@@ -326,9 +326,9 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         tile.Init( 0, mp2tile );
 
         const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart()._imageIndex );
-        if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
-            const int side1 = colorRace.first | colorsAvailableForHumans;
-            const int side2 = colorsAvailableForComp ^ colorRace.first;
+        if ( ( colorRace.first & humanPlayerColors ) == 0 ) {
+            const int side1 = colorRace.first | humanPlayerColors;
+            const int side2 = computerPlayerColors ^ colorRace.first;
 
             FillUnions( side1, side2 );
 
@@ -351,7 +351,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         int side1 = 0;
         int side2 = 0;
 
-        const Colors availableColors( kingdomColors );
+        const Colors availableColors( availablePlayerColors );
         if ( availableColors.empty() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid list of kingdom colors during map load" )
             return false;
@@ -402,7 +402,7 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
         return false;
     }
 
-    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+    if ( !isForEditor && humanPlayerColors == 0 ) {
         // This is not a valid map since no human players exist so it cannot be played.
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
         return false;
@@ -429,14 +429,14 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     assert( ( map.availablePlayerColors & map.computerPlayerColors ) == map.computerPlayerColors );
     assert( ( map.availablePlayerColors & ( map.humanPlayerColors | map.computerPlayerColors ) ) == map.availablePlayerColors );
 
-    kingdomColors = map.availablePlayerColors;
-    colorsAvailableForHumans = map.humanPlayerColors;
-    colorsAvailableForComp = map.computerPlayerColors;
+    availablePlayerColors = map.availablePlayerColors;
+    humanPlayerColors = map.humanPlayerColors;
+    computerPlayerColors = map.computerPlayerColors;
 
     races = map.playerRace;
 
     victoryConditionType = map.victoryConditionType;
-    compAlsoWins = map.isVictoryConditionApplicableForAI;
+    isVictoryConditionApplicableForAI = map.isVictoryConditionApplicableForAI;
     allowNormalVictory = map.allowNormalVictory;
 
     lossConditionType = map.lossConditionType;
@@ -474,7 +474,7 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         // Since this is a normal victory condition.
         // So, no metadata should exist.
         assert( map.victoryConditionMetadata.empty() );
-        compAlsoWins = true;
+        isVictoryConditionApplicableForAI = true;
         allowNormalVictory = true;
         break;
     case VICTORY_CAPTURE_TOWN:
@@ -630,7 +630,7 @@ uint32_t Maps::FileInfo::ConditionLoss() const
 
 bool Maps::FileInfo::WinsCompAlsoWins() const
 {
-    return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
+    return isVictoryConditionApplicableForAI && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
@@ -645,7 +645,7 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
         stream << fi.races[i] << fi.unions[i];
     }
 
-    return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
+    return stream << fi.availablePlayerColors << fi.humanPlayerColors << fi.computerPlayerColors << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.isVictoryConditionApplicableForAI
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
                   << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
                   << fi.mainLanguage;
@@ -676,7 +676,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         }
     }
 
-    stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+    stream >> fi.availablePlayerColors >> fi.humanPlayerColors >> fi.computerPlayerColors >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.isVictoryConditionApplicableForAI
         >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
         >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 

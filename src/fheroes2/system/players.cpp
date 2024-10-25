@@ -326,13 +326,13 @@ void Players::Init( int colors )
 
 void Players::Init( const Maps::FileInfo & fi )
 {
-    if ( fi.kingdomColors == 0 ) {
+    if ( fi.availablePlayerColors == 0 ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "No players are set." )
         return;
     }
 
     clear();
-    const Colors vcolors( fi.kingdomColors );
+    const Colors vcolors( fi.availablePlayerColors );
 
     Player * first = nullptr;
 
@@ -344,7 +344,7 @@ void Players::Init( const Maps::FileInfo & fi )
 
         if ( ( color & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
             player->SetControl( CONTROL_HUMAN );
-        else if ( color & fi.colorsAvailableForHumans )
+        else if ( color & fi.humanPlayerColors )
             player->SetControl( player->GetControl() | CONTROL_HUMAN );
 
         if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )

@@ -80,17 +80,17 @@ namespace Maps
 
         int AllowCompHumanColors() const
         {
-            return colorsAvailableForHumans & colorsAvailableForComp;
+            return humanPlayerColors & computerPlayerColors;
         }
 
         int HumanOnlyColors() const
         {
-            return colorsAvailableForHumans & ~colorsAvailableForComp;
+            return humanPlayerColors & ~computerPlayerColors;
         }
 
         int ComputerOnlyColors() const
         {
-            return colorsAvailableForComp & ~colorsAvailableForHumans;
+            return computerPlayerColors & ~humanPlayerColors;
         }
 
         int KingdomRace( int color ) const;
@@ -132,7 +132,7 @@ namespace Maps
 
         void removeHumanColors( const int colors )
         {
-            colorsAvailableForHumans &= ~colors;
+            humanPlayerColors &= ~colors;
         }
 
         bool AllowChangeRace( const int color ) const
@@ -185,14 +185,14 @@ namespace Maps
         std::array<uint8_t, maxNumOfPlayers> races;
         std::array<uint8_t, maxNumOfPlayers> unions;
 
-        uint8_t kingdomColors;
-        uint8_t colorsAvailableForHumans;
-        uint8_t colorsAvailableForComp;
+        uint8_t availablePlayerColors;
+        uint8_t humanPlayerColors;
+        uint8_t computerPlayerColors;
         uint8_t colorsOfRandomRaces;
 
         // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
-        bool compAlsoWins;
+        bool isVictoryConditionApplicableForAI;
         bool allowNormalVictory;
         std::array<uint16_t, 2> victoryConditionParams;
 
