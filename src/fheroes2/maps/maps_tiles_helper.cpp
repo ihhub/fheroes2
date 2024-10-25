@@ -2273,8 +2273,8 @@ namespace Maps
             default:
                 // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getMainObjectPart().icnType
-                                   << ", image index " << tile.getMainObjectPart().icnIndex )
+                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getMainObjectPart().icnType << ", image index "
+                                   << tile.getMainObjectPart().icnIndex )
                 resourceType = Resource::WOOD;
                 count = 0;
                 break;

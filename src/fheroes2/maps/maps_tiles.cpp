@@ -422,8 +422,8 @@ namespace
     void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os )
     {
         os << "UID             : " << part._uid << std::endl
-           << "ICN object type : " << static_cast<int>( part.icnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part.icnType ) )
-           << ")" << std::endl
+           << "ICN object type : " << static_cast<int>( part.icnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part.icnType ) ) << ")"
+           << std::endl
            << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl
            << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl
            << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
@@ -752,8 +752,7 @@ void Maps::Tiles::updatePassability()
             return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
         } );
 
-        const bool singleObjectTile
-            = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
+        const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
         if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainObjectPart.isPassabilityTransparent()
