@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SKILL_H
-#define H2SKILL_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -131,13 +130,7 @@ namespace Skill
     {
     public:
         SecSkills();
-        explicit SecSkills( int race );
-        SecSkills( const SecSkills & ) = delete;
-
-        ~SecSkills() = default;
-
-        SecSkills & operator=( const SecSkills & ) = delete;
-        SecSkills & operator=( SecSkills && ) = default;
+        explicit SecSkills( const int race );
 
         int Count() const;
         int GetLevel( int skill ) const;
@@ -156,7 +149,6 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    private:
         friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
         friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
@@ -214,4 +206,3 @@ namespace Skill
     OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
     IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
-#endif

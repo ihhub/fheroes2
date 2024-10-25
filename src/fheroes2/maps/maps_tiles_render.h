@@ -46,12 +46,12 @@ namespace MP2
 namespace Maps
 {
     class Tiles;
-    struct TilesAddon;
+    struct ObjectPart;
 
     void redrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
 
     void redrawTopLayerExtraObjects( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area );
-    void redrawTopLayerObject( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon );
+    void redrawTopLayerObject( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part );
 
     void drawFog( const Tiles & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 

@@ -825,9 +825,9 @@ namespace
                                     [&currentTile]( const uint8_t index ) { return currentTile.getMainObjectPart()._imageIndex == index; } );
             }
 
-            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&addon]( const uint8_t index ) { return addon._imageIndex == index; } );
+            for ( const Maps::ObjectPart & part : currentTile.getGroundObjectParts() ) {
+                if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&part]( const uint8_t index ) { return part._imageIndex == index; } );
                 }
             }
 
@@ -1015,7 +1015,7 @@ namespace
         const uint32_t roadUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
 
         if ( roadUid == 0 ) {
-            tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex ) );
+            tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex ) );
         }
         else {
             Maps::Tiles::updateTileObjectIcnIndex( tile, roadUid, imageIndex );
@@ -1140,7 +1140,7 @@ namespace
         const uint32_t streamUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_STREAM );
 
         if ( streamUid == 0 ) {
-            tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_STREAM, imageIndex ) );
+            tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_STREAM, imageIndex ) );
         }
         else {
             Maps::Tiles::updateTileObjectIcnIndex( tile, streamUid, imageIndex );
@@ -1211,8 +1211,8 @@ namespace
             // The first case if the existing tile has no object type being set.
             const MP2::MapObjectType tileObjectType = currentTile.getMainObjectType();
 
-            // Always move the current object part to the back of the bottom layer list to make proper sorting later.
-            currentTile.moveMainAddonToBottomLayer();
+            // Always move the current object part to the back of the ground layer list to make proper sorting later.
+            currentTile.moveMainObjectPartToGroundLevel();
 
             if ( tileObjectType == MP2::OBJ_NONE ) {
                 setObjectType = ( partInfo.objectType != MP2::OBJ_NONE );
@@ -1227,7 +1227,7 @@ namespace
                     // We need to run through each object part present at the tile and see if it has "higher" layer object.
                     bool higherObjectFound = false;
 
-                    for ( const auto & topPart : currentTile.getTopLayerAddons() ) {
+                    for ( const auto & topPart : currentTile.getTopObjectParts() ) {
                         const MP2::MapObjectType type = Maps::getObjectTypeByIcn( topPart._objectIcnType, topPart._imageIndex );
                         if ( type != MP2::OBJ_NONE ) {
                             // A top object part is present.
@@ -1237,7 +1237,7 @@ namespace
                     }
 
                     if ( !higherObjectFound ) {
-                        for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+                        for ( const auto & groundPart : currentTile.getGroundObjectParts() ) {
                             if ( groundPart._layerType >= partInfo.layerType ) {
                                 // A ground object part is has "lower" or equal layer type. Skip it.
                                 continue;
@@ -1258,17 +1258,17 @@ namespace
 
 #if defined( WITH_DEBUG )
             // Check that we don't put the same object part.
-            for ( const auto & groundPart : currentTile.getBottomLayerAddons() ) {
+            for ( const auto & groundPart : currentTile.getGroundObjectParts() ) {
                 assert( groundPart._uid != uid || groundPart._imageIndex != static_cast<uint8_t>( partInfo.icnIndex ) || groundPart._objectIcnType != partInfo.icnType
                         || groundPart._layerType != partInfo.layerType );
             }
 #endif
 
             // Push the object to the ground (bottom) object parts.
-            currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+            currentTile.pushGroundObjectPart( Maps::ObjectPart( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
             // Sort all objects.
-            currentTile.AddonsSort();
+            currentTile.sortObjectParts();
 
             // Set object type if needed.
             if ( setObjectType ) {
@@ -1286,7 +1286,7 @@ namespace
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
             // Top object parts do not need sorting.
-            currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+            currentTile.pushTopObjectPart( Maps::ObjectPart( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
 
             // Set object type only if the current object part has a type and the object is not an action object.
             if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isOffGameActionObject( currentTile.getMainObjectType() ) ) {
@@ -1593,7 +1593,7 @@ namespace Maps
         return 0;
     }
 
-    const TilesAddon * getObjectPartByActionType( const Tiles & tile, const MP2::MapObjectType type )
+    const ObjectPart * getObjectPartByActionType( const Tiles & tile, const MP2::MapObjectType type )
     {
         if ( !MP2::isOffGameActionObject( type ) ) {
             return nullptr;
@@ -1604,7 +1604,7 @@ namespace Maps
             return &tile.getMainObjectPart();
         }
 
-        for ( const auto & objectPart : tile.getBottomLayerAddons() ) {
+        for ( const auto & objectPart : tile.getGroundObjectParts() ) {
             objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
             if ( objectType == type ) {
                 return &objectPart;
@@ -2185,10 +2185,10 @@ namespace Maps
                 artifactSpriteIndex = tile.getMainObjectPart()._imageIndex;
             }
             else {
-                // On some hacked original maps artifact can be placed to the bottom layer addons.
-                for ( const auto & addon : tile.getBottomLayerAddons() ) {
-                    if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
-                        artifactSpriteIndex = addon._imageIndex;
+                // On some hacked original maps artifact can be placed to the ground layer object parts.
+                for ( const auto & part : tile.getGroundObjectParts() ) {
+                    if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                        artifactSpriteIndex = part._imageIndex;
                         break;
                     }
                 }
@@ -2243,9 +2243,9 @@ namespace Maps
                 resourceType = Resource::FromIndexSprite( tile.getMainObjectPart()._imageIndex );
             }
             else {
-                for ( const auto & addon : tile.getBottomLayerAddons() ) {
-                    if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
-                        resourceType = Resource::FromIndexSprite( addon._imageIndex );
+                for ( const auto & part : tile.getGroundObjectParts() ) {
+                    if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                        resourceType = Resource::FromIndexSprite( part._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                         // Let's update the tile's object type to properly show the action object.
                         tile.updateObjectType();
@@ -2756,27 +2756,27 @@ namespace Maps
     {
         tile.setMainObjectType( MP2::OBJ_MONSTER );
 
-        Maps::TilesAddon & mainAddon = tile.getMainObjectPart();
+        Maps::ObjectPart & mainObjectPart = tile.getMainObjectPart();
 
-        if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
-            if ( mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            if ( mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 // If there is another object sprite here (shadow for example) push it down to add-ons.
-                tile.pushBottomLayerAddon( mainAddon );
+                tile.pushGroundObjectPart( mainObjectPart );
             }
 
             // Set unique UID for placed monster.
-            mainAddon._uid = getNewObjectUID();
-            mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
-            mainAddon._layerType = OBJECT_LAYER;
+            mainObjectPart._uid = getNewObjectUID();
+            mainObjectPart._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
+            mainObjectPart._layerType = OBJECT_LAYER;
         }
 
-        using TileImageIndexType = decltype( mainAddon._imageIndex );
+        using TileImageIndexType = decltype( mainObjectPart._imageIndex );
         static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
 
-        mainAddon._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
+        mainObjectPart._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
         const bool setDefinedCount = ( count > 0 );
 
@@ -2957,8 +2957,8 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.getMainObjectType() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getBottomLayerAddon( tile.getMainObjectPart()._uid )
-                          || mineTile.getTopLayerAddon( tile.getMainObjectPart()._uid ) ) ) {
+                     && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getGroundObjectPart( tile.getMainObjectPart()._uid )
+                          || mineTile.getTopObjectPart( tile.getMainObjectPart()._uid ) ) ) {
                     mineTile.setMainObjectType( MP2::OBJ_NON_ACTION_MINE );
                 }
             }
@@ -2971,9 +2971,9 @@ namespace Maps
         tile.getMainObjectPart()._objectIcnType = objectIcnTypeTemp;
         tile.getMainObjectPart()._imageIndex = imageIndexTemp;
 
-        for ( auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._uid == tile.getMainObjectPart()._uid ) {
-                restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
+        for ( auto & part : tile.getGroundObjectParts() ) {
+            if ( part._uid == tile.getMainObjectPart()._uid ) {
+                restoreLeftSprite( part._objectIcnType, part._imageIndex );
             }
         }
 
@@ -2989,10 +2989,10 @@ namespace Maps
                 rightTile.getMainObjectPart()._imageIndex = imageIndexTemp;
             }
 
-            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.getMainObjectPart()._uid );
+            ObjectPart * part = rightTile.getGroundObjectPart( tile.getMainObjectPart()._uid );
 
-            if ( addon ) {
-                restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
+            if ( part ) {
+                restoreRightSprite( part->_objectIcnType, part->_imageIndex );
             }
         }
 
@@ -3020,7 +3020,7 @@ namespace Maps
         }
 
         if ( objectUID == 0 ) {
-            for ( auto iter = tile.getTopLayerAddons().rbegin(); iter != tile.getTopLayerAddons().rend(); ++iter ) {
+            for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
                 if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
@@ -3029,7 +3029,7 @@ namespace Maps
         }
 
         if ( objectUID == 0 ) {
-            for ( auto iter = tile.getBottomLayerAddons().rbegin(); iter != tile.getBottomLayerAddons().rend(); ++iter ) {
+            for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
                 if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
@@ -3311,9 +3311,9 @@ namespace Maps
                     objectsUids.insert( currentTile.getMainObjectPart()._uid );
                 }
 
-                for ( const auto & addon : currentTile.getBottomLayerAddons() ) {
-                    if ( addon._uid != 0 && ( addon._layerType != SHADOW_LAYER ) ) {
-                        objectsUids.insert( addon._uid );
+                for ( const auto & part : currentTile.getGroundObjectParts() ) {
+                    if ( part._uid != 0 && ( part._layerType != SHADOW_LAYER ) ) {
+                        objectsUids.insert( part._uid );
                     }
                 }
 

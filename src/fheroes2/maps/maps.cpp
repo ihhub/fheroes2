@@ -484,12 +484,12 @@ Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType )
     return MapsIndexesObject( objectType, true );
 }
 
-std::vector<std::pair<int32_t, const Maps::TilesAddon *>> Maps::getObjectParts( const MP2::MapObjectType objectType )
+std::vector<std::pair<int32_t, const Maps::ObjectPart *>> Maps::getObjectParts( const MP2::MapObjectType objectType )
 {
-    std::vector<std::pair<int32_t, const TilesAddon *>> result;
+    std::vector<std::pair<int32_t, const ObjectPart *>> result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        const Maps::TilesAddon * objectPart = getObjectPartByActionType( world.GetTiles( idx ), objectType );
+        const Maps::ObjectPart * objectPart = getObjectPartByActionType( world.GetTiles( idx ), objectType );
         if ( objectPart != nullptr ) {
             result.emplace_back( idx, objectPart );
         }
@@ -725,10 +725,10 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
                 tile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, -16 );
 
             if ( index == 0 ) {
-                TilesAddon * addon = tile.getTopLayerAddon( castleID );
-                if ( addon && addon->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
-                    addon->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
-                    addon->_imageIndex = fullTownIndex - 16;
+                ObjectPart * part = tile.getTopObjectPart( castleID );
+                if ( part && part->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
+                    part->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
+                    part->_imageIndex = fullTownIndex - 16;
                 }
             }
         }

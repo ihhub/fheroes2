@@ -791,7 +791,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
         return result;
     }
 
-    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
+    const Maps::ObjectPart * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
     if ( entranceObjectPart == nullptr ) {
         // This tile is marked as Stone Liths but somehow it doesn't even have Stone Liths' object parts.
         assert( 0 );
@@ -835,7 +835,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    const Maps::TilesAddon * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
+    const Maps::ObjectPart * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
     if ( entranceObjectPart == nullptr ) {
         // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
         assert( 0 );
@@ -848,7 +848,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
             continue;
         }
 
-        const Maps::TilesAddon * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
+        const Maps::ObjectPart * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
         if ( destinationObjectPart == nullptr ) {
             // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
             assert( 0 );
@@ -964,7 +964,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
+    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1389,12 +1389,12 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     for ( const Maps::Tiles & tile : vec_tiles ) {
         maxUid = std::max( tile.getMainObjectPart()._uid, maxUid );
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            maxUid = std::max( addon._uid, maxUid );
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            maxUid = std::max( part._uid, maxUid );
         }
 
-        for ( const auto & addon : tile.getTopLayerAddons() ) {
-            maxUid = std::max( addon._uid, maxUid );
+        for ( const auto & part : tile.getTopObjectParts() ) {
+            maxUid = std::max( part._uid, maxUid );
         }
     }
 

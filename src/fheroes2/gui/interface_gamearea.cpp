@@ -298,8 +298,8 @@ namespace
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
 
-        for ( const auto & lowerAddon : tileBelow.getTopLayerAddons() ) {
-            if ( lowerAddon._uid == uid ) {
+        for ( const auto & lowerPart : tileBelow.getTopObjectParts() ) {
+            if ( lowerPart._uid == uid ) {
                 // This is a tall object.
                 return true;
             }
@@ -646,7 +646,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // High priority images are drawn after any other object on this tile.
     renderImagesOnTiles( dst, tileUnfit.highPriorityBottomImages, *this );
 
-    std::vector<const Maps::TilesAddon *> topLayerTallObjects;
+    std::vector<const Maps::ObjectPart *> topLayerTallObjects;
 
     // Expand  ROI to properly render very tall objects (1 tile - left and right; 2 tiles - bottom): Abandoned mine Ghosts, Flag on the Alchemist lab, and others.
     const int32_t roiExtraObjectsMaxX = std::min( maxX + 1, world.w() );
@@ -672,19 +672,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const auto & addon : tile.getTopLayerAddons() ) {
-                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
-                    topLayerTallObjects.emplace_back( &addon );
+            for ( const auto & part : tile.getTopObjectParts() ) {
+                if ( isTallTopLayerObject( x, y, part._uid ) ) {
+                    topLayerTallObjects.emplace_back( &part );
                 }
                 else {
-                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, addon );
+                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, part );
                 }
             }
 
             redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
-            for ( const auto * addon : topLayerTallObjects ) {
-                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
+            for ( const auto * part : topLayerTallObjects ) {
+                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *part );
             }
         }
     }
