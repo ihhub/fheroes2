@@ -446,7 +446,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         for ( const int32_t tileId : vec_object ) {
             const Maps::Tiles & tile = vec_tiles[tileId];
-            if ( ( tile.getMainObjectPart()._layerType & 0x3 ) != Maps::OBJECT_LAYER ) {
+            if ( ( tile.getMainObjectPart().layerType & 0x3 ) != Maps::OBJECT_LAYER ) {
                 continue;
             }
 
@@ -561,7 +561,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart()._imageIndex );
+                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
@@ -1267,7 +1267,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
 
     case MP2::OBJ_HERO: {
         // remove map editor sprite
-        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_MINIHERO ) {
+        if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_MINIHERO ) {
             tile.removeObjectPartsByUID( tile.getMainObjectPart()._uid );
         }
 
