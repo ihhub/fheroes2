@@ -416,16 +416,16 @@ namespace
 
     bool isObjectPartShadow( const Maps::ObjectPart & ta )
     {
-        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta._objectIcnType ), ta._imageIndex );
+        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta.icnType ), ta.icnIndex );
     }
 
     void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os )
     {
         os << "UID             : " << part._uid << std::endl
-           << "ICN object type : " << static_cast<int>( part._objectIcnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part._objectIcnType ) )
-           << ")" << std::endl
-           << "image index     : " << static_cast<int>( part._imageIndex ) << std::endl
-           << "layer type      : " << static_cast<int>( part._layerType ) << " - " << getObjectLayerName( part._layerType ) << std::endl
+           << "ICN object type : " << static_cast<int>( part.icnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part.icnType ) ) << ")"
+           << std::endl
+           << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl
+           << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl
            << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
     }
 
@@ -463,7 +463,7 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
 
     const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
 
-    const uint8_t layerType = ( mp2.quantity1 & 0x03 );
+    const ObjectLayerType layerType = static_cast<ObjectLayerType>( mp2.quantity1 & 0x03 );
 
     // In the original Editor the road bit is set even if no road exist.
     // It is important to verify the existence of a road without relying on this bit.
@@ -478,10 +478,10 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         }
     }
     else {
-        _mainObjectPart._layerType = layerType;
+        _mainObjectPart.layerType = layerType;
         _mainObjectPart._uid = mp2.level1ObjectUID;
-        _mainObjectPart._objectIcnType = bottomObjectIcnType;
-        _mainObjectPart._imageIndex = mp2.bottomIcnImageIndex;
+        _mainObjectPart.icnType = bottomObjectIcnType;
+        _mainObjectPart.icnIndex = mp2.bottomIcnImageIndex;
     }
 
     const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName2 >> 2 );
@@ -567,7 +567,7 @@ void Maps::Tile::setMainObjectType( const MP2::MapObjectType objectType )
 
 void Maps::Tile::setBoat( const int direction, const int color )
 {
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
         _groundObjectPart.emplace_front( _mainObjectPart );
     }
@@ -576,36 +576,36 @@ void Maps::Tile::setBoat( const int direction, const int color )
     assert( isWater() );
 
     setMainObjectType( MP2::OBJ_BOAT );
-    _mainObjectPart._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
+    _mainObjectPart.icnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
     switch ( direction ) {
     case Direction::TOP:
-        _mainObjectPart._imageIndex = 0;
+        _mainObjectPart.icnIndex = 0;
         break;
     case Direction::TOP_RIGHT:
-        _mainObjectPart._imageIndex = 9;
+        _mainObjectPart.icnIndex = 9;
         break;
     case Direction::RIGHT:
-        _mainObjectPart._imageIndex = 18;
+        _mainObjectPart.icnIndex = 18;
         break;
     case Direction::BOTTOM_RIGHT:
-        _mainObjectPart._imageIndex = 27;
+        _mainObjectPart.icnIndex = 27;
         break;
     case Direction::BOTTOM:
-        _mainObjectPart._imageIndex = 36;
+        _mainObjectPart.icnIndex = 36;
         break;
     // Left-side sprites have to be flipped, add 128 to index.
     case Direction::BOTTOM_LEFT:
-        _mainObjectPart._imageIndex = 27 + 128;
+        _mainObjectPart.icnIndex = 27 + 128;
         break;
     case Direction::LEFT:
-        _mainObjectPart._imageIndex = 18 + 128;
+        _mainObjectPart.icnIndex = 18 + 128;
         break;
     case Direction::TOP_LEFT:
-        _mainObjectPart._imageIndex = 9 + 128;
+        _mainObjectPart.icnIndex = 9 + 128;
         break;
     default:
-        _mainObjectPart._imageIndex = 18;
+        _mainObjectPart.icnIndex = 18;
         break;
     }
 
@@ -632,11 +632,11 @@ void Maps::Tile::setBoat( const int direction, const int color )
 int Maps::Tile::getBoatDirection() const
 {
     // Check if it really is a boat
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_BOAT32 )
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_BOAT32 )
         return Direction::UNKNOWN;
 
     // Left-side sprites have to flipped, add 128 to index
-    switch ( _mainObjectPart._imageIndex ) {
+    switch ( _mainObjectPart.icnIndex ) {
     case 0:
         return Direction::TOP;
     case 9:
@@ -668,17 +668,17 @@ int Maps::Tile::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( _mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent() || isShadow() ) {
+    if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
 
-    if ( isValidReefsSprite( _mainObjectPart._objectIcnType, _mainObjectPart._imageIndex ) ) {
+    if ( isValidReefsSprite( _mainObjectPart.icnType, _mainObjectPart.icnIndex ) ) {
         return 0;
     }
 
     for ( const auto & part : _groundObjectPart ) {
-        if ( isValidReefsSprite( part._objectIcnType, part._imageIndex ) ) {
+        if ( isValidReefsSprite( part.icnType, part.icnIndex ) ) {
             return 0;
         }
     }
@@ -703,7 +703,7 @@ void Maps::Tile::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = getMainObjectType( false );
 
-    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainObjectPart.isPassabilityTransparent()
+    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainObjectPart.isPassabilityTransparent()
          && !isShadow() ) {
         // This is a non-action object.
 
@@ -749,15 +749,14 @@ void Maps::Tile::updatePassability()
                 return false;
             }
 
-            return part._objectIcnType != MP2::OBJ_ICN_TYPE_ROAD && part._objectIcnType != MP2::OBJ_ICN_TYPE_STREAM;
+            return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
         } );
 
-        const bool singleObjectTile
-            = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart._objectIcnType != _mainObjectPart._objectIcnType );
+        const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
         if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainObjectPart.isPassabilityTransparent()
-             && ( bottomTile._mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
+             && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
             const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
@@ -841,7 +840,7 @@ void Maps::Tile::pushGroundObjectPart( const MP2::MP2AddonInfo & ma )
         _isTileMarkedAsRoad = true;
     }
 
-    _groundObjectPart.emplace_back( static_cast<uint8_t>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
+    _groundObjectPart.emplace_back( static_cast<ObjectLayerType>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
 }
 
 void Maps::Tile::pushTopObjectPart( const MP2::MP2AddonInfo & ma )
@@ -859,7 +858,7 @@ void Maps::Tile::pushTopObjectPart( const MP2::MP2AddonInfo & ma )
 
 void Maps::Tile::pushGroundObjectPart( ObjectPart ta )
 {
-    if ( isSpriteRoad( ta._objectIcnType, ta._imageIndex ) ) {
+    if ( isSpriteRoad( ta.icnType, ta.icnIndex ) ) {
         _isTileMarkedAsRoad = true;
     }
 
@@ -874,19 +873,19 @@ void Maps::Tile::sortObjectParts()
     }
 
     // Push everything to the container and sort it by level.
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         _groundObjectPart.emplace_front( _mainObjectPart );
     }
 
     // Sort by internal layers.
-    _groundObjectPart.sort( []( const auto & left, const auto & right ) { return ( left._layerType > right._layerType ); } );
+    _groundObjectPart.sort( []( const auto & left, const auto & right ) { return ( left.layerType > right.layerType ); } );
 
     if ( !_groundObjectPart.empty() ) {
         ObjectPart & highestPriorityPart = _groundObjectPart.back();
         std::swap( highestPriorityPart, _mainObjectPart );
 
         // If this assertion blows up then you are not storing correct values for layer type!
-        assert( _mainObjectPart._layerType <= TERRAIN_LAYER );
+        assert( _mainObjectPart.layerType <= TERRAIN_LAYER );
 
         _groundObjectPart.pop_back();
     }
@@ -1008,7 +1007,7 @@ bool Maps::Tile::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !isObjectPartShadow( _mainObjectPart ) ) {
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !isObjectPartShadow( _mainObjectPart ) ) {
         return false;
     }
 
@@ -1090,15 +1089,15 @@ void Maps::Tile::SetObjectPassable( bool pass )
 bool Maps::Tile::isStream() const
 {
     for ( const auto & part : _groundObjectPart ) {
-        if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
-             || ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( part._imageIndex < 14 || ( part._imageIndex > 217 && part._imageIndex < ( 218 + 14 ) ) ) ) ) {
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_STREAM
+             || ( part.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( part.icnIndex < 14 || ( part.icnIndex > 217 && part.icnIndex < ( 218 + 14 ) ) ) ) ) {
             return true;
         }
     }
 
-    return _mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM
-           || ( _mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
-                && ( _mainObjectPart._imageIndex < 14 || ( _mainObjectPart._imageIndex > 217 && _mainObjectPart._imageIndex < ( 218 + 14 ) ) ) );
+    return _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_STREAM
+           || ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
+                && ( _mainObjectPart.icnIndex < 14 || ( _mainObjectPart.icnIndex > 217 && _mainObjectPart.icnIndex < ( 218 + 14 ) ) ) );
 }
 
 bool Maps::Tile::isShadow() const
@@ -1109,7 +1108,7 @@ bool Maps::Tile::isShadow() const
 
 Maps::ObjectPart * Maps::Tile::getObjectPartWithFlag( const uint32_t uid )
 {
-    const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
+    const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part.icnType == MP2::OBJ_ICN_TYPE_FLAG32; };
 
     auto iter = std::find_if( _groundObjectPart.begin(), _groundObjectPart.end(), isFlag );
     if ( iter != _groundObjectPart.end() ) {
@@ -1244,7 +1243,7 @@ void Maps::Tile::updateFlag( const int color, const uint8_t objectSpriteIndex, c
 {
     // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
     if ( color == Color::NONE ) {
-        const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
+        const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part.icnType == MP2::OBJ_ICN_TYPE_FLAG32; };
         _groundObjectPart.remove_if( isFlag );
         _topObjectPart.remove_if( isFlag );
         return;
@@ -1253,7 +1252,7 @@ void Maps::Tile::updateFlag( const int color, const uint8_t objectSpriteIndex, c
     ObjectPart * part = getObjectPartWithFlag( uid );
     if ( part != nullptr ) {
         // Replace an existing flag.
-        part->_imageIndex = objectSpriteIndex;
+        part->icnIndex = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
         _topObjectPart.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex );
@@ -1265,14 +1264,14 @@ void Maps::Tile::updateFlag( const int color, const uint8_t objectSpriteIndex, c
 
 void Maps::Tile::_updateRoadFlag()
 {
-    _isTileMarkedAsRoad = isSpriteRoad( _mainObjectPart._objectIcnType, _mainObjectPart._imageIndex );
+    _isTileMarkedAsRoad = isSpriteRoad( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
 
     if ( _isTileMarkedAsRoad ) {
         return;
     }
 
     for ( const auto & part : _groundObjectPart ) {
-        if ( isSpriteRoad( part._objectIcnType, part._imageIndex ) ) {
+        if ( isSpriteRoad( part.icnType, part.icnIndex ) ) {
             _isTileMarkedAsRoad = true;
             return;
         }
@@ -1284,7 +1283,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     const MP2::MapObjectType originalObjectType = tile.getMainObjectType( false );
 
     // Left tile of a skeleton on Desert should be marked as non-action tile.
-    if ( originalObjectType == MP2::OBJ_SKELETON && tile._mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT && tile._mainObjectPart._imageIndex == 83 ) {
+    if ( originalObjectType == MP2::OBJ_SKELETON && tile._mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNDSRT && tile._mainObjectPart.icnIndex == 83 ) {
         tile.setMainObjectType( MP2::OBJ_NON_ACTION_SKELETON );
 
         // There is no need to check the rest of things as we fixed this object.
@@ -1292,8 +1291,8 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     }
 
     // Oasis object has 2 top tiles being marked as part of bottom object layer while in reality they should be at the top level.
-    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT
-         && ( tile._mainObjectPart._imageIndex == 105 || tile._mainObjectPart._imageIndex == 106 ) ) {
+    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNDSRT
+         && ( tile._mainObjectPart.icnIndex == 105 || tile._mainObjectPart.icnIndex == 106 ) ) {
         tile._topObjectPart.emplace_back();
         std::swap( tile._topObjectPart.back(), tile._mainObjectPart );
 
@@ -1302,7 +1301,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
 
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passability.
-    if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._mainObjectPart._objectIcnType, tile._mainObjectPart._imageIndex ) ) {
+    if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._mainObjectPart.icnType, tile._mainObjectPart.icnIndex ) ) {
         tile.setMainObjectType( MP2::OBJ_REEFS );
 
         // There is no need to check the rest of things as we fixed this object.
@@ -1327,10 +1326,10 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     // On some maps (apparently created by some non-standard editors), the object type on tiles with random monsters does not match the index
     // of the monster placeholder sprite. While this engine looks at the object type when placing an actual monster on a tile, the original
     // HoMM2 apparently looks at the placeholder sprite, so we need to keep them in sync.
-    if ( tile._mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_MONS32 ) {
+    if ( tile._mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_MONS32 ) {
         MP2::MapObjectType monsterObjectType = originalObjectType;
 
-        const uint8_t originalObjectSpriteIndex = tile.getMainObjectPart()._imageIndex;
+        const uint8_t originalObjectSpriteIndex = tile.getMainObjectPart().icnIndex;
         switch ( originalObjectSpriteIndex ) {
         // Random monster placeholder "MON"
         case 66:
@@ -1376,7 +1375,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     case MP2::OBJ_EXPANSION_OBJECT: {
         // The type of expansion action object or dwelling is stored in object metadata.
         // However, we just ignore it.
-        MP2::MapObjectType objectType = getLoyaltyObject( tile._mainObjectPart._objectIcnType, tile._mainObjectPart._imageIndex );
+        MP2::MapObjectType objectType = getLoyaltyObject( tile._mainObjectPart.icnType, tile._mainObjectPart.icnIndex );
         if ( objectType != MP2::OBJ_NONE ) {
             tile.setMainObjectType( objectType );
             break;
@@ -1384,7 +1383,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
 
         // Add-ons of level 1 shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
         for ( const auto & part : tile._groundObjectPart ) {
-            objectType = getLoyaltyObject( part._objectIcnType, part._imageIndex );
+            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
         }
@@ -1395,7 +1394,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
         }
 
         for ( const auto & part : tile._topObjectPart ) {
-            objectType = getLoyaltyObject( part._objectIcnType, part._imageIndex );
+            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
         }
@@ -1407,7 +1406,7 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
-                                                << static_cast<int>( tile._mainObjectPart._imageIndex ) )
+                                                << static_cast<int>( tile._mainObjectPart.icnIndex ) )
         break;
     }
 
@@ -1462,10 +1461,10 @@ bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
 
 void Maps::Tile::removeObjects( const MP2::ObjectIcnType objectIcnType )
 {
-    _groundObjectPart.remove_if( [objectIcnType]( const auto & part ) { return part._objectIcnType == objectIcnType; } );
-    _topObjectPart.remove_if( [objectIcnType]( const auto & part ) { return part._objectIcnType == objectIcnType; } );
+    _groundObjectPart.remove_if( [objectIcnType]( const auto & part ) { return part.icnType == objectIcnType; } );
+    _topObjectPart.remove_if( [objectIcnType]( const auto & part ) { return part.icnType == objectIcnType; } );
 
-    if ( _mainObjectPart._objectIcnType == objectIcnType ) {
+    if ( _mainObjectPart.icnType == objectIcnType ) {
         _mainObjectPart = {};
     }
 
@@ -1479,24 +1478,24 @@ void Maps::Tile::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnTy
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
     for ( auto & part : _groundObjectPart ) {
-        if ( part._uid == objectUid && part._objectIcnType == originalObjectIcnType && part._imageIndex == originalImageIndex ) {
-            part._objectIcnType = newObjectIcnType;
-            part._imageIndex = newImageIndex;
+        if ( part._uid == objectUid && part.icnType == originalObjectIcnType && part.icnIndex == originalImageIndex ) {
+            part.icnType = newObjectIcnType;
+            part.icnIndex = newImageIndex;
             return;
         }
     }
 
     for ( auto & part : _topObjectPart ) {
-        if ( part._uid == objectUid && part._objectIcnType == originalObjectIcnType && part._imageIndex == originalImageIndex ) {
-            part._objectIcnType = newObjectIcnType;
-            part._imageIndex = newImageIndex;
+        if ( part._uid == objectUid && part.icnType == originalObjectIcnType && part.icnIndex == originalImageIndex ) {
+            part.icnType = newObjectIcnType;
+            part.icnIndex = newImageIndex;
             return;
         }
     }
 
-    if ( _mainObjectPart._uid == objectUid && _mainObjectPart._objectIcnType == originalObjectIcnType && _mainObjectPart._imageIndex == originalImageIndex ) {
-        _mainObjectPart._objectIcnType = newObjectIcnType;
-        _mainObjectPart._imageIndex = newImageIndex;
+    if ( _mainObjectPart._uid == objectUid && _mainObjectPart.icnType == originalObjectIcnType && _mainObjectPart.icnIndex == originalImageIndex ) {
+        _mainObjectPart.icnType = newObjectIcnType;
+        _mainObjectPart.icnIndex = newImageIndex;
     }
 }
 
@@ -1504,24 +1503,24 @@ void Maps::Tile::updateObjectImageIndex( const uint32_t objectUid, const MP2::Ob
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
     for ( auto & part : _groundObjectPart ) {
-        if ( part._uid == objectUid && part._objectIcnType == objectIcnType ) {
-            assert( part._imageIndex + imageIndexOffset >= 0 && part._imageIndex + imageIndexOffset < 255 );
-            part._imageIndex = static_cast<uint8_t>( part._imageIndex + imageIndexOffset );
+        if ( part._uid == objectUid && part.icnType == objectIcnType ) {
+            assert( part.icnIndex + imageIndexOffset >= 0 && part.icnIndex + imageIndexOffset < 255 );
+            part.icnIndex = static_cast<uint8_t>( part.icnIndex + imageIndexOffset );
             return;
         }
     }
 
     for ( auto & part : _topObjectPart ) {
-        if ( part._uid == objectUid && part._objectIcnType == objectIcnType ) {
-            assert( part._imageIndex + imageIndexOffset >= 0 && part._imageIndex + imageIndexOffset < 255 );
-            part._imageIndex = static_cast<uint8_t>( part._imageIndex + imageIndexOffset );
+        if ( part._uid == objectUid && part.icnType == objectIcnType ) {
+            assert( part.icnIndex + imageIndexOffset >= 0 && part.icnIndex + imageIndexOffset < 255 );
+            part.icnIndex = static_cast<uint8_t>( part.icnIndex + imageIndexOffset );
             return;
         }
     }
 
-    if ( _mainObjectPart._uid == objectUid && _mainObjectPart._objectIcnType == objectIcnType ) {
-        assert( _mainObjectPart._imageIndex + imageIndexOffset >= 0 && _mainObjectPart._imageIndex + imageIndexOffset < 255 );
-        _mainObjectPart._imageIndex = static_cast<uint8_t>( _mainObjectPart._imageIndex + imageIndexOffset );
+    if ( _mainObjectPart._uid == objectUid && _mainObjectPart.icnType == objectIcnType ) {
+        assert( _mainObjectPart.icnIndex + imageIndexOffset >= 0 && _mainObjectPart.icnIndex + imageIndexOffset < 255 );
+        _mainObjectPart.icnIndex = static_cast<uint8_t>( _mainObjectPart.icnIndex + imageIndexOffset );
     }
 }
 
@@ -1539,10 +1538,10 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
 {
     ObjectPart * part = tile.getGroundObjectPart( uid );
     if ( part != nullptr ) {
-        part->_imageIndex = newIndex;
+        part->icnIndex = newIndex;
     }
     else if ( tile._mainObjectPart._uid == uid ) {
-        tile._mainObjectPart._imageIndex = newIndex;
+        tile._mainObjectPart.icnIndex = newIndex;
     }
 
     tile._updateRoadFlag();
@@ -1551,7 +1550,7 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
 void Maps::Tile::updateObjectType()
 {
     // After removing an object there could be an object part in the main object part.
-    MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart._objectIcnType, _mainObjectPart._imageIndex );
+    MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
         // Set object type only when this is an interactive object type to make sure that interaction can be done.
         setMainObjectType( objectType );
@@ -1561,7 +1560,7 @@ void Maps::Tile::updateObjectType()
     // And sometimes even in the ground layer object parts.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
     for ( auto iter = _groundObjectPart.rbegin(); iter != _groundObjectPart.rend(); ++iter ) {
-        const MP2::MapObjectType type = getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+        const MP2::MapObjectType type = getObjectTypeByIcn( iter->icnType, iter->icnIndex );
         if ( type == MP2::OBJ_NONE ) {
             continue;
         }
@@ -1580,7 +1579,7 @@ void Maps::Tile::updateObjectType()
     // Or object part can be in the top layer object parts.
     // Take a note that we iterate object parts from back to front as the latest object part has higher priority.
     for ( auto iter = _topObjectPart.rbegin(); iter != _topObjectPart.rend(); ++iter ) {
-        const MP2::MapObjectType type = getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
+        const MP2::MapObjectType type = getObjectTypeByIcn( iter->icnType, iter->icnIndex );
 
         if ( type != MP2::OBJ_NONE ) {
             setMainObjectType( type );
@@ -1621,18 +1620,18 @@ void Maps::Tile::updateObjectType()
 
 uint32_t Maps::Tile::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const
 {
-    if ( _mainObjectPart._objectIcnType == objectIcnType ) {
+    if ( _mainObjectPart.icnType == objectIcnType ) {
         return _mainObjectPart._uid;
     }
 
     for ( const auto & part : _groundObjectPart ) {
-        if ( part._objectIcnType == objectIcnType ) {
+        if ( part.icnType == objectIcnType ) {
             return part._uid;
         }
     }
 
     for ( const auto & part : _topObjectPart ) {
-        if ( part._objectIcnType == objectIcnType ) {
+        if ( part.icnType == objectIcnType ) {
             return part._uid;
         }
     }
@@ -1644,22 +1643,22 @@ std::vector<MP2::ObjectIcnType> Maps::Tile::getValidObjectIcnTypes() const
 {
     std::vector<MP2::ObjectIcnType> objectIcnTypes;
 
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        objectIcnTypes.emplace_back( _mainObjectPart._objectIcnType );
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        objectIcnTypes.emplace_back( _mainObjectPart.icnType );
     }
 
     for ( const auto & part : _groundObjectPart ) {
         // If this assertion blows up then you put an empty object into an object part which makes no sense!
-        assert( part._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
+        assert( part.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
 
-        objectIcnTypes.emplace_back( part._objectIcnType );
+        objectIcnTypes.emplace_back( part.icnType );
     }
 
     for ( const auto & part : _topObjectPart ) {
         // If this assertion blows up then you put an empty object into an object part which makes no sense!
-        assert( part._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
+        assert( part.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
 
-        objectIcnTypes.emplace_back( part._objectIcnType );
+        objectIcnTypes.emplace_back( part.icnType );
     }
 
     return objectIcnTypes;
@@ -1668,18 +1667,18 @@ std::vector<MP2::ObjectIcnType> Maps::Tile::getValidObjectIcnTypes() const
 bool Maps::Tile::containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const
 {
     for ( const MP2::ObjectIcnType objectIcnType : objectIcnTypes ) {
-        if ( _mainObjectPart._objectIcnType == objectIcnType ) {
+        if ( _mainObjectPart.icnType == objectIcnType ) {
             return true;
         }
 
         for ( const auto & part : _groundObjectPart ) {
-            if ( part._objectIcnType == objectIcnType ) {
+            if ( part.icnType == objectIcnType ) {
                 return true;
             }
         }
 
         for ( const auto & part : _topObjectPart ) {
-            if ( part._objectIcnType == objectIcnType ) {
+            if ( part.icnType == objectIcnType ) {
                 return true;
             }
         }
@@ -1690,17 +1689,17 @@ bool Maps::Tile::containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType>
 
 bool Maps::Tile::containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const
 {
-    if ( _mainObjectPart._objectIcnType == objectIcnType && imageIdx == _mainObjectPart._imageIndex ) {
+    if ( _mainObjectPart.icnType == objectIcnType && imageIdx == _mainObjectPart.icnIndex ) {
         return true;
     }
 
     if ( std::any_of( _groundObjectPart.cbegin(), _groundObjectPart.cend(),
-                      [objectIcnType, imageIdx]( const auto & part ) { return part._objectIcnType == objectIcnType && imageIdx == part._imageIndex; } ) ) {
+                      [objectIcnType, imageIdx]( const auto & part ) { return part.icnType == objectIcnType && imageIdx == part.icnIndex; } ) ) {
         return true;
     }
 
     return std::any_of( _topObjectPart.cbegin(), _topObjectPart.cend(),
-                        [objectIcnType, imageIdx]( const auto & part ) { return part._objectIcnType == objectIcnType && imageIdx == part._imageIndex; } );
+                        [objectIcnType, imageIdx]( const auto & part ) { return part.icnType == objectIcnType && imageIdx == part.icnIndex; } );
 }
 
 bool Maps::Tile::isTallObject() const
@@ -1712,7 +1711,7 @@ bool Maps::Tile::isTallObject() const
     }
 
     std::vector<uint32_t> tileUIDs;
-    if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainObjectPart._uid != 0 && !_mainObjectPart.isPassabilityTransparent() ) {
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainObjectPart._uid != 0 && !_mainObjectPart.isPassabilityTransparent() ) {
         tileUIDs.emplace_back( _mainObjectPart._uid );
     }
 
@@ -1837,19 +1836,19 @@ bool Maps::Tile::isDetachedObject() const
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const ObjectPart & ta )
 {
-    return stream << ta._layerType << ta._uid << ta._objectIcnType << ta._imageIndex;
+    return stream << ta.layerType << ta._uid << ta.icnType << ta.icnIndex;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, ObjectPart & ta )
 {
-    stream >> ta._layerType;
+    stream >> ta.layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
-        ta._layerType = ( ta._layerType & 0x03 );
+        ta.layerType = static_cast<ObjectLayerType>( ta.layerType & 0x03 );
     }
 
-    stream >> ta._uid >> ta._objectIcnType;
+    stream >> ta._uid >> ta.icnType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
@@ -1857,7 +1856,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, ObjectPart & ta )
         stream >> temp >> temp;
     }
 
-    return stream >> ta._imageIndex;
+    return stream >> ta.icnIndex;
 }
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const Tile & tile )
@@ -1873,7 +1872,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1104_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
-        stream >> tile._mainObjectPart._uid >> tile._mainObjectPart._objectIcnType;
+        stream >> tile._mainObjectPart._uid >> tile._mainObjectPart.icnType;
     }
     else {
         stream >> tile._mainObjectPart;
@@ -1886,7 +1885,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
     }
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
-        stream >> tile._mainObjectPart._imageIndex;
+        stream >> tile._mainObjectPart.icnIndex;
     }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
@@ -1903,7 +1902,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
     stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._groundObjectPart >> tile._topObjectPart;
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
-        stream >> tile._mainObjectPart._layerType;
+        stream >> tile._mainObjectPart.layerType;
     }
 
     return stream >> tile._boatOwnerColor;

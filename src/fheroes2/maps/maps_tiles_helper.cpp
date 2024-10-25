@@ -186,12 +186,12 @@ namespace
 
         tile.setMainObjectType( MP2::OBJ_MONSTER );
 
-        using TileImageIndexType = decltype( tile.getMainObjectPart()._imageIndex );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+        using TileImageIndexType = decltype( tile.getMainObjectPart().icnIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of icnIndex has been changed, check the logic below" );
 
         assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
 
-        tile.getMainObjectPart()._imageIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
+        tile.getMainObjectPart().icnIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
     }
 
     // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
@@ -820,14 +820,14 @@ namespace
         auto checkRoadIcnIndex = []( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
             const Maps::Tile & currentTile = world.getTile( tileIndex );
 
-            if ( currentTile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            if ( currentTile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
                 return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(),
-                                    [&currentTile]( const uint8_t index ) { return currentTile.getMainObjectPart()._imageIndex == index; } );
+                                    [&currentTile]( const uint8_t index ) { return currentTile.getMainObjectPart().icnIndex == index; } );
             }
 
             for ( const Maps::ObjectPart & part : currentTile.getGroundObjectParts() ) {
-                if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&part]( const uint8_t index ) { return part._imageIndex == index; } );
+                if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&part]( const uint8_t index ) { return part.icnIndex == index; } );
                 }
             }
 
@@ -1228,7 +1228,7 @@ namespace
                     bool higherObjectFound = false;
 
                     for ( const auto & topPart : currentTile.getTopObjectParts() ) {
-                        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( topPart._objectIcnType, topPart._imageIndex );
+                        const MP2::MapObjectType type = Maps::getObjectTypeByIcn( topPart.icnType, topPart.icnIndex );
                         if ( type != MP2::OBJ_NONE ) {
                             // A top object part is present.
                             higherObjectFound = true;
@@ -1238,12 +1238,12 @@ namespace
 
                     if ( !higherObjectFound ) {
                         for ( const auto & groundPart : currentTile.getGroundObjectParts() ) {
-                            if ( groundPart._layerType >= partInfo.layerType ) {
+                            if ( groundPart.layerType >= partInfo.layerType ) {
                                 // A ground object part is has "lower" or equal layer type. Skip it.
                                 continue;
                             }
 
-                            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( groundPart._objectIcnType, groundPart._imageIndex );
+                            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( groundPart.icnType, groundPart.icnIndex );
                             if ( type != MP2::OBJ_NONE ) {
                                 // A ground object part is present and it has "higher" layer type.
                                 higherObjectFound = true;
@@ -1259,8 +1259,8 @@ namespace
 #if defined( WITH_DEBUG )
             // Check that we don't put the same object part.
             for ( const auto & groundPart : currentTile.getGroundObjectParts() ) {
-                assert( groundPart._uid != uid || groundPart._imageIndex != static_cast<uint8_t>( partInfo.icnIndex ) || groundPart._objectIcnType != partInfo.icnType
-                        || groundPart._layerType != partInfo.layerType );
+                assert( groundPart._uid != uid || groundPart.icnIndex != static_cast<uint8_t>( partInfo.icnIndex ) || groundPart.icnType != partInfo.icnType
+                        || groundPart.layerType != partInfo.layerType );
             }
 #endif
 
@@ -1599,13 +1599,13 @@ namespace Maps
             return nullptr;
         }
 
-        MP2::MapObjectType objectType = getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex );
+        MP2::MapObjectType objectType = getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
         if ( objectType == type ) {
             return &tile.getMainObjectPart();
         }
 
         for ( const auto & objectPart : tile.getGroundObjectParts() ) {
-            objectType = getObjectTypeByIcn( objectPart._objectIcnType, objectPart._imageIndex );
+            objectType = getObjectTypeByIcn( objectPart.icnType, objectPart.icnIndex );
             if ( objectType == type ) {
                 return &objectPart;
             }
@@ -1664,7 +1664,7 @@ namespace Maps
         case MP2::OBJ_BARROW_MOUNDS:
             return { Monster::GHOST };
         case MP2::OBJ_MONSTER:
-            return { tile.getMainObjectPart()._imageIndex + 1 };
+            return { tile.getMainObjectPart().icnIndex + 1 };
         default:
             break;
         }
@@ -2181,14 +2181,14 @@ namespace Maps
             assert( isFirstLoad );
 
             uint8_t artifactSpriteIndex = Artifact::UNKNOWN;
-            if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
-                artifactSpriteIndex = tile.getMainObjectPart()._imageIndex;
+            if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                artifactSpriteIndex = tile.getMainObjectPart().icnIndex;
             }
             else {
                 // On some hacked original maps artifact can be placed to the ground layer object parts.
                 for ( const auto & part : tile.getGroundObjectParts() ) {
-                    if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
-                        artifactSpriteIndex = part._imageIndex;
+                    if ( part.icnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+                        artifactSpriteIndex = part.icnIndex;
                         break;
                     }
                 }
@@ -2238,14 +2238,14 @@ namespace Maps
 
             int resourceType = Resource::UNKNOWN;
 
-            if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                 // The resource is located at the top.
-                resourceType = Resource::FromIndexSprite( tile.getMainObjectPart()._imageIndex );
+                resourceType = Resource::FromIndexSprite( tile.getMainObjectPart().icnIndex );
             }
             else {
                 for ( const auto & part : tile.getGroundObjectParts() ) {
-                    if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
-                        resourceType = Resource::FromIndexSprite( part._imageIndex );
+                    if ( part.icnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                        resourceType = Resource::FromIndexSprite( part.icnIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                         // Let's update the tile's object type to properly show the action object.
                         tile.updateObjectType();
@@ -2273,8 +2273,8 @@ namespace Maps
             default:
                 // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getMainObjectPart()._objectIcnType
-                                   << ", image index " << tile.getMainObjectPart()._imageIndex )
+                           "Tile " << tile.GetIndex() << " contains unknown resource type. Object ICN type " << tile.getMainObjectPart().icnType << ", image index "
+                                   << tile.getMainObjectPart().icnIndex )
                 resourceType = Resource::WOOD;
                 count = 0;
                 break;
@@ -2574,13 +2574,13 @@ namespace Maps
         case MP2::OBJ_BARRIER:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) );
+            setColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_TRAVELLER_TENT:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) );
+            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB: {
@@ -2606,7 +2606,7 @@ namespace Maps
         case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
-            switch ( tile.getMainObjectPart()._imageIndex ) {
+            switch ( tile.getMainObjectPart().icnIndex ) {
             case 0: {
                 const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
                 assert( resourceCount.has_value() && resourceCount > 0U );
@@ -2661,8 +2661,8 @@ namespace Maps
             assert( isFirstLoad );
 
             // This is a special case. Boats are different in the original editor.
-            tile.getMainObjectPart()._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
-            tile.getMainObjectPart()._imageIndex = 18;
+            tile.getMainObjectPart().icnType = MP2::OBJ_ICN_TYPE_BOAT32;
+            tile.getMainObjectPart().icnIndex = 18;
             break;
 
         case MP2::OBJ_RANDOM_ARTIFACT:
@@ -2748,7 +2748,7 @@ namespace Maps
 
     void updateMonsterInfoOnTile( Tile & tile )
     {
-        const Monster mons = Monster( tile.getMainObjectPart()._imageIndex + 1 ); // ICN::MONS32 start from PEASANT
+        const Monster mons = Monster( tile.getMainObjectPart().icnIndex + 1 ); // ICN::MONS32 start from PEASANT
         setMonsterOnTile( tile, mons, tile.metadata()[0] );
     }
 
@@ -2758,25 +2758,25 @@ namespace Maps
 
         Maps::ObjectPart & mainObjectPart = tile.getMainObjectPart();
 
-        if ( mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
-            if ( mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 // If there is another object sprite here (shadow for example) push it down to add-ons.
                 tile.pushGroundObjectPart( mainObjectPart );
             }
 
             // Set unique UID for placed monster.
             mainObjectPart._uid = getNewObjectUID();
-            mainObjectPart._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
-            mainObjectPart._layerType = OBJECT_LAYER;
+            mainObjectPart.icnType = MP2::OBJ_ICN_TYPE_MONS32;
+            mainObjectPart.layerType = OBJECT_LAYER;
         }
 
-        using TileImageIndexType = decltype( mainObjectPart._imageIndex );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+        using TileImageIndexType = decltype( mainObjectPart.icnIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of icnIndex has been changed, check the logic below" );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
 
-        mainObjectPart._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
+        mainObjectPart.icnIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
         const bool setDefinedCount = ( count > 0 );
 
@@ -2964,16 +2964,16 @@ namespace Maps
             }
         };
 
-        MP2::ObjectIcnType objectIcnTypeTemp{ tile.getMainObjectPart()._objectIcnType };
-        uint8_t imageIndexTemp{ tile.getMainObjectPart()._imageIndex };
+        MP2::ObjectIcnType objectIcnTypeTemp{ tile.getMainObjectPart().icnType };
+        uint8_t imageIndexTemp{ tile.getMainObjectPart().icnIndex };
 
         restoreLeftSprite( objectIcnTypeTemp, imageIndexTemp );
-        tile.getMainObjectPart()._objectIcnType = objectIcnTypeTemp;
-        tile.getMainObjectPart()._imageIndex = imageIndexTemp;
+        tile.getMainObjectPart().icnType = objectIcnTypeTemp;
+        tile.getMainObjectPart().icnIndex = imageIndexTemp;
 
         for ( auto & part : tile.getGroundObjectParts() ) {
             if ( part._uid == tile.getMainObjectPart()._uid ) {
-                restoreLeftSprite( part._objectIcnType, part._imageIndex );
+                restoreLeftSprite( part.icnType, part.icnIndex );
             }
         }
 
@@ -2981,18 +2981,18 @@ namespace Maps
             Tile & rightTile = world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
 
             if ( rightTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid ) {
-                objectIcnTypeTemp = rightTile.getMainObjectPart()._objectIcnType;
-                imageIndexTemp = rightTile.getMainObjectPart()._imageIndex;
+                objectIcnTypeTemp = rightTile.getMainObjectPart().icnType;
+                imageIndexTemp = rightTile.getMainObjectPart().icnIndex;
                 restoreRightSprite( objectIcnTypeTemp, imageIndexTemp );
 
-                rightTile.getMainObjectPart()._objectIcnType = objectIcnTypeTemp;
-                rightTile.getMainObjectPart()._imageIndex = imageIndexTemp;
+                rightTile.getMainObjectPart().icnType = objectIcnTypeTemp;
+                rightTile.getMainObjectPart().icnIndex = imageIndexTemp;
             }
 
             ObjectPart * part = rightTile.getGroundObjectPart( tile.getMainObjectPart()._uid );
 
             if ( part ) {
-                restoreRightSprite( part->_objectIcnType, part->_imageIndex );
+                restoreRightSprite( part->icnType, part->icnIndex );
             }
         }
 
@@ -3015,13 +3015,13 @@ namespace Maps
         // Verify that this tile indeed contains an object with given object type.
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == objectType ) {
+        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
             objectUID = tile.getMainObjectPart()._uid;
         }
 
         if ( objectUID == 0 ) {
             for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
                 }
@@ -3030,7 +3030,7 @@ namespace Maps
 
         if ( objectUID == 0 ) {
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
                 }
@@ -3059,8 +3059,8 @@ namespace Maps
             break;
         }
 
-        if ( ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart()._layerType == Maps::SHADOW_LAYER )
-             || ( tile.getMainObjectPart()._layerType == Maps::TERRAIN_LAYER ) ) {
+        if ( ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart().layerType == Maps::SHADOW_LAYER )
+             || ( tile.getMainObjectPart().layerType == Maps::TERRAIN_LAYER ) ) {
             return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
@@ -3307,12 +3307,12 @@ namespace Maps
             for ( int32_t x = startX; x <= endX; ++x ) {
                 const Maps::Tile & currentTile = world.getTile( x + tileOffset );
 
-                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart()._layerType != SHADOW_LAYER ) ) {
+                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart().layerType != SHADOW_LAYER ) ) {
                     objectsUids.insert( currentTile.getMainObjectPart()._uid );
                 }
 
                 for ( const auto & part : currentTile.getGroundObjectParts() ) {
-                    if ( part._uid != 0 && ( part._layerType != SHADOW_LAYER ) ) {
+                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) ) {
                         objectsUids.insert( part._uid );
                     }
                 }

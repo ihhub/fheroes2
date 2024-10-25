@@ -224,20 +224,20 @@ namespace Maps
         std::set<std::pair<uint32_t, uint8_t>> roadParts;
         std::set<std::pair<uint32_t, uint8_t>> streamParts;
 
-        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart()._objectIcnType;
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart().icnType;
         if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
+            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart().icnIndex );
         }
         else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart()._imageIndex );
+            streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart().icnIndex );
         }
 
         for ( const auto & part : tile.getGroundObjectParts() ) {
-            if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                roadParts.emplace( part._uid, part._imageIndex );
+            if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( part._uid, part.icnIndex );
             }
-            else if ( part._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                streamParts.emplace( part._uid, part._imageIndex );
+            else if ( part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace( part._uid, part.icnIndex );
             }
         }
 
