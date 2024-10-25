@@ -54,11 +54,11 @@ namespace Maps
     {
         ObjectPart() = default;
 
-        ObjectPart( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
+        ObjectPart( const ObjectLayerType layerType_, const uint32_t uid, const MP2::ObjectIcnType icnType_, const uint8_t icnIndex_ )
             : _uid( uid )
-            , _layerType( layerType )
-            , _objectIcnType( objectIcnType )
-            , _imageIndex( imageIndex )
+            , layerType( layerType_ )
+            , icnType( icnType_ )
+            , icnIndex( icnIndex_ )
         {
             // Do nothing.
         }
@@ -70,25 +70,25 @@ namespace Maps
         // Returns true if it can be passed be hero/boat: part's layer type is SHADOW or TERRAIN.
         bool isPassabilityTransparent() const
         {
-            return _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER;
+            return layerType == SHADOW_LAYER || layerType == TERRAIN_LAYER;
         }
 
         bool operator==( const ObjectPart & part ) const
         {
-            return ( _uid == part._uid ) && ( _layerType == part._layerType ) && ( _objectIcnType == part._objectIcnType ) && ( _imageIndex == part._imageIndex );
+            return ( _uid == part._uid ) && ( layerType == part.layerType ) && ( icnType == part.icnType ) && ( icnIndex == part.icnIndex );
         }
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
 
         // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType{ OBJECT_LAYER };
+        ObjectLayerType layerType{ OBJECT_LAYER };
 
         // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex{ 255 };
+        uint8_t icnIndex{ 255 };
     };
 
     class Tiles
@@ -250,7 +250,7 @@ namespace Maps
 
         void moveMainObjectPartToGroundLevel()
         {
-            if ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
                 _groundObjectPart.emplace_back( _mainObjectPart );
                 _mainObjectPart = {};
             }

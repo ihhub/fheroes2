@@ -325,7 +325,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
 
-        const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart()._imageIndex );
+        const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
         if ( ( colorRace.first & humanPlayerColors ) == 0 ) {
             const int side1 = colorRace.first | humanPlayerColors;
             const int side2 = computerPlayerColors ^ colorRace.first;

@@ -726,9 +726,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 
             if ( index == 0 ) {
                 ObjectPart * part = tile.getTopObjectPart( castleID );
-                if ( part && part->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
-                    part->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
-                    part->_imageIndex = fullTownIndex - 16;
+                if ( part && part->icnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
+                    part->icnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
+                    part->icnIndex = fullTownIndex - 16;
                 }
             }
         }
