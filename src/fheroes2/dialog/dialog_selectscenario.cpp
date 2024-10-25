@@ -282,7 +282,8 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 {
     const Maps::FileInfo & info = GetCurrent();
 
-    fheroes2::Blit( _getPlayersCountIcon( info.availablePlayerColors ), display, dst.x + SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
+    fheroes2::Blit( _getPlayersCountIcon( info.availablePlayerColors ), display, dst.x + SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X,
+                    dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     _renderMapIcon( info.width, display, dst.x + SELECTED_SCENARIO_MAP_SIZE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getMapTypeIcon( info.version ), display, dst.x + SELECTED_SCENARIO_MAP_TYPE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 

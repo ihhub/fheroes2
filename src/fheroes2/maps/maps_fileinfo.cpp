@@ -645,10 +645,10 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
         stream << fi.races[i] << fi.unions[i];
     }
 
-    return stream << fi.availablePlayerColors << fi.humanPlayerColors << fi.computerPlayerColors << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.isVictoryConditionApplicableForAI
-                  << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
-                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
-                  << fi.mainLanguage;
+    return stream << fi.availablePlayerColors << fi.humanPlayerColors << fi.computerPlayerColors << fi.colorsOfRandomRaces << fi.victoryConditionType
+                  << fi.isVictoryConditionApplicableForAI << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType
+                  << fi.lossConditionParams[0] << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek
+                  << fi.worldMonth << fi.mainLanguage;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
@@ -676,9 +676,10 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         }
     }
 
-    stream >> fi.availablePlayerColors >> fi.humanPlayerColors >> fi.computerPlayerColors >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.isVictoryConditionApplicableForAI
-        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
-        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    stream >> fi.availablePlayerColors >> fi.humanPlayerColors >> fi.computerPlayerColors >> fi.colorsOfRandomRaces >> fi.victoryConditionType
+        >> fi.isVictoryConditionApplicableForAI >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType
+        >> fi.lossConditionParams[0] >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek
+        >> fi.worldMonth;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
