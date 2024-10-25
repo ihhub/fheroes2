@@ -1862,17 +1862,22 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, ObjectPart & ta )
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
 {
-    // TODO: use operator<<() for _mainObjectPart.
-    return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainObjectPart._uid
-                  << tile._mainObjectPart._objectIcnType << tile._mainObjectPart._imageIndex << tile._mainObjectType << tile._fogColors << tile._metadata
-                  << tile._occupantHeroId << tile._isTileMarkedAsRoad << tile._groundObjectPart << tile._topObjectPart << tile._mainObjectPart._layerType
+    return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainObjectPart << tile._mainObjectType
+                  << tile._fogColors << tile._metadata << tile._occupantHeroId << tile._isTileMarkedAsRoad << tile._groundObjectPart << tile._topObjectPart
                   << tile._boatOwnerColor;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 {
-    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections >> tile._mainObjectPart._uid
-        >> tile._mainObjectPart._objectIcnType;
+    stream >> tile._index >> tile._terrainImageIndex >> tile._terrainFlags >> tile._tilePassabilityDirections;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1104_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
+        stream >> tile._mainObjectPart._uid >> tile._mainObjectPart._objectIcnType;
+    }
+    else {
+        stream >> tile._mainObjectPart;
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
@@ -1880,7 +1885,9 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
         stream >> temp >> temp;
     }
 
-    stream >> tile._mainObjectPart._imageIndex;
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
+        stream >> tile._mainObjectPart._imageIndex;
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
@@ -1893,6 +1900,11 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
         stream >> tile._mainObjectType;
     }
 
-    return stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._groundObjectPart >> tile._topObjectPart
-           >> tile._mainObjectPart._layerType >> tile._boatOwnerColor;
+    stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._groundObjectPart >> tile._topObjectPart;
+
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
+        stream >> tile._mainObjectPart._layerType;
+    }
+
+    return stream >> tile._boatOwnerColor;
 }
