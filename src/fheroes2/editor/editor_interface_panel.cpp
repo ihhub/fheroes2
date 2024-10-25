@@ -878,7 +878,7 @@ namespace Interface
                         return;
                     }
 
-                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
+                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.getTile( tileIndex ).GetGround() );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
                 } );

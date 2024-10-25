@@ -39,7 +39,7 @@ class Heroes;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace GameFocus
@@ -158,10 +158,10 @@ namespace Interface
     private:
         AdventureMap();
 
-        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
-        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
-        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
-        static int _getCursorNoFocus( const Maps::Tiles & tile );
+        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tile & tile );
+        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tile & tile );
+        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tile & tile );
+        static int _getCursorNoFocus( const Maps::Tile & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );

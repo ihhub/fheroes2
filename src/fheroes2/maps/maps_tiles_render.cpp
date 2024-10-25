@@ -132,7 +132,7 @@ namespace
         }
     }
 
-    void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tiles & tile )
+    void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tile & tile )
     {
         assert( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._imageIndex != 255 );
 
@@ -270,7 +270,7 @@ namespace
     }
 #endif
 
-    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tiles & tile, uint32_t monsterIndex, const bool isEditorMode )
+    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tile & tile, uint32_t monsterIndex, const bool isEditorMode )
     {
         const int tileIndex = tile.GetIndex();
         int attackerIndex = -1;
@@ -278,7 +278,7 @@ namespace
         // scan for a hero around
         if ( !isEditorMode ) {
             for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HERO, false ) ) {
-                const Heroes * hero = world.GetTiles( idx ).getHero();
+                const Heroes * hero = world.getTile( idx ).getHero();
                 assert( hero != nullptr );
 
                 // hero is going to attack monsters on this tile
@@ -632,7 +632,7 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerExtraObjects( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
+    void redrawTopLayerExtraObjects( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
     {
         if ( isPuzzleDraw ) {
             // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
@@ -679,7 +679,7 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerObject( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part )
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part )
     {
         if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), part._objectIcnType, part._imageIndex ) ) {
             return;
@@ -688,7 +688,7 @@ namespace Maps
         renderObjectPart( dst, area, Maps::GetPoint( tile.GetIndex() ), part );
     }
 
-    void drawFog( const Tiles & tile, fheroes2::Image & dst, const Interface::GameArea & area )
+    void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area )
     {
         const uint16_t fogDirection = tile.getFogDirection();
         // This method should not be called for a tile without fog.
@@ -912,7 +912,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
@@ -928,7 +928,7 @@ namespace Maps
         }
     }
 
-    void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
+    void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
     {
         assert( level <= 0x03 );
 
@@ -977,7 +977,7 @@ namespace Maps
         }
     }
 
-    void drawByObjectIcnType( const Tiles & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType )
+    void drawByObjectIcnType( const Tile & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType )
     {
         const fheroes2::Point & tileOffset = Maps::GetPoint( tile.GetIndex() );
 
@@ -998,7 +998,7 @@ namespace Maps
         }
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tile & tile, const bool isEditorMode )
     {
         assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
@@ -1041,7 +1041,7 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tile & tile, const bool isEditorMode )
     {
         assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
@@ -1084,7 +1084,7 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tile & tile )
     {
         // TODO: combine both boat image generation for heroes and empty boats.
         assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
@@ -1115,7 +1115,7 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tile & tile )
     {
         assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
 
@@ -1142,7 +1142,7 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tile & tile )
     {
         assert( tile.getMainObjectType( false ) == MP2::OBJ_MINE );
 
@@ -1294,7 +1294,7 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tile & tile )
     {
         assert( tile.getMainObjectType() == MP2::OBJ_HERO );
 
@@ -1319,7 +1319,7 @@ namespace Maps
         return objectInfo;
     }
 
-    const fheroes2::Image & getTileSurface( const Tiles & tile )
+    const fheroes2::Image & getTileSurface( const Tile & tile )
     {
         return fheroes2::AGG::GetTIL( TIL::GROUND32, tile.getTerrainImageIndex(), ( tile.getTerrainFlags() & 0x3 ) );
     }

@@ -108,7 +108,7 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
     }
 
     const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
-    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+    const Maps::Tile & tile = world.getTile( dstIndex );
 
     if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
         return;
@@ -132,7 +132,7 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 
 void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
 {
-    Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
+    Heroes * selectedHero = world.getTile( tileIndex ).getHero();
     if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
         return;
     }
@@ -439,7 +439,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();

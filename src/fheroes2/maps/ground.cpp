@@ -166,7 +166,7 @@ const char * Maps::Ground::String( int groundId )
     }
 }
 
-uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
+uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
 {
     //              none   basc   advd   expr
     //    Desert    2.00   1.75   1.50   1.00

@@ -26,7 +26,7 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace M82
@@ -357,7 +357,7 @@ namespace M82
     int FromSpell( const int spellID );
 
     // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
-    SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
+    SoundType getAdventureMapTileSound( const Maps::Tile & tile );
 }
 
 #endif

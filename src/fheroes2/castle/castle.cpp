@@ -1378,7 +1378,7 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
 void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    const Maps::Tile & tile = world.getTile( GetIndex() );
 
     uint32_t index = 0;
     fheroes2::Point dst_pt;
@@ -1878,7 +1878,7 @@ bool Castle::HasSeaAccess() const
         return false;
     }
 
-    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileAllowsToPutBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
@@ -1896,15 +1896,15 @@ bool Castle::HasSeaAccess() const
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileAllowsToPutBoat( world.getTile( index ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index - 1 ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index + 1 ) ) ) {
         return true;
     }
 
@@ -1919,7 +1919,7 @@ bool Castle::HasBoatNearby() const
         return false;
     }
 
-    auto doesTileHaveBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileHaveBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
@@ -1930,15 +1930,15 @@ bool Castle::HasBoatNearby() const
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileHaveBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileHaveBoat( world.getTile( index ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.getTile( index - 1 ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.getTile( index + 1 ) ) ) {
         return true;
     }
 
@@ -1953,7 +1953,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
         return -1;
     }
 
-    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileAllowsToPutBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
@@ -1965,15 +1965,15 @@ int32_t Castle::getTileIndexToPlaceBoat() const
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileAllowsToPutBoat( world.getTile( index ) ) ) {
         return index;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index - 1 ) ) ) {
         return index - 1;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index + 1 ) ) ) {
         return index + 1;
     }
 
@@ -2211,7 +2211,7 @@ bool Castle::BuyBoat() const
 
     Kingdom & kingdom = GetKingdom();
     kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-    world.GetTiles( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
+    world.getTile( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
 
     return true;
 }

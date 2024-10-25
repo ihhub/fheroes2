@@ -238,7 +238,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     vec_object.reserve( 128 );
 
     for ( int32_t i = 0; i < worldSize; ++i ) {
-        Maps::Tiles & tile = vec_tiles[i];
+        Maps::Tile & tile = vec_tiles[i];
 
         MP2::MP2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
@@ -445,7 +445,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const std::vector<uint8_t> pblock = fs.getRaw( blockSize );
 
         for ( const int32_t tileId : vec_object ) {
-            const Maps::Tiles & tile = vec_tiles[tileId];
+            const Maps::Tile & tile = vec_tiles[tileId];
             if ( ( tile.getMainObjectPart()._layerType & 0x3 ) != Maps::OBJECT_LAYER ) {
                 continue;
             }
@@ -457,7 +457,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
 
         if ( 0 <= objectTileId ) {
-            const Maps::Tiles & tile = vec_tiles[objectTileId];
+            const Maps::Tile & tile = vec_tiles[objectTileId];
             const MP2::MapObjectType objectType = tile.getMainObjectType();
 
             switch ( objectType ) {
@@ -1133,8 +1133,8 @@ bool World::loadResurrectionMap( const std::string & filename )
 
 bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects )
 {
-    for ( Maps::Tiles & tile : vec_tiles ) {
-        Maps::Tiles::fixMP2MapTileObjectType( tile );
+    for ( Maps::Tile & tile : vec_tiles ) {
+        Maps::Tile::fixMP2MapTileObjectType( tile );
 
         if ( !updateTileMetadata( tile, tile.getMainObjectType(), checkPoLObjects ) ) {
             ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
@@ -1153,7 +1153,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
 
     // Search for a tile with a predefined Ultimate Artifact
     const auto ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
     int32_t ultimateArtifactTileId = -1;
     int32_t ultimateArtifactRadius = 0;
     if ( ultArtTileIter != vec_tiles.end() ) {
@@ -1175,7 +1175,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
     return true;
 }
 
-bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects )
+bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects )
 {
     switch ( objectType ) {
     case MP2::OBJ_ARTIFACT:
@@ -1324,7 +1324,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
             return false;
         }
 
-        return GetTiles( idx ).GoodForUltimateArtifact();
+        return getTile( idx ).GoodForUltimateArtifact();
     };
 
     if ( tileId < 0 ) {
@@ -1332,7 +1332,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
         std::vector<int32_t> pool;
         pool.reserve( vec_tiles.size() / 2 );
 
-        for ( const Maps::Tiles & tile : vec_tiles ) {
+        for ( const Maps::Tile & tile : vec_tiles ) {
             const int32_t idx = tile.GetIndex();
 
             if ( checkTileForSuitabilityForUltArt( idx ) ) {
@@ -1400,7 +1400,7 @@ void World::addDebugHero()
     const fheroes2::Point & cp = castle->GetCenter();
     Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-    if ( hero && !GetTiles( cp.x, cp.y + 1 ).getHero() ) {
+    if ( hero && !getTile( cp.x, cp.y + 1 ).getHero() ) {
         hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
     }
 }

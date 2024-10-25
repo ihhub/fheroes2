@@ -172,7 +172,7 @@ namespace
             return true;
         }
 
-        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
+        const size_t neighbourRegions = world.getRegion( world.getTile( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // Force building a shipyard, +1 to cost check since we can have 0 neighbours
@@ -334,7 +334,7 @@ void AI::Planner::CastleTurn( Castle & castle, const bool defensiveStrategy )
         }
     }
     else {
-        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
         const RegionStats & stats = _regions[regionID];
 
         CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );

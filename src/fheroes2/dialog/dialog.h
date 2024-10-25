@@ -57,7 +57,7 @@ namespace Skill
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Dialog
@@ -90,7 +90,7 @@ namespace Dialog
     std::string SelectFileSave();
 
     // Shows the quick info window for the given tile
-    void QuickInfo( const Maps::Tiles & tile );
+    void QuickInfo( const Maps::Tile & tile );
     // Shows the quick info window for the given castle
     void QuickInfo( const Castle & castle );
     // Shows the quick info window for the given hero or captain. If the 'showFullInfo' parameter is specified,

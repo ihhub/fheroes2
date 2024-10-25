@@ -22,10 +22,10 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tiles & tile );
+    void showPopupWindow( const Maps::Tile & tile );
 }
