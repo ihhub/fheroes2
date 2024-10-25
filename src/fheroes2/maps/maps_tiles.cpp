@@ -1862,9 +1862,9 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, ObjectPart & ta )
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const Tiles & tile )
 {
-    return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainObjectPart
-                  << tile._mainObjectType << tile._fogColors << tile._metadata << tile._occupantHeroId << tile._isTileMarkedAsRoad
-                  << tile._groundObjectPart << tile._topObjectPart << tile._boatOwnerColor;
+    return stream << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainObjectPart << tile._mainObjectType
+                  << tile._fogColors << tile._metadata << tile._occupantHeroId << tile._isTileMarkedAsRoad << tile._groundObjectPart << tile._topObjectPart
+                  << tile._boatOwnerColor;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
@@ -1873,7 +1873,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1104_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
-        stream >> tile._mainObjectPart._uid >> tile._mainAddon._objectIcnType;
+        stream >> tile._mainObjectPart._uid >> tile._mainObjectPart._objectIcnType;
     }
     else {
         stream >> tile._mainObjectPart;
@@ -1900,7 +1900,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tiles & tile )
         stream >> tile._mainObjectType;
     }
 
-    stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer;
+    stream >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._groundObjectPart >> tile._topObjectPart;
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1104_RELEASE ) {
         stream >> tile._mainObjectPart._layerType;
