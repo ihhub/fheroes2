@@ -799,7 +799,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     }
 
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->_imageIndex ) ) {
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->icnIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
         if ( teleportIndex == index || teleportTile.getMainObjectType() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
@@ -842,7 +842,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
         return result;
     }
 
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->_imageIndex ) ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->icnIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
         if ( whirlpoolTile.getMainObjectType() != MP2::OBJ_WHIRLPOOL ) {
             continue;
@@ -1359,7 +1359,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
             continue;
         }
 
-        _allTeleports[objectPart->_imageIndex].push_back( index );
+        _allTeleports[objectPart->icnIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
@@ -1371,7 +1371,7 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
         assert( objectPart != nullptr );
 
-        _allWhirlpools[objectPart->_imageIndex].push_back( index );
+        _allWhirlpools[objectPart->icnIndex].push_back( index );
     }
 
     // Cache all positions of Eye of Magi objects.
