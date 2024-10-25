@@ -377,8 +377,8 @@ namespace
             for ( int32_t posX = 0; posX < worldHeight; ++posX ) {
                 const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
-                objectTypes[0] = tile.GetObject( false );
-                objectTypes[1] = tile.GetObject( true );
+                objectTypes[0] = tile.getMainObjectType( false );
+                objectTypes[1] = tile.getMainObjectType( true );
                 objectCount = ( objectTypes[0] == objectTypes[1] ) ? 1 : 2;
 
                 for ( uint32_t i = 0; i < objectCount; ++i ) {

@@ -282,7 +282,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         tile.sortObjectParts();
 
-        if ( MP2::doesObjectNeedExtendedMetadata( tile.GetObject() ) ) {
+        if ( MP2::doesObjectNeedExtendedMetadata( tile.getMainObjectType() ) ) {
             vec_object.push_back( i );
         }
     }
@@ -458,7 +458,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         if ( 0 <= objectTileId ) {
             const Maps::Tiles & tile = vec_tiles[objectTileId];
-            const MP2::MapObjectType objectType = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.getMainObjectType();
 
             switch ( objectType ) {
             case MP2::OBJ_CASTLE:
@@ -1136,7 +1136,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
     for ( Maps::Tiles & tile : vec_tiles ) {
         Maps::Tiles::fixMP2MapTileObjectType( tile );
 
-        if ( !updateTileMetadata( tile, tile.GetObject(), checkPoLObjects ) ) {
+        if ( !updateTileMetadata( tile, tile.getMainObjectType(), checkPoLObjects ) ) {
             ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
             // You are trying to load a PoL map named as a MP2 file.
             return false;
@@ -1153,7 +1153,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
 
     // Search for a tile with a predefined Ultimate Artifact
     const auto ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
     int32_t ultimateArtifactTileId = -1;
     int32_t ultimateArtifactRadius = 0;
     if ( ultArtTileIter != vec_tiles.end() ) {
@@ -1292,7 +1292,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
             }
         }
 
-        const MP2::MapObjectType updatedObjectType = tile.GetObject( false );
+        const MP2::MapObjectType updatedObjectType = tile.getMainObjectType( false );
         if ( updatedObjectType != objectType ) {
             return updateTileMetadata( tile, updatedObjectType, checkPoLObjects );
         }

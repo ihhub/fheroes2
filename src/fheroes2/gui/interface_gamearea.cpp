@@ -491,7 +491,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
-            MP2::MapObjectType objectType = tile.GetObject();
+            MP2::MapObjectType objectType = tile.getMainObjectType();
 
             // We will skip objects which are fully under the fog.
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
@@ -533,7 +533,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 populateHeroObjectInfo( tileUnfit, hero );
 
                 // Update object type as it could be an object under the hero.
-                objectType = tile.GetObject( false );
+                objectType = tile.getMainObjectType( false );
 
                 break;
             }
@@ -769,7 +769,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( drawTowns ) {
                         drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
-                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
                         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
                             drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
@@ -1205,7 +1205,7 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 {
     const Maps::Tiles & tile = world.GetTiles( tileId );
 
-    if ( tile.GetObject() == type ) {
+    if ( tile.getMainObjectType() == type ) {
         removeMainObjectFromTile( tile );
     }
 }

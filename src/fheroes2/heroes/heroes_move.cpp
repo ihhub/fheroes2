@@ -161,7 +161,7 @@ namespace
 
     bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     {
-        if ( next.GetObject() == MP2::OBJ_CASTLE ) {
+        if ( next.getMainObjectType() == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( next.GetCenter() );
             if ( castle == nullptr ) {
                 return false;
@@ -172,14 +172,14 @@ namespace
 
             return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
-        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
+        if ( hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_COAST ) {
             return true;
         }
-        if ( !hero.isShipMaster() && next.GetObject() == MP2::OBJ_SHIPWRECK ) {
+        if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
             return true;
         }
 
-        return MP2::isNeedStayFront( next.GetObject() );
+        return MP2::isNeedStayFront( next.getMainObjectType() );
     }
 }
 

@@ -1267,7 +1267,7 @@ Castle * Heroes::inCastleMutable() const
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::Type type ) const
 {
     const int32_t index = tile.GetIndex();
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
@@ -1288,7 +1288,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
 void Heroes::SetVisited( int32_t index, Visit::Type type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, objectType );
@@ -1301,7 +1301,7 @@ void Heroes::SetVisited( int32_t index, Visit::Type type )
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
@@ -1330,7 +1330,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
         break;
     }
 
-    if ( tile.GetObject( false ) == objectType && wide ) {
+    if ( tile.getMainObjectType( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
@@ -2133,7 +2133,7 @@ std::string Heroes::String() const
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
-       << "save object     : " << MP2::StringObject( world.GetTiles( GetIndex() ).GetObject( false ) ) << std::endl
+       << "save object     : " << MP2::StringObject( world.GetTiles( GetIndex() ).getMainObjectType( false ) ) << std::endl
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( CUSTOM ) ? "CUSTOM," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" )
        << std::endl;
 

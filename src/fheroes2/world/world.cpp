@@ -78,7 +78,7 @@ namespace
                 continue;
             }
 
-            const MP2::MapObjectType objectType = indexedTile.GetObject( true );
+            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
             if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
@@ -106,7 +106,7 @@ namespace
             }
 
             // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
-            if ( indexedTile.GetObject( false ) == MP2::OBJ_COAST ) {
+            if ( indexedTile.getMainObjectType( false ) == MP2::OBJ_COAST ) {
                 const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
 
                 if ( coastTiles.empty() ) {
@@ -445,7 +445,7 @@ Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 
 bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
-    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
+    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).getMainObjectType( false ) == MP2::OBJ_CASTLE );
 }
 
 Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
@@ -559,7 +559,7 @@ void World::NewWeek()
     // update objects
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+            if ( MP2::isWeekLife( tile.getMainObjectType( false ) ) || tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
                 updateObjectInfoTile( tile, false );
             }
         }
@@ -610,7 +610,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         }
 
         const int32_t tileId = tile.GetIndex();
-        const MP2::MapObjectType objectType = tile.GetObject( true );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
 
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
@@ -787,7 +787,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 
     const Maps::Tiles & entranceTile = GetTiles( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONE_LITHS ) {
+    if ( entranceTile.getMainObjectType( false ) != MP2::OBJ_STONE_LITHS ) {
         return result;
     }
 
@@ -802,7 +802,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.getMainObjectType() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -831,7 +831,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 
     const Maps::Tiles & entranceTile = GetTiles( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+    if ( entranceTile.getMainObjectType( false ) != MP2::OBJ_WHIRLPOOL ) {
         return result;
     }
 
@@ -844,7 +844,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->_imageIndex ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
-        if ( whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+        if ( whirlpoolTile.getMainObjectType() != MP2::OBJ_WHIRLPOOL ) {
             continue;
         }
 
@@ -901,7 +901,7 @@ void World::CaptureObject( const int32_t index, const int color )
 {
     assert( CountBits( color ) <= 1 );
 
-    const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
+    const MP2::MapObjectType objectType = GetTiles( index ).getMainObjectType( false );
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {
@@ -1004,7 +1004,8 @@ std::string World::DateString() const
 
 uint32_t World::CountObeliskOnMaps()
 {
-    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
+    const size_t res
+        = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.getMainObjectType( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 
@@ -1328,7 +1329,7 @@ void World::updatePassabilities()
 {
     for ( Maps::Tiles & tile : vec_tiles ) {
         // If tile is empty then update tile's object type if needed.
-        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_NONE ) {
             tile.updateObjectType();
         }
 

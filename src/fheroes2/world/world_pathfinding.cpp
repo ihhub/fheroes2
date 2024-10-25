@@ -77,7 +77,7 @@ namespace
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
             return false;
@@ -107,7 +107,7 @@ namespace
 
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const auto isTileAccessible = [color, armyStrength, minimalAdvantage, &tile]() {
             // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
@@ -316,7 +316,7 @@ namespace
         }
 
         // ... this only works when moving from the shore to an empty water tile...
-        if ( fromWater || !toTile.isWater() || toTile.GetObject() != MP2::OBJ_NONE ) {
+        if ( fromWater || !toTile.isWater() || toTile.getMainObjectType() != MP2::OBJ_NONE ) {
             return false;
         }
 
@@ -328,7 +328,7 @@ namespace
     {
         // Tiles with monsters are considered accessible regardless of the monsters' power, high-level AI logic
         // will decide what to do with them
-        if ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ) {
+        if ( world.GetTiles( tileIndex ).getMainObjectType() == MP2::OBJ_MONSTER ) {
             return true;
         }
 
@@ -860,7 +860,7 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
             return regularPenalty;
         }
 
-        const MP2::MapObjectType objectType = fromTile.GetObject();
+        const MP2::MapObjectType objectType = fromTile.getMainObjectType();
         if ( !MP2::isNeedStayFront( objectType ) || objectType == MP2::OBJ_BOAT ) {
             return regularPenalty;
         }
@@ -903,9 +903,9 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
         const Maps::Tiles & toTile = world.GetTiles( to );
 
         // AI-controlled hero may get from the shore to an empty water tile using the Summon Boat spell
-        const bool isEmptyWaterTile = ( toTile.isWater() && toTile.GetObject() == MP2::OBJ_NONE );
-        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.GetObject() == MP2::OBJ_BOAT || isEmptyWaterTile ) );
-        const bool isDisembarks = ( fromTile.isWater() && toTile.GetObject() == MP2::OBJ_COAST );
+        const bool isEmptyWaterTile = ( toTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_NONE );
+        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || isEmptyWaterTile ) );
+        const bool isDisembarks = ( fromTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_COAST );
 
         // When the hero gets into a boat or disembarks, he spends all remaining movement points.
         if ( isComesOnBoard || isDisembarks ) {
@@ -945,7 +945,7 @@ std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & 
             }
 
             const int32_t tileIdx = static_cast<int32_t>( idx );
-            if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( tileIdx ).GetObject( true ) ) ) {
+            if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( tileIdx ).getMainObjectType( true ) ) ) {
                 continue;
             }
 
@@ -1026,7 +1026,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
         }
 
         // Don't go onto action objects as they might be castles or dwellings with guards.
-        if ( MP2::isInGameActionObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
+        if ( MP2::isInGameActionObject( world.GetTiles( newIndex ).getMainObjectType( true ) ) ) {
             continue;
         }
 
@@ -1175,7 +1175,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
     // Hero in the boat can neither occupy nor block the Stone Liths
     if ( heroTile.isWater() ) {
-        assert( heroTile.GetObject( false ) != MP2::OBJ_STONE_LITHS );
+        assert( heroTile.getMainObjectType( false ) != MP2::OBJ_STONE_LITHS );
 
         return false;
     }
@@ -1184,7 +1184,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
         const Maps::Tiles & tile = world.GetTiles( idx );
 
-        if ( tile.GetObject() == MP2::OBJ_HERO ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_HERO ) {
             const int direction = Maps::GetDirection( idx, heroIndex );
             assert( CountBits( direction ) == 1 && direction != Direction::CENTER );
 
@@ -1195,7 +1195,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     }
 
     // Is the hero standing on Stone Liths?
-    return heroTile.GetObject( false ) == MP2::OBJ_STONE_LITHS;
+    return heroTile.getMainObjectType( false ) == MP2::OBJ_STONE_LITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex ) const
@@ -1213,7 +1213,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     std::set<int> uniqueIndices;
 
     const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index ) {
-        const MP2::MapObjectType objectType = world.GetTiles( index ).GetObject();
+        const MP2::MapObjectType objectType = world.GetTiles( index ).getMainObjectType();
 
         // std::set insert returns a pair, second value is true if it was unique
         if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
@@ -1280,7 +1280,8 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     uint32_t remainingSpellPoints = _remainingSpellPoints;
 
     // Reserve spell points only if the target is not an object that will replenish the lost spell points
-    if ( const MP2::MapObjectType objectType = world.GetTiles( targetIndex ).GetObject(); objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
+    if ( const MP2::MapObjectType objectType = world.GetTiles( targetIndex ).getMainObjectType();
+         objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
         if ( remainingSpellPoints < _maxSpellPoints * _spellPointsReserveRatio ) {
             return {};
         }

@@ -1891,7 +1891,7 @@ bool Castle::HasSeaAccess() const
         }
 
         // If this is an object's shadow or this is an action object that can be removed then it is possible to put a boat here.
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT || tile.isPassabilityTransparent();
     };
 
@@ -1925,7 +1925,7 @@ bool Castle::HasBoatNearby() const
             return false;
         }
 
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HERO );
     };
 

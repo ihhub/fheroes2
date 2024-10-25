@@ -262,7 +262,7 @@ namespace
                             const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( !underHero );
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
@@ -982,7 +982,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     // In the future these hardcoded values could be configured by the mod
     // 1 tile distance is 100.0 value approximately
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
         assert( castle != nullptr );
@@ -1619,7 +1619,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
 
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
         assert( castle != nullptr );
@@ -1928,7 +1928,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
     const double tenTiles = 3000;
 
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
     case MP2::OBJ_HERO: {
@@ -2038,7 +2038,7 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
     assert( hero.getAIRole() == Heroes::Role::SCOUT );
 
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
     case MP2::OBJ_WITCHS_HUT: {
@@ -2082,7 +2082,7 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
 double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                     const uint32_t distanceToObject ) const
 {
-    assert( objectType == world.GetTiles( index ).GetObject() );
+    assert( objectType == world.GetTiles( index ).getMainObjectType() );
 
 #ifdef NDEBUG
     (void)objectType;
@@ -2367,7 +2367,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             maxPriority = 0;
             priorityTarget = courierTarget;
 #ifdef WITH_DEBUG
-            objectType = world.GetTiles( courierTarget ).GetObject();
+            objectType = world.GetTiles( courierTarget ).getMainObjectType();
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
@@ -2491,7 +2491,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             const Heroes * anotherHero = tile.getHero();
             if ( anotherHero == nullptr ) {
                 // Another hero lost the battle, but he could defend a castle
-                if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
+                if ( tile.getMainObjectType() == MP2::OBJ_CASTLE ) {
                     updateCastle();
                 }
                 else {
@@ -2535,7 +2535,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
 #ifndef NDEBUG
             const Maps::Tiles & tile = world.GetTiles( tileIndex );
 #endif
-            assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
+            assert( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
             assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
             // In case the castle has just been captured, we need to update the information related to the object on the corresponding tile.
@@ -2626,7 +2626,7 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
     const Maps::Tiles & currTile = world.GetTiles( heroIdx );
     const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;
     }
 
@@ -2685,7 +2685,7 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
     const Maps::Tiles & currTile = world.GetTiles( heroIdx );
     const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;
     }
 

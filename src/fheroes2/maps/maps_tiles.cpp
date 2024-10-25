@@ -449,7 +449,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     _boatOwnerColor = Color::NONE;
     _index = index;
 
-    SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
+    setMainObjectType( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     if ( !MP2::doesObjectContainMetadata( _mainObjectType ) && ( _metadata[0] != 0 ) ) {
         // No metadata should exist for non-action objects.
@@ -526,13 +526,13 @@ void Maps::Tiles::setHero( Heroes * hero )
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
         _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
 
-        SetObject( MP2::OBJ_HERO );
+        setMainObjectType( MP2::OBJ_HERO );
     }
     else {
         hero = getHero();
 
         if ( hero ) {
-            SetObject( hero->getObjectTypeUnderHero() );
+            setMainObjectType( hero->getObjectTypeUnderHero() );
             hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
@@ -548,7 +548,7 @@ fheroes2::Point Maps::Tiles::GetCenter() const
     return GetPoint( _index );
 }
 
-MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
+MP2::MapObjectType Maps::Tiles::getMainObjectType( const bool ignoreObjectUnderHero /* true */ ) const
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HERO == _mainObjectType ) {
         const Heroes * hero = getHero();
@@ -558,7 +558,7 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
     return _mainObjectType;
 }
 
-void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
+void Maps::Tiles::setMainObjectType( const MP2::MapObjectType objectType )
 {
     _mainObjectType = objectType;
 
@@ -575,7 +575,7 @@ void Maps::Tiles::setBoat( const int direction, const int color )
     // If this assertion blows up then you are trying to put a boat on land!
     assert( isWater() );
 
-    SetObject( MP2::OBJ_BOAT );
+    setMainObjectType( MP2::OBJ_BOAT );
     _mainObjectPart._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
     switch ( direction ) {
@@ -662,7 +662,7 @@ int Maps::Tiles::getBoatDirection() const
 
 int Maps::Tiles::getOriginalPassability() const
 {
-    const MP2::MapObjectType objectType = GetObject( false );
+    const MP2::MapObjectType objectType = getMainObjectType( false );
 
     if ( MP2::isOffGameActionObject( objectType ) ) {
         return MP2::getActionObjectDirection( objectType );
@@ -701,7 +701,7 @@ void Maps::Tiles::setInitialPassability()
 void Maps::Tiles::updatePassability()
 {
     // Get object type but ignore heroes as they are "temporary" objects.
-    const MP2::MapObjectType objectType = GetObject( false );
+    const MP2::MapObjectType objectType = getMainObjectType( false );
 
     if ( !MP2::isOffGameActionObject( objectType ) && ( _mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainObjectPart.isPassabilityTransparent()
          && !isShadow() ) {
@@ -758,7 +758,7 @@ void Maps::Tiles::updatePassability()
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
         if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainObjectPart.isPassabilityTransparent()
              && ( bottomTile._mainObjectPart._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
-            const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
+            const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
             if ( MP2::isOffGameActionObject( bottomTileObjectType ) ) {
@@ -912,7 +912,7 @@ std::string Maps::Tiles::String() const
 {
     std::ostringstream os;
 
-    const MP2::MapObjectType objectType = GetObject();
+    const MP2::MapObjectType objectType = getMainObjectType();
 
     os << "******* Tile info *******" << std::endl
        << "Tile index      : " << _index << ", "
@@ -988,7 +988,7 @@ std::string Maps::Tiles::String() const
     }
     }
 
-    if ( MP2::isCaptureObject( GetObject( false ) ) ) {
+    if ( MP2::isCaptureObject( getMainObjectType( false ) ) ) {
         const CapturedObject & co = world.GetCapturedObject( _index );
 
         os << "capture color   : " << Color::String( co.objCol.second ) << std::endl;
@@ -1077,7 +1077,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
 
 void Maps::Tiles::SetObjectPassable( bool pass )
 {
-    if ( GetObject( false ) == MP2::OBJ_TROLL_BRIDGE ) {
+    if ( getMainObjectType( false ) == MP2::OBJ_TROLL_BRIDGE ) {
         if ( pass ) {
             _tilePassabilityDirections |= Direction::TOP_LEFT;
         }
@@ -1281,11 +1281,11 @@ void Maps::Tiles::_updateRoadFlag()
 
 void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
 {
-    const MP2::MapObjectType originalObjectType = tile.GetObject( false );
+    const MP2::MapObjectType originalObjectType = tile.getMainObjectType( false );
 
     // Left tile of a skeleton on Desert should be marked as non-action tile.
     if ( originalObjectType == MP2::OBJ_SKELETON && tile._mainObjectPart._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT && tile._mainObjectPart._imageIndex == 83 ) {
-        tile.SetObject( MP2::OBJ_NON_ACTION_SKELETON );
+        tile.setMainObjectType( MP2::OBJ_NON_ACTION_SKELETON );
 
         // There is no need to check the rest of things as we fixed this object.
         return;
@@ -1303,7 +1303,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passability.
     if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._mainObjectPart._objectIcnType, tile._mainObjectPart._imageIndex ) ) {
-        tile.SetObject( MP2::OBJ_REEFS );
+        tile.setMainObjectType( MP2::OBJ_REEFS );
 
         // There is no need to check the rest of things as we fixed this object.
         return;
@@ -1317,7 +1317,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
             hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
-            tile.SetObject( MP2::OBJ_NONE );
+            tile.setMainObjectType( MP2::OBJ_NONE );
         }
 
         // There is no need to check the rest of things as we fixed this object.
@@ -1357,7 +1357,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
         }
 
         if ( monsterObjectType != originalObjectType ) {
-            tile.SetObject( monsterObjectType );
+            tile.setMainObjectType( monsterObjectType );
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", object sprite index "
@@ -1378,7 +1378,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
         // However, we just ignore it.
         MP2::MapObjectType objectType = getLoyaltyObject( tile._mainObjectPart._objectIcnType, tile._mainObjectPart._imageIndex );
         if ( objectType != MP2::OBJ_NONE ) {
-            tile.SetObject( objectType );
+            tile.setMainObjectType( objectType );
             break;
         }
 
@@ -1390,7 +1390,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
         }
 
         if ( objectType != MP2::OBJ_NONE ) {
-            tile.SetObject( objectType );
+            tile.setMainObjectType( objectType );
             break;
         }
 
@@ -1401,7 +1401,7 @@ void Maps::Tiles::fixMP2MapTileObjectType( Tiles & tile )
         }
 
         if ( objectType != MP2::OBJ_NONE ) {
-            tile.SetObject( objectType );
+            tile.setMainObjectType( objectType );
             break;
         }
 
@@ -1449,7 +1449,7 @@ bool Maps::Tiles::removeObjectPartsByUID( const uint32_t objectUID )
             if ( hero != nullptr ) {
                 hero->setObjectTypeUnderHero( _mainObjectType );
 
-                SetObject( MP2::OBJ_HERO );
+                setMainObjectType( MP2::OBJ_HERO );
             }
         }
 
@@ -1554,7 +1554,7 @@ void Maps::Tiles::updateObjectType()
     MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart._objectIcnType, _mainObjectPart._imageIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
         // Set object type only when this is an interactive object type to make sure that interaction can be done.
-        SetObject( objectType );
+        setMainObjectType( objectType );
         return;
     }
 
@@ -1568,7 +1568,7 @@ void Maps::Tiles::updateObjectType()
 
         if ( MP2::isOffGameActionObject( type ) ) {
             // Set object type only when this is an interactive object type to make sure that interaction can be done.
-            SetObject( type );
+            setMainObjectType( type );
             return;
         }
 
@@ -1583,14 +1583,14 @@ void Maps::Tiles::updateObjectType()
         const MP2::MapObjectType type = getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex );
 
         if ( type != MP2::OBJ_NONE ) {
-            SetObject( type );
+            setMainObjectType( type );
             return;
         }
     }
 
     // Top objects do not have object type while bottom object do.
     if ( objectType != MP2::OBJ_NONE ) {
-        SetObject( objectType );
+        setMainObjectType( objectType );
         return;
     }
 
@@ -1598,7 +1598,7 @@ void Maps::Tiles::updateObjectType()
     // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
         assert( objectType == MP2::OBJ_NONE );
-        SetObject( objectType );
+        setMainObjectType( objectType );
         return;
     }
 
@@ -1610,13 +1610,13 @@ void Maps::Tiles::updateObjectType()
         }
 
         if ( world.GetTiles( tileIndex ).isWater() ) {
-            SetObject( MP2::OBJ_COAST );
+            setMainObjectType( MP2::OBJ_COAST );
             return;
         }
     }
 
     assert( objectType == MP2::OBJ_NONE );
-    SetObject( objectType );
+    setMainObjectType( objectType );
 }
 
 uint32_t Maps::Tiles::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const
@@ -1752,7 +1752,7 @@ bool Maps::Tiles::isTallObject() const
 
 int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 {
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
     const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( objectType );
 
     if ( correctedObjectType == objectType ) {
@@ -1788,7 +1788,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
             const int32_t index = offsetX + x;
             if ( isValidAbsIndex( index ) ) {
                 const Tiles & foundTile = world.GetTiles( index );
-                if ( foundTile.GetObject( false ) != correctedObjectType ) {
+                if ( foundTile.getMainObjectType( false ) != correctedObjectType ) {
                     continue;
                 }
 
@@ -1806,7 +1806,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 
 bool Maps::Tiles::isDetachedObject() const
 {
-    const MP2::MapObjectType objectType = GetObject( false );
+    const MP2::MapObjectType objectType = getMainObjectType( false );
     if ( isDetachedObjectType( objectType ) ) {
         return true;
     }
