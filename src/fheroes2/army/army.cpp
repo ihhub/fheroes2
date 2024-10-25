@@ -1014,7 +1014,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     Troops::Clean();
 
-    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
+    const bool isCaptureObject = MP2::isCaptureObject( tile.getMainObjectType( false ) );
     if ( isCaptureObject ) {
         color = getColorFromTile( tile );
     }
@@ -1022,7 +1022,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         color = Color::NONE;
     }
 
-    switch ( tile.GetObject( false ) ) {
+    switch ( tile.getMainObjectType( false ) ) {
     case MP2::OBJ_PYRAMID:
         at( 0 )->Set( Monster::VAMPIRE_LORD, 10 );
         at( 1 )->Set( Monster::ROYAL_MUMMY, 10 );

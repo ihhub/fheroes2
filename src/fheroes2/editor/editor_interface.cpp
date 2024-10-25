@@ -177,7 +177,7 @@ namespace
 
             const auto & tile = world.GetTiles( pos.x, pos.y );
 
-            if ( MP2::isOffGameActionObject( tile.GetObject() ) ) {
+            if ( MP2::isOffGameActionObject( tile.getMainObjectType() ) ) {
                 // An action object already exist. We cannot allow to put anything on top of it.
                 return false;
             }
@@ -670,7 +670,7 @@ namespace Interface
 
                     assert( Maps::isValidAbsIndex( indices.x ) );
                     const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1
-                                                  && MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() ) );
+                                                  && MP2::isOffGameActionObject( world.GetTiles( indices.x ).getMainObjectType() ) );
 
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
                 }

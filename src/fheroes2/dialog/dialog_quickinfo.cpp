@@ -159,7 +159,7 @@ namespace
 
     std::string showGuardiansInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         std::string str;
 
@@ -217,7 +217,7 @@ namespace
 
     std::string showDwellingInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
 
         if ( isOwned ) {
             str += "\n\n";
@@ -238,7 +238,7 @@ namespace
 
     std::string showShrineInfo( const Maps::Tiles & tile, const bool isVisited )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         std::string str = MP2::StringObject( objectType );
 
@@ -263,7 +263,7 @@ namespace
 
     std::string showTreeOfKnowledgeInfo( const Maps::Tiles & tile, const bool isVisited )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         std::string str = MP2::StringObject( objectType );
         const Heroes * hero = Interface::GetFocusHeroes();
 
@@ -301,7 +301,7 @@ namespace
 
     std::string showWitchHutInfo( const Maps::Tiles & tile, const bool isVisited )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
 
         if ( isVisited ) {
             const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
@@ -335,7 +335,7 @@ namespace
 
     std::string showLocalVisitTileInfo( const Maps::Tiles & tile )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
             str.append( "\n\n" );
@@ -397,7 +397,7 @@ namespace
 
     std::string showGroundInfo( const Maps::Tiles & tile )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         const bool isRoad = tile.isRoad();
 
         std::string str;
@@ -448,7 +448,7 @@ namespace
     std::string getQuickInfoText( const Maps::Tiles & tile )
     {
         const int32_t playerColor = Settings::Get().CurrentColor();
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );

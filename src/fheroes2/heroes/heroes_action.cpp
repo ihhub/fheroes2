@@ -225,13 +225,13 @@ namespace
     {
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) == objectType ) {
+        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
             objectUID = tile.getMainObjectPart()._uid;
         }
         else {
             // In maps made by the original map editor the action object can be in the ground layer.
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->_objectIcnType, iter->_imageIndex ) == objectType ) {
+                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
                 }
@@ -259,7 +259,7 @@ namespace
                 if ( remove && recruit == troop.GetCount() ) {
                     Game::PlayPickupSound();
 
-                    runActionObjectFadeOutAnumation( tile, tile.GetObject() );
+                    runActionObjectFadeOutAnumation( tile, tile.getMainObjectType() );
 
                     resetObjectMetadata( tile );
                 }
@@ -451,7 +451,7 @@ namespace
         if ( destroy ) {
             AudioManager::PlaySound( M82::KILLFADE );
 
-            assert( tile.GetObject() == MP2::OBJ_MONSTER );
+            assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
 
@@ -669,9 +669,9 @@ namespace
         destinationTile.updateObjectType();
         // Set the newly updated object type to hero to remember it.
         // It is needed in case of moving out from this tile and restoring the tile's original object type.
-        hero.setObjectTypeUnderHero( destinationTile.GetObject( true ) );
+        hero.setObjectTypeUnderHero( destinationTile.getMainObjectType( true ) );
         // Set the tile's object type as Hero.
-        destinationTile.SetObject( MP2::OBJ_HERO );
+        destinationTile.setMainObjectType( MP2::OBJ_HERO );
 
         hero.SetShipMaster( true );
 
@@ -1752,7 +1752,7 @@ namespace
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            assert( tile.GetObject() == MP2::OBJ_ARTIFACT );
+            assert( tile.getMainObjectType() == MP2::OBJ_ARTIFACT );
 
             runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
 
@@ -1903,7 +1903,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HERO );
+        assert( world.GetTiles( index_to ).getMainObjectType() != MP2::OBJ_HERO );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
@@ -2016,7 +2016,7 @@ namespace
 
             const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                if ( tile.GetObject( false ) == MP2::OBJ_MINE ) {
+                if ( tile.getMainObjectType( false ) == MP2::OBJ_MINE ) {
                     removeMineSpellFromTile( tile );
                 }
             };
@@ -3672,7 +3672,7 @@ void Heroes::Action( int tileIndex )
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
+    const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).getMainObjectType( tileIndex != heroPosIndex );
     if ( MP2::isInGameActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );
     }

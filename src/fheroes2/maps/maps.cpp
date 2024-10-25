@@ -49,7 +49,7 @@ namespace
     {
         Maps::Indexes result;
         for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-            if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == objectType ) {
+            if ( world.GetTiles( indexes[idx] ).getMainObjectType( !ignoreHeroes ) == objectType ) {
                 result.push_back( indexes[idx] );
             }
         }
@@ -61,7 +61,7 @@ namespace
         Maps::Indexes result;
         const int32_t size = static_cast<int32_t>( world.getSize() );
         for ( int32_t idx = 0; idx < size; ++idx ) {
-            if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == objectType ) {
+            if ( world.GetTiles( idx ).getMainObjectType( !ignoreHeroes ) == objectType ) {
                 result.push_back( idx );
             }
         }
@@ -451,7 +451,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObject
 bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
 {
     const Maps::Tiles & tile = world.GetTiles( targetIndex );
-    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isInGameActionObject( tile.GetObject( true ) );
+    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isInGameActionObject( tile.getMainObjectType( true ) );
 }
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
@@ -471,7 +471,7 @@ bool Maps::doesObjectExistOnMap( const MP2::MapObjectType objectType )
 {
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( false ) == objectType ) {
+        if ( world.GetTiles( idx ).getMainObjectType( false ) == objectType ) {
             return true;
         }
     }
@@ -507,7 +507,7 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType
 
 bool Maps::isTileUnderProtection( const int32_t tileIndex )
 {
-    return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
+    return world.GetTiles( tileIndex ).getMainObjectType() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
 Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile /* = true */ )
@@ -521,9 +521,9 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     // If a tile contains an object that you can interact with without visiting this tile, then this interaction doesn't trigger a monster attack...
-    if ( checkObjectOnTile && MP2::isNeedStayFront( tile.GetObject() ) ) {
+    if ( checkObjectOnTile && MP2::isNeedStayFront( tile.getMainObjectType() ) ) {
         // ... unless the tile itself contains a monster
-        if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
             result.push_back( tileIndex );
         }
 
@@ -539,7 +539,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
     const auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
         const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
 
-        if ( monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+        if ( monsterTile.getMainObjectType() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
             return false;
         }
 
@@ -591,7 +591,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
         validateAndAdd( tileIndex - 1 );
     }
 
-    if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+    if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
         result.push_back( tileIndex );
     }
 
@@ -647,14 +647,14 @@ void Maps::ReplaceRandomCastleObjectId( const fheroes2::Point & center )
         for ( int32_t x = -2; x < 3; ++x ) {
             Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
-            if ( MP2::OBJ_NON_ACTION_RANDOM_CASTLE == tile.GetObject() || MP2::OBJ_NON_ACTION_RANDOM_TOWN == tile.GetObject() ) {
-                tile.SetObject( MP2::OBJ_NON_ACTION_CASTLE );
+            if ( MP2::OBJ_NON_ACTION_RANDOM_CASTLE == tile.getMainObjectType() || MP2::OBJ_NON_ACTION_RANDOM_TOWN == tile.getMainObjectType() ) {
+                tile.setMainObjectType( MP2::OBJ_NON_ACTION_CASTLE );
             }
         }
     }
 
     // restore center ID
-    world.GetTiles( center.x, center.y ).SetObject( MP2::OBJ_CASTLE );
+    world.GetTiles( center.x, center.y ).setMainObjectType( MP2::OBJ_CASTLE );
 }
 
 void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle, bool isRandom )
@@ -673,7 +673,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 
     // correct only RND town and castle
     const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
-    const MP2::MapObjectType objectType = entranceTile.GetObject();
+    const MP2::MapObjectType objectType = entranceTile.getMainObjectType();
     const uint32_t castleID = entranceTile.getMainObjectPart()._uid;
 
     if ( isRandom && ( objectType != MP2::OBJ_RANDOM_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN ) ) {
@@ -726,9 +726,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 
             if ( index == 0 ) {
                 ObjectPart * part = tile.getTopObjectPart( castleID );
-                if ( part && part->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
-                    part->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
-                    part->_imageIndex = fullTownIndex - 16;
+                if ( part && part->icnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
+                    part->icnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
+                    part->icnIndex = fullTownIndex - 16;
                 }
             }
         }

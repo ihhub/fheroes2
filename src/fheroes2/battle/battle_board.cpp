@@ -392,7 +392,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 {
     std::vector<int> objs;
 
-    if ( tile.GetObject( false ) == MP2::OBJ_GRAVEYARD ) {
+    if ( tile.getMainObjectType( false ) == MP2::OBJ_GRAVEYARD ) {
         objs.push_back( ICN::COBJ0000 );
         objs.push_back( ICN::COBJ0001 );
         objs.push_back( ICN::COBJ0025 );

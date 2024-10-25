@@ -214,7 +214,7 @@ namespace
 
     std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tiles & tile )
     {
-        const MP2::MapObjectType object = tile.GetObject();
+        const MP2::MapObjectType object = tile.getMainObjectType();
         const int32_t tileIndex = tile.GetIndex();
 
         if ( object == MP2::OBJ_HERO ) {
@@ -790,7 +790,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
         const Maps::Tiles & tile = world.GetTiles( idx );
-        MP2::MapObjectType objectType = tile.GetObject();
+        MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const uint32_t regionID = tile.GetRegion();
         if ( regionID >= _regions.size() ) {
@@ -825,7 +825,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             }
 
             // This hero can be in a castle
-            objectType = tile.GetObject( false );
+            objectType = tile.getMainObjectType( false );
         }
 
         if ( objectType == MP2::OBJ_CASTLE ) {

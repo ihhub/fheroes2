@@ -324,7 +324,7 @@ namespace
     bool ActionSpellSetGuardian( const Heroes & hero, const Spell & spell )
     {
         Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
-        assert( MP2::OBJ_MINE == tile.GetObject( false ) );
+        assert( MP2::OBJ_MINE == tile.getMainObjectType( false ) );
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 

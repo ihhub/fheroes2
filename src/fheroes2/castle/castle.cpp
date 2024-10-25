@@ -1884,14 +1884,14 @@ bool Castle::HasSeaAccess() const
             return false;
         }
 
-        if ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
             // The main addon does not exist on this tile.
             // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
             return true;
         }
 
         // If this is an object's shadow or this is an action object that can be removed then it is possible to put a boat here.
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT || tile.isPassabilityTransparent();
     };
 
@@ -1925,7 +1925,7 @@ bool Castle::HasBoatNearby() const
             return false;
         }
 
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HERO );
     };
 
@@ -1961,7 +1961,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main object part does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getMainObjectPart()._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
+        return ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
