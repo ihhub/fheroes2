@@ -75,7 +75,7 @@ namespace
         case ICN::MTNCRCK:
         case ICN::MTNDIRT: {
             static const std::bitset<256> objMnts2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
-                { 0, 5, 11, 17, 21, 26, 32, 38, 42, 46, 47, 53, 57, 58, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110 } );
+                { 0, 5, 11, 17, 21, 26, 32, 38, 42, 47, 53, 62, 68, 72, 75, 79, 82, 85, 89, 92, 95, 98, 101, 104, 105, 109, 110 } );
             return objMnts2ShadowBitset[icnIndex];
         }
         case ICN::TREDECI:
@@ -100,7 +100,7 @@ namespace
         }
         case ICN::OBJNDSRT: {
             static const std::bitset<256> objDsrtShadowBitset = fheroes2::makeBitsetFromVector<256>(
-                { 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 46, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 } );
+                { 11, 13, 16, 19, 23, 25, 27, 29, 33, 35, 38, 41, 44, 47, 50, 52, 54, 55, 56, 57, 58, 59, 60, 71, 75, 77, 80, 86, 103, 115, 118 } );
             return objDsrtShadowBitset[icnIndex];
         }
         case ICN::OBJNGRA2: {
@@ -111,12 +111,12 @@ namespace
         }
         case ICN::OBJNGRAS: {
             static const std::bitset<256> objGrasShadowBitset = fheroes2::makeBitsetFromVector<256>(
-                { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 50, 76, 79, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
+                { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 76, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
             return objGrasShadowBitset[icnIndex];
         }
         case ICN::OBJNMUL2: {
             static const std::bitset<256> objMul2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
-                { 14,  17,  20,  24,  34,  36,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+                { 14,  17,  20,  24,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
                   147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 164, 180, 181, 182, 183, 184, 185, 186, 189, 199, 200, 202, 206 } );
             return objMul2ShadowBitset[icnIndex];
         }
@@ -169,12 +169,8 @@ namespace
                   48, 49, 59, 65, 71, 77, 83, 89, 95, 101, 108, 109, 112, 113, 116, 117, 120, 121, 124, 125, 128, 129, 132, 133, 136, 137 } );
             return objXlc3ShadowBitset[icnIndex];
         }
-        case ICN::OBJNTOWN: {
-            static const std::bitset<256> obTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
-            return obTownShadowBitset[icnIndex];
-        }
         case ICN::OBJNLAVA: {
-            static const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 10, 11, 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
+            static const std::bitset<256> objLavaShadowBitset = fheroes2::makeBitsetFromVector<256>( { 45, 49, 79, 80, 81, 82, 109, 113, 116 } );
             return objLavaShadowBitset[icnIndex];
         }
         case ICN::OBJNLAV2: {
@@ -194,15 +190,16 @@ namespace
         }
         case ICN::OBJNTWSH:
             return true;
-        case ICN::STREAM:
+        case ICN::BOAT32:
+        case ICN::EXTRAOVR:
+        case ICN::FLAG32:
+        case ICN::MINIHERO:
+        case ICN::MONS32:
+        case ICN::OBJNTOWN:
         case ICN::OBJNTWBA:
         case ICN::OBJNXTRA:
         case ICN::ROAD:
-        case ICN::EXTRAOVR:
-        case ICN::MONS32:
-        case ICN::BOAT32:
-        case ICN::FLAG32:
-        case ICN::MINIHERO:
+        case ICN::STREAM:
             return false;
         default:
             // Did you add a new ICN group of objects into the game?
@@ -1722,7 +1719,7 @@ bool Maps::Tile::isTallObject() const
     }
 
     for ( const auto & part : _topObjectPart ) {
-        if ( part._uid != 0 && !part.isPassabilityTransparent() ) {
+        if ( part._uid != 0 ) {
             tileUIDs.emplace_back( part._uid );
         }
     }
@@ -1740,7 +1737,7 @@ bool Maps::Tile::isTallObject() const
         }
 
         for ( const auto & part : topTile._topObjectPart ) {
-            if ( part._uid == tileUID && !isObjectPartShadow( part ) ) {
+            if ( part._uid == tileUID ) {
                 return true;
             }
         }
