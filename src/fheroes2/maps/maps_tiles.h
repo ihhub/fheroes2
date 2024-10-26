@@ -42,12 +42,17 @@ class OStreamBase;
 
 namespace Maps
 {
+    // Layer types. They affect passability and also rendering. Rendering must be in the following order:
+    // - terrain objects (they have no shadows)
+    // - shadows
+    // - background objects
+    // - objects
     enum ObjectLayerType : uint8_t
     {
-        OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
-        BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
-        SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
-        TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
+        OBJECT_LAYER = 0, // Common objects like mines, forest, mountains, castles and etc. They affect passability.
+        BACKGROUND_LAYER = 1, // Objects that still affect passability but they must be rendered as background. Such objects are lakes, bushes and etc.
+        SHADOW_LAYER = 2, // Shadows and some special objects like castle's entrance road. No passability changes.
+        TERRAIN_LAYER = 3 // Roads, water flaws and cracks. Essentially everything what is a part of terrain. No passability changes.
     };
 
     struct ObjectPart

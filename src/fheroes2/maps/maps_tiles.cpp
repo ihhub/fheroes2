@@ -471,7 +471,7 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         _isTileMarkedAsRoad = true;
     }
 
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
+    if ( _mainObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
         // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
         if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
             _groundObjectPart.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
@@ -662,6 +662,16 @@ int Maps::Tile::getBoatDirection() const
 
 int Maps::Tile::getOriginalPassability() const
 {
+    if ( isValidReefsSprite( _mainObjectPart.icnType, _mainObjectPart.icnIndex ) ) {
+        return 0;
+    }
+
+    for ( const auto & part : _groundObjectPart ) {
+        if ( isValidReefsSprite( part.icnType, part.icnIndex ) ) {
+            return 0;
+        }
+    }
+
     const MP2::MapObjectType objectType = getMainObjectType( false );
 
     if ( MP2::isOffGameActionObject( objectType ) ) {
@@ -671,16 +681,6 @@ int Maps::Tile::getOriginalPassability() const
     if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
-    }
-
-    if ( isValidReefsSprite( _mainObjectPart.icnType, _mainObjectPart.icnIndex ) ) {
-        return 0;
-    }
-
-    for ( const auto & part : _groundObjectPart ) {
-        if ( isValidReefsSprite( part.icnType, part.icnIndex ) ) {
-            return 0;
-        }
     }
 
     // Objects have fixed passability.
