@@ -332,7 +332,7 @@ namespace
             return false;
         }
 
-        auto * objectPart = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        const auto * objectPart = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
         if ( objectPart == nullptr ) {
             // This could be a hacked map.
             return false;
