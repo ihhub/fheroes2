@@ -319,34 +319,33 @@ namespace
         return "Unknown layer";
     }
 
-    bool updateLoyaltyObjectType( const Maps::ObjectPart & part, Maps::Tile & tile )
+    bool updatePriceOfLoyaltyObjectType( const Maps::ObjectPart & part, Maps::Tile & tile )
     {
-        // The Price of Loyalty' object should belong to certain ICN type.
+        // The Price of Loyalty' object should belong to a certain ICN type.
         switch ( part.icnType ) {
         case MP2::OBJ_ICN_TYPE_X_LOC1:
         case MP2::OBJ_ICN_TYPE_X_LOC2:
         case MP2::OBJ_ICN_TYPE_X_LOC3:
             break;
         default:
-            // This is not a POL object.
+            // This is not an original POL object.
             return false;
         }
 
         const auto * objectPart = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
         if ( objectPart == nullptr ) {
-            // This could be a hacked map.
+            // This could be a hacked map or an object part which we ignored in our list of objects (for example, an empty object part).
             return false;
         }
 
         if ( objectPart->objectType == MP2::OBJ_NONE ) {
-            // It looks like the object is not present in the list or the object is maked incorrectly.
+            // It looks like the object is not present in the list or the object is marked incorrectly.
             // Let's update the tile based on the object parts it has.
             tile.updateObjectType();
             return true;
         }
 
         tile.setMainObjectType( objectPart->objectType );
-
         return true;
     }
 
@@ -1332,19 +1331,19 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     case MP2::OBJ_EXPANSION_OBJECT: {
         // The type of expansion action object or dwelling is stored in object metadata.
         // However, we just ignore it.
-        if ( updateLoyaltyObjectType( tile._mainObjectPart, tile ) ) {
+        if ( updatePriceOfLoyaltyObjectType( tile._mainObjectPart, tile ) ) {
             return;
         }
 
         // Object part of ground layer shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
         for ( const auto & part : tile._groundObjectPart ) {
-            if ( updateLoyaltyObjectType( part, tile ) ) {
+            if ( updatePriceOfLoyaltyObjectType( part, tile ) ) {
                 return;
             }
         }
 
         for ( const auto & part : tile._topObjectPart ) {
-            if ( updateLoyaltyObjectType( part, tile ) ) {
+            if ( updatePriceOfLoyaltyObjectType( part, tile ) ) {
                 return;
             }
         }
