@@ -117,7 +117,8 @@ namespace
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
-            else if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+
+            if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
@@ -127,7 +128,8 @@ namespace
                 result = fheroes2::GameMode::CANCEL;
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
                 fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonLoadArea ) ) {

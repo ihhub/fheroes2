@@ -298,7 +298,8 @@ namespace
                 selectedResolution = {};
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {

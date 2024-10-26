@@ -338,10 +338,12 @@ namespace
             else if ( le.MouseClickLeft( optionAreas[6] ) ) {
                 return DialogAction::AudioSettings;
             }
-            else if ( le.MouseClickLeft( optionAreas[7] ) ) {
+
+            if ( le.MouseClickLeft( optionAreas[7] ) ) {
                 return DialogAction::HotKeys;
             }
-            else if ( le.MouseClickLeft( optionAreas[8] ) ) {
+
+            if ( le.MouseClickLeft( optionAreas[8] ) ) {
                 conf.setBattleDamageInfo( !conf.isBattleShowDamageInfoEnabled() );
                 redrawScreen = true;
             }
@@ -812,9 +814,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 else if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyCloseWindow() ) {
                     break;
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+
+                if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 }
+
                 // Animation
                 if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
                     if ( sequenceId != sequence.id() ) {

@@ -127,7 +127,7 @@ fheroes2::GameMode Game::LoadMulti()
         }
 
         // right info
-        else if ( le.isMouseRightButtonPressedInArea( buttonHotSeatArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonHotSeatArea ) ) {
             fheroes2::showStandardTextMessage(
                 _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 6 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
                 Dialog::ZERO );
@@ -213,10 +213,12 @@ fheroes2::GameMode Game::LoadGame()
         else if ( le.MouseClickLeft( buttonMultiplayerGameArea ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) ) {
             return fheroes2::GameMode::LOAD_MULTI;
         }
-        else if ( le.MouseClickLeft( buttonCancelArea ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
+
+        if ( le.MouseClickLeft( buttonCancelArea ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonStandardGameArea ) ) {
+
+        if ( le.isMouseRightButtonPressedInArea( buttonStandardGameArea ) ) {
             fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonCampaignGameArea ) ) {

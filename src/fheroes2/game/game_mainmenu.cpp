@@ -398,26 +398,35 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditorArea ) ) ) {
+
+        if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditorArea ) ) ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info
-        if ( le.isMouseRightButtonPressedInArea( buttonQuitArea ) )
+        if ( le.isMouseRightButtonPressedInArea( buttonQuitArea ) ) {
             fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGameArea ) )
-            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonCreditsArea ) )
-            fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonHighScoresArea ) )
-            fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonNewGameArea ) )
-            fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
-        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditorArea ) ) {
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( settingsArea ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGameArea ) ) {
+            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonCreditsArea ) ) {
+            fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonHighScoresArea ) ) {
+            fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonNewGameArea ) ) {
+            fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
+        }
+        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditorArea ) ) {
+            {
+                fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
+            }
+        }
+        else if ( le.isMouseRightButtonPressedInArea( settingsArea ) ) {
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
+        }
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );

@@ -354,7 +354,8 @@ namespace
                 result = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkArea ) ) {
+
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkArea ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
@@ -362,7 +363,8 @@ namespace
                 fheroes2::fadeOutDisplay();
                 break;
             }
-            else if ( le.MouseClickLeft( roi ) ) {
+
+            if ( le.MouseClickLeft( roi ) ) {
                 const int32_t index = GetRectIndex( coordDifficulty, le.getMouseCursorPos() );
 
                 // select difficulty

@@ -1128,7 +1128,8 @@ namespace Interface
 
                 break;
             }
-            else if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+
+            if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
@@ -1137,7 +1138,8 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
