@@ -319,77 +319,35 @@ namespace
         return "Unknown layer";
     }
 
-    MP2::MapObjectType getLoyaltyObject( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+    bool updateLoyaltyObjectType( const Maps::ObjectPart & part, Maps::Tile & tile )
     {
-        switch ( objectIcnType ) {
+        // The Price of Loyalty' object should belong to certain ICN type.
+        switch ( part.icnType ) {
         case MP2::OBJ_ICN_TYPE_X_LOC1:
-            if ( icnIndex == 3 )
-                return MP2::OBJ_ALCHEMIST_TOWER;
-            else if ( icnIndex < 3 )
-                return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
-            else if ( 70 == icnIndex )
-                return MP2::OBJ_ARENA;
-            else if ( 3 < icnIndex && icnIndex < 72 )
-                return MP2::OBJ_NON_ACTION_ARENA;
-            else if ( 77 == icnIndex )
-                return MP2::OBJ_BARROW_MOUNDS;
-            else if ( 71 < icnIndex && icnIndex < 78 )
-                return MP2::OBJ_NON_ACTION_BARROW_MOUNDS;
-            else if ( 94 == icnIndex )
-                return MP2::OBJ_EARTH_ALTAR;
-            else if ( 77 < icnIndex && icnIndex < 112 )
-                return MP2::OBJ_NON_ACTION_EARTH_ALTAR;
-            else if ( 118 == icnIndex )
-                return MP2::OBJ_AIR_ALTAR;
-            else if ( 111 < icnIndex && icnIndex < 120 )
-                return MP2::OBJ_NON_ACTION_AIR_ALTAR;
-            else if ( 127 == icnIndex )
-                return MP2::OBJ_FIRE_ALTAR;
-            else if ( 119 < icnIndex && icnIndex < 129 )
-                return MP2::OBJ_NON_ACTION_FIRE_ALTAR;
-            else if ( 135 == icnIndex )
-                return MP2::OBJ_WATER_ALTAR;
-            else if ( 128 < icnIndex && icnIndex < 137 )
-                return MP2::OBJ_NON_ACTION_WATER_ALTAR;
-            break;
-
         case MP2::OBJ_ICN_TYPE_X_LOC2:
-            if ( icnIndex == 4 )
-                return MP2::OBJ_STABLES;
-            else if ( icnIndex < 4 )
-                return MP2::OBJ_NON_ACTION_STABLES;
-            else if ( icnIndex == 9 )
-                return MP2::OBJ_JAIL;
-            else if ( 4 < icnIndex && icnIndex < 10 )
-                return MP2::OBJ_NON_ACTION_JAIL;
-            else if ( icnIndex == 37 )
-                return MP2::OBJ_MERMAID;
-            else if ( 9 < icnIndex && icnIndex < 47 )
-                return MP2::OBJ_NON_ACTION_MERMAID;
-            else if ( icnIndex == 101 )
-                return MP2::OBJ_SIRENS;
-            else if ( 46 < icnIndex && icnIndex < 111 )
-                return MP2::OBJ_NON_ACTION_SIRENS;
-            else if ( isReefs( icnIndex ) )
-                return MP2::OBJ_REEFS;
-            break;
-
         case MP2::OBJ_ICN_TYPE_X_LOC3:
-            if ( icnIndex == 30 )
-                return MP2::OBJ_HUT_OF_MAGI;
-            else if ( icnIndex < 32 )
-                return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
-            else if ( icnIndex == 50 )
-                return MP2::OBJ_EYE_OF_MAGI;
-            else if ( 31 < icnIndex && icnIndex < 59 )
-                return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
             break;
-
         default:
-            break;
+            // This is not a POL object.
+            return false;
         }
 
-        return MP2::OBJ_NONE;
+        auto * objectPart = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectPart == nullptr ) {
+            // This could be a hacked map.
+            return false;
+        }
+
+        if ( objectPart->objectType == MP2::OBJ_NONE ) {
+            // It looks like the object is not present in the list or the object is maked incorrectly.
+            // Let's update the tile based on the object parts it has.
+            tile.updateObjectType();
+            return true;
+        }
+
+        tile.setMainObjectType( objectPart->objectType );
+
+        return true;
     }
 
     bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
@@ -1102,8 +1060,7 @@ bool Maps::Tile::isStream() const
 
 bool Maps::Tile::isShadow() const
 {
-    return isObjectPartShadow( _mainObjectPart )
-           && _groundObjectPart.size() == static_cast<size_t>( std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartShadow ) );
+    return isObjectPartShadow( _mainObjectPart ) && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartShadow );
 }
 
 Maps::ObjectPart * Maps::Tile::getObjectPartWithFlag( const uint32_t uid )
@@ -1375,33 +1332,21 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
     case MP2::OBJ_EXPANSION_OBJECT: {
         // The type of expansion action object or dwelling is stored in object metadata.
         // However, we just ignore it.
-        MP2::MapObjectType objectType = getLoyaltyObject( tile._mainObjectPart.icnType, tile._mainObjectPart.icnIndex );
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+        if ( updateLoyaltyObjectType( tile._mainObjectPart, tile ) ) {
+            return;
         }
 
-        // Add-ons of level 1 shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
+        // Object part of ground layer shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
         for ( const auto & part : tile._groundObjectPart ) {
-            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
-            if ( objectType != MP2::OBJ_NONE )
-                break;
-        }
-
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+            if ( updateLoyaltyObjectType( part, tile ) ) {
+                return;
+            }
         }
 
         for ( const auto & part : tile._topObjectPart ) {
-            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
-            if ( objectType != MP2::OBJ_NONE )
-                break;
-        }
-
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+            if ( updateLoyaltyObjectType( part, tile ) ) {
+                return;
+            }
         }
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,

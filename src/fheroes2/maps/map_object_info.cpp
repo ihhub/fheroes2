@@ -4960,7 +4960,7 @@ namespace Maps
         return objectInfo[objectIndex];
     }
 
-    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    const ObjectPartInfo * getObjectPartByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
     {
         populateObjectData();
 
@@ -4970,13 +4970,13 @@ namespace Maps
 
                 for ( const auto & info : object.groundLevelParts ) {
                     if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
+                        return &info;
                     }
                 }
 
                 for ( const auto & info : object.topLevelParts ) {
                     if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
+                        return &info;
                     }
                 }
             }
@@ -4986,6 +4986,16 @@ namespace Maps
         // - you are passing invalid object information
         // - you updated object properties but didn't do object info migration for save files
         // - you are trying to get info of an object created by an original Editor
+        return nullptr;
+    }
+
+    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    {
+        const ObjectPartInfo * objectPart = getObjectPartByIcn( icnType, icnIndex );
+        if ( objectPart != nullptr ) {
+            return objectPart->objectType;
+        }
+
         return MP2::OBJ_NONE;
     }
 
