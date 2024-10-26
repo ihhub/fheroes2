@@ -1323,19 +1323,23 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
         }
     }
 
-    // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
+    // The original maps do not have proper object type being set for The Price of Loyalty' objects.
+    // All of them are marked under few common types listed below.
+    // The type of an expansion action object or dwelling is stored in object metadata.
+    // However, we do not read this information and set the correct object type based on the object part information.
+    //
+    // We shouldn't even reach this code for Succession Wars maps but it is okay if we execute it since the map is most likely hacked.
     switch ( originalObjectType ) {
     case MP2::OBJ_NON_ACTION_EXPANSION_DWELLING:
     case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT: {
-        // The type of expansion action object or dwelling is stored in object metadata.
-        // However, we just ignore it.
         if ( updatePriceOfLoyaltyObjectType( tile._mainObjectPart, tile ) ) {
             return;
         }
 
-        // Object part of ground layer shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
+        // Object part of ground layer shouldn't even exist if no top object is present.
+        // However, let's play safe and verify it as well.
         for ( const auto & part : tile._groundObjectPart ) {
             if ( updatePriceOfLoyaltyObjectType( part, tile ) ) {
                 return;
