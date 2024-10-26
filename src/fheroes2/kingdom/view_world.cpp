@@ -375,7 +375,7 @@ namespace
 
         for ( int32_t posY = 0; posY < worldWidth; ++posY ) {
             for ( int32_t posX = 0; posX < worldHeight; ++posX ) {
-                const Maps::Tiles & tile = world.GetTiles( posX, posY );
+                const Maps::Tile & tile = world.getTile( posX, posY );
 
                 objectTypes[0] = tile.getMainObjectType( false );
                 objectTypes[1] = tile.getMainObjectType( true );

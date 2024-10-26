@@ -141,14 +141,14 @@ namespace Maps
 
         // We must clear all tiles before writing something on them.
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            auto & tile = world.GetTiles( static_cast<int32_t>( i ) );
+            auto & tile = world.getTile( static_cast<int32_t>( i ) );
             tile = {};
 
             tile.setIndex( static_cast<int32_t>( i ) );
         }
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            readTileTerrain( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            readTileTerrain( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         // Read objects from all tiles and place them based on their IDs.
@@ -166,7 +166,7 @@ namespace Maps
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );
-            if ( !readTileObject( world.GetTiles( info.tileIndex ), *info.info ) ) {
+            if ( !readTileObject( world.getTile( info.tileIndex ), *info.info ) ) {
                 return false;
             }
         }
@@ -185,18 +185,18 @@ namespace Maps
         map.tiles.resize( size );
 
         for ( size_t i = 0; i < size; ++i ) {
-            writeTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            writeTile( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
     }
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info )
+    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info )
     {
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
     }
 
-    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object )
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
         if ( object.index >= objectInfos.size() ) {
@@ -218,7 +218,7 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info )
     {
         // A tile cannot contain an exactly the same road or stream parts.
         std::set<std::pair<uint32_t, uint8_t>> roadParts;

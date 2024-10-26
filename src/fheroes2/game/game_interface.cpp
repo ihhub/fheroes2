@@ -271,7 +271,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.isMouseRightButtonPressed() ) {
-                Dialog::QuickInfo( world.GetTiles( dst ) );
+                Dialog::QuickInfo( world.getTile( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;

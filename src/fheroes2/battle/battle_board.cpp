@@ -388,7 +388,7 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen )
 {
     std::vector<int> objs;
 
