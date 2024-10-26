@@ -321,7 +321,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
         }
 
         for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
             const bool visibleTile = revealAll || !tile.isFog( playerColor );
 
             uint8_t fillColor = 0;
@@ -354,7 +354,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_NON_ACTION_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
                         fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( mainTileIndex ) );
                         break;

@@ -428,13 +428,13 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( _covrIcnId != ICN::UNKNOWN ) {
             board.SetCovrObjects( _covrIcnId );
         }
 
-        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+        board.SetCobjObjects( world.getTile( tileIndex ), seededGen );
     }
 
     AI::BattlePlanner::Get().battleBegins();

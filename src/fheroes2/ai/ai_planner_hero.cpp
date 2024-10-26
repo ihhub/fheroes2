@@ -186,7 +186,7 @@ namespace
         return heroArmyStrength > castleStrength;
     }
 
-    bool isHeroStrongerThan( const Maps::Tiles & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
+    bool isHeroStrongerThan( const Maps::Tile & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
     {
         return heroArmyStrength > ai.getTileArmyStrength( tile ) * targetStrengthMultiplier;
     }
@@ -202,7 +202,7 @@ namespace
         return monster.GetStrength() > armyStrengthThreshold;
     }
 
-    bool isArmyValuableToHire( const Army & army, const Kingdom & kingdom, const Maps::Tiles & tile, const double armyStrengthThreshold )
+    bool isArmyValuableToHire( const Army & army, const Kingdom & kingdom, const Maps::Tile & tile, const double armyStrengthThreshold )
     {
         const Troop & troop = getTroopFromTile( tile );
         if ( !troop.isValid() ) {
@@ -261,7 +261,7 @@ namespace
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
                             const double armyStrengthThreshold, const bool underHero )
     {
-        const Maps::Tiles & tile = world.GetTiles( index );
+        const Maps::Tile & tile = world.getTile( index );
         const MP2::MapObjectType objectType = tile.getMainObjectType( !underHero );
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
@@ -981,7 +981,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
 {
     // In the future these hardcoded values could be configured by the mod
     // 1 tile distance is 100.0 value approximately
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
@@ -1618,7 +1618,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     // Fighters have higher priority for battles and smaller values for other objects.
     assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
 
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
@@ -1927,7 +1927,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
     const double fiveTiles = 1400;
     const double tenTiles = 3000;
 
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
@@ -2037,7 +2037,7 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::SCOUT );
 
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
@@ -2082,7 +2082,7 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
 double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                     const uint32_t distanceToObject ) const
 {
-    assert( objectType == world.GetTiles( index ).getMainObjectType() );
+    assert( objectType == world.getTile( index ).getMainObjectType() );
 
 #ifdef NDEBUG
     (void)objectType;
@@ -2176,7 +2176,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestP
             continue;
         }
 
-        const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
+        const int safetyFactor = _regions[world.getTile( currentCastleIndex ).GetRegion()].safetyFactor;
         if ( safetyFactor > 100 ) {
             value *= 2;
         }
@@ -2210,7 +2210,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
         for ( const auto & [idx, objType] : _mapActionObjects ) {
             if ( objType == MP2::OBJ_HERO ) {
-                assert( world.GetTiles( idx ).getHero() != nullptr );
+                assert( world.getTile( idx ).getHero() != nullptr );
             }
 
             if ( const auto [dummy, inserted] = objectIndexes.emplace( idx ); !inserted ) {
@@ -2367,7 +2367,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             maxPriority = 0;
             priorityTarget = courierTarget;
 #ifdef WITH_DEBUG
-            objectType = world.GetTiles( courierTarget ).getMainObjectType();
+            objectType = world.getTile( courierTarget ).getMainObjectType();
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
@@ -2478,7 +2478,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
                 updatePriorityForCastle( *castle );
             }
             else {
-                updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                updatePriorityAttackTarget( hero.GetKingdom(), world.getTile( tileIndex ) );
             }
         };
 
@@ -2486,7 +2486,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             updateCastle();
         }
         else if ( objectType == MP2::OBJ_HERO ) {
-            const Maps::Tiles & tile = world.GetTiles( tileIndex );
+            const Maps::Tile & tile = world.getTile( tileIndex );
 
             const Heroes * anotherHero = tile.getHero();
             if ( anotherHero == nullptr ) {
@@ -2533,7 +2533,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
             // one of these cases.
 #ifndef NDEBUG
-            const Maps::Tiles & tile = world.GetTiles( tileIndex );
+            const Maps::Tile & tile = world.getTile( tileIndex );
 #endif
             assert( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
             assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
@@ -2623,8 +2623,8 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, frontDirection );
 
-    const Maps::Tiles & currTile = world.GetTiles( heroIdx );
-    const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+    const Maps::Tile & currTile = world.getTile( heroIdx );
+    const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
     if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;
@@ -2682,8 +2682,8 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, nextStepDirection );
 
-    const Maps::Tiles & currTile = world.GetTiles( heroIdx );
-    const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+    const Maps::Tile & currTile = world.getTile( heroIdx );
+    const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
     if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;

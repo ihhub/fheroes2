@@ -989,7 +989,7 @@ Army::Army( HeroBase * cmdr /* = nullptr */ )
     }
 }
 
-Army::Army( const Maps::Tiles & tile )
+Army::Army( const Maps::Tile & tile )
     : commander( nullptr )
     , _isSpreadCombatFormation( true )
     , color( Color::NONE )
@@ -1008,7 +1008,7 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
-void Army::setFromTile( const Maps::Tiles & tile )
+void Army::setFromTile( const Maps::Tile & tile )
 {
     assert( commander == nullptr );
 
@@ -1594,7 +1594,7 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
     }
 }
 
-NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
+NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop )
 {
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
