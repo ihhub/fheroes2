@@ -4263,7 +4263,6 @@ namespace
                 Copy( shadow, 0, 0, _icnVsSprite[id][206], 0, 0, shadow.width(), shadow.height() );
                 _icnVsSprite[id][206].setPosition( shadow.x() + shadowOffset, shadow.y() );
 
-                
                 _icnVsSprite[id][207].resize( 21 + shadowOffset, 32 );
                 _icnVsSprite[id][207].reset();
                 Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
