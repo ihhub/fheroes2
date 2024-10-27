@@ -42,7 +42,7 @@ namespace
 
     // This map is used for searching object parts based on their ICN information.
     // Since we have a lot of objects it is important to speed up the search even if we take several more KB of memory.
-    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, const Maps::ObjectPartInfo*> objectInfoByIcn;
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, const Maps::ObjectPartInfo *> objectInfoByIcn;
 
     void populateRoads( std::vector<Maps::ObjectInfo> & objects )
     {
