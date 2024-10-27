@@ -1582,7 +1582,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             // If the current unit was flying, then this enemy unit would have already been attacked by it
             assert( !currentUnit.isFlying() );
 
-            // Always try to get closer to the archers, even if they are faster, because they can either shoot or move, and cannot attack after moving
+            // Always try to get closer to the archers, even if they are faster, to try to block them more reliably in the future
             if ( enemy->isArchers() ) {
                 return false;
             }
