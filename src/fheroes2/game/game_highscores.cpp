@@ -66,6 +66,11 @@
 #include "logging.h"
 #endif
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace
 {
     const std::string highScoreFileName = "fheroes2.hgs";
