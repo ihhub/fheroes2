@@ -1579,6 +1579,8 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
 
         // First, try to choose a target among the enemy units that will not be able to evade an engagement
         chooseDistantTarget( [&currentUnit]( const Battle::Unit * enemy ) {
+            assert( enemy != nullptr );
+
             // If the current unit was flying, then this enemy unit would have already been attacked by it
             assert( !currentUnit.isFlying() );
 
@@ -1605,7 +1607,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             return target;
         }
 
-        // If this didn't work, try to choose a target among the enemy units that are reachable in principle
+        // If there are no enemy units that could not evade an engagement, then try to choose a target among the enemy units that are reachable in principle
         chooseDistantTarget( []( const Battle::Unit * ) { return false; } );
 
         if ( target.cell != -1 ) {
