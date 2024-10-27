@@ -350,7 +350,7 @@ namespace Maps
 
         bool isDetachedObject() const;
 
-        int getOriginalPassability() const;
+        int getTileIndepentPassability() const;
 
         bool doesObjectExist( const uint32_t uid ) const;
 
