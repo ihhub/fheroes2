@@ -455,8 +455,6 @@ void Maps::Tile::setTerrain( const uint16_t terrainImageIndex, const bool horizo
 
     const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
 
-    // TODO: Remove all objects from map when changing water to land and vice-versa in both 'Map_Format' and 'tiles'.
-
     if ( ( _isTileMarkedAsRoad || isStream() ) && ( newGround != Ground::WATER ) && Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
         // There cannot be extra objects under the roads and streams.
         _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
