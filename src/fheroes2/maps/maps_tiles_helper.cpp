@@ -323,7 +323,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::LEFT | Direction::TOP | Direction::BOTTOM )
-             && ( ( tile.GetGround() != Maps::Ground::WATER ) || hasBits( groundDirection, Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
+             && ( !tile.isWater() || hasBits( groundDirection, Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             // There is no ground direction to the right.
             // NOTICE: Initially the whole 'DIRECTION_LEFT_COL' should have direction bits.
             // If ground is not Water we  do not check TOP_LEFT and BOTTOM_LEFT as there are no tile images for that cases.
@@ -355,7 +355,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::RIGHT | Direction::TOP | Direction::BOTTOM )
-             && ( ( tile.GetGround() != Maps::Ground::WATER ) || hasBits( groundDirection, Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
+             && ( !tile.isWater() || hasBits( groundDirection, Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             // There is no ground direction to the left.
             // NOTICE: Initially the whole 'DIRECTION_RIGHT_COL' should have direction bits.
             // If ground is not Water we do not check TOP_RIGHT and BOTTOM_RIGHT as there are no tile images for that cases.
@@ -387,7 +387,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
-             && ( ( tile.GetGround() != Maps::Ground::WATER ) || hasBits( groundDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+             && ( !tile.isWater() || hasBits( groundDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             // There is no ground direction to the top.
             // NOTICE: Initially the whole 'DIRECTION_BOTTOM_ROW' should have direction bits.
             // If ground is not Water we  do not check BOTTOM_LEFT and BOTTOM_RIGHT as there are no tile images for that cases.
@@ -419,7 +419,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::TOP | Direction::LEFT | Direction::RIGHT )
-             && ( ( tile.GetGround() != Maps::Ground::WATER ) || hasBits( groundDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+             && ( !tile.isWater() || hasBits( groundDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             // There is no ground direction to the bottom.
             // NOTICE: Initially the whole 'DIRECTION_TOP_ROW' should have direction bits.
             // If ground is not Water we  do not check TOP_LEFT and TOP_RIGHT as there are no tile images for that cases.
