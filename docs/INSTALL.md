@@ -57,6 +57,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+  Make sure the subdirectories in the target directory have lowercase names, i.e. `anim`, `data`, `maps` and `music`.
 
 <a name="windows-zip-archive"></a>
 ### Windows ZIP archive
@@ -73,6 +74,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+  Make sure the subdirectories in the target directory have lowercase names, i.e. `anim`, `data`, `maps` and `music`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version.bat` script supplied in the ZIP archive.
@@ -155,6 +157,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   be missing depending on the version of the original game) from the original game directory to 
   * `~/Library/Application Support/fheroes2` if you built from source using the [**macOS native app**](#macos-native-app) method;
   * `~/.fheroes2` for all other cases.
+  Make sure the subdirectories in the target directory have lowercase names, i.e. `anim`, `data`, `maps` and `music`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
@@ -192,6 +195,7 @@ The recommended option requires the Heroes of Might and Magic II installer file 
 
 For the manual installation you have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
 `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. The destination folder will be opened when this option is selected.
+Make sure the subdirectories in the target directory have lowercase names, i.e. `anim`, `data`, `maps` and `music`.
 
 <a name="gentoo-package"></a>
 ### Gentoo package
@@ -242,7 +246,8 @@ brew install fheroes2
 If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
 be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
 `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
-`/usr/share/fheroes2/download_demo_version.sh` script.
+`/usr/share/fheroes2/download_demo_version.sh` script. Make sure the subdirectories in the target directory are lowercase, i.e.
+`anim`, `data`, `maps` and `music`.
 
 <a name="aur-package"></a>
 ### AUR package
@@ -317,6 +322,7 @@ You can get more info about resource packaging by running `game-data-packager he
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+  Make sure the subdirectories in the target directory have lowercase names, i.e. `anim`, `data`, `maps` and `music`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version.sh` script supplied in the ZIP archive.
