@@ -1539,7 +1539,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
                     continue;
                 }
 
-                // If this distance were zero, it would mean that this enemy unit would have already been attacked by the current unit
+                // If this distance was zero, it would mean that this enemy unit would have already been attacked by the current unit
                 assert( nearestCellInfo.dist > 0 );
 
                 const double priority = static_cast<double>( enemy->evaluateThreatForUnit( currentUnit ) ) / nearestCellInfo.dist;
