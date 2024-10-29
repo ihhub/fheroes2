@@ -319,77 +319,34 @@ namespace
         return "Unknown layer";
     }
 
-    MP2::MapObjectType getLoyaltyObject( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+    bool updatePriceOfLoyaltyObjectType( const Maps::ObjectPart & part, Maps::Tile & tile )
     {
-        switch ( objectIcnType ) {
+        // The Price of Loyalty' object should belong to a certain ICN type.
+        switch ( part.icnType ) {
         case MP2::OBJ_ICN_TYPE_X_LOC1:
-            if ( icnIndex == 3 )
-                return MP2::OBJ_ALCHEMIST_TOWER;
-            else if ( icnIndex < 3 )
-                return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
-            else if ( 70 == icnIndex )
-                return MP2::OBJ_ARENA;
-            else if ( 3 < icnIndex && icnIndex < 72 )
-                return MP2::OBJ_NON_ACTION_ARENA;
-            else if ( 77 == icnIndex )
-                return MP2::OBJ_BARROW_MOUNDS;
-            else if ( 71 < icnIndex && icnIndex < 78 )
-                return MP2::OBJ_NON_ACTION_BARROW_MOUNDS;
-            else if ( 94 == icnIndex )
-                return MP2::OBJ_EARTH_ALTAR;
-            else if ( 77 < icnIndex && icnIndex < 112 )
-                return MP2::OBJ_NON_ACTION_EARTH_ALTAR;
-            else if ( 118 == icnIndex )
-                return MP2::OBJ_AIR_ALTAR;
-            else if ( 111 < icnIndex && icnIndex < 120 )
-                return MP2::OBJ_NON_ACTION_AIR_ALTAR;
-            else if ( 127 == icnIndex )
-                return MP2::OBJ_FIRE_ALTAR;
-            else if ( 119 < icnIndex && icnIndex < 129 )
-                return MP2::OBJ_NON_ACTION_FIRE_ALTAR;
-            else if ( 135 == icnIndex )
-                return MP2::OBJ_WATER_ALTAR;
-            else if ( 128 < icnIndex && icnIndex < 137 )
-                return MP2::OBJ_NON_ACTION_WATER_ALTAR;
-            break;
-
         case MP2::OBJ_ICN_TYPE_X_LOC2:
-            if ( icnIndex == 4 )
-                return MP2::OBJ_STABLES;
-            else if ( icnIndex < 4 )
-                return MP2::OBJ_NON_ACTION_STABLES;
-            else if ( icnIndex == 9 )
-                return MP2::OBJ_JAIL;
-            else if ( 4 < icnIndex && icnIndex < 10 )
-                return MP2::OBJ_NON_ACTION_JAIL;
-            else if ( icnIndex == 37 )
-                return MP2::OBJ_MERMAID;
-            else if ( 9 < icnIndex && icnIndex < 47 )
-                return MP2::OBJ_NON_ACTION_MERMAID;
-            else if ( icnIndex == 101 )
-                return MP2::OBJ_SIRENS;
-            else if ( 46 < icnIndex && icnIndex < 111 )
-                return MP2::OBJ_NON_ACTION_SIRENS;
-            else if ( isReefs( icnIndex ) )
-                return MP2::OBJ_REEFS;
-            break;
-
         case MP2::OBJ_ICN_TYPE_X_LOC3:
-            if ( icnIndex == 30 )
-                return MP2::OBJ_HUT_OF_MAGI;
-            else if ( icnIndex < 32 )
-                return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
-            else if ( icnIndex == 50 )
-                return MP2::OBJ_EYE_OF_MAGI;
-            else if ( 31 < icnIndex && icnIndex < 59 )
-                return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
             break;
-
         default:
-            break;
+            // This is not an original POL object.
+            return false;
         }
 
-        return MP2::OBJ_NONE;
+        const auto * objectPart = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectPart == nullptr ) {
+            // This could be a hacked map or an object part which we ignored in our list of objects (for example, an empty object part).
+            return false;
+        }
+
+        if ( objectPart->objectType == MP2::OBJ_NONE ) {
+            // It looks like the object is not present in the list or the object is marked incorrectly.
+            // Let's update the tile based on the object parts it has.
+            tile.updateObjectType();
+            return true;
+        }
+
+        tile.setMainObjectType( objectPart->objectType );
+        return true;
     }
 
     bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
@@ -471,7 +428,7 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         _isTileMarkedAsRoad = true;
     }
 
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
+    if ( _mainObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
         // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
         if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
             _groundObjectPart.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
@@ -497,8 +454,6 @@ void Maps::Tile::setTerrain( const uint16_t terrainImageIndex, const bool horizo
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
     const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
-
-    // TODO: Remove all objects from map when changing water to land and vice-versa in both 'Map_Format' and 'tiles'.
 
     if ( ( _isTileMarkedAsRoad || isStream() ) && ( newGround != Ground::WATER ) && Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
         // There cannot be extra objects under the roads and streams.
@@ -660,31 +615,49 @@ int Maps::Tile::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-int Maps::Tile::getOriginalPassability() const
+int Maps::Tile::getTileIndependentPassability() const
 {
-    const MP2::MapObjectType objectType = getMainObjectType( false );
+    // Tile-independent passability is based purely on object parts located on this tile.
+    // We need to run through all object parts on the ground level to calculate the resulting passability.
+    // Remember, top object parts do not affect passability.
+    int passability = DIRECTION_ALL;
 
-    if ( MP2::isOffGameActionObject( objectType ) ) {
-        return MP2::getActionObjectDirection( objectType );
-    }
+    const auto getObjectPartPassability = []( const Maps::ObjectPart & part ) {
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+            // Rivers and stream are completely passable.
+            return DIRECTION_ALL;
+        }
 
-    if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent() || isShadow() ) {
-        // No object exists. Make it fully passable.
+        // The tile has a valid main object part. Check its passability.
+        const MP2::MapObjectType type = getObjectTypeByIcn( part.icnType, part.icnIndex );
+        if ( type == MP2::OBJ_REEFS ) {
+            // Reefs are inaccessible.
+            return 0;
+        }
+
+        if ( MP2::isOffGameActionObject( type ) ) {
+            // This is an action object part.
+            return MP2::getActionObjectDirection( type );
+        }
+
+        if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
+            // This is a ground object part which is not a shadow or a part of terrain.
+            return ( DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW );
+        }
+
+        // It looks like this object part is fully passable.
         return DIRECTION_ALL;
-    }
+    };
 
-    if ( isValidReefsSprite( _mainObjectPart.icnType, _mainObjectPart.icnIndex ) ) {
-        return 0;
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        passability = passability & getObjectPartPassability( _mainObjectPart );
     }
 
     for ( const auto & part : _groundObjectPart ) {
-        if ( isValidReefsSprite( part.icnType, part.icnIndex ) ) {
-            return 0;
-        }
+        passability = passability & getObjectPartPassability( part );
     }
 
-    // Objects have fixed passability.
-    return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
+    return passability;
 }
 
 void Maps::Tile::setInitialPassability()
@@ -692,7 +665,7 @@ void Maps::Tile::setInitialPassability()
     using TilePassableType = decltype( _tilePassabilityDirections );
     static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
 
-    const int passability = getOriginalPassability();
+    const int passability = getTileIndependentPassability();
     assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
 
     _tilePassabilityDirections = static_cast<TilePassableType>( passability );
@@ -772,7 +745,7 @@ void Maps::Tile::updatePassability()
                 }
             }
             else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isOffGameActionObject( correctedObjectType )
-                      && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+                      && isShortObject( correctedObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
             }
             else if ( isShortObject( bottomTileObjectType )
@@ -791,7 +764,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
         const Tile & leftTile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
         const bool leftTileTallObject = leftTile.isTallObject();
-        if ( leftTileTallObject && ( leftTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+        if ( leftTileTallObject && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
@@ -800,7 +773,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && isValidDirection( _index, Direction::RIGHT ) ) {
         const Tile & rightTile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
         const bool rightTileTallObject = rightTile.isTallObject();
-        if ( rightTileTallObject && ( rightTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+        if ( rightTileTallObject && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
         }
     }
@@ -1102,8 +1075,7 @@ bool Maps::Tile::isStream() const
 
 bool Maps::Tile::isShadow() const
 {
-    return isObjectPartShadow( _mainObjectPart )
-           && _groundObjectPart.size() == static_cast<size_t>( std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartShadow ) );
+    return isObjectPartShadow( _mainObjectPart ) && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartShadow );
 }
 
 Maps::ObjectPart * Maps::Tile::getObjectPartWithFlag( const uint32_t uid )
@@ -1367,41 +1339,33 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
         }
     }
 
-    // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
+    // The original maps do not have proper object type being set for The Price of Loyalty' objects.
+    // All of them are marked under few common types listed below.
+    // The type of an expansion action object or dwelling is stored in object metadata.
+    // However, we do not read this information and set the correct object type based on the object part information.
+    //
+    // We shouldn't even reach this code for Succession Wars maps but it is okay if we execute it since the map is most likely hacked.
     switch ( originalObjectType ) {
     case MP2::OBJ_NON_ACTION_EXPANSION_DWELLING:
     case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT: {
-        // The type of expansion action object or dwelling is stored in object metadata.
-        // However, we just ignore it.
-        MP2::MapObjectType objectType = getLoyaltyObject( tile._mainObjectPart.icnType, tile._mainObjectPart.icnIndex );
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+        if ( updatePriceOfLoyaltyObjectType( tile._mainObjectPart, tile ) ) {
+            return;
         }
 
-        // Add-ons of level 1 shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
+        // Object part of ground layer shouldn't even exist if no top object is present.
+        // However, let's play safe and verify it as well.
         for ( const auto & part : tile._groundObjectPart ) {
-            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
-            if ( objectType != MP2::OBJ_NONE )
-                break;
-        }
-
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+            if ( updatePriceOfLoyaltyObjectType( part, tile ) ) {
+                return;
+            }
         }
 
         for ( const auto & part : tile._topObjectPart ) {
-            objectType = getLoyaltyObject( part.icnType, part.icnIndex );
-            if ( objectType != MP2::OBJ_NONE )
-                break;
-        }
-
-        if ( objectType != MP2::OBJ_NONE ) {
-            tile.setMainObjectType( objectType );
-            break;
+            if ( updatePriceOfLoyaltyObjectType( part, tile ) ) {
+                return;
+            }
         }
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
