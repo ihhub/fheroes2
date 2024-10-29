@@ -660,7 +660,7 @@ int Maps::Tile::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-int Maps::Tile::getTileIndepentPassability() const
+int Maps::Tile::getTileIndependentPassability() const
 {
     // Tile-independent passability is based purely on object parts located on this tile.
     // We need to run through all object parts on the ground level to calculate the resulting passability.
@@ -710,7 +710,7 @@ void Maps::Tile::setInitialPassability()
     using TilePassableType = decltype( _tilePassabilityDirections );
     static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
 
-    const int passability = getTileIndepentPassability();
+    const int passability = getTileIndependentPassability();
     assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
 
     _tilePassabilityDirections = static_cast<TilePassableType>( passability );
@@ -790,7 +790,7 @@ void Maps::Tile::updatePassability()
                 }
             }
             else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isOffGameActionObject( correctedObjectType )
-                      && isShortObject( correctedObjectType ) && ( bottomTile.getTileIndepentPassability() & Direction::TOP ) == 0 ) {
+                      && isShortObject( correctedObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
             }
             else if ( isShortObject( bottomTileObjectType )
@@ -809,7 +809,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
         const Tile & leftTile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
         const bool leftTileTallObject = leftTile.isTallObject();
-        if ( leftTileTallObject && ( leftTile.getTileIndepentPassability() & Direction::TOP ) == 0 ) {
+        if ( leftTileTallObject && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
@@ -818,7 +818,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && isValidDirection( _index, Direction::RIGHT ) ) {
         const Tile & rightTile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
         const bool rightTileTallObject = rightTile.isTallObject();
-        if ( rightTileTallObject && ( rightTile.getTileIndepentPassability() & Direction::TOP ) == 0 ) {
+        if ( rightTileTallObject && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
         }
     }
