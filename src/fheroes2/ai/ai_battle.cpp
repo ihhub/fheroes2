@@ -1524,7 +1524,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
 
     // 2. For units that don't have a target within reach, choose a target depending on distance-based priority
     {
-        const auto chooseDistantTarget = [this, &arena, &currentUnit, &target, &enemies]( const auto & enemyFilter ) {
+        const auto chooseDistantTarget = [this, &arena, &currentUnit, &target, &enemies]( const auto enemyPredicate ) {
             double maxPriority = std::numeric_limits<double>::lowest();
 
             for ( const Battle::Unit * enemy : enemies ) {
@@ -1535,7 +1535,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
                     continue;
                 }
 
-                if ( enemyFilter( enemy ) ) {
+                if ( !enemyPredicate( enemy ) ) {
                     continue;
                 }
 
@@ -1586,21 +1586,21 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
 
             // Always try to get closer to the archers, even if they are faster, to try to block them more reliably in the future
             if ( enemy->isArchers() ) {
-                return false;
+                return true;
             }
 
             const uint32_t enemySpeed = enemy->GetSpeed( false, true );
             // If the enemy unit is immovable, then it will not be able to evade an engagement
             if ( enemySpeed == Speed::STANDING ) {
-                return false;
+                return true;
             }
 
             // Flying unit, even inferior in speed, can move around the entire battlefield and easily evade an engagement
             if ( enemy->isFlying() ) {
-                return true;
+                return false;
             }
 
-            return enemySpeed >= currentUnit.GetSpeed( false, true );
+            return enemySpeed < currentUnit.GetSpeed( false, true );
         } );
 
         if ( target.cell != -1 ) {
@@ -1608,7 +1608,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
         }
 
         // If there are no enemy units that could not evade an engagement, then try to choose a target among the enemy units that are reachable in principle
-        chooseDistantTarget( []( const Battle::Unit * ) { return false; } );
+        chooseDistantTarget( []( const Battle::Unit * ) { return true; } );
 
         if ( target.cell != -1 ) {
             return target;
