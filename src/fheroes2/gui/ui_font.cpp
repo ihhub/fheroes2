@@ -5639,7 +5639,7 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 214 } ) {
+        for ( const int & charCode : { 196, 197, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
@@ -5788,6 +5788,13 @@ namespace
         released[218 - 32].reset();
         fheroes2::Copy( released[85 - 32], 0, 0, released[218 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
         fheroes2::DrawLine( released[218 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // U with diaeresis.
+        released[220 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 2 );
+        released[220 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 2, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::SetPixel( released[220 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
     }
 }
 

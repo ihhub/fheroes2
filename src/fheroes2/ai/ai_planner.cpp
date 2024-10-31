@@ -49,9 +49,9 @@ void AI::Planner::resetPathfinder()
     _pathfinder.reset();
 }
 
-void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
+void AI::Planner::revealFog( const Maps::Tile & tile, const Kingdom & kingdom )
 {
-    const MP2::MapObjectType object = tile.GetObject();
+    const MP2::MapObjectType object = tile.getMainObjectType();
     if ( !MP2::isInGameActionObject( object ) ) {
         return;
     }
@@ -76,7 +76,7 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     }
 }
 
-double AI::Planner::getTileArmyStrength( const Maps::Tiles & tile )
+double AI::Planner::getTileArmyStrength( const Maps::Tile & tile )
 {
     const auto [iter, inserted] = _tileArmyStrengthValues.try_emplace( tile.GetIndex(), 0.0 );
     if ( inserted ) {
@@ -179,7 +179,7 @@ double AI::Planner::getFundsValueBasedOnPriority( const Funds & funds ) const
 
 void AI::Planner::updateMapActionObjectCache( const int mapIndex )
 {
-    const MP2::MapObjectType objectType = world.GetTiles( mapIndex ).GetObject();
+    const MP2::MapObjectType objectType = world.getTile( mapIndex ).getMainObjectType();
 
     if ( !MP2::isInGameActionObject( objectType ) ) {
         _mapActionObjects.erase( mapIndex );

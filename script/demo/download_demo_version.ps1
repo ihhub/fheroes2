@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -22,9 +22,6 @@ $ErrorActionPreference = "Stop"
 
 $h2DemoURL = "https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
 $h2DemoSHA256 = "12048C8B03875C81E69534A3813AAF6340975E77B762DC1B79A4FF5514240E3C"
-
-$wing32URL = "https://wikidll.com/download/25503/wing32.zip"
-$wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
     function Get-FileViaHTTP {
@@ -82,7 +79,7 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/5] determining the destination directory"
+    Write-Host "[1/4] determining the destination directory"
 
     $destPath = $null
 
@@ -124,7 +121,7 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
 
-    Write-Host "[2/5] downloading the demo version"
+    Write-Host "[2/4] downloading the demo version"
 
     $demoPath = "$destPath\demo"
 
@@ -145,22 +142,7 @@ try {
         return
     }
 
-    Write-Host "[3/5] downloading the wing32.dll library"
-
-    Get-FileViaHTTP -URL $wing32URL -FilePath "$demoPath\wing32.zip"
-
-    $result = Get-SHA256HashForFile -Path "$demoPath\wing32.zip"
-
-    if (-Not ($result -Is [Boolean]) -And ($result -Ne $wing32SHA256)) {
-        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
-                                               "Expected:`t$wing32SHA256`r`n", `
-                                               "Got:`t`t$result`r`n", `
-                                               "Installation aborted"))
-
-        return
-    }
-
-    Write-Host "[4/5] unpacking archives"
+    Write-Host "[3/4] unpacking archives"
 
     $shell = New-Object -ComObject "Shell.Application"
 
@@ -170,13 +152,7 @@ try {
         $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
-    $zip = $shell.NameSpace((Resolve-Path "$demoPath\wing32.zip").Path)
-
-    foreach ($item in $zip.Items()) {
-        $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
-    }
-
-    Write-Host "[5/5] copying files"
+    Write-Host "[4/4] copying files"
 
     $dataPath = "$destPath\data"
     $mapsPath = "$destPath\maps"

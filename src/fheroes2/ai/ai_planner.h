@@ -46,7 +46,7 @@ namespace MP2
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Skill
@@ -168,7 +168,7 @@ namespace AI
 
         void resetPathfinder();
 
-        void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom );
+        void revealFog( const Maps::Tile & tile, const Kingdom & kingdom );
 
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero );
 
@@ -177,7 +177,7 @@ namespace AI
 
         // Returns the strength of the army guarding the given tile. Note that the army is obtained by calling
         // Army::setFromTile(), so this method is not suitable for hero armies or castle garrisons.
-        double getTileArmyStrength( const Maps::Tiles & tile );
+        double getTileArmyStrength( const Maps::Tile & tile );
 
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
@@ -229,7 +229,7 @@ namespace AI
         bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
 
         void removePriorityAttackTarget( const int32_t tileIndex );
-        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tile & tile );
 
         bool isPriorityTask( const int32_t index ) const
         {

@@ -93,7 +93,7 @@ namespace
             for ( Heroes * hero : heroes ) {
                 assert( hero != nullptr && hero->isActive() );
 
-                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                Maps::Tile & tile = world.getTile( hero->GetIndex() );
                 if ( tile.getHero() == nullptr ) {
                     // This could happen when a hero is moving.
                     continue;
@@ -109,7 +109,7 @@ namespace
         ~TemporaryHeroEraser()
         {
             for ( Heroes * hero : _heroes ) {
-                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                Maps::Tile & tile = world.getTile( hero->GetIndex() );
                 assert( tile.getHero() == nullptr );
 
                 tile.setHero( hero );
@@ -212,9 +212,9 @@ namespace
         }
     }
 
-    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tiles & tile )
+    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tile & tile )
     {
-        const MP2::MapObjectType object = tile.GetObject();
+        const MP2::MapObjectType object = tile.getMainObjectType();
         const int32_t tileIndex = tile.GetIndex();
 
         if ( object == MP2::OBJ_HERO ) {
@@ -344,7 +344,7 @@ void AI::Planner::reinforceHeroInCastle( Heroes & hero, Castle & castle, const F
     castle.recruitBestAvailable( budget );
     heroArmy.JoinStrongestFromArmy( garrison );
 
-    const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+    const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
 
     // Check if we should leave some troops in the garrison
     // TODO: amount of troops left could depend on region's safetyFactor
@@ -486,7 +486,7 @@ std::vector<AI::AICastle> AI::Planner::getSortedCastleList( const VecCastles & c
         }
 
         const int32_t castleIndex = castle->GetIndex();
-        const uint32_t regionID = world.GetTiles( castleIndex ).GetRegion();
+        const uint32_t regionID = world.getTile( castleIndex ).GetRegion();
 
         sortedCastleList.emplace_back( castle, castlesInDanger.count( castleIndex ) > 0, _regions[regionID].safetyFactor, castle->getBuildingValue() );
     }
@@ -684,7 +684,7 @@ void AI::Planner::removePriorityAttackTarget( const int32_t tileIndex )
     _priorityTargets.erase( tileIndex );
 }
 
-void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile )
+void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tile & tile )
 {
     const int32_t tileIndex = tile.GetIndex();
 
@@ -789,8 +789,8 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     const int mapSize = world.w() * world.h();
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
-        const Maps::Tiles & tile = world.GetTiles( idx );
-        MP2::MapObjectType objectType = tile.GetObject();
+        const Maps::Tile & tile = world.getTile( idx );
+        MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const uint32_t regionID = tile.GetRegion();
         if ( regionID >= _regions.size() ) {
@@ -825,7 +825,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             }
 
             // This hero can be in a castle
-            objectType = tile.GetObject( false );
+            objectType = tile.getMainObjectType( false );
         }
 
         if ( objectType == MP2::OBJ_CASTLE ) {
@@ -984,7 +984,7 @@ bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleL
             if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
                 continue;
 
-            const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
+            const uint32_t regionID = world.getTile( mapIndex ).GetRegion();
             const int heroesInRegion = _regions[regionID].friendlyHeroes;
 
             if ( heroesInRegion > 1 )

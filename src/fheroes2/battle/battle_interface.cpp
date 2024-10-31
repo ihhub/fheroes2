@@ -1218,7 +1218,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     // cover
     const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType

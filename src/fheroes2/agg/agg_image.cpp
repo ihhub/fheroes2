@@ -2574,7 +2574,7 @@ namespace
                     imageArray[238 - 32].setPosition( 0, -1 );
                     fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
                     // Copy the fixed sprite back.
-                    for ( const int & charCode : { 30, 93, 95 } ) {
+                    for ( const int charCode : { 30, 93, 95 } ) {
                         imageArray[charCode] = imageArray[238 - 32];
                     }
                 }
@@ -4225,37 +4225,48 @@ namespace
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
-                _icnVsSprite[id][206] = _icnVsSprite[id][162];
-                FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 2, 1, 4, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 0, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 18, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 17, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 19, 3, 2, 1, 3U );
+                fheroes2::Sprite shadow = _icnVsSprite[id][162];
+                FillTransform( shadow, 0, 0, 5, 1, 1U );
+                FillTransform( shadow, 0, 1, 2, 1, 1U );
+                FillTransform( shadow, 2, 1, 4, 1, 3U );
+                FillTransform( shadow, 0, 2, 3, 1, 3U );
+                FillTransform( shadow, 18, 1, 2, 1, 1U );
+                FillTransform( shadow, 17, 2, 3, 1, 3U );
+                FillTransform( shadow, 20, 2, 1, 1, 1U );
+                FillTransform( shadow, 19, 3, 2, 1, 3U );
 
                 // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
-                _icnVsSprite[id][207].resize( 21, 32 );
-                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
-                FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 1, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 2, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 4, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 3, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 25, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 18, 26, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 27, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 14, 28, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 29, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 12, 29, 11, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 8, 31, 15, 1, 1U );
+                fheroes2::Sprite body( 21, 32 );
+                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, body, 0, 0, 21, 32 );
+                FillTransform( body, 0, 0, 12, 1, 1U );
+                FillTransform( body, 15, 0, 6, 1, 1U );
+                FillTransform( body, 0, 1, 9, 1, 1U );
+                FillTransform( body, 16, 1, 5, 1, 1U );
+                FillTransform( body, 0, 2, 6, 1, 1U );
+                FillTransform( body, 20, 2, 1, 1, 1U );
+                FillTransform( body, 0, 4, 1, 1, 1U );
+                FillTransform( body, 0, 3, 3, 1, 1U );
+                FillTransform( body, 20, 25, 1, 1, 1U );
+                FillTransform( body, 18, 26, 3, 1, 1U );
+                FillTransform( body, 16, 27, 5, 1, 1U );
+                FillTransform( body, 14, 28, 9, 1, 1U );
+                FillTransform( body, 0, 29, 1, 1, 1U );
+                FillTransform( body, 12, 29, 11, 1, 1U );
+                FillTransform( body, 0, 30, 3, 1, 1U );
+                FillTransform( body, 10, 30, 13, 1, 1U );
+                FillTransform( body, 0, 31, 5, 1, 1U );
+                FillTransform( body, 8, 31, 15, 1, 1U );
+
+                const int32_t shadowOffset = ( 32 - body.width() ) / 2;
+
+                _icnVsSprite[id][206].resize( shadow.width() - shadowOffset, shadow.height() );
+                Copy( shadow, 0, 0, _icnVsSprite[id][206], 0, 0, shadow.width(), shadow.height() );
+                _icnVsSprite[id][206].setPosition( shadow.x() + shadowOffset, shadow.y() );
+
+                _icnVsSprite[id][207].resize( 21 + shadowOffset, 32 );
+                _icnVsSprite[id][207].reset();
+                Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
+                Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
             }
             return true;
         case ICN::TWNSDW_5:

@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMY_H
-#define H2ARMY_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -43,7 +42,7 @@ class Troop;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Troops : protected std::vector<Troop *>
@@ -52,6 +51,7 @@ public:
     Troops() = default;
 
     Troops( const Troops & troops );
+    Troops( Troops && ) = default;
 
     virtual ~Troops();
 
@@ -172,22 +172,20 @@ public:
 
     static void SwapTroops( Troop &, Troop & );
 
-    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tile &, const Troop & );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
     explicit Army( HeroBase * cmdr = nullptr );
-    explicit Army( const Maps::Tiles & tile );
+    explicit Army( const Maps::Tile & tile );
 
     Army( const Army & ) = delete;
-    Army( Army && ) = delete;
-
-    Army & operator=( const Army & ) = delete;
-    Army & operator=( Army && ) = delete;
 
     ~Army() override = default;
+
+    Army & operator=( const Army & ) = delete;
 
     const Troops & getTroops() const;
 
@@ -195,7 +193,7 @@ public:
     // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
     // of the commanding hero's faction.
     void Reset( const bool defaultArmy = false );
-    void setFromTile( const Maps::Tiles & tile );
+    void setFromTile( const Maps::Tile & tile );
 
     int GetColor() const;
     int GetControl() const override;
@@ -270,5 +268,3 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-#endif
