@@ -483,13 +483,6 @@ namespace
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
-    bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target )
-    {
-        if ( currentUnit.isFlying() == target.isFlying() )
-            return currentUnit.GetSpeed() > target.GetSpeed();
-        return currentUnit.isFlying();
-    }
-
     double commanderMaximumSpellDamageValue( const HeroBase & commander )
     {
         double bestValue = 0;
@@ -1343,7 +1336,6 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
             const uint32_t distanceToBattlefieldCenter = Battle::Board::GetDistance( idx, Battle::Board::sizeInCells / 2 );
 
             const auto idxParams = std::make_pair( characteristics.distanceToNearestEnemy, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter );
-
             if ( safestParams < idxParams ) {
                 safestIdx = idx;
                 safestParams = idxParams;
@@ -1399,7 +1391,6 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
 
             const int32_t retaliatoryDmg = enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
             const int32_t damageDiff = archerMeleeDmg - retaliatoryDmg;
-
             if ( bestOutcome < damageDiff ) {
                 bestOutcome = damageDiff;
 
@@ -1523,72 +1514,105 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
                            "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
             }
         }
-    }
 
-    if ( target.unit ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+        if ( target.unit ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
 
-        return target;
+            return target;
+        }
     }
 
     // 2. For units that don't have a target within reach, choose a target depending on distance-based priority
     {
-        const Castle * castle = Battle::Arena::GetCastle();
-        const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+        const auto chooseDistantTarget = [this, &arena, &currentUnit, &target, &enemies]( const auto enemyPredicate ) {
+            double maxPriority = std::numeric_limits<double>::lowest();
 
-        // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the total army value will be
-        // lost to make sure that the difference of 4 tiles matters.
-        const double attackDistanceModifier = _enemyArmyStrength / 5.0;
+            for ( const Battle::Unit * enemy : enemies ) {
+                assert( enemy != nullptr );
 
-        double maxPriority = std::numeric_limits<double>::lowest();
+                const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *enemy );
+                if ( nearestCellInfo.idx == -1 ) {
+                    continue;
+                }
 
-        for ( const Battle::Unit * enemy : enemies ) {
+                if ( !enemyPredicate( enemy ) ) {
+                    continue;
+                }
+
+                // If this distance was zero, it would mean that this enemy unit would have already been attacked by the current unit
+                assert( nearestCellInfo.dist > 0 );
+
+                const double priority = static_cast<double>( enemy->evaluateThreatForUnit( currentUnit ) ) / nearestCellInfo.dist;
+                if ( priority < maxPriority ) {
+                    continue;
+                }
+
+                maxPriority = priority;
+
+                const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearestCellInfo.idx );
+                assert( pos.isValidForUnit( currentUnit ) );
+
+                const Battle::Indexes path = arena.GetPath( currentUnit, pos );
+                assert( !path.empty() );
+
+                const Castle * castle = Battle::Arena::GetCastle();
+                const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+
+                // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
+                if ( isMoatBuilt && Battle::Board::isMoatIndex( path.back(), currentUnit ) ) {
+                    target.cell = path.back();
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at cell " << target.cell )
+                }
+                else if ( _cautiousOffensive ) {
+                    target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " using a cautious offensive, stopping at cell " << target.cell )
+                }
+                else {
+                    target.cell = path.back();
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at cell " << target.cell )
+                }
+            }
+        };
+
+        // First, try to choose a target among the enemy units that will not be able to evade an engagement
+        chooseDistantTarget( [&currentUnit]( const Battle::Unit * enemy ) {
             assert( enemy != nullptr );
 
-            const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *enemy );
-            if ( nearestCellInfo.idx == -1 ) {
-                continue;
+            // If the current unit was flying, then this enemy unit would have already been attacked by it
+            assert( !currentUnit.isFlying() );
+
+            // Always try to get closer to the archers, even if they are faster, to try to block them more reliably in the future
+            if ( enemy->isArchers() ) {
+                return true;
             }
 
-            // Do not pursue faster units that can move away and avoid an engagement
-            const uint32_t dist
-                = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ? nearestCellInfo.dist + Battle::Board::widthInCells + Battle::Board::heightInCells
-                                                                               : nearestCellInfo.dist );
-            const double unitPriority = enemy->evaluateThreatForUnit( currentUnit ) - dist * attackDistanceModifier;
-
-            if ( unitPriority < maxPriority ) {
-                continue;
+            const uint32_t enemySpeed = enemy->GetSpeed( false, true );
+            // If the enemy unit is immovable, then it will not be able to evade an engagement
+            if ( enemySpeed == Speed::STANDING ) {
+                return true;
             }
 
-            maxPriority = unitPriority;
-
-            const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearestCellInfo.idx );
-            assert( pos.isValidForUnit( currentUnit ) );
-
-            const Battle::Indexes path = arena.GetPath( currentUnit, pos );
-            assert( !path.empty() );
-
-            // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
-            if ( isMoatBuilt && Battle::Board::isMoatIndex( path.back(), currentUnit ) ) {
-                target.cell = path.back();
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at cell " << target.cell )
+            // Flying unit, even inferior in speed, can move around the entire battlefield and easily evade an engagement
+            if ( enemy->isFlying() ) {
+                return false;
             }
-            else if ( _cautiousOffensive ) {
-                target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " using a cautious offensive, stopping at cell " << target.cell )
-            }
-            else {
-                target.cell = path.back();
+            return enemySpeed < currentUnit.GetSpeed( false, true );
+        } );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at cell " << target.cell )
-            }
+        if ( target.cell != -1 ) {
+            return target;
         }
-    }
 
-    if ( target.cell != -1 ) {
-        return target;
+        // If there are no enemy units that could not evade an engagement, then try to choose a target among the enemy units that are reachable in principle
+        chooseDistantTarget( []( const Battle::Unit * ) { return true; } );
+
+        if ( target.cell != -1 ) {
+            return target;
+        }
     }
 
     // 3. Try to get closer to the castle walls during the siege
@@ -1819,7 +1843,6 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
             }
 
             const double archerValue = frnd->GetStrength() - dist * defenseDistanceModifier;
-
             if ( archerValue < bestArcherValue ) {
                 continue;
             }
