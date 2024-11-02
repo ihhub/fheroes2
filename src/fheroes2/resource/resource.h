@@ -31,9 +31,10 @@
 
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
-struct cost_t
+struct Cost
 {
     uint16_t gold;
     uint8_t wood;
@@ -78,7 +79,7 @@ struct Funds
 
     Funds( const int type, const uint32_t count );
 
-    explicit Funds( const cost_t & cost )
+    explicit Funds( const Cost & cost )
         : wood( cost.wood )
         , mercury( cost.mercury )
         , ore( cost.ore )
@@ -98,7 +99,7 @@ struct Funds
     Funds & operator*=( uint32_t mul );
     Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & pm );
-    Funds & operator=( const cost_t & cost );
+    Funds & operator=( const Cost & cost );
 
     bool operator==( const Funds & other ) const;
     bool operator>=( const Funds & other ) const;
@@ -134,8 +135,8 @@ struct Funds
     int32_t gold{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const Funds & res );
-StreamBase & operator>>( StreamBase &, Funds & res );
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res );
+IStreamBase & operator>>( IStreamBase & stream, Funds & res );
 
 namespace Resource
 {
@@ -169,10 +170,10 @@ namespace Resource
     };
 
     // Applies the given function object 'fn' to every valid resource in the 'resources' set
-    template <typename T, typename F, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+    template <typename T, typename F, std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, bool> = true>
     void forEach( const T resources, const F & fn )
     {
-        const auto forEachImp = [&fn]( const auto res ) {
+        const auto forEachImpl = [&fn]( const auto res ) {
             constexpr int maxResourceIdBitNum = []() constexpr
             {
                 static_assert( std::is_enum_v<decltype( Resource::ALL )> );
@@ -204,10 +205,10 @@ namespace Resource
         };
 
         if constexpr ( std::is_enum_v<decltype( resources )> ) {
-            forEachImp( static_cast<std::underlying_type_t<decltype( resources )>>( resources ) );
+            forEachImpl( static_cast<std::underlying_type_t<decltype( resources )>>( resources ) );
         }
         else {
-            forEachImp( resources );
+            forEachImpl( resources );
         }
     }
 }

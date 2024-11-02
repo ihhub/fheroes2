@@ -37,6 +37,169 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-10-23" version="v1.1.3">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.3</url>
+      <description>
+        <p>Changes in v1.1.3 (23 October 2024):</p>
+        <ul>
+          <li>fix invalid behavior and crash during interaction with whirlpools by heroes on boats</li>
+          <li>fix French small font i with circumflex</li>
+          <li>add Czech Virtual Keyboard support</li>
+          <li>fix rendering of overlapped UI elements</li>
+          <li>shorten map title when too long in several places</li>
+          <li>add missing popup dialogs to buttons within View World mode</li>
+          <li>update the Hungarian translation</li>
+          <li>speed up language switching I/O operations</li>
+          <li>update the Swedish translation</li>
+          <li>fix Sorceress Statue construction fade-in animation</li>
+          <li>fix map titles not being cleared when changing map</li>
+          <li>add language support for fh2m map format</li>
+          <li>update the Portuguese translation</li>
+          <li>use an original image to draw hexagons on the battlefield</li>
+          <li>improve Dismiss button for French and Spanish languages</li>
+          <li>fix event handling for dialogs in No Interface mode</li>
+          <li>improve error handling for I/O operations</li>
+          <li>increase most of object selection windows in the Editor by 50 pixels </li>
+          <li>update army information after battle before showing any dialogs</li>
+          <li>add missing sand animation for hourglass while waiting for a turn</li>
+          <li>speed up AI calculations on the Adventure Map</li>
+          <li>improve AI decision making while using Dimension Door spell</li>
+          <li>ease object requirements while erasing them in the Editor</li>
+          <li>split long phrases into two lines for battle log</li>
+          <li>fix blinking arrow cursor during scrolling in Editor</li>
+          <li>properly show damage info pop-up dialog for 2-hex monsters during battle</li>
+          <li>make default knowledge value for random hero 1</li>
+          <li>fix inability to erase monsters on the map under certain conditions within the Editor</li>
+          <li>fix the triggering of invalid drag events for the game area when casting certain spells</li>
+          <li>fix out of mini-map mouse dragging behavior in the Editor</li>
+          <li>update the Russian translation</li>
+          <li>add vertical gradient fonts</li>
+          <li>add a popup dialog to the list of resolutions</li>
+          <li>allow to resize vertical buttons for translations</li>
+          <li>fix issues with non-English path detection on Windows</li>
+          <li>center sprites and text in adventure map treasure chest dialog</li>
+          <li>do not discard area selection while moving mouse out of the map in the Editor</li>
+          <li>fix a crash while trying to distribute an army with 1 unit</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2024-09-15" version="v1.1.2">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.2</url>
+      <description>
+        <p>Changes in v1.1.2 (15 September 2024):</p>
+        <ul>
+          <li>preserve the order of artifacts when adding the Spell Book to the artifacts bag</li>
+          <li>update the Portuguese translation</li>
+          <li>speed up MIDI file processing</li>
+          <li>update the German translation</li>
+          <li>update visited status for Tree of Knowledge object</li>
+          <li>update New Secondary Skill dialog</li>
+          <li>add an extra check to verify the game resources not being corrupted</li>
+          <li>update the Hungarian translation</li>
+          <li>limit the use of the Summon Boat by AI for the original maps</li>
+          <li>do not create an undo action in the Editor if nothing was changed for an object</li>
+          <li>allow to undo any castle modifications in the Editor</li>
+          <li>improve AI castle protection logic on the Adventure Map</li>
+          <li>render mirrored troop in dialog properly</li>
+          <li>update resources before showing construction animation inside castle dialog</li>
+          <li>update the Swedish translation</li>
+          <li>fix the audio playback and distance calculation in the 3D Audio mode</li>
+          <li>fix Cliff Nest glowing pixel</li>
+          <li>update Earthquake spell animation and improve its logic to allow bridge and nearby towers demolition</li>
+          <li>disable mouse popup for empty space in map selection window</li>
+          <li>fix AI heroes ignoring patrol limit</li>
+          <li>AI should determine best skill when leveling up heroes</li>
+          <li>update hero spell points indicator after the battle and before performing defeated opponent fade animation</li>
+          <li>fix creature and header overlap in recruit window</li>
+          <li>fix map special conditions render after drop list is closed</li>
+          <li>implement alliances in the Editor</li>
+          <li>fix original maps bottom layer (hacky) placed resources and artifacts</li>
+          <li>add Backslash character to normal and small fonts</li>
+          <li>add missed Small Cliff (Dirt terrain) to the Landscape Miscellaneous objects in the Editor</li>
+          <li>add Ukrainian language virtual keyboard</li>
+          <li>fix inability to save maps within the Editor for some installations</li>
+          <li>add monster statistics popup window inside the Editor monster information dialog</li>
+          <li>Android Toolset: add Russian translation for FH2M file manager</li>
+          <li>fix Anti-Magic spell description</li>
+          <li>update the Polish translation</li>
+          <li>fix mini-map updates while picking up certain objects on the Adventure Map</li>
+          <li>fix invalid animation while picking up an artifact hidden by another object on the Adventure Map</li>
+          <li>remove scouting &amp; movement bonuses for AI-controlled players</li>
+          <li>fix rendering issues in mine selection dialog for the Editor</li>
+          <li>allow to input "/", "*", "-", "+" and "." from the keypad</li>
+          <li>add new River Deltas objects</li>
+          <li>add Slovak virtual keyboard support</li>
+          <li>update the Russian translation</li>
+          <li>fix lagging input controls on some devices</li>
+          <li>AI: properly evaluate the enemy heroes defending the castles</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2024-07-13" version="v1.1.1">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.1</url>
+      <description>
+        <p>Changes in v1.1.1 (13 July 2024):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>properly set tile information upon placing a new object</li>
+          <li>update the Hungarian translation</li>
+          <li>implement special victory and loss conditions for heroes and towns</li>
+          <li>add Evil theme for ADD, EDIT and DELETE buttons in the Editor</li>
+          <li>fix object UID restoration after Redo operation in the Editor</li>
+          <li>add support for double click within Sphinx, Daily Events and Rumors lists</li>
+          <li>show date description for daily events</li>
+          <li>allow to disable any building in castles and towns in the Editor</li>
+          <li>add Find Artifact victory condition in Editor</li>
+          <li>add popup messages for right clicking on special map conditions</li>
+          <li>restrict obelisk placement to 48 objects</li>
+          <li>update logic related to human player selection for maps</li>
+          <li>fix crash when entering an empty line in text boxes</li>
+          <li>fix town placement over action objects</li>
+          <li>allow normal victory for "Accumulate gold" condition</li>
+          <li>fix the display of identical artifacts captured in battle</li>
+          <li>Magic Book window: show the maximum number of spell points</li>
+          <li>add "Out of Time" and "Accumulate Gold" map conditions within the Editor</li>
+          <li>add support of editing daily events within the Editor</li>
+          <li>show pressed monster button on Editor panel while clicking on it</li>
+          <li>add hotkey for passability within the Editor</li>
+          <li>add color names to Traveller's Tent and Barrier objects within object selection window</li>
+          <li>reduce castle area for mouse right clicking inside Editor's castle selection window</li>
+          <li>update map type popup message by right clicking to include Resurrection maps</li>
+          <li>add a new variation of Cave object on the Adventure Map</li>
+          <li>change hero selection dialog in the Editor</li>
+          <li>add an ability in the Editor to edit Rumors for maps</li>
+          <li>bring the logic of the Summon Boat spell for the human player in line with its logic of operation in the case of AI</li>
+          <li>AI: fix the assertion failure when visiting an object that is impossible to stand on</li>
+          <li>fix castle and hero radar rendering in the Editor</li>
+          <li>fix Magic Garden being shown without animation within the Editor</li>
+          <li>speed up save file loading and saving operations</li>
+          <li>add '?' symbol to Virtual Keyboard</li>
+          <li>properly check the Price of Loyalty resources in order to enable the Editor</li>
+          <li>move an existing object in front while trying to place an exact one on the same tile in the Editor</li>
+          <li>generate a random hero portrait for the Editor</li>
+          <li>fix crash when a hero is killed defending a castle</li>
+          <li>differentiate Random Castle and Town names in the Editor</li>
+          <li>update the Swedish translation</li>
+          <li>fix invalid logic for setting random artifacts</li>
+          <li>put the Graveyard object to the correct category, "hide" the alternative versions of Graveyard sprites</li>
+          <li>remove the AI unit growth bonuses and tune the income bonuses for different difficulty levels</li>
+          <li>limit the minimum slider length to 15 pixels</li>
+          <li>update the Portuguese translation</li>
+          <li>fix hero editing assertion</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix random artifact types</li>
+          <li>implement the file manager for FH2M maps in Android</li>
+          <li>force use the non-typeable hotkeys for text input dialog and allow starting a new line in multiline texts</li>
+          <li>fix Editor instruments' buttons rendering</li>
+          <li>AI: properly handle the Spell Book artifacts on the Adventure Map</li>
+          <li>add missing checks for Miscellaneous objects in the Editor</li>
+          <li>add missing Sphinx part</li>
+          <li>fix text editing crash</li>
+          <li>fix crash when using quick switch to hero when castle is current object</li>
+          <li>fix the evaluation of the DOUBLE_SHOOTING and DOUBLE_MELEE_ATTACK abilities</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-05-22" version="v1.1.0">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.0</url>
       <description>

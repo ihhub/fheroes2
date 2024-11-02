@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,7 +39,6 @@
 #include "game.h"
 #include "game_video.h"
 #include "game_video_type.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "highscores.h"
 #include "kingdom.h"
@@ -374,9 +373,9 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( LOSS_TIME & cond ) {
         const uint32_t dayCount = conf.getCurrentMapInfo().LossCountDays() - 1;
-        const uint32_t month = dayCount / ( DAYOFWEEK * WEEKOFMONTH );
-        const uint32_t week = ( dayCount - month * ( DAYOFWEEK * WEEKOFMONTH ) ) / DAYOFWEEK;
-        const uint32_t day = dayCount % DAYOFWEEK;
+        const uint32_t month = dayCount / ( numOfDaysPerWeek * numOfWeeksPerMonth );
+        const uint32_t week = ( dayCount - month * ( numOfDaysPerWeek * numOfWeeksPerMonth ) ) / numOfDaysPerWeek;
+        const uint32_t day = dayCount % numOfDaysPerWeek;
 
         msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         StringReplace( msg, "%{day}", day + 1 );
@@ -604,12 +603,12 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     return res;
 }
 
-StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
+OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
 {
-    return msg << res.colors << res.result;
+    return stream << res.colors << res.result;
 }
 
-StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
+IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
-    return msg >> res.colors >> res.result;
+    return stream >> res.colors >> res.result;
 }

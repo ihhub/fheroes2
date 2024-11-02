@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MONSTER_H
-#define H2MONSTER_H
+#pragma once
 
 #include <cstdint>
 
@@ -139,8 +138,10 @@ public:
     {
         // Do nothing.
     }
-    explicit Monster( const Spell & );
-    Monster( int race, uint32_t dw );
+
+    explicit Monster( const Spell & sp );
+    Monster( const int race, const uint32_t dw );
+
     virtual ~Monster() = default;
 
     bool operator==( const Monster & m ) const
@@ -168,7 +169,6 @@ public:
 
     virtual uint32_t GetAttack() const;
     virtual uint32_t GetDefense() const;
-    virtual int GetColor() const;
     virtual int GetMorale() const;
     virtual int GetLuck() const;
     virtual int GetRace() const;
@@ -321,5 +321,3 @@ protected:
 
     int id;
 };
-
-#endif

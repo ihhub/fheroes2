@@ -31,14 +31,11 @@
 
 #include "math_base.h"
 
-#define CELLW 44
-#define CELLH 52
-
 namespace Battle
 {
     class Unit;
 
-    enum direction_t
+    enum CellDirection : int
     {
         UNKNOWN = 0x00,
         TOP_LEFT = 0x01,
@@ -56,6 +53,11 @@ namespace Battle
     class Cell final
     {
     public:
+        // Width of the rendered cell in pixels
+        static constexpr int widthPx{ 44 };
+        // Height of the rendered cell in pixels
+        static constexpr int heightPx{ 52 };
+
         explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
@@ -72,7 +74,7 @@ namespace Battle
         const Unit * GetUnit() const;
         Unit * GetUnit();
 
-        direction_t GetTriangleDirection( const fheroes2::Point & dst ) const;
+        CellDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
 
         bool isPositionIncludePoint( const fheroes2::Point & pt ) const;
 

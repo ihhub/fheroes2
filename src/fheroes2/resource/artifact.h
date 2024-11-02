@@ -20,9 +20,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2ARTIFACT_H
-#define H2ARTIFACT_H
 
+#pragma once
+
+#include <cstddef>
 #include <cstdint>
 #include <set>
 #include <string>
@@ -33,17 +34,23 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "ui_tool.h"
+
+class IStreamBase;
+class OStreamBase;
 
 class Heroes;
 class StatusBar;
-class StreamBase;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 class Artifact
 {
 public:
-    enum level_t
+    enum ArtLevel
     {
         ART_NONE = 0,
         ART_LEVEL_TREASURE = 0x01,
@@ -57,7 +64,7 @@ public:
 
     // All artifact IDs are by value 1 bigger than in the original game.
     // This is done to support new artifact addition and also align with the rest of object types.
-    enum type_t : int
+    enum : int
     {
         UNKNOWN = 0,
 
@@ -252,20 +259,17 @@ public:
         return fheroes2::getArtifactData( id ).getDescription( ext );
     }
 
-    static int Rand( level_t );
+    static int Rand( ArtLevel );
     static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Artifact & );
-    friend StreamBase & operator>>( StreamBase &, Artifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Artifact & art );
+    friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
     int id;
     int ext;
 };
-
-StreamBase & operator<<( StreamBase &, const Artifact & );
-StreamBase & operator>>( StreamBase &, Artifact & );
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
@@ -295,10 +299,13 @@ struct ArtifactSetData
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
+    // Maximum number of artifacts that can be placed in an artifact bag
+    static constexpr size_t maxCapacity{ 14 };
+
     BagArtifacts();
 
     bool ContainSpell( const int spellId ) const;
-    bool isPresentArtifact( const Artifact & ) const;
+    bool isPresentArtifact( const Artifact & art ) const;
 
     bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
     bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
@@ -318,7 +325,7 @@ public:
     Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
     Artifact getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const;
 
-    bool PushArtifact( const Artifact & );
+    bool PushArtifact( const Artifact & art );
 
     // Removes the first found instance of the specified artifact from the artifact bag
     void RemoveArtifact( const Artifact & art );
@@ -327,11 +334,11 @@ public:
     bool ContainUltimateArtifact() const;
 
     // Automatically exchange artifacts between two heroes. The taker should get the best possible artifacts.
-    void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
+    static void exchangeArtifacts( Heroes & taker, Heroes & giver );
 
     double getArtifactValue() const;
     uint32_t CountArtifacts() const;
-    uint32_t Count( const Artifact & ) const;
+    uint32_t Count( const Artifact & art ) const;
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
@@ -344,7 +351,7 @@ public:
     using Interface::ItemsActionBar<Artifact>::RedrawItem;
     using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
 
-    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
+    ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
@@ -367,7 +374,7 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool read_only;
@@ -380,5 +387,3 @@ private:
 
     void messageMagicBookAbortTrading() const;
 };
-
-#endif

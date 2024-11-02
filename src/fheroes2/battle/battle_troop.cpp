@@ -25,7 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <ostream>
+#include <sstream>
 
 #include "agg_image.h"
 #include "army.h"
@@ -155,14 +155,14 @@ uint32_t Battle::ModesAffected::FindZeroDuration() const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid )
-    : ArmyTroop( nullptr, t )
+Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid )
+    : ArmyTroop( nullptr, troop )
     , animation( id )
     , _uid( uid )
-    , hp( t.GetHitPoints() )
-    , _initialCount( t.GetCount() )
+    , hp( troop.GetHitPoints() )
+    , _initialCount( troop.GetCount() )
     , dead( 0 )
-    , shots( t.GetShots() )
+    , shots( troop.GetShots() )
     , disruptingray( 0 )
     , reflect( ref )
     , mirror( nullptr )
@@ -475,7 +475,7 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
     }
-    else if ( Modes( SP_SLOW ) ) {
+    if ( Modes( SP_SLOW ) ) {
         return Speed::GetSlowSpeedFromSpell( speed );
     }
 
@@ -539,7 +539,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         if ( !isHandFighting() && !isHandFighting( *this, enemy ) ) {
             // Hero's Archery skill may increase damage
             if ( GetCommander() ) {
-                dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
+                dmg += ( dmg * GetCommander()->GetSecondarySkillValue( Skill::Secondary::ARCHERY ) / 100 );
             }
 
             const Arena * arena = GetArena();
@@ -732,7 +732,7 @@ void Battle::Unit::PostKilledAction()
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
-        graveyard->AddTroop( *this );
+        graveyard->addUnit( this );
     }
 
     Cell * head = position.GetHead();
@@ -750,16 +750,17 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     hp += points;
 
-    if ( allow_overflow ) {
-        if ( _initialCount < GetCount() )
+    if ( allowToExceedInitialCount ) {
+        if ( _initialCount < GetCount() ) {
             _initialCount = GetCount();
+        }
     }
     else if ( GetCount() > _initialCount ) {
         resurrect -= GetCount() - _initialCount;
@@ -767,8 +768,9 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
         hp = ArmyTroop::GetHitPoints();
     }
 
-    if ( !skip_dead )
+    if ( !isTemporary ) {
         dead -= ( resurrect < dead ? resurrect : dead );
+    }
 
     return resurrect;
 }
@@ -899,7 +901,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() )
 
-    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
 
     if ( spell.isDamage() ) {
         SpellApplyDamage( spell, spoint, applyingHero, target );
@@ -1572,7 +1574,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             Graveyard * graveyard = Arena::GetGraveyard();
             assert( graveyard != nullptr );
 
-            graveyard->RemoveTroop( *this );
+            graveyard->removeUnit( this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
@@ -1585,7 +1587,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
             StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
-            Arena::GetInterface()->SetStatus( str, true );
+            Arena::GetInterface()->setStatus( str, true );
         }
         break;
     }

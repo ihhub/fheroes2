@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,19 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "trees.h"
+#pragma once
 
-#include <bitset>
-#include <vector>
+#include <cstdint>
 
-#include "tools.h"
+class Heroes;
+class Spell;
 
-namespace
+namespace AI
 {
-    const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
-}
+    void HeroesAction( Heroes & hero, const int32_t dst_index );
+    void HeroesMove( Heroes & hero );
 
-bool ObjTree::isShadow( const uint8_t index )
-{
-    return objTreeShadowBitset[index];
+    // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+
+    // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
+    // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
+
+    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 }

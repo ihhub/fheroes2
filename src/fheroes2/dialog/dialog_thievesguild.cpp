@@ -35,7 +35,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
@@ -59,180 +59,183 @@
 #include "ui_window.h"
 #include "world.h"
 
-struct ValueColors : std::pair<int, int>
+namespace
 {
-    ValueColors( int value, int color )
-        : std::pair<int, int>( value, color )
-    {}
-
-    static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
+    struct ValueColors : std::pair<int, int>
     {
-        return v1.first > v2.first;
-    }
-};
+        ValueColors( int value, int color )
+            : std::pair<int, int>( value, color )
+        {}
 
-void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
-{
-    const auto it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.first == value; } );
+        static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
+        {
+            return v1.first > v2.first;
+        }
+    };
 
-    if ( it == v.end() ) {
-        v.emplace_back( value, color );
-    }
-    else {
-        ( *it ).second |= color;
-    }
-}
+    void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
+    {
+        const auto it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.first == value; } );
 
-void getInfo( std::vector<ValueColors> & v, const Colors & colors, const std::function<int( const int )> & getValue )
-{
-    // 'getValue' should contain a callable function.
-    assert( getValue );
-
-    v.clear();
-
-    for ( const int color : colors ) {
-        UpdateValuesColors( v, getValue( color ), color );
+        if ( it == v.end() ) {
+            v.emplace_back( value, color );
+        }
+        else {
+            ( *it ).second |= color;
+        }
     }
 
-    std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
-}
+    void getInfo( std::vector<ValueColors> & v, const Colors & colors, const std::function<int( const int )> & getValue )
+    {
+        // 'getValue' should contain a callable function.
+        assert( getValue );
 
-int getWoodOreValue( const int color )
-{
-    const Funds & funds = world.GetKingdom( color ).GetFunds();
-    return funds.Get( Resource::WOOD ) + funds.Get( Resource::ORE );
-}
-
-int getGemsCrSlfMerValue( const int color )
-{
-    const Funds & funds = world.GetKingdom( color ).GetFunds();
-    return funds.Get( Resource::GEMS ) + funds.Get( Resource::CRYSTAL ) + funds.Get( Resource::SULFUR ) + funds.Get( Resource::MERCURY );
-}
-
-void drawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, const int32_t step, const size_t count, fheroes2::Image & output )
-{
-    const size_t flagGroups = std::min( count, v.size() );
-
-    if ( flagGroups == 0 ) {
-        return;
-    }
-
-    const int32_t sptireWidth = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 ).width();
-    const int32_t offsetY = pos.y - 4;
-
-    for ( size_t i = 0; i < flagGroups; ++i ) {
-        const Colors colors( v[i].second );
-
-        int32_t offsetX = pos.x + static_cast<int32_t>( i ) * step - ( static_cast<int32_t>( colors.size() ) * sptireWidth ) / 2 + 3;
+        v.clear();
 
         for ( const int color : colors ) {
-            const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( color ) );
-            fheroes2::Blit( flag, output, offsetX, offsetY );
-            offsetX += sptireWidth;
+            UpdateValuesColors( v, getValue( color ), color );
+        }
+
+        std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
+    }
+
+    int getWoodOreValue( const int color )
+    {
+        const Funds & funds = world.GetKingdom( color ).GetFunds();
+        return funds.Get( Resource::WOOD ) + funds.Get( Resource::ORE );
+    }
+
+    int getGemsCrSlfMerValue( const int color )
+    {
+        const Funds & funds = world.GetKingdom( color ).GetFunds();
+        return funds.Get( Resource::GEMS ) + funds.Get( Resource::CRYSTAL ) + funds.Get( Resource::SULFUR ) + funds.Get( Resource::MERCURY );
+    }
+
+    void drawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, const int32_t step, const size_t count, fheroes2::Image & output )
+    {
+        const size_t flagGroups = std::min( count, v.size() );
+
+        if ( flagGroups == 0 ) {
+            return;
+        }
+
+        const int32_t sptireWidth = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 ).width();
+        const int32_t offsetY = pos.y - 4;
+
+        for ( size_t i = 0; i < flagGroups; ++i ) {
+            const Colors colors( v[i].second );
+
+            int32_t offsetX = pos.x + static_cast<int32_t>( i ) * step - ( static_cast<int32_t>( colors.size() ) * sptireWidth ) / 2 + 3;
+
+            for ( const int color : colors ) {
+                const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( color ) );
+                fheroes2::Blit( flag, output, offsetX, offsetY );
+                offsetX += sptireWidth;
+            }
         }
     }
-}
 
-void drawHeroStats( const Heroes * hero, const int32_t offsetX, int32_t offsetY, fheroes2::Image & output )
-{
-    fheroes2::Text text( _( "Att." ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX, offsetY, output );
-    text.set( std::to_string( hero->GetAttack() ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX + 50 - text.width(), offsetY, output );
+    void drawHeroStats( const Heroes * hero, const int32_t offsetX, int32_t offsetY, fheroes2::Image & output )
+    {
+        fheroes2::Text text( _( "Att." ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX, offsetY, output );
+        text.set( std::to_string( hero->GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX + 50 - text.width(), offsetY, output );
 
-    offsetY += 11;
-    text.set( _( "Def." ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX, offsetY, output );
-    text.set( std::to_string( hero->GetDefense() ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX + 50 - text.width(), offsetY, output );
+        offsetY += 11;
+        text.set( _( "Def." ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX, offsetY, output );
+        text.set( std::to_string( hero->GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX + 50 - text.width(), offsetY, output );
 
-    offsetY += 11;
-    text.set( _( "Power" ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX, offsetY, output );
-    text.set( std::to_string( hero->GetPower() ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX + 50 - text.width(), offsetY, output );
+        offsetY += 11;
+        text.set( _( "Power" ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX, offsetY, output );
+        text.set( std::to_string( hero->GetPower() ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX + 50 - text.width(), offsetY, output );
 
-    offsetY += 11;
-    text.set( _( "Knowl" ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX, offsetY, output );
-    text.set( std::to_string( hero->GetKnowledge() ), fheroes2::FontType::smallWhite() );
-    text.draw( offsetX + 50 - text.width(), offsetY, output );
-}
+        offsetY += 11;
+        text.set( _( "Knowl" ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX, offsetY, output );
+        text.set( std::to_string( hero->GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.draw( offsetX + 50 - text.width(), offsetY, output );
+    }
 
-void drawHeroIcons( const Colors & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID, fheroes2::Image & output )
-{
-    int32_t offsetX = pos.x + 1;
+    void drawHeroIcons( const Colors & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID, fheroes2::Image & output )
+    {
+        int32_t offsetX = pos.x + 1;
 
-    for ( const int color : colors ) {
-        const Heroes * hero = world.GetKingdom( color ).GetBestHero();
-        if ( hero == nullptr ) {
+        for ( const int color : colors ) {
+            const Heroes * hero = world.GetKingdom( color ).GetBestHero();
+            if ( hero == nullptr ) {
+                offsetX += step;
+                continue;
+            }
+
+            const fheroes2::Sprite & window = fheroes2::AGG::GetICN( frameIcnID, 22 );
+            fheroes2::Blit( window, output, offsetX - window.width() / 2, pos.y - 4 );
+
+            const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
+            fheroes2::Copy( icon, 0, 0, output, offsetX - icon.width() / 2, pos.y, icon.width(), icon.height() );
+
+            if ( drawStats ) {
+                drawHeroStats( hero, offsetX - 26, pos.y + 34, output );
+            }
+
             offsetX += step;
-            continue;
+        }
+    }
+
+    void drawPersonality( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    {
+        int32_t offsetX = pos.x;
+
+        for ( const int color : colors ) {
+            const Player * player = Players::Get( color );
+            const fheroes2::Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), fheroes2::FontType::smallWhite() );
+            text.draw( offsetX - text.width() / 2, pos.y, output );
+
+            offsetX += step;
+        }
+    }
+
+    void drawBestMonsterIcons( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    {
+        int32_t offsetX = pos.x;
+
+        for ( const int color : colors ) {
+            const Monster monster = world.GetKingdom( color ).GetStrongestMonster();
+            if ( monster.isValid() ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
+                fheroes2::Blit( sprite, output, offsetX - sprite.width() / 2, pos.y - sprite.height() / 2 );
+            }
+
+            offsetX += step;
+        }
+    }
+
+    const char * getPlayerOrderString( const size_t player )
+    {
+        switch ( player ) {
+        case 0:
+            return _( "1st" );
+        case 1:
+            return _( "2nd" );
+        case 2:
+            return _( "3rd" );
+        case 3:
+            return _( "4th" );
+        case 4:
+            return _( "5th" );
+        case 5:
+            return _( "6th" );
+        default:
+            // The engine supports up to 6 players. Check your logic!
+            assert( 0 );
         }
 
-        const fheroes2::Sprite & window = fheroes2::AGG::GetICN( frameIcnID, 22 );
-        fheroes2::Blit( window, output, offsetX - window.width() / 2, pos.y - 4 );
-
-        const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
-        fheroes2::Copy( icon, 0, 0, output, offsetX - icon.width() / 2, pos.y, icon.width(), icon.height() );
-
-        if ( drawStats ) {
-            drawHeroStats( hero, offsetX - 26, pos.y + 34, output );
-        }
-
-        offsetX += step;
+        return {};
     }
-}
-
-void drawPersonality( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
-{
-    int32_t offsetX = pos.x;
-
-    for ( const int color : colors ) {
-        const Player * player = Players::Get( color );
-        const fheroes2::Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), fheroes2::FontType::smallWhite() );
-        text.draw( offsetX - text.width() / 2, pos.y, output );
-
-        offsetX += step;
-    }
-}
-
-void drawBestMonsterIcons( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
-{
-    int32_t offsetX = pos.x;
-
-    for ( const int color : colors ) {
-        const Monster monster = world.GetKingdom( color ).GetStrongestMonster();
-        if ( monster.isValid() ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
-            fheroes2::Blit( sprite, output, offsetX - sprite.width() / 2, pos.y - sprite.height() / 2 );
-        }
-
-        offsetX += step;
-    }
-}
-
-const char * getPlayerOrderString( const size_t player )
-{
-    switch ( player ) {
-    case 0:
-        return _( "1st" );
-    case 1:
-        return _( "2nd" );
-    case 2:
-        return _( "3rd" );
-    case 3:
-        return _( "4th" );
-    case 4:
-        return _( "5th" );
-    case 5:
-        return _( "6th" );
-    default:
-        // The engine supports up to 6 players. Check your logic!
-        assert( 0 );
-    }
-
-    return {};
 }
 
 void Dialog::ThievesGuild( const bool oracle )

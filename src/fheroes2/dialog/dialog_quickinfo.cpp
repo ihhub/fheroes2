@@ -37,7 +37,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -70,7 +70,7 @@
 
 namespace
 {
-    void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
+    void outputInTextSupportMode( const Maps::Tile & tile, const std::string & info )
     {
         START_TEXT_SUPPORT_MODE
 
@@ -144,7 +144,7 @@ namespace
         return res;
     }
 
-    std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
+    std::string showMineInfo( const Maps::Tile & tile, const bool isOwned )
     {
         const int32_t resourceType = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
         std::string objectInfo = Maps::GetMineName( resourceType );
@@ -157,9 +157,9 @@ namespace
         return objectInfo;
     }
 
-    std::string showGuardiansInfo( const Maps::Tiles & tile, const bool isOwned )
+    std::string showGuardiansInfo( const Maps::Tile & tile, const bool isOwned )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         std::string str;
 
@@ -194,7 +194,7 @@ namespace
         return str;
     }
 
-    std::string showMonsterInfo( const Maps::Tiles & tile, const bool isVisibleFromCrystalBall )
+    std::string showMonsterInfo( const Maps::Tile & tile, const bool isVisibleFromCrystalBall )
     {
         const Troop & troop = getTroopFromTile( tile );
 
@@ -215,9 +215,9 @@ namespace
         return Army::TroopSizeString( troop );
     }
 
-    std::string showDwellingInfo( const Maps::Tiles & tile, const bool isOwned )
+    std::string showDwellingInfo( const Maps::Tile & tile, const bool isOwned )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
 
         if ( isOwned ) {
             str += "\n\n";
@@ -236,9 +236,9 @@ namespace
         return str;
     }
 
-    std::string showShrineInfo( const Maps::Tiles & tile, const bool isVisited )
+    std::string showShrineInfo( const Maps::Tile & tile, const bool isVisited )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         std::string str = MP2::StringObject( objectType );
 
@@ -261,9 +261,9 @@ namespace
         return str;
     }
 
-    std::string showTreeOfKnowledgeInfo( const Maps::Tiles & tile, const bool isVisited )
+    std::string showTreeOfKnowledgeInfo( const Maps::Tile & tile, const bool isVisited )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         std::string str = MP2::StringObject( objectType );
         const Heroes * hero = Interface::GetFocusHeroes();
 
@@ -290,7 +290,8 @@ namespace
         else {
             if ( hero ) {
                 str.append( "\n\n(" );
-                str.append( _( "not claimed" ) );
+                // In case another player visited this tree with this hero.
+                str.append( hero->isVisited( tile ) ? _( "already claimed" ) : _( "not claimed" ) );
                 str += ')';
             }
         }
@@ -298,9 +299,9 @@ namespace
         return str;
     }
 
-    std::string showWitchHutInfo( const Maps::Tiles & tile, const bool isVisited )
+    std::string showWitchHutInfo( const Maps::Tile & tile, const bool isVisited )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
 
         if ( isVisited ) {
             const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
@@ -332,9 +333,9 @@ namespace
         return str;
     }
 
-    std::string showLocalVisitTileInfo( const Maps::Tiles & tile )
+    std::string showLocalVisitTileInfo( const Maps::Tile & tile )
     {
-        std::string str = MP2::StringObject( tile.GetObject( false ) );
+        std::string str = MP2::StringObject( tile.getMainObjectType( false ) );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
             str.append( "\n\n" );
@@ -366,7 +367,7 @@ namespace
         return str;
     }
 
-    std::string showBarrierInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    std::string showBarrierInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Barrier" );
         const int32_t barrierColor = getColorFromTile( tile );
@@ -380,7 +381,7 @@ namespace
         return str;
     }
 
-    std::string showTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
+    std::string showTentInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
         const int32_t tentColor = getColorFromTile( tile );
@@ -394,9 +395,9 @@ namespace
         return str;
     }
 
-    std::string showGroundInfo( const Maps::Tiles & tile )
+    std::string showGroundInfo( const Maps::Tile & tile )
     {
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         const bool isRoad = tile.isRoad();
 
         std::string str;
@@ -444,10 +445,10 @@ namespace
                                                   { imageBox.width(), imageBox.height() } );
     }
 
-    std::string getQuickInfoText( const Maps::Tiles & tile )
+    std::string getQuickInfoText( const Maps::Tile & tile )
     {
         const int32_t playerColor = Settings::Get().CurrentColor();
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
@@ -570,9 +571,9 @@ namespace
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
-        // These objects does not have extra text for quick info.
-        case MP2::OBJ_CAMPFIRE:
+        // These objects do not have extra text for quick info.
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_CAMPFIRE:
         default:
             return MP2::StringObject( objectType );
         }
@@ -881,7 +882,7 @@ namespace
     }
 }
 
-void Dialog::QuickInfo( const Maps::Tiles & tile )
+void Dialog::QuickInfo( const Maps::Tile & tile )
 {
     std::string infoString;
 
@@ -891,10 +892,10 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         infoString = _( "Uncharted Territory" );
     }
     else {
-        const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+        const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
         if ( mainTileIndex != -1 ) {
-            infoString = getQuickInfoText( world.GetTiles( mainTileIndex ) );
+            infoString = getQuickInfoText( world.getTile( mainTileIndex ) );
         }
         else {
             infoString = getQuickInfoText( tile );

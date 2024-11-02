@@ -30,6 +30,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -39,6 +40,7 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -120,9 +122,27 @@ namespace
             // Do nothing.
         }
 
-        void ActionListPressRight( fheroes2::ResolutionInfo & /*unused*/ ) override
+        void ActionListPressRight( fheroes2::ResolutionInfo & resolution ) override
         {
-            // Do nothing.
+            const auto [leftText, rightText] = getResolutionStrings( resolution );
+
+            if ( resolution.gameHeight == resolution.screenHeight && resolution.gameWidth == resolution.screenWidth ) {
+                fheroes2::showStandardTextMessage( leftText + middleText + rightText, _( "Select this game resolution." ), Dialog::ZERO );
+            }
+            else {
+                const int32_t integer = resolution.screenWidth / resolution.gameWidth;
+                const int32_t fraction = resolution.screenWidth * 10 / resolution.gameWidth - 10 * integer;
+
+                std::string scaledResolutionText = _(
+                    "Selecting this resolution will set a resolution that is scaled from the original resolution (%{resolution}) by multiplying it with the number "
+                    "in the brackets (%{scale}).\n\nA resolution with a clean integer number (2.0x, 3.0x etc.) will usually look better because the pixels are upscaled "
+                    "evenly in both horizontal and vertical directions." );
+
+                StringReplace( scaledResolutionText, "%{resolution}", std::to_string( resolution.gameWidth ) + middleText + std::to_string( resolution.gameHeight ) );
+                StringReplace( scaledResolutionText, "%{scale}", std::to_string( integer ) + "." + std::to_string( fraction ) );
+
+                fheroes2::showStandardTextMessage( leftText + middleText + rightText, scaledResolutionText, Dialog::ZERO );
+            }
         }
 
         void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
@@ -261,10 +281,6 @@ namespace
             le.isMouseLeftButtonPressedInArea( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            if ( le.isMouseRightButtonPressedInArea( listRoi ) ) {
-                continue;
-            }
-
             const int listId = listBox.getCurrentId();
             listBox.QueueEventProcessing();
             const bool needRedraw = listId != listBox.getCurrentId();
@@ -280,14 +296,10 @@ namespace
                 break;
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the selected resolution." ), Dialog::ZERO );
             }
 
             if ( !listBox.IsNeedRedraw() ) {

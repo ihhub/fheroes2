@@ -936,7 +936,12 @@ namespace ICN
         UNIFORM_GOOD_EXIT_BUTTON,
         UNIFORM_EVIL_EXIT_BUTTON,
 
+        GOLDEN_GRADIENT_FONT,
+        SILVER_GRADIENT_FONT,
+
         WHITE_LARGE_FONT,
+        GOLDEN_GRADIENT_LARGE_FONT,
+        SILVER_GRADIENT_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
 
@@ -1118,20 +1123,24 @@ namespace ICN
         BUTTON_RUMORS_EVIL,
         BUTTON_EVENTS_GOOD,
         BUTTON_EVENTS_EVIL,
+        BUTTON_LANGUAGE_GOOD,
+        BUTTON_LANGUAGE_EVIL,
+
+        SCENIBKG_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
-    const char * GetString( int );
-    uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
-    int PORTxxxx( int heroId );
+    const char * getIcnFileName( const int icnId );
+    uint32_t getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, const uint32_t currentFrameNumber, const bool quantity = false );
+    int getHeroPortraitIcnId( const int heroId );
 
-    int Get4Captain( int race );
-    int Get4Building( int race );
-    int Get4Castle( int race );
+    int getCaptainIcnId( const int race );
+    int getBuildingIcnId( const int race );
+    int getCastleIcnId( const int race );
 
-    int GetFlagIcnId( int color );
+    int getFlagIcnId( const int color );
 }
 
 #endif

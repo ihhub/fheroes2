@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -38,13 +38,12 @@
 #include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, const TowerType type, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, uid )
+    : Unit( Troop( Monster::ARCHER, std::min( castle.CountBuildings(), 20U ) ), {}, false, uid )
     , _towerType( type )
     , _attackBonus( castle.GetLevelMageGuild() )
     , _isValid( true )
 {
-    count = std::min( count, 20U );
-    count = std::max( _towerType == TowerType::TWR_CENTER ? count : count / 2, 1U );
+    SetCount( std::max( _towerType == TowerType::TWR_CENTER ? GetCount() : GetCount() / 2, 1U ) );
 
     // Virtual archers shooting from this tower should receive bonuses
     // to their attack skill from the commanding hero (if present)
@@ -107,7 +106,7 @@ fheroes2::Point Battle::Tower::GetPortPosition() const
     return {};
 }
 
-void Battle::Tower::SetDestroy()
+void Battle::Tower::SetDestroyed()
 {
     switch ( _towerType ) {
     case TowerType::TWR_LEFT:

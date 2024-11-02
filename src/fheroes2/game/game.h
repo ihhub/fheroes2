@@ -37,7 +37,6 @@ namespace Game
 {
     void Init();
 
-    // type_t
     enum
     {
         TYPE_MENU = 0,
@@ -82,6 +81,7 @@ namespace Game
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
+    // Starts playback of ambient sounds produced by surrounding objects located in an area close to the current game focus.
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
 

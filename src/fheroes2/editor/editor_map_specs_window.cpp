@@ -28,6 +28,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,6 +39,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
@@ -54,6 +56,7 @@
 #include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
@@ -62,9 +65,15 @@
 #include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace
 {
@@ -82,9 +91,9 @@ namespace
 
     const uint32_t ultimateArtifactId = static_cast<uint32_t>( Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT );
 
-    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE, Maps::FileInfo::VICTORY_CAPTURE_TOWN,
-                                                           Maps::FileInfo::VICTORY_KILL_HERO, Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
-                                                           Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
+    const std::vector<uint8_t> supportedVictoryConditions{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE,   Maps::FileInfo::VICTORY_CAPTURE_TOWN,
+                                                           Maps::FileInfo::VICTORY_KILL_HERO,         Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT,
+                                                           Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE, Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD };
     const std::vector<uint8_t> supportedLossConditions{ Maps::FileInfo::LOSS_EVERYTHING, Maps::FileInfo::LOSS_TOWN, Maps::FileInfo::LOSS_HERO,
                                                         Maps::FileInfo::LOSS_OUT_OF_TIME };
 
@@ -115,13 +124,13 @@ namespace
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
 
-        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
-        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
-        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
+        fheroes2::Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        fheroes2::Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        fheroes2::Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         if ( heroPortait > 0 ) {
             const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::MINIPORT, heroPortait - 1 );
-            Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
+            fheroes2::Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
         }
         else {
             // This is a hero with a random race dependent portrait. Render the default race portrait.
@@ -172,14 +181,14 @@ namespace
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
 
-        Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
-        Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
-        Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
+        fheroes2::Blit( castleLeftFlag, 0, 0, castleIcon, 0, 5, castleLeftFlag.width(), castleLeftFlag.height() );
+        fheroes2::Blit( castleFrame, 0, 0, castleIcon, castleLeftFlag.width() + 2, 0, castleFrame.width(), castleFrame.height() );
+        fheroes2::Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         const uint32_t icnIndex = fheroes2::getCastleIcnIndex( race, !isTown );
 
         const fheroes2::Sprite & castleImage = fheroes2::AGG::GetICN( townIcnId, icnIndex );
-        Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
+        fheroes2::Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
 
         return castleIcon;
     }
@@ -254,7 +263,7 @@ namespace
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
             const auto & heroInfo = _heroInfos[index];
-            const auto & heroMetadata = heroInfo.heroMetadata;
+            const auto * heroMetadata = heroInfo.heroMetadata;
 
             renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
                         getHeroTitle( heroMetadata->customName, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2, current );
@@ -298,7 +307,7 @@ namespace
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
             const auto & townInfo = _townInfos[index];
-            const auto & castleMetadata = townInfo.castleMetadata;
+            const auto * castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
@@ -312,7 +321,7 @@ namespace
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
             const auto & townInfo = _townInfos[index];
-            const auto & castleMetadata = townInfo.castleMetadata;
+            const auto * castleMetadata = townInfo.castleMetadata;
 
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
@@ -442,7 +451,7 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
     }
 
     uint32_t getVictoryIcnIndex( const uint8_t victoryConditionType )
@@ -486,7 +495,29 @@ namespace
             break;
         }
 
-        return nullptr;
+        return "Unknown";
+    }
+
+    // Returns the order text of the alliance: 0 will be "1st" and so on.
+    const char * getAllianceOrderText( const size_t index )
+    {
+        switch ( index ) {
+        case 0:
+            return _( "alliance|1st" );
+        case 1:
+            return _( "alliance|2nd" );
+        case 2:
+            return _( "alliance|3rd" );
+        case 3:
+            return _( "alliance|4th" );
+        case 4:
+            return _( "alliance|5th" );
+        default:
+            // The engine supports up to 6 players so there can be a maximum of 5 alliances: one with 2 players and four with 1 player.
+            assert( 0 );
+        }
+
+        return "Unknown";
     }
 
     uint32_t getLossIcnIndex( const uint8_t lossConditionType )
@@ -534,6 +565,7 @@ namespace
 
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
+        ~DropBoxList() override = default;
 
         explicit DropBoxList( const fheroes2::Point & pt, const int32_t itemsCount, const bool isLossList, const int dropBoxIcn )
             : Interface::ListBox<uint8_t>( pt )
@@ -582,13 +614,6 @@ namespace
             _background = std::make_unique<fheroes2::ImageRestorer>( display, pt.x + 2, pt.y + 2, listWidth - 3, listHeight - 4 );
 
             SetAreaItems( { pt.x + 2, pt.y + 5, listWidth - 4, listHeight - 6 } );
-        }
-
-        ~DropBoxList() override
-        {
-            // After closing the drop list we also need to render the restored background.
-            _restorer->restore();
-            fheroes2::Display::instance().render( _restorer->rect() );
         }
 
         void RedrawItem( const uint8_t & condition, int32_t dstX, int32_t dstY, bool current ) override
@@ -664,6 +689,7 @@ namespace
     public:
         VictoryConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.victoryConditionType )
+            , _availableColors( mapFormat.availablePlayerColors )
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
             , _isEvilInterface( isEvilInterface )
@@ -740,6 +766,18 @@ namespace
                 }
 
                 break;
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
+                // As of now only 2 alliances are supported.
+                // TODO: Update this logic for more than 2 alliances.
+
+                // Use the alliances saved in the mapFormat only if they are correct.
+                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0
+                     && mapFormat.availablePlayerColors == ( mapFormat.alliances[0] | mapFormat.alliances[1] ) && mapFormat.alliances[0] != 0
+                     && mapFormat.alliances[1] != 0 ) {
+                    _alliances = mapFormat.alliances;
+                }
+
+                break;
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( mapFormat.victoryConditionMetadata.size() == 1 ) {
                     _goldAccumulationValue.setValue( static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] ) );
@@ -752,6 +790,15 @@ namespace
                 assert( 0 );
 
                 break;
+            }
+
+            if ( _alliances.size() != 2 ) {
+                // Fill in the default alliances: the first human player against all others.
+                _alliances.clear();
+
+                const uint8_t firstColor = static_cast<uint8_t>( Color::GetFirst( mapFormat.humanPlayerColors ) );
+                _alliances.push_back( firstColor );
+                _alliances.push_back( mapFormat.availablePlayerColors ^ firstColor );
             }
         }
 
@@ -874,6 +921,13 @@ namespace
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
 
                 return;
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
+                mapFormat.alliances = _alliances;
+
+                mapFormat.allowNormalVictory = false;
+                mapFormat.isVictoryConditionApplicableForAI = false;
+
+                return;
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
                 if ( mapFormat.victoryConditionMetadata.size() != 1 ) {
                     mapFormat.victoryConditionMetadata.resize( 1 );
@@ -929,7 +983,7 @@ namespace
                 }
 
                 const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = townInfo.castleMetadata;
+                const auto * castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
@@ -1010,11 +1064,11 @@ namespace
                 Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
                       castleRightFlag.height() );
 
-                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
 
                     fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
                 }
@@ -1056,6 +1110,42 @@ namespace
                 else {
                     _allowNormalVictory.hide();
                 }
+
+                break;
+            }
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE: {
+                if ( renderEverything ) {
+                    const fheroes2::Rect roi{ _restorer.rect() };
+
+                    int32_t offsetY = roi.y + 2;
+
+                    fheroes2::Text text( _( "Set alliances:" ), fheroes2::FontType::normalWhite() );
+                    text.draw( roi.x + ( roi.width - text.width() ) / 2, offsetY, output );
+
+                    _alliancesCheckboxes.clear();
+
+                    offsetY += text.height();
+                    const int32_t stepY = 32;
+                    const int32_t checkboxesOffsetX = roi.x + ( roi.width - Color::Count( _availableColors ) * 32 + 12 ) / 2;
+
+                    for ( size_t i = 0; i < _alliances.size(); ++i ) {
+                        std::string allianceText = _( "{%number} alliance: " );
+                        StringReplace( allianceText, "{%number}", getAllianceOrderText( i ) );
+                        text.set( std::move( allianceText ), fheroes2::FontType::normalWhite() );
+
+                        const int32_t textWidth = text.width() + 5;
+                        const int32_t posX = checkboxesOffsetX - textWidth / 2;
+                        text.draw( posX, offsetY + 4, output );
+
+                        std::vector<std::unique_ptr<Editor::Checkbox>> allianceCheckboxes;
+                        createColorCheckboxes( allianceCheckboxes, _availableColors, _alliances[i], posX + textWidth, offsetY, output );
+                        _alliancesCheckboxes.push_back( std::move( allianceCheckboxes ) );
+
+                        offsetY += stepY;
+                    }
+                }
+
+                // The mark rendering of the  checkboxes is handled in processEvents().
 
                 break;
             }
@@ -1147,9 +1237,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int townIndex = listbox.GetCurrent();
 
                         if ( townIndex != initiallySelectedTownIndex ) {
@@ -1209,9 +1297,7 @@ namespace
                         }
                     }
 
-                    const int32_t result = listbox.selectItemsEventProcessing();
-
-                    if ( result == Dialog::OK ) {
+                    if ( listbox.selectItemsEventProcessing() == Dialog::OK ) {
                         const int heroIndex = listbox.GetCurrent();
 
                         if ( heroIndex != initiallySelectedHeroIndex ) {
@@ -1258,6 +1344,54 @@ namespace
 
                 break;
             }
+            case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE: {
+                LocalEvent & le = LocalEvent::Get();
+
+                for ( size_t allianceNumber = 0; allianceNumber < _alliancesCheckboxes.size(); ++allianceNumber ) {
+                    for ( size_t playerNumber = 0; playerNumber < _alliancesCheckboxes[allianceNumber].size(); ++playerNumber ) {
+                        const fheroes2::Rect & checkboxRect = _alliancesCheckboxes[allianceNumber][playerNumber]->getRect();
+
+                        // Allow to select player only if it is not already selected.
+                        if ( le.MouseClickLeft( checkboxRect ) ) {
+                            const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+
+                            // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
+                            if ( ( ( _alliances[allianceNumber] & color ) == 0 )
+                                 && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
+                                for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
+                                    if ( _alliancesCheckboxes[i][playerNumber]->toggle() ) {
+                                        _alliances[i] |= color;
+                                    }
+                                    else {
+                                        _alliances[i] ^= color;
+                                    }
+                                }
+
+                                return true;
+                            }
+
+                            return false;
+                        }
+
+                        if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
+                            std::string header = _( "Put %{color} player in the %{alliance} alliance" );
+                            std::string messageText = _( "If this checkbox is checked, the %{color} player will be in the %{alliance} alliance." );
+
+                            const std::string colorString = Color::String( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+                            StringReplace( header, "%{color}", colorString );
+                            StringReplace( header, "%{alliance}", getAllianceOrderText( allianceNumber ) );
+                            StringReplace( messageText, "%{color}", colorString );
+                            StringReplace( messageText, "%{alliance}", getAllianceOrderText( allianceNumber ) );
+
+                            fheroes2::showStandardTextMessage( std::move( header ), std::move( messageText ), Dialog::ZERO );
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+            }
             case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD: {
                 if ( _goldAccumulationValue.processEvents() ) {
                     return true;
@@ -1291,6 +1425,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
+        const uint8_t _availableColors{ Color::NONE };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
@@ -1299,6 +1434,8 @@ namespace
         // Town or hero loss metadata include tile ID and color.
         std::array<uint32_t, 2> _heroToKill{ 0 };
         std::array<uint32_t, 2> _townToCapture{ 0 };
+        std::vector<uint8_t> _alliances;
+        std::vector<std::vector<std::unique_ptr<Editor::Checkbox>>> _alliancesCheckboxes;
         std::vector<TownInfo> _mapTownInfos;
         std::vector<HeroInfo> _mapHeroInfos;
 
@@ -1543,7 +1680,7 @@ namespace
                 }
 
                 const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto & castleMetadata = townInfo.castleMetadata;
+                const auto * castleMetadata = townInfo.castleMetadata;
                 const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
 
                 const bool isTown
@@ -1599,11 +1736,11 @@ namespace
                 Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
                       castleRightFlag.height() );
 
-                const auto & heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
+                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
                 const int32_t heroPortraitId = heroMetadata->customPortrait;
 
                 if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::PORTxxxx( heroPortraitId ), 0 );
+                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
 
                     fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
                 }
@@ -1810,6 +1947,13 @@ namespace
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ),
                                   conditions.end() );
             }
+
+            // Alliances can be formed for a minimum of three players: two on the one side and one on the other.
+            if ( Color::Count( mapFormat.availablePlayerColors ) < 3 ) {
+                conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
+                                                  []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE; } ),
+                                  conditions.end() );
+            }
         }
 
         DropBoxList conditionList( offset, static_cast<int32_t>( conditions.size() ), isLossList, dropBoxIcn );
@@ -1961,7 +2105,7 @@ namespace Editor
         fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
@@ -2036,7 +2180,7 @@ namespace Editor
         background.applyTextBackgroundShading( { descriptionTextRoi.x - 6, descriptionTextRoi.y - 6, descriptionTextRoi.width + 12, descriptionTextRoi.height + 12 } );
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
 
-        text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+        text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
         // Victory conditions.
@@ -2118,6 +2262,38 @@ namespace Editor
         background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumorsRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
         const fheroes2::Rect buttonEventsRoi( buttonEvents.area() );
 
+        fheroes2::Button buttonLanguage;
+        const int buttonLanguageIcn = isEvilInterface ? ICN::BUTTON_LANGUAGE_EVIL : ICN::BUTTON_LANGUAGE_GOOD;
+        background.renderButton( buttonLanguage, buttonLanguageIcn, 0, 1, { 20 + buttonRumorsRoi.width + buttonEventsRoi.width + 2 * 10, 6 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        const fheroes2::Rect buttonLanguageRoi( buttonLanguage.area() );
+
+        auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
+            text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+            fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+            text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
+        };
+
+        auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
+            text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+
+            // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
+            if ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
+                    Dialog::OK );
+
+                // As a temporary solution we cut the end of the text to fit 5 rows.
+                while ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                    mapFormat.description.pop_back();
+                    text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+                }
+            }
+
+            descriptionBackground.restore();
+            text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+        };
+
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
@@ -2127,6 +2303,7 @@ namespace Editor
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
             buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
             buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEventsRoi ) );
+            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguageRoi ) );
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
 
@@ -2148,7 +2325,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
                 auto temp = mapFormat.rumors;
-                if ( openRumorWindow( temp ) ) {
+                if ( openRumorWindow( temp, mapFormat.mainLanguage ) ) {
                     mapFormat.rumors = std::move( temp );
                 }
 
@@ -2156,22 +2333,41 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
                 auto temp = mapFormat.dailyEvents;
-                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors ) ) {
+                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors, mapFormat.mainLanguage ) ) {
                     mapFormat.dailyEvents = std::move( temp );
                 }
 
                 display.render( background.totalArea() );
             }
+            else if ( le.MouseClickLeft( buttonLanguageRoi ) ) {
+                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+                const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
+                if ( language != mapFormat.mainLanguage ) {
+                    std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
+                                                              "Some texts might not be displayed properly after this. Do you want to proceed?" );
+                    StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
+                    StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
+
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                        mapFormat.mainLanguage = language;
+
+                        renderMapName();
+                        renderMapDescription();
+
+                        display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
+                    }
+                }
+            }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
 
                 std::string editableMapName = mapFormat.name;
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false, true ) ) {
-                    mapFormat.name = std::move( editableMapName );
-                    text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
-                    fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
-                    text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, mapFormat.mainLanguage ) ) {
+                    mapFormat.name = std::move( editableMapName );
+
+                    renderMapName();
                     display.render( scenarioBoxRoi );
                 }
             }
@@ -2179,27 +2375,13 @@ namespace Editor
                 // TODO: Edit texts directly in this dialog.
                 // TODO: Limit description to 5 text lines.
 
-                std::string signText = mapFormat.description;
-                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true, true ) ) {
-                    mapFormat.description = std::move( signText );
+                std::string descripton = mapFormat.description;
 
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true, mapFormat.mainLanguage ) ) {
+                    mapFormat.description = std::move( descripton );
 
-                    // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
-                    if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                        fheroes2::showStandardTextMessage(
-                            _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                            Dialog::OK );
-
-                        // As a temporary solution we cut the end of the text to fit 5 rows.
-                        while ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                            mapFormat.description.pop_back();
-                            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
-                        }
-                    }
-
-                    descriptionBackground.restore();
-                    text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+                    renderMapDescription();
                     display.render( descriptionTextRoi );
                 }
             }
@@ -2216,8 +2398,9 @@ namespace Editor
 
                     fheroes2::Copy( itemBackground, 2, 3, display, victoryTextRoi );
                     redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
-                    display.render( fheroes2::getBoundaryRect( victoryTextRoi, victoryConditionUIRoi ) );
                 }
+
+                display.render( fheroes2::getBoundaryRect( victoryTextRoi, victoryConditionUIRoi ) );
             }
             else if ( le.MouseClickLeft( lossDroplistButtonRoi ) ) {
                 const uint8_t result
@@ -2232,8 +2415,9 @@ namespace Editor
 
                     fheroes2::Copy( itemBackground, 2, 3, display, lossTextRoi );
                     redrawLossCondition( mapFormat.lossConditionType, lossTextRoi, false, display );
-                    display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
                 }
+
+                display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
@@ -2246,6 +2430,9 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonEventsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Events" ), _( "Click to edit daily events." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonLanguageRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );

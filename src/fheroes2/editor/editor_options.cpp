@@ -22,9 +22,12 @@
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
@@ -33,7 +36,6 @@
 #include "editor_interface.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -44,6 +46,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
@@ -132,13 +135,14 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                                dialog.height() + fheroes2::borderWidthPx );
 
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
         const fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -230,6 +234,8 @@ namespace Editor
 {
     void openEditorSettings()
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
@@ -260,7 +266,7 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
@@ -282,7 +288,7 @@ namespace Editor
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
 
                 action = DialogAction::Configuration;
                 break;

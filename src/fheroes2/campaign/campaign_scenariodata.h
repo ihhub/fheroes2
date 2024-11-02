@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,10 +25,15 @@
 #include <string>
 #include <vector>
 
-#include "game_video_type.h"
 #include "maps_fileinfo.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
+
+namespace Video
+{
+    enum class VideoAction : int;
+}
 
 namespace Campaign
 {
@@ -77,8 +82,8 @@ namespace Campaign
             return !operator==( info );
         }
 
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data );
-        friend StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data );
+        friend OStreamBase & operator<<( OStreamBase & stream, const ScenarioInfoId & data );
+        friend IStreamBase & operator>>( IStreamBase & stream, ScenarioInfoId & data );
 
         int campaignId{ -1 };
 

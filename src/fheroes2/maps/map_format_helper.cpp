@@ -25,10 +25,8 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <deque>
 #include <list>
 #include <map>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -36,14 +34,15 @@
 #include "army_troop.h"
 #include "castle.h"
 #include "color.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "race.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -142,14 +141,14 @@ namespace Maps
 
         // We must clear all tiles before writing something on them.
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            auto & tile = world.GetTiles( static_cast<int32_t>( i ) );
+            auto & tile = world.getTile( static_cast<int32_t>( i ) );
             tile = {};
 
             tile.setIndex( static_cast<int32_t>( i ) );
         }
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            readTileTerrain( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            readTileTerrain( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         // Read objects from all tiles and place them based on their IDs.
@@ -167,7 +166,7 @@ namespace Maps
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );
-            if ( !readTileObject( world.GetTiles( info.tileIndex ), *info.info ) ) {
+            if ( !readTileObject( world.getTile( info.tileIndex ), *info.info ) ) {
                 return false;
             }
         }
@@ -186,18 +185,18 @@ namespace Maps
         map.tiles.resize( size );
 
         for ( size_t i = 0; i < size; ++i ) {
-            writeTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            writeTile( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
     }
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info )
+    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info )
     {
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
     }
 
-    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object )
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
         if ( object.index >= objectInfos.size() ) {
@@ -219,20 +218,26 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info )
     {
-        std::deque<const TilesAddon *> roadParts;
-        std::deque<const TilesAddon *> streamParts;
+        // A tile cannot contain an exactly the same road or stream parts.
+        std::set<std::pair<uint32_t, uint8_t>> roadParts;
+        std::set<std::pair<uint32_t, uint8_t>> streamParts;
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.push_back( &addon );
-                }
-                else {
-                    streamParts.push_back( &addon );
-                }
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart().icnType;
+        if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart().icnIndex );
+        }
+        else if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+            streamParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart().icnIndex );
+        }
+
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( part._uid, part.icnIndex );
+            }
+            else if ( part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                streamParts.emplace( part._uid, part.icnIndex );
             }
         }
 
@@ -241,36 +246,36 @@ namespace Maps
 
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = roadParts.front()->_uid;
-                object.index = roadParts.front()->_imageIndex;
-                roadParts.pop_front();
+                object.id = roadParts.begin()->first;
+                object.index = roadParts.begin()->second;
+                roadParts.erase( roadParts.begin() );
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
-                    // This tile was removed. Delete the object.
+                    // This object was removed from the tile. Delete the object.
                     info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = streamParts.front()->_uid;
-                object.index = streamParts.front()->_imageIndex;
-                streamParts.pop_front();
+                object.id = streamParts.begin()->first;
+                object.index = streamParts.begin()->second;
+                streamParts.erase( streamParts.begin() );
             }
 
             ++objectIndex;
         }
 
-        for ( const TilesAddon * addon : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
-        for ( const TilesAddon * addon : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, index, uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
@@ -404,7 +409,7 @@ namespace Maps
         static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
         static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
 
-        constexpr size_t mainColors{ KINGDOMMAX };
+        constexpr size_t mainColors{ maxNumOfPlayers };
 
         if ( map.playerRace.size() != mainColors ) {
             // Possibly corrupted map.
@@ -533,11 +538,19 @@ namespace Maps
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
                     uint8_t & allianceColors = *iter;
 
+                    // Only available players should be in the alliances.
+                    allianceColors &= map.availablePlayerColors;
+
                     for ( size_t i = 0; i < mainColors; ++i ) {
                         const uint8_t color = static_cast<uint8_t>( 1 << i );
-                        if ( ( allianceColors & color ) != 0 && usedAllianceColors[i] ) {
-                            // This color is used in another alliance. Remove it from here.
-                            allianceColors = allianceColors & ( ~color );
+                        if ( ( allianceColors & color ) != 0 ) {
+                            if ( usedAllianceColors[i] ) {
+                                // This color is used in another alliance. Remove it from here.
+                                allianceColors = allianceColors & ( ~color );
+                            }
+                            else {
+                                usedAllianceColors[i] = true;
+                            }
                         }
                     }
 

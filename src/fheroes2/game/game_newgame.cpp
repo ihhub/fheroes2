@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <array>
 #include <cassert>
@@ -52,6 +52,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "screen.h"
@@ -130,11 +131,10 @@ namespace
 
     void showMissingVideoFilesWindow()
     {
-        fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
-                               fheroes2::Text{ _( "The required video files for the campaign selection window are missing. "
-                                                  "Please make sure that all necessary files are present in the system." ),
-                                               fheroes2::FontType::normalWhite() },
-                               Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning!" ),
+                                           _( "The required video files for the campaign selection window are missing. "
+                                              "Please make sure that all necessary files are present in the system." ),
+                                           Dialog::OK );
     }
 }
 
@@ -142,7 +142,7 @@ fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( {} );
+        conf.setCurrentMapInfo( {} );
     conf.SetGameType( Game::TYPE_STANDARD );
     return fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER;
 }
@@ -159,7 +159,7 @@ fheroes2::GameMode Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( {} );
+        conf.setCurrentMapInfo( {} );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.

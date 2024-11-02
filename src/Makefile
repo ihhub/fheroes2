@@ -117,11 +117,11 @@ CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"
 endif
 
 # TODO: Add -Wconversion -Wsign-conversion flags once we fix all the corresponding code smells
-# TODO: Add -Wdouble-promotion -Wold-style-cast -Wswitch-default flags once SDL headers can be compiled with them
-CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal \
-              -Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
+              -Wredundant-decls -Wshadow -Wswitch-default -Wundef -Wunused
 CFLAGS := $(CFLAGS) $(CCWARNOPTS)
-CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Woverloaded-virtual
+CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast \
+                                      -Woverloaded-virtual -Wsuggest-override
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror

@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include "agg_image.h"
@@ -44,6 +45,7 @@
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
@@ -60,23 +62,28 @@ namespace
         assert( overallCount > 0 );
 
         if ( overallCount == 1 ) {
-            // prevent cross-army split if we lose the last unit in the hero army
+            // Prevent units from moving between armies if this would result in no units remaining in the hero's army
             if ( saveLastTroop ) {
                 return;
             }
 
-            // it seems that we are just moving a single unit to a free cell
+            // It seems that we are just moving a single unit to an empty slot
             assert( !troopTarget.isValid() );
 
             Army::SwapTroops( troopFrom, troopTarget );
         }
         else if ( !troopTarget.isValid() && troopFrom.GetCount() == 2 ) {
-            // a player splits a slot with two monsters into an empty slot; move one monster into the source slot to the target slot.
+            // Player splits a slot with two monsters into an empty slot; move one monster from the source slot to the target slot
             troopFrom.SetCount( 1 );
             troopTarget.Set( troopFrom.GetMonster(), 1 );
         }
         else if ( isSameTroopType && troopFrom.isValid() && troopFrom.GetCount() == 1 && troopTarget.isValid() && troopTarget.GetCount() == 1 ) {
-            // a player splits the same troop type and both count one; move a monster from the source slot to the target slot.
+            // Prevent units from moving between armies if this would result in no units remaining in the hero's army
+            if ( saveLastTroop ) {
+                return;
+            }
+
+            // Player splits a slot with just one monster into a slot with just one monster of the same type; add a monster from the source slot to the target slot
             troopFrom.Reset();
             troopTarget.SetCount( 2 );
         }
@@ -87,7 +94,7 @@ namespace
             }
 
             const int32_t maxCount = static_cast<int32_t>( saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount() );
-            int32_t redistributeCount = isSameTroopType ? 1 : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
+            int32_t redistributeCount = isSameTroopType ? std::min( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
             const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),
@@ -100,25 +107,29 @@ namespace
             uint32_t totalSplitTroopCount = troopFrom.GetCount();
 
             if ( !useFastSplit && slots == 2 ) {
-                // this logic is used when splitting to a stack with the same unit
-                if ( isSameTroopType )
+                // This logic is used when splitting to a stack with the same unit
+                if ( isSameTroopType ) {
                     troopTarget.SetCount( troopTarget.GetCount() + static_cast<uint32_t>( redistributeCount ) );
-                else
+                }
+                else {
                     troopTarget.Set( troopFrom, static_cast<uint32_t>( redistributeCount ) );
+                }
 
                 troopFrom.SetCount( totalSplitTroopCount - static_cast<uint32_t>( redistributeCount ) );
             }
             else {
-                if ( isSameTroopType )
+                if ( isSameTroopType ) {
                     totalSplitTroopCount += troopTarget.GetCount();
+                }
 
                 const uint32_t troopFromSplitCount = ( totalSplitTroopCount + slots - 1 ) / slots;
                 troopFrom.SetCount( troopFromSplitCount );
 
                 const uint32_t troopTargetSplitCount = ( totalSplitTroopCount + slots - 2 ) / slots;
 
-                if ( !isSameTroopType )
+                if ( !isSameTroopType ) {
                     troopTarget.SetMonster( troopFrom.GetID() );
+                }
 
                 troopTarget.SetCount( troopTargetSplitCount );
 
@@ -474,16 +485,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 std::string str = _( "Set %{monster} Count" );
                 StringReplace( str, "%{monster}", mons.GetName() );
 
-                fheroes2::Sprite surface;
-
-                if ( mons.isValid() ) {
-                    surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-                    fheroes2::renderMonsterFrame( mons, surface, { 6, 6 } );
-                }
-
                 int32_t count = 1;
+                auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
 
-                if ( Dialog::SelectCount( str, 1, 500000, count, 1, surface ) ) {
+                if ( Dialog::SelectCount( str, 1, 500000, count, 1, monsUi.get() ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }

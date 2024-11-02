@@ -25,14 +25,14 @@
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
-#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -53,177 +53,177 @@
 namespace
 {
     const fheroes2::Size giftDialogSize( 320, 234 );
-}
 
-int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
-{
-    LocalEvent & le = LocalEvent::Get();
+    int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
+    {
+        LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point & pos = le.getMouseCursorPos();
-    const fheroes2::Point position( pos.x, pos.y );
+        const fheroes2::Point & pos = le.getMouseCursorPos();
+        const fheroes2::Point position( pos.x, pos.y );
 
-    for ( size_t i = 0; i < rects.size(); ++i ) {
-        if ( rects[i] & position ) {
-            if ( le.MouseClickLeft() )
-                return static_cast<int32_t>( i );
-            else
+        for ( size_t i = 0; i < rects.size(); ++i ) {
+            if ( rects[i] & position ) {
+                if ( le.MouseClickLeft() ) {
+                    return static_cast<int32_t>( i );
+                }
+
                 return -1;
-        }
-    }
-
-    return -1;
-}
-
-struct SelectRecipientsColors
-{
-    static constexpr int recipientSpacing = 22;
-    const Colors colors;
-    int recipients;
-    std::vector<fheroes2::Rect> positions;
-
-    SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
-        : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
-        , recipients( 0 )
-    {
-        positions.reserve( colors.size() );
-        const fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Rect box( ( display.width() - giftDialogSize.width ) / 2, ( display.height() - giftDialogSize.height ) / 2, giftDialogSize.width,
-                                  giftDialogSize.height );
-
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
-        const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
-        const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * recipientSpacing;
-        const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
-        for ( int32_t i = 0; i < colorCount; ++i ) {
-            const int32_t posX = startX + i * ( recipientSpacing + sprite.width() );
-            positions.emplace_back( posX, pos.y, sprite.width(), sprite.height() );
-        }
-    }
-
-    int32_t GetIndexClick() const
-    {
-        return GetIndexClickRects( positions );
-    }
-
-    void Redraw() const
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
-            const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
-
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
-            if ( recipients & *it )
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
-        }
-    }
-
-    bool QueueEventProcessing()
-    {
-        const int32_t index = GetIndexClick();
-
-        if ( index >= 0 ) {
-            const int cols = colors[index];
-
-            if ( recipients & cols )
-                recipients &= ~cols;
-            else
-                recipients |= cols;
-
-            return true;
-        }
-
-        return false;
-    }
-};
-
-struct ResourceBar
-{
-    Funds & resource;
-    std::vector<fheroes2::Rect> positions;
-
-    ResourceBar( Funds & funds, int32_t posx, int32_t posy )
-        : resource( funds )
-    {
-        positions.reserve( 7 );
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
-
-        positions.emplace_back( posx, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 40, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 80, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 120, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 160, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 200, posy, sprite.width(), sprite.height() );
-        positions.emplace_back( posx + 240, posy, sprite.width(), sprite.height() );
-    }
-
-    static void RedrawResource( int type, int32_t count, int32_t posx, int32_t posy )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
-        fheroes2::Blit( sprite, display, posx, posy );
-        text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
-    }
-
-    void Redraw( const Funds * res = nullptr ) const
-    {
-        if ( !res )
-            res = &resource;
-
-        for ( size_t i = 0; i < positions.size(); ++i ) {
-            const int rs = Resource::getResourceTypeFromIconIndex( static_cast<uint32_t>( i ) );
-            RedrawResource( rs, res->Get( rs ), positions[i].x, positions[i].y );
-        }
-    }
-
-    int32_t GetIndexClick() const
-    {
-        return GetIndexClickRects( positions );
-    }
-
-    bool QueueEventProcessing( Funds & funds, uint32_t mul )
-    {
-        const int32_t index = GetIndexClick();
-
-        if ( index >= 0 ) {
-            int rs = Resource::getResourceTypeFromIconIndex( index );
-            uint32_t step = rs == Resource::GOLD ? 100 : 1;
-
-            int32_t cur = resource.Get( rs );
-            int32_t sel = cur;
-            uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
-            if ( 0 == mul ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
-            else if ( 0 == max ) {
-                std::string msg = _( "You cannot select %{resource}!" );
-                StringReplace( msg, "%{resource}", Resource::String( rs ) );
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK );
+        }
+
+        return -1;
+    }
+
+    struct SelectRecipientsColors
+    {
+        static constexpr int recipientSpacing = 22;
+        const Colors colors;
+        int recipients{ 0 };
+        std::vector<fheroes2::Rect> positions;
+
+        SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
+            : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
+        {
+            positions.reserve( colors.size() );
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            const fheroes2::Rect box( ( display.width() - giftDialogSize.width ) / 2, ( display.height() - giftDialogSize.height ) / 2, giftDialogSize.width,
+                                      giftDialogSize.height );
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
+            const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
+            const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * recipientSpacing;
+            const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
+            for ( int32_t i = 0; i < colorCount; ++i ) {
+                const int32_t posX = startX + i * ( recipientSpacing + sprite.width() );
+                positions.emplace_back( posX, pos.y, sprite.width(), sprite.height() );
             }
-            else {
-                std::string msg = _( "Select count %{resource}:" );
-                StringReplace( msg, "%{resource}", Resource::String( rs ) );
+        }
 
-                if ( Dialog::SelectCount( msg, 0, max, sel, step ) && cur != sel ) {
-                    int32_t * from = funds.GetPtr( rs );
-                    int32_t * to = resource.GetPtr( rs );
+        int32_t GetIndexClick() const
+        {
+            return GetIndexClickRects( positions );
+        }
 
-                    if ( from && to ) {
-                        int32_t count = sel - cur;
+        void Redraw() const
+        {
+            fheroes2::Display & display = fheroes2::Display::instance();
 
-                        *from -= mul > 1 ? count * mul : count;
-                        *to += count;
+            for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
+                const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
-                        return true;
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
+                if ( recipients & *it )
+                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
+            }
+        }
+
+        bool QueueEventProcessing()
+        {
+            const int32_t index = GetIndexClick();
+
+            if ( index >= 0 ) {
+                const int cols = colors[index];
+
+                if ( recipients & cols )
+                    recipients &= ~cols;
+                else
+                    recipients |= cols;
+
+                return true;
+            }
+
+            return false;
+        }
+    };
+
+    struct ResourceBar
+    {
+        Funds & resource;
+        std::vector<fheroes2::Rect> positions;
+
+        ResourceBar( Funds & funds, int32_t posx, int32_t posy )
+            : resource( funds )
+        {
+            positions.reserve( 7 );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
+
+            positions.emplace_back( posx, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 40, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 80, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 120, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 160, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 200, posy, sprite.width(), sprite.height() );
+            positions.emplace_back( posx + 240, posy, sprite.width(), sprite.height() );
+        }
+
+        static void RedrawResource( int type, int32_t count, int32_t posx, int32_t posy )
+        {
+            fheroes2::Display & display = fheroes2::Display::instance();
+            const fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
+            fheroes2::Blit( sprite, display, posx, posy );
+            text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
+        }
+
+        void Redraw( const Funds * res = nullptr ) const
+        {
+            if ( !res )
+                res = &resource;
+
+            for ( size_t i = 0; i < positions.size(); ++i ) {
+                const int rs = Resource::getResourceTypeFromIconIndex( static_cast<uint32_t>( i ) );
+                RedrawResource( rs, res->Get( rs ), positions[i].x, positions[i].y );
+            }
+        }
+
+        int32_t GetIndexClick() const
+        {
+            return GetIndexClickRects( positions );
+        }
+
+        bool QueueEventProcessing( Funds & funds, uint32_t mul )
+        {
+            const int32_t index = GetIndexClick();
+
+            if ( index >= 0 ) {
+                const int rs = Resource::getResourceTypeFromIconIndex( index );
+                const int32_t step = ( rs == Resource::GOLD ) ? 100 : 1;
+
+                const int32_t cur = resource.Get( rs );
+                int32_t sel = cur;
+                const int32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / static_cast<int32_t>( mul ) : funds.Get( rs ) + resource.Get( rs );
+                if ( 0 == mul ) {
+                    fheroes2::showStandardTextMessage( {}, _( "First select recipients!" ), Dialog::OK );
+                }
+                else if ( 0 == max ) {
+                    std::string msg = _( "You cannot select %{resource}!" );
+                    StringReplace( msg, "%{resource}", Resource::String( rs ) );
+                    fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK );
+                }
+                else {
+                    std::string msg = _( "Select count %{resource}:" );
+                    StringReplace( msg, "%{resource}", Resource::String( rs ) );
+
+                    if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
+                        int32_t * from = funds.GetPtr( rs );
+                        int32_t * to = resource.GetPtr( rs );
+
+                        if ( from && to ) {
+                            const int32_t count = sel - cur;
+
+                            *from -= mul > 1 ? count * static_cast<int32_t>( mul ) : count;
+                            *to += count;
+
+                            return true;
+                        }
                     }
                 }
             }
-        }
 
-        return false;
-    }
-};
+            return false;
+        }
+    };
+}
 
 void Dialog::MakeGiftResource( Kingdom & kingdom )
 {

@@ -23,19 +23,16 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
-
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
+#include "math_base.h"
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -45,7 +42,13 @@ class Monster;
 class Troop;
 
 struct ArtifactSetData;
-struct CapturedObject;
+
+namespace fheroes2
+{
+    class DialogElement;
+    class TextBase;
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace Skill
 {
@@ -54,7 +57,7 @@ namespace Skill
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Dialog
@@ -87,7 +90,7 @@ namespace Dialog
     std::string SelectFileSave();
 
     // Shows the quick info window for the given tile
-    void QuickInfo( const Maps::Tiles & tile );
+    void QuickInfo( const Maps::Tile & tile );
     // Shows the quick info window for the given castle
     void QuickInfo( const Castle & castle );
     // Shows the quick info window for the given hero or captain. If the 'showFullInfo' parameter is specified,
@@ -113,9 +116,9 @@ namespace Dialog
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
     bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
-                      const fheroes2::Image & backgroundImage = {} );
-    bool inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
-                      const bool englishOnlyVirtualKeyboard );
+                      const fheroes2::DialogElement * uiElement = nullptr );
+    bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
+                      const std::optional<fheroes2::SupportedLanguage> & textLanguage );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
@@ -169,7 +172,7 @@ namespace Dialog
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {

@@ -22,6 +22,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -32,6 +33,8 @@
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     enum class FontSize : uint8_t
     {
         SMALL,
@@ -46,7 +49,9 @@ namespace fheroes2
     {
         WHITE,
         GRAY,
-        YELLOW
+        YELLOW,
+        GOLDEN_GRADIENT,
+        SILVER_GRADIENT,
     };
 
     struct FontType
@@ -141,11 +146,18 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
+        const std::optional<SupportedLanguage> & getLanguage() const
+        {
+            return _language;
+        }
+
     protected:
         bool _isUniformedVerticalAlignment{ true };
+
+        std::optional<SupportedLanguage> _language;
     };
 
-    class Text : public TextBase
+    class Text final : public TextBase
     {
     public:
         friend class MultiFontText;
@@ -157,6 +169,13 @@ namespace fheroes2
             , _fontType( fontType )
         {
             // Do nothing.
+        }
+
+        Text( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            _language = language;
         }
 
         Text( const Text & text ) = default;
@@ -177,19 +196,33 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _text.empty();
+        }
 
         void set( std::string text, const FontType fontType )
         {
             _text = std::move( text );
             _fontType = fontType;
+            _language = std::nullopt;
+        }
+
+        void set( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+            _language = language;
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         // By default it ignores spaces at the end of the text phrase.
         void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        std::string text() const override;
+        std::string text() const override
+        {
+            return _text;
+        }
 
         FontType getFontType() const
         {
@@ -202,7 +235,7 @@ namespace fheroes2
         FontType _fontType;
     };
 
-    class MultiFontText : public TextBase
+    class MultiFontText final : public TextBase
     {
     public:
         MultiFontText() = default;
@@ -221,7 +254,10 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _texts.empty();
+        }
 
         std::string text() const override;
 

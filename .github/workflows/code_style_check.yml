@@ -8,7 +8,7 @@ permissions: {}
 jobs:
   style:
     name: Code style check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     defaults:
       run:
@@ -19,8 +19,8 @@ jobs:
         fetch-depth: 50
     - name: Setup clang-format
       run: |
-        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-14 100
-        sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-14 100
+        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-17 100
+        sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-17 100
     - name: Check code format
       run: |
         bash script/tools/check_code_format.sh

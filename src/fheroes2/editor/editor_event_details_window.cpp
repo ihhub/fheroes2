@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,7 +39,6 @@
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -52,6 +52,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -63,12 +64,13 @@ namespace
 
     const fheroes2::Size messageArea{ 300, 210 };
     const int32_t elementOffset{ 9 };
-    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
+    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2 - 3 * elementOffset - messageArea.width };
 }
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                             const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
@@ -79,7 +81,7 @@ namespace Editor
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 140, true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2, messageArea.height + 140, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         int32_t offsetY = dialogRoi.y + elementOffset;
@@ -98,7 +100,7 @@ namespace Editor
 
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+        text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
         const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
@@ -112,16 +114,6 @@ namespace Editor
         else {
             recurringEventCheckbox.show();
         }
-
-        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
-                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
-            int32_t colorsAdded = 0;
-
-            for ( const int color : Colors( availableColors ) ) {
-                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
-                ++colorsAdded;
-            }
-        };
 
         const int32_t playerAreaOffsetX = dialogRoi.x + elementOffset + messageRoi.width + elementOffset;
 
@@ -140,7 +132,7 @@ namespace Editor
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY, display );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
@@ -159,7 +151,7 @@ namespace Editor
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY, display );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
 
@@ -303,11 +295,12 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true, true ) ) {
+                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();
-                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
                     text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }
@@ -366,12 +359,11 @@ namespace Editor
                 const Artifact artifact( eventMetadata.artifact );
 
                 if ( artifact.isValid() ) {
-                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
-                    const fheroes2::Text description( fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ),
-                                                      fheroes2::FontType::normalWhite() );
-
                     fheroes2::ArtifactDialogElement artifactUI( artifact );
-                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
+
+                    fheroes2::showStandardTextMessage( artifact.GetName(),
+                                                       fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ), Dialog::ZERO,
+                                                       { &artifactUI } );
                 }
                 else {
                     fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );

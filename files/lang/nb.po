@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -307,6 +307,9 @@ msgstr ""
 msgid "EVENTS"
 msgstr ""
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -477,6 +480,9 @@ msgid ""
 msgstr ""
 "Sfæren av opphevelse er til stede i denne kampen og dermed forhindres all "
 "kampmagi."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Du har allerede brukt trolldom denne runden."
@@ -2898,11 +2904,11 @@ msgstr "Ingen krigere tilgjengelige for verving."
 msgid "Recruit Creatures"
 msgstr "Verv krigere"
 
-msgid "Max"
-msgstr "Maks"
-
 msgid "Hire all creatures in the town."
 msgstr "Verv alle krigerene som er tilgjengelige i byen."
+
+msgid "Max"
+msgstr "Maks"
 
 msgid "Available"
 msgstr "Tilgjengelig"
@@ -3103,17 +3109,14 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Trenger: "
 
-msgid "Load Game"
-msgstr "Last inn et parti"
-
-msgid "No save files to load."
-msgstr "Ingen lagrede spill å laste inn."
-
 msgid "New Game"
 msgstr "Nytt parti"
 
 msgid "Start a single or multi-player game."
 msgstr "Start et enkelt- eller flerspillerparti."
+
+msgid "Load Game"
+msgstr "Last inn et parti"
 
 msgid "Load a previously saved game."
 msgstr "Last inn et tidligere lagret parti."
@@ -3334,6 +3337,10 @@ msgstr "Setter farten du panorerer rundt kartet på."
 msgid "Select Game Language:"
 msgstr "Velg språk:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Velg språk:"
+
 msgid "Click to choose the selected language."
 msgstr "Trykk for å velge et språk."
 
@@ -3360,6 +3367,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Du kan velge mellom å lære:"
+
+msgid "n/a"
+msgstr "n/a"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3395,9 +3405,6 @@ msgstr "Dine råvarer"
 
 msgid "Available Trades"
 msgstr "Mulige bytter"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bevoktet av %{count} %{monster}"
@@ -3506,6 +3513,20 @@ msgstr "Velg maksimalt antall vervbare krigere."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Velg kun én kriger til å verves."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Velg spilloppløsning"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Velg en oppløsning:"
@@ -3698,6 +3719,42 @@ msgstr "Sjøting"
 msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
+msgid "Players Icon"
+msgstr "Spillerikon"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Viser hvor mange spillere som totalt er med på kartet. Hver plass som ikke "
+"er tatt av et menneske vil bli tatt av en computerspiller."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Viser om kartet er\n"
+"smått (36 x 36), middels\n"
+"(72 x 72), stort (108 x 108)\n"
+"eller veldig stort (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Størrelsesikon"
+
+msgid "Map Type"
+msgstr "Kart-type"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
+"\"Prisen for trofasthet\"."
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
@@ -3712,6 +3769,13 @@ msgid "Resurrection"
 msgstr ""
 "Gjen-\n"
 "opplivning"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Språk"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -3789,42 +3853,6 @@ msgstr "Alle kart"
 
 msgid "View all maps, regardless of size."
 msgstr "Vis alle kart, uavhengig av størrelse."
-
-msgid "Players Icon"
-msgstr "Spillerikon"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Viser hvor mange spillere som totalt er med på kartet. Hver plass som ikke "
-"er tatt av et menneske vil bli tatt av en computerspiller."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Viser om kartet er\n"
-"smått (36 x 36), middels\n"
-"(72 x 72), stort (108 x 108)\n"
-"eller veldig stort (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Størrelsesikon"
-
-msgid "Map Type"
-msgstr "Kart-type"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
-"\"Prisen for trofasthet\"."
 
 msgid "Selected Name"
 msgstr "Navn"
@@ -4262,6 +4290,10 @@ msgid "Unable to create a directory to save the map."
 msgstr "Brukes til å fjerne ting fra kartet."
 
 #, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Brukes til å fjerne ting fra kartet."
+
+#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Er du sikker på at du vil overskrive lagringspunktet med dette navnet?"
 
@@ -4610,6 +4642,26 @@ msgid "Run out of time."
 msgstr "Forlat karttegneren"
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr "allianse"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr "allianse"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr "allianse"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr "allianse"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr "allianse"
+
+#, fuzzy
 msgid "Special Loss Condition"
 msgstr "Tapsvilkår"
 
@@ -4623,6 +4675,14 @@ msgstr "Seiersvilkår"
 
 msgid "Allow this condition also for AI"
 msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr "allianse"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr "allianse"
 
 #, fuzzy
 msgid "Gold:"
@@ -4642,6 +4702,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Klikk for å lagre det nåværende spillet."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4673,17 +4741,23 @@ msgstr ""
 "\n"
 "Plassering: "
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Kartbeskrivelse"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4703,6 +4777,10 @@ msgstr "Trykk for å bruke den valgte oppløsningen."
 #, fuzzy
 msgid "Events"
 msgstr "Hendelse"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Endre språket til spillet."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5139,6 +5217,9 @@ msgstr "Karttegnere"
 msgid "Package Design"
 msgstr "Innpakningsdesign"
 
+msgid "High Scores"
+msgstr "Rekordtavle"
+
 msgid "Your Name"
 msgstr "Ditt navn"
 
@@ -5563,6 +5644,9 @@ msgstr "Dette lagrede spillet er satt opp for språket '"
 msgid "' language, but the current language of the game is '"
 msgstr "', men det gjeldende språket for spillet er '"
 
+msgid "No save files to load."
+msgstr "Ingen lagrede spill å laste inn."
+
 msgid "Hot Seat"
 msgstr "Byttespilling"
 
@@ -5653,9 +5737,6 @@ msgstr "Rulletekst"
 
 msgid "View the credits screen."
 msgstr "Vis rulleteksten."
-
-msgid "High Scores"
-msgstr "Rekordtavle"
 
 msgid "View the high scores screen."
 msgstr "Vis rekordtavlen."
@@ -7978,18 +8059,23 @@ msgstr ""
 "\"Jeg har en gåte til deg,\" sier sfinksen. \"Svar riktig, og du vil bli "
 "belønnet. Svar galt, og du vil bli spist levende. Tar du imot utfordringen?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Sfinksen stiller deg den følgende gåten :\n"
 "\n"
 "\"%{riddle}\n"
 "\n"
 "Ditt svar?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8992,6 +9078,12 @@ msgstr "Fykende"
 # Øyeblikkelig, tvert, umiddelbar.
 msgid "speed|Instant"
 msgstr "Lynrask"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "ekorn"
@@ -11807,6 +11899,9 @@ msgstr "Øker på magisk vis forsvarsevnen til den utvalgte krigeren."
 msgid "Stoneskin"
 msgstr "Stenhud"
 
+msgid "Steelskin"
+msgstr "Stålhud"
+
 #, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
@@ -11814,9 +11909,6 @@ msgid ""
 msgstr ""
 "Øker forsvarsevnen til de utvalgte krigerne. Dette er en forbedret utgave av "
 "stenhud."
-
-msgid "Steelskin"
-msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Får den utvalgte krigeren til å gjøre minst mulig skade."
@@ -11851,7 +11943,8 @@ msgstr ""
 "vern"
 
 # en enkelt? flere?
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Skjermer den utvalgte krigeren mot skadelig magi."
 
 msgid "Dispel Magic"

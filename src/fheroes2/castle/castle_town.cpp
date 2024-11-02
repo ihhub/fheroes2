@@ -32,7 +32,7 @@
 #include "artifact.h"
 #include "buildinginfo.h"
 #include "captain.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -56,8 +56,10 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_kingdom.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -99,18 +101,18 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     const fheroes2::Text heroDescriptionText( std::move( str ), fheroes2::FontType::normalWhite() );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), fheroes2::boxAreaWidthPx );
 
-    const int32_t dialogHeight = recruitHeroText.height( BOXAREA_WIDTH ) + spacer + portrait_frame.height() + spacer + heroDescriptionText.height( BOXAREA_WIDTH )
-                                 + spacer + rbs.GetArea().height;
+    const int32_t dialogHeight = recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer + portrait_frame.height() + spacer
+                                 + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer + rbs.GetArea().height;
 
     const Dialog::FrameBox box( dialogHeight, true );
     const fheroes2::Rect & dialogRoi = box.GetArea();
 
-    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, BOXAREA_WIDTH, display );
+    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, fheroes2::boxAreaWidthPx, display );
 
     // portrait and frame
-    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( BOXAREA_WIDTH ) + spacer };
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer };
     fheroes2::Blit( portrait_frame, display, pos.x, pos.y );
 
     const fheroes2::Rect heroPortraitArea( pos.x, pos.y, portrait_frame.width(), portrait_frame.height() );
@@ -119,9 +121,9 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     hero->PortraitRedraw( pos.x, pos.y, PORT_BIG, display );
 
     pos.y += portrait_frame.height() + spacer;
-    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, BOXAREA_WIDTH, display );
+    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( BOXAREA_WIDTH ) + spacer );
+    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -176,13 +178,13 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     return Dialog::CANCEL;
 }
 
-int Castle::DialogBuyCastle( bool buttons ) const
+int Castle::DialogBuyCastle( const bool hasButtons /* = true */ ) const
 {
     const BuildingInfo info( *this, BUILD_CASTLE );
-    return info.DialogBuyBuilding( buttons ) ? Dialog::OK : Dialog::CANCEL;
+    return info.DialogBuyBuilding( hasButtons ) ? Dialog::OK : Dialog::CANCEL;
 }
 
-Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwellingTobuild )
+Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwellingTobuild )
 {
     if ( !isBuild( BUILD_CASTLE ) ) {
         // It is not possible to open this dialog without a built castle!
@@ -203,7 +205,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -257,7 +260,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     dwelling6.Redraw();
 
     // mage guild
-    building_t level = BUILD_NOTHING;
+    BuildingType level = BUILD_NOTHING;
     switch ( GetLevelMageGuild() ) {
     case 0:
         level = BUILD_MAGEGUILD1;
@@ -283,7 +286,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
+    const bool isSkipTavernInteraction = ( Race::NECR == _race ) && ( conf.getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();
@@ -374,35 +377,35 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.y = cur_pt.y + 170;
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetAttack() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetDefense() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetPower() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetPower() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         fheroes2::Copy( spriteSpreadArmyFormat, 0, 0, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y, rectSpreadArmyFormat.width, rectSpreadArmyFormat.height );
         fheroes2::Copy( spriteGroupedArmyFormat, 0, 0, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y, rectGroupedArmyFormat.width,
                         rectGroupedArmyFormat.height );
 
-        if ( army.isSpreadFormation() ) {
+        if ( _army.isSpreadFormation() ) {
             cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
         }
         else {
@@ -578,7 +581,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             return ConstructionDialogResult::Build;
         }
         if ( !isSkipTavernInteraction && le.isMouseCursorPosInArea( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) ) {
-            dwellingTobuild = ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
+            dwellingTobuild = ( Race::NECR == _race ? BUILD_SHRINE : BUILD_TAVERN );
             return ConstructionDialogResult::Build;
         }
         if ( le.isMouseCursorPosInArea( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) ) {
@@ -635,15 +638,15 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
 
         if ( isCaptainBuilt ) {
-            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !_army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( true );
+                _army.SetSpreadFormation( true );
             }
-            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
+            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && _army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( false );
+                _army.SetSpreadFormation( false );
             }
             else if ( le.isMouseRightButtonPressedInArea( rectSpreadArmyFormat ) ) {
                 fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
@@ -656,14 +659,14 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         // Right click
         if ( hero1 && le.isMouseRightButtonPressedInArea( rectHero1 ) ) {
             LocalEvent::Get().reset();
-            hero1->OpenDialog( true, true, false, false, false, false );
+            hero1->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.isMouseRightButtonPressedInArea( rectHero2 ) ) {
             LocalEvent::Get().reset();
-            hero2->OpenDialog( true, true, false, false, false, false );
+            hero2->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );

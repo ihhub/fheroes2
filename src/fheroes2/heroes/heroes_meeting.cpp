@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -40,8 +39,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -55,6 +53,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -160,7 +159,7 @@ class MeetingArtifactBar : public ArtifactsBar
 public:
     using ArtifactsBar::RedrawItem;
 
-    explicit MeetingArtifactBar( const Heroes * hero )
+    explicit MeetingArtifactBar( Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
@@ -528,7 +527,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             // so the engine thinks that we are opening there was now window before to fade-out.
             // We also have to cache the display image to properly restore it after closing hero dialog.
 
-            const fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
+            const fheroes2::Rect restorerRoi( cur_pt.x - 2 * fheroes2::borderWidthPx, cur_pt.y - fheroes2::borderWidthPx, src_rt.width + 3 * fheroes2::borderWidthPx,
+                                              src_rt.height + 3 * fheroes2::borderWidthPx );
             fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
             // If game display resolution is 640x480 then all fade effects are done in 'OpenHeroesDialog()' except fade-in after dialog close.

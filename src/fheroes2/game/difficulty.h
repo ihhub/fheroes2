@@ -26,10 +26,11 @@
 #include <cstdint>
 #include <string>
 
-#include "castle.h"
 #include "resource.h"
 
 class Kingdom;
+
+enum BuildingType : uint32_t;
 
 namespace Difficulty
 {
@@ -46,15 +47,11 @@ namespace Difficulty
 
     std::string String( int );
 
-    int GetScoutingBonusForAI( int difficulty );
-
     // Returns an extra resource bonus for AI based on difficulty level.
     Funds getResourceIncomeBonusForAI( const int difficulty, const Kingdom & kingdom );
 
     // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );
-
-    int GetHeroMovementBonusForAI( int difficulty );
 
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
@@ -73,7 +70,7 @@ namespace Difficulty
     bool allowAIToSplitWeakStacks( const int difficulty );
 
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
-    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building );
+    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }
 
 #endif

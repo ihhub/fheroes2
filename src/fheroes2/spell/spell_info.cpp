@@ -33,10 +33,12 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "settings.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -326,7 +328,7 @@ namespace fheroes2
         }
 
         const int32_t heroTileIdx = hero.GetIndex();
-        const int heroTilePassability = world.GetTiles( heroTileIdx ).GetPassable();
+        const int heroTilePassability = world.getTile( heroTileIdx ).GetPassable();
 
         std::vector<int32_t> possibleBoatPositions;
         possibleBoatPositions.reserve( 8 );
@@ -339,8 +341,8 @@ namespace fheroes2
                 continue;
             }
 
-            const Maps::Tiles & tile = world.GetTiles( tileIdx );
-            if ( !tile.isWater() || tile.GetObject() != MP2::OBJ_NONE ) {
+            const Maps::Tile & tile = world.getTile( tileIdx );
+            if ( !tile.isWater() || tile.getMainObjectType() != MP2::OBJ_NONE ) {
                 continue;
             }
 
@@ -371,11 +373,35 @@ namespace fheroes2
         const int32_t center = hero.GetIndex();
         const int heroColor = hero.GetColor();
 
+        const bool isResurrectionMap = ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION );
+
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+            // In the original game, AI could not use the Summon Boat spell at all, and many of the original maps (including the maps of the original campaign) were
+            // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
+            // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
+            if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
+                     const int boatColor = world.getTile( boatSource ).getBoatOwnerColor();
+
+                     // Boats belonging to the hero's kingdom can always be summoned
+                     if ( boatColor == heroColor ) {
+                         return false;
+                     }
+
+                     // Non-neutral boats (belonging to any other kingdom) can never be summoned
+                     if ( boatColor != Color::NONE ) {
+                         return true;
+                     }
+
+                     // On Resurrection maps, neutral boats can be summoned by both human and AI players
+                     if ( isResurrectionMap ) {
+                         return false;
+                     }
+
+                     // On original HoMM2 maps, neutral boats can only be summoned by human players
+                     return hero.isControlAI();
+                 }() ) {
                 continue;
             }
 
@@ -391,6 +417,6 @@ namespace fheroes2
     bool isHeroNearWater( const Heroes & hero )
     {
         const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
-        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.GetTiles( tileId ).isWater(); } );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.getTile( tileId ).isWater(); } );
     }
 }

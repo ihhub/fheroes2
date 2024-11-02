@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,7 +27,10 @@
 #include <string>
 #include <vector>
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
+
+class Kingdom;
 
 namespace fheroes2
 {
@@ -52,11 +55,12 @@ namespace Color
         ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
     };
 
-    std::string String( int color );
-    int Count( int colors );
-    int GetIndex( int color );
-    int GetFirst( int colors );
-    int FromInt( int col );
+    std::string String( const int color );
+
+    int GetIndex( const int color );
+
+    int Count( const int colors );
+    int GetFirst( const int colors );
 
     uint8_t IndexToColor( const int index );
 }
@@ -64,35 +68,31 @@ namespace Color
 class Colors : public std::vector<int>
 {
 public:
-    explicit Colors( int colors = Color::ALL );
+    explicit Colors( const int colors = Color::ALL );
 };
-
-class Kingdom;
 
 class ColorBase
 {
     int color;
 
-    friend StreamBase & operator<<( StreamBase &, const ColorBase & );
-    friend StreamBase & operator>>( StreamBase &, ColorBase & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const ColorBase & col );
+    friend IStreamBase & operator>>( IStreamBase & stream, ColorBase & col );
 
 public:
-    explicit ColorBase( int col = Color::NONE )
+    explicit ColorBase( const int col = Color::NONE )
         : color( col )
     {}
 
-    bool isFriends( int ) const;
-    void SetColor( int );
+    bool isFriends( const int col ) const;
 
     Kingdom & GetKingdom() const;
+
+    void SetColor( const int col );
 
     int GetColor() const
     {
         return color;
     }
 };
-
-StreamBase & operator<<( StreamBase &, const ColorBase & );
-StreamBase & operator>>( StreamBase &, ColorBase & );
 
 #endif

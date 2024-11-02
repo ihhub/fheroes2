@@ -85,6 +85,20 @@ namespace Maps::Map_Format
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.
         std::array<int32_t, 6> availableToHireMonsterCount{ -1 };
+
+        bool operator==( const CastleMetadata & anotherCastleMetadata ) const
+        {
+            return customName == anotherCastleMetadata.customName && defenderMonsterType == anotherCastleMetadata.defenderMonsterType
+                   && defenderMonsterCount == anotherCastleMetadata.defenderMonsterCount && customBuildings == anotherCastleMetadata.customBuildings
+                   && builtBuildings == anotherCastleMetadata.builtBuildings && bannedBuildings == anotherCastleMetadata.bannedBuildings
+                   && mustHaveSpells == anotherCastleMetadata.mustHaveSpells && bannedSpells == anotherCastleMetadata.bannedSpells
+                   && availableToHireMonsterCount == anotherCastleMetadata.availableToHireMonsterCount;
+        }
+
+        bool operator!=( const CastleMetadata & anotherCastleMetadata ) const
+        {
+            return !( *this == anotherCastleMetadata );
+        }
     };
 
     struct HeroMetadata
@@ -167,6 +181,17 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+
+        bool operator==( const SphinxMetadata & anotherMetadata ) const
+        {
+            return riddle == anotherMetadata.riddle && answers == anotherMetadata.answers && artifact == anotherMetadata.artifact
+                   && artifactMetadata == anotherMetadata.artifactMetadata && resources == anotherMetadata.resources;
+        }
+
+        bool operator!=( const SphinxMetadata & anotherMetadata ) const
+        {
+            return !( *this == anotherMetadata );
+        }
     };
 
     struct SignMetadata
@@ -205,6 +230,22 @@ namespace Maps::Map_Format
 
         int32_t monsterType{ 0 };
         int32_t monsterCount{ 0 };
+
+        bool operator==( const AdventureMapEventMetadata & anotherMetadata ) const
+        {
+            return message == anotherMetadata.message && humanPlayerColors == anotherMetadata.humanPlayerColors
+                   && computerPlayerColors == anotherMetadata.computerPlayerColors && isRecurringEvent == anotherMetadata.isRecurringEvent
+                   && artifact == anotherMetadata.artifact && artifactMetadata == anotherMetadata.artifactMetadata && resources == anotherMetadata.resources
+                   && attack == anotherMetadata.attack && defense == anotherMetadata.defense && knowledge == anotherMetadata.knowledge
+                   && spellPower == anotherMetadata.spellPower && experience == anotherMetadata.experience && secondarySkill == anotherMetadata.secondarySkill
+                   && secondarySkillLevel == anotherMetadata.secondarySkillLevel && monsterType == anotherMetadata.monsterType
+                   && monsterCount == anotherMetadata.monsterCount;
+        }
+
+        bool operator!=( const AdventureMapEventMetadata & anotherMetadata ) const
+        {
+            return !( *this == anotherMetadata );
+        }
     };
 
     struct ShrineMetadata
@@ -257,7 +298,8 @@ namespace Maps::Map_Format
         // The world width in tiles. It is equal to the world height since currently all maps are square maps.
         int32_t size{ 0 };
 
-        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
+        // This is the main language of the map. At the moment only one language is being supported.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;

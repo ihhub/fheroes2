@@ -22,11 +22,11 @@
 
 #include <cstdint>
 #include <list>
+#include <optional>
 #include <utility>
 #include <vector>
 
 #include "color.h"
-#include "mp2.h"
 #include "skill.h"
 
 class Heroes;
@@ -41,23 +41,32 @@ struct WorldNode final
 {
     int _from{ -1 };
     uint32_t _cost{ 0 };
-    MP2::MapObjectType _objectID{ MP2::OBJ_NONE };
     // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints{ 0 };
 
+    // When calculating tile availability for an AI-controlled player, various relatively heavy computations are
+    // performed, the result of which does not depend on the direction in which the tile is entered. The results
+    // of these calculations can be cached.
+    std::optional<bool> _isAccessibleForAI;
+    struct
+    {
+        std::optional<bool> fromWater;
+        std::optional<bool> fromLand;
+    } _isAvailableForWalkThroughForAI;
+
     WorldNode() = default;
-    WorldNode( const int node, const uint32_t cost, const MP2::MapObjectType object, const uint32_t remainingMovePoints )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-        , _remainingMovePoints( remainingMovePoints )
-    {}
+
+    void update( const int from, const uint32_t cost, const uint32_t remainingMovePoints )
+    {
+        _from = from;
+        _cost = cost;
+        _remainingMovePoints = remainingMovePoints;
+    }
 
     void reset()
     {
         _from = -1;
         _cost = 0;
-        _objectID = MP2::OBJ_NONE;
         _remainingMovePoints = 0;
     }
 };
@@ -78,8 +87,9 @@ public:
     uint32_t getDistance( int targetIndex ) const;
 
 protected:
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, const int currentNodeIdx );
+
     virtual void processWorldMap();
-    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
     // Checks whether moving from the source tile in the specified direction is allowed. The default implementation
     // can be overridden by a derived class.
@@ -102,9 +112,9 @@ protected:
     std::vector<WorldNode> _cache;
     std::vector<int> _mapOffset;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
     int _pathStart{ -1 };
     int _color{ Color::NONE };
     uint32_t _remainingMovePoints{ 0 };
@@ -138,9 +148,9 @@ private:
     // surface on which the hero is currently located is used.
     uint32_t getMaxMovePoints( const bool onWater ) const override;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
     uint32_t _maxMovePoints{ 0 };
 };
 
@@ -172,7 +182,11 @@ public:
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex ) const;
 
-    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
+    // Builds and returns a path to the tile with the index 'targetIndex', consisting of tile indexes suitable for using the
+    // Dimension Door spell to move between them. If the target tile is unsuitable for moving to it using the Dimension Door
+    // spell, but there is a tile suitable for this next to it, from which it is possible to move to the target tile, then the
+    // resulting path will end with this neighboring tile. If such a path could not be built, then an empty path is returned.
+    std::list<Route::Step> buildDimensionDoorPath( const int targetIndex );
 
     // Builds and returns a path to the tile with the index 'targetIndex'. If there is a need to pass through any objects
     // on the way to this tile, then a path to the nearest such object is returned. If the destination tile is not reachable
@@ -207,6 +221,9 @@ public:
     void setSpellPointsReserveRatio( const double ratio );
 
 private:
+    bool isTileAccessibleForAI( const int tileIndex );
+    bool isTileAvailableForWalkThroughForAI( const int tileIndex, const bool fromWater );
+
     void processWorldMap() override;
 
     // Adds special logic for AI-controlled heroes to use Summon Boat spell to overcome water obstacles (if available)
@@ -225,15 +242,23 @@ private:
     // this hero and it should also have a valid information about the hero's remaining movement points.
     uint32_t getMovementPenalty( const int from, const int to, const int direction ) const override;
 
-    // Hero properties should be cached here because they can change even if the hero's position does not change,
-    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
-    // pathfinder's cache
+    // The hero properties used by the pathfinder are cached here not just for optimization, but also because some
+    // of them may change even if the position of the hero does not change, so it should be possible to compare the
+    // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
+    int32_t _patrolCenter{ -1 };
+    uint32_t _patrolDistance{ 0 };
     uint32_t _maxMovePointsOnLand{ 0 };
     uint32_t _maxMovePointsOnWater{ 0 };
+    uint32_t _remainingSpellPoints{ 0 };
+    uint32_t _maxSpellPoints{ 0 };
+    uint32_t _dimensionDoorSPCost{ 0 };
+    uint32_t _dimensionDoorNumOfUses{ 0 };
     double _armyStrength{ -1 };
+    bool _isOnPatrol{ false };
     bool _isArtifactsBagFull{ false };
     bool _isEquippedWithSpellBook{ false };
     bool _isSummonBoatSpellAvailable{ false };
+    bool _isDimensionDoorSpellAvailable{ false };
 
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
     // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),

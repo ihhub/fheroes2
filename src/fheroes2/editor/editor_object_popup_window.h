@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,10 +22,10 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tiles & tile );
+    void showPopupWindow( const Maps::Tile & tile );
 }

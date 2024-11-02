@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 14:38+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -320,6 +320,9 @@ msgstr ""
 msgid "EVENTS"
 msgstr ""
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Válečník"
 
@@ -486,6 +489,9 @@ msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr "Artefakt Sféra Negace znemožňuje v této bitvě použít jakékoliv kouzla."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "V tomto kole si již kouzlil."
@@ -2835,11 +2841,11 @@ msgstr "Nejsou zde žádné stvoření k najmutí."
 msgid "Recruit Creatures"
 msgstr "Najmout Stvoření"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Najmout všechna stvoření ve městě."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Dostupných"
@@ -3035,17 +3041,14 @@ msgstr "Celkem: "
 msgid "Need: "
 msgstr "Potřeba: "
 
-msgid "Load Game"
-msgstr "Načíst Hru"
-
-msgid "No save files to load."
-msgstr "Žádné uložené hry k načtení."
-
 msgid "New Game"
 msgstr "Nová Hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Spusti hru jednoho nebo více hráčů."
+
+msgid "Load Game"
+msgstr "Načíst Hru"
 
 msgid "Load a previously saved game."
 msgstr "Načti dříve uloženou hru."
@@ -3260,6 +3263,10 @@ msgstr ""
 msgid "Select Game Language:"
 msgstr "Vybrat jazyk:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Vybrat jazyk:"
+
 msgid "Click to choose the selected language."
 msgstr "Kliknutím vybereš zvolený jazyk."
 
@@ -3286,6 +3293,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Můžeš se naučit:"
+
+msgid "n/a"
+msgstr "n/a"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3321,9 +3331,6 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možno zaměnit"
-
-msgid "n/a"
-msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "hlídáno %{count} %{monster}"
@@ -3432,6 +3439,20 @@ msgstr "Vybrat maximální počet k najmutí."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Vybrat pouze 1 stvůru k najmutí."
+
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Vybrat rozlišení"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
 
 msgid "Select Game Resolution:"
 msgstr "Nastav rozlišení hry:"
@@ -3626,6 +3647,33 @@ msgstr "Artefakt"
 msgid "Select Adventure Object:"
 msgstr "Artefakt"
 
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Velikost mapy"
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Map Type:\n"
 msgstr "Velikost mapy"
@@ -3639,6 +3687,13 @@ msgstr "Cena za věrnost"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Oživení"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Jazyk"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3718,33 +3773,6 @@ msgstr "Všechny mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Zobrazí všechny mapy, nezávisle na velikosti."
-
-msgid "Players Icon"
-msgstr ""
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-
-msgid "Size Icon"
-msgstr ""
-
-#, fuzzy
-msgid "Map Type"
-msgstr "Velikost mapy"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
 
 msgid "Selected Name"
 msgstr ""
@@ -4164,6 +4192,10 @@ msgid "Unable to create a directory to save the map."
 msgstr ""
 
 #, fuzzy
+msgid "Unable to locate a directory to save the map."
+msgstr "Uložit do souboru:"
+
+#, fuzzy
 msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Jsi si jist, že chceš prěpsat soubor pod tímto názvem?"
 
@@ -4497,6 +4529,26 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " aliance"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " aliance"
+
+#, fuzzy
 msgid "Special Loss Condition"
 msgstr ""
 "Podmínky\n"
@@ -4515,6 +4567,14 @@ msgid "Allow this condition also for AI"
 msgstr ""
 
 #, fuzzy
+msgid "Set alliances:"
+msgstr " aliance"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " aliance"
+
+#, fuzzy
 msgid "Gold:"
 msgstr "Zlato"
 
@@ -4531,6 +4591,14 @@ msgstr ""
 #, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
 
 msgid "Days:"
 msgstr ""
@@ -4562,15 +4630,21 @@ msgstr ""
 "\n"
 "Cesta: "
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 #, fuzzy
@@ -4591,6 +4665,10 @@ msgstr "Kliknutím se rozliśení změní na vybrané. "
 #, fuzzy
 msgid "Events"
 msgstr "Událost"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Změnit jazyk hry."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5009,6 +5087,9 @@ msgstr ""
 
 msgid "Package Design"
 msgstr ""
+
+msgid "High Scores"
+msgstr "Nejlepší výsledky"
 
 msgid "Your Name"
 msgstr ""
@@ -5444,6 +5525,9 @@ msgstr "Tato hra je uložena s lokalizací pro '"
 msgid "' language, but the current language of the game is '"
 msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 
+msgid "No save files to load."
+msgstr "Žádné uložené hry k načtení."
+
 msgid "Hot Seat"
 msgstr "Horké křeslo"
 
@@ -5527,9 +5611,6 @@ msgstr "Autoři"
 
 msgid "View the credits screen."
 msgstr "Zobraz obrazovku s autory."
-
-msgid "High Scores"
-msgstr "Nejlepší výsledky"
 
 msgid "View the high scores screen."
 msgstr "Zobraz tabulku s nej. skóre."
@@ -7467,7 +7548,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -8387,6 +8472,12 @@ msgid "speed|Blazing"
 msgstr ""
 
 msgid "speed|Instant"
+msgstr ""
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
 msgstr ""
 
 msgid "week|Squirrel"
@@ -10800,15 +10891,15 @@ msgstr "Magicky zvýší obrannou sílu vybraných stvůr."
 msgid "Stoneskin"
 msgstr "Kamenná kůže"
 
+msgid "Steelskin"
+msgstr "Kůže z oceli"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Zvyšuje obrannou sílu u cílových stvůr. Jedná se o vylepšenou verzi kouzla "
 "Kamenná kůže."
-
-msgid "Steelskin"
-msgstr "Kůže z oceli"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Způsobí, že vybrané stvůry budou působit minimální poškození."
@@ -10840,7 +10931,8 @@ msgstr "Svatý Výkřik"
 msgid "Anti-Magic"
 msgstr "Antimagie"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Znemožňuje použití škodlivé magie proti vybraným stvůrám."
 
 msgid "Dispel Magic"

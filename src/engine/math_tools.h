@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,32 +17,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2GAMEDEFS_H
-#define H2GAMEDEFS_H
 
-// hardcore defines: kingdom
-#define KINGDOMMAX 6
+#pragma once
 
-// hardcore defines: world
-#define DAYOFWEEK 7
-#define WEEKOFMONTH 4
+#include <cstdint>
+#include <vector>
 
-// hardcore defines: castle
-#define CASTLEMAXMONSTER 6
+#include "math_base.h"
 
-// hardcore defines: heroes
-#define HEROESMAXARTIFACT 14
-#define HEROESMAXSKILL 8
-
-// hardcore defines: skill
-#define MAXPRIMARYSKILL 4
-#define MAXSECONDARYSKILL 14
-
-// hardcore defines: interface
-#define RADARWIDTH 144
-#define BORDERWIDTH 16
-
-// ai/hero speed
-#define DEFAULT_BATTLE_SPEED 4
-
-#endif
+namespace fheroes2
+{
+    double GetAngle( const Point & start, const Point & target );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
+}

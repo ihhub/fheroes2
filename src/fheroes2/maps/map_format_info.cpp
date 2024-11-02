@@ -22,10 +22,44 @@
 
 #include <array>
 #include <cstddef>
-#include <type_traits>
 
 #include "serialize.h"
 #include "zzlib.h"
+
+namespace Maps::Map_Format
+{
+    // The following operators are used only inside this module, but they cannot be declared in an anonymous namespace due to the way ADL works
+
+    OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object );
+    IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile );
+    IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile );
+
+    OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo );
+    IStreamBase & operator>>( IStreamBase & stream, DailyEvent & eventInfo );
+
+    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const CastleMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, CastleMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const HeroMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, HeroMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const SphinxMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SphinxMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const SignMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SignMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata );
+}
 
 namespace
 {
@@ -38,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 4 };
+    constexpr uint16_t currentSupportedVersion{ 5 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -107,154 +141,42 @@ namespace
             }
         }
     }
-}
 
-namespace Maps::Map_Format
-{
-    StreamBase & operator<<( StreamBase & msg, const TileObjectInfo & object )
+    void convertFromV4ToV5( Maps::Map_Format::MapFormat & map )
     {
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
+        static_assert( minimumSupportedVersion <= 4, "Remove this function." );
 
-        return msg << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
+        if ( map.version > 4 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS && objInfo.index >= 128 ) {
+                    // Shift the objects in the Landscape Miscellaneous group by 1 position "down" to add missed Small cliff, dirt terrain.
+                    objInfo.index += 1;
+                }
+            }
+        }
     }
 
-    StreamBase & operator>>( StreamBase & msg, TileObjectInfo & object )
+    bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
-        msg >> object.id;
+        stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
+               << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
 
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
-        GroupUnderlyingType group;
-        msg >> group;
-
-        object.group = static_cast<ObjectGroup>( group );
-
-        return msg >> object.index;
+        return !stream.fail();
     }
 
-    StreamBase & operator<<( StreamBase & msg, const TileInfo & tile )
+    bool loadFromStream( IStreamBase & stream, Maps::Map_Format::BaseMapFormat & map )
     {
-        return msg << tile.terrainIndex << tile.terrainFlag << tile.objects;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, TileInfo & tile )
-    {
-        return msg >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo )
-    {
-        return msg << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay << eventInfo.repeatPeriodInDays
-                   << eventInfo.resources;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo )
-    {
-        return msg >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay >> eventInfo.repeatPeriodInDays
-               >> eventInfo.resources;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
-    {
-        return msg << metadata.metadata;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata )
-    {
-        return msg >> metadata.metadata;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
-    {
-        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
-                   << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
-    {
-        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
-               >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata )
-    {
-        return msg << metadata.customName << metadata.customPortrait << metadata.armyMonsterType << metadata.armyMonsterCount << metadata.artifact
-                   << metadata.artifactMetadata << metadata.availableSpells << metadata.isOnPatrol << metadata.patrolRadius << metadata.secondarySkill
-                   << metadata.secondarySkillLevel << metadata.customLevel << metadata.customExperience << metadata.customAttack << metadata.customDefense
-                   << metadata.customKnowledge << metadata.customSpellPower << metadata.magicPoints << metadata.race;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
-    {
-        return msg >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
-               >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefense
-               >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints >> metadata.race;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
-    {
-        return msg << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
-    {
-        return msg >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
-    {
-        return msg << metadata.message;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata )
-    {
-        return msg >> metadata.message;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
-    {
-        return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
-                   << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
-                   << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
-    {
-        return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
-               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
-               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const ShrineMetadata & metadata )
-    {
-        return msg << metadata.allowedSpells;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, ShrineMetadata & metadata )
-    {
-        return msg >> metadata.allowedSpells;
-    }
-
-    bool saveToStream( StreamBase & msg, const BaseMapFormat & map )
-    {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-
-        msg << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
-            << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-            << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-            << map.name << map.description;
-
-        return !msg.fail();
-    }
-
-    bool loadFromStream( StreamBase & msg, BaseMapFormat & map )
-    {
-        msg >> map.version;
+        stream >> map.version;
         if ( map.version < minimumSupportedVersion || map.version > currentSupportedVersion ) {
             return false;
         }
 
-        msg >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
+        stream >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
             >> map.lossConditionMetadata >> map.size;
 
@@ -263,59 +185,52 @@ namespace Maps::Map_Format
             return false;
         }
 
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
-        LanguageUnderlyingType language;
+        stream >> map.mainLanguage >> map.name >> map.description;
 
-        msg >> language;
-        map.language = static_cast<fheroes2::SupportedLanguage>( language );
-
-        msg >> map.name >> map.description;
-
-        return !msg.fail();
+        return !stream.fail();
     }
 
-    bool saveToStream( StreamBase & msg, const MapFormat & map )
+    bool saveToStream( OStreamBase & stream, const Maps::Map_Format::MapFormat & map )
     {
         // Only the base map information is not encoded.
         // The rest of data must be compressed to prevent manual corruption of the file.
-        if ( !saveToStream( msg, static_cast<const BaseMapFormat &>( map ) ) ) {
+        if ( !saveToStream( stream, static_cast<const Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
             return false;
         }
 
-        StreamBuf compressed;
-        compressed.setbigendian( true );
+        RWStreamBuf compressed;
+        compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
                    << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
 
-        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
-        msg.putRaw( temp.data(), temp.size() );
+        stream.putRaw( temp.data(), temp.size() );
 
-        return !msg.fail();
+        return !stream.fail();
     }
 
-    bool loadFromStream( StreamBase & msg, MapFormat & map )
+    bool loadFromStream( IStreamBase & stream, Maps::Map_Format::MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        if ( !loadFromStream( msg, static_cast<BaseMapFormat &>( map ) ) ) {
+        if ( !loadFromStream( stream, static_cast<Maps::Map_Format::BaseMapFormat &>( map ) ) ) {
             map = {};
             return false;
         }
 
-        StreamBuf decompressed;
-        decompressed.setbigendian( true );
+        RWStreamBuf decompressed;
+        decompressed.setBigendian( true );
 
         {
-            std::vector<uint8_t> temp = msg.getRaw();
+            std::vector<uint8_t> temp = stream.getRaw( 0 );
             if ( temp.empty() ) {
                 // This is a corrupted file.
                 map = {};
                 return false;
             }
 
-            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            const std::vector<uint8_t> decompressedData = Compression::unzipData( temp.data(), temp.size() );
             if ( decompressedData.empty() ) {
                 // This is a corrupted file.
                 map = {};
@@ -341,8 +256,126 @@ namespace Maps::Map_Format
         static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
+        convertFromV4ToV5( map );
 
-        return !msg.fail();
+        return !stream.fail();
+    }
+}
+
+namespace Maps::Map_Format
+{
+    OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object )
+    {
+        return stream << object.id << object.group << object.index;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object )
+    {
+        return stream >> object.id >> object.group >> object.index;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )
+    {
+        return stream << tile.terrainIndex << tile.terrainFlag << tile.objects;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile )
+    {
+        return stream >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo )
+    {
+        return stream << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay
+                      << eventInfo.repeatPeriodInDays << eventInfo.resources;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, DailyEvent & eventInfo )
+    {
+        return stream >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay
+               >> eventInfo.repeatPeriodInDays >> eventInfo.resources;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata )
+    {
+        return stream << metadata.metadata;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata )
+    {
+        return stream >> metadata.metadata;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const CastleMetadata & metadata )
+    {
+        return stream << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
+                      << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, CastleMetadata & metadata )
+    {
+        return stream >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
+               >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const HeroMetadata & metadata )
+    {
+        return stream << metadata.customName << metadata.customPortrait << metadata.armyMonsterType << metadata.armyMonsterCount << metadata.artifact
+                      << metadata.artifactMetadata << metadata.availableSpells << metadata.isOnPatrol << metadata.patrolRadius << metadata.secondarySkill
+                      << metadata.secondarySkillLevel << metadata.customLevel << metadata.customExperience << metadata.customAttack << metadata.customDefense
+                      << metadata.customKnowledge << metadata.customSpellPower << metadata.magicPoints << metadata.race;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, HeroMetadata & metadata )
+    {
+        return stream >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
+               >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
+               >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefense
+               >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints >> metadata.race;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const SphinxMetadata & metadata )
+    {
+        return stream << metadata.riddle << metadata.answers << metadata.artifact << metadata.artifactMetadata << metadata.resources;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, SphinxMetadata & metadata )
+    {
+        return stream >> metadata.riddle >> metadata.answers >> metadata.artifact >> metadata.artifactMetadata >> metadata.resources;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const SignMetadata & metadata )
+    {
+        return stream << metadata.message;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, SignMetadata & metadata )
+    {
+        return stream >> metadata.message;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata )
+    {
+        return stream << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
+                      << metadata.artifactMetadata << metadata.resources << metadata.attack << metadata.defense << metadata.knowledge << metadata.spellPower
+                      << metadata.experience << metadata.secondarySkill << metadata.secondarySkillLevel << metadata.monsterType << metadata.monsterCount;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata )
+    {
+        return stream >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
+               >> metadata.artifactMetadata >> metadata.resources >> metadata.attack >> metadata.defense >> metadata.knowledge >> metadata.spellPower
+               >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata )
+    {
+        return stream << metadata.allowedSpells;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata )
+    {
+        return stream >> metadata.allowedSpells;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
@@ -352,7 +385,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -379,7 +412,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "rb" ) ) {
             return false;
@@ -406,7 +439,7 @@ namespace Maps::Map_Format
         }
 
         StreamFile fileStream;
-        fileStream.setbigendian( true );
+        fileStream.setBigendian( true );
 
         if ( !fileStream.open( path, "wb" ) ) {
             return false;
