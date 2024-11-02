@@ -5070,6 +5070,37 @@ namespace
 
             return true;
         }
+        case ICN::SCENIBKG_EVIL: {
+            const int32_t originalId = ICN::SCENIBKG;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() != 1 ) {
+                return true;
+            }
+
+            _icnVsSprite[id].resize( 1 );
+
+            const auto & originalImage = _icnVsSprite[originalId][0];
+            auto & outputImage = _icnVsSprite[id][0];
+
+            outputImage = originalImage;
+            convertToEvilInterface( outputImage, { 0, 0, outputImage.width(), outputImage.height() } );
+
+            loadICN( ICN::METALLIC_BORDERED_TEXTBOX_EVIL );
+            if ( _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL].empty() ) {
+                return true;
+            }
+
+            const auto & evilTextBox = _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL][0];
+
+            // The original text area is shorter than one we are using so we need to make 2 image copy operations to compensate this.
+            const int32_t textWidth = 361;
+            fheroes2::Copy( evilTextBox, 0, 0, outputImage, 46, 23, textWidth / 2, evilTextBox.height() );
+            fheroes2::Copy( evilTextBox, evilTextBox.width() - ( textWidth - textWidth / 2 ), 0, outputImage, 46 + textWidth / 2, 23, ( textWidth - textWidth / 2 ),
+                            evilTextBox.height() );
+
+            return true;
+        }
         default:
             break;
         }
