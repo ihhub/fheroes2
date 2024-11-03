@@ -1247,14 +1247,20 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                     assert( position.GetHead() != nullptr );
 
                     const bool isPositionUnderEnemyThreat = [enemy]( const Battle::Position & pos ) {
+                        const uint32_t distanceToEnemy = Battle::Board::GetDistance( pos, enemy->GetPosition() );
+                        assert( distanceToEnemy > 0 );
+
+                        // Any position directly adjacent to an enemy (even an immovable one) is considered to be under
+                        // threat, because in such a position, archers will not be able to shoot
+                        if ( distanceToEnemy == 1 ) {
+                            return true;
+                        }
+
                         // Archers who not blocked by enemy units generally threaten any position, but for the purpose
                         // of this assessment, it is assumed that they threaten only in melee, that is, in positions
                         // directly adjacent to them
                         if ( enemy->isArchers() && !enemy->isHandFighting() ) {
-                            const uint32_t distanceToEnemy = Battle::Board::GetDistance( pos, enemy->GetPosition() );
-                            assert( distanceToEnemy > 0 );
-
-                            return ( distanceToEnemy == 1 );
+                            return false;
                         }
 
                         // The potential event of enemy's good morale is not taken into account here
@@ -1305,7 +1311,11 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
 
                                                                    // Also consider the next turn, even if this unit has already acted during the current turn
                                                                    const uint32_t enemySpeed = enemy->GetSpeed( false, true );
-                                                                   assert( enemySpeed > Speed::STANDING );
+
+                                                                   // We can always retreat from an immovable enemy
+                                                                   if ( enemySpeed == Speed::STANDING ) {
+                                                                       return true;
+                                                                   }
 
                                                                    // In order for it to make sense to try to retreat from the enemy, the enemy should be somewhat
                                                                    // slower
