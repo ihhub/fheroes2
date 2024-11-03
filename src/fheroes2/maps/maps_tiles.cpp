@@ -616,35 +616,25 @@ int Maps::Tile::getTileIndependentPassability() const
 {
     // Tile-independent passability is based purely on object parts located on this tile.
     // We need to run through all object parts on the ground level to calculate the resulting passability.
-    //
-    // The total passability is a combination of all object parts on the tile.
-    // If we encounter any action object we have to stop calculations.
-    //
-    // All object parts should be verified in the following order:
-    // - main object part
-    // - from bottom object part from the end of the object list to the start
-    // In other words, we have to go through object parts in the reverse order as they are being rendered.
-    //
-    // Top object parts do not affect passability.
+    // Remember, top object parts do not affect passability.
     int passability = DIRECTION_ALL;
 
-    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
+    const auto getObjectPartPassability = []( const Maps::ObjectPart & part ) {
         if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
             // Rivers and stream are completely passable.
             return DIRECTION_ALL;
         }
 
-        // The tile has a valid object part. Check its passability.
+        // The tile has a valid main object part. Check its passability.
         const MP2::MapObjectType type = getObjectTypeByIcn( part.icnType, part.icnIndex );
-        if ( MP2::isOffGameActionObject( type ) ) {
-            // This is an action object part.
-            isActionObject = true;
-            return MP2::getActionObjectDirection( type );
-        }
-
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
             return 0;
+        }
+
+        if ( MP2::isOffGameActionObject( type ) ) {
+            // This is an action object part.
+            return MP2::getActionObjectDirection( type );
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
@@ -656,20 +646,12 @@ int Maps::Tile::getTileIndependentPassability() const
         return DIRECTION_ALL;
     };
 
-    bool isActionObject = false;
-
     if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        passability = passability & getObjectPartPassability( _mainObjectPart, isActionObject );
-        if ( isActionObject ) {
-            return passability;
-        }
+        passability = passability & getObjectPartPassability( _mainObjectPart );
     }
 
-    for ( auto iter = _groundObjectPart.crbegin(); iter != _groundObjectPart.crend(); ++iter ) {
-        passability = passability & getObjectPartPassability( *iter, isActionObject );
-        if ( isActionObject ) {
-            return passability;
-        }
+    for ( const auto & part : _groundObjectPart ) {
+        passability = passability & getObjectPartPassability( part );
     }
 
     return passability;
@@ -688,12 +670,6 @@ void Maps::Tile::setInitialPassability()
 
 void Maps::Tile::updatePassability()
 {
-    // If the passability is already 0 nothing we need to do.
-    if ( _tilePassabilityDirections == 0 ) {
-        // This tile is impassable.
-        return;
-    }
-
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = getMainObjectType( false );
 
@@ -781,20 +757,20 @@ void Maps::Tile::updatePassability()
         }
     }
 
-    // Verify the neighboring tiles.
-    // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
+    // Left side.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
         const Tile & leftTile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
-
-        if ( leftTile.anyTallObjectOnTile() && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+        const bool leftTileTallObject = leftTile.isTallObject();
+        if ( leftTileTallObject && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
 
+    // Right side.
     if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && isValidDirection( _index, Direction::RIGHT ) ) {
         const Tile & rightTile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
-
-        if ( rightTile.anyTallObjectOnTile() && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+        const bool rightTileTallObject = rightTile.isTallObject();
+        if ( rightTileTallObject && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
         }
     }
@@ -1687,11 +1663,11 @@ bool Maps::Tile::containsSprite( const MP2::ObjectIcnType objectIcnType, const u
                         [objectIcnType, imageIdx]( const auto & part ) { return part.icnType == objectIcnType && imageIdx == part.icnIndex; } );
 }
 
-bool Maps::Tile::anyTallObjectOnTile() const
+bool Maps::Tile::isTallObject() const
 {
-    // TODO: possibly cache the output of the method.
+    // TODO: possibly cache the output of the method as right now it's in average twice.
     if ( !isValidDirection( _index, Direction::TOP ) ) {
-        // This tile is on the first row. Any object on this tile cannot be tall.
+        // Nothing above so this object can't be tall.
         return false;
     }
 

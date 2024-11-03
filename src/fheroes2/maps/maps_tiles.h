@@ -346,7 +346,7 @@ namespace Maps
 
         void _updateRoadFlag();
 
-        bool anyTallObjectOnTile() const;
+        bool isTallObject() const;
 
         bool isDetachedObject() const;
 
