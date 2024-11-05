@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <ctime>
 
 #include "campaign_scenariodata.h"
@@ -226,9 +227,9 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
     {
-        static std::vector<std::pair<size_t, Monster::MonsterType>> monsterRatings;
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> monsterRatings = []() {
+            std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
-        if ( monsterRatings.empty() ) {
             uint32_t ratingSoFar = 0;
             uint32_t ratingIncrementCount = 0;
 
@@ -253,14 +254,21 @@ namespace fheroes2
                 }
 
                 ratingSoFar += ratingIncrementCount;
-                monsterRatings.emplace_back( ratingSoFar, monstersInRanking[i] );
+
+                result.emplace_back( ratingSoFar, monstersInRanking[i] );
+            }
+
+            return result;
+        }();
+
+        {
+            assert( !monsterRatings.empty() );
+
+            const auto & [maxRating, monster] = monsterRatings.back();
+            if ( rating >= maxRating ) {
+                return { monster };
             }
         }
-
-        const std::pair<size_t, Monster::MonsterType> & lastData = monsterRatings.back();
-
-        if ( rating >= lastData.first )
-            return Monster( lastData.second );
 
         Monster::MonsterType monster = Monster::PEASANT;
         for ( size_t i = 0; i < monsterRatings.size(); ++i ) {
@@ -270,14 +278,14 @@ namespace fheroes2
             }
         }
 
-        return Monster( monster );
+        return { monster };
     }
 
     Monster HighScoreDataContainer::getMonsterByDay( const size_t dayCount )
     {
-        static std::vector<std::pair<size_t, Monster::MonsterType>> monsterDays;
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> monsterDays = []() {
+            std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
-        if ( monsterDays.empty() ) {
             uint32_t daySoFar = 0;
             uint32_t dayIncrementCount = 0;
 
@@ -309,14 +317,21 @@ namespace fheroes2
                 }
 
                 daySoFar += dayIncrementCount;
-                monsterDays.emplace_back( daySoFar, monstersInRanking[i] );
+
+                result.emplace_back( daySoFar, monstersInRanking[i] );
+            }
+
+            return result;
+        }();
+
+        {
+            assert( !monsterDays.empty() );
+
+            const auto & [maxDayCount, monster] = monsterDays.back();
+            if ( dayCount >= maxDayCount ) {
+                return { monster };
             }
         }
-
-        const std::pair<size_t, Monster::MonsterType> lastData = monsterDays.back();
-
-        if ( dayCount >= lastData.first )
-            return Monster( lastData.second );
 
         Monster::MonsterType monster = Monster::PEASANT;
         for ( size_t i = 0; i < monsterDays.size(); ++i ) {
@@ -326,7 +341,7 @@ namespace fheroes2
             }
         }
 
-        return Monster( monster );
+        return { monster };
     }
 
     void HighScoreDataContainer::populateStandardDefaultHighScores()
