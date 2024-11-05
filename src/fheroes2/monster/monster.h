@@ -50,7 +50,7 @@ public:
         LEVEL_4
     };
 
-    enum monster_t : int32_t
+    enum MonsterType : int32_t
     {
         UNKNOWN,
 

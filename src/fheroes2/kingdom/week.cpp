@@ -73,7 +73,7 @@ namespace
         return WeekName::PLAGUE;
     }
 
-    Monster::monster_t RandomMonsterWeekOf( const uint32_t seed )
+    Monster::MonsterType RandomMonsterWeekOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
         fheroes2::hashCombine( monsterSeed, 886473 ); // Salt
@@ -81,7 +81,7 @@ namespace
         return Rand::GetWithSeed( Monster::PEASANT, Monster::BONE_DRAGON, monsterSeed );
     }
 
-    Monster::monster_t RandomMonsterMonthOf( const uint32_t seed )
+    Monster::MonsterType RandomMonsterMonthOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
         fheroes2::hashCombine( monsterSeed, 1130906 ); // Salt

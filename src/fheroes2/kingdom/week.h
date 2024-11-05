@@ -70,7 +70,7 @@ enum class WeekName : int
 
 struct Week
 {
-    Week( const WeekName type = WeekName::UNNAMED, const Monster::monster_t monster = Monster::UNKNOWN )
+    Week( const WeekName type = WeekName::UNNAMED, const Monster::MonsterType monster = Monster::UNKNOWN )
         : _week( type )
         , _monster( monster )
     {}
@@ -80,7 +80,7 @@ struct Week
         return _week;
     }
 
-    Monster::monster_t GetMonster() const
+    Monster::MonsterType GetMonster() const
     {
         return _monster;
     }
@@ -91,7 +91,7 @@ struct Week
 
 private:
     WeekName _week;
-    Monster::monster_t _monster;
+    Monster::MonsterType _monster;
 };
 
 #endif

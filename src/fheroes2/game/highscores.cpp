@@ -38,39 +38,39 @@ namespace
 
     const size_t highscoreMaximumEntries = 10;
 
-    const std::array<Monster::monster_t, 66> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
-                                                                   Monster::SPRITE,        Monster::HALFLING,
-                                                                   Monster::CENTAUR,       Monster::ROGUE,
-                                                                   Monster::SKELETON,      Monster::ORC,
-                                                                   Monster::ZOMBIE,        Monster::ARCHER,
-                                                                   Monster::RANGER,        Monster::BOAR,
-                                                                   Monster::DWARF,         Monster::MUTANT_ZOMBIE,
-                                                                   Monster::ORC_CHIEF,     Monster::ELF,
-                                                                   Monster::GARGOYLE,      Monster::PIKEMAN,
-                                                                   Monster::GRAND_ELF,     Monster::BATTLE_DWARF,
-                                                                   Monster::NOMAD,         Monster::VETERAN_PIKEMAN,
-                                                                   Monster::WOLF,          Monster::MUMMY,
-                                                                   Monster::IRON_GOLEM,    Monster::ROYAL_MUMMY,
-                                                                   Monster::OGRE,          Monster::GRIFFIN,
-                                                                   Monster::SWORDSMAN,     Monster::DRUID,
-                                                                   Monster::STEEL_GOLEM,   Monster::MASTER_SWORDSMAN,
-                                                                   Monster::AIR_ELEMENT,   Monster::GREATER_DRUID,
-                                                                   Monster::FIRE_ELEMENT,  Monster::GHOST,
-                                                                   Monster::VAMPIRE,       Monster::WATER_ELEMENT,
-                                                                   Monster::EARTH_ELEMENT, Monster::ROC,
-                                                                   Monster::MINOTAUR,      Monster::CAVALRY,
-                                                                   Monster::TROLL,         Monster::MAGE,
-                                                                   Monster::MEDUSA,        Monster::LICH,
-                                                                   Monster::OGRE_LORD,     Monster::MINOTAUR_KING,
-                                                                   Monster::CHAMPION,      Monster::WAR_TROLL,
-                                                                   Monster::VAMPIRE_LORD,  Monster::ARCHMAGE,
-                                                                   Monster::POWER_LICH,    Monster::UNICORN,
-                                                                   Monster::HYDRA,         Monster::PALADIN,
-                                                                   Monster::GENIE,         Monster::CRUSADER,
-                                                                   Monster::CYCLOPS,       Monster::GIANT,
-                                                                   Monster::PHOENIX,       Monster::BONE_DRAGON,
-                                                                   Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
-                                                                   Monster::TITAN,         Monster::BLACK_DRAGON };
+    const std::array<Monster::MonsterType, 66> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
+                                                                     Monster::SPRITE,        Monster::HALFLING,
+                                                                     Monster::CENTAUR,       Monster::ROGUE,
+                                                                     Monster::SKELETON,      Monster::ORC,
+                                                                     Monster::ZOMBIE,        Monster::ARCHER,
+                                                                     Monster::RANGER,        Monster::BOAR,
+                                                                     Monster::DWARF,         Monster::MUTANT_ZOMBIE,
+                                                                     Monster::ORC_CHIEF,     Monster::ELF,
+                                                                     Monster::GARGOYLE,      Monster::PIKEMAN,
+                                                                     Monster::GRAND_ELF,     Monster::BATTLE_DWARF,
+                                                                     Monster::NOMAD,         Monster::VETERAN_PIKEMAN,
+                                                                     Monster::WOLF,          Monster::MUMMY,
+                                                                     Monster::IRON_GOLEM,    Monster::ROYAL_MUMMY,
+                                                                     Monster::OGRE,          Monster::GRIFFIN,
+                                                                     Monster::SWORDSMAN,     Monster::DRUID,
+                                                                     Monster::STEEL_GOLEM,   Monster::MASTER_SWORDSMAN,
+                                                                     Monster::AIR_ELEMENT,   Monster::GREATER_DRUID,
+                                                                     Monster::FIRE_ELEMENT,  Monster::GHOST,
+                                                                     Monster::VAMPIRE,       Monster::WATER_ELEMENT,
+                                                                     Monster::EARTH_ELEMENT, Monster::ROC,
+                                                                     Monster::MINOTAUR,      Monster::CAVALRY,
+                                                                     Monster::TROLL,         Monster::MAGE,
+                                                                     Monster::MEDUSA,        Monster::LICH,
+                                                                     Monster::OGRE_LORD,     Monster::MINOTAUR_KING,
+                                                                     Monster::CHAMPION,      Monster::WAR_TROLL,
+                                                                     Monster::VAMPIRE_LORD,  Monster::ARCHMAGE,
+                                                                     Monster::POWER_LICH,    Monster::UNICORN,
+                                                                     Monster::HYDRA,         Monster::PALADIN,
+                                                                     Monster::GENIE,         Monster::CRUSADER,
+                                                                     Monster::CYCLOPS,       Monster::GIANT,
+                                                                     Monster::PHOENIX,       Monster::BONE_DRAGON,
+                                                                     Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
+                                                                     Monster::TITAN,         Monster::BLACK_DRAGON };
 
     int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries, const bool isCampaign )
     {
@@ -226,14 +226,14 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
     {
-        static std::vector<std::pair<size_t, Monster::monster_t>> monsterRatings;
+        static std::vector<std::pair<size_t, Monster::MonsterType>> monsterRatings;
 
         if ( monsterRatings.empty() ) {
             uint32_t ratingSoFar = 0;
             uint32_t ratingIncrementCount = 0;
 
             for ( size_t i = 0; i < monstersInRanking.size(); ++i ) {
-                const Monster::monster_t monster = monstersInRanking[i];
+                const Monster::MonsterType monster = monstersInRanking[i];
 
                 // 0 to 3
                 if ( monster == Monster::PEASANT ) {
@@ -257,12 +257,12 @@ namespace fheroes2
             }
         }
 
-        const std::pair<size_t, Monster::monster_t> & lastData = monsterRatings.back();
+        const std::pair<size_t, Monster::MonsterType> & lastData = monsterRatings.back();
 
         if ( rating >= lastData.first )
             return Monster( lastData.second );
 
-        Monster::monster_t monster = Monster::PEASANT;
+        Monster::MonsterType monster = Monster::PEASANT;
         for ( size_t i = 0; i < monsterRatings.size(); ++i ) {
             if ( rating <= monsterRatings[i].first ) {
                 monster = monsterRatings[i].second;
@@ -275,7 +275,7 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByDay( const size_t dayCount )
     {
-        static std::vector<std::pair<size_t, Monster::monster_t>> monsterDays;
+        static std::vector<std::pair<size_t, Monster::MonsterType>> monsterDays;
 
         if ( monsterDays.empty() ) {
             uint32_t daySoFar = 0;
@@ -285,7 +285,7 @@ namespace fheroes2
             const int monstersInRankingCount = static_cast<int>( monstersInRanking.size() );
 
             for ( int i = monstersInRankingCount - 1; i >= 0; --i ) {
-                const Monster::monster_t monster = monstersInRanking[i];
+                const Monster::MonsterType monster = monstersInRanking[i];
 
                 // 0 to 300
                 if ( monster == Monster::BLACK_DRAGON ) {
@@ -313,12 +313,12 @@ namespace fheroes2
             }
         }
 
-        std::pair<size_t, Monster::monster_t> lastData = monsterDays.back();
+        std::pair<size_t, Monster::MonsterType> lastData = monsterDays.back();
 
         if ( dayCount >= lastData.first )
             return Monster( lastData.second );
 
-        Monster::monster_t monster = Monster::PEASANT;
+        Monster::MonsterType monster = Monster::PEASANT;
         for ( size_t i = 0; i < monsterDays.size(); ++i ) {
             if ( dayCount <= monsterDays[i].first ) {
                 monster = monsterDays[i].second;
