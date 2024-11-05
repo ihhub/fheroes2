@@ -313,7 +313,7 @@ namespace fheroes2
             }
         }
 
-        std::pair<size_t, Monster::MonsterType> lastData = monsterDays.back();
+        const std::pair<size_t, Monster::MonsterType> lastData = monsterDays.back();
 
         if ( dayCount >= lastData.first )
             return Monster( lastData.second );
