@@ -109,7 +109,7 @@ namespace fheroes2
         }
 
         static Monster getMonsterByRating( const size_t rating );
-        static Monster getMonsterByDay( const size_t dayCount );
+        static Monster getMonsterByDay( const size_t numOfDays );
 
         void clear()
         {

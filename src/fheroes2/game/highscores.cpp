@@ -228,49 +228,49 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
     {
-        static const std::vector<std::pair<size_t, Monster::MonsterType>> monsterRatings = []() {
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> ratingPerMonster = []() {
             std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
-            uint32_t ratingSoFar = 0;
-            uint32_t ratingIncrementCount = 0;
+            uint32_t threshold = 0;
+            uint32_t step = 0;
 
             for ( const Monster::MonsterType monster : monstersInRanking ) {
                 // 0 to 3
                 if ( monster == Monster::PEASANT ) {
-                    ratingIncrementCount = 3;
+                    step = 3;
                 }
                 // 4 to 131
                 else if ( monster == Monster::GOBLIN ) {
-                    ratingIncrementCount = 4;
+                    step = 4;
                 }
                 // 132 to 227
                 else if ( monster == Monster::GREATER_DRUID ) {
-                    ratingIncrementCount = 3;
+                    step = 3;
                 }
                 // >= 228
                 else if ( monster == Monster::BLACK_DRAGON ) {
-                    ratingIncrementCount = 1;
+                    step = 1;
                 }
 
-                ratingSoFar += ratingIncrementCount;
+                threshold += step;
 
-                result.emplace_back( ratingSoFar, monster );
+                result.emplace_back( threshold, monster );
             }
 
             return result;
         }();
 
         {
-            assert( !monsterRatings.empty() );
+            assert( !ratingPerMonster.empty() );
 
-            const auto & [maxRating, monster] = monsterRatings.back();
-            if ( rating >= maxRating ) {
+            const auto & [monsRating, monster] = ratingPerMonster.back();
+            if ( rating >= monsRating ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [monsterRating, monster] : monsterRatings ) {
-            if ( rating <= monsterRating ) {
+        for ( const auto & [monsRating, monster] : ratingPerMonster ) {
+            if ( rating <= monsRating ) {
                 return { monster };
             }
         }
@@ -280,57 +280,57 @@ namespace fheroes2
         return { Monster::PEASANT };
     }
 
-    Monster HighScoreDataContainer::getMonsterByDay( const size_t dayCount )
+    Monster HighScoreDataContainer::getMonsterByDay( const size_t numOfDays )
     {
-        static const std::vector<std::pair<size_t, Monster::MonsterType>> monsterDays = []() {
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> numOfDaysPerMonster = []() {
             std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
-            uint32_t daySoFar = 0;
-            uint32_t dayIncrementCount = 0;
+            uint32_t threshold = 0;
+            uint32_t step = 0;
 
             for ( auto iter = monstersInRanking.crbegin(); iter != monstersInRanking.crend(); ++iter ) {
                 const Monster::MonsterType monster = *iter;
 
                 // 0 to 300
                 if ( monster == Monster::BLACK_DRAGON ) {
-                    dayIncrementCount = 300;
+                    step = 300;
                 }
                 // 301 to 1000
                 else if ( monster == Monster::TITAN ) {
-                    dayIncrementCount = 20;
+                    step = 20;
                 }
                 // 1001 to 2000
                 else if ( monster == Monster::DRUID ) {
-                    dayIncrementCount = 100;
+                    step = 100;
                 }
                 // 2001 to 5800
                 else if ( monster == Monster::BATTLE_DWARF ) {
-                    dayIncrementCount = 200;
+                    step = 200;
                 }
                 // >= 5801
                 else if ( monster == Monster::PEASANT ) {
-                    dayIncrementCount = 1;
+                    step = 1;
                 }
 
-                daySoFar += dayIncrementCount;
+                threshold += step;
 
-                result.emplace_back( daySoFar, monster );
+                result.emplace_back( threshold, monster );
             }
 
             return result;
         }();
 
         {
-            assert( !monsterDays.empty() );
+            assert( !numOfDaysPerMonster.empty() );
 
-            const auto & [maxDayCount, monster] = monsterDays.back();
-            if ( dayCount >= maxDayCount ) {
+            const auto & [monsNumOfDays, monster] = numOfDaysPerMonster.back();
+            if ( numOfDays >= monsNumOfDays ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [maxDayCount, monster] : monsterDays ) {
-            if ( dayCount <= maxDayCount ) {
+        for ( const auto & [monsNumOfDays, monster] : numOfDaysPerMonster ) {
+            if ( numOfDays <= monsNumOfDays ) {
                 return { monster };
             }
         }
