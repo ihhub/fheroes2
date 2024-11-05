@@ -233,9 +233,7 @@ namespace fheroes2
             uint32_t ratingSoFar = 0;
             uint32_t ratingIncrementCount = 0;
 
-            for ( size_t i = 0; i < monstersInRanking.size(); ++i ) {
-                const Monster::MonsterType monster = monstersInRanking[i];
-
+            for ( const Monster::MonsterType monster : monstersInRanking ) {
                 // 0 to 3
                 if ( monster == Monster::PEASANT ) {
                     ratingIncrementCount = 3;
@@ -255,7 +253,7 @@ namespace fheroes2
 
                 ratingSoFar += ratingIncrementCount;
 
-                result.emplace_back( ratingSoFar, monstersInRanking[i] );
+                result.emplace_back( ratingSoFar, monster );
             }
 
             return result;
@@ -270,15 +268,15 @@ namespace fheroes2
             }
         }
 
-        Monster::MonsterType monster = Monster::PEASANT;
-        for ( size_t i = 0; i < monsterRatings.size(); ++i ) {
-            if ( rating <= monsterRatings[i].first ) {
-                monster = monsterRatings[i].second;
-                break;
+        for ( const auto & [monsterRating, monster] : monsterRatings ) {
+            if ( rating <= monsterRating ) {
+                return { monster };
             }
         }
 
-        return { monster };
+        assert( 0 );
+
+        return { Monster::PEASANT };
     }
 
     Monster HighScoreDataContainer::getMonsterByDay( const size_t dayCount )
@@ -289,11 +287,8 @@ namespace fheroes2
             uint32_t daySoFar = 0;
             uint32_t dayIncrementCount = 0;
 
-            // need int for reverse-for loop
-            const int monstersInRankingCount = static_cast<int>( monstersInRanking.size() );
-
-            for ( int i = monstersInRankingCount - 1; i >= 0; --i ) {
-                const Monster::MonsterType monster = monstersInRanking[i];
+            for ( auto iter = monstersInRanking.crbegin(); iter != monstersInRanking.crend(); ++iter ) {
+                const Monster::MonsterType monster = *iter;
 
                 // 0 to 300
                 if ( monster == Monster::BLACK_DRAGON ) {
@@ -318,7 +313,7 @@ namespace fheroes2
 
                 daySoFar += dayIncrementCount;
 
-                result.emplace_back( daySoFar, monstersInRanking[i] );
+                result.emplace_back( daySoFar, monster );
             }
 
             return result;
@@ -333,15 +328,15 @@ namespace fheroes2
             }
         }
 
-        Monster::MonsterType monster = Monster::PEASANT;
-        for ( size_t i = 0; i < monsterDays.size(); ++i ) {
-            if ( dayCount <= monsterDays[i].first ) {
-                monster = monsterDays[i].second;
-                break;
+        for ( const auto & [maxDayCount, monster] : monsterDays ) {
+            if ( dayCount <= maxDayCount ) {
+                return { monster };
             }
         }
 
-        return { monster };
+        assert( 0 );
+
+        return { Monster::PEASANT };
     }
 
     void HighScoreDataContainer::populateStandardDefaultHighScores()

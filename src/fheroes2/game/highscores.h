@@ -96,7 +96,6 @@ namespace fheroes2
         int32_t registerScoreCampaign( HighscoreData && data );
 
         void populateStandardDefaultHighScores();
-
         void populateCampaignDefaultHighScores();
 
         const std::vector<HighscoreData> & getHighScoresStandard() const
