@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <ctime>
+#include <iterator>
 
 #include "campaign_scenariodata.h"
 #include "game_language.h"
