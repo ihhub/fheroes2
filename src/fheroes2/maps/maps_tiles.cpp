@@ -786,7 +786,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
         const Tile & leftTile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
 
-        if ( leftTile.anyTallObjectOnTile() && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+        if ( leftTile.isAnyTallObjectOnTile() && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
@@ -794,7 +794,7 @@ void Maps::Tile::updatePassability()
     if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && isValidDirection( _index, Direction::RIGHT ) ) {
         const Tile & rightTile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
 
-        if ( rightTile.anyTallObjectOnTile() && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+        if ( rightTile.isAnyTallObjectOnTile() && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
         }
     }
@@ -1687,7 +1687,7 @@ bool Maps::Tile::containsSprite( const MP2::ObjectIcnType objectIcnType, const u
                         [objectIcnType, imageIdx]( const auto & part ) { return part.icnType == objectIcnType && imageIdx == part.icnIndex; } );
 }
 
-bool Maps::Tile::anyTallObjectOnTile() const
+bool Maps::Tile::isAnyTallObjectOnTile() const
 {
     // TODO: possibly cache the output of the method.
     if ( !isValidDirection( _index, Direction::TOP ) ) {
