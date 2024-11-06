@@ -263,14 +263,14 @@ namespace fheroes2
         {
             assert( !ratingPerMonster.empty() );
 
-            const auto & [monsRating, monster] = ratingPerMonster.back();
-            if ( rating >= monsRating ) {
+            const auto & [threshold, monster] = ratingPerMonster.back();
+            if ( rating >= threshold ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [monsRating, monster] : ratingPerMonster ) {
-            if ( rating <= monsRating ) {
+        for ( const auto & [threshold, monster] : ratingPerMonster ) {
+            if ( rating <= threshold ) {
                 return { monster };
             }
         }
@@ -323,14 +323,14 @@ namespace fheroes2
         {
             assert( !numOfDaysPerMonster.empty() );
 
-            const auto & [monsNumOfDays, monster] = numOfDaysPerMonster.back();
-            if ( numOfDays >= monsNumOfDays ) {
+            const auto & [threshold, monster] = numOfDaysPerMonster.back();
+            if ( numOfDays >= threshold ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [monsNumOfDays, monster] : numOfDaysPerMonster ) {
-            if ( numOfDays <= monsNumOfDays ) {
+        for ( const auto & [threshold, monster] : numOfDaysPerMonster ) {
+            if ( numOfDays <= threshold ) {
                 return { monster };
             }
         }
