@@ -228,7 +228,7 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
     {
-        static const std::vector<std::pair<size_t, Monster::MonsterType>> ratingPerMonster = []() {
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> ratingForMonster = []() {
             std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
             uint32_t threshold = 0;
@@ -261,15 +261,15 @@ namespace fheroes2
         }();
 
         {
-            assert( !ratingPerMonster.empty() );
+            assert( !ratingForMonster.empty() );
 
-            const auto & [threshold, monster] = ratingPerMonster.back();
+            const auto & [threshold, monster] = ratingForMonster.back();
             if ( rating >= threshold ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [threshold, monster] : ratingPerMonster ) {
+        for ( const auto & [threshold, monster] : ratingForMonster ) {
             if ( rating <= threshold ) {
                 return { monster };
             }
@@ -282,7 +282,7 @@ namespace fheroes2
 
     Monster HighScoreDataContainer::getMonsterByDay( const size_t numOfDays )
     {
-        static const std::vector<std::pair<size_t, Monster::MonsterType>> numOfDaysPerMonster = []() {
+        static const std::vector<std::pair<size_t, Monster::MonsterType>> numOfDaysForMonster = []() {
             std::vector<std::pair<size_t, Monster::MonsterType>> result;
 
             uint32_t threshold = 0;
@@ -321,15 +321,15 @@ namespace fheroes2
         }();
 
         {
-            assert( !numOfDaysPerMonster.empty() );
+            assert( !numOfDaysForMonster.empty() );
 
-            const auto & [threshold, monster] = numOfDaysPerMonster.back();
+            const auto & [threshold, monster] = numOfDaysForMonster.back();
             if ( numOfDays >= threshold ) {
                 return { monster };
             }
         }
 
-        for ( const auto & [threshold, monster] : numOfDaysPerMonster ) {
+        for ( const auto & [threshold, monster] : numOfDaysForMonster ) {
             if ( numOfDays <= threshold ) {
                 return { monster };
             }
