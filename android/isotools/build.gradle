@@ -1,12 +1,14 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     namespace 'com.github.stephenc.javaisotools'
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 34
+        minSdk 22
+        targetSdk 35
     }
 }
