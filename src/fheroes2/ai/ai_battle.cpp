@@ -168,7 +168,8 @@ namespace
             for ( const int32_t index : Battle::Board::GetAroundIndexes( attackPos ) ) {
                 const Battle::Unit * unit = board->at( index ).GetUnit();
 
-                if ( unit == nullptr || unit->GetColor() == attacker.GetCurrentColor() ) {
+                // Attacking unit can be under the influence of the Hypnotize spell
+                if ( unit == nullptr || unit == &attacker || unit->GetColor() == attacker.GetCurrentColor() ) {
                     continue;
                 }
 
