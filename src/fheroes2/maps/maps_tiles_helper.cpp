@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <initializer_list>
 #include <limits>
 #include <list>
 #include <optional>

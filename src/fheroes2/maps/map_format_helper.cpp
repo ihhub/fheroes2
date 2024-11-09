@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <list>
 #include <map>
 #include <set>
@@ -34,9 +35,12 @@
 #include "army_troop.h"
 #include "castle.h"
 #include "color.h"
+#include "direction.h"
+#include "ground.h"
 #include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
