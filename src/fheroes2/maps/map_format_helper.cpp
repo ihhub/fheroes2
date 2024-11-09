@@ -590,6 +590,7 @@ namespace Maps
 
         const auto & firstObjectPart = objectInfo.groundLevelParts.front();
 
+        // Yes, the below code is very hacky but so far this is the best we can do.
         if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 ) {
             switch ( firstObjectPart.icnIndex ) {
             case 2U:
