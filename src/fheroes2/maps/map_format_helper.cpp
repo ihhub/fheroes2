@@ -248,7 +248,7 @@ namespace
 
         const uint8_t objectIndex = getStreamIndex( forceStreamOnTile ? ( direction | Direction::CENTER ) : direction );
 
-        if ( objectIndex == UINT32_MAX ) {
+        if ( objectIndex == 255U ) {
             return;
         }
 
