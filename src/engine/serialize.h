@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
@@ -419,14 +420,18 @@ public:
         return tellg();
     }
 
-    void seek( size_t sz )
+    void seek( const size_t pos )
     {
-        _itget = ( _itbeg + sz < _itend ? _itbeg + sz : _itend );
+        assert( _itbeg <= _itput );
+
+        const size_t putPos = _itput - _itbeg;
+
+        _itget = ( pos < putPos ? _itbeg + pos : _itput );
     }
 
-    void skip( size_t sz ) override
+    void skip( size_t size ) override
     {
-        _itget += ( sz <= sizeg() ? sz : sizeg() );
+        _itget += ( size < sizeg() ? size : sizeg() );
     }
 
     uint16_t getBE16() override
@@ -470,10 +475,10 @@ public:
     }
 
     // If a zero size is specified, then all still unread data is returned
-    std::vector<uint8_t> getRaw( size_t sz ) override
+    std::vector<uint8_t> getRaw( size_t size ) override
     {
         const size_t actualSize = sizeg();
-        const size_t resultSize = sz > 0 ? sz : actualSize;
+        const size_t resultSize = size > 0 ? size : actualSize;
         const size_t sizeToCopy = std::min( resultSize, actualSize );
 
         std::vector<uint8_t> result( resultSize, 0 );
@@ -488,9 +493,9 @@ public:
     // If a zero size is specified, then all still unread data is read, and from this data, a string is
     // formed that ends with the first null character found (or includes all data if no null character
     // was found), and this string is returned
-    std::string toString( const size_t sz = 0 )
+    std::string toString( const size_t size = 0 )
     {
-        const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
+        const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
 
         T * strBeg = _itget;
         _itget += length;
@@ -528,11 +533,15 @@ protected:
 
     size_t tellg() override
     {
+        assert( _itbeg <= _itget );
+
         return _itget - _itbeg;
     }
 
     size_t sizeg() override
     {
+        assert( _itget <= _itput );
+
         return _itput - _itget;
     }
 
@@ -549,6 +558,8 @@ protected:
 
     size_t capacity() const
     {
+        assert( _itbeg <= _itend );
+
         return _itend - _itbeg;
     }
 
@@ -566,7 +577,7 @@ public:
         : RWStreamBuf( 0 )
     {}
 
-    explicit RWStreamBuf( const size_t sz );
+    explicit RWStreamBuf( const size_t size );
 
     RWStreamBuf( const RWStreamBuf & ) = delete;
     RWStreamBuf( RWStreamBuf && ) = default;
@@ -581,7 +592,7 @@ public:
     void putBE16( uint16_t v ) override;
     void putLE16( uint16_t v ) override;
 
-    void putRaw( const void * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t size ) override;
 
 private:
     friend class StreamFile;
@@ -600,10 +611,7 @@ private:
     }
 
     // Advances the cursor intended for writing data forward by a specified number of bytes.
-    void advance( const size_t size )
-    {
-        _itput += size;
-    }
+    void advance( const size_t size );
 
     std::unique_ptr<uint8_t[]> _buf;
 };
@@ -642,23 +650,23 @@ public:
     // If a zero size is specified, then all still unread data is returned
     RWStreamBuf toStreamBuf( const size_t size = 0 );
 
-    void seek( size_t );
-    void skip( size_t ) override;
+    void seek( const size_t pos );
+    void skip( size_t size ) override;
 
     uint16_t getBE16() override;
     uint16_t getLE16() override;
     uint32_t getBE32() override;
     uint32_t getLE32() override;
 
-    void putBE16( uint16_t ) override;
-    void putLE16( uint16_t ) override;
-    void putBE32( uint32_t ) override;
-    void putLE32( uint32_t ) override;
+    void putBE16( uint16_t v ) override;
+    void putLE16( uint16_t v ) override;
+    void putBE32( uint32_t v ) override;
+    void putLE32( uint32_t v ) override;
 
     // If a zero size is specified, then all still unread data is returned
     std::vector<uint8_t> getRaw( const size_t size ) override;
 
-    void putRaw( const void * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t size ) override;
 
     // If a zero size is specified, then all still unread data is read, and from this data, a string is
     // formed that ends with the first null character found (or includes all data if no null character
@@ -681,25 +689,25 @@ private:
             return 0;
         }
 
-        T val;
+        T v;
 
-        if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
+        if ( std::fread( &v, sizeof( T ), 1, _file.get() ) != 1 ) {
             setFail();
 
             return 0;
         }
 
-        return val;
+        return v;
     }
 
     template <typename T>
-    void putUint( const T val )
+    void putUint( const T v )
     {
         if ( !_file ) {
             return;
         }
 
-        if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
+        if ( std::fwrite( &v, sizeof( T ), 1, _file.get() ) != 1 ) {
             setFail();
         }
     }

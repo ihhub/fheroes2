@@ -24,7 +24,6 @@
 #include "serialize.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstring>
 #include <ostream>
 #include <string>
@@ -245,10 +244,10 @@ OStreamBase & OStreamBase::operator<<( const fheroes2::Point & v )
     return *this << v.x << v.y;
 }
 
-RWStreamBuf::RWStreamBuf( const size_t sz )
+RWStreamBuf::RWStreamBuf( const size_t size )
 {
-    if ( sz ) {
-        reallocBuf( sz );
+    if ( size ) {
+        reallocBuf( size );
     }
 
     setBigendian( IS_BIGENDIAN );
@@ -297,29 +296,29 @@ void RWStreamBuf::putLE32( uint32_t v )
     put8( v >> 24 );
 }
 
-void RWStreamBuf::putRaw( const void * ptr, size_t sz )
+void RWStreamBuf::putRaw( const void * ptr, size_t size )
 {
-    if ( sz == 0 ) {
+    if ( size == 0 ) {
         return;
     }
 
-    if ( sizep() < sz ) {
-        if ( sz < capacity() / 2 ) {
+    if ( sizep() < size ) {
+        if ( size < capacity() / 2 ) {
             reallocBuf( capacity() + capacity() / 2 );
         }
         else {
-            reallocBuf( capacity() + sz );
+            reallocBuf( capacity() + size );
         }
     }
 
-    if ( sizep() < sz ) {
+    if ( sizep() < size ) {
         assert( 0 );
         return;
     }
 
-    memcpy( _itput, ptr, sz );
+    memcpy( _itput, ptr, size );
 
-    _itput = _itput + sz;
+    _itput = _itput + size;
 }
 
 void RWStreamBuf::put8( const uint8_t v )
@@ -339,11 +338,15 @@ void RWStreamBuf::put8( const uint8_t v )
 
 size_t RWStreamBuf::tellp()
 {
+    assert( _itbeg <= _itput );
+
     return _itput - _itbeg;
 }
 
 size_t RWStreamBuf::sizep()
 {
+    assert( _itput <= _itend );
+
     return _itend - _itput;
 }
 
@@ -365,7 +368,8 @@ void RWStreamBuf::reallocBuf( size_t size )
         return;
     }
 
-    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) );
+    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) && _itbeg <= _itget && _itget <= _itput
+            && _itput <= _itend );
 
     if ( sizep() < size ) {
         size = std::max( size, minBufferCapacity );
@@ -382,6 +386,13 @@ void RWStreamBuf::reallocBuf( size_t size )
         _itbeg = _buf.get();
         _itend = _itbeg + size;
     }
+}
+
+void RWStreamBuf::advance( const size_t size )
+{
+    assert( size <= sizep() );
+
+    _itput += size;
 }
 
 ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
@@ -451,7 +462,7 @@ size_t StreamFile::tell()
     return tellg();
 }
 
-void StreamFile::seek( size_t pos )
+void StreamFile::seek( const size_t pos )
 {
     if ( !_file ) {
         return;
@@ -530,13 +541,13 @@ size_t StreamFile::tellp()
     return tellg();
 }
 
-void StreamFile::skip( size_t pos )
+void StreamFile::skip( size_t size )
 {
     if ( !_file ) {
         return;
     }
 
-    if ( std::fseek( _file.get(), static_cast<long int>( pos ), SEEK_CUR ) != 0 ) {
+    if ( std::fseek( _file.get(), static_cast<long int>( size ), SEEK_CUR ) != 0 ) {
         setFail();
     }
 }
@@ -571,24 +582,24 @@ uint32_t StreamFile::getLE32()
     return le32toh( getUint<uint32_t>() );
 }
 
-void StreamFile::putBE16( uint16_t val )
+void StreamFile::putBE16( uint16_t v )
 {
-    putUint<uint16_t>( htobe16( val ) );
+    putUint<uint16_t>( htobe16( v ) );
 }
 
-void StreamFile::putLE16( uint16_t val )
+void StreamFile::putLE16( uint16_t v )
 {
-    putUint<uint16_t>( htole16( val ) );
+    putUint<uint16_t>( htole16( v ) );
 }
 
-void StreamFile::putBE32( uint32_t val )
+void StreamFile::putBE32( uint32_t v )
 {
-    putUint<uint32_t>( htobe32( val ) );
+    putUint<uint32_t>( htobe32( v ) );
 }
 
-void StreamFile::putLE32( uint32_t val )
+void StreamFile::putLE32( uint32_t v )
 {
-    putUint<uint32_t>( htole32( val ) );
+    putUint<uint32_t>( htole32( v ) );
 }
 
 std::vector<uint8_t> StreamFile::getRaw( const size_t size )
@@ -609,9 +620,9 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     return v;
 }
 
-void StreamFile::putRaw( const void * ptr, size_t sz )
+void StreamFile::putRaw( const void * ptr, size_t size )
 {
-    if ( sz == 0 ) {
+    if ( size == 0 ) {
         // Nothing to write. Ignore it.
         return;
     }
@@ -620,7 +631,7 @@ void StreamFile::putRaw( const void * ptr, size_t sz )
         return;
     }
 
-    if ( std::fwrite( ptr, sz, 1, _file.get() ) != 1 ) {
+    if ( std::fwrite( ptr, size, 1, _file.get() ) != 1 ) {
         setFail();
     }
 }
