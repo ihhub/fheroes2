@@ -41,10 +41,10 @@ namespace fheroes2
             return false;
         }
 
-        RWStreamBuf fileEntries = _stream.getStreamBuf( count * fileRecordSize );
+        ROStreamBuf fileEntries = _stream.getStreamBuf( count * fileRecordSize );
         const size_t nameEntriesSize = _maxFilenameSize * count;
         _stream.seek( size - nameEntriesSize );
-        RWStreamBuf nameEntries = _stream.getStreamBuf( nameEntriesSize );
+        ROStreamBuf nameEntries = _stream.getStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
             std::string name = nameEntries.getString( _maxFilenameSize );

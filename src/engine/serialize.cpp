@@ -388,17 +388,21 @@ void RWStreamBuf::reallocBuf( size_t size )
     }
 }
 
-void RWStreamBuf::advance( const size_t size )
-{
-    assert( size <= sizep() );
-
-    _itput += size;
-}
-
 ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
 {
     _itbeg = buf.data();
     _itend = _itbeg + buf.size();
+    _itget = _itbeg;
+    _itput = _itend;
+
+    setBigendian( IS_BIGENDIAN );
+}
+
+ROStreamBuf::ROStreamBuf( std::vector<uint8_t> && buf )
+    : _buf( std::move( buf ) )
+{
+    _itbeg = _buf.data();
+    _itend = _itbeg + _buf.size();
     _itget = _itbeg;
     _itput = _itend;
 
@@ -621,24 +625,9 @@ void StreamFile::putRaw( const void * ptr, size_t size )
     }
 }
 
-RWStreamBuf StreamFile::getStreamBuf( const size_t size /* = 0 */ )
+ROStreamBuf StreamFile::getStreamBuf( const size_t size /* = 0 */ )
 {
-    const size_t chunkSize = size > 0 ? size : sizeg();
-    if ( chunkSize == 0 || !_file ) {
-        return {};
-    }
-
-    RWStreamBuf buffer( chunkSize );
-
-    if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
-        setFail();
-
-        return {};
-    }
-
-    buffer.advance( chunkSize );
-
-    return buffer;
+    return ROStreamBuf{ getRaw( size ) };
 }
 
 std::string StreamFile::getString( const size_t size /* = 0 */ )

@@ -590,8 +590,6 @@ public:
     void putRaw( const void * ptr, size_t size ) override;
 
 private:
-    friend class StreamFile;
-
     void put8( const uint8_t v ) override;
 
     size_t sizep();
@@ -599,23 +597,17 @@ private:
 
     void reallocBuf( size_t size );
 
-    // After using this method to write data, update the cursor by calling the advance() method.
-    uint8_t * rwData()
-    {
-        return _itput;
-    }
-
-    // Advances the cursor intended for writing data forward by a specified number of bytes.
-    void advance( const size_t size );
-
     std::unique_ptr<uint8_t[]> _buf;
 };
 
-// Stream with read-only in-memory storage backed by a const vector instance
+// Stream with read-only in-memory storage backed by a const vector instance (either internal or external, depending on the constructor used)
 class ROStreamBuf final : public StreamBufTmpl<const uint8_t>
 {
 public:
+    // Creates a non-owning stream on top of an external buffer ("view mode")
     explicit ROStreamBuf( const std::vector<uint8_t> & buf );
+    // Takes ownership of the given buffer (through the move operation) and creates a stream on top of it
+    explicit ROStreamBuf( std::vector<uint8_t> && buf );
 
     ROStreamBuf( const ROStreamBuf & ) = delete;
 
@@ -656,6 +648,11 @@ public:
 
         return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
     }
+
+private:
+    // Buffer to which the transfer of ownership of the external buffer takes place. This buffer is not used in
+    // the non-owning ("view") mode.
+    const std::vector<uint8_t> _buf;
 };
 
 // Stream with a file storage backend that supports both reading and writing
@@ -677,7 +674,7 @@ public:
     void close();
 
     // If a zero size is specified, then all still unread data is returned
-    RWStreamBuf getStreamBuf( const size_t size = 0 );
+    ROStreamBuf getStreamBuf( const size_t size = 0 );
 
     void seek( const size_t pos );
     void skip( size_t size ) override;

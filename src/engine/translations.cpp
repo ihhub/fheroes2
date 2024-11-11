@@ -349,22 +349,18 @@ namespace
         {
             *this = {};
 
-            std::vector<uint8_t> buf;
-
-            {
-                StreamFile sf;
-                if ( !sf.open( fileName, "rb" ) ) {
-                    return false;
-                }
-
-                buf = sf.getRaw( 0 );
-                if ( sf.fail() ) {
-                    ERROR_LOG( "I/O error when reading " << fileName )
-                    return false;
-                }
+            StreamFile sf;
+            if ( !sf.open( fileName, "rb" ) ) {
+                return false;
             }
 
-            ROStreamBuf sb( buf );
+            ROStreamBuf sb = sf.getStreamBuf();
+            if ( sf.fail() ) {
+                ERROR_LOG( "I/O error when reading " << fileName )
+                return false;
+            }
+
+            sf.close();
 
             {
                 const uint32_t magicNumber = sb.getLE32();
