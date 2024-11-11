@@ -278,9 +278,6 @@ protected:
     IStreamBase & operator=( IStreamBase && stream ) noexcept;
 
     virtual uint8_t get8() = 0;
-
-    virtual size_t sizeg() = 0;
-    virtual size_t tellg() = 0;
 };
 
 // Interface that declares the methods needed to write to a stream
@@ -378,9 +375,6 @@ protected:
     OStreamBase( OStreamBase && ) = default;
 
     virtual void put8( const uint8_t ) = 0;
-
-    virtual size_t sizep() = 0;
-    virtual size_t tellp() = 0;
 };
 
 // Interface that declares a stream with an in-memory storage backend that can be read from
@@ -531,18 +525,18 @@ protected:
         return *this;
     }
 
-    size_t tellg() override
-    {
-        assert( _itbeg <= _itget );
-
-        return _itget - _itbeg;
-    }
-
-    size_t sizeg() override
+    size_t sizeg()
     {
         assert( _itget <= _itput );
 
         return _itput - _itget;
+    }
+
+    size_t tellg()
+    {
+        assert( _itbeg <= _itget );
+
+        return _itget - _itbeg;
     }
 
     uint8_t get8() override
@@ -599,8 +593,8 @@ private:
 
     void put8( const uint8_t v ) override;
 
-    size_t sizep() override;
-    size_t tellp() override;
+    size_t sizep();
+    size_t tellp();
 
     void reallocBuf( size_t size );
 
@@ -674,10 +668,7 @@ public:
     std::string getString( const size_t size = 0 );
 
 private:
-    size_t sizeg() override;
-    size_t sizep() override;
-    size_t tellg() override;
-    size_t tellp() override;
+    size_t sizeg();
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;

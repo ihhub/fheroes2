@@ -459,7 +459,18 @@ size_t StreamFile::size()
 
 size_t StreamFile::tell()
 {
-    return tellg();
+    if ( !_file ) {
+        return 0;
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    return static_cast<size_t>( pos );
 }
 
 void StreamFile::seek( const size_t pos )
@@ -513,32 +524,6 @@ size_t StreamFile::sizeg()
     }
 
     return static_cast<size_t>( len - pos );
-}
-
-size_t StreamFile::tellg()
-{
-    if ( !_file ) {
-        return 0;
-    }
-
-    const long pos = std::ftell( _file.get() );
-    if ( pos < 0 ) {
-        setFail();
-
-        return 0;
-    }
-
-    return static_cast<size_t>( pos );
-}
-
-size_t StreamFile::sizep()
-{
-    return sizeg();
-}
-
-size_t StreamFile::tellp()
-{
-    return tellg();
 }
 
 void StreamFile::skip( size_t size )
