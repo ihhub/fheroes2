@@ -246,7 +246,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     // Get all possible answers.
     for ( uint32_t i = 0; i < 8; ++i ) {
-        std::string answer = dataStream.getString( 13 );
+        const std::string answer = dataStream.getString( 13 );
 
         if ( answerCount > 0 ) {
             --answerCount;
