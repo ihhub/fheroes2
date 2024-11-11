@@ -217,7 +217,7 @@ public:
         return height;
     }
 
-    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const
+    const Maps::Tile & getTile( const int32_t x, const int32_t y ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -226,7 +226,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t x, const int32_t y )
+    Maps::Tile & getTile( const int32_t x, const int32_t y )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -235,7 +235,7 @@ public:
 #endif
     }
 
-    const Maps::Tiles & GetTiles( const int32_t tileId ) const
+    const Maps::Tile & getTile( const int32_t tileId ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -244,7 +244,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t tileId )
+    Maps::Tile & getTile( const int32_t tileId )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -432,7 +432,7 @@ private:
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
-    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
+    bool updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -446,7 +446,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
     friend IStreamBase & operator>>( IStreamBase & stream, World & w );
 
-    std::vector<Maps::Tiles> vec_tiles;
+    std::vector<Maps::Tile> vec_tiles;
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;

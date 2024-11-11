@@ -40,6 +40,10 @@ namespace
     // the fheroes2 Editor requires to have resources from the expansion.
     std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT )> objectData;
 
+    // This map is used for searching object parts based on their ICN information.
+    // Since we have a lot of objects it is important to speed up the search even if we take several more KB of memory.
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, const Maps::ObjectPartInfo *> objectInfoByIcn;
+
     void populateRoads( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
@@ -4850,6 +4854,20 @@ namespace
 
         populateExtraBoatDirections( objectData[static_cast<size_t>( Maps::ObjectGroup::MAP_EXTRAS )] );
 
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                // We accept that there could be duplicates so we don't check if the insertion is successful for the map.
+
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    objectInfoByIcn.try_emplace( std::make_pair( info.icnType, info.icnIndex ), &info );
+                }
+
+                for ( const auto & info : objectInfo.topLevelParts ) {
+                    objectInfoByIcn.try_emplace( std::make_pair( info.icnType, info.icnIndex ), &info );
+                }
+            }
+        }
+
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.
         for ( const auto & objects : objectData ) {
@@ -4960,32 +4978,29 @@ namespace Maps
         return objectInfo[objectIndex];
     }
 
-    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    const ObjectPartInfo * getObjectPartByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
     {
         populateObjectData();
 
-        for ( const auto & group : objectData ) {
-            for ( const auto & object : group ) {
-                assert( !object.groundLevelParts.empty() );
-
-                for ( const auto & info : object.groundLevelParts ) {
-                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
-                    }
-                }
-
-                for ( const auto & info : object.topLevelParts ) {
-                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
-                    }
-                }
-            }
+        auto iter = objectInfoByIcn.find( std::make_pair( icnType, icnIndex ) );
+        if ( iter != objectInfoByIcn.end() ) {
+            return iter->second;
         }
 
         // You can reach this code by 3 reasons:
         // - you are passing invalid object information
         // - you updated object properties but didn't do object info migration for save files
         // - you are trying to get info of an object created by an original Editor
+        return nullptr;
+    }
+
+    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    {
+        const ObjectPartInfo * objectPart = getObjectPartByIcn( icnType, icnIndex );
+        if ( objectPart != nullptr ) {
+            return objectPart->objectType;
+        }
+
         return MP2::OBJ_NONE;
     }
 

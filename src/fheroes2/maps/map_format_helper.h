@@ -28,7 +28,7 @@ class Army;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Map_Format
     {
@@ -46,10 +46,10 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object );
+    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info );
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 

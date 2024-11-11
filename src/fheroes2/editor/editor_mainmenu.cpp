@@ -57,7 +57,7 @@ namespace
     const size_t mapSizeCount = 4;
     const std::array<Game::HotKeyEvent, mapSizeCount> mapSizeHotkeys = { Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM,
                                                                          Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE };
-    const std::array<Maps::mapsize_t, mapSizeCount> mapSizes = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
+    const std::array<Maps::MapSize, mapSizeCount> mapSizes = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
 
     void outputEditorMainMenuInTextSupportMode()
     {
@@ -104,7 +104,7 @@ namespace
         fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
     }
 
-    Maps::mapsize_t selectMapSize()
+    Maps::MapSize selectMapSize()
     {
         outputEditorMapSizeMenuInTextSupportMode();
 
@@ -257,7 +257,7 @@ namespace Editor
             le.isMouseLeftButtonPressedInArea( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
             if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
-                const Maps::mapsize_t mapSize = selectMapSize();
+                const Maps::MapSize mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
                     world.generateForEditor( mapSize );
 
@@ -329,7 +329,7 @@ namespace Editor
 
     fheroes2::GameMode menuNewFromScratchMap()
     {
-        const Maps::mapsize_t mapSize = selectMapSize();
+        const Maps::MapSize mapSize = selectMapSize();
         if ( mapSize != Maps::ZERO ) {
             world.generateForEditor( mapSize );
 

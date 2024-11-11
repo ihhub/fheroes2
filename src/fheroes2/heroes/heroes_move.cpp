@@ -159,9 +159,9 @@ namespace
         AudioManager::PlaySoundAsync( soundId );
     }
 
-    bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
+    bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tile & next )
     {
-        if ( next.GetObject() == MP2::OBJ_CASTLE ) {
+        if ( next.getMainObjectType() == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( next.GetCenter() );
             if ( castle == nullptr ) {
                 return false;
@@ -172,14 +172,14 @@ namespace
 
             return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
-        if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
+        if ( hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_COAST ) {
             return true;
         }
-        if ( !hero.isShipMaster() && next.GetObject() == MP2::OBJ_SHIPWRECK ) {
+        if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
             return true;
         }
 
-        return MP2::isNeedStayFront( next.GetObject() );
+        return MP2::isNeedStayFront( next.getMainObjectType() );
     }
 }
 
@@ -197,7 +197,7 @@ bool Heroes::isInDeepOcean() const
     const int32_t tileIndex
         = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
     for ( const int32_t nearbyIndex : Maps::getAroundIndexes( tileIndex ) ) {
-        if ( !world.GetTiles( nearbyIndex ).isWater() ) {
+        if ( !world.getTile( nearbyIndex ).isWater() ) {
             return false;
         }
     }
@@ -243,7 +243,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     };
 
     if ( jumpToNextTile ) {
-        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.getTile( nextStepIndex ) ) ) {
             makeStep( false );
         }
         else {
@@ -258,7 +258,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
 
     const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
     if ( currentHeroFrameIndex == 0 ) {
-        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.getTile( nextStepIndex ) ) ) {
             makeStep( false );
 
             return true;
@@ -267,7 +267,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         if ( GetKingdom().isControlHuman() ) {
             const fheroes2::Point & mp = GetCenter();
 
-            playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
+            playHeroWalkingSound( world.getTile( mp.x, mp.y ).GetGround() );
         }
     }
     else if ( currentHeroFrameIndex == 1 ) {
@@ -280,9 +280,9 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.GetFrontIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.getTile( path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
-                playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
+                playHeroWalkingSound( world.getTile( heroIndex ).GetGround() );
             }
             ++sprite_index;
         }

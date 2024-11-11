@@ -275,7 +275,7 @@ void Game::EnvironmentSoundMixer()
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.getTile( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
             continue;
         }
@@ -356,7 +356,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         }
         break;
     }
@@ -366,7 +366,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( focusedCastle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         break;
     }
 

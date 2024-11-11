@@ -175,9 +175,9 @@ namespace
                 return false;
             }
 
-            const auto & tile = world.GetTiles( pos.x, pos.y );
+            const auto & tile = world.getTile( pos.x, pos.y );
 
-            if ( MP2::isOffGameActionObject( tile.GetObject() ) ) {
+            if ( MP2::isOffGameActionObject( tile.getMainObjectType() ) ) {
                 // An action object already exist. We cannot allow to put anything on top of it.
                 return false;
             }
@@ -192,7 +192,7 @@ namespace
     }
 
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
-                           const std::function<bool( const Maps::Tiles & tile )> & condition )
+                           const std::function<bool( const Maps::Tile & tile )> & condition )
     {
         if ( offsets.empty() ) {
             return true;
@@ -206,7 +206,7 @@ namespace
                 return false;
             }
 
-            if ( !condition( world.GetTiles( temp.x, temp.y ) ) ) {
+            if ( !condition( world.getTile( temp.x, temp.y ) ) ) {
                 return false;
             }
         }
@@ -215,7 +215,7 @@ namespace
     }
 
     bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-                                     const std::function<bool( const Maps::Tiles & tile )> & condition )
+                                     const std::function<bool( const Maps::Tile & tile )> & condition )
     {
         return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
     }
@@ -303,7 +303,7 @@ namespace
                           != bottomTileObjects.end();
                     if ( isRoadAtBottom ) {
                         // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
-                        Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( bottomTileIndex ) ), false );
+                        Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( bottomTileIndex ) ), false );
                     }
 
                     needRedraw = true;
@@ -312,14 +312,14 @@ namespace
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
 
-                    needRedraw |= Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+                    needRedraw |= Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( mapTileIndex ) ), false );
 
                     ++objectIter;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     assert( mapTileIndex < world.getSize() );
 
-                    needRedraw |= Maps::updateStreamOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+                    needRedraw |= Maps::updateStreamOnTile( world.getTile( static_cast<int32_t>( mapTileIndex ) ), false );
 
                     ++objectIter;
                 }
@@ -409,14 +409,14 @@ namespace
         case Maps::ObjectGroup::ADVENTURE_ARTIFACTS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
 
             if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
-                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
+                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
                 errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
             }
@@ -433,7 +433,7 @@ namespace
         case Maps::ObjectGroup::LANDSCAPE_TREES:
         case Maps::ObjectGroup::MONSTERS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -444,7 +444,7 @@ namespace
         case Maps::ObjectGroup::ADVENTURE_WATER:
         case Maps::ObjectGroup::LANDSCAPE_WATER: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} must be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -465,7 +465,7 @@ namespace
                       || firstObjectPart.icnIndex == 218 + 11U ) ) {
                 // This is a river delta. Just don't check the terrain type.
             }
-            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -474,7 +474,7 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
-            const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
+            const Maps::Tile & tile = world.getTile( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
@@ -488,13 +488,13 @@ namespace
             const auto & townObjectInfo = Maps::getObjectInfo( groupType, objectType );
             const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
-            if ( !checkConditionForUsedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( townObjectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
             }
 
-            if ( !checkConditionForUsedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( basementObjectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -508,7 +508,7 @@ namespace
             if ( objectInfo.objectType == MP2::OBJ_EVENT ) {
                 // Only event objects are allowed to be placed anywhere.
             }
-            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -556,7 +556,7 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
-            const Maps::Tiles & tile = world.GetTiles( tilePos.x, tilePos.y );
+            const Maps::Tile & tile = world.getTile( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
@@ -670,7 +670,7 @@ namespace Interface
 
                     assert( Maps::isValidAbsIndex( indices.x ) );
                     const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1
-                                                  && MP2::isOffGameActionObject( world.GetTiles( indices.x ).GetObject() ) );
+                                                  && MP2::isOffGameActionObject( world.getTile( indices.x ).getMainObjectType() ) );
 
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
                 }
@@ -1167,7 +1167,7 @@ namespace Interface
     {
         assert( tileIndex >= 0 && tileIndex < static_cast<int32_t>( world.getSize() ) );
 
-        Maps::Tiles & tile = world.GetTiles( tileIndex );
+        Maps::Tile & tile = world.getTile( tileIndex );
 
         if ( _editorPanel.isDetailEdit() ) {
             // Trigger an action only when metadata has been changed to avoid expensive computations and bloated list of actions.
@@ -1426,7 +1426,7 @@ namespace Interface
         }
     }
 
-    void EditorInterface::_handleObjectMouseLeftClick( Maps::Tiles & tile )
+    void EditorInterface::_handleObjectMouseLeftClick( Maps::Tile & tile )
     {
         assert( _editorPanel.isObjectMode() );
 
@@ -1588,13 +1588,13 @@ namespace Interface
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            if ( !_setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
+            if ( !_setObjectOnTile( world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
                 return;
             }
 
             Maps::setLastObjectUID( objectId );
 
-            if ( !_setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
+            if ( !_setObjectOnTile( world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
                 return;
             }
 
@@ -1724,7 +1724,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.GetTiles( tileIndex ) );
+        Editor::showPopupWindow( world.getTile( tileIndex ) );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
@@ -1737,7 +1737,7 @@ namespace Interface
         }
     }
 
-    bool EditorInterface::_setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::_setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -1757,7 +1757,7 @@ namespace Interface
         return true;
     }
 
-    bool EditorInterface::_setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::_setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
@@ -1896,7 +1896,7 @@ namespace Interface
                 }
 
                 if ( object.group == Maps::ObjectGroup::ROADS || object.group == Maps::ObjectGroup::STREAMS ) {
-                    if ( world.GetTiles( static_cast<int32_t>( i ) ).isWater() ) {
+                    if ( world.getTile( static_cast<int32_t>( i ) ).isWater() ) {
                         removeRoadAndStream = true;
                     }
 
@@ -1909,7 +1909,7 @@ namespace Interface
             }
 
             if ( removeRoadAndStream ) {
-                auto & worldTile = world.GetTiles( static_cast<int32_t>( i ) );
+                auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
 
                 Maps::updateRoadOnTile( worldTile, false );
                 Maps::updateStreamOnTile( worldTile, false );
@@ -1929,7 +1929,7 @@ namespace Interface
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             for ( auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
-                    const auto & worldTile = world.GetTiles( static_cast<int32_t>( i ) );
+                    const auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
                     const int groundType = Maps::Ground::getGroundByImageIndex( worldTile.getTerrainImageIndex() );
                     const int32_t basementId = fheroes2::getTownBasementId( groundType );
                     object.index = static_cast<uint32_t>( basementId );

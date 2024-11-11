@@ -86,7 +86,7 @@ namespace
         MAP_SIZE_BUTTON_OFFSET_Y = 23
     };
 
-    Maps::mapsize_t currentMapFilter = Maps::ZERO;
+    Maps::MapSize currentMapFilter = Maps::ZERO;
 
     void ShowToolTip( const std::string & header, const std::string & body )
     {

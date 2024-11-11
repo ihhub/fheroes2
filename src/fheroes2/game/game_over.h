@@ -34,7 +34,7 @@ class OStreamBase;
 
 namespace GameOver
 {
-    enum conditions_t : uint32_t
+    enum : uint32_t
     {
         COND_NONE = 0x00000000,
 

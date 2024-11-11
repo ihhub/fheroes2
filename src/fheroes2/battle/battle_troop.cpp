@@ -155,14 +155,14 @@ uint32_t Battle::ModesAffected::FindZeroDuration() const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid )
-    : ArmyTroop( nullptr, t )
+Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid )
+    : ArmyTroop( nullptr, troop )
     , animation( id )
     , _uid( uid )
-    , hp( t.GetHitPoints() )
-    , _initialCount( t.GetCount() )
+    , hp( troop.GetHitPoints() )
+    , _initialCount( troop.GetCount() )
     , dead( 0 )
-    , shots( t.GetShots() )
+    , shots( troop.GetShots() )
     , disruptingray( 0 )
     , reflect( ref )
     , mirror( nullptr )
@@ -475,7 +475,7 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
     }
-    else if ( Modes( SP_SLOW ) ) {
+    if ( Modes( SP_SLOW ) ) {
         return Speed::GetSlowSpeedFromSpell( speed );
     }
 

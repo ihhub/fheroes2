@@ -81,7 +81,7 @@ namespace
         return false;
     }
 
-    bool isAddonDirectRenderingRestricted( const int icnId )
+    bool isObjectPartDirectRenderingRestricted( const int icnId )
     {
         switch ( icnId ) {
         case ICN::UNKNOWN:
@@ -97,18 +97,18 @@ namespace
         return false;
     }
 
-    void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::TilesAddon & addon )
+    void renderObjectPart( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::ObjectPart & part )
     {
-        assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && addon._imageIndex != 255 );
+        assert( part.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && part.icnIndex != 255 );
 
-        const int icn = MP2::getIcnIdFromObjectIcnType( addon._objectIcnType );
-        if ( isAddonDirectRenderingRestricted( icn ) ) {
+        const int icn = MP2::getIcnIdFromObjectIcnType( part.icnType );
+        if ( isObjectPartDirectRenderingRestricted( icn ) ) {
             return;
         }
 
-        const uint8_t alphaValue = area.getObjectAlphaValue( addon._uid );
+        const uint8_t alphaValue = area.getObjectAlphaValue( part._uid );
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon._imageIndex );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, part.icnIndex );
 
         // Ideally we need to check that the image is within a tile area. However, flags are among those for which this rule doesn't apply.
         if ( icn == ICN::FLAG32 ) {
@@ -120,7 +120,7 @@ namespace
 
         area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
+        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, part.icnIndex, Game::getAdventureMapAnimationIndex() );
         if ( animationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
@@ -132,18 +132,18 @@ namespace
         }
     }
 
-    void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tiles & tile )
+    void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tile & tile )
     {
-        assert( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._imageIndex != 255 );
+        assert( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart().icnIndex != 255 );
 
-        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart()._objectIcnType );
-        if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.GetObject() ) ) {
+        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart().icnType );
+        if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.getMainObjectType() ) ) {
             return;
         }
 
         const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
 
-        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.getMainObjectPart()._imageIndex );
+        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.getMainObjectPart().icnIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= fheroes2::tileWidthPx && mainObjectSprite.y() >= 0
@@ -154,7 +154,7 @@ namespace
         // Render possible animation image.
         // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
         const uint32_t mainObjectAnimationIndex
-            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart()._imageIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
+            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart().icnIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
         if ( mainObjectAnimationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 
@@ -270,7 +270,7 @@ namespace
     }
 #endif
 
-    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tiles & tile, uint32_t monsterIndex, const bool isEditorMode )
+    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tile & tile, uint32_t monsterIndex, const bool isEditorMode )
     {
         const int tileIndex = tile.GetIndex();
         int attackerIndex = -1;
@@ -278,7 +278,7 @@ namespace
         // scan for a hero around
         if ( !isEditorMode ) {
             for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HERO, false ) ) {
-                const Heroes * hero = world.GetTiles( idx ).getHero();
+                const Heroes * hero = world.getTile( idx ).getHero();
                 assert( hero != nullptr );
 
                 // hero is going to attack monsters on this tile
@@ -632,7 +632,7 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerExtraObjects( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
+    void redrawTopLayerExtraObjects( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
     {
         if ( isPuzzleDraw ) {
             // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
@@ -642,7 +642,7 @@ namespace Maps
         // Ghost animation is unique and can be rendered in multiple cases.
         bool renderFlyingGhosts = false;
 
-        const MP2::MapObjectType objectType = tile.GetObject( false );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
         if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
             renderFlyingGhosts = true;
         }
@@ -670,7 +670,7 @@ namespace Maps
 
         if ( renderFlyingGhosts ) {
             // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
-            // TODO: consider adding this sprite as a part of an addon.
+            // TODO: consider adding this sprite as a part of an object part.
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
 
             const uint8_t alphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
@@ -679,16 +679,16 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerObject( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon )
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part )
     {
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), part.icnType, part.icnIndex ) ) {
             return;
         }
 
-        renderAddonObject( dst, area, Maps::GetPoint( tile.GetIndex() ), addon );
+        renderObjectPart( dst, area, Maps::GetPoint( tile.GetIndex() ), part );
     }
 
-    void drawFog( const Tiles & tile, fheroes2::Image & dst, const Interface::GameArea & area )
+    void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area )
     {
         const uint16_t fogDirection = tile.getFogDirection();
         // This method should not be called for a tile without fog.
@@ -912,7 +912,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
@@ -922,85 +922,85 @@ namespace Maps
         (void)friendColors;
 #endif
 
-        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.GetObject() ) : MP2::isInGameActionObject( tile.GetObject() );
+        const bool isActionObject = isEditor ? MP2::isOffGameActionObject( tile.getMainObjectType() ) : MP2::isInGameActionObject( tile.getMainObjectType() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
     }
 
-    void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
+    void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
     {
         assert( level <= 0x03 );
 
         const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
         // Since the original game stores information about objects in a very weird way and this is how it is implemented for us we need to do the following procedure:
-        // - run through all bottom objects first which are stored in the addon stack
+        // - run through all ground object parts first
         // - check the main object which is on the tile
 
-        // Some addons must be rendered after the main object on the tile. This applies for flags.
+        // Some object parts must be rendered after the main object on the tile. This applies for flags.
         // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
-        const size_t maxPostRenderAddons = 16;
-        std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
-        size_t postRenderAddonCount = 0;
+        const size_t maxPostRenderPart = 16;
+        std::array<const ObjectPart *, maxPostRenderPart> postRenderingPart{};
+        size_t postRenderObjectCount = 0;
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._layerType != level ) {
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            if ( part.layerType != level ) {
                 continue;
             }
 
-            if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
+            if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), part.icnType, part.icnIndex ) ) {
                 continue;
             }
 
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            if ( part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
                 // Based on logically thinking it is impossible to have more than 16 flags on a single tile.
-                assert( postRenderAddonCount < maxPostRenderAddons );
+                assert( postRenderObjectCount < maxPostRenderPart );
 
-                postRenderingAddon[postRenderAddonCount] = &addon;
-                ++postRenderAddonCount;
+                postRenderingPart[postRenderObjectCount] = &part;
+                ++postRenderObjectCount;
                 continue;
             }
 
-            renderAddonObject( dst, area, mp, addon );
+            renderObjectPart( dst, area, mp, part );
         }
 
-        if ( tile.getMainObjectPart()._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart()._layerType == level
-             && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getMainObjectPart()._objectIcnType, tile.getMainObjectPart()._imageIndex ) ) ) {
+        if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart().layerType == level
+             && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) ) ) {
             renderMainObject( dst, area, mp, tile );
         }
 
-        for ( size_t i = 0; i < postRenderAddonCount; ++i ) {
-            assert( postRenderingAddon[i] != nullptr );
+        for ( size_t i = 0; i < postRenderObjectCount; ++i ) {
+            assert( postRenderingPart[i] != nullptr );
 
-            renderAddonObject( dst, area, mp, *postRenderingAddon[i] );
+            renderObjectPart( dst, area, mp, *postRenderingPart[i] );
         }
     }
 
-    void drawByObjectIcnType( const Tiles & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType )
+    void drawByObjectIcnType( const Tile & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType )
     {
         const fheroes2::Point & tileOffset = Maps::GetPoint( tile.GetIndex() );
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == objectIcnType ) {
-                renderAddonObject( output, area, tileOffset, addon );
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            if ( part.icnType == objectIcnType ) {
+                renderObjectPart( output, area, tileOffset, part );
             }
         }
 
-        if ( tile.getMainObjectPart()._objectIcnType == objectIcnType ) {
+        if ( tile.getMainObjectPart().icnType == objectIcnType ) {
             renderMainObject( output, area, tileOffset, tile );
         }
 
-        for ( const auto & addon : tile.getTopLayerAddons() ) {
-            if ( addon._objectIcnType == objectIcnType ) {
-                renderAddonObject( output, area, tileOffset, addon );
+        for ( const auto & part : tile.getTopObjectParts() ) {
+            if ( part.icnType == objectIcnType ) {
+                renderObjectPart( output, area, tileOffset, part );
             }
         }
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tile & tile, const bool isEditorMode )
     {
-        assert( tile.GetObject() == MP2::OBJ_MONSTER );
+        assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
@@ -1041,9 +1041,9 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tile & tile, const bool isEditorMode )
     {
-        assert( tile.GetObject() == MP2::OBJ_MONSTER );
+        assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
@@ -1084,12 +1084,12 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tile & tile )
     {
         // TODO: combine both boat image generation for heroes and empty boats.
-        assert( tile.GetObject() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
 
-        const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
+        const uint32_t spriteIndex = ( tile.getMainObjectPart().icnIndex == 255 ) ? 18 : tile.getMainObjectPart().icnIndex;
 
         const bool isReflected = ( spriteIndex > 128 );
 
@@ -1115,12 +1115,12 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tile & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
 
         // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
-        const uint32_t spriteIndex = ( tile.getMainObjectPart()._imageIndex == 255 ) ? 18 : tile.getMainObjectPart()._imageIndex;
+        const uint32_t spriteIndex = ( tile.getMainObjectPart().icnIndex == 255 ) ? 18 : tile.getMainObjectPart().icnIndex;
 
         const int icnId{ ICN::BOATSHAD };
         const uint32_t icnIndex = spriteIndex % 128;
@@ -1142,9 +1142,9 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tile & tile )
     {
-        assert( tile.GetObject( false ) == MP2::OBJ_MINE );
+        assert( tile.getMainObjectType( false ) == MP2::OBJ_MINE );
 
         std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
 
@@ -1294,11 +1294,11 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tile & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_HERO );
+        assert( tile.getMainObjectType() == MP2::OBJ_HERO );
 
-        const uint32_t icnIndex = tile.getMainObjectPart()._imageIndex;
+        const uint32_t icnIndex = tile.getMainObjectPart().icnIndex;
         const int icnId{ ICN::MINIHERO };
 
         const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
@@ -1319,7 +1319,7 @@ namespace Maps
         return objectInfo;
     }
 
-    const fheroes2::Image & getTileSurface( const Tiles & tile )
+    const fheroes2::Image & getTileSurface( const Tile & tile )
     {
         return fheroes2::AGG::GetTIL( TIL::GROUND32, tile.getTerrainImageIndex(), ( tile.getTerrainFlags() & 0x3 ) );
     }
