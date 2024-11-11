@@ -430,42 +430,42 @@ public:
 
     uint16_t getBE16() override
     {
-        uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
+        uint16_t v = ( static_cast<uint16_t>( get8() ) << 8 );
 
-        result |= get8();
+        v |= get8();
 
-        return result;
+        return v;
     }
 
     uint16_t getLE16() override
     {
-        uint16_t result = get8();
+        uint16_t v = get8();
 
-        result |= ( static_cast<uint16_t>( get8() ) << 8 );
+        v |= ( static_cast<uint16_t>( get8() ) << 8 );
 
-        return result;
+        return v;
     }
 
     uint32_t getBE32() override
     {
-        uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
+        uint32_t v = ( static_cast<uint32_t>( get8() ) << 24 );
 
-        result |= ( static_cast<uint32_t>( get8() ) << 16 );
-        result |= ( static_cast<uint32_t>( get8() ) << 8 );
-        result |= get8();
+        v |= ( static_cast<uint32_t>( get8() ) << 16 );
+        v |= ( static_cast<uint32_t>( get8() ) << 8 );
+        v |= get8();
 
-        return result;
+        return v;
     }
 
     uint32_t getLE32() override
     {
-        uint32_t result = get8();
+        uint32_t v = get8();
 
-        result |= ( static_cast<uint32_t>( get8() ) << 8 );
-        result |= ( static_cast<uint32_t>( get8() ) << 16 );
-        result |= ( static_cast<uint32_t>( get8() ) << 24 );
+        v |= ( static_cast<uint32_t>( get8() ) << 8 );
+        v |= ( static_cast<uint32_t>( get8() ) << 16 );
+        v |= ( static_cast<uint32_t>( get8() ) << 24 );
 
-        return result;
+        return v;
     }
 
     // If a zero size is specified, then all still unread data is returned
@@ -475,13 +475,13 @@ public:
         const size_t resultSize = size > 0 ? size : remainSize;
         const size_t sizeToCopy = std::min( resultSize, remainSize );
 
-        std::vector<uint8_t> result( resultSize, 0 );
+        std::vector<uint8_t> v( resultSize, 0 );
 
-        std::copy( _itget, _itget + sizeToCopy, result.data() );
+        std::copy( _itget, _itget + sizeToCopy, v.data() );
 
         _itget += sizeToCopy;
 
-        return result;
+        return v;
     }
 
     // Reads no more than 'size' bytes of data (if a zero size is specified, then all still unread data
@@ -629,11 +629,11 @@ public:
         const size_t remainSize = sizeg();
         const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
 
-        auto result = std::make_pair( _itget, resultSize );
+        auto v = std::make_pair( _itget, resultSize );
 
         _itget += resultSize;
 
-        return result;
+        return v;
     }
 
     // Returns a string view of no more than 'size' bytes of data ending with the first null character found in
@@ -750,16 +750,16 @@ namespace fheroes2
         const char * begin = data + base + offset * sizeof( T );
         const char * end = begin + sizeof( T );
 
-        T result;
+        T v;
 
 #if defined( BYTE_ORDER ) && defined( LITTLE_ENDIAN ) && BYTE_ORDER == LITTLE_ENDIAN
-        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+        std::copy( begin, end, reinterpret_cast<char *>( &v ) );
 #elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
-        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &v ) );
 #else
 #error "Unknown byte order"
 #endif
 
-        return result;
+        return v;
     }
 }

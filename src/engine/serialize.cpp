@@ -594,7 +594,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
         return {};
     }
 
-    std::vector<uint8_t> v( chunkSize );
+    std::vector<uint8_t> v( chunkSize, 0 );
 
     if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
         setFail();
