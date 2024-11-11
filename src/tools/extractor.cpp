@@ -102,14 +102,14 @@ int main( int argc, char ** argv )
         const size_t inputStreamSize = inputStream.size();
         const uint16_t itemsCount = inputStream.getLE16();
 
-        RWStreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
+        RWStreamBuf itemsStream = inputStream.getStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
-        RWStreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
+        RWStreamBuf namesStream = inputStream.getStreamBuf( AGGItemNameLen * itemsCount );
 
         std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
-            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
+            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.getString( AGGItemNameLen ) )];
 
             info.hash = itemsStream.getLE32();
             info.offset = itemsStream.getLE32();

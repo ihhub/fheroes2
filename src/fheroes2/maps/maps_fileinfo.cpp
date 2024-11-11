@@ -340,11 +340,11 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
     // Map name
     fs.seek( 58 );
-    name = fs.toString( mapNameLength );
+    name = fs.getString( mapNameLength );
 
     // Map description
     fs.seek( 118 );
-    description = fs.toString( mapDescriptionLength );
+    description = fs.getString( mapDescriptionLength );
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {

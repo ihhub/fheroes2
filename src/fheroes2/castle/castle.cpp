@@ -344,7 +344,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
-        _name = dataStream.toString( 13 );
+        _name = dataStream.getString( 13 );
     }
     else {
         // Skip 13 bytes since the name is not set.

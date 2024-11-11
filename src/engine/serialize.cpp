@@ -636,7 +636,7 @@ void StreamFile::putRaw( const void * ptr, size_t size )
     }
 }
 
-RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
+RWStreamBuf StreamFile::getStreamBuf( const size_t size /* = 0 */ )
 {
     const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
@@ -656,7 +656,7 @@ RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
     return buffer;
 }
 
-std::string StreamFile::toString( const size_t size /* = 0 */ )
+std::string StreamFile::getString( const size_t size /* = 0 */ )
 {
     const std::vector<uint8_t> buf = getRaw( size );
 

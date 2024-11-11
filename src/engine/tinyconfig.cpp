@@ -83,7 +83,7 @@ bool TinyConfig::Load( const std::string & cfile )
         return false;
     }
 
-    std::vector<std::string> rows = StringSplit( sf.toString(), '\n' );
+    std::vector<std::string> rows = StringSplit( sf.getString(), '\n' );
 
     for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
         std::string str = StringTrim( *it );

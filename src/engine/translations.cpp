@@ -431,7 +431,7 @@ namespace
 
                 sb.seek( origStrOff );
 
-                const std::string origStr = sb.toString( origStrLen );
+                const std::string origStr = sb.getString( origStrLen );
                 if ( sb.fail() ) {
                     ERROR_LOG( "I/O error when parsing " << fileName )
                     return false;
@@ -488,7 +488,7 @@ namespace
 
                 sb.seek( off );
 
-                for ( const std::string & hdr : StringSplit( sb.toString( len ), '\n' ) ) {
+                for ( const std::string & hdr : StringSplit( sb.getString( len ), '\n' ) ) {
                     if ( getCharsetFromHeader( hdr, _encoding ) ) {
                         break;
                     }

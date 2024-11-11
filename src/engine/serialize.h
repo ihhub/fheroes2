@@ -493,7 +493,7 @@ public:
     // If a zero size is specified, then all still unread data is read, and from this data, a string is
     // formed that ends with the first null character found (or includes all data if no null character
     // was found), and this string is returned
-    std::string toString( const size_t size = 0 )
+    std::string getString( const size_t size = 0 )
     {
         const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
 
@@ -648,7 +648,7 @@ public:
     void close();
 
     // If a zero size is specified, then all still unread data is returned
-    RWStreamBuf toStreamBuf( const size_t size = 0 );
+    RWStreamBuf getStreamBuf( const size_t size = 0 );
 
     void seek( const size_t pos );
     void skip( size_t size ) override;
@@ -671,7 +671,7 @@ public:
     // If a zero size is specified, then all still unread data is read, and from this data, a string is
     // formed that ends with the first null character found (or includes all data if no null character
     // was found), and this string is returned
-    std::string toString( const size_t size = 0 );
+    std::string getString( const size_t size = 0 );
 
 private:
     size_t sizeg() override;
