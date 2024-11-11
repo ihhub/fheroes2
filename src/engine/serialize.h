@@ -616,38 +616,14 @@ public:
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
 
     // If a zero size is specified, then a view of all still unread data is returned
-    std::pair<const uint8_t *, size_t> getRawView( const size_t size = 0 )
-    {
-        const size_t remainSize = sizeg();
-        const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
-
-        auto v = std::make_pair( _itget, resultSize );
-
-        _itget += resultSize;
-
-        return v;
-    }
+    std::pair<const uint8_t *, size_t> getRawView( const size_t size = 0 );
 
     // Returns a string view of no more than 'size' bytes of data ending with the first null character found in
     // this data (or of all the data in the corresponding range if this data does not contain null characters).
     // If a zero size is specified, then the entire unread amount of data is considered. Advances the cursor
     // intended for reading data forward by the full amount of the data used (regardless of the presence of null
     // characters in this data).
-    std::string_view getStringView( const size_t size = 0 )
-    {
-        const size_t remainSize = sizeg();
-        const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
-
-        const uint8_t * strBeg = _itget;
-        _itget += sizeToSkip;
-
-        const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
-        assert( strBeg <= strEnd );
-
-        static_assert( std::is_same_v<uint8_t, unsigned char> );
-
-        return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
-    }
+    std::string_view getStringView( const size_t size = 0 );
 
 private:
     // Buffer to which the transfer of ownership of the external buffer takes place. This buffer is not used in

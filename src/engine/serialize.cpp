@@ -409,6 +409,34 @@ ROStreamBuf::ROStreamBuf( std::vector<uint8_t> && buf )
     setBigendian( IS_BIGENDIAN );
 }
 
+std::pair<const uint8_t *, size_t> ROStreamBuf::getRawView( const size_t size /* = 0 */ )
+{
+    const size_t remainSize = sizeg();
+    const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+    auto v = std::make_pair( _itget, resultSize );
+
+    _itget += resultSize;
+
+    return v;
+}
+
+std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
+{
+    const size_t remainSize = sizeg();
+    const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+    const uint8_t * strBeg = _itget;
+    _itget += sizeToSkip;
+
+    const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
+    assert( strBeg <= strEnd );
+
+    static_assert( std::is_same_v<std::remove_const_t<std::remove_reference_t<decltype( *strBeg )>>, unsigned char> );
+
+    return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
+}
+
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
