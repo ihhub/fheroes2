@@ -471,9 +471,9 @@ public:
     // If a zero size is specified, then all still unread data is returned
     std::vector<uint8_t> getRaw( size_t size ) override
     {
-        const size_t actualSize = sizeg();
-        const size_t resultSize = size > 0 ? size : actualSize;
-        const size_t sizeToCopy = std::min( resultSize, actualSize );
+        const size_t remainSize = sizeg();
+        const size_t resultSize = size > 0 ? size : remainSize;
+        const size_t sizeToCopy = std::min( resultSize, remainSize );
 
         std::vector<uint8_t> result( resultSize, 0 );
 
@@ -484,15 +484,16 @@ public:
         return result;
     }
 
-    // If a zero size is specified, then all still unread data is read, and from this data, a string is
-    // formed that ends with the first null character found (or includes all data if no null character
-    // was found), and this string is returned
+    // Reads no more than 'size' bytes of data (if a zero size is specified, then all still unread data
+    // is read), forms a string that ends with the first null character found in this data (or includes
+    // all data if this data does not contain null characters), and returns this string
     std::string getString( const size_t size = 0 )
     {
-        const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
+        const size_t remainSize = sizeg();
+        const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
 
         T * strBeg = _itget;
-        _itget += length;
+        _itget += sizeToSkip;
 
         return { strBeg, std::find( strBeg, _itget, 0 ) };
     }
@@ -621,6 +622,40 @@ public:
     ~ROStreamBuf() override = default;
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
+
+    // If a zero size is specified, then a view of all still unread data is returned
+    std::pair<const uint8_t *, size_t> getRawView( const size_t size )
+    {
+        const size_t remainSize = sizeg();
+        const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+        auto result = std::make_pair( _itget, resultSize );
+
+        _itget += resultSize;
+
+        return result;
+    }
+
+    // Returns a string view of no more than 'size' bytes of data ending with the first null character found in
+    // this data (or of all the data in the corresponding range if this data does not contain null characters).
+    // If a zero size is specified, then the entire unread amount of data is considered. Advances the cursor
+    // intended for reading data forward by the full amount of the data used (regardless of the presence of null
+    // characters in this data).
+    std::string_view getStringView( const size_t size = 0 )
+    {
+        const size_t remainSize = sizeg();
+        const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+        const uint8_t * strBeg = _itget;
+        _itget += sizeToSkip;
+
+        const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
+        assert( strBeg <= strEnd );
+
+        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+
+        return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
+    }
 };
 
 // Stream with a file storage backend that supports both reading and writing
@@ -662,9 +697,9 @@ public:
 
     void putRaw( const void * ptr, size_t size ) override;
 
-    // If a zero size is specified, then all still unread data is read, and from this data, a string is
-    // formed that ends with the first null character found (or includes all data if no null character
-    // was found), and this string is returned
+    // Reads no more than 'size' bytes of data (if a zero size is specified, then all still unread data
+    // is read), forms a string that ends with the first null character found in this data (or includes
+    // all data if this data does not contain null characters), and returns this string
     std::string getString( const size_t size = 0 );
 
 private:

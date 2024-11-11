@@ -274,20 +274,17 @@ namespace
         return iter->second;
     }
 
-    uint32_t crc32b( const char * msg )
+    uint32_t crc32b( const std::string_view str )
     {
         uint32_t crc = 0xFFFFFFFF;
-        uint32_t index = 0;
 
-        while ( msg[index] ) {
-            crc ^= static_cast<uint32_t>( msg[index] );
+        for ( const char ch : str ) {
+            crc ^= static_cast<uint32_t>( ch );
 
             for ( int bit = 0; bit < 8; ++bit ) {
                 const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
                 crc = ( crc >> 1 ) ^ poly;
             }
-
-            ++index;
         }
 
         return ~crc;
@@ -394,7 +391,7 @@ namespace
                 return false;
             }
 
-            // Minor version
+            // Skip the minor version
             sb.skip( 2 );
 
             const uint32_t stringsCount = sb.get32();
@@ -431,7 +428,7 @@ namespace
 
                 sb.seek( origStrOff );
 
-                const std::string origStr = sb.getString( origStrLen );
+                const std::string_view origStr = sb.getStringView( origStrLen );
                 if ( sb.fail() ) {
                     ERROR_LOG( "I/O error when parsing " << fileName )
                     return false;
@@ -455,14 +452,14 @@ namespace
 
                 static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-                const std::vector<uint8_t> tranBuf = sb.getRaw( tranStrLen );
+                const auto [tranBuf, tranBufLen] = sb.getRawView( tranStrLen );
                 if ( sb.fail() ) {
                     ERROR_LOG( "I/O error when parsing " << fileName )
                     return false;
                 }
 
                 if ( const auto [dummy, inserted]
-                     = _translations.try_emplace( crc32b( origStr.c_str() ), StringSplit( { reinterpret_cast<const char *>( tranBuf.data() ), tranBuf.size() }, '\0' ) );
+                     = _translations.try_emplace( crc32b( origStr ), StringSplit( { reinterpret_cast<const char *>( tranBuf ), tranBufLen }, '\0' ) );
                      !inserted ) {
                     ERROR_LOG( "Hash collision detected for string \"" << origStr << "\"" )
                 }
@@ -488,7 +485,7 @@ namespace
 
                 sb.seek( off );
 
-                for ( const std::string & hdr : StringSplit( sb.getString( len ), '\n' ) ) {
+                for ( const std::string & hdr : StringSplit( sb.getStringView( len ), '\n' ) ) {
                     if ( getCharsetFromHeader( hdr, _encoding ) ) {
                         break;
                     }
