@@ -342,7 +342,7 @@ namespace
             }
 
             if ( plural < iter->second.size() ) {
-                return iter->second[plural].data();
+                return iter->second[plural].c_str();
             }
 
             return stripContext( str );
@@ -462,7 +462,7 @@ namespace
                 }
 
                 if ( const auto [dummy, inserted]
-                     = _translations.try_emplace( crc32b( origStr.data() ), StringSplit( { reinterpret_cast<const char *>( tranBuf.data() ), tranBuf.size() }, '\0' ) );
+                     = _translations.try_emplace( crc32b( origStr.c_str() ), StringSplit( { reinterpret_cast<const char *>( tranBuf.data() ), tranBuf.size() }, '\0' ) );
                      !inserted ) {
                     ERROR_LOG( "Hash collision detected for string \"" << origStr << "\"" )
                 }
