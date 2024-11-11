@@ -616,7 +616,7 @@ public:
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
 
     // If a zero size is specified, then a view of all still unread data is returned
-    std::pair<const uint8_t *, size_t> getRawView( const size_t size )
+    std::pair<const uint8_t *, size_t> getRawView( const size_t size = 0 )
     {
         const size_t remainSize = sizeg();
         const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
