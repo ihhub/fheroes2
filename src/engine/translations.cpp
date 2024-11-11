@@ -450,13 +450,13 @@ namespace
 
                 sb.seek( tranStrOff );
 
-                static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
-
                 const auto [tranBufPtr, tranBufLen] = sb.getRawView( tranStrLen );
                 if ( sb.fail() ) {
                     ERROR_LOG( "I/O error when parsing " << fileName )
                     return false;
                 }
+
+                static_assert( std::is_same_v<std::remove_const_t<std::remove_reference_t<decltype( *tranBufPtr )>>, unsigned char> );
 
                 if ( const auto [dummy, inserted]
                      = _translations.try_emplace( crc32b( origStr ), StringSplit( { reinterpret_cast<const char *>( tranBufPtr ), tranBufLen }, '\0' ) );

@@ -652,7 +652,7 @@ public:
         const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
         assert( strBeg <= strEnd );
 
-        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+        static_assert( std::is_same_v<uint8_t, unsigned char> );
 
         return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
     }

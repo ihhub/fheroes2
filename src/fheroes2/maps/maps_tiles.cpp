@@ -470,13 +470,13 @@ Heroes * Maps::Tile::getHero() const
 void Maps::Tile::setHero( Heroes * hero )
 {
     if ( hero ) {
-        using HeroIDType = decltype( _occupantHeroId );
-        static_assert( std::is_same_v<HeroIDType, uint8_t>, "Type of heroID has been changed, check the logic below" );
+        using OccupantHeroIdType = decltype( _occupantHeroId );
+        static_assert( std::is_same_v<OccupantHeroIdType, uint8_t> );
 
         hero->setObjectTypeUnderHero( _mainObjectType );
 
-        assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
-        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
+        assert( hero->GetID() >= std::numeric_limits<OccupantHeroIdType>::min() && hero->GetID() < std::numeric_limits<OccupantHeroIdType>::max() );
+        _occupantHeroId = static_cast<OccupantHeroIdType>( hero->GetID() );
 
         setMainObjectType( MP2::OBJ_HERO );
     }
@@ -574,7 +574,7 @@ void Maps::Tile::setBoat( const int direction, const int color )
 #endif // WITH_DEBUG
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
-    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );
+    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t> );
 
     assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
 
@@ -677,13 +677,13 @@ int Maps::Tile::getTileIndependentPassability() const
 
 void Maps::Tile::setInitialPassability()
 {
-    using TilePassableType = decltype( _tilePassabilityDirections );
-    static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
+    using TilePassabilityDirectionsType = decltype( _tilePassabilityDirections );
+    static_assert( std::is_same_v<TilePassabilityDirectionsType, uint16_t> );
 
     const int passability = getTileIndependentPassability();
-    assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
+    assert( passability >= std::numeric_limits<TilePassabilityDirectionsType>::min() && passability <= std::numeric_limits<TilePassabilityDirectionsType>::max() );
 
-    _tilePassabilityDirections = static_cast<TilePassableType>( passability );
+    _tilePassabilityDirections = static_cast<TilePassabilityDirectionsType>( passability );
 }
 
 void Maps::Tile::updatePassability()
