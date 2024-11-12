@@ -95,6 +95,8 @@ std::vector<std::string> StringSplit( const std::string_view str, const char sep
     size_t startPos = 0;
 
     for ( size_t sepPos = str.find( sep ); sepPos != std::string::npos; sepPos = str.find( sep, startPos ) ) {
+        assert( startPos < str.size() && sepPos < str.size() );
+
         result.emplace_back( str.begin() + startPos, str.begin() + sepPos );
 
         startPos = sepPos + 1;
