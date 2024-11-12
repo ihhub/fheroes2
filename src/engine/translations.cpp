@@ -338,11 +338,17 @@ namespace
                 return stripContext( str );
             }
 
-            if ( plural < iter->second.size() ) {
-                return iter->second[plural].c_str();
+            const auto & [dummy, pluralFormTranslations] = *iter;
+            if ( plural >= pluralFormTranslations.size() ) {
+                return stripContext( str );
             }
 
-            return stripContext( str );
+            const std::string & translatedStr = pluralFormTranslations[plural];
+            if ( translatedStr.empty() ) {
+                return stripContext( str );
+            }
+
+            return translatedStr.c_str();
         }
 
         bool load( const std::string_view langName, const std::string & fileName )
