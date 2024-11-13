@@ -370,6 +370,10 @@ namespace
 
             {
                 const uint32_t magicNumber = sb.getLE32();
+                if ( sb.fail() ) {
+                    ERROR_LOG( "I/O error when parsing " << fileName )
+                    return false;
+                }
 
                 switch ( magicNumber ) {
                 case 0xde120495:
@@ -388,9 +392,17 @@ namespace
                 }
             }
 
-            if ( const uint16_t majorVersion = sb.get16(); majorVersion != 0 ) {
-                ERROR_LOG( "Incorrect major version " << GetHexString( majorVersion, 4 ) << " for " << fileName )
-                return false;
+            {
+                const uint16_t majorVersion = sb.get16();
+                if ( sb.fail() ) {
+                    ERROR_LOG( "I/O error when parsing " << fileName )
+                    return false;
+                }
+
+                if ( majorVersion != 0 ) {
+                    ERROR_LOG( "Incorrect major version " << GetHexString( majorVersion, 4 ) << " for " << fileName )
+                    return false;
+                }
             }
 
             // Skip the minor version
@@ -484,10 +496,20 @@ namespace
 
                 const uint32_t len = sb.get32();
                 const uint32_t off = sb.get32();
+                if ( sb.fail() ) {
+                    ERROR_LOG( "I/O error when parsing " << fileName )
+                    return false;
+                }
 
                 sb.seek( off );
 
-                for ( const std::string & hdr : StringSplit( sb.getStringView( len ), '\n' ) ) {
+                const std::string_view str = sb.getStringView( len );
+                if ( sb.fail() ) {
+                    ERROR_LOG( "I/O error when parsing " << fileName )
+                    return false;
+                }
+
+                for ( const std::string & hdr : StringSplit( str, '\n' ) ) {
                     if ( getCharsetFromHeader( hdr, _encoding ) ) {
                         break;
                     }
