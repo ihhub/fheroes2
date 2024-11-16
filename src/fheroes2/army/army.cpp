@@ -1553,7 +1553,7 @@ bool Army::isMeleeDominantArmy() const
 
     for ( const Troop * troop : *this ) {
         if ( troop != nullptr && troop->isValid() ) {
-            if ( !troop->isArchers() && !troop->isFlying() ) {
+            if ( !troop->isArchers() && !troop->isFlying() && !troop->isGhost() ) {
                 meleeInfantry += troop->GetStrength();
             }
             else {

@@ -48,7 +48,7 @@ bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const
         return false;
     }
 
-    if ( unit.isFlying() ) {
+    if ( unit.isFlying() || unit.isGhost() ) {
         return dstIdx == CELL_GATES;
     }
 

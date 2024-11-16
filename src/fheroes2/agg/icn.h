@@ -25,6 +25,7 @@
 #define H2ICN_H
 
 #include <cstdint>
+#include <string>
 
 namespace ICN
 {
@@ -1141,6 +1142,7 @@ namespace ICN
     int getCastleIcnId( const int race );
 
     int getFlagIcnId( const int color );
+    int getIcnFromStr(const std::string& id);
 }
 
 #endif

@@ -116,3 +116,17 @@ int Speed::GetHasteSpeedFromSpell( const int currentSpeed )
     Spell spell = Spell::HASTE;
     return spell.ExtraValue() ? currentSpeed + spell.ExtraValue() : Speed::GetOriginalFast( currentSpeed );
 }
+
+int Speed::GetFromString(const std::string& id){
+    if(id == "STANDING"){ return Speed::STANDING; }else
+    if(id == "CRAWLING"){ return Speed::CRAWLING; }else
+    if(id == "VERYSLOW"){ return Speed::VERYSLOW; }else
+    if(id == "SLOW"){ return Speed::SLOW; }else
+    if(id == "AVERAGE"){ return Speed::AVERAGE; }else
+    if(id == "FAST"){ return Speed::FAST; }else
+    if(id == "VERYFAST"){ return Speed::VERYFAST; }else
+    if(id == "ULTRAFAST"){ return Speed::ULTRAFAST; }else
+    if(id == "BLAZING"){ return Speed::BLAZING; }else
+    if(id == "INSTANT"){ return Speed::INSTANT; }
+    return Speed::STANDING;
+}

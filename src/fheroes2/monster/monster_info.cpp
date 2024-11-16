@@ -29,6 +29,8 @@
 #include <set>
 #include <sstream>
 #include <utility>
+#include <fstream>
+#include "json.h"
 
 #include "icn.h"
 #include "m82.h"
@@ -38,6 +40,8 @@
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
+#include "settings.h"
+#include "system.h"
 
 namespace
 {
@@ -557,7 +561,7 @@ namespace
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
-
+        fheroes2::loadMonstersData();
         // Calculate base value of monster strength.
         for ( fheroes2::MonsterData & data : monsterData ) {
             data.battleStats.monsterBaseStrength = getMonsterBaseStrength( data );
@@ -689,6 +693,12 @@ namespace fheroes2
             return std::to_string( ability.percentage ) + _( "% chance to halve enemy" );
         case MonsterAbilityType::SOUL_EATER:
             return _( "Soul Eater" );
+        case MonsterAbilityType::GHOST:
+            return _( "Ghost" );
+        case MonsterAbilityType::LONGWALKER:
+            return _( "Long walker" );
+        case MonsterAbilityType::WATERWALKER:
+            return _( "Water walker" );
         case MonsterAbilityType::ELEMENTAL:
             return ignoreBasicAbility ? _( "No Morale" ) : _( "Elemental" );
         default:
@@ -945,5 +955,165 @@ namespace fheroes2
         }
 
         return spellResistance;
+    }
+
+    void fillSoundMonsterInfo(const json::jobject& jsounds, MonsterSound& sounds){
+        if(jsounds.has_key("meleeAttack")){ sounds.meleeAttack = M82::getFromString(jsounds["meleeAttack"]); }
+        if(jsounds.has_key("death")){ sounds.death = M82::getFromString(jsounds["death"]); }
+        if(jsounds.has_key("movement")){ sounds.movement = M82::getFromString(jsounds["movement"]); }
+        if(jsounds.has_key("wince")){ sounds.wince = M82::getFromString(jsounds["wince"]); }
+        if(jsounds.has_key("rangeAttack")){ sounds.rangeAttack = M82::getFromString(jsounds["rangeAttack"]); }
+        if(jsounds.has_key("takeoff")){ sounds.takeoff = M82::getFromString(jsounds["takeoff"]); }
+        if(jsounds.has_key("landing")){ sounds.landing = M82::getFromString(jsounds["landing"]); }
+        if(jsounds.has_key("explosion")){ sounds.explosion = M82::getFromString(jsounds["explosion"]); }
+    }
+
+    MonsterAbilityType MonsterAbilityFromString(const std::string& id){
+        if(id == "DOUBLE_HEX_SIZE"){ return MonsterAbilityType::DOUBLE_HEX_SIZE; }else
+        if(id == "FLYING"){ return MonsterAbilityType::FLYING; }else
+        if(id == "DRAGON"){ return MonsterAbilityType::DRAGON; }else
+        if(id == "UNDEAD"){ return MonsterAbilityType::UNDEAD; }else
+        if(id == "ELEMENTAL"){ return MonsterAbilityType::ELEMENTAL; }else
+        if(id == "DOUBLE_SHOOTING"){ return MonsterAbilityType::DOUBLE_SHOOTING; }else
+        if(id == "DOUBLE_MELEE_ATTACK"){ return MonsterAbilityType::DOUBLE_MELEE_ATTACK; }else
+        if(id == "DOUBLE_DAMAGE_TO_UNDEAD"){ return MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD; }else
+        if(id == "MAGIC_RESISTANCE"){ return MonsterAbilityType::MAGIC_RESISTANCE; }else
+        if(id == "MIND_SPELL_IMMUNITY"){ return MonsterAbilityType::MIND_SPELL_IMMUNITY; }else
+        if(id == "ELEMENTAL_SPELL_IMMUNITY"){ return MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY; }else
+        if(id == "FIRE_SPELL_IMMUNITY"){ return MonsterAbilityType::FIRE_SPELL_IMMUNITY; }else
+        if(id == "COLD_SPELL_IMMUNITY"){ return MonsterAbilityType::COLD_SPELL_IMMUNITY; }else
+        if(id == "IMMUNE_TO_CERTAIN_SPELL"){ return MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL; }else
+        if(id == "ELEMENTAL_SPELL_DAMAGE_REDUCTION"){ return MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION; }else
+        if(id == "SPELL_CASTER"){ return MonsterAbilityType::SPELL_CASTER; }else
+        if(id == "HP_REGENERATION"){ return MonsterAbilityType::HP_REGENERATION; }else
+        if(id == "TWO_CELL_MELEE_ATTACK"){ return MonsterAbilityType::TWO_CELL_MELEE_ATTACK; }else
+        if(id == "ALWAYS_RETALIATE"){ return MonsterAbilityType::ALWAYS_RETALIATE; }else
+        if(id == "ALL_ADJACENT_CELL_MELEE_ATTACK"){ return MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK; }else
+        if(id == "NO_MELEE_PENALTY"){ return MonsterAbilityType::NO_MELEE_PENALTY; }else
+        if(id == "NO_ENEMY_RETALIATION"){ return MonsterAbilityType::NO_ENEMY_RETALIATION; }else
+        if(id == "HP_DRAIN"){ return MonsterAbilityType::HP_DRAIN; }else
+        if(id == "AREA_SHOT"){ return MonsterAbilityType::AREA_SHOT; }else
+        if(id == "MORAL_DECREMENT"){ return MonsterAbilityType::MORAL_DECREMENT; }else
+        if(id == "ENEMY_HALVING"){ return MonsterAbilityType::ENEMY_HALVING; }else
+        if(id == "SOUL_EATER"){ return MonsterAbilityType::SOUL_EATER; };
+        if(id == "GHOST"){ return MonsterAbilityType::GHOST; };
+        if(id == "LONGWALKER"){ return MonsterAbilityType::LONGWALKER; };
+        if(id == "WATERWALKER"){ return MonsterAbilityType::WATERWALKER; };
+        return MonsterAbilityType::NONE;
+    }
+
+    MonsterWeaknessType MonsterWeaknessFromString(const std::string& id){
+        if(id == "EXTRA_DAMAGE_FROM_FIRE_SPELL"){ return MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL; }else
+        if(id == "EXTRA_DAMAGE_FROM_COLD_SPELL"){ return MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL; }else
+        if(id == "EXTRA_DAMAGE_FROM_CERTAIN_SPELL"){ return MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL; }
+        return MonsterWeaknessType::NONE;
+    }
+
+    void fillMonsterAbility(const json::jobject& jability, MonsterAbility& ability){
+        if(jability.has_key("type")){ ability.type = MonsterAbilityFromString(jability["type"]); }
+        if(jability.has_key("percentage")){ ability.percentage = jability["percentage"]; }
+        if(jability.has_key("spell")){ ability.value = Spell::getFromString(jability["spell"]); }
+    }
+
+    void fillMonsterWeakness(const json::jobject& jability, MonsterWeakness& ability){
+        if(jability.has_key("type")){ ability.type = MonsterWeaknessFromString(jability["type"]); }
+        if(jability.has_key("percentage")){ ability.percentage = jability["percentage"]; }
+        if(jability.has_key("spell")){ ability.value = Spell::getFromString(jability["spell"]); }
+    }
+
+    void fillMonsterBattleStats(const json::jobject& jbattleStats, MonsterBattleStats& battleStats){
+        if(jbattleStats.has_key("attack")){ battleStats.attack = jbattleStats["attack"]; }
+        if(jbattleStats.has_key("defense")){ battleStats.defense = jbattleStats["defense"]; }
+        if(jbattleStats.has_key("damageMin")){ battleStats.damageMin = jbattleStats["damageMin"]; }
+        if(jbattleStats.has_key("damageMax")){ battleStats.damageMax = jbattleStats["damageMax"]; }
+        if(jbattleStats.has_key("hp")){ battleStats.hp = jbattleStats["hp"]; }
+        if(jbattleStats.has_key("speed")){ battleStats.speed = Speed::GetFromString(jbattleStats["speed"]); }
+        if(jbattleStats.has_key("shots")){ battleStats.shots = jbattleStats["shots"]; }
+        if(jbattleStats.has_key("monsterBaseStrength")){ battleStats.monsterBaseStrength = jbattleStats["monsterBaseStrength"]; }
+        if(jbattleStats.has_key("abilities")){
+            battleStats.abilities.clear();
+            for(auto& jability:jbattleStats["abilities"].as_array<json::jobject>()){
+                MonsterAbility ability(MonsterAbilityType::NONE);
+                fillMonsterAbility(jability, ability);
+                if(ability.type == MonsterAbilityType::NONE){ continue; }
+                battleStats.abilities.push_back(ability);
+            }
+        }
+        if(jbattleStats.has_key("weaknesses")){
+            battleStats.weaknesses.clear();
+            for(auto& jweaknesses:jbattleStats["weaknesses"].as_array<json::jobject>()){
+                MonsterWeakness weaknesses(MonsterWeaknessType::NONE);
+                fillMonsterWeakness(jweaknesses, weaknesses);
+                if(weaknesses.type == MonsterWeaknessType::NONE){ continue; }
+                battleStats.weaknesses.push_back(weaknesses);
+            }
+        }
+    }
+
+    void fillCost(const json::jobject& jcost, Cost& cost){
+        if(jcost.has_key("gold")){ cost.gold = static_cast<uint32_t>(jcost["gold"]); }
+        if(jcost.has_key("wood")){ cost.wood = static_cast<uint32_t>(jcost["wood"]); }
+        if(jcost.has_key("mercury")){ cost.mercury = static_cast<uint32_t>(jcost["mercury"]); }
+        if(jcost.has_key("ore")){ cost.ore = static_cast<uint32_t>(jcost["ore"]); }
+        if(jcost.has_key("sulfur")){ cost.sulfur = static_cast<uint32_t>(jcost["sulfur"]); }
+        if(jcost.has_key("crystal")){ cost.crystal = static_cast<uint32_t>(jcost["crystal"]); }
+        if(jcost.has_key("gems")){ cost.gems = static_cast<uint32_t>(jcost["gems"]); }
+    }
+
+    void fillMonsterGeneralStats(const json::jobject& jgeneral, MonsterGeneralStats& general){
+        if(jgeneral.has_key("name")){ std::string val = jgeneral["name"]; general.name = gettext_noop(val.c_str()); }
+        if(jgeneral.has_key("pluralName")){ std::string val = jgeneral["pluralName"]; general.pluralName = gettext_noop(val.c_str()); }
+        if(jgeneral.has_key("baseGrowth")){ general.baseGrowth = jgeneral["baseGrowth"]; }
+        if(jgeneral.has_key("race")){ general.race = Race::getFromString(jgeneral["race"]); }
+        if(jgeneral.has_key("cost")){
+            fillCost(jgeneral["cost"].as_object(), general.cost);
+        }
+    }
+
+    void loadMonstersData(){
+        const ListFiles monstersDataFiles = Settings::FindFiles( System::concatPath(System::concatPath( "files", "info" ), "monsters"), ".json", false );
+        for(auto& mdFileName:monstersDataFiles){
+            fprintf(stderr, "monster data: %s\n",mdFileName.c_str());
+            try{
+                std::string mdContent;
+                {
+                    std::ifstream mdFile(mdFileName);
+                    std::stringstream buffer;
+                    buffer << mdFile.rdbuf();
+                    mdContent = buffer.str();
+                }
+                json::jobject jmd = json::jobject::parse(mdContent);
+                uint32_t id = Monster::UNKNOWN;
+                if(jmd["type"].is_null() == false){
+                    id = Monster::strToMonsterId(jmd["type"]);
+                }
+                fprintf(stderr, " type:%d\n",id);
+                if(id == Monster::UNKNOWN){ continue; }
+                if(jmd["icn"].is_null() == false){
+                    monsterData[id].icnId = ICN::getIcnFromStr(jmd["icn"]);
+                }
+                if(jmd["binFileName"].is_null() == false){
+                    std::string value = jmd["binFileName"];
+                    monsterData[id].binFileName = strdup(value.c_str());
+                }
+                if(jmd["sound"].is_null() == false){
+                    fillSoundMonsterInfo(jmd["sound"].as_object(), monsterData[id].sounds);
+                }
+                if(jmd["battle"].is_null() == false){
+                    fillMonsterBattleStats(jmd["battle"].as_object(), monsterData[id].battleStats);
+                }
+                if(jmd["general"].is_null() == false){
+                    fillMonsterGeneralStats(jmd["general"].as_object(), monsterData[id].generalStats);
+                }
+                fprintf(stderr, "%s\n", getMonsterDescription(id).c_str());
+            }catch(std::exception& e){
+                fprintf(stderr, "exception:%s\n",e.what());
+            }
+        }
+    }
+    void buildMonstersData(){
+        if ( monsterData.empty() ) {
+            populateMonsterData();
+        }
     }
 }

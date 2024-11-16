@@ -27,6 +27,7 @@
 
 #include "monster_info.h"
 #include "resource.h"
+#include "speed.h"
 
 class Spell;
 
@@ -195,6 +196,11 @@ public:
         return fheroes2::getMonsterData( id ).battleStats.speed;
     }
 
+    uint32_t GetWalkRadius() const
+    {
+        return isLongWalker()?static_cast<uint32_t>(Speed::TELEPORT):fheroes2::getMonsterData( id ).battleStats.speed;
+    }
+
     uint32_t GetGrown() const
     {
         return fheroes2::getMonsterData( id ).generalStats.baseGrowth;
@@ -236,6 +242,21 @@ public:
     bool isFlying() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+    }
+
+    bool isGhost() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::GHOST );
+    }
+
+    bool isLongWalker() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::LONGWALKER );
+    }
+
+    bool isWaterWalker() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::WATERWALKER );
     }
 
     bool isWide() const
@@ -312,7 +333,7 @@ public:
     static uint32_t GetCountFromHitPoints( const Monster & mons, const uint32_t hp );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
-
+    static uint32_t strToMonsterId(const std::string& id);
 protected:
     // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
     Funds GetUpgradeCost() const;

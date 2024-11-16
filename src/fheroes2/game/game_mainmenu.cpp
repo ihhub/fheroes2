@@ -60,6 +60,7 @@
 #include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "monster_info.h"
 
 namespace
 {
@@ -324,6 +325,10 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
     fheroes2::ApplyPalette( highlightDoor, 8 );
+
+    //fheroes2::buildMonstersData();
+    //fheroes2::showStandardTextMessage( _( "Mod loading" ), _( "Mod loaded" ), Dialog::OK );
+
 
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {

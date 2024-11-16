@@ -38,13 +38,14 @@ namespace Speed
         VERYFAST = 6,
         ULTRAFAST = 7,
         BLAZING = 8,
-        INSTANT = 9
+        INSTANT = 9,
+        TELEPORT = 15
     };
 
     std::string String( const int speed );
     int GetOriginalSlow( const int speed );
     int GetOriginalFast( const int speed );
-
+    int GetFromString(const std::string& id);
     int GetSlowSpeedFromSpell( const int currentSpeed );
     int GetHasteSpeedFromSpell( const int currentSpeed );
 }

@@ -807,3 +807,72 @@ IStreamBase & operator>>( IStreamBase & stream, Spell & spell )
 {
     return stream >> spell.id;
 }
+
+int Spell::getFromString(const std::string& id){
+    if(id == "FIREBALL"){ return Spell::FIREBALL; }else
+    if(id == "FIREBLAST"){ return Spell::FIREBLAST; }else
+    if(id == "LIGHTNINGBOLT"){ return Spell::LIGHTNINGBOLT; }else
+    if(id == "CHAINLIGHTNING"){ return Spell::CHAINLIGHTNING; }else
+    if(id == "TELEPORT"){ return Spell::TELEPORT; }else
+    if(id == "CURE"){ return Spell::CURE; }else
+    if(id == "MASSCURE"){ return Spell::MASSCURE; }else
+    if(id == "RESURRECT"){ return Spell::RESURRECT; }else
+    if(id == "RESURRECTTRUE"){ return Spell::RESURRECTTRUE; }else
+    if(id == "HASTE"){ return Spell::HASTE; }else
+    if(id == "MASSHASTE"){ return Spell::MASSHASTE; }else
+    if(id == "SLOW"){ return Spell::SLOW; }else
+    if(id == "MASSSLOW"){ return Spell::MASSSLOW; }else
+    if(id == "BLIND"){ return Spell::BLIND; }else
+    if(id == "BLESS"){ return Spell::BLESS; }else
+    if(id == "MASSBLESS"){ return Spell::MASSBLESS; }else
+    if(id == "STONESKIN"){ return Spell::STONESKIN; }else
+    if(id == "STEELSKIN"){ return Spell::STEELSKIN; }else
+    if(id == "CURSE"){ return Spell::CURSE; }else
+    if(id == "MASSCURSE"){ return Spell::MASSCURSE; }else
+    if(id == "HOLYWORD"){ return Spell::HOLYWORD; }else
+    if(id == "HOLYSHOUT"){ return Spell::HOLYSHOUT; }else
+    if(id == "ANTIMAGIC"){ return Spell::ANTIMAGIC; }else
+    if(id == "DISPEL"){ return Spell::DISPEL; }else
+    if(id == "MASSDISPEL"){ return Spell::MASSDISPEL; }else
+    if(id == "ARROW"){ return Spell::ARROW; }else
+    if(id == "BERSERKER"){ return Spell::BERSERKER; }else
+    if(id == "ARMAGEDDON"){ return Spell::ARMAGEDDON; }else
+    if(id == "ELEMENTALSTORM"){ return Spell::ELEMENTALSTORM; }else
+    if(id == "METEORSHOWER"){ return Spell::METEORSHOWER; }else
+    if(id == "PARALYZE"){ return Spell::PARALYZE; }else
+    if(id == "HYPNOTIZE"){ return Spell::HYPNOTIZE; }else
+    if(id == "COLDRAY"){ return Spell::COLDRAY; }else
+    if(id == "COLDRING"){ return Spell::COLDRING; }else
+    if(id == "DISRUPTINGRAY"){ return Spell::DISRUPTINGRAY; }else
+    if(id == "DEATHRIPPLE"){ return Spell::DEATHRIPPLE; }else
+    if(id == "DEATHWAVE"){ return Spell::DEATHWAVE; }else
+    if(id == "DRAGONSLAYER"){ return Spell::DRAGONSLAYER; }else
+    if(id == "BLOODLUST"){ return Spell::BLOODLUST; }else
+    if(id == "ANIMATEDEAD"){ return Spell::ANIMATEDEAD; }else
+    if(id == "MIRRORIMAGE"){ return Spell::MIRRORIMAGE; }else
+    if(id == "SHIELD"){ return Spell::SHIELD; }else
+    if(id == "MASSSHIELD"){ return Spell::MASSSHIELD; }else
+    if(id == "SUMMONEELEMENT"){ return Spell::SUMMONEELEMENT; }else
+    if(id == "SUMMONAELEMENT"){ return Spell::SUMMONAELEMENT; }else
+    if(id == "SUMMONFELEMENT"){ return Spell::SUMMONFELEMENT; }else
+    if(id == "SUMMONWELEMENT"){ return Spell::SUMMONWELEMENT; }else
+    if(id == "EARTHQUAKE"){ return Spell::EARTHQUAKE; }else
+    if(id == "VIEWMINES"){ return Spell::VIEWMINES; }else
+    if(id == "VIEWRESOURCES"){ return Spell::VIEWRESOURCES; }else
+    if(id == "VIEWARTIFACTS"){ return Spell::VIEWARTIFACTS; }else
+    if(id == "VIEWTOWNS"){ return Spell::VIEWTOWNS; }else
+    if(id == "VIEWHEROES"){ return Spell::VIEWHEROES; }else
+    if(id == "VIEWALL"){ return Spell::VIEWALL; }else
+    if(id == "IDENTIFYHERO"){ return Spell::IDENTIFYHERO; }else
+    if(id == "SUMMONBOAT"){ return Spell::SUMMONBOAT; }else
+    if(id == "DIMENSIONDOOR"){ return Spell::DIMENSIONDOOR; }else
+    if(id == "TOWNGATE"){ return Spell::TOWNGATE; }else
+    if(id == "TOWNPORTAL"){ return Spell::TOWNPORTAL; }else
+    if(id == "VISIONS"){ return Spell::VISIONS; }else
+    if(id == "HAUNT"){ return Spell::HAUNT; }else
+    if(id == "SETEGUARDIAN"){ return Spell::SETEGUARDIAN; }else
+    if(id == "SETAGUARDIAN"){ return Spell::SETAGUARDIAN; }else
+    if(id == "SETFGUARDIAN"){ return Spell::SETFGUARDIAN; }else
+    if(id == "SETWGUARDIAN"){ return Spell::SETWGUARDIAN; }
+    return Spell::NONE;
+}

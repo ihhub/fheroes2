@@ -74,6 +74,7 @@ public:
     virtual std::string GetSpeedString() const;
     virtual uint32_t GetHitPointsLeft() const;
     virtual uint32_t GetSpeed() const;
+    virtual uint32_t GetWalkRadius() const;
     virtual uint32_t GetAffectedDuration( uint32_t ) const;
 
     double GetStrength() const;

@@ -297,7 +297,7 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
     if ( target.Modes( Battle::SP_HASTE ) ) {
         ratio *= 2;
     }
-    else if ( !target.isFlying() ) {
+    else if ( !(target.isFlying() || target.isGhost()) ) {
         ratio /= ReduceEffectivenessByDistance( target );
     }
     return ratio;

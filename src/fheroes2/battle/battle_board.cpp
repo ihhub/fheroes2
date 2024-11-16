@@ -378,7 +378,7 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
         return true;
     case 49: {
         const Bridge * bridge = Arena::GetBridge();
-        return unit.isFlying() || bridge == nullptr || !bridge->isPassable( unit );
+        return unit.isFlying() || unit.isGhost() || bridge == nullptr || !bridge->isPassable( unit );
     }
 
     default:
@@ -948,7 +948,7 @@ bool Battle::Board::CanAttackFromCell( const Unit & unit, const int32_t from )
     }
 
     // The moat doesn't stop flying units
-    if ( unit.isFlying() ) {
+    if ( unit.isFlying() || unit.isGhost() ) {
         return true;
     }
 

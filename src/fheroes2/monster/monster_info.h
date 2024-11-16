@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <string.h>
 
 #include "resource.h"
 
@@ -63,7 +64,10 @@ namespace fheroes2
         AREA_SHOT,
         MORAL_DECREMENT,
         ENEMY_HALVING,
-        SOUL_EATER
+        SOUL_EATER,
+        GHOST,
+        LONGWALKER,
+        WATERWALKER
     };
 
     enum class MonsterWeaknessType : int
@@ -173,7 +177,7 @@ namespace fheroes2
         MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_,
                      const MonsterGeneralStats & generalStats_ )
             : icnId( icnId_ )
-            , binFileName( binFileName_ )
+            , binFileName( strdup(binFileName_) )
             , sounds( sounds_ )
             , battleStats( battleStats_ )
             , generalStats( generalStats_ )
@@ -181,7 +185,7 @@ namespace fheroes2
 
         int icnId;
 
-        const char * binFileName;
+        char * binFileName;
 
         MonsterSound sounds;
 
@@ -200,5 +204,7 @@ namespace fheroes2
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
+    void loadMonstersData();
+    void buildMonstersData();
 }
 #endif

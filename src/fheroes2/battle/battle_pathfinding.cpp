@@ -59,9 +59,9 @@ namespace Battle
             boardStatus[cellIdx] = cell.isPassable( true );
         }
 
-        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
-        const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), std::cref( boardStatus ) );
+        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus, _isWaterWalker );
+        const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetWalkRadius(), unit.isWide(), unit.isFlying() || unit.isGhost(),
+                                                  unit.GetColor(), std::cref( boardStatus ), unit.isWaterWalker() );
 
         // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
@@ -105,7 +105,7 @@ namespace Battle
         // The index of that of the cells of the initial unit's position, which is located
         // in the moat (-1, if there is none)
         const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt]() {
-            if ( !isMoatBuilt ) {
+            if ( (!isMoatBuilt) || (_isWaterWalker) ) {
                 return -1;
             }
 
@@ -146,8 +146,8 @@ namespace Battle
                 const bool isCurrentLeftDirection = ( ( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) & LEFT_SIDE ) != 0 );
                 // The moat restrictions can be ignored if the wide unit originally occupied a moat cell, and at the current step any part
                 // of this unit occupies the same moat cell
-                const bool isIgnoreMoat = ( currentHeadCellIdx == pathStartMoatCellIdx || currentTailCellIdx == pathStartMoatCellIdx );
-                const bool isInMoat = isMoatBuilt && ( Board::isMoatIndex( currentHeadCellIdx, unit ) || Board::isMoatIndex( currentTailCellIdx, unit ) );
+                const bool isIgnoreMoat = ( (currentHeadCellIdx == pathStartMoatCellIdx) || (currentTailCellIdx == pathStartMoatCellIdx) || _isWaterWalker );
+                const bool isInMoat = (isMoatBuilt && (_isWaterWalker == false) ) && ( Board::isMoatIndex( currentHeadCellIdx, unit ) || Board::isMoatIndex( currentTailCellIdx, unit ) );
                 const uint32_t movementPenalty = ( !isIgnoreMoat && isInMoat ) ? MOAT_PENALTY : 1;
 
                 for ( const int32_t headCellIdx : Board::GetMoveWideIndexes( currentHeadCellIdx, isCurrentLeftDirection ) ) {
@@ -186,8 +186,8 @@ namespace Battle
                 assert( currentCell != nullptr );
 
                 // The moat restrictions can be ignored at the first step if the unit starts its movement from the moat
-                const bool isIgnoreMoat = ( currentCellIdx == pathStartMoatCellIdx );
-                const bool isInMoat = isMoatBuilt && Board::isMoatIndex( currentCellIdx, unit );
+                const bool isIgnoreMoat = ( (currentCellIdx == pathStartMoatCellIdx) || _isWaterWalker );
+                const bool isInMoat = (isMoatBuilt && (_isWaterWalker == false)) && Board::isMoatIndex( currentCellIdx, unit );
                 const uint32_t movementPenalty = ( !isIgnoreMoat && isInMoat ) ? MOAT_PENALTY : 1;
 
                 for ( const int32_t cellIdx : Board::GetAroundIndexes( currentCellIdx ) ) {

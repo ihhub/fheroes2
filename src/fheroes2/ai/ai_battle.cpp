@@ -385,7 +385,7 @@ namespace
             assert( enemy != nullptr );
 
             // Archers and Flyers are always a threat
-            if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
+            if ( enemy->isFlying() || enemy->isGhost() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                 continue;
             }
 
@@ -1105,7 +1105,7 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
             return false;
         }
 
-        const double overPowerRatio = ( currentUnit.isFlying() ? 6 : 10 );
+        const double overPowerRatio = ( (currentUnit.isFlying() || currentUnit.isGhost()) ? 6 : 10 );
 
         // When we have a X times stronger army than the enemy, then we are likely to win, there is no need to go on the defensive
         if ( _myArmyStrength > _enemyArmyStrength * overPowerRatio ) {
@@ -1160,7 +1160,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
         if ( std::any_of( enemies.begin(), enemies.end(), []( const Battle::Unit * enemy ) {
                  assert( enemy != nullptr );
 
-                 return enemy->isFlying();
+                 return enemy->isFlying() || enemy->isGhost();
              } ) ) {
             return -1;
         }
@@ -1308,7 +1308,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
             const bool isItWorthTryingToRetreat = std::all_of( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(),
                                                                [&arena, currentUnitSpeed]( const int32_t enemyIdx ) {
                                                                    const Battle::Unit * enemy = arena.GetTroopBoard( enemyIdx );
-                                                                   assert( enemy != nullptr && !enemy->isFlying() );
+                                                                   assert( enemy != nullptr && !enemy->isFlying() && !enemy->isGhost() );
 
                                                                    // Also consider the next turn, even if this unit has already acted during the current turn
                                                                    const uint32_t enemySpeed = enemy->GetSpeed( false, true );
@@ -1593,7 +1593,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             assert( enemy != nullptr );
 
             // If the current unit was flying, then this enemy unit would have already been attacked by it
-            assert( !currentUnit.isFlying() );
+            assert( !(currentUnit.isFlying() || currentUnit.isGhost()) );
 
             // Always try to get closer to the archers, even if they are faster, to try to block them more reliably in the future
             if ( enemy->isArchers() ) {
@@ -1607,7 +1607,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
             }
 
             // Flying unit, even inferior in speed, can move around the entire battlefield and easily evade an engagement
-            if ( enemy->isFlying() ) {
+            if ( enemy->isFlying() || enemy->isGhost() ) {
                 return false;
             }
 
@@ -1849,7 +1849,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
             // If the unit cannot cover the archer or approach any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
             // at least one enemy unit that can be immediately attacked by this unit, then ignore that archer. Very slow units (such as Hydra) should not waste time
             // covering archers far from them - especially if there are other enemy units nearby worthy of their attention.
-            if ( isAnyEnemyCanBeAttackedImmediately && !currentUnit.isFlying() && dist > currentUnit.GetSpeed() * 2 ) {
+            if ( isAnyEnemyCanBeAttackedImmediately && !currentUnit.isFlying() && !currentUnit.isGhost() && dist > currentUnit.GetSpeed() * 2 ) {
                 continue;
             }
 

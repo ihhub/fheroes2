@@ -24,6 +24,7 @@
 #define H2RACE_H
 
 #include <cstdint>
+#include <string>
 
 namespace Race
 {
@@ -53,6 +54,7 @@ namespace Race
     int getPreviousRace( const int race );
 
     bool isMagicalRace( const int race );
+    int getFromString(const std::string& id);
 }
 
 #endif

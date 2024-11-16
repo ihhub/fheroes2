@@ -191,6 +191,12 @@ uint32_t Troop::GetSpeed() const
     return Monster::GetSpeed();
 }
 
+uint32_t Troop::GetWalkRadius() const
+{
+    return Monster::GetWalkRadius();
+}
+
+
 uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
 {
     return 0;

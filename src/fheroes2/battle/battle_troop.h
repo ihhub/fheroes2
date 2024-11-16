@@ -89,6 +89,7 @@ namespace Battle
         virtual uint32_t GetMissingHitPoints() const;
         uint32_t GetAffectedDuration( uint32_t mod ) const override;
         uint32_t GetSpeed() const override;
+        uint32_t GetWalkRadius() const override;
         int GetMorale() const override;
 
         Unit * GetMirror()
@@ -106,6 +107,7 @@ namespace Battle
         void NewTurn();
 
         bool isFlying() const;
+        bool isGhost() const;
         bool isDoubleAttack() const;
 
         bool AllowResponse() const;
@@ -169,6 +171,7 @@ namespace Battle
         // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
         // is set to true, then the value of 'skipMovedCheck' doesn't matter.
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
+        uint32_t GetWalkRadius( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
