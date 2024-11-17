@@ -97,6 +97,11 @@ namespace fheroes2
 
         void setPosition( const int32_t offsetX, const int32_t offsetY )
         {
+            _areaPressed.x += offsetX - _offsetX;
+            _areaReleased.x += offsetX - _offsetX;
+            _areaPressed.y += offsetY - _offsetY;
+            _areaReleased.y += offsetY - _offsetY;
+
             _offsetX = offsetX;
             _offsetY = offsetY;
         }
@@ -120,20 +125,44 @@ namespace fheroes2
             return drawOnRelease( output );
         }
 
-        Rect area() const;
+        const Rect & area() const
+        {
+            return isPressed() ? _areaPressed : _areaReleased;
+        }
 
     protected:
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
 
+        void _updateButtonAreas()
+        {
+            _updatePressedArea();
+            _updateReleasedArea();
+        }
+
     private:
         int32_t _offsetX{ 0 };
         int32_t _offsetY{ 0 };
 
+        Rect _areaPressed{ _offsetX, _offsetY, 0, 0 };
+        Rect _areaReleased{ _offsetX, _offsetY, 0, 0 };
+
         bool _isPressed{ false };
         bool _isEnabled{ true };
         bool _isVisible{ true };
+
+        void _updatePressedArea()
+        {
+            const Sprite & pressed = _getPressed();
+            _areaPressed = { _offsetX + pressed.x(), _offsetY + pressed.y(), pressed.width(), pressed.height() };
+        }
+
+        void _updateReleasedArea()
+        {
+            const Sprite & released = isEnabled() ? _getReleased() : _getDisabled();
+            _areaReleased = { _offsetX + released.x(), _offsetY + released.y(), released.width(), released.height() };
+        }
 
         mutable const Sprite * _releasedSprite = nullptr;
         mutable std::unique_ptr<Sprite> _disabledSprite;
@@ -154,7 +183,7 @@ namespace fheroes2
             , _releasedIndex( releasedIndex )
             , _pressedIndex( pressedIndex )
         {
-            // Do nothing.
+            _updateButtonAreas();
         }
 
         ~Button() override = default;
@@ -164,19 +193,22 @@ namespace fheroes2
             _icnId = icnId;
             _releasedIndex = releasedIndex;
             _pressedIndex = pressedIndex;
+
+            _updateButtonAreas();
         }
 
         void setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
         {
             _releasedIndex = releasedIndex;
             _pressedIndex = pressedIndex;
+
+            _updateButtonAreas();
         }
 
-    protected:
+    private:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
 
-    private:
         int _icnId{ -1 };
         uint32_t _releasedIndex{ 0 };
         uint32_t _pressedIndex{ 0 };
@@ -198,7 +230,7 @@ namespace fheroes2
             , _pressed( std::move( pressed ) )
             , _disabled( std::move( disabled ) )
         {
-            // Do nothing.
+            _updateButtonAreas();
         }
 
         ButtonSprite( const ButtonSprite & ) = delete;
@@ -214,14 +246,15 @@ namespace fheroes2
             _released = released;
             _pressed = pressed;
             _disabled = disabled;
+
+            _updateButtonAreas();
         }
 
-    protected:
+    private:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
         const Sprite & _getDisabled() const override;
 
-    private:
         Sprite _released;
         Sprite _pressed;
         Sprite _disabled;
