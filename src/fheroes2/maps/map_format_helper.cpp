@@ -541,7 +541,7 @@ namespace Maps
 
         Map_Format::TileInfo & thisTile = map.tiles[tileId];
 
-        if ( isStreamOnMapTile( thisTile ) || Ground::getGroundByImageIndex( thisTile.terrainIndex ) == Ground::WATER ) {
+        if ( isStreamPresent( thisTile ) || Ground::getGroundByImageIndex( thisTile.terrainIndex ) == Ground::WATER ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }
