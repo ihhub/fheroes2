@@ -128,7 +128,7 @@ namespace
                             []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
     }
 
-    bool isNeedStreamToDeltaConnection( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
+    bool isStreamToDeltaConnectionNeeded( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
     {
         if ( direction != Direction::TOP && direction != Direction::BOTTOM && direction != Direction::RIGHT && direction != Direction::LEFT ) {
             return false;
@@ -143,21 +143,22 @@ namespace
 
         return std::any_of( map.tiles[nextTileId].objects.cbegin(), map.tiles[nextTileId].objects.cend(),
                             [&direction]( const Maps::Map_Format::TileObjectInfo & object ) {
-                                if ( object.group != Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
-                                    return false;
-                                }
-
-                                return Maps::getRiverDeltaDirectionByIndex( static_cast<int32_t>( object.index ) ) == Direction::Reflect( direction );
+                                return Maps::getRiverDeltaDirectionByIndex( object.group, static_cast<int32_t>( object.index ) ) == Direction::Reflect( direction );
                             } );
     }
 
     // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
-    int getStreamDirecton( Maps::Map_Format::MapFormat & map, const int32_t currentTileId )
+    int getStreamDirecton( Maps::Map_Format::MapFormat & map, const int32_t currentTileId, const bool forceStreamOnTile )
     {
         assert( currentTileId >= 0 && map.tiles.size() > static_cast<size_t>( currentTileId ) );
 
-        // Stream includes also the Deltas. Here we need to check only streams excluding Deltas.
-        int streamDirection = ( isStreamOnMapTile( map.tiles[currentTileId] ) ) ? Direction::CENTER : 0;
+        // Stream includes also the Deltas. For the current tile we need to check only streams excluding Deltas.
+        if ( !forceStreamOnTile && !isStreamOnMapTile( map.tiles[currentTileId] ) ) {
+            // Current tile has no streams.
+            return Direction::UNKNOWN;
+        }
+
+        int streamDirection = Direction::CENTER;
 
         // For streams we can check only the next four directions.
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
@@ -169,7 +170,7 @@ namespace
             assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
 
             // Check also for Deltas connection.
-            if ( isStreamOnMapTile( map.tiles[tileId] ) || isNeedStreamToDeltaConnection( map, tileId, direction ) ) {
+            if ( isStreamOnMapTile( map.tiles[tileId] ) || isStreamToDeltaConnectionNeeded( map, tileId, direction ) ) {
                 streamDirection |= direction;
             }
         }
@@ -243,14 +244,14 @@ namespace
 
     void updateStreamObjectOnMapTile( Maps::Map_Format::MapFormat & map, const int32_t tileId, const bool forceStreamOnTile )
     {
-        const int direction = getStreamDirecton( map, tileId );
+        const int direction = getStreamDirecton( map, tileId, forceStreamOnTile );
 
-        if ( !forceStreamOnTile && hasNoBits( direction, Direction::CENTER ) ) {
-            // There will be no stream on this tile.
+        if ( hasNoBits( direction, Direction::CENTER ) ) {
+            // There is no stream on this tile.
             return;
         }
 
-        const uint8_t objectIndex = getStreamIndex( forceStreamOnTile ? ( direction | Direction::CENTER ) : direction );
+        const uint8_t objectIndex = getStreamIndex( direction );
 
         if ( objectIndex == 255U ) {
             return;
@@ -533,13 +534,13 @@ namespace Maps
         }
     }
 
-    bool addStreamToMap( Map_Format::MapFormat & map, const int32_t tileId )
+    bool addStream( Map_Format::MapFormat & map, const int32_t tileId )
     {
         assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
 
         Map_Format::TileInfo & thisTile = map.tiles[tileId];
 
-        if ( isStreamOnMapTile( thisTile ) || world.getTile( tileId ).isWater() ) {
+        if ( isStreamOnMapTile( thisTile ) || Ground::getGroundByImageIndex( thisTile.terrainIndex ) == Ground::WATER ) {
             // We cannot place streams on the water or on already placed streams.
             return false;
         }
@@ -582,8 +583,12 @@ namespace Maps
         updateStreamObjectOnMapTile( map, GetDirectionIndex( nextTileId, deltaDirection ), false );
     }
 
-    int getRiverDeltaDirectionByIndex( const int32_t objectIndex )
+    int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex )
     {
+        if ( group != ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            return Direction::UNKNOWN;
+        }
+
         const auto & objectInfo = getObjectInfo( ObjectGroup::LANDSCAPE_MISCELLANEOUS, objectIndex );
 
         assert( !objectInfo.groundLevelParts.empty() );
@@ -607,6 +612,11 @@ namespace Maps
         }
 
         return Direction::UNKNOWN;
+    }
+
+    bool isRiverDeltaObject( const ObjectGroup group, const uint32_t objectIndex )
+    {
+        return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )

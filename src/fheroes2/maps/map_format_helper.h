@@ -53,7 +53,7 @@ namespace Maps
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 
-    bool addStreamToMap( Map_Format::MapFormat & map, const int32_t tileId );
+    bool addStream( Map_Format::MapFormat & map, const int32_t tileId );
 
     // Update the existing streams around the center tile to properly connect them to the center stream.
     void updateStreamsAround( Map_Format::MapFormat & map, const int32_t centerTileId );
@@ -61,8 +61,10 @@ namespace Maps
     // Update the existing streams to connect them to the River Delta.
     void updateStreamsToDeltaConnection( Map_Format::MapFormat & map, const int32_t tileId, const int deltaDirection );
 
-    // Returns 'Direction::UNKNOWN' if this index belongs not to the River Delta.
-    int getRiverDeltaDirectionByIndex( const int32_t objectIndex );
+    // Returns 'Direction::UNKNOWN' if the index does not belong to River Delta object
+    int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex );
+
+    bool isRiverDeltaObject( const ObjectGroup group, const uint32_t objectIndex );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 

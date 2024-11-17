@@ -230,7 +230,7 @@ namespace
         bool updateMapPlayerInformation = false;
 
         // Filter objects by group and remove them from '_mapFormat'.
-        for ( size_t mapTileIndex = 0; mapTileIndex < mapFormat.tiles.size() && !objectsUids.empty(); ++mapTileIndex ) {
+        for ( size_t mapTileIndex = 0; mapTileIndex < mapFormat.tiles.size(); ++mapTileIndex ) {
             Maps::Map_Format::TileInfo & mapTile = mapFormat.tiles[mapTileIndex];
 
             for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
@@ -385,7 +385,7 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
-                    const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( static_cast<int32_t>( objectIter->index ) );
+                    const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
 
                     objectIter = mapTile.objects.erase( objectIter );
 
@@ -404,6 +404,10 @@ namespace
                 if ( objectsUids.empty() ) {
                     break;
                 }
+            }
+
+            if ( objectsUids.empty() ) {
+                break;
             }
         }
 
@@ -466,7 +470,7 @@ namespace
         }
         case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS: {
             // River deltas are only objects that can be placed on water and on land.
-            if ( Maps::getRiverDeltaDirectionByIndex( objectType ) != Direction::UNKNOWN ) {
+            if ( Maps::isRiverDeltaObject( groupType, objectType ) ) {
                 // This is a river delta. Just don't check the terrain type.
             }
             else if ( !checkConditionForUsedTiles( Maps::getObjectInfo( groupType, objectType ), tilePos,
@@ -1400,7 +1404,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( Maps::addStreamToMap( _mapFormat, tileIndex ) ) {
+            if ( Maps::addStream( _mapFormat, tileIndex ) ) {
                 _redraw |= mapUpdateFlags;
 
                 action.commit();
@@ -1649,7 +1653,7 @@ namespace Interface
             }
 
             // For River Deltas we update the nearby Streams to properly connect to them.
-            if ( const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectType ); riverDeltaDirection != Direction::UNKNOWN ) {
+            if ( const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( groupType, objectType ); riverDeltaDirection != Direction::UNKNOWN ) {
                 Maps::updateStreamsToDeltaConnection( _mapFormat, tile.GetIndex(), riverDeltaDirection );
             }
 
