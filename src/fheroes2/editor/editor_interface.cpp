@@ -385,11 +385,10 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
-                    const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
-
                     objectIter = mapTile.objects.erase( objectIter );
 
-                    if ( riverDeltaDirection != Direction::UNKNOWN ) {
+                    if ( const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
+                         riverDeltaDirection != Direction::UNKNOWN ) {
                         // For River Deltas we update the nearby Streams to properly disconnect from them.
                         Maps::updateStreamsToDeltaConnection( mapFormat, static_cast<int32_t>( mapTileIndex ), riverDeltaDirection );
                     }

@@ -122,7 +122,8 @@ namespace
         }
     }
 
-    bool isStreamOnMapTile( const Maps::Map_Format::TileInfo & mapTile )
+    // This function only checks for Streams and ignores River Deltas.
+    bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
         return std::any_of( mapTile.objects.cbegin(), mapTile.objects.cend(),
                             []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
@@ -153,7 +154,7 @@ namespace
         assert( currentTileId >= 0 && map.tiles.size() > static_cast<size_t>( currentTileId ) );
 
         // Stream includes also the Deltas. For the current tile we need to check only streams excluding Deltas.
-        if ( !forceStreamOnTile && !isStreamOnMapTile( map.tiles[currentTileId] ) ) {
+        if ( !forceStreamOnTile && !isStreamPresent( map.tiles[currentTileId] ) ) {
             // Current tile has no streams.
             return Direction::UNKNOWN;
         }
@@ -170,7 +171,7 @@ namespace
             assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
 
             // Check also for Deltas connection.
-            if ( isStreamOnMapTile( map.tiles[tileId] ) || isStreamToDeltaConnectionNeeded( map, tileId, direction ) ) {
+            if ( isStreamPresent( map.tiles[tileId] ) || isStreamToDeltaConnectionNeeded( map, tileId, direction ) ) {
                 streamDirection |= direction;
             }
         }
