@@ -134,8 +134,7 @@ namespace
             uidArtifact = tile.getMainObjectPart()._uid;
         }
 
-        static_assert( std::is_same_v<decltype( Maps::Tile::updateTileObjectIcnIndex ), void( Maps::Tile &, uint32_t, uint8_t )>,
-                       "Type of updateTileObjectIcnIndex() has been changed, check the logic below" );
+        static_assert( std::is_same_v<decltype( Maps::Tile::updateTileObjectIcnIndex ), void( Maps::Tile &, uint32_t, uint8_t )> );
 
         // Please refer to ICN::OBJNARTI for artifact images. Since in the original game artifact UID start from 0 we have to deduct 1 from the current artifact ID.
         const uint32_t artSpriteIndex = ( art.GetID() - 1 ) * 2 + 1;
@@ -186,12 +185,12 @@ namespace
 
         tile.setMainObjectType( MP2::OBJ_MONSTER );
 
-        using TileImageIndexType = decltype( tile.getMainObjectPart().icnIndex );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of icnIndex has been changed, check the logic below" );
+        using IcnIndexType = decltype( tile.getMainObjectPart().icnIndex );
+        static_assert( std::is_same_v<IcnIndexType, uint8_t> );
 
-        assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
+        assert( mons.GetID() > std::numeric_limits<IcnIndexType>::min() && mons.GetID() <= std::numeric_limits<IcnIndexType>::max() );
 
-        tile.getMainObjectPart().icnIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
+        tile.getMainObjectPart().icnIndex = static_cast<IcnIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
     }
 
     // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
@@ -2770,13 +2769,13 @@ namespace Maps
             mainObjectPart.layerType = OBJECT_LAYER;
         }
 
-        using TileImageIndexType = decltype( mainObjectPart.icnIndex );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of icnIndex has been changed, check the logic below" );
+        using IcnIndexType = decltype( mainObjectPart.icnIndex );
+        static_assert( std::is_same_v<IcnIndexType, uint8_t> );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
-        assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
+        assert( monsSpriteIndex >= std::numeric_limits<IcnIndexType>::min() && monsSpriteIndex <= std::numeric_limits<IcnIndexType>::max() );
 
-        mainObjectPart.icnIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
+        mainObjectPart.icnIndex = static_cast<IcnIndexType>( monsSpriteIndex );
 
         const bool setDefinedCount = ( count > 0 );
 

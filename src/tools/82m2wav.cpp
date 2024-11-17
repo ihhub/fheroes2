@@ -129,7 +129,7 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+        static_assert( std::is_same_v<uint8_t, unsigned char> );
 
         RWStreamBuf wavHeader( wavHeaderLen );
         wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")

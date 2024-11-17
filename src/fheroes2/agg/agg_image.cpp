@@ -282,8 +282,8 @@ namespace
         // Skip the second byte
         imageStream.get();
 
-        const int32_t width = imageStream.get16();
-        const int32_t height = imageStream.get16();
+        const int32_t width = imageStream.getLE16();
+        const int32_t height = imageStream.getLE16();
 
         if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
