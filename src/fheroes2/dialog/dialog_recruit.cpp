@@ -404,13 +404,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
-    const auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button, const fheroes2::Rect & buttonRoi ) {
+    const auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
         if ( button.isReleased() ) {
             return;
         }
 
         // When the "Up"/"Down" button is pressed it is shifted 1 pixel down so we need to properly restore the background.
         button.release();
+
+        const fheroes2::Rect & buttonRoi = button.area();
 
         fheroes2::Copy( background, buttonRoi.x - dialogOffset.x, buttonRoi.y - dialogOffset.y, display, buttonRoi.x, buttonRoi.y, buttonRoi.width, buttonRoi.height );
         // The non-pressed button is already on the "background" copy so we do not render the button.
@@ -436,14 +438,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             buttonUp.drawOnPress();
         }
         else {
-            buttonReleaseRestore( buttonUp, buttonUp.area() );
+            buttonReleaseRestore( buttonUp );
         }
 
         if ( le.isMouseLeftButtonPressedInArea( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
         else {
-            buttonReleaseRestore( buttonDn, buttonDn.area() );
+            buttonReleaseRestore( buttonDn );
         }
 
         if ( buttonMax.isEnabled() ) {
@@ -460,14 +462,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 monsterSwitchLeft.drawOnPress();
             }
             else {
-                buttonReleaseRestore( monsterSwitchLeft, monsterSwitchLeft.area() );
+                buttonReleaseRestore( monsterSwitchLeft );
             }
 
             if ( le.isMouseLeftButtonPressedInArea( monsterSwitchRight.area() ) ) {
                 monsterSwitchRight.drawOnPress();
             }
             else {
-                buttonReleaseRestore( monsterSwitchRight, monsterSwitchRight.area() );
+                buttonReleaseRestore( monsterSwitchRight );
             }
 
             if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.isKeyPressed( fheroes2::Key::KEY_LEFT ) ) {
