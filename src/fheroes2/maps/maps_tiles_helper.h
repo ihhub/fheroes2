@@ -175,10 +175,6 @@ namespace Maps
 
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
     bool updateRoadOnTile( Tile & tile, const bool setRoad );
-    bool updateStreamOnTile( Tile & tile, const bool setStream );
-
-    // Update the existing streams to connect them to the river delta.
-    void updateStreamsToDeltaConnection( const Tile & tile, const int deltaDirection );
 
     bool setObjectOnTile( Tile & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
