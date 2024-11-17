@@ -336,14 +336,14 @@ void RWStreamBuf::put8( const uint8_t v )
     ++_itput;
 }
 
-size_t RWStreamBuf::tellp()
+size_t RWStreamBuf::tellp() const
 {
     assert( _itbeg <= _itput );
 
     return _itput - _itbeg;
 }
 
-size_t RWStreamBuf::sizep()
+size_t RWStreamBuf::sizep() const
 {
     assert( _itput <= _itend );
 

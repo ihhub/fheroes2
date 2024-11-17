@@ -382,7 +382,7 @@ class IStreamBuf : public IStreamBase
 {
 public:
     virtual const uint8_t * data() const = 0;
-    virtual size_t size() = 0;
+    virtual size_t size() const = 0;
 
 protected:
     IStreamBuf() = default;
@@ -404,12 +404,12 @@ public:
         return _itget;
     }
 
-    size_t size() override
+    size_t size() const override
     {
         return sizeg();
     }
 
-    size_t tell()
+    size_t tell() const
     {
         return tellg();
     }
@@ -526,14 +526,14 @@ protected:
         return *this;
     }
 
-    size_t sizeg()
+    size_t sizeg() const
     {
         assert( _itget <= _itput );
 
         return _itput - _itget;
     }
 
-    size_t tellg()
+    size_t tellg() const
     {
         assert( _itbeg <= _itget );
 
@@ -592,8 +592,8 @@ public:
 private:
     void put8( const uint8_t v ) override;
 
-    size_t sizep();
-    size_t tellp();
+    size_t sizep() const;
+    size_t tellp() const;
 
     void reallocBuf( size_t size );
 
