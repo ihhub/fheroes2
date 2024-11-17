@@ -111,8 +111,6 @@ namespace
         // The game area puzzle image should be single-layer.
         assert( sf.singleLayer() );
 
-        const fheroes2::Rect buttonExitArea = buttonExit.area();
-
         fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
 
@@ -122,9 +120,9 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
-            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
             }
 
@@ -179,7 +177,6 @@ namespace
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
-        const fheroes2::Rect buttonExitArea = buttonExit.area();
 
         buttonExit.draw();
 
@@ -194,8 +191,8 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
-            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
         }
@@ -245,7 +242,6 @@ namespace
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
-        const fheroes2::Rect buttonExitArea = buttonExit.area();
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
@@ -273,8 +269,8 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
-            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
         }

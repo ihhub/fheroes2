@@ -365,8 +365,7 @@ namespace Editor
         // Build restrict mode button.
         fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
         buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
-        const fheroes2::Rect buttonRestrictBuildingArea( buttonRestrictBuilding.area() );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuilding.area().getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
 
         const bool isNeutral = ( color == Color::NONE );
@@ -451,8 +450,7 @@ namespace Editor
         // Exit button.
         fheroes2::Button buttonExit( dialogRoi.x + rightPartOffsetX + 50, dialogRoi.y + 430, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD,
                                      0, 1 );
-        const fheroes2::Rect buttonExitArea( buttonExit.area() );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExitArea.getPosition(), { -2, 2 } );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -2, 2 } );
         buttonExit.draw();
 
         // Status bar.
@@ -471,17 +469,17 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
-            if ( le.MouseClickLeft( buttonRestrictBuildingArea ) ) {
+            if ( le.MouseClickLeft( buttonRestrictBuilding.area() ) ) {
                 buildingRestriction = !buildingRestriction;
             }
 
-            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuildingArea ) );
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuilding.area() ) );
 
             if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
@@ -551,7 +549,7 @@ namespace Editor
                 }
             }
 
-            else if ( le.isMouseCursorPosInArea( buttonRestrictBuildingArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonRestrictBuilding.area() ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
                 if ( le.isMouseRightButtonPressed() ) {
@@ -590,7 +588,7 @@ namespace Editor
                     message = _( "Set custom Castle Army. Right-click to reset unit." );
                 }
             }
-            else if ( le.isMouseCursorPosInArea( buttonExitArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
                 message = _( "Exit Castle Options" );
 
                 if ( le.isMouseRightButtonPressed() ) {

@@ -249,10 +249,6 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     buttonCancel.draw();
     buttonVirtualKB.draw();
 
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-    const fheroes2::Rect buttonVirtualKBArea = buttonVirtualKB.area();
-
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -265,23 +261,23 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
         }
 
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
-        buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKBArea ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
         // In this dialog we input text so we need to use hotkeys that cannot be use in text typing.
-        if ( ( !isMultiLine && le.isKeyPressed( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOkArea ) ) ) {
+        if ( ( !isMultiLine && le.isKeyPressed( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             return !result.empty();
         }
 
-        if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancelArea ) ) {
+        if ( le.isKeyPressed( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             result.clear();
             return false;
         }
 
-        if ( le.MouseClickLeft( buttonVirtualKBArea ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
+        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
             if ( textLanguage.has_value() ) {
                 const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
                 fheroes2::openVirtualKeyboard( result );
@@ -312,13 +308,13 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
             redraw = true;
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered text." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKBArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
         }
 
@@ -341,7 +337,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
             if ( redrawOkButton ) {
                 buttonOk.draw();
-                display.updateNextRenderRoi( buttonOkArea );
+                display.updateNextRenderRoi( buttonOk.area() );
             }
 
             text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
@@ -447,9 +443,6 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
-    // MIN and MAX buttons are rendered at the same place and replace each other.
-    const fheroes2::Rect buttonMinMaxArea = buttonMax.area();
-
     const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMin );
 
@@ -463,23 +456,23 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
         bool redraw_count = false;
 
         if ( buttonMax.isVisible() ) {
-            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMinMaxArea ) );
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
         }
 
         if ( buttonMin.isVisible() ) {
-            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMinMaxArea ) );
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
         if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
             valueSelectionElement.setValue( redistributeCount );
             redraw_count = true;
         }
-        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMinMaxArea ) ) {
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             redistributeCount = redistributeMax;
             valueSelectionElement.setValue( redistributeMax );
             redraw_count = true;
         }
-        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMinMaxArea ) ) {
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             redistributeCount = redistributeMin;
             valueSelectionElement.setValue( redistributeMin );
             redraw_count = true;

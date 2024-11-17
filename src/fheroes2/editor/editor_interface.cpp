@@ -1084,12 +1084,6 @@ namespace Interface
         fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
-        const fheroes2::Rect buttonNewArea = buttonNew.area();
-        const fheroes2::Rect buttonLoadArea = buttonLoad.area();
-        const fheroes2::Rect buttonSaveArea = buttonSave.area();
-        const fheroes2::Rect buttonQuitArea = buttonQuit.area();
-        const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
         buttonNew.draw();
         buttonLoad.draw();
         buttonSave.draw();
@@ -1103,25 +1097,25 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNewArea ) );
-            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoadArea ) );
-            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSaveArea ) );
-            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuitArea ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
+            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
+            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
+            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonNewArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
+            if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     result = fheroes2::GameMode::EDITOR_NEW_MAP;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoadArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
                     result = fheroes2::GameMode::EDITOR_LOAD_MAP;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSaveArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 back.restore();
 
                 Get().saveMapToFile();
@@ -1129,31 +1123,31 @@ namespace Interface
                 break;
             }
 
-            if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyCloseWindow() ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLoadArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonSaveArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Map" ), _( "Save the current map." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonQuitArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }

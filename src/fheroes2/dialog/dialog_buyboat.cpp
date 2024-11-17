@@ -75,14 +75,12 @@ int Dialog::BuyBoat( bool enable )
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOkayICN, 0 ).height();
     fheroes2::Button buttonOkay( dst_pt.x, dst_pt.y, buttonOkayICN, 0, 1 );
-    const fheroes2::Rect buttonOkayArea = buttonOkay.area();
 
     const int buttonCancelICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
     dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).width();
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).height();
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonCancelICN, 0, 1 );
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
 
     if ( !enable ) {
         buttonOkay.press();
@@ -99,16 +97,16 @@ int Dialog::BuyBoat( bool enable )
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonOkay.isEnabled() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkayArea ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
         }
 
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkayArea ) ) ) {
+        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return Dialog::OK;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelArea ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             return Dialog::CANCEL;
         }
     }

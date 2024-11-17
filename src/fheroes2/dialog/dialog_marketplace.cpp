@@ -432,12 +432,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
-    const fheroes2::Rect buttonExitArea = buttonExit.area();
-    const fheroes2::Rect buttonGiftArea = buttonGift.area();
-    const fheroes2::Rect buttonTradeArea = buttonTrade.area();
-    const fheroes2::Rect buttonLeftArea = buttonLeft.area();
-    const fheroes2::Rect buttonRightArea = buttonRight.area();
-
     buttonTrade.disable();
 
     buttonGift.draw();
@@ -452,25 +446,25 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonGift.isEnabled() ) {
-            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGiftArea ) );
+            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGift.area() ) );
         }
         if ( buttonTrade.isEnabled() ) {
-            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTradeArea ) );
+            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) );
         }
         if ( buttonLeft.isEnabled() ) {
-            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeftArea ) );
+            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) );
         }
         if ( buttonRight.isEnabled() ) {
-            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRightArea ) );
+            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRight.area() ) );
         }
 
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // gift resources
-        if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGiftArea ) ) {
+        if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             Dialog::MakeGiftResource( kingdom );
 
             resourceTo = Resource::UNKNOWN;
@@ -592,7 +586,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // trade
-        if ( buttonTrade.isEnabled() && le.MouseClickLeft( buttonTradeArea ) && count_sell && count_buy ) {
+        if ( buttonTrade.isEnabled() && le.MouseClickLeft( buttonTrade.area() ) && count_sell && count_buy ) {
             kingdom.OddFundsResource( Funds( resourceFrom, count_sell ) );
             kingdom.AddFundsResource( Funds( resourceTo, count_buy ) );
 
@@ -612,7 +606,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // decrease trade resource
         if ( count_buy
-             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( buttonLeftArea ) || timedButtonLeft.isDelayPassed() ) )
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
                   || le.isMouseWheelDownInArea( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
@@ -625,7 +619,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // increase trade resource
         if ( count_buy < max_buy
-             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRightArea ) || timedButtonRight.isDelayPassed() ) )
+             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isDelayPassed() ) )
                   || le.isMouseWheelUpInArea( scrollbar.getArea() ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 

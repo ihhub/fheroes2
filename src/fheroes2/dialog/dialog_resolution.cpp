@@ -235,9 +235,6 @@ namespace
         fheroes2::Button buttonCancel;
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-        const fheroes2::Rect buttonOkArea = buttonOk.area();
-        const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
         ResolutionList listBox( roi.getPosition() );
 
         listBox.initListBackgroundRestorer( listRoi );
@@ -281,28 +278,28 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             const int listId = listBox.getCurrentId();
             listBox.QueueEventProcessing();
             const bool needRedraw = listId != listBox.getCurrentId();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOkArea ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
+            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
                 if ( listBox.isSelected() ) {
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 selectedResolution = {};
                 break;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the selected resolution." ), Dialog::ZERO );
             }
 

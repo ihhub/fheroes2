@@ -272,7 +272,6 @@ namespace fheroes2
         fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 0, 7 }, StandardWindow::Padding::BOTTOM_CENTER );
-        const fheroes2::Rect buttonOkArea = buttonOk.area();
 
         HotKeyList listbox( roi.getPosition() );
         listbox.initListBackgroundRestorer( listRoi );
@@ -301,15 +300,15 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
             listbox.QueueEventProcessing();
 
-            if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 return;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
 
                 continue;

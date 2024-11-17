@@ -337,28 +337,24 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
     fheroes2::TimedEventValidator timedButtonPrevHero( [&buttonPrevHero]() { return buttonPrevHero.isPressed(); } );
     buttonPrevHero.subscribe( &timedButtonPrevHero );
-    const fheroes2::Rect buttonPrevHeroArea = buttonPrevHero.area();
 
     // Next hero button.
     dst_pt.x += fheroes2::Display::DEFAULT_WIDTH - 22;
     fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
     fheroes2::TimedEventValidator timedButtonNextHero( [&buttonNextHero]() { return buttonNextHero.isPressed(); } );
     buttonNextHero.subscribe( &timedButtonNextHero );
-    const fheroes2::Rect buttonNextHeroArea = buttonNextHero.area();
 
     // Hero dismiss button.
     dst_pt.x = dialogRoi.x + 9;
     dst_pt.y = dialogRoi.y + 378;
 
     std::unique_ptr<fheroes2::ButtonSprite> buttonDismiss;
-    std::unique_ptr<fheroes2::Rect> buttonDismissArea;
 
     if ( !isEditor && !readonly && !disableDismiss ) {
         const fheroes2::Sprite & dismissReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 );
         buttonDismiss = std::make_unique<fheroes2::ButtonSprite>( dst_pt.x, dst_pt.y - dismissReleased.height() / 2, dismissReleased,
                                                                   fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ),
                                                                   fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
-        buttonDismissArea = std::make_unique<fheroes2::Rect>( buttonDismiss->area() );
 
         if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
             buttonDismiss->disable();
@@ -371,13 +367,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Hero Patrol mode button (used in Editor).
     std::unique_ptr<fheroes2::ButtonSprite> buttonPatrol;
-    std::unique_ptr<fheroes2::Rect> buttonPatrolArea;
 
     if ( isEditor ) {
         const fheroes2::Sprite & patrolReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 );
         buttonPatrol = std::make_unique<fheroes2::ButtonSprite>( dst_pt.x, dst_pt.y - patrolReleased.height() / 2, patrolReleased,
                                                                  fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
-        buttonPatrolArea = std::make_unique<fheroes2::Rect>( buttonPatrol->area() );
 
         fheroes2::addGradientShadow( patrolReleased, display, { dialogRoi.x + 9, dst_pt.y - patrolReleased.height() / 2 }, { -3, 5 } );
 
@@ -392,7 +386,6 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.x = dialogRoi.x + 602;
     const fheroes2::Sprite & exitReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 );
     fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
-    const fheroes2::Rect buttonExitArea = buttonExit.area();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -425,9 +418,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // dialog menu loop
     while ( le.HandleEvents() ) {
         // Exit this dialog.
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExitArea ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
             break;
         }
@@ -468,9 +461,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Dismiss hero.
         else if ( buttonDismiss && buttonDismiss->isEnabled() ) {
-            buttonDismiss->drawOnState( ( le.isMouseLeftButtonPressedInArea( *buttonDismissArea ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) );
+            buttonDismiss->drawOnState( ( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) );
 
-            if ( ( le.MouseClickLeft( *buttonDismissArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
+            if ( ( le.MouseClickLeft( buttonDismiss->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
                  && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
                 // Fade-out hero dialog.
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
@@ -481,16 +474,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Previous hero.
         if ( buttonPrevHero.isEnabled() ) {
-            buttonPrevHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevHeroArea ) );
-            if ( le.MouseClickLeft( buttonPrevHeroArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) {
+            buttonPrevHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevHero.area() ) );
+            if ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) {
                 return Dialog::PREV;
             }
         }
 
         // Next hero.
         if ( buttonNextHero.isEnabled() ) {
-            buttonNextHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextHeroArea ) );
-            if ( le.MouseClickLeft( buttonNextHeroArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) {
+            buttonNextHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextHero.area() ) );
+            if ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) {
                 return Dialog::NEXT;
             }
         }
@@ -612,7 +605,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 Dialog::QuickInfo( *this, true );
             }
         }
-        else if ( buttonPatrol && le.isMouseCursorPosInArea( *buttonPatrolArea ) ) {
+        else if ( buttonPatrol && le.isMouseCursorPosInArea( buttonPatrol->area() ) ) {
             if ( le.isMouseLeftButtonPressed() && buttonPatrol->isReleased() && !Modes( PATROL ) ) {
                 buttonPatrol->drawOnPress();
                 int32_t value = static_cast<int32_t>( _patrolDistance );
@@ -703,10 +696,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // Status messages.
-        if ( le.isMouseCursorPosInArea( buttonExitArea ) ) {
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
             message = _( "Exit Hero Screen" );
         }
-        else if ( buttonDismiss && le.isMouseCursorPosInArea( *buttonDismissArea ) ) {
+        else if ( buttonDismiss && le.isMouseCursorPosInArea( buttonDismiss->area() ) ) {
             if ( inCastle() ) {
                 message = _( "You cannot dismiss a hero in a castle" );
             }
@@ -721,10 +714,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
-        else if ( buttonPrevHero.isEnabled() && le.isMouseCursorPosInArea( buttonPrevHeroArea ) ) {
+        else if ( buttonPrevHero.isEnabled() && le.isMouseCursorPosInArea( buttonPrevHero.area() ) ) {
             message = _( "Show previous hero" );
         }
-        else if ( buttonNextHero.isEnabled() && le.isMouseCursorPosInArea( buttonNextHeroArea ) ) {
+        else if ( buttonNextHero.isEnabled() && le.isMouseCursorPosInArea( buttonNextHero.area() ) ) {
             message = _( "Show next hero" );
         }
         else if ( !isEditor ) {
@@ -753,7 +746,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             else if ( le.isMouseCursorPosInArea( titleRoi ) ) {
                 message = _( "Click to change hero's name. Right-click to reset to default." );
             }
-            else if ( buttonPatrol && le.isMouseCursorPosInArea( *buttonPatrolArea ) ) {
+            else if ( buttonPatrol && le.isMouseCursorPosInArea( buttonPatrol->area() ) ) {
                 if ( buttonPatrol->isPressed() ) {
                     message = _( "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it." );
                     StringReplace( message, "%{tiles}", _patrolDistance );

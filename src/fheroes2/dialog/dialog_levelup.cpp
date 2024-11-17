@@ -165,28 +165,24 @@ namespace
         buttonLearnRight.draw();
         buttonHero.draw();
 
-        const fheroes2::Rect buttonLearnLeftArea = buttonLearnLeft.area();
-        const fheroes2::Rect buttonLearnRightArea = buttonLearnRight.area();
-        const fheroes2::Rect buttonHeroArea = buttonHero.area();
-
         display.render();
         LocalEvent & le = LocalEvent::Get();
 
         // message loop
         while ( le.HandleEvents() ) {
-            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeftArea ) );
-            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRightArea ) );
-            buttonHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHeroArea ) );
+            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeft.area() ) );
+            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRight.area() ) );
+            buttonHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHero.area() ) );
 
-            if ( le.MouseClickLeft( buttonLearnLeftArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+            if ( le.MouseClickLeft( buttonLearnLeft.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
                 return sec1.Skill();
             }
 
-            if ( le.MouseClickLeft( buttonLearnRightArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+            if ( le.MouseClickLeft( buttonLearnRight.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
                 return sec2.Skill();
             }
 
-            if ( le.MouseClickLeft( buttonHeroArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( le.MouseClickLeft( buttonHero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 LocalEvent::Get().reset();
                 hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
@@ -207,7 +203,7 @@ namespace
                 fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
                 display.render();
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonHeroArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonHero.area() ) ) {
                 fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
             }
         }

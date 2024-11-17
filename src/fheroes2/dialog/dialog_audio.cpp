@@ -148,7 +148,6 @@ namespace Dialog
 
         const fheroes2::Point buttonOffset( 112 + dialogArea.x, 252 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        const fheroes2::Rect buttonOkayArea = buttonOkay.area();
 
         buttonOkay.draw();
 
@@ -158,9 +157,9 @@ namespace Dialog
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkayArea ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
 
-            if ( le.MouseClickLeft( buttonOkayArea ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
@@ -251,7 +250,7 @@ namespace Dialog
             else if ( le.isMouseRightButtonPressedInArea( audio3D ) ) {
                 fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkayArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 

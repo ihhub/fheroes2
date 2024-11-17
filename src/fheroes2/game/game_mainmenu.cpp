@@ -282,13 +282,6 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     fheroes2::Button buttonEditor( 0, 0, ICN::BTNSHNGL, EDITOR_DEFAULT, EDITOR_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
-    const fheroes2::Rect buttonNewGameArea = buttonNewGame.area();
-    const fheroes2::Rect buttonLoadGameArea = buttonLoadGame.area();
-    const fheroes2::Rect buttonHighScoresArea = buttonHighScores.area();
-    const fheroes2::Rect buttonCreditsArea = buttonCredits.area();
-    const fheroes2::Rect buttonEditorArea = buttonEditor.area();
-    const fheroes2::Rect buttonQuitArea = buttonQuit.area();
-
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
@@ -317,14 +310,14 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     const bool isPOLPresent = conf.isPriceOfLoyaltySupported();
 
-    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, buttonNewGameArea, false, false },
-                                     ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, buttonLoadGameArea, false, false },
-                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, buttonHighScoresArea, false, false },
-                                     ButtonInfo{ CREDITS_DEFAULT, buttonCredits, buttonCreditsArea, false, false },
-                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, buttonQuitArea, false, false } };
+    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, buttonNewGame.area(), false, false },
+                                     ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, buttonLoadGame.area(), false, false },
+                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, buttonHighScores.area(), false, false },
+                                     ButtonInfo{ CREDITS_DEFAULT, buttonCredits, buttonCredits.area(), false, false },
+                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, buttonQuit.area(), false, false } };
 
     if ( isPOLPresent ) {
-        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, buttonEditorArea, false, false } );
+        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, buttonEditor.area(), false, false } );
     }
 
     for ( size_t i = 0; le.hasMouseMoved() && i < buttons.size(); ++i ) {
@@ -372,23 +365,23 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             display.render();
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGameArea ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
             return fheroes2::GameMode::NEW_GAME;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGameArea ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScoresArea ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
             return fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCreditsArea ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuitArea ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
@@ -399,27 +392,27 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             return fheroes2::GameMode::MAIN_MENU;
         }
 
-        if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditorArea ) ) ) {
+        if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info
-        if ( le.isMouseRightButtonPressedInArea( buttonQuitArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGameArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCreditsArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCredits.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonHighScoresArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonHighScores.area() ) ) {
             fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonNewGameArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonNewGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
         }
-        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditorArea ) ) {
+        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditor.area() ) ) {
             {
                 fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
             }

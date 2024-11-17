@@ -764,8 +764,6 @@ namespace Dialog
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         const fheroes2::Rect & roi = _window->activeArea();
-        const fheroes2::Rect buttonOkArea = _buttonOk.area();
-        const fheroes2::Rect buttonCancelArea = _buttonCancel.area();
 
         updateScrollBarImage();
 
@@ -775,20 +773,20 @@ namespace Dialog
         LocalEvent & le = LocalEvent::Get();
 
         while ( !_isDoubleClicked && le.HandleEvents() ) {
-            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
-            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonOk.area() ) );
+            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 return Dialog::OK;
             }
-            if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( _buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return Dialog::CANCEL;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( _buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( _buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
 
@@ -1036,9 +1034,6 @@ int Dialog::selectHeroType( const int heroType )
     fheroes2::Button buttonCancel;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     fheroes2::Rect heroRoi;
 
@@ -1062,20 +1057,20 @@ int Dialog::selectHeroType( const int heroType )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-        if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return heroColor * 7 + heroRace;
         }
-        if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected hero." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( heroBackground.rect() ) ) {
@@ -1276,11 +1271,6 @@ void Dialog::selectTownType( int & type, int & color )
     background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-    const fheroes2::Rect buttonTownArea = buttonTown.area();
-    const fheroes2::Rect buttonCastleArea = buttonCastle.area();
-
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
 
@@ -1308,14 +1298,14 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
-            if ( le.isMouseLeftButtonPressedInArea( buttonTownArea ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
                 buttonTown.drawOnPress();
             }
-            else if ( le.MouseClickLeft( buttonTownArea ) ) {
+            else if ( le.MouseClickLeft( buttonTown.area() ) ) {
                 buttonTown.drawOnPress();
                 isCastle = false;
                 needRedraw = true;
@@ -1325,10 +1315,10 @@ void Dialog::selectTownType( int & type, int & color )
             }
         }
         else {
-            if ( le.isMouseLeftButtonPressedInArea( buttonCastleArea ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( buttonCastle.area() ) ) {
                 buttonCastle.drawOnPress();
             }
-            else if ( le.MouseClickLeft( buttonCastleArea ) ) {
+            else if ( le.MouseClickLeft( buttonCastle.area() ) ) {
                 buttonCastle.drawOnPress();
                 isCastle = true;
                 needRedraw = true;
@@ -1338,25 +1328,25 @@ void Dialog::selectTownType( int & type, int & color )
             }
         }
 
-        if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = getPackedTownType( townRace, isCastle );
             color = townColor;
             return;
         }
-        if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonTownArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Town" ), _( "Click to select town placing." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCastleArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Castle" ), _( "Click to select castle placing." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( castleRoi ) ) {
@@ -1652,32 +1642,29 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     fheroes2::Button buttonCancel;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
     display.render( background.totalArea() );
 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         bool needRedraw = listbox.QueueEventProcessing();
 
-        if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOkArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = objectInfoIndexes[listbox.getCurrentId()];
             color = 0;
             return;
         }
-        if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
         }
         else {

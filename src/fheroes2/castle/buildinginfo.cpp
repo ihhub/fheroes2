@@ -564,30 +564,27 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     buttonOkay.draw();
     buttonCancel.draw();
 
-    const fheroes2::Rect buttonOkayArea = buttonOkay.area();
-    const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
     display.render();
 
     while ( le.HandleEvents() ) {
         if ( buttonOkay.isEnabled() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkayArea ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
         }
 
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkayArea ) ) ) {
+        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return true;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelArea ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonOkayArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), GetConditionDescription(), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }

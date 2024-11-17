@@ -197,8 +197,6 @@ namespace
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-        const fheroes2::Rect buttonOkArea = buttonOk.area();
-        const fheroes2::Rect buttonCancelArea = buttonCancel.area();
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
@@ -234,10 +232,10 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             if ( buttonOk.isEnabled() ) {
-                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
             }
 
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.isMouseRightButtonPressedInArea( listRoi ) ) {
                 continue;
@@ -247,19 +245,19 @@ namespace
             listBox.QueueEventProcessing();
             const bool needRedraw = listId != listBox.getCurrentId();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOkArea ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
+            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
                 return true;
             }
 
-            if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to choose the selected language." ), Dialog::ZERO );
             }
 

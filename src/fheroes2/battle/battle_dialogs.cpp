@@ -287,7 +287,6 @@ namespace
 
         const fheroes2::Point buttonOffset( 112 + pos_rt.x, 362 + pos_rt.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        const fheroes2::Rect buttonOkayArea = buttonOkay.area();
 
         buttonOkay.draw();
 
@@ -296,7 +295,7 @@ namespace
         display.render();
 
         while ( le.HandleEvents() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkayArea ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
 
             bool redrawScreen = false;
 
@@ -380,11 +379,11 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( optionAreas[8] ) ) {
                 fheroes2::showStandardTextMessage( _( "Damage Info" ), _( "Toggle to display damage information during the battle." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkayArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOkayArea ) ) {
+            if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOkay.area() ) ) {
                 break;
             }
 
@@ -638,13 +637,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     int32_t buttonHorizontalMargin = 0;
     const int32_t buttonVerticalMargin = 5;
     std::unique_ptr<fheroes2::Button> buttonRestart;
-    std::unique_ptr<fheroes2::Rect> buttonRestartArea;
     if ( allowToRestart ) {
         buttonRestart = std::make_unique<fheroes2::Button>();
         buttonHorizontalMargin = 23;
         background.renderButton( *buttonRestart, isEvilInterface ? ICN::BUTTON_SMALL_RESTART_EVIL : ICN::BUTTON_SMALL_RESTART_GOOD, 0, 1,
                                  { buttonHorizontalMargin, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
-        buttonRestartArea = std::make_unique<fheroes2::Rect>( buttonRestart->area() );
     }
 
     const int buttonOkICN = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
@@ -653,8 +650,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const fheroes2::StandardWindow::Padding buttonOkPadding
         = allowToRestart ? fheroes2::StandardWindow::Padding::BOTTOM_LEFT : fheroes2::StandardWindow::Padding::BOTTOM_CENTER;
     background.renderButton( buttonOk, buttonOkICN, 0, 1, { buttonHorizontalMargin, buttonVerticalMargin }, buttonOkPadding );
-
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
 
     if ( Game::validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
@@ -668,25 +663,25 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     int sequenceId = sequence.id();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         if ( allowToRestart ) {
-            buttonRestart->drawOnState( le.isMouseLeftButtonPressedInArea( *buttonRestartArea ) );
+            buttonRestart->drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart->area() ) );
         }
 
-        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOkArea ) ) {
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to leave the battle results." ), Dialog::ZERO );
         }
         else if ( allowToRestart ) {
-            if ( le.MouseClickLeft( *buttonRestartArea ) ) {
+            if ( le.MouseClickLeft( buttonRestart->area() ) ) {
                 // Skip artifact transfer and return to restart the battle in manual mode
                 return true;
             }
-            if ( le.isMouseRightButtonPressedInArea( *buttonRestartArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonRestart->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Restart" ), _( "Click to restart the battle in manual mode." ), Dialog::ZERO );
             }
         }
@@ -709,7 +704,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     // Free memory because RESTART button is not used more.
     if ( allowToRestart ) {
         buttonRestart.reset();
-        buttonRestartArea.reset();
     }
 
     if ( !artifacts.empty() ) {
@@ -805,17 +799,17 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             }
 
             while ( le.HandleEvents() ) {
-                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
                 // Display captured artifact info on right click
                 if ( le.isMouseRightButtonPressedInArea( artifactArea ) ) {
                     fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
                 }
-                else if ( le.MouseClickLeft( buttonOkArea ) || Game::HotKeyCloseWindow() ) {
+                else if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                     break;
                 }
 
-                if ( le.isMouseRightButtonPressedInArea( buttonOkArea ) ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 }
 
@@ -903,7 +897,6 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     const int buttonOffset = 121;
     const int buttonICN = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
     fheroes2::Button buttonOk( renderArea.x + buttonOffset, renderArea.y + 410, buttonICN, 0, 1 );
-    const fheroes2::Rect buttonOkArea = buttonOk.area();
 
     buttonOk.draw();
 
@@ -911,10 +904,10 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkArea ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         // exit
-        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOkArea ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
             break;
 
         // animation
@@ -1059,11 +1052,6 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     display.render( pos_rt );
 
-    const fheroes2::Rect btnCastArea = btnCast.area();
-    const fheroes2::Rect btnRetreatArea = btnRetreat.area();
-    const fheroes2::Rect btnSurrenderArea = btnSurrender.area();
-    const fheroes2::Rect btnCloseArea = btnClose.area();
-
     // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
     Heroes * heroForHeroScreen = ( currentColor == hero.GetColor() ) ? dynamic_cast<Heroes *>( &hero ) : nullptr;
 
@@ -1071,30 +1059,30 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     while ( le.HandleEvents() && !result ) {
         if ( btnCast.isEnabled() ) {
-            btnCast.drawOnState( le.isMouseLeftButtonPressedInArea( btnCastArea ) );
+            btnCast.drawOnState( le.isMouseLeftButtonPressedInArea( btnCast.area() ) );
         }
         if ( btnRetreat.isEnabled() ) {
-            btnRetreat.drawOnState( le.isMouseLeftButtonPressedInArea( btnRetreatArea ) );
+            btnRetreat.drawOnState( le.isMouseLeftButtonPressedInArea( btnRetreat.area() ) );
         }
         if ( btnSurrender.isEnabled() ) {
-            btnSurrender.drawOnState( le.isMouseLeftButtonPressedInArea( btnSurrenderArea ) );
+            btnSurrender.drawOnState( le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) );
         }
 
-        btnClose.drawOnState( le.isMouseLeftButtonPressedInArea( btnCloseArea ) );
+        btnClose.drawOnState( le.isMouseLeftButtonPressedInArea( btnClose.area() ) );
 
         // The Cast Spell is available for a hero and a captain.
-        if ( le.isMouseCursorPosInArea( btnCastArea ) && currentColor == hero.GetColor() ) {
+        if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
             statusMessage = _( "Cast Spell" );
         }
         // The retreat is available during a player's turn only. A captain cannot retreat.
-        else if ( le.isMouseCursorPosInArea( btnRetreatArea ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.isMouseCursorPosInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             statusMessage = _( "Retreat" );
         }
         // The surrender is available during a player's turn only. A captain cannot surrender.
-        else if ( le.isMouseCursorPosInArea( btnSurrenderArea ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.isMouseCursorPosInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             statusMessage = _( "Surrender" );
         }
-        else if ( le.isMouseCursorPosInArea( btnCloseArea ) ) {
+        else if ( le.isMouseCursorPosInArea( btnClose.area() ) ) {
             statusMessage = _( "Cancel" );
         }
         // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
@@ -1108,19 +1096,19 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
             statusMessage = _( "Hero's Options" );
         }
 
-        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnCloseArea ) ) {
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) ) {
             break;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCastArea ) ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) ) {
             result = 1;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreatArea ) ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) ) {
             result = 2;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrenderArea ) ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) ) {
             result = 3;
         }
 
@@ -1133,18 +1121,18 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
         }
 
-        if ( le.isMouseRightButtonPressedInArea( btnCastArea ) && currentColor == hero.GetColor() ) {
+        if ( le.isMouseRightButtonPressedInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
             fheroes2::showStandardTextMessage(
                 _( "Cast Spell" ), _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                 Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( btnRetreatArea ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.isMouseRightButtonPressedInArea( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( btnSurrenderArea ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.isMouseRightButtonPressedInArea( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again. The cost of surrender is half of the total cost of the non-temporary troops remaining in the army." ),
@@ -1153,7 +1141,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         else if ( le.isMouseRightButtonPressedInArea( portraitArea ) && heroForHeroScreen != nullptr ) {
             fheroes2::showStandardTextMessage( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( btnCloseArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( btnClose.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Return to the battle." ), Dialog::ZERO );
         }
 
@@ -1223,11 +1211,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     btnAccept.draw();
     btnDecline.draw();
 
-    const fheroes2::Rect btnAcceptArea = btnAccept.area();
-    const fheroes2::Rect btnDeclineArea = btnDecline.area();
-    const fheroes2::Rect btnMarketArea = btnMarket.area();
-
-    const auto drawGoldMsg = [cost, &kingdom, &btnAcceptArea, &display]() {
+    const auto drawGoldMsg = [cost, &kingdom, &display]( const fheroes2::Rect & btnAcceptArea ) {
         std::string str = _( "Not enough gold (%{gold})" );
 
         StringReplace( str, "%{gold}", cost - kingdom.GetFunds().gold );
@@ -1258,7 +1242,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
 
     if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
-        drawGoldMsg();
+        drawGoldMsg( btnAccept.area() );
     }
 
     display.render();
@@ -1267,20 +1251,20 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     while ( le.HandleEvents() && !result ) {
         if ( btnAccept.isEnabled() ) {
-            btnAccept.drawOnState( le.isMouseLeftButtonPressedInArea( btnAcceptArea ) );
+            btnAccept.drawOnState( le.isMouseLeftButtonPressedInArea( btnAccept.area() ) );
         }
 
-        btnDecline.drawOnState( le.isMouseLeftButtonPressedInArea( btnDeclineArea ) );
+        btnDecline.drawOnState( le.isMouseLeftButtonPressedInArea( btnDecline.area() ) );
 
         if ( btnMarket.isEnabled() ) {
-            btnMarket.drawOnState( le.isMouseLeftButtonPressedInArea( btnMarketArea ) );
+            btnMarket.drawOnState( le.isMouseLeftButtonPressedInArea( btnMarket.area() ) );
         }
 
-        if ( btnAccept.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( btnAcceptArea ) ) ) {
+        if ( btnAccept.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( btnAccept.area() ) ) ) {
             result = true;
         }
 
-        if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
+        if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarket.area() ) ) {
             Dialog::Marketplace( kingdom, false );
 
             back.restore();
@@ -1291,7 +1275,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
             else {
                 btnAccept.disable();
 
-                drawGoldMsg();
+                drawGoldMsg( btnAccept.area() );
             }
 
             btnAccept.draw();
@@ -1299,7 +1283,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         }
 
         // exit
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( btnDeclineArea ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( btnDecline.area() ) )
             break;
     }
 

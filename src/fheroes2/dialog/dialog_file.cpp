@@ -79,12 +79,6 @@ namespace
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        const fheroes2::Rect buttonNewArea = buttonNew.area();
-        const fheroes2::Rect buttonLoadArea = buttonLoad.area();
-        const fheroes2::Rect buttonSaveArea = buttonSave.area();
-        const fheroes2::Rect buttonQuitArea = buttonQuit.area();
-        const fheroes2::Rect buttonCancelArea = buttonCancel.area();
-
         display.render( background.totalArea() );
 
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
@@ -93,55 +87,55 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNewArea ) );
-            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoadArea ) );
-            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSaveArea ) );
-            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuitArea ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelArea ) );
+            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
+            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
+            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
+            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonNewArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
+            if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                     result = fheroes2::GameMode::NEW_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoadArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSaveArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 back.restore();
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
 
-            if ( le.MouseClickLeft( buttonQuitArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancelArea ) || Game::HotKeyCloseWindow() ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 result = fheroes2::GameMode::CANCEL;
                 break;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonNewArea ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLoadArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonSaveArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Game" ), _( "Save the current game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonQuitArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }

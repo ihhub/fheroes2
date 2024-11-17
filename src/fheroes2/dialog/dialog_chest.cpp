@@ -110,23 +110,20 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     buttonYes.draw();
     buttonNo.draw();
 
-    const fheroes2::Rect buttonYesArea = buttonYes.area();
-    const fheroes2::Rect buttonNoArea = buttonNo.area();
-
     display.render();
     LocalEvent & le = LocalEvent::Get();
     bool result = false;
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonYes.drawOnState( le.isMouseLeftButtonPressedInArea( buttonYesArea ) );
-        buttonNo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNoArea ) );
+        buttonYes.drawOnState( le.isMouseLeftButtonPressedInArea( buttonYes.area() ) );
+        buttonNo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNo.area() ) );
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonYesArea ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonYes.area() ) ) {
             result = true;
             break;
         }
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonNoArea ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonNo.area() ) ) {
             result = false;
             break;
         }

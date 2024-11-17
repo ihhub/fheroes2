@@ -1294,7 +1294,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect settingsRect = _buttonSettings.area();
+    const fheroes2::Rect & settingsRect = _buttonSettings.area();
     const int32_t satusOffsetY = area.y + area.height - settingsRect.height - _buttonAuto.area().height;
     _buttonAuto.setPosition( area.x, satusOffsetY );
     _buttonSettings.setPosition( area.x, area.y + area.height - settingsRect.height );
