@@ -83,10 +83,8 @@ bool TinyConfig::Load( const std::string & cfile )
         return false;
     }
 
-    std::vector<std::string> rows = StringSplit( sf.toString(), '\n' );
-
-    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
-        std::string str = StringTrim( *it );
+    for ( const std::string & line : StringSplit( sf.getString(), '\n' ) ) {
+        std::string str = StringTrim( line );
 
         if ( str.empty() || str[0] == comment ) {
             continue;

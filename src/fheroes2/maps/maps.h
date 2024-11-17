@@ -43,7 +43,7 @@ namespace Maps
 {
     struct ObjectPart;
 
-    enum mapsize_t : int
+    enum MapSize : int
     {
         ZERO = 0,
         SMALL = 36,

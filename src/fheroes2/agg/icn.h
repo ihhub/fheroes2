@@ -1126,6 +1126,8 @@ namespace ICN
         BUTTON_LANGUAGE_GOOD,
         BUTTON_LANGUAGE_EVIL,
 
+        SCENIBKG_EVIL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

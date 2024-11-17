@@ -711,7 +711,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     }
 
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
-    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
+    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t> );
 
     Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 

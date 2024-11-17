@@ -470,13 +470,13 @@ Heroes * Maps::Tile::getHero() const
 void Maps::Tile::setHero( Heroes * hero )
 {
     if ( hero ) {
-        using HeroIDType = decltype( _occupantHeroId );
-        static_assert( std::is_same_v<HeroIDType, uint8_t>, "Type of heroID has been changed, check the logic below" );
+        using OccupantHeroIdType = decltype( _occupantHeroId );
+        static_assert( std::is_same_v<OccupantHeroIdType, uint8_t> );
 
         hero->setObjectTypeUnderHero( _mainObjectType );
 
-        assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
-        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
+        assert( hero->GetID() >= std::numeric_limits<OccupantHeroIdType>::min() && hero->GetID() < std::numeric_limits<OccupantHeroIdType>::max() );
+        _occupantHeroId = static_cast<OccupantHeroIdType>( hero->GetID() );
 
         setMainObjectType( MP2::OBJ_HERO );
     }
@@ -574,7 +574,7 @@ void Maps::Tile::setBoat( const int direction, const int color )
 #endif // WITH_DEBUG
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
-    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );
+    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t> );
 
     assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
 
@@ -616,25 +616,35 @@ int Maps::Tile::getTileIndependentPassability() const
 {
     // Tile-independent passability is based purely on object parts located on this tile.
     // We need to run through all object parts on the ground level to calculate the resulting passability.
-    // Remember, top object parts do not affect passability.
+    //
+    // The total passability is a combination of all object parts on the tile.
+    // If we encounter any action object we have to stop calculations.
+    //
+    // All object parts should be verified in the following order:
+    // - main object part
+    // - from bottom object part from the end of the object list to the start
+    // In other words, we have to go through object parts in the reverse order as they are being rendered.
+    //
+    // Top object parts do not affect passability.
     int passability = DIRECTION_ALL;
 
-    const auto getObjectPartPassability = []( const Maps::ObjectPart & part ) {
+    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
         if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
             // Rivers and stream are completely passable.
             return DIRECTION_ALL;
         }
 
-        // The tile has a valid main object part. Check its passability.
+        // The tile has a valid object part. Check its passability.
         const MP2::MapObjectType type = getObjectTypeByIcn( part.icnType, part.icnIndex );
+        if ( MP2::isOffGameActionObject( type ) ) {
+            // This is an action object part.
+            isActionObject = true;
+            return MP2::getActionObjectDirection( type );
+        }
+
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
             return 0;
-        }
-
-        if ( MP2::isOffGameActionObject( type ) ) {
-            // This is an action object part.
-            return MP2::getActionObjectDirection( type );
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
@@ -646,12 +656,20 @@ int Maps::Tile::getTileIndependentPassability() const
         return DIRECTION_ALL;
     };
 
+    bool isActionObject = false;
+
     if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        passability = passability & getObjectPartPassability( _mainObjectPart );
+        passability = passability & getObjectPartPassability( _mainObjectPart, isActionObject );
+        if ( isActionObject ) {
+            return passability;
+        }
     }
 
-    for ( const auto & part : _groundObjectPart ) {
-        passability = passability & getObjectPartPassability( part );
+    for ( auto iter = _groundObjectPart.crbegin(); iter != _groundObjectPart.crend(); ++iter ) {
+        passability = passability & getObjectPartPassability( *iter, isActionObject );
+        if ( isActionObject ) {
+            return passability;
+        }
     }
 
     return passability;
@@ -659,119 +677,136 @@ int Maps::Tile::getTileIndependentPassability() const
 
 void Maps::Tile::setInitialPassability()
 {
-    using TilePassableType = decltype( _tilePassabilityDirections );
-    static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
+    using TilePassabilityDirectionsType = decltype( _tilePassabilityDirections );
+    static_assert( std::is_same_v<TilePassabilityDirectionsType, uint16_t> );
 
     const int passability = getTileIndependentPassability();
-    assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
+    assert( passability >= std::numeric_limits<TilePassabilityDirectionsType>::min() && passability <= std::numeric_limits<TilePassabilityDirectionsType>::max() );
 
-    _tilePassabilityDirections = static_cast<TilePassableType>( passability );
+    _tilePassabilityDirections = static_cast<TilePassabilityDirectionsType>( passability );
 }
 
 void Maps::Tile::updatePassability()
 {
-    // Get object type but ignore heroes as they are "temporary" objects.
-    const MP2::MapObjectType objectType = getMainObjectType( false );
-
-    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainObjectPart.isPassabilityTransparent()
-         && !isShadow() ) {
-        // This is a non-action object.
-
-        if ( !isValidDirection( _index, Direction::BOTTOM ) ) {
-            // This object "touches" the bottom part of the map. Mark is as inaccessible.
-            _tilePassabilityDirections = 0;
-            return;
-        }
-
-        const Tile & bottomTile = world.getTile( GetDirectionIndex( _index, Direction::BOTTOM ) );
-        // If an object locates on land and the bottom tile is water mark the current tile as impassable. It's done for cases that a hero won't be able to
-        // disembark on the tile.
-        if ( !isWater() && bottomTile.isWater() ) {
-            _tilePassabilityDirections = 0;
-            return;
-        }
-
-        // If a bottom tile has the same object ID then this tile must be marked as inaccessible because it is a continuation of the same object.
-        std::vector<uint32_t> tileUIDs;
-
-        // If this assertion blows up then the object is not set properly. An object must have a valid UID!
-        assert( _mainObjectPart._uid != 0 );
-        tileUIDs.emplace_back( _mainObjectPart._uid );
-
-        for ( const auto & part : _groundObjectPart ) {
-            if ( !part.isPassabilityTransparent() ) {
-                // If this assertion blows up then the object is not set properly. An object must have a valid UID!
-                assert( part._uid != 0 );
-                tileUIDs.emplace_back( part._uid );
-            }
-        }
-
-        for ( const uint32_t objectId : tileUIDs ) {
-            if ( bottomTile.doesObjectExist( objectId ) ) {
-                _tilePassabilityDirections = 0;
-                return;
-            }
-        }
-
-        // Count how many objects are there excluding shadows, roads and river streams.
-        const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
-            if ( isObjectPartShadow( part ) ) {
-                return false;
-            }
-
-            return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
-        } );
-
-        const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
-
-        // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-        if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainObjectPart.isPassabilityTransparent()
-             && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
-            const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
-            const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
-
-            if ( MP2::isOffGameActionObject( bottomTileObjectType ) ) {
-                if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
-                    if ( isShortObject( bottomTileObjectType ) ) {
-                        _tilePassabilityDirections &= ~Direction::BOTTOM;
-                    }
-                    else {
-                        _tilePassabilityDirections = 0;
-                        return;
-                    }
-                }
-            }
-            else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isOffGameActionObject( correctedObjectType )
-                      && isShortObject( correctedObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
-                _tilePassabilityDirections &= ~Direction::BOTTOM;
-            }
-            else if ( isShortObject( bottomTileObjectType )
-                      || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
-                           && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-                _tilePassabilityDirections &= ~Direction::BOTTOM;
-            }
-            else {
-                _tilePassabilityDirections = 0;
-                return;
-            }
-        }
+    // If the passability is already 0 nothing we need to do.
+    if ( _tilePassabilityDirections == 0 ) {
+        // This tile is impassable.
+        return;
     }
 
-    // Left side.
+    // Verify the neighboring tiles.
+    // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
         const Tile & leftTile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
-        const bool leftTileTallObject = leftTile.isTallObject();
-        if ( leftTileTallObject && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+
+        if ( leftTile.isAnyTallObjectOnTile() && ( leftTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
 
-    // Right side.
     if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && isValidDirection( _index, Direction::RIGHT ) ) {
         const Tile & rightTile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
-        const bool rightTileTallObject = rightTile.isTallObject();
-        if ( rightTileTallObject && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+
+        if ( rightTile.isAnyTallObjectOnTile() && ( rightTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
             _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
+        }
+    }
+
+    // Get object type but ignore heroes as they are "temporary" objects.
+    const MP2::MapObjectType objectType = getMainObjectType( false );
+    if ( MP2::isOffGameActionObject( objectType ) ) {
+        // This is an action object. Action object passability is not affected by other objects.
+        return;
+    }
+
+    if ( isShadow() ) {
+        // The whole tile contains only shadow object parts. All shadows do not affect passability.
+        return;
+    }
+
+    if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        // The main object part is not set. Ignore the tile.
+        // TODO: this is wrong as tiles can have object parts at the ground layer. Fix it!
+        return;
+    }
+
+    if ( _mainObjectPart.isPassabilityTransparent() ) {
+        // This object does not affect passability.
+        return;
+    }
+
+    if ( !isValidDirection( _index, Direction::BOTTOM ) ) {
+        // This object "touches" the bottom part of the map. Mark is as inaccessible.
+        _tilePassabilityDirections = 0;
+        return;
+    }
+
+    const Tile & bottomTile = world.getTile( GetDirectionIndex( _index, Direction::BOTTOM ) );
+    // If an object locates on land and the bottom tile is water mark the current tile as impassable. It's done for cases that a hero won't be able to
+    // disembark on the tile.
+    if ( !isWater() && bottomTile.isWater() ) {
+        _tilePassabilityDirections = 0;
+        return;
+    }
+
+    // If a bottom tile has the same object ID then this tile must be marked as inaccessible because it is a continuation of the same object.
+    std::vector<uint32_t> tileUIDs;
+
+    // If this assertion blows up then the object is not set properly. An object must have a valid UID!
+    assert( _mainObjectPart._uid != 0 );
+    tileUIDs.emplace_back( _mainObjectPart._uid );
+
+    for ( const auto & part : _groundObjectPart ) {
+        if ( !part.isPassabilityTransparent() ) {
+            // If this assertion blows up then the object is not set properly. An object must have a valid UID!
+            assert( part._uid != 0 );
+            tileUIDs.emplace_back( part._uid );
+        }
+    }
+
+    for ( const uint32_t objectId : tileUIDs ) {
+        if ( bottomTile.doesObjectExist( objectId ) ) {
+            _tilePassabilityDirections = 0;
+            return;
+        }
+    }
+
+    // Count how many objects are there excluding shadows, roads and river streams.
+    const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
+        if ( isObjectPartShadow( part ) ) {
+            return false;
+        }
+
+        return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
+    } );
+
+    const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
+
+    // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
+    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
+         && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
+        const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
+        const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
+
+        if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
+            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+                if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
+                    _tilePassabilityDirections &= ~Direction::BOTTOM;
+                }
+                else {
+                    _tilePassabilityDirections = 0;
+                    return;
+                }
+            }
+        }
+        else if ( isShortObject( bottomTileObjectType )
+                  || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
+                       && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+            _tilePassabilityDirections &= ~Direction::BOTTOM;
+        }
+        else {
+            _tilePassabilityDirections = 0;
+            return;
         }
     }
 }
@@ -1663,11 +1698,11 @@ bool Maps::Tile::containsSprite( const MP2::ObjectIcnType objectIcnType, const u
                         [objectIcnType, imageIdx]( const auto & part ) { return part.icnType == objectIcnType && imageIdx == part.icnIndex; } );
 }
 
-bool Maps::Tile::isTallObject() const
+bool Maps::Tile::isAnyTallObjectOnTile() const
 {
-    // TODO: possibly cache the output of the method as right now it's in average twice.
+    // TODO: possibly cache the output of the method.
     if ( !isValidDirection( _index, Direction::TOP ) ) {
-        // Nothing above so this object can't be tall.
+        // This tile is on the first row. Any object on this tile cannot be tall.
         return false;
     }
 

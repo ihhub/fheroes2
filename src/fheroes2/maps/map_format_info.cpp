@@ -253,7 +253,6 @@ namespace
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
             >> map.adventureMapEventMetadata >> map.shrineMetadata;
 
-        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
         convertFromV4ToV5( map );
