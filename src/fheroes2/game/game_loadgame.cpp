@@ -179,8 +179,8 @@ fheroes2::GameMode Game::LoadGame()
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        for ( size_t i = 0; i < buttons.size(); ++i ) {
-            buttons[i]->drawOnState( le.isMouseLeftButtonPressedInArea( buttons[i]->area() ) );
+        for ( fheroes2::ButtonBase * button : buttons ) {
+            button->drawOnState( le.isMouseLeftButtonPressedInArea( button->area() ) );
         }
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
