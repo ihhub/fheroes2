@@ -614,7 +614,7 @@ namespace Maps
         return Direction::UNKNOWN;
     }
 
-    bool isRiverDeltaObject( const ObjectGroup group, const uint32_t objectIndex )
+    bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex )
     {
         return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
     }

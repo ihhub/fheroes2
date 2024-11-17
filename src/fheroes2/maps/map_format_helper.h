@@ -64,7 +64,7 @@ namespace Maps
     // Returns 'Direction::UNKNOWN' if the index does not belong to River Delta object
     int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex );
 
-    bool isRiverDeltaObject( const ObjectGroup group, const uint32_t objectIndex );
+    bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
