@@ -434,6 +434,7 @@ namespace
 
         if ( mapInfo.version == GameVersion::SUCCESSION_WARS || mapInfo.version == GameVersion::PRICE_OF_LOYALTY ) {
             if ( world.LoadMapMP2( mapInfo.filename, ( mapInfo.version == GameVersion::SUCCESSION_WARS ) ) ) {
+                fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
                 return fheroes2::GameMode::START_GAME;
             }
 
@@ -442,6 +443,7 @@ namespace
 
         assert( mapInfo.version == GameVersion::RESURRECTION );
         if ( world.loadResurrectionMap( mapInfo.filename ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
             return fheroes2::GameMode::START_GAME;
         }
 
