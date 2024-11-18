@@ -504,6 +504,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
 {
     for ( Troop * troop : *this ) {
         assert( troop != nullptr );
+
         if ( !troop->isValid() ) {
             continue;
         }
@@ -512,7 +513,6 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
-        Kingdom & kingdom = castle.GetKingdom();
         if ( castle.GetRace() != troop->GetRace() ) {
             continue;
         }
@@ -521,11 +521,16 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
+        Kingdom & kingdom = castle.GetKingdom();
+
         const Funds payment = troop->GetTotalUpgradeCost();
-        if ( kingdom.AllowPayment( payment ) ) {
-            kingdom.OddFundsResource( payment );
-            troop->Upgrade();
+        if ( !kingdom.AllowPayment( payment ) ) {
+            continue;
         }
+
+        kingdom.OddFundsResource( payment );
+
+        troop->Upgrade();
     }
 }
 
