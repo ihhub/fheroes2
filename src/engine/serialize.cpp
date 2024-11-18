@@ -36,22 +36,6 @@ namespace
     const size_t minBufferCapacity = 1024;
 }
 
-StreamBase::StreamBase( StreamBase && stream ) noexcept
-{
-    std::swap( _flags, stream._flags );
-}
-
-StreamBase & StreamBase::operator=( StreamBase && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    std::swap( _flags, stream._flags );
-
-    return *this;
-}
-
 void StreamBase::setBigendian( bool f )
 {
     if ( f ) {
@@ -70,17 +54,6 @@ void StreamBase::setFail( bool f )
     else {
         _flags &= ~FAILURE;
     }
-}
-
-IStreamBase & IStreamBase::operator=( IStreamBase && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    StreamBase::operator=( std::move( stream ) );
-
-    return *this;
 }
 
 uint16_t IStreamBase::get16()
@@ -253,21 +226,6 @@ RWStreamBuf::RWStreamBuf( const size_t size )
     setBigendian( IS_BIGENDIAN );
 }
 
-RWStreamBuf & RWStreamBuf::operator=( RWStreamBuf && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    // Only the StreamBufTmpl move assignment operator should be called to avoid multiple calls
-    // of the StreamBase move assignment operator due to the multiple inheritance scheme
-    StreamBufTmpl::operator=( std::move( stream ) );
-
-    std::swap( _buf, stream._buf );
-
-    return *this;
-}
-
 void RWStreamBuf::putBE16( uint16_t v )
 {
     put8( v >> 8 );
@@ -336,14 +294,14 @@ void RWStreamBuf::put8( const uint8_t v )
     ++_itput;
 }
 
-size_t RWStreamBuf::tellp()
+size_t RWStreamBuf::tellp() const
 {
     assert( _itbeg <= _itput );
 
     return _itput - _itbeg;
 }
 
-size_t RWStreamBuf::sizep()
+size_t RWStreamBuf::sizep() const
 {
     assert( _itput <= _itend );
 

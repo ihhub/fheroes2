@@ -142,7 +142,13 @@ public:
     explicit Monster( const Spell & sp );
     Monster( const int race, const uint32_t dw );
 
+    Monster( const Monster & ) = default;
+    Monster( Monster && ) = default;
+
     virtual ~Monster() = default;
+
+    Monster & operator=( const Monster & ) = default;
+    Monster & operator=( Monster && ) = default;
 
     bool operator==( const Monster & m ) const
     {
