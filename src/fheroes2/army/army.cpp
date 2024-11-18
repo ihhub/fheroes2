@@ -531,7 +531,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
 
 Troop * Troops::GetFirstValid() const
 {
-    if ( const_iterator iter = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } ); iter != end() ) {
+    if ( const const_iterator iter = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } ); iter != end() ) {
         return *iter;
     }
 
