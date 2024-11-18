@@ -23,11 +23,14 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "ai_common.h"
 #include "ai_planner.h" // IWYU pragma: associated
 #include "army.h"
+#include "army_troop.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
