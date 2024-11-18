@@ -106,9 +106,10 @@ namespace
     class KeyboardRenderer
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool evilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool evilInterface )
             : _output( output )
             , _info( info )
+            , _lengthLimit( lengthLimit )
             , _isEvilInterface( evilInterface )
             , _cursorPosition( info.size() )
         {
@@ -165,7 +166,7 @@ namespace
 
         void insertCharacter( const char character )
         {
-            if ( _info.size() >= 255 ) {
+            if ( _info.size() >= _lengthLimit ) {
                 // Do not add more characters as the string is already long enough.
                 return;
             }
@@ -212,6 +213,7 @@ namespace
     private:
         fheroes2::Display & _output;
         std::string & _info;
+        const size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
@@ -720,8 +722,13 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit )
     {
+        if ( lengthLimit == 0 ) {
+            // A string longer than 64KB is extremely impossible.
+            lengthLimit = std::numeric_limits<uint16_t>::max();
+        }
+
         const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
         SupportedLanguage language = SupportedLanguage::English;
         DialogAction action = DialogAction::AddLetter;
@@ -733,7 +740,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( fheroes2::Display::instance(), output, lengthLimit, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
