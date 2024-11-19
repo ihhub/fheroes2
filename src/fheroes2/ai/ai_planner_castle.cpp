@@ -414,7 +414,8 @@ void AI::Planner::reinforceCastle( Castle & castle )
             // All garrison slots should be occupied here because we just couldn't find a place for a new unit
             assert( weakestGarrisonTroop != nullptr );
 
-            weakestTroop = weakestTroop && weakestTroop->GetStrength() < weakestGarrisonTroop->GetStrength() ? weakestTroop : weakestGarrisonTroop;
+            // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+            weakestTroop = weakestTroop && Troop( *weakestTroop ).GetStrength() < Troop( *weakestGarrisonTroop ).GetStrength() ? weakestTroop : weakestGarrisonTroop;
         }
 
         // If we still can't find a free slot, let's try to dismiss the weakest unit of those that are present in the garrison and in the army of the guest hero -
@@ -422,7 +423,8 @@ void AI::Planner::reinforceCastle( Castle & castle )
 
         assert( weakestTroop != nullptr );
 
-        if ( weakestTroop->GetStrength() > troop.GetStrength() ) {
+        // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+        if ( Troop( *weakestTroop ).GetStrength() > troop.GetStrength() ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE,
                        castle.GetName() << " skips hiring " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() ) << " because "
                                         << weakestTroop->GetCount() << " " << weakestTroop->GetPluralName( weakestTroop->GetCount() )
@@ -455,7 +457,7 @@ void AI::Planner::reinforceCastle( Castle & castle )
                 = [guestHeroRole = guestHero->getAIRole(), &guestHeroArmy = std::as_const( guestHeroArmy )]() -> std::pair<Troop *, bool> {
                 const bool isFighterRole = ( guestHeroRole == Heroes::Role::FIGHTER || guestHeroRole == Heroes::Role::CHAMPION );
 
-                // We need to compare a strength of troops excluding hero's stats
+                // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
                 const double troopsStrength = Troops( guestHeroArmy.getTroops() ).GetStrength();
                 const double significanceRatio = isFighterRole ? 20.0 : 10.0;
 
@@ -463,7 +465,8 @@ void AI::Planner::reinforceCastle( Castle & castle )
                     Troop * candidateTroop = guestHeroArmy.GetSlowestTroop();
                     assert( candidateTroop != nullptr );
 
-                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                    // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+                    if ( Troop( *candidateTroop ).GetStrength() <= troopsStrength / significanceRatio ) {
                         return { candidateTroop, false };
                     }
                 }
@@ -477,7 +480,8 @@ void AI::Planner::reinforceCastle( Castle & castle )
                     Troop * candidateTroop = guestHeroArmy.GetWeakestTroop();
                     assert( candidateTroop != nullptr );
 
-                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                    // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+                    if ( Troop( *candidateTroop ).GetStrength() <= troopsStrength / significanceRatio ) {
                         return { candidateTroop, true };
                     }
                 }
