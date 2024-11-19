@@ -24,6 +24,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 #include "monster_info.h"
 #include "resource.h"
@@ -201,6 +202,15 @@ public:
         return fheroes2::getMonsterData( id ).battleStats.speed;
     }
 
+    uint32_t GetWalkRadius() const
+    {
+        const fheroes2::MonsterAbility * ability = nullptr;
+        if ( isAbilityPresent( fheroes2::MonsterAbilityType::PLUSWALKRADIUS, ability ) ) {
+            return fheroes2::getMonsterData( id ).battleStats.speed + ( ( ability == nullptr ) ? 0 : ability->value );
+        }
+        return fheroes2::getMonsterData( id ).battleStats.speed;
+    }
+
     uint32_t GetGrown() const
     {
         return fheroes2::getMonsterData( id ).generalStats.baseGrowth;
@@ -242,6 +252,11 @@ public:
     bool isFlying() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+    }
+
+    bool isMoatIgnore() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::MOATIGNORE );
     }
 
     bool isWide() const
@@ -291,6 +306,7 @@ public:
     }
 
     bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
+    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType, const fheroes2::MonsterAbility *& ability ) const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 
@@ -316,6 +332,7 @@ public:
     static Monster Rand( const LevelType type );
 
     static uint32_t GetCountFromHitPoints( const Monster & mons, const uint32_t hp );
+    static uint32_t strToMonsterId( const std::string & id );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
 

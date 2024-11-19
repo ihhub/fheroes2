@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -29,7 +29,7 @@ if(ENABLE_STRICT_COMPILATION)
 	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>)
 endif(ENABLE_STRICT_COMPILATION)
 
-add_library(engine STATIC ${LIBENGINE_SOURCES})
+add_library(engine STATIC ${LIBENGINE_SOURCES} ../thirdparty/simplejson/json.cxx)
 
 target_compile_definitions(
 	engine
@@ -45,6 +45,7 @@ target_include_directories(
 	engine
 	PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+	../thirdparty/simplejson
 	)
 
 target_link_libraries(

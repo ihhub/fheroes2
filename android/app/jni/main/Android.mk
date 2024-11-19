@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -31,7 +31,8 @@ MAIN_SRC_DIR := $(LOCAL_PATH)/../../../../src/fheroes2
 LOCAL_MODULE := main
 LOCAL_C_INCLUDES := \
     $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/)) \
-    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/))
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/)) \
+    $(MAIN_SRC_DIR)/../thirdparty/simplejson
 LOCAL_SRC_FILES := \
     $(wildcard $(MAIN_SRC_DIR)/*/*.cpp) \
     $(wildcard $(MAIN_SRC_DIR)/*/*/*.cpp)

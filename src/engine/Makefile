@@ -20,6 +20,8 @@
 
 TARGET := libengine
 
+CCFLAGS := $(CCFLAGS) -I../thirdparty/simplejson
+
 ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 endif
@@ -28,8 +30,11 @@ endif
 
 all: $(TARGET).a
 
-$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) 
+$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) json.o
 	$(AR) crvs $@ $^
+
+json.o:
+	$(CXX) -c -MD ../thirdparty/simplejson/json.cxx $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
 
 %.o: %.cpp
 	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)

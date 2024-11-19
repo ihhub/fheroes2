@@ -225,6 +225,18 @@ bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType )
     return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
 }
 
+bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType, const fheroes2::MonsterAbility *& ability ) const
+{
+    ability = nullptr;
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    auto it = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) );
+    if ( it == abilities.end() ) {
+        return false;
+    }
+    ability = &( *it );
+    return true;
+}
+
 Monster Monster::GetDowngrade() const
 {
     switch ( id ) {
@@ -844,4 +856,207 @@ uint32_t Monster::GetCountFromHitPoints( const Monster & mons, const uint32_t hp
     const uint32_t remainder = hp % singleMonsterHP;
 
     return ( remainder > 0 ? quotient + 1 : quotient );
+}
+
+uint32_t Monster::strToMonsterId( const std::string & id )
+{
+    if ( id == "PEASANT" ) {
+        return Monster::PEASANT;
+    }
+    if ( id == "ARCHER" ) {
+        return Monster::ARCHER;
+    }
+    if ( id == "RANGER" ) {
+        return Monster::RANGER;
+    }
+    if ( id == "PIKEMAN" ) {
+        return Monster::PIKEMAN;
+    }
+    if ( id == "VETERAN_PIKEMAN" ) {
+        return Monster::VETERAN_PIKEMAN;
+    }
+    if ( id == "SWORDSMAN" ) {
+        return Monster::SWORDSMAN;
+    }
+    if ( id == "MASTER_SWORDSMAN" ) {
+        return Monster::MASTER_SWORDSMAN;
+    }
+    if ( id == "CAVALRY" ) {
+        return Monster::CAVALRY;
+    }
+    if ( id == "CHAMPION" ) {
+        return Monster::CHAMPION;
+    }
+    if ( id == "PALADIN" ) {
+        return Monster::PALADIN;
+    }
+    if ( id == "CRUSADER" ) {
+        return Monster::CRUSADER;
+    }
+    if ( id == "GOBLIN" ) {
+        return Monster::GOBLIN;
+    }
+    if ( id == "ORC" ) {
+        return Monster::ORC;
+    }
+    if ( id == "ORC_CHIEF" ) {
+        return Monster::ORC_CHIEF;
+    }
+    if ( id == "WOLF" ) {
+        return Monster::WOLF;
+    }
+    if ( id == "OGRE" ) {
+        return Monster::OGRE;
+    }
+    if ( id == "OGRE_LORD" ) {
+        return Monster::OGRE_LORD;
+    }
+    if ( id == "TROLL" ) {
+        return Monster::TROLL;
+    }
+    if ( id == "WAR_TROLL" ) {
+        return Monster::WAR_TROLL;
+    }
+    if ( id == "CYCLOPS" ) {
+        return Monster::CYCLOPS;
+    }
+    if ( id == "SPRITE" ) {
+        return Monster::SPRITE;
+    }
+    if ( id == "DWARF" ) {
+        return Monster::DWARF;
+    }
+    if ( id == "BATTLE_DWARF" ) {
+        return Monster::BATTLE_DWARF;
+    }
+    if ( id == "ELF" ) {
+        return Monster::ELF;
+    }
+    if ( id == "GRAND_ELF" ) {
+        return Monster::GRAND_ELF;
+    }
+    if ( id == "DRUID" ) {
+        return Monster::DRUID;
+    }
+    if ( id == "GREATER_DRUID" ) {
+        return Monster::GREATER_DRUID;
+    }
+    if ( id == "UNICORN" ) {
+        return Monster::UNICORN;
+    }
+    if ( id == "PHOENIX" ) {
+        return Monster::PHOENIX;
+    }
+    if ( id == "CENTAUR" ) {
+        return Monster::CENTAUR;
+    }
+    if ( id == "GARGOYLE" ) {
+        return Monster::GARGOYLE;
+    }
+    if ( id == "GRIFFIN" ) {
+        return Monster::GRIFFIN;
+    }
+    if ( id == "MINOTAUR" ) {
+        return Monster::MINOTAUR;
+    }
+    if ( id == "MINOTAUR_KING" ) {
+        return Monster::MINOTAUR_KING;
+    }
+    if ( id == "HYDRA" ) {
+        return Monster::HYDRA;
+    }
+    if ( id == "GREEN_DRAGON" ) {
+        return Monster::GREEN_DRAGON;
+    }
+    if ( id == "RED_DRAGON" ) {
+        return Monster::RED_DRAGON;
+    }
+    if ( id == "BLACK_DRAGON" ) {
+        return Monster::BLACK_DRAGON;
+    }
+    if ( id == "HALFLING" ) {
+        return Monster::HALFLING;
+    }
+    if ( id == "BOAR" ) {
+        return Monster::BOAR;
+    }
+    if ( id == "IRON_GOLEM" ) {
+        return Monster::IRON_GOLEM;
+    }
+    if ( id == "STEEL_GOLEM" ) {
+        return Monster::STEEL_GOLEM;
+    }
+    if ( id == "ROC" ) {
+        return Monster::ROC;
+    }
+    if ( id == "MAGE" ) {
+        return Monster::MAGE;
+    }
+    if ( id == "ARCHMAGE" ) {
+        return Monster::ARCHMAGE;
+    }
+    if ( id == "GIANT" ) {
+        return Monster::GIANT;
+    }
+    if ( id == "TITAN" ) {
+        return Monster::TITAN;
+    }
+    if ( id == "SKELETON" ) {
+        return Monster::SKELETON;
+    }
+    if ( id == "ZOMBIE" ) {
+        return Monster::ZOMBIE;
+    }
+    if ( id == "MUTANT_ZOMBIE" ) {
+        return Monster::MUTANT_ZOMBIE;
+    }
+    if ( id == "MUMMY" ) {
+        return Monster::MUMMY;
+    }
+    if ( id == "ROYAL_MUMMY" ) {
+        return Monster::ROYAL_MUMMY;
+    }
+    if ( id == "VAMPIRE" ) {
+        return Monster::VAMPIRE;
+    }
+    if ( id == "VAMPIRE_LORD" ) {
+        return Monster::VAMPIRE_LORD;
+    }
+    if ( id == "LICH" ) {
+        return Monster::LICH;
+    }
+    if ( id == "POWER_LICH" ) {
+        return Monster::POWER_LICH;
+    }
+    if ( id == "BONE_DRAGON" ) {
+        return Monster::BONE_DRAGON;
+    }
+    if ( id == "ROGUE" ) {
+        return Monster::ROGUE;
+    }
+    if ( id == "NOMAD" ) {
+        return Monster::NOMAD;
+    }
+    if ( id == "GHOST" ) {
+        return Monster::GHOST;
+    }
+    if ( id == "GENIE" ) {
+        return Monster::GENIE;
+    }
+    if ( id == "MEDUSA" ) {
+        return Monster::MEDUSA;
+    }
+    if ( id == "EARTH_ELEMENT" ) {
+        return Monster::EARTH_ELEMENT;
+    }
+    if ( id == "AIR_ELEMENT" ) {
+        return Monster::AIR_ELEMENT;
+    }
+    if ( id == "FIRE_ELEMENT" ) {
+        return Monster::FIRE_ELEMENT;
+    }
+    if ( id == "WATER_ELEMENT" ) {
+        return Monster::WATER_ELEMENT;
+    }
+    return Monster::UNKNOWN;
 }

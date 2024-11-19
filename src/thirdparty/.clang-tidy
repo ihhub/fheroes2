@@ -1,0 +1,7 @@
+# File: thirdparty
+
+# Disable all checks in this folder.
+Checks: >-
+    -*,
+    performance-unnecessary-value-param
+

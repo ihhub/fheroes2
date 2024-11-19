@@ -306,6 +306,11 @@ uint32_t Battle::Unit::GetSpeed() const
     return GetSpeed( false, false );
 }
 
+uint32_t Battle::Unit::GetWalkRadius() const
+{
+    return GetWalkRadius( false, false );
+}
+
 int Battle::Unit::GetMorale() const
 {
     const Arena * arena = GetArena();
@@ -367,6 +372,11 @@ void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGen
 bool Battle::Unit::isFlying() const
 {
     return ArmyTroop::isFlying() && !Modes( SP_SLOW );
+}
+
+bool Battle::Unit::isMoatIgnore() const
+{
+    return ArmyTroop::isMoatIgnore();
 }
 
 bool Battle::Unit::isOutOfCastleWalls() const
@@ -477,6 +487,31 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     }
     if ( Modes( SP_SLOW ) ) {
         return Speed::GetSlowSpeedFromSpell( speed );
+    }
+
+    return speed;
+}
+
+uint32_t Battle::Unit::GetWalkRadius( const bool skipStandingCheck, const bool skipMovedCheck ) const
+{
+    if ( !skipStandingCheck ) {
+        uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
+        if ( !skipMovedCheck ) {
+            modesToCheck |= TR_MOVED;
+        }
+
+        if ( GetCount() == 0 || Modes( modesToCheck ) ) {
+            return Speed::STANDING;
+        }
+    }
+
+    const uint32_t speed = Monster::GetWalkRadius();
+
+    if ( Modes( SP_HASTE ) ) {
+        return static_cast<uint32_t>( Speed::GetHasteSpeedFromSpell( static_cast<int32_t>( speed ) ) );
+    }
+    if ( Modes( SP_SLOW ) ) {
+        return static_cast<uint32_t>( Speed::GetSlowSpeedFromSpell( static_cast<int32_t>( speed ) ) );
     }
 
     return speed;
