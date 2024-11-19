@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -115,4 +115,39 @@ int Speed::GetHasteSpeedFromSpell( const int currentSpeed )
 {
     Spell spell = Spell::HASTE;
     return spell.ExtraValue() ? currentSpeed + spell.ExtraValue() : Speed::GetOriginalFast( currentSpeed );
+}
+
+int Speed::GetFromString( const std::string & id )
+{
+    if ( id == "STANDING" ) {
+        return Speed::STANDING;
+    }
+    if ( id == "CRAWLING" ) {
+        return Speed::CRAWLING;
+    }
+    if ( id == "VERYSLOW" ) {
+        return Speed::VERYSLOW;
+    }
+    if ( id == "SLOW" ) {
+        return Speed::SLOW;
+    }
+    if ( id == "AVERAGE" ) {
+        return Speed::AVERAGE;
+    }
+    if ( id == "FAST" ) {
+        return Speed::FAST;
+    }
+    if ( id == "VERYFAST" ) {
+        return Speed::VERYFAST;
+    }
+    if ( id == "ULTRAFAST" ) {
+        return Speed::ULTRAFAST;
+    }
+    if ( id == "BLAZING" ) {
+        return Speed::BLAZING;
+    }
+    if ( id == "INSTANT" ) {
+        return Speed::INSTANT;
+    }
+    return Speed::STANDING;
 }

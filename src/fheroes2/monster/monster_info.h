@@ -23,9 +23,15 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "resource.h"
+
+namespace json
+{
+    class jobject;
+}
 
 namespace fheroes2
 {
@@ -63,7 +69,9 @@ namespace fheroes2
         AREA_SHOT,
         MORAL_DECREMENT,
         ENEMY_HALVING,
-        SOUL_EATER
+        SOUL_EATER,
+        PLUSWALKRADIUS,
+        MOATIGNORE,
     };
 
     enum class MonsterWeaknessType : int
@@ -146,8 +154,8 @@ namespace fheroes2
 
     struct MonsterGeneralStats
     {
-        const char * name;
-        const char * pluralName;
+        std::string name;
+        std::string pluralName;
 
         uint32_t baseGrowth;
         uint32_t race;
@@ -170,18 +178,18 @@ namespace fheroes2
 
     struct MonsterData
     {
-        MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_,
+        MonsterData( const int icnId_, std::string binFileName_, const MonsterSound & sounds_, MonsterBattleStats battleStats_,
                      const MonsterGeneralStats & generalStats_ )
             : icnId( icnId_ )
-            , binFileName( binFileName_ )
+            , binFileName( std::move( binFileName_ ) )
             , sounds( sounds_ )
-            , battleStats( battleStats_ )
+            , battleStats( std::move( battleStats_ ) )
             , generalStats( generalStats_ )
         {}
 
         int icnId;
 
-        const char * binFileName;
+        std::string binFileName;
 
         MonsterSound sounds;
 
@@ -200,5 +208,15 @@ namespace fheroes2
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
+    void loadMonstersData();
+    void buildMonstersData();
+    void fillCost( const json::jobject & jcost, Cost & cost );
+    void fillSoundMonsterInfo( const json::jobject & jsounds, MonsterSound & sounds );
+    MonsterAbilityType MonsterAbilityFromString( const std::string & id );
+    MonsterWeaknessType MonsterWeaknessFromString( const std::string & id );
+    void fillMonsterAbility( const json::jobject & jability, MonsterAbility & ability );
+    void fillMonsterWeakness( const json::jobject & jability, MonsterWeakness & ability );
+    void fillMonsterBattleStats( const json::jobject & jbattleStats, MonsterBattleStats & battleStats );
+    void fillMonsterGeneralStats( const json::jobject & jgeneral, MonsterGeneralStats & general );
 }
 #endif

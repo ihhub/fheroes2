@@ -24,6 +24,8 @@
 #ifndef H2M82_H
 #define H2M82_H
 
+#include <string>
+
 namespace Maps
 {
     class Tile;
@@ -355,6 +357,8 @@ namespace M82
 
     const char * GetString( int m82 );
     int FromSpell( const int spellID );
+    void fillM82ReverseMap();
+    int getFromString( const std::string & id );
 
     // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
     SoundType getAdventureMapTileSound( const Maps::Tile & tile );

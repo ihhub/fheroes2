@@ -229,3 +229,26 @@ int Race::getPreviousRace( const int race )
     }
     return Race::NONE;
 }
+
+int Race::getFromString( const std::string & id )
+{
+    if ( id == "KNGT" ) {
+        return Race::KNGT;
+    }
+    if ( id == "BARB" ) {
+        return Race::BARB;
+    }
+    if ( id == "SORC" ) {
+        return Race::SORC;
+    }
+    if ( id == "WRLK" ) {
+        return Race::WRLK;
+    }
+    if ( id == "WZRD" ) {
+        return Race::WZRD;
+    }
+    if ( id == "NECR" ) {
+        return Race::NECR;
+    }
+    return Race::NONE;
+}

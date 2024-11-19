@@ -45,7 +45,7 @@ namespace
 
     const char * GetFilename( const int monsterId )
     {
-        return fheroes2::getMonsterData( monsterId ).binFileName;
+        return fheroes2::getMonsterData( monsterId ).binFileName.c_str();
     }
 
     class MonsterAnimCache

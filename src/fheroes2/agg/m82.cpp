@@ -23,6 +23,9 @@
 
 #include "m82.h"
 
+#include <map>
+#include <utility>
+
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "spell.h"
@@ -95,6 +98,8 @@ namespace M82
                    { WSND14, "WSND14.82M" },     { WSND15, "WSND15.82M" },     { WSND16, "WSND16.82M" },     { WSND20, "WSND20.82M" },     { WSND21, "WSND21.82M" },
                    { WSND22, "WSND22.82M" },     { WSND23, "WSND23.82M" },     { WSND24, "WSND24.82M" },     { WSND25, "WSND25.82M" },     { WSND26, "WSND26.82M" },
                    { ZOMBATTK, "ZOMBATTK.82M" }, { ZOMBKILL, "ZOMBKILL.82M" }, { ZOMBMOVE, "ZOMBMOVE.82M" }, { ZOMBWNCE, "ZOMBWNCE.82M" }, { UNKNOWN, "UNKNOWN" } };
+
+    std::map<std::string, int> M82_FROM_STRING_MAP;
 }
 
 const char * M82::GetString( int m82 )
@@ -283,4 +288,30 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tile & tile )
     }
 
     return UNKNOWN;
+}
+
+void M82::fillM82ReverseMap()
+{
+    for ( const auto & it : M82::m82map ) {
+        std::string name = std::string( it.string );
+        auto dot_pos = name.find( '.' );
+        if ( dot_pos != std::string::npos ) {
+            name = name.substr( 0, dot_pos );
+        }
+        if ( !name.empty() ) {
+            M82::M82_FROM_STRING_MAP[name] = it.type;
+        }
+    }
+}
+
+int M82::getFromString( const std::string & id )
+{
+    if ( M82::M82_FROM_STRING_MAP.empty() ) {
+        M82::fillM82ReverseMap();
+    }
+    auto it = M82::M82_FROM_STRING_MAP.find( id );
+    if ( it != M82::M82_FROM_STRING_MAP.end() ) {
+        return it->second;
+    }
+    return M82::UNKNOWN;
 }

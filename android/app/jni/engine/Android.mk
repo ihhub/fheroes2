@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -28,7 +28,7 @@ LOCAL_SHORT_COMMANDS := true
 ENGINE_SRC_DIR := $(LOCAL_PATH)/../../../../src/engine
 
 LOCAL_MODULE := engine
-LOCAL_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp)
+LOCAL_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp) $(ENGINE_SRC_DIR)/../thirdparty/simplejson/json.cxx
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
 LOCAL_STATIC_LIBRARIES := smacker
 LOCAL_CFLAGS := $(FHEROES2_C_WARN_OPTIONS)
@@ -36,7 +36,7 @@ LOCAL_CPP_FEATURES := exceptions rtti
 LOCAL_CPPFLAGS := \
     -std=c++17 \
     $(FHEROES2_CPP_WARN_OPTIONS)
-LOCAL_EXPORT_C_INCLUDES := $(ENGINE_SRC_DIR)
+LOCAL_EXPORT_C_INCLUDES := $(ENGINE_SRC_DIR) $(ENGINE_SRC_DIR)/../thirdparty/simplejson
 LOCAL_EXPORT_LDLIBS := -llog -lz
 
 include $(BUILD_STATIC_LIBRARY)

@@ -25,6 +25,8 @@
 
 #include <array>
 #include <cassert>
+#include <map>
+#include <utility>
 
 #include "color.h"
 #include "heroes.h"
@@ -219,6 +221,7 @@ namespace ICN
               { X_TRACK2, "X_TRACK2.ICN" }, { X_TRACK3, "X_TRACK3.ICN" }, { X_TRACK4, "X_TRACK4.ICN" }, { X_LOC1, "X_LOC1.ICN" },     { X_LOC2, "X_LOC2.ICN" },
               { X_LOC3, "X_LOC3.ICN" },     { XPRIMARY, "XPRIMARY.ICN" }, { Y_BFLG32, "Y-BFLG32.ICN" }, { Y_FLAG32, "Y-FLAG32.ICN" }, { YINYANG, "YINYANG.ICN" },
               { ZOMBIE2, "ZOMBIE2.ICN" },   { ZOMBIE, "ZOMBIE.ICN" } } };
+    std::map<std::string, int> ICN_FROM_STRING_MAP;
 }
 
 const char * ICN::getIcnFileName( const int icnId )
@@ -965,4 +968,30 @@ int ICN::getFlagIcnId( const int color )
     default:
         return ICN::HEROFL06;
     }
+}
+
+void ICN::fillICNReverseMap()
+{
+    for ( const auto & it : ICN::icnMap ) {
+        std::string name = std::string( it.string );
+        auto dot_pos = name.find( '.' );
+        if ( dot_pos != std::string::npos ) {
+            name = name.substr( 0, dot_pos );
+        }
+        if ( !name.empty() ) {
+            ICN::ICN_FROM_STRING_MAP[name] = it.type;
+        }
+    }
+}
+
+int ICN::getIcnFromStr( const std::string & id )
+{
+    if ( ICN::ICN_FROM_STRING_MAP.empty() ) {
+        ICN::fillICNReverseMap();
+    }
+    auto it = ICN::ICN_FROM_STRING_MAP.find( id );
+    if ( it != ICN::ICN_FROM_STRING_MAP.end() ) {
+        return it->second;
+    }
+    return -1;
 }

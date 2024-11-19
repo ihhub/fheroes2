@@ -111,6 +111,7 @@ target_include_directories(
 	spell
 	system
 	world
+	../thirdparty/simplejson
 	)
 
 target_link_libraries(

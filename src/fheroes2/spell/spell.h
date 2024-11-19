@@ -24,6 +24,7 @@
 #define H2SPELL_H
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 class IStreamBase;
@@ -238,6 +239,7 @@ public:
     static Spell Rand( const int level, const bool isAdventure );
     static Spell RandCombat( const int level );
     static Spell RandAdventure( const int level );
+    static int getFromString( const std::string & id );
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
@@ -248,6 +250,7 @@ public:
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
     friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );
+    static void fillSpellsReverseMap();
 
     int id;
 };

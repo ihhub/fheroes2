@@ -21,7 +21,7 @@
 TARGET := fheroes2
 
 LIBENGINE := ../engine/libengine.a
-CCFLAGS := $(CCFLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) -I../engine -I../thirdparty/simplejson
 
 ifndef FHEROES2_WITH_SYSTEM_SMACKER
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
