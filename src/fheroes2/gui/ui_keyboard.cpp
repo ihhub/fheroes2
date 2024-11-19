@@ -213,7 +213,7 @@ namespace
     private:
         fheroes2::Display & _output;
         std::string & _info;
-        const size_t _lengthLimit{ 255 };
+        size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
