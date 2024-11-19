@@ -426,9 +426,9 @@ void AI::Planner::reinforceCastle( Castle & castle )
         // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
         if ( Troop( *weakestTroop ).GetStrength() > troop.GetStrength() ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       castle.GetName() << " skips hiring " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() ) << " because "
-                                        << weakestTroop->GetCount() << " " << weakestTroop->GetPluralName( weakestTroop->GetCount() )
-                                        << " (the weakest units) are stronger than these" )
+                       castle.GetName() << " skips hiring " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() )
+                                        << " because the weakest unit consisting of " << weakestTroop->GetCount() << " "
+                                        << weakestTroop->GetPluralName( weakestTroop->GetCount() ) << " is stronger" )
 
             continue;
         }
