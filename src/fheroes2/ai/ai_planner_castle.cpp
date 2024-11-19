@@ -447,12 +447,12 @@ void AI::Planner::reinforceCastle( Castle & castle )
         // Transfer the best troops from the garrison to the guest hero
         guestHeroArmy.JoinStrongestFromArmy( garrison );
 
-        const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
-
         // Check if we should leave some troops in the garrison
         // TODO: amount of troops left could depend on region's safetyFactor
-        if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
-            auto [troopForTransferToGarrison, transferHalf] = [guestHeroRole = guestHero->getAIRole(), &guestHeroArmy]() -> std::pair<Troop *, bool> {
+        if ( const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
+             castle.isCastle() && _regions.at( regionID ).safetyFactor <= 100 && !garrison.isValid() ) {
+            auto [troopForTransferToGarrison, transferHalf]
+                = [guestHeroRole = guestHero->getAIRole(), &guestHeroArmy = std::as_const( guestHeroArmy )]() -> std::pair<Troop *, bool> {
                 const bool isFighterRole = ( guestHeroRole == Heroes::Role::FIGHTER || guestHeroRole == Heroes::Role::CHAMPION );
 
                 // We need to compare a strength of troops excluding hero's stats
