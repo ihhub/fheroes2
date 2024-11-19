@@ -111,7 +111,6 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
-        const int32_t initialTextWidth = currentFilename.width();
         // Do not ignore spaces at the end.
         currentFilename.fitToOneRow( maxFileNameWidth, false );
 
