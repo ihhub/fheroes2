@@ -591,13 +591,13 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
-    void getClosestSoundIdPairByAngle( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd, const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace,
-                                       size_t & bestSoundToAddId, size_t & bestSoundToReplaceId )
+    std::pair<size_t, size_t> findPairOfClosestSounds( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd,
+                                                       const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace )
     {
         assert( !soundToAdd.empty() && !soundToReplace.empty() );
 
-        bestSoundToAddId = 0;
-        bestSoundToReplaceId = 0;
+        std::pair<size_t, size_t> result{ 0, 0 };
+
         int bestAngleDiff = INT_MAX;
         int bestDistanceDiff = INT_MAX;
 
@@ -618,10 +618,11 @@ namespace
                 bestAngleDiff = angleDiff;
                 bestDistanceDiff = distanceDiff;
 
-                bestSoundToAddId = soundToAddId;
-                bestSoundToReplaceId = soundToReplaceId;
+                result = { soundToAddId, soundToReplaceId };
             }
         }
+
+        return result;
     }
 
     void clearAllAudioLoopEffects()
@@ -648,25 +649,18 @@ namespace
             clearAllAudioLoopEffects();
         }
 
-        // TODO: use another container for sound effects to support more efficient sort and find operations based on the code below.
-
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
-        // Remove all sounds which aren't currently played anymore. This might be the case when Audio::Stop() function is called.
+        // Remove all sounds which aren't currently played anymore. This may be the case if the sound playback was forcibly stopped.
         for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ) {
-            std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+            auto & [dummy, effects] = *iter;
 
-            for ( auto effectIter = existingEffects.begin(); effectIter != existingEffects.end(); ) {
-                if ( !Mixer::isPlaying( effectIter->channelId ) ) {
-                    effectIter = existingEffects.erase( effectIter );
-                }
-                else {
-                    ++effectIter;
-                }
-            }
+            effects.erase( std::remove_if( effects.begin(), effects.end(),
+                                           []( const ChannelAudioLoopEffectInfo & effectInfo ) { return !Mixer::isPlaying( effectInfo.channelId ); } ),
+                           effects.end() );
 
-            if ( existingEffects.empty() ) {
+            if ( effects.empty() ) {
                 iter = tempAudioLoopEffects.erase( iter );
             }
             else {
@@ -674,59 +668,61 @@ namespace
             }
         }
 
-        // First find channels with existing sounds and just update them.
+        // Try to reuse existing sounds.
         for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ) {
-            const M82::SoundType soundType = iter->first;
-            std::vector<AudioManager::AudioLoopEffectInfo> & effectsToAdd = iter->second;
+            auto & [soundType, effectsToAdd] = *iter;
             assert( !effectsToAdd.empty() );
 
-            auto foundSoundTypeIter = tempAudioLoopEffects.find( soundType );
-            if ( foundSoundTypeIter == tempAudioLoopEffects.end() ) {
-                // This sound type does not exist.
+            auto soundTypeIter = tempAudioLoopEffects.find( soundType );
+            if ( soundTypeIter == tempAudioLoopEffects.end() ) {
+                // There is no such sound, nothing to reuse.
                 ++iter;
                 continue;
             }
 
-            std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = foundSoundTypeIter->second;
+            std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = soundTypeIter->second;
 
-            // Search for an existing sound which has the exact distance and angle.
+            // Find existing sounds that have exactly the same distance and angle as the ones that should be added, and reuse these sounds as is.
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
-                auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
-                if ( exactSoundEffect != effectsToReplace.end() ) {
-                    currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
-                    effectsToReplace.erase( exactSoundEffect );
-
-                    soundToAddIter = effectsToAdd.erase( soundToAddIter );
+                auto soundToReplaceIter = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
+                if ( soundToReplaceIter == effectsToReplace.end() ) {
+                    ++soundToAddIter;
                     continue;
                 }
 
-                ++soundToAddIter;
+                currentAudioLoopEffects[soundType].emplace_back( *soundToReplaceIter );
+
+                effectsToReplace.erase( soundToReplaceIter );
+                soundToAddIter = effectsToAdd.erase( soundToAddIter );
             }
 
-            size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
+            // Find the existing sounds closest to those that should be added and reuse these sounds by adjusting their positions.
+            {
+                size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
 
-            while ( effectsToReplaceCount > 0 ) {
-                --effectsToReplaceCount;
+                while ( effectsToReplaceCount > 0 ) {
+                    --effectsToReplaceCount;
 
-                // Find the closest angles to those which are going to be added.
-                size_t soundToAddId = 0;
-                size_t soundToReplaceId = 0;
-                getClosestSoundIdPairByAngle( effectsToAdd, effectsToReplace, soundToAddId, soundToReplaceId );
+                    {
+                        const auto [soundToAddId, soundToReplaceId] = findPairOfClosestSounds( effectsToAdd, effectsToReplace );
+                        const int channelId = effectsToReplace[soundToReplaceId].channelId;
 
-                currentAudioLoopEffects[soundType].emplace_back( effectsToReplace[soundToReplaceId] );
-                effectsToReplace.erase( effectsToReplace.begin() + static_cast<ptrdiff_t>( soundToReplaceId ) );
+                        currentAudioLoopEffects[soundType].emplace_back( effectsToAdd[soundToAddId], channelId );
 
-                ChannelAudioLoopEffectInfo & currentInfo = currentAudioLoopEffects[soundType].back();
-                currentInfo = { effectsToAdd[soundToAddId], currentInfo.channelId };
-                effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
+                        effectsToReplace.erase( effectsToReplace.begin() + static_cast<ptrdiff_t>( soundToReplaceId ) );
+                        effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
+                    }
 
-                assert( is3DAudioEnabled || currentInfo.angle == 0 );
+                    const ChannelAudioLoopEffectInfo & effectInfo = currentAudioLoopEffects[soundType].back();
 
-                Mixer::setPosition( currentInfo.channelId, currentInfo.angle, currentInfo.distance );
+                    assert( is3DAudioEnabled || effectInfo.angle == 0 );
+
+                    Mixer::setPosition( effectInfo.channelId, effectInfo.angle, effectInfo.distance );
+                }
             }
 
             if ( effectsToReplace.empty() ) {
-                tempAudioLoopEffects.erase( foundSoundTypeIter );
+                tempAudioLoopEffects.erase( soundTypeIter );
             }
 
             if ( effectsToAdd.empty() ) {
@@ -737,39 +733,39 @@ namespace
             }
         }
 
-        for ( const auto & audioEffectPair : tempAudioLoopEffects ) {
-            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
-
-            for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                Mixer::Stop( info.channelId );
+        // Channels with sounds that could not be reused because such sounds are missing from the list of added ones should be stopped.
+        {
+            for ( const auto & [dummy, effects] : tempAudioLoopEffects ) {
+                for ( const ChannelAudioLoopEffectInfo & effectInfo : effects ) {
+                    Mixer::Stop( effectInfo.channelId );
+                }
             }
+
+            tempAudioLoopEffects.clear();
         }
 
-        tempAudioLoopEffects.clear();
-
         // Add new sound effects.
-        for ( const auto & audioEffectPair : soundEffects ) {
-            const M82::SoundType soundType = audioEffectPair.first;
-            const std::vector<AudioManager::AudioLoopEffectInfo> & effects = audioEffectPair.second;
+        for ( const auto & [soundType, effects] : soundEffects ) {
             assert( !effects.empty() );
 
-            for ( const AudioManager::AudioLoopEffectInfo & info : effects ) {
-                // It is a new sound effect. Register and play it.
+            for ( const AudioManager::AudioLoopEffectInfo & effectInfo : effects ) {
+                // This is a new sound effect. Register and play it.
                 const std::vector<uint8_t> & audioData = GetWAV( soundType );
                 if ( audioData.empty() ) {
                     // Looks like nothing to play. Ignore it.
                     continue;
                 }
 
-                assert( is3DAudioEnabled || info.angle == 0 );
+                assert( is3DAudioEnabled || effectInfo.angle == 0 );
 
-                const int channelId = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), true, std::pair{ info.angle, info.distance } );
+                const int channelId
+                    = Mixer::Play( audioData.data(), static_cast<uint32_t>( audioData.size() ), true, std::pair{ effectInfo.angle, effectInfo.distance } );
                 if ( channelId < 0 ) {
                     // Unable to play this sound.
                     continue;
                 }
 
-                currentAudioLoopEffects[soundType].emplace_back( info, channelId );
+                currentAudioLoopEffects[soundType].emplace_back( effectInfo, channelId );
 
                 DEBUG_LOG( DBG_GAME, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
             }
