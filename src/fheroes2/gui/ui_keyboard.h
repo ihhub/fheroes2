@@ -28,4 +28,6 @@ namespace fheroes2
     // As a solution we should utilize an in-game virtual keyboard which supports all code pages available by the engine.
     // The default language in the keyboard is English.
     void openVirtualKeyboard( std::string & output );
+
+    void openVirtualNumpad( int32_t & output );
 }
