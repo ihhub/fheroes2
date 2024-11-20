@@ -847,14 +847,13 @@ namespace fheroes2
     void openVirtualNumpad( int32_t & output )
     {
         DialogAction action = DialogAction::AddLetter;
-        LayoutType layoutType = LayoutType::Numeric;
 
         std::string outputString = std::to_string( output );
 
         KeyboardRenderer renderer( Display::instance(), outputString, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
-            action = processVirtualKeyboardEvent( layoutType, SupportedLanguage::English, false, renderer );
+            action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
             switch ( action ) {
             case DialogAction::DoNothing:
             case DialogAction::AddLetter:
