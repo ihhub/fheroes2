@@ -537,16 +537,18 @@ namespace
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
-                                        []( KeyboardRenderer & renderer ) { renderer.swapSign();
-                                        return DialogAction::AddLetter; } );
-                                        
+            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.swapSign();
+                return DialogAction::AddLetter;
+            } );
+
             lastButtonRow.emplace_back( "0", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( '0' );
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( "\x7F", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            lastButtonRow.emplace_back( "\x7F", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -707,8 +709,7 @@ namespace
         const int32_t windowWidth = ( layoutType == LayoutType::Numeric ) ? numbericWindowWidth : defaultWindowWidth;
 
         const bool isResized = renderer.resize(
-            { windowWidth,
-              defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+            { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
