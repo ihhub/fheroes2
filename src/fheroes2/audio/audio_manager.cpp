@@ -686,17 +686,17 @@ namespace
             std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = soundTypeIter->second;
 
             // Find existing sounds that have exactly the same distance and angle as the ones that should be added, and reuse these sounds as is.
-            for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
-                auto soundToReplaceIter = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
-                if ( soundToReplaceIter == effectsToReplace.end() ) {
-                    ++soundToAddIter;
+            for ( auto effectToAddIter = effectsToAdd.begin(); effectToAddIter != effectsToAdd.end(); ) {
+                auto effectToReplaceIter = std::find( effectsToReplace.begin(), effectsToReplace.end(), *effectToAddIter );
+                if ( effectToReplaceIter == effectsToReplace.end() ) {
+                    ++effectToAddIter;
                     continue;
                 }
 
-                currentAudioLoopEffects[soundType].emplace_back( *soundToReplaceIter );
+                currentAudioLoopEffects[soundType].emplace_back( *effectToReplaceIter );
 
-                effectsToReplace.erase( soundToReplaceIter );
-                soundToAddIter = effectsToAdd.erase( soundToAddIter );
+                effectsToReplace.erase( effectToReplaceIter );
+                effectToAddIter = effectsToAdd.erase( effectToAddIter );
             }
 
             // Find the existing sounds closest to those that should be added and reuse these sounds by adjusting their positions.
