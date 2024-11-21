@@ -19,19 +19,14 @@ jobs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-18
-    - name: Setup clang-tools
+    - name: Install CodeChecker
       run: |
-        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-18 100
+        python -m venv ~/.python-venv
+        ~/.python-venv/bin/pip install codechecker
+    - name: Prepare compile_commands.json
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
-        scan-build --status-bugs -v -o scan-build-result make -j 2
-      env:
-        FHEROES2_STRICT_COMPILATION: ON
-        FHEROES2_WITH_DEBUG: ON
-        FHEROES2_WITH_IMAGE: ON
-        FHEROES2_WITH_TOOLS: ON
-    - uses: actions/upload-artifact@v4
-      if: ${{ failure() }}
-      with:
-        name: scan-build-result
-        path: scan-build-result/
+        export PATH="~/.python-venv/bin:$PATH"
+        CodeChecker analyze --analyzers clangsa --ctu-all --output codechecker-output build/compile_commands.json
