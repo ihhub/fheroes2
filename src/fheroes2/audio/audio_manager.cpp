@@ -591,21 +591,24 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
-    std::pair<size_t, size_t> findPairOfClosestSounds( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd,
-                                                       const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace )
+    std::pair<size_t, size_t> findPairOfClosestSoundEffects( const std::vector<AudioManager::AudioLoopEffectInfo> & effectsToAdd,
+                                                             const std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace )
     {
-        assert( !soundToAdd.empty() && !soundToReplace.empty() );
+        assert( !effectsToAdd.empty() && !effectsToReplace.empty() );
 
         std::pair<size_t, size_t> result{ 0, 0 };
 
         int bestAngleDiff = INT_MAX;
         int bestDistanceDiff = INT_MAX;
 
-        for ( size_t soundToAddId = 0; soundToAddId < soundToAdd.size(); ++soundToAddId ) {
-            for ( size_t soundToReplaceId = 0; soundToReplaceId < soundToReplace.size(); ++soundToReplaceId ) {
-                const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
-                const int distanceDiff
-                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].distance ) - static_cast<int>( soundToReplace[soundToReplaceId].distance ) );
+        for ( size_t effectToAddId = 0; effectToAddId < effectsToAdd.size(); ++effectToAddId ) {
+            const AudioManager::AudioLoopEffectInfo & effectToAdd = effectsToAdd[effectToAddId];
+
+            for ( size_t effectToReplaceId = 0; effectToReplaceId < effectsToReplace.size(); ++effectToReplaceId ) {
+                const ChannelAudioLoopEffectInfo & effectToReplace = effectsToReplace[effectToReplaceId];
+
+                const int angleDiff = std::abs( effectToAdd.angle - effectToReplace.angle );
+                const int distanceDiff = std::abs( static_cast<int>( effectToAdd.distance ) - static_cast<int>( effectToReplace.distance ) );
 
                 if ( bestAngleDiff < angleDiff ) {
                     continue;
@@ -618,7 +621,7 @@ namespace
                 bestAngleDiff = angleDiff;
                 bestDistanceDiff = distanceDiff;
 
-                result = { soundToAddId, soundToReplaceId };
+                result = { effectToAddId, effectToReplaceId };
             }
         }
 
@@ -704,13 +707,13 @@ namespace
                     --effectsToReplaceCount;
 
                     {
-                        const auto [soundToAddId, soundToReplaceId] = findPairOfClosestSounds( effectsToAdd, effectsToReplace );
-                        const int channelId = effectsToReplace[soundToReplaceId].channelId;
+                        const auto [effectToAddId, effectToReplaceId] = findPairOfClosestSoundEffects( effectsToAdd, effectsToReplace );
+                        const int channelId = effectsToReplace[effectToReplaceId].channelId;
 
-                        currentAudioLoopEffects[soundType].emplace_back( effectsToAdd[soundToAddId], channelId );
+                        currentAudioLoopEffects[soundType].emplace_back( effectsToAdd[effectToAddId], channelId );
 
-                        effectsToReplace.erase( effectsToReplace.begin() + static_cast<ptrdiff_t>( soundToReplaceId ) );
-                        effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
+                        effectsToReplace.erase( effectsToReplace.begin() + static_cast<ptrdiff_t>( effectToReplaceId ) );
+                        effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( effectToAddId ) );
                     }
 
                     const ChannelAudioLoopEffectInfo & effectInfo = currentAudioLoopEffects[soundType].back();
