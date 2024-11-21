@@ -171,7 +171,7 @@ namespace
         for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
             for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
                 if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 17 ) {
-                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add missed new Lean-To object.
+                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add new Lean-To object.
                     objInfo.index += 1;
                 }
             }
