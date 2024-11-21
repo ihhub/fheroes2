@@ -478,7 +478,7 @@ namespace
                     needRedraw = true;
                 }
                 else if ( !listboxEvent && le.isAnyKeyPressed()
-                          && ( filename.size() >= lengthLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue()
+                          && ( filename.size() < lengthLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue()
                                || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
                           && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
