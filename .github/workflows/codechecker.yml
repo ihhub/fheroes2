@@ -1,4 +1,4 @@
-name: Clang Analyzer
+name: CodeChecker
 
 on:
   workflow_call:
@@ -6,21 +6,19 @@ on:
 permissions: {}
 
 jobs:
-  clang:
-    name: Clang Analyzer
+  codechecker:
+    name: CodeChecker
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     steps:
     - uses: actions/checkout@v4
-    - name: Install dependencies and clang-tools
+    - name: Install dependencies and codechecker
       run: |
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev clang-tools-18
-    - name: Install CodeChecker
-      run: |
         python -m venv ~/.python-venv
         ~/.python-venv/bin/pip install codechecker
     - name: Prepare compile_commands.json
@@ -29,4 +27,5 @@ jobs:
     - name: Analyze
       run: |
         export PATH="~/.python-venv/bin:$PATH"
-        CodeChecker analyze --analyzers clangsa --ctu-all --output codechecker-output build/compile_commands.json
+        CodeChecker analyze --analyzers clangsa --ctu-all --ctu-ast-mode load-from-pch --output codechecker-output --ignore .codechecker-ignore build/compile_commands.json
+        CodeChecker parse codechecker-output
