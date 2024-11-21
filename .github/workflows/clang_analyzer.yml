@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-18
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev clang-tools-18
     - name: Install CodeChecker
       run: |
         python -m venv ~/.python-venv
