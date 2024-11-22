@@ -874,11 +874,6 @@ namespace fheroes2
                     action = DialogAction::DoNothing;
                 };
 
-                if ( strValue.empty() ) {
-                    handleError();
-                    break;
-                }
-
                 try {
                     const int32_t intValue = std::stoi( strValue );
                     if ( intValue < minValue || intValue > maxValue ) {
@@ -888,6 +883,10 @@ namespace fheroes2
 
                     output = intValue;
                     return;
+                }
+                // The string can be empty or contain only a minus sign (when entering a negative number and then deleting numeric characters using the Backspace key)
+                catch ( std::invalid_argument & ) {
+                    handleError();
                 }
                 catch ( std::out_of_range & ) {
                     handleError();
