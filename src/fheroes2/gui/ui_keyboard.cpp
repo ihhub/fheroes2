@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
@@ -43,6 +44,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -790,12 +792,12 @@ namespace fheroes2
     void openVirtualKeyboard( std::string & output )
     {
         const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
+
         SupportedLanguage language = SupportedLanguage::English;
-        DialogAction action = DialogAction::AddLetter;
+        DialogAction action = DialogAction::DoNothing;
         LayoutType layoutType = LayoutType::LowerCase;
 
         const SupportedLanguage currentGameLanguage = getCurrentLanguage();
-
         if ( currentGameLanguage == lastSelectedLanguage ) {
             language = lastSelectedLanguage;
         }
@@ -844,13 +846,12 @@ namespace fheroes2
         }
     }
 
-    void openVirtualNumpad( int32_t & output )
+    void openVirtualNumpad( int32_t & output, const int32_t minValue /* = INT32_MIN */, const int32_t maxValue /* = INT32_MAX */ )
     {
-        DialogAction action = DialogAction::AddLetter;
+        std::string strValue = std::to_string( output );
+        DialogAction action = DialogAction::DoNothing;
 
-        std::string outputString = std::to_string( output );
-
-        KeyboardRenderer renderer( Display::instance(), outputString, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), strValue, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
@@ -866,8 +867,20 @@ namespace fheroes2
                 assert( 0 );
                 break;
             case DialogAction::Close:
-                output = std::stoi( outputString );
-                return;
+                if ( !strValue.empty() ) {
+                    try {
+                        if ( const int32_t intValue = std::stoi( strValue ); intValue >= minValue && intValue <= maxValue ) {
+                            output = intValue;
+                            return;
+                        }
+                    }
+                    catch ( std::out_of_range & ) {
+                        // Do nothing
+                    }
+                }
+                showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+                action = DialogAction::DoNothing;
+                break;
             default:
                 // Did you add a new state? Add the logic above!
                 assert( 0 );

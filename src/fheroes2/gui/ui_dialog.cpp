@@ -910,8 +910,9 @@ namespace fheroes2
         }
 
         if ( le.MouseClickLeft( _editBox ) ) {
-            openVirtualNumpad( _value );
-            setValue( _value );
+            openVirtualNumpad( _value, _minimum, _maximum );
+            assert( _value >= _minimum && _value <= _maximum );
+
             return true;
         }
 

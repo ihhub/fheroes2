@@ -30,5 +30,5 @@ namespace fheroes2
     // The default language in the keyboard is English.
     void openVirtualKeyboard( std::string & output );
 
-    void openVirtualNumpad( int32_t & output );
+    void openVirtualNumpad( int32_t & output, const int32_t minValue = INT32_MIN, const int32_t maxValue = INT32_MAX );
 }
