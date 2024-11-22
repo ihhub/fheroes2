@@ -107,7 +107,12 @@ CPPFLAGS := $(CPPFLAGS) $(CPPFLAGS_FH2)
 ifdef FHEROES2_WITH_SYSTEM_SMACKER
 LIBS := $(LIBS) -lsmacker
 endif
+
+ifeq ($(PLATFORM),morphos)
+LIBS := $(LIBS) -lz_shared $(LDLIBS)
+else
 LIBS := $(LIBS) -lz $(LDLIBS)
+endif
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
