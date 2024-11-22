@@ -792,8 +792,6 @@ namespace fheroes2
 {
     void openVirtualKeyboard( std::string & output )
     {
-        const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
-
         SupportedLanguage language = SupportedLanguage::English;
         DialogAction action = DialogAction::DoNothing;
         LayoutType layoutType = LayoutType::LowerCase;
