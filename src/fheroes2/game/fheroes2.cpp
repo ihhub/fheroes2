@@ -82,7 +82,7 @@
 
 #ifdef __MORPHOS__
 unsigned long __stack = 1024 * 1024;
-static const char *version __attribute__((used)) = "$VER: fheroes2 " MAJOR_VERSION "." MINOR_VERSION "." INTERMEDIATE_VERSION " (" __AMIGADATE__ ")";
+static const std::string  morphos_versions_tag =  std::string("$VER: fheroes2 " + Settings::GetVersion() + " (" __AMIGADATE__ ")");
 #endif
 
 namespace

@@ -18,9 +18,9 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-AR = ppc-morphos-gcc-ar
-CC = ppc-morphos-gcc-9
-CXX = ppc-morphos-g++-9
+AR = ppc-morphos-gcc-ar-11
+CC = ppc-morphos-gcc-11
+CXX = ppc-morphos-g++-11
 # Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
 AMIGADATE = $(shell date +"%-d.%-m.%Y")
 CCFLAGS := $(CCFLAGS) -noixemul -I/gg/usr/local/include -I/gg/usr/local/include/SDL2 -D__MORPHOS_SHAREDLIBS -D__STDC_LIMIT_MACROS -D__AMIGADATE__=\"$(AMIGADATE)\"
