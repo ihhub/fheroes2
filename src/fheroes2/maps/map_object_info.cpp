@@ -4168,6 +4168,16 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // Lean-to, grass terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LEAN_TO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 154U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LEAN_TO, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 153U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Sign, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SIGN };
