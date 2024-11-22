@@ -867,21 +867,34 @@ namespace fheroes2
                 // These actions must not be processed here!
                 assert( 0 );
                 break;
-            case DialogAction::Close:
-                if ( !strValue.empty() ) {
-                    try {
-                        if ( const int32_t intValue = std::stoi( strValue ); intValue >= minValue && intValue <= maxValue ) {
-                            output = intValue;
-                            return;
-                        }
-                    }
-                    catch ( std::out_of_range & ) {
-                        // Do nothing
-                    }
+            case DialogAction::Close: {
+                const auto handleError = [&action]() {
+                    showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+
+                    action = DialogAction::DoNothing;
+                };
+
+                if ( strValue.empty() ) {
+                    handleError();
+                    break;
                 }
-                showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
-                action = DialogAction::DoNothing;
+
+                try {
+                    const int32_t intValue = std::stoi( strValue );
+                    if ( intValue < minValue || intValue > maxValue ) {
+                        handleError();
+                        break;
+                    }
+
+                    output = intValue;
+                    return;
+                }
+                catch ( std::out_of_range & ) {
+                    handleError();
+                }
+
                 break;
+            }
             default:
                 // Did you add a new state? Add the logic above!
                 assert( 0 );
