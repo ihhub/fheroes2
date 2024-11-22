@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-10-18 00:20+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -50,6 +50,30 @@ msgstr "ИНФО"
 
 msgid "QUIT"
 msgstr "ИЗХОД"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
 
 msgid "CANCEL"
 msgstr "ОТКАЗ"
@@ -210,6 +234,10 @@ msgstr ""
 msgid "TOWN"
 msgstr ""
 
+#, fuzzy
+msgid "RESTRICT"
+msgstr "РЕСТАРТ"
+
 msgid ""
 "D\n"
 "I\n"
@@ -238,6 +266,15 @@ msgstr ""
 "Х\n"
 "О\n"
 "Д"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 msgid ""
 "C\n"
@@ -278,6 +315,15 @@ msgstr ""
 "Т\n"
 "Е\n"
 "Н"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Войн"
@@ -384,8 +430,9 @@ msgstr "Легион"
 msgid "All %{race} troops +1"
 msgstr "Всички %{race} войски +1"
 
-msgid "Multiple"
-msgstr "Многократни"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Неутрален"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Войски от %{count} подравнявания -%{penalty}"
@@ -393,6 +440,12 @@ msgstr "Войски от %{count} подравнявания -%{penalty}"
 #, fuzzy
 msgid "Some undead in army -1"
 msgstr "Някои немъртви в група -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "действие по подразбиране"
 
 msgid "View %{name}"
 msgstr "Виж %{name}"
@@ -418,8 +471,9 @@ msgstr "Не може да премести последния отряд"
 msgid "Move the %{name}"
 msgstr "Премести %{name}"
 
-msgid "Set Count"
-msgstr "Задаване на броя"
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Застреляй %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -442,6 +496,9 @@ msgstr ""
 "Артефактът Сфера на отрицанието е в сила за тази битка, дезактивирайки "
 "всички бойни заклинания."
 
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
+
 msgid "You have already cast a spell this round."
 msgstr "Вече си направил магия този рунд."
 
@@ -457,9 +514,10 @@ msgid ""
 msgstr ""
 "Няма открито пространство до твоя герой, където можеш да призовеш Елементал."
 
+#, fuzzy
 msgid ""
-"The Moat reduces by -%{count} the defense skill of any unit and slows to "
-"half movement rate."
+"The Moat reduces the defense skill of troops trapped in it by %{count} and "
+"restricts their movement range."
 msgstr ""
 "Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
 "наполовина скоростта на движение."
@@ -821,14 +879,17 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
 
-msgid "%{name} skip their turn."
-msgstr "%{name} пропускат своя ред."
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+#, fuzzy
+msgid "The %{name} skips their turn."
+msgid_plural "The %{name} skip their turn."
+msgstr[0] "%{name} пропускат своя ред."
+msgstr[1] "%{name} пропускат своя ред."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -858,8 +919,11 @@ msgstr[1] "%{count} %{unit} са съживени."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Преместен %{monster}: %{src}, %{dst}"
 
-msgid "The %{name} resist the spell!"
-msgstr "%{name} устоя на заклинанието!"
+#, fuzzy
+msgid "The %{name} resists the spell!"
+msgid_plural "The %{name} resist the spell!"
+msgstr[0] "%{name} устоя на заклинанието!"
+msgstr[1] "%{name} устоя на заклинанието!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} хвърля %{spell} върху %{troop}."
@@ -885,23 +949,41 @@ msgstr "%{spell} нанася %{damage} щети на едно живо съще
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} нанася %{damage} щети на всички живи същества."
 
-msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Нападението на %{attacker} заслепява %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s attack blinds the %{target}!"
+msgid_plural "The %{attacker}' attack blinds the %{target}!"
+msgstr[0] "Нападението на %{attacker} заслепява %{target}!"
+msgstr[1] "Нападението на %{attacker} заслепява %{target}!"
 
-msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Погледът на %{attacker} превръща %{target} в камък!"
+#, fuzzy
+msgid "The %{attacker}'s gaze turns the %{target} to stone!"
+msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr[0] "Погледът на %{attacker} превръща %{target} в камък!"
+msgstr[1] "Погледът на %{attacker} превръща %{target} в камък!"
 
-msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Проклятието %{attacker} пада върху %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s curse falls upon the %{target}!"
+msgid_plural "The %{attacker}' curse falls upon the %{target}!"
+msgstr[0] "Проклятието %{attacker} пада върху %{target}!"
+msgstr[1] "Проклятието %{attacker} пада върху %{target}!"
 
-msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{target} са парализирани от %{attacker}!"
+#, fuzzy
+msgid "The %{target} is paralyzed by the %{attacker}!"
+msgid_plural "The %{target} are paralyzed by the %{attacker}!"
+msgstr[0] "%{target} са парализирани от %{attacker}!"
+msgstr[1] "%{target} са парализирани от %{attacker}!"
 
-msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} разсейва всички добри заклинания на твоя %{target}!"
+#, fuzzy
+msgid "The %{attacker} dispels all good spells on your %{target}!"
+msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
+msgstr[0] "%{attacker} разсейва всички добри заклинания на твоя %{target}!"
+msgstr[1] "%{attacker} разсейва всички добри заклинания на твоя %{target}!"
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{attacker} направи %{spell} на %{target}!"
+#, fuzzy
+msgid "The %{attacker} casts %{spell} on the %{target}!"
+msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
+msgstr[0] "%{attacker} направи %{spell} на %{target}!"
+msgstr[1] "%{attacker} направи %{spell} на %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Лошият късмет се стоварва върху %{attacker}."
@@ -924,7 +1006,8 @@ msgstr "Създава се огледален образ."
 msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Error"
@@ -986,18 +1069,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
-
-msgid "Set Attack Skill"
-msgstr "Задайте умение за нападение"
-
-msgid "Set Defense Skill"
-msgstr "Задайте умение за защита"
-
-msgid "Set Power Skill"
-msgstr "Задайте умение за сила"
-
-msgid "Set Knowledge Skill"
-msgstr "Задайте умение за знание"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -1121,8 +1192,9 @@ msgstr ""
 "всички вражески градове и замъци, за да спечелиш и бъди сигурен, че няма да "
 "загубиш всички градове на джуджетата наведнъж, или врагът ще е победил."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Ще се изправиш срещу четирима съюзнически врагове в директна битка за "
@@ -1440,9 +1512,10 @@ msgstr ""
 "земи. Направи го преди първия ден на третия месец или няма да е от полза за "
 "твоето семейство."
 
+#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
-"month or it will be no help to your kingdom."
+"month or it will be of no help to your kingdom."
 msgstr ""
 "Спаси лудия си чичо Иван. Намери го преди първия ден на четвъртия месец или "
 "той няма да е от полза за твоето кралство."
@@ -1460,9 +1533,10 @@ msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
 "Върни си отново замъка Портите на Ивъри, който падна поради предателство."
 
+#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
-"so they will send you wood every 2 weeks. You must complete your mission "
+"so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 "Спечели благоволението на елфите. Те няма да позволят да се изсичат дървета, "
@@ -1584,23 +1658,27 @@ msgstr " винаги ще бяга от вашата армия."
 msgid " will be willing to join your army."
 msgstr " ще има желание да се присъедини към вашата армия."
 
-msgid "\"%{artifact}\" artifact will be carried over the scenario."
+#, fuzzy
+msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr "Артефактът \"%{artifact}\" ще бъде пренесен в сценария."
 
-msgid "The army will be carried over the scenario."
+#, fuzzy
+msgid "The army will be carried over in the campaign."
 msgstr "Армията ще бъде пренесена по сценария."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Кралството ще има +%{count} %{resource} всеки ден."
 
-msgid "\"%{spell}\" spell will be carried over the scenario."
+#, fuzzy
+msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr "Заклинанието \"%{spell}\" ще бъде пренесено в сценария."
 
-msgid "%{hero} can be hired in the scenario."
+#, fuzzy
+msgid "%{hero} can be hired during scenarios."
 msgstr "%{hero} може да бъде нает в сценария."
 
-msgid ""
-"%{hero} has been defeated and will not appear in the subsequent scenarios."
+#, fuzzy
+msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr "%{hero} е победен и няма да се появи в следващите сценарии."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1889,8 +1967,9 @@ msgstr "Напреднала мъдрост"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна мъдрост"
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{artifact}\" artifact at the start of the "
+"The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr "Главният герой ще има артефакт \"%{artifact}\" в началото на сценария."
 
@@ -1911,15 +1990,18 @@ msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Главният герой ще има %{count} %{monster} в началото на сценария."
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{spell}\" spell at the start of the scenario."
+"The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr "Главният герой ще има заклинание \"%{spell}\" в началото на сценария."
 
-msgid "The starting race of the scenario will be %{race}."
+#, fuzzy
+msgid "The starting alignment of the scenario will be %{race}."
 msgstr "Началното състезание на сценария ще бъде %{race}."
 
+#, fuzzy
 msgid ""
-"The main hero will have additional %{count} %{skill} at the start of the "
+"The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
 "Главният герой ще има допълнителни %{count} %{skill} в началото на сценария."
@@ -1946,6 +2028,12 @@ msgstr "Островът на вълшебника"
 msgid "Descendants"
 msgstr "Потомци"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Не може да се строи. Ти вече си построил тук днес."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "За това действие е необходимо първо да построиш замък."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} произвежда %{monster}."
 
@@ -1955,25 +2043,23 @@ msgstr "Изисква:"
 msgid "Exit this menu without doing anything."
 msgstr "Излез от това меню, без да правиш нищо."
 
-msgid "Cannot build. You have already built here today."
-msgstr "Не може да се строи. Ти вече си построил тук днес."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "За това действие е необходимо първо да построиш замък."
-
-msgid "Cannot build %{name} because the castle is too far away from an ocean."
+#, fuzzy
+msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Не може да се построи %{name}, защото замъкът е твърде далеч от океан."
 
-msgid "disable build."
-msgstr "спри изграждането."
+msgid "This building has been disabled."
+msgstr ""
 
-msgid "Cannot afford %{name}."
+#, fuzzy
+msgid "Cannot afford the %{name}."
 msgstr "Не мога да си позволя %{name}."
 
-msgid "%{name} is already built."
+#, fuzzy
+msgid "The %{name} is already built."
 msgstr "%{name} вече е изграден."
 
-msgid "Cannot build %{name}."
+#, fuzzy
+msgid "Cannot build the %{name}."
 msgstr "Не може да се изгради %{name}."
 
 msgid "Build %{name}."
@@ -2201,7 +2287,8 @@ msgstr "Не може да се наеме - вече имате герой в �
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Не може да се наеме - имаш твърде много герои."
 
-msgid "Cannot afford a Hero"
+#, fuzzy
+msgid "Cannot afford a Hero."
 msgstr "Не мога да си позволя герой"
 
 msgid "There is no room in the garrison for this army."
@@ -2408,6 +2495,60 @@ msgstr "Лаборатория"
 msgid "Shrine"
 msgstr "Светилище"
 
+#, fuzzy
+msgid "Special"
+msgstr "Нищо специално"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 5"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 5"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Хобити"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Хобити"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2460,6 +2601,17 @@ msgstr "Бурята добавя +2 към силата на заклинани
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "Купчината черепи увеличава производството на Скелети с %{count} на седмица."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
+"същества на седмица."
 
 msgid "Thieves' Guild"
 msgstr "Гилдия на крадците"
@@ -2683,6 +2835,14 @@ msgstr "Формация Разпростиране"
 msgid "Grouped Formation"
 msgstr "Групирана формация"
 
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Кликни, за да покажеш предишния град."
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
 
@@ -2707,11 +2867,11 @@ msgstr "Няма налични същества за покупка."
 msgid "Recruit Creatures"
 msgstr "Вербувай същества"
 
-msgid "Max"
-msgstr "Максимално"
-
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
+
+msgid "Max"
+msgstr "Максимално"
 
 msgid "Available"
 msgstr "Налични"
@@ -2894,7 +3054,8 @@ msgstr "Превключване на нивото на звуците на пр
 msgid "Change the type of music."
 msgstr "Промени вида на музиката."
 
-msgid "Toggle 3D effects of foreground sounds."
+#, fuzzy
+msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Превключване на 3D ефекти на звуци на преден план."
 
 msgid "Build a new ship:"
@@ -2909,17 +3070,14 @@ msgstr "Общо: "
 msgid "Need: "
 msgstr "Още: "
 
-msgid "Load Game"
-msgstr "Зареди Игра"
-
-msgid "No save files to load."
-msgstr "Няма запазени файлове за зареждане."
-
 msgid "New Game"
 msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
 msgstr "Започни игра за един или няколко играча."
+
+msgid "Load Game"
+msgstr "Зареди Игра"
 
 msgid "Load a previously saved game."
 msgstr "Зареди запазена игра."
@@ -3049,9 +3207,6 @@ msgstr "В прозорец"
 msgid "V-Sync"
 msgstr "V-синхронизация"
 
-msgid "on"
-msgstr "вкл"
-
 msgid "FPS"
 msgstr ""
 
@@ -3129,14 +3284,14 @@ msgstr "Превключи типа на интерфейса, който иск
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-"Включване/изключване на цветните курсори. Това е само естетически избор."
-
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
 
 msgid "Select Game Language:"
+msgstr "Език на играта:"
+
+#, fuzzy
+msgid "Select Language:"
 msgstr "Език на играта:"
 
 msgid "Click to choose the selected language."
@@ -3170,6 +3325,9 @@ msgstr ""
 "%{skill1}\n"
 "или\n"
 "%{skill2}"
+
+msgid "n/a"
+msgstr "без"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3206,9 +3364,6 @@ msgstr "Твоите ресурси"
 
 msgid "Available Trades"
 msgstr "Налични сделки"
-
-msgid "n/a"
-msgstr "без"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
@@ -3317,6 +3472,20 @@ msgstr "Избери максимален брой чудовища, които 
 msgid "Select only 1 monster to be recruited."
 msgstr "Избери само 1 чудовище, което да бъде наето."
 
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Избери резолюция на играта"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
 
@@ -3332,11 +3501,13 @@ msgstr "Щракни, за да отвориш диалоговия прозор
 msgid "Open Virtual Keyboard"
 msgstr "Отвори виртуална клавиатура"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many creatures do you wish to move?"
 msgstr "Колко единици ще преместите?"
 
-msgid "Fast separation into slots:"
-msgstr "Бързо разделяне на слотове:"
+#, fuzzy
+msgid "Select how many units to separate into:"
+msgstr "Избери град за пристанище."
 
 msgid "Map: "
 msgstr "Карта: "
@@ -3365,17 +3536,17 @@ msgstr ""
 "\n"
 "Местоположение: "
 
-msgid "Click to save the current game."
-msgstr "Кликни, за да запазиш текущата игра."
-
-msgid "Click to load a previously saved game."
-msgstr "Кликни, за да заредиш предварително запазена игра."
-
 msgid "Are you sure you want to delete file:"
 msgstr "Сигурен ли си, че искаш да изтриеш файла:"
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "Click to save the current game."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Click to load a previously saved game."
+msgstr "Кликни, за да заредиш предварително запазена игра."
 
 msgid "File to Save:"
 msgstr "Файл за запазване:"
@@ -3383,15 +3554,12 @@ msgstr "Файл за запазване:"
 msgid "File to Load:"
 msgstr "Файл за зареждане:"
 
-msgid "Accept the choice made."
-msgstr "Приемете направения избор."
-
-msgid "%{color} %{race} hero"
-msgstr "%{color} %{race} герой"
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Режим терен"
+
+msgid "Accept the choice made."
+msgstr "Приемете направения избор."
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -3407,6 +3575,28 @@ msgstr "Избери чудовище:"
 
 msgid "Select Hero:"
 msgstr "Избери герой:"
+
+msgid "race|Random"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} %{race} герой"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "Select Treasure:"
@@ -3424,9 +3614,6 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 "Неутра-\n"
 "лен"
-
-msgid "race|Random"
-msgstr "Случаен"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3446,17 +3633,6 @@ msgstr "%{color} %{race} герой"
 
 msgid "race|Neutral"
 msgstr "Неутрален"
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Кликни тук, за да избереш кой сценарий да играеш."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3503,6 +3679,42 @@ msgstr "Океански обекти"
 msgid "Select Adventure Object:"
 msgstr "Океански обекти"
 
+msgid "Players Icon"
+msgstr "Брой на играчи"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Показва колко общо играчи има в сценария. Всички позиции, които не са заети "
+"от хора, ще бъдат заети от компютърни играчи."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Показва дали картата\n"
+"е малък (36 x 36), среден\n"
+"(72 x 72), голям (108 x 108),\n"
+"или изключително голям размер (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Размер на карта"
+
+msgid "Map Type"
+msgstr "Тип на карта"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Показва дали картата е направена за версията на играта \"Наследените войни\" "
+"или за \"Цената на лоялността\"."
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
@@ -3515,6 +3727,13 @@ msgstr "Цената на лоялността"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Възкресяване"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Език"
 
 msgid "Lose all your heroes and towns."
 msgstr "Ако загубиш всичките си герои и градове."
@@ -3543,7 +3762,8 @@ msgstr "Победи конкретен герой."
 msgid "Find a specific artifact."
 msgstr "Намери конкретен артефакт."
 
-msgid "Your side defeats the opposing side."
+#, fuzzy
+msgid "Your side must defeat the opposing side."
 msgstr "Твоята страна побеждава противниковата страна."
 
 msgid "Accumulate a large amount of gold."
@@ -3558,7 +3778,8 @@ msgstr "Трудност на карта:"
 msgid "N"
 msgstr "С"
 
-msgid "No maps exist at that size"
+#, fuzzy
+msgid "No maps exist at that size."
 msgstr "Няма карти в този размер"
 
 msgid "Small Maps"
@@ -3590,40 +3811,6 @@ msgstr "Всички карти"
 
 msgid "View all maps, regardless of size."
 msgstr "Виж всички карти, независимо от размера."
-
-msgid "Players Icon"
-msgstr "Брой на играчи"
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by humans will be occupied by computer players."
-msgstr ""
-"Показва колко общо играчи има в сценария. Всички позиции, които не са заети "
-"от хора, ще бъдат заети от компютърни играчи."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Показва дали картата\n"
-"е малък (36 x 36), среден\n"
-"(72 x 72), голям (108 x 108),\n"
-"или изключително голям размер (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Размер на карта"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-"Показва дали картата е направена за версията на играта \"Наследените войни\" "
-"или за \"Цената на лоялността\"."
-
-msgid "Map Type"
-msgstr "Тип на карта"
 
 msgid "Selected Name"
 msgstr "Избрано име"
@@ -3678,9 +3865,10 @@ msgstr "Ръчно"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
 
+#, fuzzy
 msgid ""
-"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
-"movement at all."
+"Sets the speed that computer heroes move at. You can also elect not to view "
+"computer movement at all."
 msgstr ""
 "Задава скоростта, която И.И. героите се движат. Можеш също да избереш да не "
 "гледаш движението на И.И.."
@@ -3773,8 +3961,205 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 #, fuzzy
-msgid "Map filename"
-msgstr "Размер на карта"
+msgid "Random Castle Name"
+msgstr "Случаен замък"
+
+#, fuzzy
+msgid "Random Town Name"
+msgstr "Случаен град"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Замък в облаците"
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "действие по подразбиране"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "действие по подразбиране"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Замък"
+
+#, fuzzy
+msgid "Town Army"
+msgstr "Град"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Губиш героя: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
+msgid "Message Text:"
+msgstr "Лента за съобщения"
+
+msgid "Reward:"
+msgstr ""
+
+msgid "Player colors allowed to get event:"
+msgstr ""
+
+msgid "Computer colors allowed to get event:"
+msgstr ""
+
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
+msgstr ""
+
+msgid "Allow %{color} human player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a human."
+msgstr ""
+
+msgid "Allow %{color} computer player to get event"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, this event will trigger for the %{color} player "
+"if they are controlled by a computer."
+msgstr ""
+
+#, fuzzy
+msgid "Message:"
+msgstr "Лента за съобщения"
+
+#, fuzzy
+msgid "Click to save the Event properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Ресурс"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ден: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Кликни, за да запазиш текущата игра."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Събитие"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Допълнително програмиране"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Събитие"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Зареди съществуваща карта."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Зареди съществуваща карта."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Artifact"
+msgstr "Избери артефакт:"
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the event will trigger only once. If not "
+"checked, the event will trigger every time one of the specified players "
+"crosses the event tile."
+msgstr ""
+
+#, fuzzy
+msgid "%{objects} cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid ""
+"The Ultimate Artifact can only be placed on terrain where digging is "
+"possible."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "%{objects} must be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+msgid "Editor"
+msgstr "Редактор"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3790,11 +4175,9 @@ msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Създай нова карта от нулата, или като използвате генератора на произволни "
-"карти."
+#, fuzzy
+msgid "Create a new map from scratch."
+msgstr "нова карта от начало"
 
 msgid "New Map"
 msgstr "Нова Карта"
@@ -3814,70 +4197,65 @@ msgstr "Запазете текущата карта."
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
 
-#, fuzzy
-msgid "Objects cannot be placed outside the map."
-msgstr "Това заклинание не може да се направи на кораб."
-
-msgid "Monsters cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Избери плочка, която не съдържа никакви предмети."
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
-msgid "Treasures cannot be placed on water."
-msgstr "Това заклинание не може да се направи на кораб."
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Случаен върховен артефакт"
 
-msgid "Heroes cannot be placed on water."
-msgstr "Героите не могат да бъдат поставени на вода."
+msgid "%{object} has no properties to change."
+msgstr ""
+
+#, fuzzy
+msgid "This artifact"
+msgstr "с 1 артефакт."
+
+msgid "Roads"
+msgstr "Пътища"
+
+msgid "Streams"
+msgstr "Потоци"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 #, fuzzy
-msgid "Artifacts cannot be placed on water."
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
-#, fuzzy
-msgid "Mountains cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
 
 #, fuzzy
-msgid "Rocks cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
+msgid "The map is corrupted."
+msgstr "Запазеният файл е повреден."
+
+msgid "Unable to locate data directory to save the map."
+msgstr ""
 
 #, fuzzy
-msgid "Trees cannot be placed on water."
-msgstr "Това заклинание не може да се направи на кораб."
+msgid "Unable to create a directory to save the map."
+msgstr "Използва се за изтриване на обекти от картата."
 
 #, fuzzy
-msgid "Ocean object must be placed on water."
-msgstr "Това заклинание не може да се направи на кораб."
+msgid "Unable to locate a directory to save the map."
+msgstr "Използва се за изтриване на обекти от картата."
 
 #, fuzzy
-msgid "Landscape objects cannot be placed on water."
-msgstr "Героите не могат да бъдат поставени на вода."
+msgid "Are you sure you want to overwrite the existing map?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+msgid "Map saved to: "
+msgstr ""
 
 #, fuzzy
-msgid "Towns cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-msgid "Mines cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-msgid "Dwellings cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-msgid "Power-ups cannot be placed on water."
-msgstr "Чудовищата не могат да се поставят върху вода."
-
-#, fuzzy
-msgid "Adventure objects cannot be placed on water."
-msgstr "Героите не могат да бъдат поставени на вода."
+msgid "Failed to save the map."
+msgstr "Файл за запазване:"
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -3903,12 +4281,6 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
-
-msgid "Roads"
-msgstr "Пътища"
-
-msgid "Streams"
-msgstr "Потоци"
 
 #, fuzzy
 msgid "Erase"
@@ -3949,16 +4321,23 @@ msgstr "Сила"
 msgid "Treasures"
 msgstr "Съкровища"
 
-msgid "Towns"
-msgstr "Градове"
-
 msgid "Heroes"
 msgstr "Герой"
 
-msgid "editorErasure|Terrain"
+msgid "Towns"
+msgstr "Градове"
+
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Океански обекти"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -3967,16 +4346,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -4070,7 +4443,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Подробен режим"
 
-msgid "Used for special editing of monsters, heroes and towns."
+#, fuzzy
+msgid "Used for special editing of action objects."
 msgstr "Използва се за специално редактиране на чудовища, герои и градове."
 
 #, fuzzy
@@ -4135,11 +4509,6 @@ msgstr "Отмяна"
 msgid "Undo your last action."
 msgstr "Отмени последното си действие."
 
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-"Създай нова карта или от начало, или като използваш генератора на произволни "
-"карти."
-
 msgid "Edit map title, description, and other general information."
 msgstr "Редактирай заглавието на картата, описанието и друга обща информация."
 
@@ -4191,6 +4560,339 @@ msgstr "Няма налични карти!"
 msgid "Warning"
 msgstr "Внимание"
 
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "None."
+msgstr "Без"
+
+#, fuzzy
+msgid "One side defeats another."
+msgstr "Моля, избери друг герой."
+
+#, fuzzy
+msgid "Accumulate gold."
+msgstr "Натрупай %{count} злато."
+
+#, fuzzy
+msgid "Run out of time."
+msgstr "Излез от редактора на карти."
+
+#, fuzzy
+msgid "alliance|1st"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " съюз"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " съюз"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Състояние на загуба"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Условие за победа"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Условие за победа"
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " съюз"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " съюз"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Злато"
+
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Избери град за пристанище."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Кликни, за да запазиш текущата игра."
+
+#, fuzzy
+msgid "Map Difficulty"
+msgstr ""
+"Трудност\n"
+"на Карта"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Description"
+msgstr "Избрано описание"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Events"
+msgstr "Събитие"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Промяна на езика на играта."
+
+#, fuzzy
+msgid "Click to change your map name."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Map Name"
+msgstr "Размер на карта"
+
+#, fuzzy
+msgid "Click to change the description of the current map."
+msgstr "Описание на избраната в момента карта."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Описание на избраната в момента карта."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
+msgstr "Описание на избраната в момента карта."
+
+msgid "Indicates the player types in the scenario. Click to change."
+msgstr ""
+
+#, fuzzy
+msgid "Player Type"
+msgstr "Тип на карта"
+
+#, fuzzy
+msgid ""
+"Click to set map difficulty. More difficult maps might include more or "
+"stronger enemies, fewer resources, or other special conditions making things "
+"tougher for the human player."
+msgstr ""
+"Трудността на картата на текущо избраната карта. Трудността на картата се "
+"определя от дизайнера на сценария. По-трудните карти може да включват повече "
+"или по-силни врагове, по-малко ресурси или други специални условия, които "
+"правят нещата по-трудни за играча."
+
+#, fuzzy
+msgid "Animation"
+msgstr "Анексирам"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Личност:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Превключи изтриването на %{type} обекти."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Допълнително програмиране"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Редактор"
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Зареди съществуваща карта."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Зареди съществуваща карта."
+
+msgid ""
+"\n"
+"\n"
+"Size: "
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Description: "
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
+
+#, fuzzy
+msgid "Save Map:"
+msgstr "Запазване на картата"
+
+#, fuzzy
+msgid "Click to save the current map."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Riddle:"
+msgstr ""
+
+msgid "Answers:"
+msgstr ""
+
+msgid "Answer:"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "This answer exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the Sphinx properties."
+msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Add Answer"
+msgstr ""
+
+msgid "Add an additional answer for the question."
+msgstr ""
+
+msgid "Edit Answer"
+msgstr ""
+
+msgid "Edit an existing answer for the question."
+msgstr ""
+
+msgid "Delete Answer"
+msgstr ""
+
+msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -4218,22 +4920,25 @@ msgstr "Трудно"
 msgid "Campaign Difficulty"
 msgstr "Трудност на Кампанията"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty to experience the game's story with less challenge. "
+"The AI will be weaker than at Normal difficulty."
 msgstr ""
 "Избери тази трудност, ако предпочиташ историята на играта пред "
 "предизвикателството. И.И. е по-слаб в сравнение с нормалната трудност."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 "Избери тази трудност, за да се насладиш на кампанията според оригиналния "
 "дизайн."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want more challenge. The AI will be stronger "
+"than at Normal difficulty."
 msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
@@ -4273,7 +4978,8 @@ msgstr "Стартирай избрания сценарий."
 msgid "View Intro"
 msgstr "Виж въведение"
 
-msgid "View Intro videos for the current state of the campaign."
+#, fuzzy
+msgid "View the intro video for the current state of the campaign."
 msgstr "Виж въвеждащи видеоклипове за текущото състояние на кампанията."
 
 msgid ""
@@ -4331,10 +5037,8 @@ msgstr "Разработка и поддръжка"
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
 
-msgid "and many other contributors!"
-msgstr "и много други сътрудници!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "и много-много други поддръжници!"
 
 msgid "Support us at"
@@ -4469,6 +5173,9 @@ msgstr "Дизайнери на картите"
 msgid "Package Design"
 msgstr "Дизайн на опаковката"
 
+msgid "High Scores"
+msgstr "Класиране"
+
 msgid "Your Name"
 msgstr "Твоето име"
 
@@ -4517,7 +5224,8 @@ msgstr "нова игра"
 msgid "hotkey|load game"
 msgstr "зареди игра"
 
-msgid "hotkey|highscores"
+#, fuzzy
+msgid "hotkey|high scores"
 msgstr "резултати"
 
 msgid "hotkey|credits"
@@ -4556,7 +5264,8 @@ msgstr "избери много голяма карта"
 msgid "hotkey|select all map sizes"
 msgstr "избери всички карти"
 
-msgid "hotkey|hotseat game"
+#, fuzzy
+msgid "hotkey|hot seat game"
 msgstr "двойна игра"
 
 msgid "hotkey|battle only game"
@@ -4589,13 +5298,22 @@ msgstr "отмени последното действие"
 msgid "hotkey|redo last action"
 msgstr "повтори последното действие"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "ново меню на карта"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "превключи състояние"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
 
 msgid "hotkey|archibald campaign"
 msgstr "кампания на арчибалд"
 
-msgid "hotkey|the price of loyalty campaign"
+#, fuzzy
+msgid "hotkey|price of loyalty campaign"
 msgstr "цената на лоялността"
 
 msgid "hotkey|voyage home campaign"
@@ -4653,6 +5371,10 @@ msgid "hotkey|save game"
 msgstr "запази играта"
 
 msgid "hotkey|next hero"
+msgstr "следващия герой"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "следващия герой"
 
 msgid "hotkey|start hero movement"
@@ -4842,9 +5564,6 @@ msgstr "Екран на героя"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr "Редактор"
-
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4874,14 +5593,17 @@ msgstr "Запазената игра е локализирана на \""
 msgid "' language, but the current language of the game is '"
 msgstr "\" език, но текущият език на играта е \""
 
+msgid "No save files to load."
+msgstr "Няма запазени файлове за зареждане."
+
 msgid "Hot Seat"
 msgstr "Горещ стол"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Играй игра на \"Гореща седалка\", при която от 2-4 играчи играят на един и "
+"Играй игра на \"Гореща седалка\", при която от 2-6 играчи играят на един и "
 "същ компютър, превключвайки на \"Гореща седалка\", когато им дойде реда."
 
 msgid "A single player game playing out a single map."
@@ -4919,7 +5641,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
-"Before starting the game please select a game resolution."
+"Before starting the game, please select a game resolution."
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
 "Преди да започнеш играта, моля избери разделителна способност на играта."
@@ -4956,10 +5678,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Редакторът изисква разширителни файлове „Цената на лоялността“, за да работи."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Излез от Heroes of Might and Magic II и се върни към операционната система."
@@ -4970,11 +5688,12 @@ msgstr "За играта"
 msgid "View the credits screen."
 msgstr "Виж екран за играта."
 
-msgid "High Scores"
-msgstr "Класиране"
-
 msgid "View the high scores screen."
 msgstr "Виж екрана с високи резултати."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Зареди съществуваща карта."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Промени езика, резолюцията и настройките на играта."
@@ -4982,9 +5701,10 @@ msgstr "Промени езика, резолюцията и настройки�
 msgid "Game Settings"
 msgstr "Игрови настройки"
 
+#, fuzzy
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
+"The required video files for the campaign selection window are missing. "
+"Please make sure that all necessary files are present in the system."
 msgstr ""
 "Липсват необходимите видео файлове за прозореца за избор на кампания. Моля, "
 "уверете се, че всички необходими файлове присъстват в системата."
@@ -5030,11 +5750,34 @@ msgstr ""
 "Гостът чака хостът да настрои играта, след което автоматично се добавя. Може "
 "да има няколко госта за TCP/IP игри."
 
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"A multi-player game, with several human players competing against each other "
+"on a single map."
+msgstr ""
+"Игра за много играчи, с няколко човешки играчи, които се състезават един "
+"срещу друг на една карта."
+
 msgid "Battle Only"
 msgstr "Само битка"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Настрой и изиграй битка, без да зареждаш никаква карта."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Играй игра на \"Гореща седалка\", при която от 2-6 играчи играят на един и "
+"същ компютър, превключвайки на \"Гореща седалка\", когато им дойде реда."
 
 msgid "2 Players"
 msgstr "2 Играча"
@@ -5169,6 +5912,9 @@ msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Победи всички вражески герои и превземи всички вражески градове и замъци."
 
+msgid "Your side defeats the opposing side."
+msgstr "Твоята страна побеждава противниковата страна."
+
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Времето свърши. (Не успя да победиш в определеното време.)"
 
@@ -5257,9 +6003,10 @@ msgstr "Сценарий"
 msgid "Game Difficulty"
 msgstr "Трудност на играта"
 
+#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
-"difficulty levels start you of with fewer resources, and at the higher "
+"difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
 "Това ти позволява да промениш началната трудност, при която ще играеш. По-"
@@ -5432,7 +6179,8 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr "Резюме за Кралството"
 
-msgid "View a Summary of your Kingdom."
+#, fuzzy
+msgid "View a summary of your Kingdom."
 msgstr "Виж резюме на твоето кралство."
 
 msgid "Cast an adventure spell."
@@ -5441,7 +6189,8 @@ msgstr "Направи приключенско заклинание."
 msgid "End Turn"
 msgstr "Краен завой"
 
-msgid "End your turn and left the computer take its turn."
+#, fuzzy
+msgid "End your turn and let the computer take its turn."
 msgstr "Завърши хода си и остави компютъра да направи своя."
 
 msgid "Adventure Options"
@@ -5525,9 +6274,6 @@ msgstr ""
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"
 
-msgid "Day: %{day}"
-msgstr "Ден: %{day}"
-
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
@@ -5575,10 +6321,12 @@ msgid "Handicap"
 msgstr "Недъг"
 
 #
+#, fuzzy
 msgid ""
-"This lets you change the handicap of a particular player. Only humans may be "
-"handicapped. Handicapped players start with fewer resources and earn 15 or "
-"30% fewer resources per turn for mild and severe handicaps, respectively."
+"This lets you change the handicap of a particular player. Only human players "
+"may have a handicap. Handicapped players start with fewer resources and earn "
+"15 or 30% fewer resources per turn for mild and severe handicaps, "
+"respectively."
 msgstr ""
 "Това ти позволява да промениш недъга на определен играч. Само хората могат "
 "да бъдат инвалиди. Играчите с увреждания започват с по-малко ресурси и "
@@ -5591,7 +6339,9 @@ msgstr "%{color} играч"
 msgid "No Handicap"
 msgstr "Без недъг"
 
-msgid "No special restrictions on start resources and earning them per turn."
+#, fuzzy
+msgid ""
+"No special restrictions on starting resources and resource income per turn."
 msgstr ""
 "Няма специални ограничения за стартовите ресурси и печеленето им на ход."
 
@@ -5599,8 +6349,9 @@ msgid "Mild Handicap"
 msgstr "Лек недъг"
 
 #
+#, fuzzy
 msgid ""
-"Mild handicapped players start with fewer resources and earn 15% fewer "
+"Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
 "Играчите с леки недъзи започват с по-малко ресурси и печелят 15% по-малко "
@@ -5610,15 +6361,34 @@ msgid "Severe Handicap"
 msgstr "Тежък недъг"
 
 #
+#, fuzzy
 msgid ""
-"Severe handicapped players start with fewer resources and earn 30% fewer "
+"Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
 "Играчите с тежки увреждания започват с по-малко ресурси и печелят с 30% по-"
 "малко ресурси през своя ход."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Задайте умение за нападение"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Виж информация за %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Защита"
 
 msgid "Keyboard|123"
 msgstr ""
@@ -5706,10 +6476,12 @@ msgstr "Виетнамски"
 msgid ", FPS: "
 msgstr ""
 
-msgid "%{object} robber"
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
 msgstr "%{object} разбойник"
 
-msgid "%{object} raided"
+#, fuzzy
+msgid "pyramid|%{object} raided"
 msgstr "%{object} нападнат"
 
 msgid "Ector"
@@ -5867,6 +6639,10 @@ msgstr " ти дава максимален морал"
 
 msgid " gives you maximum luck"
 msgstr " ти дава максимален късмет"
+
+#, fuzzy
+msgid "You cannot have multiple spell books."
+msgstr "Не може да се премести книгата с магий"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Не можеш да вземеш този артефакт, вече нямаш място!"
@@ -6143,11 +6919,12 @@ msgstr ""
 "Русалките мълчаливо те примамват да се върнеш по-късно и отново да бъдеш "
 "благословен."
 
+#, fuzzy
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
 "moment.\n"
-"The mermaids charms bless you with increased luck for your next combat."
+"The mermaids' charms bless you with increased luck for your next combat."
 msgstr ""
 "Магическата, успокояваща красота на Русалките достига до теб и твоя екип.\n"
 "За миг забравяш тревогите си и се наслаждаваш на красотата на момента.\n"
@@ -6886,9 +7663,10 @@ msgstr ""
 "да ти продаде карти на морето, които е направил в младостта си за 1000 "
 "злато. Искаш ли да закупиш картите?"
 
+#, fuzzy
 msgid ""
-"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
-"to give my maps away for free!\""
+"The captain sighs. \"You don't have enough money, eh? You can't expect me to "
+"give my maps away for free!\""
 msgstr ""
 "Капитанът въздъхва. \"Нямаш достатъчно пари, а? Не можеш да очакваш от мен "
 "да дам картите си безплатно!\""
@@ -7170,18 +7948,23 @@ msgstr ""
 "възнаграден. Отговори неправилно и ще бъдеш изяден. Приемаш ли "
 "предизвикателството?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Сфинксът ти задава следната гатанка:\n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Твоят отговор?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -7349,6 +8132,58 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"
 
 #, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Ниво %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name} е %{race} (Ниво %{level})"
+
+#, fuzzy
+msgid "Hero race:"
+msgstr "Екран на героя"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Сигурен ли си, че искаш да отпратиш този герой?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Опит"
+
+msgid "View Experience Info"
+msgstr "Виж информация за опит"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Магия"
+
+msgid "View Spell Points Info"
+msgstr "Виж информация за магическите точките"
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Губиш героя: %{name}."
+
+#, fuzzy
+msgid "Click to change race."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7363,21 +8198,6 @@ msgid ""
 msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
 "страна на бойното поле."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Сигурен ли си, че искаш да отпратиш този герой?"
-
-msgid "View Experience Info"
-msgstr "Виж информация за опит"
-
-msgid "View Spell Points Info"
-msgstr "Виж информация за магическите точките"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Задай армейска бойна формация \"Разпръскване\""
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Задай армейска бойна формация \"Групирана\""
 
 msgid "Exit Hero Screen"
 msgstr "Изход от екрана на героя"
@@ -7396,6 +8216,34 @@ msgstr "Покажи предишния герой"
 
 msgid "Show next hero"
 msgstr "Покажи следващия герой"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Задай армейска бойна формация \"Разпръскване\""
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Задай армейска бойна формация \"Групирана\""
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 msgid "Blood Morale"
 msgstr "Кръвен морал"
@@ -7495,7 +8343,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
@@ -7692,10 +8540,11 @@ msgstr "%{skill} елиминира наказанието за движение
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent, and eliminates the %{penalty} percent penalty when "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{skill} увеличава щетите, нанесени от атакуващи в обхвата същества с "
-"%{count} процента."
+"%{name} елиминира %{count} процента наказание за твойте войски, стрелящи "
+"покрай препятствия (напр. стени на замък)."
 
 #, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -7905,8 +8754,9 @@ msgstr "Червена"
 msgid "Experience"
 msgstr "Опит"
 
+#, fuzzy
 msgid ""
-"Experience allows your heroes to go up levels, increasing their primary and "
+"Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
 "Опитът позволява на твойте герои да се изкачват нагоре по нивата, "
@@ -7959,7 +8809,7 @@ msgstr "Ирландски"
 
 #, fuzzy
 msgid ""
-"Bad luck sometimes falls on the hero's units in combat, causing their "
+"Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
 "Лош късмет понякога сполетява твойте армии в битка, което кара техните атаки "
@@ -7975,7 +8825,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Good luck sometimes lets the hero's units get lucky attacks (double "
+"Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Добрият късмет понякога позволява на твойте армии да получават късметлийски "
@@ -8003,7 +8853,7 @@ msgid "morale|Blood!"
 msgstr "Кървав!"
 
 #, fuzzy
-msgid "Bad morale may cause the hero's units to freeze in combat."
+msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr "Лошият морал може да накара армиите ти да замръзнат в битка."
 
 #, fuzzy
@@ -8015,7 +8865,7 @@ msgstr ""
 "с допълнителни атаки или да замръзнат в битка."
 
 #, fuzzy
-msgid "Good morale may give the hero's units extra attacks in combat."
+msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr "Добрият морал може да даде на твойте армии допълнителни атаки в битка."
 
 msgid "Knight"
@@ -8104,6 +8954,12 @@ msgstr "Пламтяща"
 
 msgid "speed|Instant"
 msgstr "Мигновена"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Катерицата"
@@ -8372,9 +9228,6 @@ msgid_plural "Windmills"
 msgstr[0] "Вятърна мелница"
 msgstr[1] "Вятърни мелници"
 
-msgid "Artifact"
-msgstr "Артефакт"
-
 msgid "Mermaid"
 msgstr "Русалка"
 
@@ -8609,11 +9462,36 @@ msgstr "Олтар за призоваване на земя"
 msgid "Water Summoning Altar"
 msgstr "Олтар за призоваване на вода"
 
-msgid "Unknown Monster"
-msgstr "Неизвестно чудовище"
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Блато"
+
+msgid "Frozen Lake"
+msgstr ""
+
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Неизвестни чудовища"
+
+msgid "Unknown Monster"
+msgstr "Неизвестно чудовище"
 
 msgid "Peasant"
 msgstr "Селянин"
@@ -10339,14 +11217,22 @@ msgstr "Магическа книга"
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} ти позволява да правиш магии."
 
-msgid "Dummy 1"
-msgstr "Манекен 1"
+msgid ""
+"A young man approaches you: \"My Lord, allow me to show you my latest "
+"invention for spreading knowledge!\" You follow the man into his workshop "
+"and immediately observe a large apparatus with levers and cranks. \"This "
+"here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
+"say a word, he hands you a Magic Book."
+msgstr ""
 
-msgid "The reserved artifact."
-msgstr "Запазеният артефакт."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Манекен 2"
+
+msgid "The reserved artifact."
+msgstr "Запазеният артефакт."
 
 msgid "Dummy 3"
 msgstr "Манекен 3"
@@ -10570,6 +11456,15 @@ msgstr ""
 "ядосано и отговаря: \"Мислиш, че това е смешно? Добре. Може да го носиш. И "
 "без това предпочитам да летя.\""
 
+msgid "Masthead"
+msgstr "Мачтов връх"
+
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10580,15 +11475,6 @@ msgstr ""
 "младостта си, за да събере екипажа си по време на проблеми. След това той ти "
 "дава избледняла карта, която показва къде я е скрил. След дълго проучване я "
 "намирате скрита под близкия док."
-
-msgid "Masthead"
-msgstr "Мачтов връх"
-
-#, fuzzy
-msgid ""
-"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
-"sea combat."
-msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
 
 msgid "Sphere of Negation"
 msgstr "Сфера на отрицанието"
@@ -10837,15 +11723,15 @@ msgstr "Магически увеличава защитните умения н
 msgid "Stoneskin"
 msgstr "Каменна кожа"
 
+msgid "Steelskin"
+msgstr "Стоманена кожа"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Увеличава защитните умения на набелязаните същества. Това е подобрена версия "
 "на Каменна кожа."
-
-msgid "Steelskin"
-msgstr "Стоманена кожа"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Кара избраните същества да нанасят минимални щети."
@@ -10877,7 +11763,8 @@ msgstr "Свещен вик"
 msgid "Anti-Magic"
 msgstr "Антимагия"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Предотвратява вредната магия срещу избраните същества."
 
 msgid "Dispel Magic"
@@ -11231,7 +12118,8 @@ msgstr "Нямаш магическа книга, така че не можеш 
 msgid "No spell to cast."
 msgstr "Няма магия за правене."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Твоят герой има %{point} оставащи точки магия."
 
 msgid "View Adventure Spells"
@@ -11344,67 +12232,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Terrain"
-#~ msgstr "Терен"
-
-#~ msgid "Castles"
-#~ msgstr "Замъци"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Океански обекти"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Океански обекти"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Тревни обекти"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Снежни обекти"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Блатни обекти"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Лава обекти"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Пустинни обекти"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Земни обекти"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Плажни обекти"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Използва се за поставяне на обекти, които са най-подходящи за използване "
-#~ "на %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Използва се за поставяне\n"
-#~ "на град или замък."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Използва се за поставяне на артефакт."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr ""
-#~ "Използва се за поставяне\n"
-#~ "на ресурс или съкровище."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "срещу"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"
+#~ msgid "Dummy 1"
+#~ msgstr "Манекен 1"

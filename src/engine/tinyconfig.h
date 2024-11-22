@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,16 +24,17 @@
 #ifndef TINYCONFIG_H
 #define TINYCONFIG_H
 
+#include <functional>
 #include <map>
 #include <string>
 
 #include "math_base.h"
 #include "screen.h"
 
-class TinyConfig : private std::multimap<std::string, std::string>
+class TinyConfig : private std::map<std::string, std::string, std::less<>>
 {
 public:
-    TinyConfig( char sep = '=', char com = ';' );
+    TinyConfig( const char sep, const char com );
 
     bool Load( const std::string & cfile );
 
@@ -49,8 +50,8 @@ public:
     fheroes2::ResolutionInfo ResolutionParams( const std::string & key, const fheroes2::ResolutionInfo & fallbackValue ) const;
 
 private:
-    char separator;
-    char comment;
+    const char separator;
+    const char comment;
 };
 
 #endif

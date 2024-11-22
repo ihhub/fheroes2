@@ -23,19 +23,16 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
-
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
+#include "math_base.h"
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -45,7 +42,13 @@ class Monster;
 class Troop;
 
 struct ArtifactSetData;
-struct CapturedObject;
+
+namespace fheroes2
+{
+    class DialogElement;
+    class TextBase;
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace Skill
 {
@@ -54,7 +57,7 @@ namespace Skill
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Dialog
@@ -87,7 +90,7 @@ namespace Dialog
     std::string SelectFileSave();
 
     // Shows the quick info window for the given tile
-    void QuickInfo( const Maps::Tiles & tile );
+    void QuickInfo( const Maps::Tile & tile );
     // Shows the quick info window for the given castle
     void QuickInfo( const Castle & castle );
     // Shows the quick info window for the given hero or captain. If the 'showFullInfo' parameter is specified,
@@ -112,14 +115,16 @@ namespace Dialog
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
-    bool SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step = 1 );
-    bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
+    bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
+                      const fheroes2::DialogElement * uiElement = nullptr );
+    bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
+                      const std::optional<fheroes2::SupportedLanguage> & textLanguage );
     Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
@@ -155,15 +160,19 @@ namespace Dialog
     class FrameBox : public NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false );
+        FrameBox( int height, bool buttons = false )
+            : Dialog::NonFixedFrameBox( height, -1, buttons )
+        {
+            // Do nothing.
+        }
+
         ~FrameBox() override = default;
     };
 
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {

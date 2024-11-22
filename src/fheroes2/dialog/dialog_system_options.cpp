@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -37,7 +38,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "gamedefs.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -47,6 +48,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
@@ -206,12 +208,13 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-        fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                                dialog.height() + fheroes2::borderWidthPx );
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -241,15 +244,16 @@ namespace
 
         drawOptions();
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
-            emptyDialogRestorer.restore();
-            drawOptions();
-            display.render( emptyDialogRestorer.rect() );
-        };
-
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         okayButton.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+            emptyDialogRestorer.restore();
+            drawOptions();
+            okayButton.draw();
+            display.render( emptyDialogRestorer.rect() );
+        };
 
         display.render();
 
@@ -257,7 +261,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
                 okayButton.drawOnPress();
             }
             else {
@@ -285,7 +289,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowHeroSpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowHeroSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() + 1 );
                 Game::UpdateGameSpeed();
@@ -293,7 +297,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowHeroSpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowHeroSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() - 1 );
                 Game::UpdateGameSpeed();
@@ -310,7 +314,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowEnemySpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowEnemySpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetAIMoveSpeed( conf.AIMoveSpeed() + 1 );
                 Game::UpdateGameSpeed();
@@ -318,7 +322,7 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowEnemySpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowEnemySpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetAIMoveSpeed( conf.AIMoveSpeed() - 1 );
                 Game::UpdateGameSpeed();
@@ -360,36 +364,36 @@ namespace
                 continue;
             }
 
-            if ( le.MousePressRight( windowLanguageRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowLanguageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Language" ), _( "Change the language of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowGraphicsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowGraphicsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Graphics" ), _( "Change the graphics settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowAudioRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowAudioRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowHeroSpeedRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowHeroSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hero Speed" ), _( "Change the speed at which your heroes move on the main screen." ), 0 );
             }
-            else if ( le.MousePressRight( windowEnemySpeedRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowEnemySpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Enemy Speed" ),
-                                                   _( "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. movement at all." ), 0 );
+                                                   _( "Sets the speed that computer heroes move at. You can also elect not to view computer movement at all." ), 0 );
             }
-            else if ( le.MousePressRight( windowHotKeyRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowHotKeyRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowInterfaceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowInterfaceRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Interface Settings" ), _( "Change the interface settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowTextSupportModeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowTextSupportModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
                                                    0 );
             }
-            else if ( le.MousePressRight( windowBattlesRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowBattlesRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Battles" ), _( "Toggle instant battle mode." ), 0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -397,10 +401,7 @@ namespace
             if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
                 isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
-                emptyDialogRestorer.restore();
-                drawOptions();
-
-                display.render( emptyDialogRestorer.rect() );
+                refreshWindow();
             }
         }
 
@@ -437,7 +438,7 @@ namespace fheroes2
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );
@@ -454,12 +455,12 @@ namespace fheroes2
                 break;
             }
             case DialogAction::Graphics:
-                fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
 
                 action = DialogAction::Configuration;
                 break;
@@ -469,7 +470,7 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceSettings:
-                fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;

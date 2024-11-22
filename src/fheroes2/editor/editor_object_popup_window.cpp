@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,9 +40,9 @@
 
 namespace
 {
-    std::string getObjectInfoText( const Maps::Tiles & tile )
+    std::string getObjectInfoText( const Maps::Tile & tile )
     {
-        const MP2::MapObjectType type = tile.GetObject();
+        const MP2::MapObjectType type = tile.getMainObjectType();
         switch ( type ) {
         case MP2::OBJ_NONE:
             if ( tile.isRoad() ) {
@@ -66,19 +66,25 @@ namespace
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tiles & tile )
+    void showPopupWindow( const Maps::Tile & tile )
     {
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
         std::string infoString;
-        const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+        const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
         if ( mainTileIndex != -1 ) {
-            infoString = getObjectInfoText( world.GetTiles( mainTileIndex ) );
+            infoString = getObjectInfoText( world.getTile( mainTileIndex ) );
         }
         else {
             infoString = getObjectInfoText( tile );
         }
+
+        infoString += "\n[";
+        infoString += std::to_string( tile.GetIndex() % world.w() );
+        infoString += "; ";
+        infoString += std::to_string( tile.GetIndex() / world.w() );
+        infoString += ']';
 
         Interface::displayStandardPopupWindow( std::move( infoString ), Interface::EditorInterface::Get().getGameArea().GetROI() );
     }

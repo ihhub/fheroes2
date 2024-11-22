@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,11 +28,9 @@
 #include <string>
 #include <vector>
 
-#include "castle.h"
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "monster.h"
 #include "resource.h"
 
 namespace fheroes2
@@ -40,16 +38,20 @@ namespace fheroes2
     class ButtonBase;
 }
 
+class Castle;
 class StatusBar;
+
+enum BuildingType : uint32_t;
+enum class BuildingStatus : int32_t;
 
 class BuildingInfo
 {
 public:
-    BuildingInfo( const Castle & c, const building_t b );
+    BuildingInfo( const Castle & c, const BuildingType b );
 
     uint32_t getBuilding() const
     {
-        return building;
+        return _buildingType;
     }
 
     void SetPos( int32_t, int32_t );
@@ -61,7 +63,8 @@ public:
 
     const char * GetName() const;
     void SetStatusMessage( StatusBar & ) const;
-    bool IsDwelling() const;
+    static bool isDwelling( const uint32_t building );
+    static std::string getBuildingDescription( const int race, const uint32_t buildingId );
     void Redraw() const;
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
@@ -73,32 +76,33 @@ private:
     std::string GetConditionDescription() const;
 
     const Castle & castle;
-    uint32_t building;
+    uint32_t _buildingType;
     std::string description;
     fheroes2::Rect area;
-    int bcond;
+    BuildingStatus _status;
 };
 
 struct DwellingItem
 {
-    DwellingItem( const Castle &, uint32_t dw );
+    explicit DwellingItem( const uint32_t dw )
+        : dwType( dw )
+    {}
 
-    uint32_t type;
-    Monster mons;
+    const uint32_t dwType;
 };
 
-class DwellingsBar : public Interface::ItemsBar<DwellingItem>
+class DwellingsBar final : public Interface::ItemsBar<DwellingItem>
 {
 public:
-    DwellingsBar( Castle &, const fheroes2::Size & );
+    DwellingsBar( Castle & cstl, const fheroes2::Size & sz );
 
-    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
-    void RedrawItem( DwellingItem &, const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override;
+    void RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override;
 
-    bool ActionBarLeftMouseSingleClick( DwellingItem & dwelling ) override;
-    bool ActionBarRightMouseHold( DwellingItem & dwelling ) override;
+    bool ActionBarLeftMouseSingleClick( DwellingItem & dwl ) override;
+    bool ActionBarRightMouseHold( DwellingItem & dwl ) override;
 
-protected:
+private:
     Castle & castle;
     fheroes2::Image backsf;
     std::vector<DwellingItem> content;

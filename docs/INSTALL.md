@@ -25,6 +25,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**Gentoo**](#gentoo-package)
   * [**Homebrew**](#homebrew-linux)
   * [**AUR package**](#aur-package)
+  * [**Debian and Ubuntu**](#debian-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
 * [**Android**](#android)
 * [**PlayStation Vita**](#playstation-vita)
@@ -267,6 +268,28 @@ git clone https://aur.archlinux.org/fheroes2.git
 cd fheroes2
 makepkg -si
 ```
+
+<a name="debian-package"></a>
+### Debian and Ubuntu
+
+fheroes2 is available from `contrib` repositories for Debian (since 13) and Ubuntu (since 24.04). You can install it by running:
+
+```sh
+apt install fheroes2
+```
+These distributions may not provide the latest version of the game due to their release cycle.
+
+#### Game resources
+
+To play the game you need the original game resources. You can install them to per-user paths (`man fheroes2` for more info, or you
+can install them to the system-wide path (`/usr/share/games/fheroes2`) with `game-data-packager` program (since v70).
+To make the resource package:
+
+```sh
+game-data-packager heroes2 <path_to_installed_original_game>
+apt install ./homm2-data_<version>_all.deb
+```
+You can get more info about resource packaging by running `game-data-packager heroes2 --help`
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive

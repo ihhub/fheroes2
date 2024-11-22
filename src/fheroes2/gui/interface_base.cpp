@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,18 @@
 
 namespace Interface
 {
+    void BaseInterface::renderWithFadeInOrPlanRender( const uint32_t redrawMask )
+    {
+        if ( Game::validateDisplayFadeIn() ) {
+            redraw( redrawMask );
+
+            fheroes2::fadeInDisplay();
+        }
+        else {
+            setRedraw( redrawMask );
+        }
+    }
+
     void Interface::BaseInterface::validateFadeInAndRender()
     {
         if ( Game::validateDisplayFadeIn() ) {
@@ -36,5 +48,4 @@ namespace Interface
             fheroes2::Display::instance().render();
         }
     }
-
 }

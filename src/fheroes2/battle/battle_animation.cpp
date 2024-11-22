@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_animation.h"
+
 #include <algorithm>
-#include <memory>
 #include <ostream>
 
-#include "battle_animation.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_anim.h"
@@ -120,10 +120,6 @@ bool AnimationSequence::isValid() const
 {
     return !_seq.empty();
 }
-
-AnimationReference::AnimationReference()
-    : _monsterID( Monster::UNKNOWN )
-{}
 
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )

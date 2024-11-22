@@ -24,11 +24,13 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
 #include <utility>
 
 #include "agg_image.h"
+#include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
@@ -44,6 +46,8 @@
 #include "screen.h"
 #include "spell_info.h"
 #include "ui_button.h"
+#include "ui_constants.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 
 class HeroBase;
@@ -83,20 +87,22 @@ namespace
 
 namespace fheroes2
 {
-    int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
         outputInTextSupportMode( header, body, buttons );
 
         const bool isProperDialog = ( buttons != 0 );
 
-        // setup cursor
-        const CursorRestorer cursorRestorer( isProperDialog, ::Cursor::POINTER );
+        const int cusorTheme = isProperDialog ? ::Cursor::POINTER : ::Cursor::Get().Themes();
 
-        const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
+        // setup cursor
+        const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
+
+        const int32_t headerHeight = header.empty() ? 0 : header.height( fheroes2::boxAreaWidthPx ) + textOffsetY;
 
         int overallTextHeight = headerHeight;
 
-        const int32_t bodyTextHeight = body.height( BOXAREA_WIDTH );
+        const int32_t bodyTextHeight = body.height( fheroes2::boxAreaWidthPx );
         if ( bodyTextHeight > 0 ) {
             overallTextHeight += bodyTextHeight + textOffsetY;
         }
@@ -122,7 +128,7 @@ namespace fheroes2
 
                 ++elementId;
             }
-            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= BOXAREA_WIDTH ) {
+            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= fheroes2::boxAreaWidthPx ) {
                 rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
                 rowHeight.back() = std::max( rowHeight.back(), element->area().height );
 
@@ -156,12 +162,12 @@ namespace fheroes2
             elementHeight += rowHeight.back();
         }
 
-        Dialog::FrameBox box( overallTextHeight + elementHeight, isProperDialog );
+        const Dialog::FrameBox box( overallTextHeight + elementHeight, isProperDialog );
         const Rect & pos = box.GetArea();
 
         Display & display = Display::instance();
-        header.draw( pos.x, pos.y + textOffsetY, BOXAREA_WIDTH, display );
-        body.draw( pos.x, pos.y + textOffsetY + headerHeight, BOXAREA_WIDTH, display );
+        header.draw( pos.x, pos.y + textOffsetY, fheroes2::boxAreaWidthPx, display );
+        body.draw( pos.x, pos.y + textOffsetY + headerHeight, fheroes2::boxAreaWidthPx, display );
 
         elementHeight = overallTextHeight + textOffsetY;
         if ( bodyTextHeight > 0 ) {
@@ -188,7 +194,7 @@ namespace fheroes2
             const int32_t currentRowElementCount = rowElementCount[currentRowId];
             const int32_t currentRowMaxElementWidth = rowMaxElementWidth[currentRowId];
 
-            const int32_t emptyWidth = BOXAREA_WIDTH - currentRowElementCount * currentRowMaxElementWidth;
+            const int32_t emptyWidth = fheroes2::boxAreaWidthPx - currentRowElementCount * currentRowMaxElementWidth;
             const int32_t offsetBetweenElements = emptyWidth / ( currentRowElementCount + 1 );
 
             const int32_t widthOffset = offsetBetweenElements + currentRowElementIndex * ( currentRowMaxElementWidth + offsetBetweenElements );
@@ -211,16 +217,15 @@ namespace fheroes2
         bool delayInEventHandling = true;
 
         while ( result == Dialog::ZERO && le.HandleEvents( delayInEventHandling ) ) {
-            if ( !buttons && !le.MousePressRight() ) {
-                break;
-            }
-
             if ( isProperDialog ) {
                 elementId = 0;
                 for ( const DialogElement * element : elements ) {
                     element->processEvents( elementOffsets[elementId] );
                     ++elementId;
                 }
+            }
+            else if ( !le.isMouseRightButtonPressed() ) {
+                break;
             }
 
             result = group.processEvents();
@@ -235,30 +240,30 @@ namespace fheroes2
             }
 
             if ( !delayInEventHandling ) {
-                display.render();
+                display.render( pos );
             }
         }
 
         return result;
     }
 
-    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
-        fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
-        fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
-        return fheroes2::showMessage( header, body, buttons );
+        const Text header( std::move( headerText ), FontType::normalYellow() );
+        const Text body( std::move( messageBody ), FontType::normalWhite() );
+        return showMessage( header, body, buttons, elements );
     }
 
     TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
         : _text( text )
     {
         // Text always occupies the whole width of the dialog.
-        _area = { BOXAREA_WIDTH, _text->height( BOXAREA_WIDTH ) };
+        _area = { fheroes2::boxAreaWidthPx, _text->height( fheroes2::boxAreaWidthPx ) };
     }
 
     void TextDialogElement::draw( Image & output, const Point & offset ) const
     {
-        _text->draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+        _text->draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
     }
 
     void TextDialogElement::processEvents( const Point & /* offset */ ) const
@@ -301,7 +306,7 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        assert( artifact.isValid() );
+        assert( artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || artifact.isValid() );
 
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };
@@ -318,7 +323,7 @@ namespace fheroes2
 
     void ArtifactDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -326,10 +331,7 @@ namespace fheroes2
 
     void ArtifactDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _artifact.GetName(), FontType::normalYellow() );
-        const Text description( _artifact.GetDescription(), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _artifact.GetName(), _artifact.GetDescription(), buttons, { this } );
     }
 
     ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string text )
@@ -357,7 +359,7 @@ namespace fheroes2
 
     void ResourceDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -365,10 +367,7 @@ namespace fheroes2
 
     void ResourceDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( Resource::String( _resourceType ), FontType::normalYellow() );
-        const Text description( Resource::getDescription(), FontType::normalWhite() );
-
-        showMessage( header, description, buttons );
+        showStandardTextMessage( Resource::String( _resourceType ), Resource::getDescription(), buttons );
     }
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds )
@@ -404,9 +403,9 @@ namespace fheroes2
     {
         const std::vector<ResourceDialogElement> elements = getResourceDialogElements( funds );
 
-        std::vector<const fheroes2::DialogElement *> uiElements;
+        std::vector<const DialogElement *> uiElements;
         uiElements.reserve( elements.size() );
-        for ( const fheroes2::ResourceDialogElement & element : elements ) {
+        for ( const ResourceDialogElement & element : elements ) {
             uiElements.emplace_back( &element );
         }
 
@@ -451,7 +450,7 @@ namespace fheroes2
 
     void SpellDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -459,28 +458,25 @@ namespace fheroes2
 
     void SpellDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _spell.GetName(), FontType::normalYellow() );
-        const Text description( getSpellDescription( _spell, _hero ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _spell.GetName(), getSpellDescription( _spell, _hero ), buttons, { this } );
     }
 
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
         : _goodLuck( goodLuck )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void LuckDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
     void LuckDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -490,28 +486,25 @@ namespace fheroes2
     {
         const int luckType = _goodLuck ? Luck::GOOD : Luck::BAD;
 
-        const Text header( LuckString( luckType ), FontType::normalYellow() );
-        const Text description( Luck::Description( luckType ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( LuckString( luckType ), Luck::Description( luckType ), buttons, { this } );
     }
 
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
         : _goodMorale( goodMorale )
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void MoraleDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & icn = fheroes2::AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
     void MoraleDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -521,10 +514,7 @@ namespace fheroes2
     {
         const int moraleType = _goodMorale ? Morale::GOOD : Morale::POOR;
 
-        const Text header( MoraleString( moraleType ), FontType::normalYellow() );
-        const Text description( Morale::Description( moraleType ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( MoraleString( moraleType ), Morale::Description( moraleType ), buttons, { this } );
     }
 
     ExperienceDialogElement::ExperienceDialogElement( const int32_t experience )
@@ -559,7 +549,7 @@ namespace fheroes2
 
     void ExperienceDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -567,12 +557,9 @@ namespace fheroes2
 
     void ExperienceDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( getExperienceName(), FontType::normalYellow() );
-        const Text description( getExperienceDescription(), FontType::normalWhite() );
-
         const ExperienceDialogElement experienceUI( 0 );
 
-        showMessage( header, description, buttons, { &experienceUI } );
+        showStandardTextMessage( getExperienceName(), getExperienceDescription(), buttons, { &experienceUI } );
     }
 
     PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string text )
@@ -625,7 +612,7 @@ namespace fheroes2
 
     void PrimarySkillDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -633,12 +620,9 @@ namespace fheroes2
 
     void PrimarySkillDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( Skill::Primary::String( _skillType ), FontType::normalYellow() );
-        const Text description( Skill::Primary::StringDescription( _skillType, nullptr ), FontType::normalWhite() );
-
         const PrimarySkillDialogElement elementUI( _skillType, std::string() );
 
-        showMessage( header, description, buttons, { &elementUI } );
+        showStandardTextMessage( Skill::Primary::String( _skillType ), Skill::Primary::StringDescription( _skillType, nullptr ), buttons, { &elementUI } );
     }
 
     SmallPrimarySkillDialogElement::SmallPrimarySkillDialogElement( const int32_t skillType, std::string text )
@@ -694,8 +678,7 @@ namespace fheroes2
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
-        const fheroes2::Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(),
-                                      icn.height() );
+        const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
         Copy( icn, 0, 0, output, icnRect );
 
         Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
@@ -709,7 +692,7 @@ namespace fheroes2
 
     void SecondarySkillDialogElement::processEvents( const Point & offset ) const
     {
-        if ( LocalEvent::Get().MousePressRight( { offset.x, offset.y, _area.width, _area.height } ) ) {
+        if ( LocalEvent::Get().isMouseRightButtonPressedInArea( { offset.x, offset.y, _area.width, _area.height } ) ) {
             // Make sure you never pass any buttons here to avoid call stack overflow!
             showPopup( defaultElementPopupButtons );
         }
@@ -717,10 +700,7 @@ namespace fheroes2
 
     void SecondarySkillDialogElement::showPopup( const int buttons ) const
     {
-        const Text header( _skill.GetNameWithBonus( _hero ), FontType::normalYellow() );
-        const Text description( _skill.GetDescription( _hero ), FontType::normalWhite() );
-
-        showMessage( header, description, buttons, { this } );
+        showStandardTextMessage( _skill.GetNameWithBonus( _hero ), _skill.GetDescription( _hero ), buttons, { this } );
     }
 
     AnimationDialogElement::AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay )
@@ -752,7 +732,7 @@ namespace fheroes2
             }
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
+        const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -781,7 +761,7 @@ namespace fheroes2
         return false;
     }
 
-    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset,
+    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point & animationPositionOffset,
                                                                 const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
         , _staticImage( std::move( staticImage ) )
@@ -801,7 +781,7 @@ namespace fheroes2
             Blit( _staticImage, 0, 0, output, offset.x, offset.y, _staticImage.width(), _staticImage.height() );
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
+        const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -827,5 +807,138 @@ namespace fheroes2
         }
 
         return false;
+    }
+
+    MonsterDialogElement::MonsterDialogElement( const Monster & monster )
+        : _monster( monster )
+    {
+        assert( _monster.isValid() );
+        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 12 );
+        _area = { sprite.width(), sprite.height() };
+    }
+
+    void MonsterDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        Sprite sprite = AGG::GetICN( ICN::STRIP, 12 );
+        sprite._disableTransformLayer();
+        renderMonsterFrame( _monster, sprite, { 6, 6 } );
+        Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+    }
+
+    void MonsterDialogElement::processEvents( const Point & offset ) const
+    {
+        LocalEvent & le = LocalEvent::Get();
+        const Rect rect{ offset.x, offset.y, _area.width, _area.height };
+        if ( le.isMouseRightButtonPressedInArea( rect ) ) {
+            showPopup( defaultElementPopupButtons );
+        }
+        else if ( le.MouseClickLeft( rect ) ) {
+            showPopup( Dialog::BUTTONS );
+        }
+    }
+
+    void MonsterDialogElement::showPopup( const int buttons ) const
+    {
+        Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
+    }
+
+    ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step,
+                                                              const Point & offset )
+        : _minimum( std::min( maximum, minimum ) )
+        , _maximum( std::max( maximum, minimum ) )
+        , _step( std::max( step, 1 ) )
+        , _value( current )
+        , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
+        , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )
+    {
+        assert( step > 0 );
+        assert( maximum >= minimum );
+        assert( current >= minimum && current <= maximum );
+
+        _buttonUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
+        _buttonDown.setICNInfo( ICN::TOWNWIND, 7, 8 );
+
+        _buttonUp.subscribe( &_timedButtonUp );
+        _buttonDown.subscribe( &_timedButtonDown );
+
+        setOffset( offset );
+    }
+
+    void ValueSelectionDialogElement::setOffset( const fheroes2::Point & offset )
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        _area = { offset.x, offset.y, editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
+
+        _editBox = { offset.x, offset.y + ( _area.height - editBoxImage.height() ) / 2, editBoxImage.width(), editBoxImage.height() };
+
+        _buttonUp.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() );
+        _buttonDown.setPosition( offset.x + _editBox.width + 6 - arrowImage.x(), offset.y - arrowImage.y() + _buttonUp.area().height + 5 );
+    }
+
+    void ValueSelectionDialogElement::draw( Image & output ) const
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        assert( _editBox.width == editBoxImage.width() && _editBox.height == editBoxImage.height() );
+
+        Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
+
+        const Text text( std::to_string( _value ), FontType::normalWhite() );
+        text.draw( _editBox.x + ( _editBox.width - text.width() ) / 2, _editBox.y + ( _editBox.height - 13 ) / 2, output );
+
+        _buttonUp.draw( output );
+        _buttonDown.draw( output );
+    }
+
+    bool ValueSelectionDialogElement::processEvents()
+    {
+        LocalEvent & le = LocalEvent::Get();
+
+        _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
+        _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
+
+        if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isMouseWheelUpEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
+            _value += _step;
+            return true;
+        }
+
+        if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
+            _value -= _step;
+            return true;
+        }
+
+        return false;
+    }
+
+    void ValueSelectionDialogElement::setValue( const int32_t value )
+    {
+        _value = std::clamp( value, _minimum, _maximum );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( const LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelUp();
+        }
+
+        return eventHandler.isMouseWheelUpInArea( _editBox );
+    }
+
+    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( const LocalEvent & eventHandler ) const
+    {
+        if ( _isIgnoreMouseWheelEventRoiCheck ) {
+            return eventHandler.isMouseWheelDown();
+        }
+
+        return eventHandler.isMouseWheelDownInArea( _editBox );
+    }
+
+    Size ValueSelectionDialogElement::getArea()
+    {
+        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+
+        return { editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
     }
 }

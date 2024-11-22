@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -202,17 +202,13 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-// TODO: This function works fine for most of objects as they have only one "main" tile. However,
-// TODO: some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds
-// TODO: coming from the same object and these sounds might not be synchronized. This is mostly
-// TODO: noticeable with 3D Audio mode on.
-M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
+M82::SoundType M82::getAdventureMapTileSound( const Maps::Tile & tile )
 {
     if ( tile.isStream() ) {
         return LOOP0014;
     }
 
-    switch ( tile.GetObject( false ) ) {
+    switch ( tile.getMainObjectType( false ) ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
@@ -225,7 +221,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
     case MP2::OBJ_VOLCANO:
-        switch ( tile.getObjectIcnType() ) {
+        switch ( tile.getMainObjectPart().icnType ) {
         // Tile with volcanic steam only
         case MP2::OBJ_ICN_TYPE_UNKNOWN:
             return UNKNOWN;

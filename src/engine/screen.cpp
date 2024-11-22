@@ -28,6 +28,15 @@
 #include <set>
 #include <utility>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -39,14 +48,20 @@
 #include <SDL_surface.h>
 #include <SDL_video.h>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
 
 #include "image_palette.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "screen.h"
-#include "tools.h"
+#include "system.h"
 
 namespace
 {
@@ -89,6 +104,7 @@ namespace
         return resolutions[id];
     }
 
+#if !defined( TARGET_PS_VITA )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -174,6 +190,7 @@ namespace
 
         return resolutions;
     }
+#endif
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
@@ -424,7 +441,10 @@ namespace
             fheroes2::Cursor::show( enable );
 
             if ( !_emulation ) {
-                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+                const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to set cursor. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
             }
         }
 
@@ -609,7 +629,6 @@ namespace
                 resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
                 resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
                 resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
-                resolutionSet = FilterResolutions( resolutionSet );
 
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }();
@@ -617,15 +636,14 @@ namespace
             return filteredResolutions;
         }
 
-    protected:
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _texBuffer( nullptr )
-            , _palettedTexturePointer( nullptr )
-        {
-            // Do nothing.
-        }
+    private:
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        vita2d_texture * _texBuffer{ nullptr };
+        uint8_t * _palettedTexturePointer{ nullptr };
+        fheroes2::Rect _destRect;
+
+        RenderEngine() = default;
 
         enum : int32_t
         {
@@ -668,6 +686,9 @@ namespace
 
             _window = SDL_CreateWindow( "", 0, 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 0 );
             if ( _window == nullptr ) {
+                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                        << " size. The error: " << SDL_GetError() )
+
                 clear();
                 return false;
             }
@@ -675,6 +696,8 @@ namespace
             _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 
             if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
+                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
+
                 clear();
                 return false;
             }
@@ -729,13 +752,6 @@ namespace
         {
             return true;
         }
-
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        vita2d_texture * _texBuffer;
-        uint8_t * _palettedTexturePointer;
-        fheroes2::Rect _destRect;
 
         void _createPalette()
         {
@@ -859,18 +875,26 @@ namespace
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
-                if ( displayCount > 0 ) {
+                if ( displayCount >= 1 ) {
                     const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-                    for ( int i = 0; i < displayModeCount; ++i ) {
-                        SDL_DisplayMode videoMode;
-                        const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
-                        if ( returnCode < 0 ) {
-                            ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        }
-                        else {
-                            resolutionSet.emplace( videoMode.w, videoMode.h );
+                    if ( displayModeCount >= 1 ) {
+                        for ( int i = 0; i < displayModeCount; ++i ) {
+                            SDL_DisplayMode videoMode;
+                            const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                            if ( returnCode != 0 ) {
+                                ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                            }
+                            else {
+                                resolutionSet.emplace( videoMode.w, videoMode.h );
+                            }
                         }
                     }
+                    else {
+                        ERROR_LOG( "Failed to get the number of display modes. The error value: " << displayModeCount << ", description: " << SDL_GetError() )
+                    }
+                }
+                else {
+                    ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
                 }
 
 #if defined( TARGET_NINTENDO_SWITCH )
@@ -888,8 +912,11 @@ namespace
 
         void setTitle( const std::string & title ) override
         {
-            if ( _window != nullptr )
-                SDL_SetWindowTitle( _window, title.c_str() );
+            if ( _window == nullptr ) {
+                return;
+            }
+
+            SDL_SetWindowTitle( _window, System::encLocalToUTF8( title ).c_str() );
         }
 
         void setIcon( const fheroes2::Image & icon ) override
@@ -942,18 +969,23 @@ namespace
             }
         }
 
-    protected:
-        RenderEngine()
-            : _window( nullptr )
-            , _surface( nullptr )
-            , _renderer( nullptr )
-            , _texture( nullptr )
-            , _driverIndex( -1 )
-            , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
-            , _isVSyncEnabled( false )
-        {
-            // Do nothing.
-        }
+    private:
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        SDL_Renderer * _renderer{ nullptr };
+        SDL_Texture * _texture{ nullptr };
+        int _driverIndex{ -1 };
+
+        std::string _previousWindowTitle;
+        fheroes2::Point _prevWindowPos{ SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
+
+        fheroes2::Size _windowedSize;
+
+        bool _isVSyncEnabled{ false };
+
+        RenderEngine() = default;
 
         void clear() override
         {
@@ -972,7 +1004,7 @@ namespace
                 if ( !isFullScreen() ) {
                     SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
                 }
-                _previousWindowTitle = SDL_GetWindowTitle( _window );
+                _previousWindowTitle = System::encUTF8ToLocal( SDL_GetWindowTitle( _window ) );
 
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
@@ -1056,7 +1088,7 @@ namespace
 #if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a hint for screen orientation." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_ORIENTATIONS " hint." )
             }
 #endif
 
@@ -1078,7 +1110,8 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
+                                        resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1096,33 +1129,38 @@ namespace
             const uint32_t renderingFlags = renderFlags();
 
             const int driverCount = SDL_GetNumRenderDrivers();
-            for ( int driverId = 0; driverId < driverCount; ++driverId ) {
-                int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
-                if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    continue;
-                }
+            if ( driverCount >= 0 ) {
+                for ( int driverId = 0; driverId < driverCount; ++driverId ) {
+                    int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                    if ( returnCode < 0 ) {
+                        ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                        continue;
+                    }
 
-                if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                    continue;
-                }
+                    if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                        continue;
+                    }
 
-                for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
-                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
-                        // Bingo! This is the best driver and format.
-                        isPaletteModeSupported = true;
-                        _driverIndex = driverId;
+                    for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
+                        if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                            // Bingo! This is the best driver and format.
+                            isPaletteModeSupported = true;
+                            _driverIndex = driverId;
+                            break;
+                        }
+                    }
+
+                    if ( isPaletteModeSupported ) {
                         break;
                     }
-                }
 
-                if ( isPaletteModeSupported ) {
-                    break;
+                    if ( _driverIndex < 0 ) {
+                        _driverIndex = driverId;
+                    }
                 }
-
-                if ( _driverIndex < 0 ) {
-                    _driverIndex = driverId;
-                }
+            }
+            else {
+                ERROR_LOG( "Failed to get the number of render drivers. The error value: " << driverCount << ", description: " << SDL_GetError() )
             }
 
             _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
@@ -1161,22 +1199,6 @@ namespace
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
-    private:
-        SDL_Window * _window;
-        SDL_Surface * _surface;
-        SDL_Renderer * _renderer;
-        SDL_Texture * _texture;
-        int _driverIndex;
-
-        std::string _previousWindowTitle;
-        fheroes2::Point _prevWindowPos;
-        fheroes2::Size _currentScreenResolution;
-        fheroes2::Rect _activeWindowROI;
-
-        fheroes2::Size _windowedSize;
-
-        bool _isVSyncEnabled;
-
         uint32_t renderFlags() const
         {
             if ( _isVSyncEnabled ) {
@@ -1209,14 +1231,22 @@ namespace
             }
         }
 
-        void _retrieveWindowInfo()
+        bool _retrieveWindowInfo()
         {
-            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            assert( _window != nullptr );
+
+            const int displayIndex = SDL_GetWindowDisplayIndex( _window );
+            if ( displayIndex < 0 ) {
+                ERROR_LOG( "Failed to get window display index. The error value: " << displayIndex << ", description: " << SDL_GetError() )
+                return false;
+            }
+
             SDL_DisplayMode displayMode;
 
             const int returnCode = SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to retrieve current display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return false;
             }
 
             _currentScreenResolution.width = displayMode.w;
@@ -1229,6 +1259,8 @@ namespace
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
+
+            return true;
         }
 
         void _toggleMouseCaptureMode()
@@ -1267,13 +1299,13 @@ namespace
 #endif
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
             }
 
             // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
             // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
             if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
             }
 
             returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
@@ -1291,7 +1323,10 @@ namespace
                 return false;
             }
 
-            _retrieveWindowInfo();
+            if ( !_retrieveWindowInfo() ) {
+                clear();
+                return false;
+            }
 
             _toggleMouseCaptureMode();
 

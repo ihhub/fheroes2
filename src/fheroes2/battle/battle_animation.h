@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ANIMATION_H
-#define H2BATTLE_ANIMATION_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -85,11 +84,10 @@ private:
 class AnimationReference
 {
 public:
-    AnimationReference();
     explicit AnimationReference( int id );
 
     AnimationReference( const AnimationReference & ) = delete;
-    AnimationReference( AnimationReference && ) = delete;
+    AnimationReference( AnimationReference && ) = default;
 
     virtual ~AnimationReference() = default;
 
@@ -159,4 +157,3 @@ private:
     int _animState;
     AnimationSequence _currentSequence;
 };
-#endif

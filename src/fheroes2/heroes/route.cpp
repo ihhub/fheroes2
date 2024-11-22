@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,7 +24,6 @@
 #include "route.h"
 
 #include <cassert>
-#include <memory>
 #include <numeric>
 
 #include "game_io.h"
@@ -363,7 +362,7 @@ std::string Route::Path::String() const
     output += ", to: ";
     output += std::to_string( dstIndex );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dstIndex ) ? world.GetTiles( dstIndex ).GetObject() : MP2::OBJ_NONE );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dstIndex ) ? world.getTile( dstIndex ).getMainObjectType() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {
@@ -378,24 +377,24 @@ std::string Route::Path::String() const
     return output;
 }
 
-StreamBase & Route::operator<<( StreamBase & msg, const Step & step )
+OStreamBase & Route::operator<<( OStreamBase & stream, const Step & step )
 {
-    return msg << step.from << step.direction << step.penalty;
+    return stream << step.from << step.direction << step.penalty;
 }
 
-StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
+OStreamBase & Route::operator<<( OStreamBase & stream, const Path & path )
 {
-    return msg << path._hide << static_cast<const std::list<Step> &>( path );
+    return stream << path._hide << static_cast<const std::list<Step> &>( path );
 }
 
-StreamBase & Route::operator>>( StreamBase & msg, Step & step )
+IStreamBase & Route::operator>>( IStreamBase & stream, Step & step )
 {
-    msg >> step.from >> step.direction >> step.penalty;
+    stream >> step.from >> step.direction >> step.penalty;
     step.currentIndex = Maps::GetDirectionIndex( step.from, step.direction );
-    return msg;
+    return stream;
 }
 
-StreamBase & Route::operator>>( StreamBase & msg, Path & path )
+IStreamBase & Route::operator>>( IStreamBase & stream, Path & path )
 {
     std::list<Step> & base = path;
 
@@ -403,10 +402,10 @@ StreamBase & Route::operator>>( StreamBase & msg, Path & path )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1007_RELEASE ) {
         int32_t dummy;
 
-        msg >> dummy;
+        stream >> dummy;
     }
 
-    return msg >> path._hide >> base;
+    return stream >> path._hide >> base;
 }
 
 uint32_t Route::calculatePathPenalty( const std::list<Step> & path )

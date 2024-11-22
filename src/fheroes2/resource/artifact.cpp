@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <iterator>
 #include <map>
 #include <ostream>
 #include <string>
@@ -37,11 +38,11 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "mp2.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
@@ -60,6 +61,9 @@ namespace
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
+    // TODO: this array is not used during gameplay but only during new map loading.
+    //       If we decide to add objects / events that generate a random artifact after a new game started
+    //       then we will have problems.
     std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = { 0 };
 
     enum
@@ -429,7 +433,7 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-int Artifact::Rand( level_t lvl )
+int Artifact::Rand( ArtLevel lvl )
 {
     std::vector<int> v;
     v.reserve( 25 );
@@ -459,29 +463,38 @@ int Artifact::Rand( level_t lvl )
     return res;
 }
 
-Artifact Artifact::FromMP2IndexSprite( uint32_t index )
+Artifact Artifact::getArtifactFromMapSpriteIndex( const uint32_t index )
 {
     // Add 1 to all values to properly convert from the old map format.
-    if ( 0xA2 > index )
+    if ( ( index < 162 ) || ( Settings::Get().isPriceOfLoyaltySupported() && index > 171 && index < 206 ) ) {
         return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    }
 
-    if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
-        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+    // The original game does not have the Magic Book adventure map sprite. But it uses the ID that is taken for "Dummy" sprite.
+    // The Resurrection map format allows to place a Magic Book and it has its own sprite that does not correlate with the original Magic Book artifact ID.
+    if ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION && index == 207 ) {
+        return { MAGIC_BOOK };
+    }
 
-    if ( 0xA3 == index )
+    if ( index == 163 ) {
         return { Rand( ART_LEVEL_ALL_NORMAL ) };
+    }
 
-    if ( 0xA4 == index )
+    if ( index == 164 ) {
         return { Rand( ART_ULTIMATE ) };
+    }
 
-    if ( 0xA7 == index )
+    if ( index == 167 ) {
         return { Rand( ART_LEVEL_TREASURE ) };
+    }
 
-    if ( 0xA9 == index )
+    if ( index == 169 ) {
         return { Rand( ART_LEVEL_MINOR ) };
+    }
 
-    if ( 0xAB == index )
-        return { ART_LEVEL_MAJOR };
+    if ( index == 171 ) {
+        return { Rand( ART_LEVEL_MAJOR ) };
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown Artifact object index: " << index )
 
@@ -493,18 +506,18 @@ const char * Artifact::getDiscoveryDescription( const Artifact & art )
     return _( fheroes2::getArtifactData( art.GetID() ).discoveryEventDescription );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Artifact & art )
+OStreamBase & operator<<( OStreamBase & stream, const Artifact & art )
 {
-    return msg << art.id << art.ext;
+    return stream << art.id << art.ext;
 }
 
-StreamBase & operator>>( StreamBase & msg, Artifact & art )
+IStreamBase & operator>>( IStreamBase & stream, Artifact & art )
 {
-    return msg >> art.id >> art.ext;
+    return stream >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()
-    : std::vector<Artifact>( HEROESMAXARTIFACT, Artifact::UNKNOWN )
+    : std::vector<Artifact>( maxCapacity, Artifact::UNKNOWN )
 {}
 
 bool BagArtifacts::ContainSpell( const int spellId ) const
@@ -819,22 +832,28 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
         return false;
     }
 
+    // There should not be more than one Magic Book in the artifact bag at a time.
     if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-        // We add a magic book while adding a hero on the map.
-        // In case if a map creator set Magic Book to be an artifact of the hero we face two Magic Books situation.
         return false;
     }
 
-    iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-    if ( it == end() )
+    const auto firstEmptySlotIter = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
+    if ( firstEmptySlotIter == end() ) {
         return false;
-
-    *it = art;
-
-    // Always put Magic Book at first place.
-    if ( art.GetID() == Artifact::MAGIC_BOOK ) {
-        std::swap( *it, front() );
     }
+
+    // If the artifact to add is not a Magic Book, then just use the first empty slot.
+    if ( art.GetID() != Artifact::MAGIC_BOOK ) {
+        *firstEmptySlotIter = art;
+
+        return true;
+    }
+
+    // Otherwise, we should first shift the existing artifacts (if any) from left to right...
+    std::move_backward( begin(), firstEmptySlotIter, std::next( firstEmptySlotIter ) );
+
+    // ... and then put the Magic Book to the first slot of the artifact bag.
+    front() = art;
 
     return true;
 }
@@ -871,20 +890,22 @@ double BagArtifacts::getArtifactValue() const
     return result;
 }
 
-void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver )
+void BagArtifacts::exchangeArtifacts( Heroes & taker, Heroes & giver )
 {
-    std::vector<Artifact> combined;
-    for ( auto it = begin(); it != end(); ++it ) {
-        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
-            combined.push_back( *it );
-            it->Reset();
-        }
-    }
+    BagArtifacts & takerBag = taker.GetBagArtifacts();
+    BagArtifacts & giverBag = giver.GetBagArtifacts();
 
-    for ( auto it = giftBag.begin(); it != giftBag.end(); ++it ) {
-        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
-            combined.push_back( *it );
-            it->Reset();
+    std::vector<Artifact> combined;
+
+    for ( BagArtifacts & bag : std::array<std::reference_wrapper<BagArtifacts>, 2>{ takerBag, giverBag } ) {
+        for ( Artifact & artifact : bag ) {
+            if ( !artifact.isValid() || artifact.GetID() == Artifact::MAGIC_BOOK ) {
+                continue;
+            }
+
+            combined.push_back( artifact );
+
+            artifact.Reset();
         }
     }
 
@@ -894,7 +915,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     };
 
     // Pure cursed artifacts (artifacts with no bonuses but only curses) should definitely go to another bag.
-    transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
+    transferArtifactsByCondition( combined, giverBag, isPureCursedArtifact );
 
     if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
         const auto isNecromancyArtifact = []( const Artifact & artifact ) {
@@ -913,7 +934,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         };
 
         // Giver hero has Necromancy skill so it would be more useful for him to use Necromancy related artifacts.
-        transferArtifactsByCondition( combined, giftBag, isNecromancyArtifact );
+        transferArtifactsByCondition( combined, giverBag, isNecromancyArtifact );
     }
 
     // Scrolls are effective if they contain spells which are not present in the book.
@@ -937,7 +958,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
             return std::find( magicBookSpells.begin(), magicBookSpells.end(), Spell( spellId ) ) != magicBookSpells.end();
         };
 
-        transferArtifactsByCondition( combined, giftBag, isScrollSpellDuplicated );
+        transferArtifactsByCondition( combined, giverBag, isScrollSpellDuplicated );
     }
 
     // A unique artifact is an artifact with no curses and all its bonuses are unique.
@@ -958,49 +979,64 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
 
     // Search for copies of unique artifacts. All copies of unique artifacts are useless.
     for ( auto mainIter = combined.begin(); mainIter != combined.end(); ++mainIter ) {
-        if ( isUniqueArtifact( *mainIter ) ) {
-            for ( auto iter = mainIter + 1; iter != combined.end(); ) {
-                if ( *iter == *mainIter ) {
-                    // Scrolls are considered as unique artifacts but their internal value might be different.
-                    // If they contain different spells then we should not interpret them as the same.
-                    if ( ( iter->GetID() == Artifact::SPELL_SCROLL ) && ( iter->getSpellId() != mainIter->getSpellId() ) ) {
-                        ++iter;
-                        continue;
-                    }
+        if ( !isUniqueArtifact( *mainIter ) ) {
+            continue;
+        }
 
-                    if ( !giftBag.PushArtifact( *iter ) ) {
-                        // The bag is full. No need to proceed further.
-                        break;
-                    }
-
-                    iter = combined.erase( iter );
-                }
-                else {
-                    ++iter;
-                }
+        for ( auto iter = mainIter + 1; iter != combined.end(); ) {
+            if ( *iter != *mainIter ) {
+                ++iter;
+                continue;
             }
+
+            // Scrolls are considered as unique artifacts but their internal value might be different.
+            // If they contain different spells then we should not interpret them as the same.
+            if ( ( iter->GetID() == Artifact::SPELL_SCROLL ) && ( iter->getSpellId() != mainIter->getSpellId() ) ) {
+                ++iter;
+                continue;
+            }
+
+            if ( !giverBag.PushArtifact( *iter ) ) {
+                // The bag is full. No need to proceed further.
+                break;
+            }
+
+            iter = combined.erase( iter );
         }
     }
 
     // Sort artifacts by value from lowest to highest since we pick them from the end of container.
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
 
-    // TODO: add logic for excessive amount of artifacts and also leave one slot for a magic book if the more powerful hero doesn't have one.
+    // Taker gets the best artifacts. If he doesn't have a Spell Book yet, we'll try to leave a place for it.
+    for ( size_t i = 1; i < takerBag.size(); ++i ) {
+        if ( combined.empty() || !takerBag.PushArtifact( combined.back() ) ) {
+            break;
+        }
 
-    // reset and clear all current artifacts, put back the best
-    while ( !combined.empty() && PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 
-    while ( !combined.empty() && giftBag.PushArtifact( combined.back() ) ) {
+    // If there are more artifacts left than there are free slots in the giver's bag, then this means that we failed to leave room for the Spell Book in the taker's bag.
+    {
+        const ptrdiff_t emptySlotsCount = std::count_if( giverBag.begin(), giverBag.end(), []( const Artifact & artifact ) { return !artifact.isValid(); } );
+        assert( emptySlotsCount >= 0 );
+
+        if ( combined.size() > static_cast<size_t>( emptySlotsCount ) && takerBag.PushArtifact( combined.back() ) ) {
+            combined.pop_back();
+        }
+    }
+
+    // Giver gets the rest of artifacts
+    while ( !combined.empty() && giverBag.PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
 
     assert( combined.empty() );
 
     // Assemble artifact sets after the exchange, if possible
-    assembleArtifactSetIfPossible();
-    giftBag.assembleArtifactSetIfPossible();
+    takerBag.assembleArtifactSetIfPossible();
+    giverBag.assembleArtifactSetIfPossible();
 }
 
 bool BagArtifacts::ContainUltimateArtifact() const
@@ -1067,7 +1103,7 @@ bool fheroes2::isPriceOfLoyaltyArtifact( const int artifactID )
     return artifactID >= Artifact::SPELL_SCROLL && artifactID <= Artifact::SPADE_NECROMANCY;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
+ArtifactsBar::ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
     : _hero( hero )
     , use_mini_sprite( mini )
     , read_only( ro )
@@ -1154,16 +1190,12 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
         const bool isMbSelected = ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
         if ( isMbSelected ) {
             if ( can_change ) {
-                const_cast<Heroes *>( _hero )->EditSpellBook();
+                _hero->EditSpellBook();
             }
             else if ( _allowOpeningMagicBook ) {
-                if ( _statusBar != nullptr ) {
-                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
-                }
-                else {
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, nullptr );
-                }
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false,
+                                      _statusBar ? [this]( const std::string & status ) { _statusBar->ShowMessage( status ); }
+                                                 : std::function<void( const std::string & )>{} );
             }
             else {
                 messageMagicBookAbortTrading();
@@ -1187,15 +1219,20 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            art = Dialog::selectArtifact( Artifact::UNKNOWN );
+            art = Dialog::selectArtifact( Artifact::UNKNOWN, false );
 
             if ( isMagicBook( art ) ) {
                 art.Reset();
 
-                const_cast<Heroes *>( _hero )->SpellBookActivate();
+                if ( _hero->HaveSpellBook() ) {
+                    fheroes2::showStandardTextMessage( Artifact( Artifact::MAGIC_BOOK ).GetName(), _( "You cannot have multiple spell books." ), Dialog::OK );
+                }
+                else {
+                    _hero->SpellBookActivate();
+                }
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, false ).GetID();
 
                 if ( spellId == Spell::NONE ) {
                     // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
@@ -1231,7 +1268,7 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
     if ( art.isValid() ) {
         if ( can_change ) {
             if ( isMagicBook( art ) ) {
-                const_cast<Heroes *>( _hero )->SpellBookDeactivate();
+                _hero->SpellBookDeactivate();
             }
             else {
                 art.Reset();

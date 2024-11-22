@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,11 +23,11 @@
 #include <cstdint>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "math_base.h"
 #include "screen.h"
+#include "ui_constants.h"
 
 namespace Interface
 {
@@ -53,7 +53,10 @@ namespace Interface
         // The next value is base for Map Editor interface.
         REDRAW_PANEL = 0x100,
 
-        REDRAW_ALL = 0x1FF
+        REDRAW_ALL = 0x1FF,
+
+        // This option is only for the Editor.
+        REDRAW_PASSABILITIES = 0x200
     };
 
     class BaseInterface
@@ -88,26 +91,26 @@ namespace Interface
 
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
-            return cursorPos.x < BORDERWIDTH;
+            return cursorPos.x < fheroes2::borderWidthPx;
         }
 
         static bool isScrollRight( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
-            return cursorPos.x >= display.width() - BORDERWIDTH;
+            return cursorPos.x >= display.width() - fheroes2::borderWidthPx;
         }
 
         static bool isScrollTop( const fheroes2::Point & cursorPos )
         {
-            return cursorPos.y < BORDERWIDTH;
+            return cursorPos.y < fheroes2::borderWidthPx;
         }
 
         static bool isScrollBottom( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
-            return cursorPos.y >= display.height() - BORDERWIDTH;
+            return cursorPos.y >= display.height() - fheroes2::borderWidthPx;
         }
 
         GameArea & getGameArea()
@@ -129,6 +132,7 @@ namespace Interface
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
+        virtual void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;
@@ -139,6 +143,10 @@ namespace Interface
         {
             return _isEditor;
         }
+
+        // Call this function to plan (set) redraw if fade in is not set
+        // or redraw the given interface items and do fade in with them rendered.
+        void renderWithFadeInOrPlanRender( const uint32_t redrawMask );
 
     protected:
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.

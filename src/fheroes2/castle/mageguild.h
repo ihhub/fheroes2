@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,8 @@
 
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class HeroBase;
 
@@ -43,14 +44,11 @@ public:
     SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const MageGuild & );
-    friend StreamBase & operator>>( StreamBase &, MageGuild & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild );
+    friend IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild );
 
     SpellStorage general;
     SpellStorage library;
 };
-
-StreamBase & operator<<( StreamBase &, const MageGuild & );
-StreamBase & operator>>( StreamBase &, MageGuild & );
 
 #endif

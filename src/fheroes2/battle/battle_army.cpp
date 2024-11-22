@@ -23,6 +23,7 @@
 
 #include "battle_army.h"
 
+#include <algorithm>
 #include <cstddef>
 
 #include "army_troop.h"
@@ -53,18 +54,18 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
+Battle::Unit * Battle::Units::FindUID( const uint32_t uid ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const auto iter = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
-Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
+Battle::Unit * Battle::Units::FindMode( const uint32_t mod ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const auto iter = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
 Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
@@ -305,28 +306,4 @@ void Battle::Force::SyncArmyCount()
 
         troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
-}
-
-double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
-{
-    double result = 0.0;
-
-    // Consider only the state of the original army
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
-        }
-
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr ) {
-            continue;
-        }
-
-        // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
-        // non-true-resurrected units)
-        result += Troop{ unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() }.GetStrength();
-    }
-
-    return result;
 }

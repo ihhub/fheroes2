@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,19 +26,23 @@ FHEROES2_C_WARN_OPTIONS := \
     -Wall \
     -Wextra \
     -Wcast-align \
-    -Wextra-semi \
+    -Wcast-qual \
+    -Wdouble-promotion \
     -Wfloat-conversion \
     -Wfloat-equal \
-    -Winit-self \
     -Wredundant-decls \
     -Wshadow \
+    -Wswitch-default \
     -Wundef \
-    -Wuninitialized \
     -Wunused
 
 # C++ only
 FHEROES2_CPP_WARN_OPTIONS := \
     -Wctor-dtor-privacy \
-    -Woverloaded-virtual
+    -Wextra-semi \
+    -Wmissing-declarations \
+    -Wold-style-cast \
+    -Woverloaded-virtual \
+    -Wsuggest-override
 
 include $(call all-subdir-makefiles)

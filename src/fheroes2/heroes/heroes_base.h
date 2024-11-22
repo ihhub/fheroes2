@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
@@ -38,7 +38,8 @@
 #include "spell_book.h"
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
@@ -92,7 +93,7 @@ public:
     virtual uint32_t GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
-    virtual uint32_t GetSecondaryValues( int skill ) const = 0;
+    virtual uint32_t GetSecondarySkillValue( int skill ) const = 0;
 
     virtual void ActionAfterBattle() = 0;
     virtual void ActionPreBattle() = 0;
@@ -113,13 +114,21 @@ public:
     int GetLuckModificator( std::string * = nullptr ) const;
     double GetMagicStrategicValue( const double armyStrength ) const;
 
-    uint32_t GetSpellPoints() const;
+    uint32_t GetSpellPoints() const
+    {
+        return magic_point;
+    }
+
     bool HaveSpellPoints( const Spell & spell ) const;
     bool haveMovePoints( const Spell & spell ) const;
     bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
     void SpellCasted( const Spell & spell );
-    void SetSpellPoints( const uint32_t points );
+    void SetSpellPoints( const uint32_t points )
+    {
+        magic_point = points;
+    }
+
     bool isPotentSpellcaster() const;
 
     // Returns all spells that the hero can cast (including spells from the spell book and spell scrolls)
@@ -132,7 +141,7 @@ public:
 
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
-                         const std::function<void( const std::string & )> * statusCallback ) const;
+                         const std::function<void( const std::string & )> & statusCallback ) const;
 
     bool HaveSpellBook() const
     {
@@ -163,8 +172,8 @@ public:
     void LoadDefaults( const int type, const int race );
 
 protected:
-    friend StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-    friend StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
+    friend OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
     uint32_t magic_point;
     uint32_t move_point;
@@ -173,7 +182,7 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
+OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
 #endif

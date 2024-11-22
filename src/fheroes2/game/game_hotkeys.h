@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,6 +77,8 @@ namespace Game
         EDITOR_RANDOM_MAP_MENU,
         EDITOR_UNDO_LAST_ACTION,
         EDITOR_REDO_LAST_ACTION,
+        EDITOR_TO_GAME_MAIN_MENU,
+        EDITOR_TOGGLE_PASSABILITY,
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
@@ -103,6 +105,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
+        WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,

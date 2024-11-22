@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,13 +28,18 @@
 #include <cassert>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
 #include "battle_arena.h"
 #include "dialog.h"
+#include "game_interface.h"
+#include "game_language.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "players.h"
@@ -111,7 +116,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|load game" ), fheroes2::Key::KEY_L };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|highscores" ), fheroes2::Key::KEY_H };
+            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|high scores" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CREDITS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|credits" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_STANDARD )]
@@ -136,7 +141,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select all map sizes" ), fheroes2::Key::KEY_A };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hotseat game" ), fheroes2::Key::KEY_H };
+            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hot seat game" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|battle only game" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN )]
@@ -158,13 +163,17 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU )]
+            = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
+            = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|archibald campaign" ), fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_PRICE_OF_LOYALTY )]
-            = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|the price of loyalty campaign" ), fheroes2::Key::KEY_1 };
+            = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|price of loyalty campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VOYAGE_HOME )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|voyage home campaign" ), fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_WIZARDS_ISLE )]
@@ -204,6 +213,8 @@ namespace
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|change to hero under cursor" ), fheroes2::Key::KEY_LEFT_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|start hero movement" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )]
@@ -350,13 +361,17 @@ namespace
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    if ( le.isAnyKeyPressed() ) {
+        // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
+        Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+    }
+    return le.isAnyKeyPressed() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    return le.isKeyBeingHold() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 fheroes2::Key Game::getHotKeyForEvent( const HotKeyEvent eventID )
@@ -384,7 +399,13 @@ std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> Game::getAllHotK
     std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> events;
     events.reserve( hotKeyEventInfo.size() - 1 );
 
+    const bool disableEditor = !Settings::Get().isPriceOfLoyaltySupported();
+
     for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
+        if ( disableEditor && ( hotKeyEventInfo[i].category == HotKeyCategory::EDITOR ) ) {
+            continue;
+        }
+
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ), hotKeyEventInfo[i].category );
     }
 
@@ -401,7 +422,7 @@ void Game::HotKeysLoad( const std::string & filename )
         isFilePresent = config.Load( filename );
 
         if ( isFilePresent ) {
-            std::map<std::string, fheroes2::Key> nameToKey;
+            std::map<std::string, fheroes2::Key, std::less<>> nameToKey;
             for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                 const fheroes2::Key key = static_cast<fheroes2::Key>( i );
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );

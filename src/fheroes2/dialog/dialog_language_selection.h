@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,12 +20,13 @@
 
 #pragma once
 
+#include <cstdint>
 #include <vector>
-
-#include "ui_language.h"
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     // UI window to select a language by user.
-    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage );
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage, const bool isGameLanguage );
 }
