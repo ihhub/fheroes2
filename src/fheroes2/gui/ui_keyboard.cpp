@@ -57,7 +57,7 @@ namespace
     const int32_t defaultSpecialButtonWidth{ 54 };
     const int32_t spacebarButtonWidth{ 175 };
     const int32_t defaultWindowWidth{ 520 };
-    const int32_t numbericWindowWidth{ 320 };
+    const int32_t numpadWindowWidth{ 320 };
     const int32_t defaultWindowHeight{ 250 };
     const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point buttonShadowOffset{ -5, 5 };
@@ -708,7 +708,7 @@ namespace
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
 
-        const int32_t windowWidth = ( layoutType == LayoutType::Numeric ) ? numbericWindowWidth : defaultWindowWidth;
+        const int32_t windowWidth = ( layoutType == LayoutType::Numeric ) ? numpadWindowWidth : defaultWindowWidth;
 
         const bool isResized = renderer.resize(
             { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
