@@ -1291,12 +1291,11 @@ namespace
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
-#ifndef __MORPHOS__	
+
             returnCode = SDL_SetRenderTarget( _renderer, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
-#endif
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )

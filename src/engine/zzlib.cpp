@@ -29,6 +29,10 @@
 #include <zconf.h>
 #include <zlib.h>
 
+#ifdef __MORPHOS__
+#undef bind
+#endif
+
 #include "logging.h"
 #include "serialize.h"
 

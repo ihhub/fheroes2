@@ -73,11 +73,8 @@ namespace
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
 #endif
-#ifdef __MORPHOS__
         uint16_t format = AUDIO_S16SYS;
-#else
-		uint16_t format = AUDIO_S16;
-#endif
+
         // Stereo audio support
         int channels = 2;
 #if defined( ANDROID )

@@ -24,10 +24,6 @@
 #ifndef H2MAPSVISIT_H
 #define H2MAPSVISIT_H
 
-#ifdef __MORPHOS__
-#undef GLOBAL
-#endif
-
 class IndexObject;
 
 namespace Visit

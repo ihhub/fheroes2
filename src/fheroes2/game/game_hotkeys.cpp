@@ -51,10 +51,6 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 
-#ifdef __MORPHOS__
-#undef GLOBAL
-#endif
-
 namespace
 {
     struct HotKeyEventInfo

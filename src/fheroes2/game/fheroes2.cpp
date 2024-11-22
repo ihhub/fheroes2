@@ -81,8 +81,8 @@
 #include "zzlib.h"
 
 #ifdef __MORPHOS__
-unsigned long __stack = 1024000;
-static const char *version __attribute__((used)) = "$VER: fheroes2 1.0.12 (07.02.2024) port by BeWorld";
+unsigned long __stack = 1024 * 1024;
+static const char *version __attribute__((used)) = "$VER: fheroes2 " MAJOR_VERSION "." MINOR_VERSION "." INTERMEDIATE_VERSION " (" __AMIGADATE__ ")";
 #endif
 
 namespace

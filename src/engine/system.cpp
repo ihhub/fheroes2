@@ -89,7 +89,7 @@ namespace
         return System::concatPath( "ux0:data", appName );
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::concatPath( "/switch", appName );
-#elif __MORPHOS__
+#elif defined( TARGET_MORPHOS )
 		return { "PROGDIR:" };
 #elif defined( ANDROID )
         (void)appName;
@@ -332,7 +332,7 @@ std::string System::concatPath( const std::string_view left, const std::string_v
     temp.reserve( left.size() + 1 + right.size() );
 
     temp += left;
-#ifdef __MORPHOS__
+#if defined( TARGET_MORPHOS )
 	if (left != "PROGDIR:")
 #endif
     temp += dirSep;
@@ -426,7 +426,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
 std::string System::GetDirname( std::string_view path )
 {
     if ( path.empty() ) {
-#ifdef __MORPHOS__
+#if defined( TARGET_MORPHOS )
 		return { "PROGDIR:" };
 #else
         return { "." };
@@ -438,18 +438,18 @@ std::string System::GetDirname( std::string_view path )
     const size_t pos = path.rfind( dirSep );
 
     if ( pos == std::string::npos ) {
-#ifdef __MORPHOS__
-		    return { "PROGDIR:" };
+#if defined( TARGET_MORPHOS )
+		return { "PROGDIR:" };
 #else
         return { "." };
 #endif
     }
     if ( pos == 0 ) {
-      #ifdef __MORPHOS__
-      		    return { "PROGDIR:" };
-      #else
-              return { std::initializer_list<char>{ dirSep } };
-      #endif
+#if defined( TARGET_MORPHOS )
+		return { "PROGDIR:" };
+#else
+        return { std::initializer_list<char>{ dirSep } };
+#endif
     }
 
     // Trailing separators should already be trimmed
@@ -461,8 +461,8 @@ std::string System::GetDirname( std::string_view path )
 std::string System::GetBasename( std::string_view path )
 {
     if ( path.empty() ) {
-#ifdef __MORPHOS__
-		    return { "PROGDIR:" };
+#if defined( TARGET_MORPHOS )
+		return { "PROGDIR:" };
 #else
         return { "." };
 #endif
@@ -533,7 +533,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID )  && !defined(__MORPHOS__)
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined(__MORPHOS__)
     static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
 
     // The following code is based on https://github.com/OneSadCookie/fcaseopen

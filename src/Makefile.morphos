@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,13 +18,15 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+AR = ppc-morphos-gcc-ar
 CC = ppc-morphos-gcc-9
 CXX = ppc-morphos-g++-9
 # Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
-CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -D__MORPHOS_SHAREDLIBS
+AMIGADATE = $(shell date +"%-d.%-m.%Y")
+CCFLAGS := $(CCFLAGS) -noixemul -I/gg/usr/local/include -I/gg/usr/local/include/SDL2 -D__MORPHOS_SHAREDLIBS -D__STDC_LIMIT_MACROS -D__AMIGADATE__=\"$(AMIGADATE)\"
 LDFLAGS := $(LDFLAGS)
 # Common flags (for both C and C++ compilers) for fheroes2 only
-CCFLAGS_FH2 := -DTARGET_MORPHOS -D__STDC_LIMIT_MACROS
+CCFLAGS_FH2 := -DTARGET_MORPHOS
 # -DNDEBUG
 
 LIBS := $(LIBS) 

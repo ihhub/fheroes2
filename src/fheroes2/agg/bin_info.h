@@ -28,10 +28,6 @@
 
 #include "math_base.h"
 
-#ifdef __MORPHOS__
-#undef STATIC
-#endif
-
 namespace Bin_Info
 {
     struct MonsterAnimInfo
