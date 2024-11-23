@@ -820,7 +820,7 @@ namespace
                 flags &= ~SDL_WINDOW_FULLSCREEN;
             }
             else {
-#if defined( _WIN32 ) || defined(__MORPHOS__)
+#if defined( _WIN32 ) || defined( __MORPHOS__ )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
@@ -1090,7 +1090,7 @@ namespace
 
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
-#if defined( _WIN32 ) || defined(__MORPHOS__)
+#if defined( _WIN32 ) || defined( __MORPHOS__ )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }

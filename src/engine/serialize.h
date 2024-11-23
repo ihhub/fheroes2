@@ -96,7 +96,7 @@
 #define be32toh( x ) __bswap32( x )
 #define le32toh( x ) ( x )
 
-#elif defined(TARGET_MORPHOS)
+#elif defined( TARGET_MORPHOS )
 #include <machine/endian.h>
 #define htobe16( x ) ( x )
 #define htole16( x ) __builtin_bswap16( x )
