@@ -333,7 +333,7 @@ std::string System::concatPath( const std::string_view left, const std::string_v
 
     temp += left;
 #if defined( TARGET_MORPHOS )
-    if (left != "PROGDIR:") {
+    if ( left != "PROGDIR:" ) {
         temp += dirSep;
     }
 #else
