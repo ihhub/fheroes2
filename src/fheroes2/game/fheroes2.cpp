@@ -81,8 +81,12 @@
 #include "zzlib.h"
 
 #ifdef __MORPHOS__
+#include "version.h"
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+#define __AMIGAVER__ TOSTRING(MAJOR_VERSION) "." TOSTRING(MINOR_VERSION) "." TOSTRING(INTERMEDIATE_VERSION)
 unsigned long __stack = 1024 * 1024;
-static const std::string  morphos_versions_tag =  std::string("$VER: fheroes2 " + Settings::GetVersion() + " (" __AMIGADATE__ ")");
+static const std::string  morphos_versions_tag =  "$VER: fheroes2 " __AMIGAVER__ " (" __AMIGADATE__ ")";
 #endif
 
 namespace
