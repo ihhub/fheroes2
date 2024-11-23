@@ -816,22 +816,18 @@ namespace
 
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-#ifndef __MORPHOS__
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-#endif
                 flags &= ~SDL_WINDOW_FULLSCREEN;
             }
             else {
-#if defined( _WIN32 )
+#if defined( _WIN32 ) || defined(__MORPHOS__)
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
                     flags |= SDL_WINDOW_FULLSCREEN;
                 }
-#elif __MORPHOS__
-				flags |= SDL_WINDOW_FULLSCREEN;
-#else
+
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
@@ -1094,15 +1090,13 @@ namespace
 
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
-#if defined( _WIN32 )
+#if defined( _WIN32 ) || defined(__MORPHOS__)
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
                     flags |= SDL_WINDOW_FULLSCREEN;
                 }
-#elif __MORPHOS__
-				flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
