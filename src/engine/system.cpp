@@ -90,7 +90,7 @@ namespace
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::concatPath( "/switch", appName );
 #elif defined( TARGET_MORPHOS )
-		return { "PROGDIR:" };
+        return { "PROGDIR:" };
 #elif defined( ANDROID )
         (void)appName;
 
@@ -333,7 +333,7 @@ std::string System::concatPath( const std::string_view left, const std::string_v
 
     temp += left;
 #if defined( TARGET_MORPHOS )
-	if (left != "PROGDIR:")
+    if (left != "PROGDIR:")
 #endif
     temp += dirSep;
     temp += right;
@@ -427,7 +427,7 @@ std::string System::GetDirname( std::string_view path )
 {
     if ( path.empty() ) {
 #if defined( TARGET_MORPHOS )
-		return { "PROGDIR:" };
+        return { "PROGDIR:" };
 #else
         return { "." };
 #endif
@@ -439,14 +439,14 @@ std::string System::GetDirname( std::string_view path )
 
     if ( pos == std::string::npos ) {
 #if defined( TARGET_MORPHOS )
-		return { "PROGDIR:" };
+        return { "PROGDIR:" };
 #else
         return { "." };
 #endif
     }
     if ( pos == 0 ) {
 #if defined( TARGET_MORPHOS )
-		return { "PROGDIR:" };
+        return { "PROGDIR:" };
 #else
         return { std::initializer_list<char>{ dirSep } };
 #endif
@@ -462,7 +462,7 @@ std::string System::GetBasename( std::string_view path )
 {
     if ( path.empty() ) {
 #if defined( TARGET_MORPHOS )
-		return { "PROGDIR:" };
+        return { "PROGDIR:" };
 #else
         return { "." };
 #endif
