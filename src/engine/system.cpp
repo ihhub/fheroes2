@@ -333,9 +333,12 @@ std::string System::concatPath( const std::string_view left, const std::string_v
 
     temp += left;
 #if defined( TARGET_MORPHOS )
-    if (left != "PROGDIR:")
-#endif
+    if (left != "PROGDIR:") {
+        temp += dirSep;
+    }
+#else
     temp += dirSep;
+#endif
     temp += right;
 
     return temp;
@@ -533,7 +536,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined(__MORPHOS__)
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( __MORPHOS__ )
     static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
 
     // The following code is based on https://github.com/OneSadCookie/fcaseopen
