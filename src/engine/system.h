@@ -49,8 +49,8 @@ namespace System
     std::string GetConfigDirectory( const std::string_view appName );
     std::string GetDataDirectory( const std::string_view appName );
 
-    std::string GetDirname( std::string_view path );
-    std::string GetBasename( std::string_view path );
+    std::string GetParentDirectory( std::string_view path );
+    std::string GetFileName( std::string_view path );
     std::string GetStem( const std::string_view path );
 
     bool IsFile( const std::string_view path );

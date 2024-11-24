@@ -98,7 +98,7 @@ namespace
             return storagePath;
         }
 
-        return { "." };
+        return {};
 #endif
         {
             const char * homeEnvPath = getenv( "HOME" );
@@ -108,7 +108,7 @@ namespace
                 return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
             }
 
-            return { "." };
+            return {};
 #endif
 
             if ( homeEnvPath != nullptr ) {
@@ -126,18 +126,9 @@ namespace
         }
 #endif
 
-        return { "." };
+        return {};
     }
 #endif
-
-    std::string_view trimTrailingSeparators( std::string_view path )
-    {
-        while ( path.size() > 1 && path.back() == dirSep ) {
-            path.remove_suffix( 1 );
-        }
-
-        return path;
-    }
 
     bool globMatch( const std::string_view string, const std::string_view wildcard )
     {
@@ -327,15 +318,7 @@ bool System::Unlink( const std::string_view path )
 
 std::string System::concatPath( const std::string_view left, const std::string_view right )
 {
-    // Avoid memory allocation while concatenating string. Allocate needed size at once.
-    std::string temp;
-    temp.reserve( left.size() + 1 + right.size() );
-
-    temp += left;
-    temp += dirSep;
-    temp += right;
-
-    return temp;
+    return fsPathToString( std::filesystem::path{ left }.append( right ) );
 }
 
 void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
@@ -369,7 +352,7 @@ std::string System::GetConfigDirectory( const std::string_view appName )
             return concatPath( concatPath( homeEnv, ".config" ), appName );
         }
 
-        return { "." };
+        return {};
 #else
         return GetHomeDirectory( appName );
 #endif
@@ -401,13 +384,13 @@ std::string System::GetDataDirectory( const std::string_view appName )
             return concatPath( concatPath( homeEnv, ".local/share" ), appName );
         }
 
-        return { "." };
+        return {};
 #elif defined( MACOS_APP_BUNDLE )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
             return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
 
-        return { "." };
+        return {};
 #else
         return GetHomeDirectory( appName );
 #endif
@@ -420,60 +403,19 @@ std::string System::GetDataDirectory( const std::string_view appName )
     return result;
 }
 
-std::string System::GetDirname( std::string_view path )
+std::string System::GetParentDirectory( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( dirSep );
-
-    if ( pos == std::string::npos ) {
-        return { "." };
-    }
-    if ( pos == 0 ) {
-        return { std::initializer_list<char>{ dirSep } };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
+    return fsPathToString( std::filesystem::path{ path }.parent_path() );
 }
 
-std::string System::GetBasename( std::string_view path )
+std::string System::GetFileName( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( dirSep );
-
-    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
-        return std::string{ path };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ path.substr( pos + 1 ) };
+    return fsPathToString( std::filesystem::path{ path }.filename() );
 }
 
 std::string System::GetStem( const std::string_view path )
 {
-    std::string res = GetBasename( path );
-
-    const size_t pos = res.rfind( '.' );
-
-    if ( pos != 0 && pos != std::string::npos ) {
-        res.resize( pos );
-    }
-
-    return res;
+    return fsPathToString( std::filesystem::path{ path }.stem() );
 }
 
 bool System::IsFile( const std::string_view path )
