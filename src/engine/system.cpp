@@ -332,13 +332,7 @@ std::string System::concatPath( const std::string_view left, const std::string_v
     temp.reserve( left.size() + 1 + right.size() );
 
     temp += left;
-#if defined( TARGET_MORPHOS )
-    if ( left != "PROGDIR:" ) {
-        temp += dirSep;
-    }
-#else
     temp += dirSep;
-#endif
     temp += right;
 
     return temp;
@@ -429,11 +423,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
 std::string System::GetDirname( std::string_view path )
 {
     if ( path.empty() ) {
-#if defined( TARGET_MORPHOS )
-        return { "PROGDIR:" };
-#else
         return { "." };
-#endif
     }
 
     path = trimTrailingSeparators( path );
@@ -441,18 +431,10 @@ std::string System::GetDirname( std::string_view path )
     const size_t pos = path.rfind( dirSep );
 
     if ( pos == std::string::npos ) {
-#if defined( TARGET_MORPHOS )
-        return { "PROGDIR:" };
-#else
         return { "." };
-#endif
     }
     if ( pos == 0 ) {
-#if defined( TARGET_MORPHOS )
-        return { "PROGDIR:" };
-#else
         return { std::initializer_list<char>{ dirSep } };
-#endif
     }
 
     // Trailing separators should already be trimmed
@@ -464,11 +446,7 @@ std::string System::GetDirname( std::string_view path )
 std::string System::GetBasename( std::string_view path )
 {
     if ( path.empty() ) {
-#if defined( TARGET_MORPHOS )
-        return { "PROGDIR:" };
-#else
         return { "." };
-#endif
     }
 
     path = trimTrailingSeparators( path );
@@ -536,7 +514,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( __MORPHOS__ )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_MORPHOS )
     static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
 
     // The following code is based on https://github.com/OneSadCookie/fcaseopen
