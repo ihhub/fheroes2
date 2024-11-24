@@ -2,7 +2,7 @@ version 1.1.4 (27 November 2024)
 - add Virtual Numpad support for integer inputs
 - add new Lean-To object variant
 - update the Czech translation
-- add Belarusian language support for the Virtual Keyabord
+- add Belarusian language support for the Virtual Keyboard
 - improve & speed up the translation-related logic
 - update the German translation related to the Price of Loyalty Campaign
 - update the Swedish translation
