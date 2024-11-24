@@ -75,12 +75,6 @@
 
 namespace
 {
-#if defined( _WIN32 )
-    constexpr char dirSep{ '\\' };
-#else
-    constexpr char dirSep{ '/' };
-#endif
-
 #if !defined( __linux__ ) || defined( ANDROID )
     std::string GetHomeDirectory( const std::string_view appName )
     {
@@ -456,14 +450,14 @@ bool System::IsDirectory( const std::string_view path )
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
 #if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_MORPHOS )
-    static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
-
-    // The following code is based on https://github.com/OneSadCookie/fcaseopen
+    // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 
     if ( path.empty() ) {
         return false;
     }
+
+    constexpr char dirSep{ '/' };
 
     std::unique_ptr<DIR, int ( * )( DIR * )> dir( path.front() == dirSep ? opendir( "/" ) : opendir( "." ), closedir );
 
