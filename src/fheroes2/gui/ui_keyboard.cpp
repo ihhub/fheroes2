@@ -806,9 +806,9 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
-            case DialogAction::DoNothing:
             case DialogAction::AddLetter:
             case DialogAction::Backspace:
+            case DialogAction::DoNothing:
                 // These actions must not be processed here!
                 assert( 0 );
                 break;
@@ -855,13 +855,13 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
             switch ( action ) {
-            case DialogAction::DoNothing:
             case DialogAction::AddLetter:
+            case DialogAction::AlphaNumeric:
             case DialogAction::Backspace:
+            case DialogAction::ChangeLanguage:
+            case DialogAction::DoNothing:
             case DialogAction::LowerCase:
             case DialogAction::UpperCase:
-            case DialogAction::AlphaNumeric:
-            case DialogAction::ChangeLanguage:
                 // These actions must not be processed here!
                 assert( 0 );
                 break;
