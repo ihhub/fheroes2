@@ -317,11 +317,10 @@ namespace
                     ++objectIter;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
-                    assert( mapTileIndex < world.getSize() );
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
 
-                    needRedraw |= Maps::updateStreamOnTile( world.getTile( static_cast<int32_t>( mapTileIndex ) ), false );
-
-                    ++objectIter;
+                    Maps::updateStreamsAround( mapFormat, static_cast<int32_t>( mapTileIndex ) );
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::KINGDOM_HEROES || Maps::isJailObject( objectIter->group, objectIter->index ) ) {
                     // Remove this hero metadata.
@@ -385,6 +384,19 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+                    // We need to check if the object being removed is a River Delta, and if so, use that data to update the nearby Stream correctly.
+                    const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
+
+                    objectIter = mapTile.objects.erase( objectIter );
+
+                    if ( riverDeltaDirection != Direction::UNKNOWN ) {
+                        // For River Deltas we update the nearby Streams to properly disconnect from them.
+                        Maps::updateStreamsToDeltaConnection( mapFormat, static_cast<int32_t>( mapTileIndex ), riverDeltaDirection );
+                    }
+
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
@@ -393,6 +405,10 @@ namespace
                 if ( objectsUids.empty() ) {
                     break;
                 }
+            }
+
+            if ( objectsUids.empty() ) {
+                break;
             }
         }
 
@@ -431,7 +447,8 @@ namespace
         case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
         case Maps::ObjectGroup::LANDSCAPE_ROCKS:
         case Maps::ObjectGroup::LANDSCAPE_TREES:
-        case Maps::ObjectGroup::MONSTERS: {
+        case Maps::ObjectGroup::MONSTERS:
+        case Maps::ObjectGroup::STREAMS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
             if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
@@ -453,19 +470,12 @@ namespace
             break;
         }
         case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS: {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
-
-            assert( !objectInfo.groundLevelParts.empty() );
-            const auto & firstObjectPart = objectInfo.groundLevelParts.front();
-
             // River deltas are only objects that can be placed on water and on land.
-            // Yes, the below code is very hacky but so far this is the best we can do.
-            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2
-                 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U || firstObjectPart.icnIndex == 218 + 2U
-                      || firstObjectPart.icnIndex == 218 + 11U ) ) {
+            if ( Maps::isRiverDeltaObject( groupType, objectType ) ) {
                 // This is a river delta. Just don't check the terrain type.
             }
-            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            else if ( !checkConditionForUsedTiles( Maps::getObjectInfo( groupType, objectType ), tilePos,
+                                                   []( const Maps::Tile & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 errorMessage = _( "%{objects} cannot be placed on water." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 return false;
@@ -1395,7 +1405,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( Maps::updateStreamOnTile( tile, true ) ) {
+            if ( Maps::addStream( _mapFormat, tileIndex ) ) {
                 _redraw |= mapUpdateFlags;
 
                 action.commit();
@@ -1644,32 +1654,9 @@ namespace Interface
             }
 
             // For River Deltas we update the nearby Streams to properly connect to them.
-            const Maps::ObjectInfo & objectInfo = Maps::getObjectInfo( groupType, objectType );
-            std::for_each( objectInfo.groundLevelParts.begin(), objectInfo.groundLevelParts.end(), [&tile]( const Maps::LayeredObjectPartInfo & info ) {
-                if ( info.icnType != MP2::OBJ_ICN_TYPE_OBJNMUL2 ) {
-                    return;
-                }
-
-                int deltaDirection = Direction::UNKNOWN;
-                switch ( info.icnIndex ) {
-                case 0:
-                    deltaDirection = Direction::TOP;
-                    break;
-                case 13:
-                    deltaDirection = Direction::BOTTOM;
-                    break;
-                case 218:
-                    deltaDirection = Direction::LEFT;
-                    break;
-                case 218 + 13:
-                    deltaDirection = Direction::RIGHT;
-                    break;
-                default:
-                    return;
-                }
-
-                Maps::updateStreamsToDeltaConnection( tile, deltaDirection );
-            } );
+            if ( const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( groupType, objectType ); riverDeltaDirection != Direction::UNKNOWN ) {
+                Maps::updateStreamsToDeltaConnection( _mapFormat, tile.GetIndex(), riverDeltaDirection );
+            }
 
             action.commit();
         }
@@ -1887,7 +1874,7 @@ namespace Interface
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
 
-            bool removeRoadAndStream = false;
+            bool removeRoad = false;
 
             for ( const auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_FLAGS || object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
@@ -1895,9 +1882,9 @@ namespace Interface
                     continue;
                 }
 
-                if ( object.group == Maps::ObjectGroup::ROADS || object.group == Maps::ObjectGroup::STREAMS ) {
+                if ( object.group == Maps::ObjectGroup::ROADS ) {
                     if ( world.getTile( static_cast<int32_t>( i ) ).isWater() ) {
-                        removeRoadAndStream = true;
+                        removeRoad = true;
                     }
 
                     continue;
@@ -1908,11 +1895,10 @@ namespace Interface
                 }
             }
 
-            if ( removeRoadAndStream ) {
+            if ( removeRoad ) {
                 auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
 
                 Maps::updateRoadOnTile( worldTile, false );
-                Maps::updateStreamOnTile( worldTile, false );
             }
         }
 

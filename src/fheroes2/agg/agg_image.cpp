@@ -282,8 +282,8 @@ namespace
         // Skip the second byte
         imageStream.get();
 
-        const int32_t width = imageStream.get16();
-        const int32_t height = imageStream.get16();
+        const int32_t width = imageStream.getLE16();
+        const int32_t height = imageStream.getLE16();
 
         if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
@@ -5031,7 +5031,7 @@ namespace
         case ICN::OBJNGRAS: {
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 151 ) {
-                _icnVsSprite[id].resize( 153 );
+                _icnVsSprite[id].resize( 155 );
 
                 loadICN( ICN::OBJNSNOW );
 
@@ -5049,6 +5049,22 @@ namespace
                     Blit( temp, _icnVsSprite[id][152] );
 
                     ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part1.image", temp );
+                    _icnVsSprite[id][153] = _icnVsSprite[ICN::OBJNSNOW][12];
+                    Blit( temp, _icnVsSprite[id][153] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 255, 3 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part2.image", temp );
+                    _icnVsSprite[id][154] = _icnVsSprite[ICN::OBJNSNOW][13];
+                    Blit( temp, _icnVsSprite[id][154] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 255, 3 );
                 }
             }
 

@@ -102,14 +102,14 @@ int main( int argc, char ** argv )
         const size_t inputStreamSize = inputStream.size();
         const uint16_t itemsCount = inputStream.getLE16();
 
-        RWStreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
+        ROStreamBuf itemsStream = inputStream.getStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
-        RWStreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
+        ROStreamBuf namesStream = inputStream.getStreamBuf( AGGItemNameLen * itemsCount );
 
         std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
-            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
+            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.getString( AGGItemNameLen ) )];
 
             info.hash = itemsStream.getLE32();
             info.offset = itemsStream.getLE32();
@@ -137,7 +137,7 @@ int main( int argc, char ** argv )
 
             inputStream.seek( info.offset );
 
-            static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+            static_assert( std::is_same_v<uint8_t, unsigned char> );
 
             const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
             if ( buf.size() != info.size ) {

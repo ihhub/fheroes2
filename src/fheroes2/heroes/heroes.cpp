@@ -560,7 +560,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
         // An empty name can be set in the original Editor which is wrong.
-        std::string temp = dataStream.toString( 13 );
+        std::string temp = dataStream.getString( 13 );
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
