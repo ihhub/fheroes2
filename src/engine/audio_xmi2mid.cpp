@@ -354,6 +354,7 @@ namespace
         }
     };
 
+    // codechecker_false_positive [core.uninitialized.Assign] Value assigned to field '_time' in implicit constructor is garbage or undefined
     struct MidiChunk
     {
         uint32_t _time{ 0 };
