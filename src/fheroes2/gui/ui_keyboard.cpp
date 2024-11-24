@@ -750,6 +750,8 @@ namespace
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
+            okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
+
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -766,13 +768,6 @@ namespace
             }
 
             updateButtonStates( buttons, le );
-
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
 
             if ( le.MouseClickLeft( textRoi ) ) {
                 renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );
@@ -866,8 +861,18 @@ namespace fheroes2
                 assert( 0 );
                 break;
             case DialogAction::Close: {
-                const auto handleError = [&action]() {
+                const auto handleInvalidValue = [&action]() {
                     showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+
+                    action = DialogAction::DoNothing;
+                };
+
+                const auto handleOutOfRange = [&action, &minValue, &maxValue]() {
+                    std::string errorMessage = _( "The entered value is out of range.\nIt should be not less than %{minValue} and not more than %{maxValue}." );
+                    StringReplace( errorMessage, "%{minValue}", minValue );
+                    StringReplace( errorMessage, "%{maxValue}", maxValue );
+
+                    showStandardTextMessage( _( "Warning" ), std::move( errorMessage ), Dialog::OK );
 
                     action = DialogAction::DoNothing;
                 };
@@ -875,7 +880,7 @@ namespace fheroes2
                 try {
                     const int32_t intValue = std::stoi( strValue );
                     if ( intValue < minValue || intValue > maxValue ) {
-                        handleError();
+                        handleOutOfRange();
                         break;
                     }
 
@@ -884,10 +889,10 @@ namespace fheroes2
                 }
                 // The string can be empty or contain only a minus sign (when entering a negative number and then deleting numeric characters using the Backspace key)
                 catch ( std::invalid_argument & ) {
-                    handleError();
+                    handleInvalidValue();
                 }
                 catch ( std::out_of_range & ) {
-                    handleError();
+                    handleOutOfRange();
                 }
 
                 break;
