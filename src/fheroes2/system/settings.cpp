@@ -614,7 +614,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
             result.emplace_back( std::move( dataPath ) );
         }
 
-        // Remove all paths that are not directories. Empty path should not be removed because it means the current directory.
+        // Remove all paths that are not directories. Empty path should not be removed because it in fact means the current directory.
         result.erase( std::remove_if( result.begin(), result.end(), []( const std::string & path ) { return !path.empty() && !System::IsDirectory( path ); } ),
                       result.end() );
 
