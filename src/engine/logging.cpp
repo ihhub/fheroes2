@@ -122,13 +122,15 @@ namespace Logging
         logFile.open( "fheroes2.log", std::ofstream::out );
 #elif defined( _WIN32 )
         const std::scoped_lock<std::mutex> lock( logMutex );
-        const std::string logPath( System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
 
-        System::MakeDirectory( System::GetParentDirectory( logPath ) );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        logFile.open( logPath, std::ofstream::out );
+        System::MakeDirectory( configDir );
+
+        logFile.open( System::concatPath( configDir, "fheroes2.log" ), std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
+
         setlogmask( LOG_UPTO( LOG_WARNING ) );
 #endif
     }
