@@ -469,7 +469,7 @@ namespace
                 }
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
                     const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
-                    const int32_t textStartOffsetX = ( textInputRoi.width - text.width() ) / 2;
+                    const int32_t textStartOffsetX = std::max( 0, ( textInputRoi.width - text.width() ) / 2 );
                     charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x,
                                                                           textInputRoi.x + textStartOffsetX );
 

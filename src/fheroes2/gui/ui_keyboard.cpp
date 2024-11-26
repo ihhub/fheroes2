@@ -852,7 +852,8 @@ namespace fheroes2
         std::string strValue = std::to_string( output );
         DialogAction action = DialogAction::DoNothing;
 
-        KeyboardRenderer renderer( Display::instance(), strValue, Settings::Get().isEvilInterfaceEnabled() );
+        // Lets limit to 11 digits: minus and 10 digits for INT32_MIN
+        KeyboardRenderer renderer( Display::instance(), strValue, 10, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
