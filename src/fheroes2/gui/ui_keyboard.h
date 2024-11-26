@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <string>
 
 namespace fheroes2
@@ -31,4 +32,6 @@ namespace fheroes2
     //
     // If length limit is set to 0 then no limit will be applied.
     void openVirtualKeyboard( std::string & output, size_t lengthLimit );
+
+    void openVirtualNumpad( int32_t & output, const int32_t minValue = INT32_MIN, const int32_t maxValue = INT32_MAX );
 }

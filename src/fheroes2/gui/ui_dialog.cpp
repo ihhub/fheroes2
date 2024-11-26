@@ -47,6 +47,7 @@
 #include "spell_info.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_keyboard.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 
@@ -905,6 +906,13 @@ namespace fheroes2
 
         if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
             _value -= _step;
+            return true;
+        }
+
+        if ( le.MouseClickLeft( _editBox ) ) {
+            openVirtualNumpad( _value, _minimum, _maximum );
+            assert( _value >= _minimum && _value <= _maximum );
+
             return true;
         }
 
