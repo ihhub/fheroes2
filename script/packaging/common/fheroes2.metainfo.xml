@@ -59,7 +59,7 @@
           <li>fix passability for several objects on maps made the original Editor</li>
           <li>center Magic Book artifact on the Adventure Map</li>
           <li>speed up ICN image decoding</li>
-          <li>so not download the wing32.dll for HoMM2 demo version</li>
+          <li>do not download the wing32.dll for HoMM2 demo version</li>
           <li>add u with two dots to buttons and translate and improve German buttons</li>
         </ul>
       </description>
