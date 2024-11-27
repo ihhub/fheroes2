@@ -51,6 +51,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_keyboard.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -284,6 +285,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     fheroes2::Image background( 68, 19 );
     fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, background.width(), background.height() );
 
+    const fheroes2::Rect recruitCountInputArea( dialogOffset.x + 118, dialogOffset.y + 147, background.width(), background.height() );
+
     if ( isEvilInterface ) {
         fheroes2::ApplyPalette( background, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
     }
@@ -423,7 +426,21 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
 
-    // str loop
+    const auto updateCurrentInfo = [&paymentMonster = std::as_const( paymentMonster ), &max = std::as_const( max ), &result = std::as_const( result ), &paymentCosts,
+                                    &buttonMax, &buttonMin, &maxmin]() {
+        paymentCosts = paymentMonster * result;
+
+        if ( result == max ) {
+            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
+        }
+        else if ( result == 1 ) {
+            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
+        }
+        else {
+            maxmin.clear();
+        }
+    };
+
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
@@ -516,11 +533,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             result = max;
             paymentMonster = monster.GetCost();
-            paymentCosts = paymentMonster * result;
-            redraw = true;
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
 
+            updateCurrentInfo();
             RedrawMonsterInfo( windowActiveArea, monster, available, true );
+
+            redraw = true;
         }
 
         if ( le.isMouseRightButtonPressedInArea( monsterArea ) ) {
@@ -539,60 +556,56 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             continue;
         }
 
-        int32_t temp = static_cast<int32_t>( result );
-        if ( fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
+        if ( int32_t temp = static_cast<int32_t>( result ); fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
             result = temp;
-            paymentCosts = paymentMonster * result;
-            redraw = true;
-            maxmin.clear();
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            updateCurrentInfo();
+
+            redraw = true;
         }
 
-        if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
-             && result < max ) {
-            ++result;
-            paymentCosts += paymentMonster;
-            redraw = true;
-            maxmin.clear();
+        if ( le.MouseClickLeft( recruitCountInputArea ) ) {
+            int32_t temp = static_cast<int32_t>( result );
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            fheroes2::openVirtualNumpad( temp, 0, static_cast<int32_t>( max ) );
+            assert( temp >= 0 && temp <= static_cast<int32_t>( max ) );
+
+            result = temp;
+
+            updateCurrentInfo();
+
+            redraw = true;
+        }
+        else if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP )
+                    || timedButtonUp.isDelayPassed() )
+                  && result < max ) {
+            ++result;
+
+            updateCurrentInfo();
+
+            redraw = true;
         }
         else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
                     || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
-            paymentCosts -= paymentMonster;
-            redraw = true;
-            maxmin.clear();
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            updateCurrentInfo();
+
+            redraw = true;
         }
         else if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) && result != max ) {
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
             result = max;
-            paymentCosts = paymentMonster * max;
+
+            updateCurrentInfo();
+
             redraw = true;
         }
         else if ( buttonMin.isEnabled() && le.MouseClickLeft( buttonMin.area() ) && result != 1 ) {
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             result = 1;
-            paymentCosts = paymentMonster;
+
+            updateCurrentInfo();
+
             redraw = true;
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
