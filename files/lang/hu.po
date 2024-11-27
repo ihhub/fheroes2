@@ -6252,7 +6252,7 @@ msgid "Dutch"
 msgstr "holland"
 
 msgid "Hungarian"
-msgstr "magyar"
+msgstr "Magyar"
 
 msgid "Danish"
 msgstr "dán"
