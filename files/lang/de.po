@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-24 10:21+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3564,8 +3564,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Seid Ihr sicher, dass Ihr die Datei löschen möchten:"
 
-msgid "Warning!"
-msgstr "Achtung!"
+msgid "Warning"
+msgstr "Achtung"
 
 msgid "Click to save the current game."
 msgstr "Klicken um das aktuelle Spiel zu speichern."
@@ -4586,9 +4586,6 @@ msgstr "Abbrechen und zurück zum Hauptmenü des Karteneditors."
 
 msgid "No maps available!"
 msgstr "Keine Karten vorhanden!"
-
-msgid "Warning"
-msgstr "Achtung"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -12435,6 +12432,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Achtung!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Dummy 1"
