@@ -26,10 +26,12 @@
 #include <cstdlib>
 #include <functional>
 #include <memory>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
+#include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
@@ -43,6 +45,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -55,6 +58,7 @@ namespace
     const int32_t defaultSpecialButtonWidth{ 54 };
     const int32_t spacebarButtonWidth{ 175 };
     const int32_t defaultWindowWidth{ 520 };
+    const int32_t numpadWindowWidth{ 320 };
     const int32_t defaultWindowHeight{ 250 };
     const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point buttonShadowOffset{ -5, 5 };
@@ -91,7 +95,7 @@ namespace
         AddLetter,
         UpperCase,
         LowerCase,
-        Numeric,
+        AlphaNumeric,
         ChangeLanguage,
         Backspace,
         Close
@@ -101,6 +105,7 @@ namespace
     {
         LowerCase,
         UpperCase,
+        AlphaNumeric,
         Numeric
     };
 
@@ -149,8 +154,8 @@ namespace
 
             assert( size.width > 0 && size.height > 0 );
 
-            const fheroes2::Point defaultOffset{ ( _output.width() - defaultWindowWidth ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
-            const fheroes2::Point offset{ defaultOffset.x - ( size.width - defaultWindowWidth ), defaultOffset.y - ( size.height - defaultWindowHeight ) };
+            const fheroes2::Point defaultOffset{ ( _output.width() - size.width ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
+            const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
 
             // It is important to destroy the previous window to avoid rendering issues.
             _window.reset();
@@ -192,6 +197,30 @@ namespace
             }
 
             --_cursorPosition;
+
+            _output.render( renderInputArea() );
+        }
+
+        void swapSign()
+        {
+            if ( _info.empty() ) {
+                return;
+            }
+
+            if ( _info.front() == '-' ) {
+                _info = _info.substr( 1 );
+
+                if ( _cursorPosition > 0 ) {
+                    --_cursorPosition;
+                }
+
+                _output.render( renderInputArea() );
+
+                return;
+            }
+
+            _info.insert( _info.begin(), '-' );
+            ++_cursorPosition;
 
             _output.render( renderInputArea() );
         }
@@ -282,7 +311,7 @@ namespace
         bool isInvertedRenderingLogic{ false };
     };
 
-    std::vector<std::string> getNumericCharacterLayout( const fheroes2::SupportedLanguage language )
+    std::vector<std::string> getAlphaNumericCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
@@ -301,6 +330,11 @@ namespace
         }
 
         return {};
+    }
+
+    std::vector<std::string> getNumericCharacterLayout()
+    {
+        return { "123", "456", "789" };
     }
 
     std::vector<std::string> getCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
@@ -367,8 +401,12 @@ namespace
             buttonLetters = getCapitalCharacterLayout( language );
             returnLetters = buttonLetters;
             break;
+        case LayoutType::AlphaNumeric:
+            buttonLetters = getAlphaNumericCharacterLayout( language );
+            returnLetters = buttonLetters;
+            break;
         case LayoutType::Numeric:
-            buttonLetters = getNumericCharacterLayout( language );
+            buttonLetters = getNumericCharacterLayout();
             returnLetters = buttonLetters;
             break;
         default:
@@ -413,7 +451,7 @@ namespace
         buttons.resize( buttonLetters.size() );
 
         const int32_t buttonWidth
-            = ( layoutType == LayoutType::Numeric ) ? getDefaultButtonWidth( fheroes2::SupportedLanguage::English ) : getDefaultButtonWidth( language );
+            = ( layoutType == LayoutType::AlphaNumeric ) ? getDefaultButtonWidth( fheroes2::SupportedLanguage::English ) : getDefaultButtonWidth( language );
 
         for ( size_t i = 0; i < buttonLetters.size(); ++i ) {
             assert( buttonLetters[i].size() == returnLetters[i].size() );
@@ -439,7 +477,7 @@ namespace
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::AlphaNumeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
@@ -461,7 +499,7 @@ namespace
             lastButtonRow.back().isInvertedRenderingLogic = true;
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::AlphaNumeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
@@ -478,7 +516,7 @@ namespace
                 return DialogAction::Backspace;
             } );
             break;
-        case LayoutType::Numeric:
+        case LayoutType::AlphaNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
@@ -491,6 +529,29 @@ namespace
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            lastButtonRow.back().button.hide();
+
+            lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.removeCharacter();
+                return DialogAction::Backspace;
+            } );
+            break;
+        case LayoutType::Numeric:
+            lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow.back().button.hide();
+
+            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.swapSign();
+                return DialogAction::AddLetter;
+            } );
+
+            lastButtonRow.emplace_back( "0", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.insertCharacter( '0' );
+                return DialogAction::AddLetter;
+            } );
+
+            lastButtonRow.emplace_back( "\x7F", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -524,7 +585,7 @@ namespace
         }
     }
 
-    fheroes2::Rect getButtonsRoi( const std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset )
+    fheroes2::Rect getButtonsRoi( const std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset, const int32_t windowWidth )
     {
         std::vector<int32_t> offsets;
 
@@ -542,7 +603,7 @@ namespace
         }
 
         for ( int32_t & rowOffset : offsets ) {
-            rowOffset = ( defaultWindowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
+            rowOffset = ( windowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
         }
 
         fheroes2::Rect roi{ offset.x + offsets.front(), offset.y, 1, 1 };
@@ -573,7 +634,7 @@ namespace
         return roi;
     }
 
-    void renderButtons( std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset, fheroes2::Image & output )
+    void renderButtons( std::vector<std::vector<KeyboardButton>> & buttonLayout, const fheroes2::Point & offset, fheroes2::Image & output, const int32_t windowWidth )
     {
         std::vector<int32_t> offsets;
 
@@ -591,7 +652,7 @@ namespace
         }
 
         for ( int32_t & rowOffset : offsets ) {
-            rowOffset = ( defaultWindowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
+            rowOffset = ( windowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
         }
 
         int32_t yOffset = offset.y;
@@ -648,22 +709,23 @@ namespace
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
 
+        const int32_t windowWidth = ( layoutType == LayoutType::Numeric ) ? numpadWindowWidth : defaultWindowWidth;
+
         const bool isResized = renderer.resize(
-            { defaultWindowWidth,
-              defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+            { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
-        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders );
+        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders, windowWidth );
         const fheroes2::Rect textRoi{ renderer.getTextRoi() };
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
 
-        renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display );
+        renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display, windowWidth );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
@@ -688,6 +750,8 @@ namespace
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
+            okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
+
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -704,13 +768,6 @@ namespace
             }
 
             updateButtonStates( buttons, le );
-
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
 
             if ( le.MouseClickLeft( textRoi ) ) {
                 renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );
@@ -730,25 +787,23 @@ namespace fheroes2
 {
     void openVirtualKeyboard( std::string & output )
     {
-        const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
         SupportedLanguage language = SupportedLanguage::English;
-        DialogAction action = DialogAction::AddLetter;
+        DialogAction action = DialogAction::DoNothing;
         LayoutType layoutType = LayoutType::LowerCase;
 
         const SupportedLanguage currentGameLanguage = getCurrentLanguage();
-
         if ( currentGameLanguage == lastSelectedLanguage ) {
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
-            case DialogAction::DoNothing:
             case DialogAction::AddLetter:
             case DialogAction::Backspace:
+            case DialogAction::DoNothing:
                 // These actions must not be processed here!
                 assert( 0 );
                 break;
@@ -758,8 +813,8 @@ namespace fheroes2
             case DialogAction::UpperCase:
                 layoutType = LayoutType::UpperCase;
                 break;
-            case DialogAction::Numeric:
-                layoutType = LayoutType::Numeric;
+            case DialogAction::AlphaNumeric:
+                layoutType = LayoutType::AlphaNumeric;
                 break;
             case DialogAction::ChangeLanguage:
                 assert( isSupportedForLanguageSwitching( currentGameLanguage ) );
@@ -777,6 +832,71 @@ namespace fheroes2
                 break;
             case DialogAction::Close:
                 return;
+            default:
+                // Did you add a new state? Add the logic above!
+                assert( 0 );
+                break;
+            }
+        }
+    }
+
+    void openVirtualNumpad( int32_t & output, const int32_t minValue /* = INT32_MIN */, const int32_t maxValue /* = INT32_MAX */ )
+    {
+        std::string strValue = std::to_string( output );
+        DialogAction action = DialogAction::DoNothing;
+
+        KeyboardRenderer renderer( Display::instance(), strValue, Settings::Get().isEvilInterfaceEnabled() );
+
+        while ( action != DialogAction::Close ) {
+            action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
+            switch ( action ) {
+            case DialogAction::AddLetter:
+            case DialogAction::AlphaNumeric:
+            case DialogAction::Backspace:
+            case DialogAction::ChangeLanguage:
+            case DialogAction::DoNothing:
+            case DialogAction::LowerCase:
+            case DialogAction::UpperCase:
+                // These actions must not be processed here!
+                assert( 0 );
+                break;
+            case DialogAction::Close: {
+                const auto handleInvalidValue = [&action]() {
+                    showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+
+                    action = DialogAction::DoNothing;
+                };
+
+                const auto handleOutOfRange = [&action, &minValue, &maxValue]() {
+                    std::string errorMessage = _( "The entered value is out of range.\nIt should be not less than %{minValue} and not more than %{maxValue}." );
+                    StringReplace( errorMessage, "%{minValue}", minValue );
+                    StringReplace( errorMessage, "%{maxValue}", maxValue );
+
+                    showStandardTextMessage( _( "Warning" ), std::move( errorMessage ), Dialog::OK );
+
+                    action = DialogAction::DoNothing;
+                };
+
+                try {
+                    const int32_t intValue = std::stoi( strValue );
+                    if ( intValue < minValue || intValue > maxValue ) {
+                        handleOutOfRange();
+                        break;
+                    }
+
+                    output = intValue;
+                    return;
+                }
+                // The string can be empty or contain only a minus sign (when entering a negative number and then deleting numeric characters using the Backspace key)
+                catch ( std::invalid_argument & ) {
+                    handleInvalidValue();
+                }
+                catch ( std::out_of_range & ) {
+                    handleOutOfRange();
+                }
+
+                break;
+            }
             default:
                 // Did you add a new state? Add the logic above!
                 assert( 0 );

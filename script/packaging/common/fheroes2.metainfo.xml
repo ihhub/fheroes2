@@ -37,6 +37,33 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-11-27" version="v1.1.4">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.4</url>
+      <description>
+        <p>Changes in v1.1.4 (27 November 2024):</p>
+        <ul>
+          <li>add Virtual Numpad support for integer inputs</li>
+          <li>add new Lean-To object variant</li>
+          <li>update the Czech translation</li>
+          <li>add Belarusian language support for the Virtual Keyboard</li>
+          <li>improve &amp; speed up the translation-related logic</li>
+          <li>update the German translation related to the Price of Loyalty Campaign</li>
+          <li>update the Swedish translation</li>
+          <li>update initial passability logic</li>
+          <li>fix the attack value estimation for a Hypnotized unit with the ALL_ADJACENT_CELL_MELEE_ATTACK ability</li>
+          <li>improve the retreat logic for archers</li>
+          <li>update the Portuguese Translation</li>
+          <li>fix overlapping text in the High Scores dialog</li>
+          <li>add support of Evil interface for the Scenario Information dialog</li>
+          <li>fix the penalty calculation for enemy units that can evade the engagement during battle</li>
+          <li>fix passability for several objects on maps made the original Editor</li>
+          <li>center Magic Book artifact on the Adventure Map</li>
+          <li>speed up ICN image decoding</li>
+          <li>do not download the wing32.dll for HoMM2 demo version</li>
+          <li>add u with two dots to buttons and translate and improve German buttons</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-10-23" version="v1.1.3">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.3</url>
       <description>
