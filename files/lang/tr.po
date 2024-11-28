@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-24 10:21+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3213,8 +3213,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
-msgid "Warning!"
-msgstr ""
+msgid "Warning"
+msgstr "Uyarı"
 
 msgid "Click to save the current game."
 msgstr ""
@@ -4121,9 +4121,6 @@ msgstr ""
 
 msgid "No maps available!"
 msgstr ""
-
-msgid "Warning"
-msgstr "Uyarı"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
