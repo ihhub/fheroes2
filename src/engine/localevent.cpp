@@ -1034,8 +1034,10 @@ namespace EventProcessing
         static void onTouchEvent( LocalEvent & eventHandler, const SDL_TouchFingerEvent & event )
         {
 #if defined( TARGET_PS_VITA )
-            if ( event.touchId != 0 ) {
-                // Ignore rear touchpad on PS Vita
+            // PS Vita has two touchpads: front (ID = 1 since SDL 2.30.7) and rear (ID = 2 since SDL 2.30.7).
+            // The IDs should correspond the 'SDL_TouchID' set in 'SDL_AddTouch() ' in VITA_InitTouch()' in SDL2 source: video/vita/SDL_vitatouch.c.
+            if ( event.touchId != 1 ) {
+                // Use only front touchpad on PS Vita.
                 return;
             }
 #endif
