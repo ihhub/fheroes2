@@ -1034,11 +1034,23 @@ namespace EventProcessing
         static void onTouchEvent( LocalEvent & eventHandler, const SDL_TouchFingerEvent & event )
         {
 #if defined( TARGET_PS_VITA )
-            // PS Vita has two touchpads: front (ID = 1 since SDL 2.30.7) and rear (ID = 2 since SDL 2.30.7).
-            // The IDs should correspond the 'SDL_TouchID' set in 'SDL_AddTouch() ' in VITA_InitTouch()' in SDL2 source: video/vita/SDL_vitatouch.c.
-            if ( event.touchId != 1 ) {
+            {
+                // PS Vita has two touchpads: front and rear. The ID of the front touchpad must match the value of
+                // 'SDL_TouchID' used in the 'SDL_AddTouch()' call in the 'VITA_InitTouch()' function in this SDL2
+                // source file: video/vita/SDL_vitatouch.c.
+                constexpr SDL_TouchID frontTouchpadDeviceID
+                {
+#if SDL_VERSION_ATLEAST( 2, 30, 7 )
+                    1
+#else
+                    0
+#endif
+                };
+
                 // Use only front touchpad on PS Vita.
-                return;
+                if ( event.touchId != frontTouchpadDeviceID ) {
+                    return;
+                }
             }
 #endif
 
