@@ -1759,12 +1759,12 @@ namespace Interface
     bool EditorInterface::loadMap( const std::string & filePath )
     {
         if ( !Maps::Map_Format::loadMap( filePath, _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), "Failed to load the map.", Dialog::OK );
             return false;
         }
 
         if ( !Maps::readMapInEditor( _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), "Failed to read the map.", Dialog::OK );
             return false;
         }
 
@@ -1785,20 +1785,20 @@ namespace Interface
     void EditorInterface::saveMapToFile()
     {
         if ( !Maps::updateMapPlayers( _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "The map is corrupted." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "The map is corrupted." ), Dialog::OK );
             return;
         }
 
         const std::string dataPath = System::GetDataDirectory( "fheroes2" );
         if ( dataPath.empty() ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate data directory to save the map." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to locate data directory to save the map." ), Dialog::OK );
             return;
         }
 
         std::string mapDirectory = System::concatPath( dataPath, "maps" );
 
         if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
             return;
         }
 
@@ -1807,7 +1807,7 @@ namespace Interface
             std::string correctedMapDirectory;
 
             if ( !System::GetCaseInsensitivePath( mapDirectory, correctedMapDirectory ) ) {
-                fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate a directory to save the map." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to locate a directory to save the map." ), Dialog::OK );
                 return;
             }
 
@@ -1849,7 +1849,7 @@ namespace Interface
             return;
         }
 
-        fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Failed to save the map." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Error" ), _( "Failed to save the map." ), Dialog::OK );
     }
 
     void EditorInterface::openMapSpecificationsDialog()
