@@ -1036,7 +1036,7 @@ namespace EventProcessing
 #if defined( TARGET_PS_VITA )
             if ( event.touchId != 0 ) {
                 // Ignore rear touchpad on PS Vita
-                return;
+                // return;
             }
 #endif
 
