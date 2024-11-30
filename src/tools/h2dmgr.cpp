@@ -62,11 +62,11 @@ namespace
 
     void printUsage( char ** argv )
     {
-        const std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
-                  << "Syntax: " << baseName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl
-                  << "        " << baseName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
+        std::cerr << toolName << " manages the contents of the specified H2D file(s)." << std::endl
+                  << "Syntax: " << toolName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl
+                  << "        " << toolName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
     }
 
     bool loadPalette( const char * paletteFileName )
