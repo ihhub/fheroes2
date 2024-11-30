@@ -125,7 +125,7 @@ namespace
                 }
             }
 
-            uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
+            uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
         }
 
         MapsFileInfoList result;
@@ -635,8 +635,8 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
-    // Only the basename of map filename (fi.file) is saved
-    stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
+    // Only the filename part of the path to the map file is saved
+    stream << System::GetFileName( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
@@ -655,7 +655,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 {
     uint8_t kingdommax = 0;
 
-    // Only the basename of map filename (fi.file) is loaded
+    // Only the filename part of the path to the map file is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );

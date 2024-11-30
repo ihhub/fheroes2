@@ -57,10 +57,10 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        const std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts the contents of the specified AGG file(s)." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.agg ..." << std::endl;
+        std::cerr << toolName << " extracts the contents of the specified AGG file(s)." << std::endl
+                  << "Syntax: " << toolName << " dst_dir input_file.agg ..." << std::endl;
         return EXIT_FAILURE;
     }
 
