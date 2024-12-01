@@ -179,7 +179,7 @@ void ListFiles::FindFileInDir( const std::string_view path, const std::string_vi
         return;
     }
 
-    emplace_back( correctedFilePath );
+    emplace_back( std::move( correctedFilePath ) );
 }
 
 bool ListFiles::IsEmpty( const std::string & path, const std::string & filter )
