@@ -59,8 +59,8 @@ namespace System
     std::string GetFileName( std::string_view path );
     std::string GetStem( const std::string_view path );
 
-    bool IsFile( const std::string & path );
-    bool IsDirectory( const std::string & path );
+    bool IsFile( const std::string_view path );
+    bool IsDirectory( const std::string_view path );
 
     bool GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath );
 

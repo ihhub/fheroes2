@@ -40,8 +40,6 @@
 #include <windows.h>
 #elif defined( TARGET_PS_VITA )
 #include <algorithm>
-
-#include <psp2/io/stat.h>
 #endif
 
 #if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
@@ -411,7 +409,7 @@ std::string System::GetStem( const std::string_view path )
     return fsPathToString( std::filesystem::path{ path }.stem() );
 }
 
-bool System::IsFile( const std::string & path )
+bool System::IsFile( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a file.
@@ -423,23 +421,13 @@ bool System::IsFile( const std::string & path )
         return false;
     }
 
-#if defined( TARGET_PS_VITA )
-    SceIoStat stat;
-
-    if ( sceIoGetstat( path.c_str(), &stat ) < 0 ) {
-        return false;
-    }
-
-    return ( SCE_S_ISREG( stat.st_mode ) );
-#else
     std::error_code ec;
 
     // Using the non-throwing overload
     return std::filesystem::is_regular_file( correctedPath, ec );
-#endif
 }
 
-bool System::IsDirectory( const std::string & path )
+bool System::IsDirectory( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a directory.
@@ -451,20 +439,10 @@ bool System::IsDirectory( const std::string & path )
         return false;
     }
 
-#if defined( TARGET_PS_VITA )
-    SceIoStat stat;
-
-    if ( sceIoGetstat( path.c_str(), &stat ) < 0 ) {
-        return false;
-    }
-
-    return ( SCE_S_ISDIR( stat.st_mode ) );
-#else
     std::error_code ec;
 
     // Using the non-throwing overload
     return std::filesystem::is_directory( correctedPath, ec );
-#endif
 }
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
