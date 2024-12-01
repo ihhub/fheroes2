@@ -62,7 +62,7 @@ namespace
         return ( strCmp( filenamePtr, filter.c_str() ) == 0 );
     }
 
-    void getFilesFromDirectory( const std::string_view path, const std::string & filter, const bool needExactMatch, ListFiles & files )
+    void getFilesFromDirectory( const std::string & path, const std::string & filter, const bool needExactMatch, ListFiles & files )
     {
         std::string correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
@@ -125,17 +125,17 @@ void ListFiles::Append( ListFiles && files )
     }
 }
 
-void ListFiles::ReadDir( const std::string_view path, const std::string & filter )
+void ListFiles::ReadDir( const std::string & path, const std::string & filter )
 {
     getFilesFromDirectory( path, filter, false, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName )
+void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName )
 {
     getFilesFromDirectory( path, fileName, true, *this );
 }
 
-bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter )
+bool ListFiles::IsEmpty( const std::string & path, const std::string & filter )
 {
     ListFiles list;
     list.ReadDir( path, filter );
