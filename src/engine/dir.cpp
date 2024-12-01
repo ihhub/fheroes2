@@ -76,14 +76,48 @@ namespace
 #endif
 
 #if defined( TARGET_PS_VITA )
-        const SceUID uid = sceIoDopen( path.c_str() );
-        if ( uid < 0 ) {
+        class SceUIDManager
+        {
+        public:
+            SceUIDManager( const std::string & path )
+                : uid( sceIoDopen( path.c_str() ) )
+            {}
+
+            SceUIDManager( const SceUIDManager & ) = delete;
+
+            ~SceUIDManager()
+            {
+                if ( !isValid() ) {
+                    return;
+                }
+
+                sceIoDclose( uid );
+            }
+
+            SceUIDManager & operator=( const SceUIDManager & ) = delete;
+
+            bool isValid() const
+            {
+                return uid >= 0;
+            }
+
+            SceUID getUID() const
+            {
+                return uid;
+            }
+
+        private:
+            const SceUID uid;
+        };
+
+        const SceUIDManager uidManager( path );
+        if ( !uidManager.isValid() ) {
             return;
         }
 
         SceIoDirent entry;
 
-        while ( sceIoDread( uid, &entry ) > 0 ) {
+        while ( sceIoDread( uidManager.getUID(), &entry ) > 0 ) {
             if ( !SCE_S_ISREG( entry.d_stat.st_mode ) ) {
                 continue;
             }
@@ -94,8 +128,6 @@ namespace
 
             files.emplace_back( System::concatPath( path, entry.d_name ) );
         }
-
-        sceIoDclose( uid );
 #else
         std::error_code ec;
 
