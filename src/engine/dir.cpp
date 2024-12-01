@@ -92,7 +92,7 @@ namespace
                 continue;
             }
 
-            files.emplace_back( System::concatPath( path, entry.d_name ); );
+            files.emplace_back( System::concatPath( path, entry.d_name ) );
         }
 
         sceIoDclose( uid );
