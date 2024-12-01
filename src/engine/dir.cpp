@@ -119,6 +119,7 @@ namespace
         SceIoDirent entry;
 
         while ( sceIoDread( uid.get(), &entry ) > 0 ) {
+            // Ensure that this directory entry is a regular file
             if ( !SCE_S_ISREG( entry.d_stat.st_mode ) ) {
                 continue;
             }
