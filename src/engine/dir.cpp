@@ -23,9 +23,14 @@
 
 #include "dir.h"
 
+#include <utility>
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/dirent.h>
+#else
 #include <filesystem>
 #include <system_error>
-#include <utility>
+#endif
 
 #if defined( _WIN32 )
 #include <cstring>
@@ -70,6 +75,28 @@ namespace
         auto * const strCmp = strcasecmp;
 #endif
 
+#if defined( TARGET_PS_VITA )
+        const SceUID uid = sceIoDopen( path.c_str() );
+        if ( uid < 0 ) {
+            return;
+        }
+
+        SceIoDirent entry;
+
+        while ( sceIoDread( uid, &entry ) > 0 ) {
+            if ( !SCE_S_ISREG( entry.d_stat.st_mode ) ) {
+                continue;
+            }
+
+            if ( !nameFilter( entry.d_name, needExactMatch, filter, strCmp ) ) {
+                continue;
+            }
+
+            files.emplace_back( System::concatPath( path, entry.d_name ); );
+        }
+
+        sceIoDclose( uid );
+#else
         std::error_code ec;
 
         // Using the non-throwing overload
@@ -87,6 +114,7 @@ namespace
 
             files.emplace_back( System::fsPathToString( entryPath ) );
         }
+#endif
     }
 }
 
