@@ -76,16 +76,17 @@ namespace
 #endif
 
 #if defined( TARGET_PS_VITA )
-        class SceUIDManager
+        // On PS Vita, getting a list of files using std::filesystem for some reason works much slower than using the native file system API
+        class SceUIDWrapper
         {
         public:
-            SceUIDManager( const std::string & path )
+            SceUIDWrapper( const std::string & path )
                 : uid( sceIoDopen( path.c_str() ) )
             {}
 
-            SceUIDManager( const SceUIDManager & ) = delete;
+            SceUIDWrapper( const SceUIDWrapper & ) = delete;
 
-            ~SceUIDManager()
+            ~SceUIDWrapper()
             {
                 if ( !isValid() ) {
                     return;
@@ -94,14 +95,14 @@ namespace
                 sceIoDclose( uid );
             }
 
-            SceUIDManager & operator=( const SceUIDManager & ) = delete;
+            SceUIDWrapper & operator=( const SceUIDWrapper & ) = delete;
 
             bool isValid() const
             {
                 return uid >= 0;
             }
 
-            SceUID getUID() const
+            SceUID get() const
             {
                 return uid;
             }
@@ -110,14 +111,14 @@ namespace
             const SceUID uid;
         };
 
-        const SceUIDManager uidManager( path );
-        if ( !uidManager.isValid() ) {
+        const SceUIDWrapper uid( path );
+        if ( !uid.isValid() ) {
             return;
         }
 
         SceIoDirent entry;
 
-        while ( sceIoDread( uidManager.getUID(), &entry ) > 0 ) {
+        while ( sceIoDread( uid.get(), &entry ) > 0 ) {
             if ( !SCE_S_ISREG( entry.d_stat.st_mode ) ) {
                 continue;
             }
