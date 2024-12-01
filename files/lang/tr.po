@@ -1257,7 +1257,7 @@ msgid "Dragon Master"
 msgstr "Ejderha Ustası"
 
 msgid "Rebellion"
-msgstr "isyan"
+msgstr "İsyan"
 
 msgid "Apocalypse"
 msgstr "Kıyamet"
