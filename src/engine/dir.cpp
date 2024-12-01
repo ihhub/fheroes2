@@ -164,9 +164,22 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter )
     getFilesFromDirectory( path, filter, false, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName )
+void ListFiles::FindFileInDir( const std::string_view path, const std::string_view fileName )
 {
-    getFilesFromDirectory( path, fileName, true, *this );
+    std::string correctedFilePath;
+    // If the file system is case-sensitive, then here we will get the actual file path using the case-insensitive
+    // search (if such a file exists). If the file system is case-insensitive, we will just get the passed path to
+    // the file back intact.
+    if ( !System::GetCaseInsensitivePath( System::concatPath( path, fileName ), correctedFilePath ) ) {
+        return;
+    }
+
+    // In case the file system is case insensitive, we additionally check the file for existence.
+    if ( !System::IsFile( correctedFilePath ) ) {
+        return;
+    }
+
+    emplace_back( correctedFilePath );
 }
 
 bool ListFiles::IsEmpty( const std::string & path, const std::string & filter )

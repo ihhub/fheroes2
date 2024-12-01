@@ -25,6 +25,7 @@
 
 #include <list>
 #include <string>
+#include <string_view>
 
 struct ListFiles : public std::list<std::string>
 {
@@ -33,8 +34,8 @@ struct ListFiles : public std::list<std::string>
     // Adds files from the 'path' directory ending in 'filter' to the list, case-insensitive.
     void ReadDir( const std::string & path, const std::string & filter );
 
-    // Adds files from the 'path' directory with names matching 'fileName' to the list, case-insensitive.
-    void FindFileInDir( const std::string & path, const std::string & fileName );
+    // Adds the first found file from the 'path' directory with a name matching 'fileName' to the list, case-insensitive.
+    void FindFileInDir( const std::string_view path, const std::string_view fileName );
 
     // Returns true if there are no files in the 'path' directory with names ending in 'filter', case-insensitive, otherwise returns false.
     static bool IsEmpty( const std::string & path, const std::string & filter );
