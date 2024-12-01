@@ -3087,7 +3087,7 @@ msgid "Hot Keys:"
 msgstr "Kısayollar:"
 
 msgid "Evil"
-msgstr "Şeyrani"
+msgstr "Şeytani"
 
 msgid "Good"
 msgstr "İyi"
