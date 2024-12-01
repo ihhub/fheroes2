@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-28 15:55+0000\n"
-"PO-Revision-Date: 2024-12-01 15:28+0300\n"
+"PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
@@ -162,7 +162,7 @@ msgid ""
 "PLAYER\n"
 "GAME"
 msgstr ""
-"ÇOKLU\n"
+"ÇOK\n"
 "OYUNCULU\n"
 "OYUN"
 
@@ -270,7 +270,6 @@ msgstr ""
 "E\n"
 "V\n"
 "R\n"
-"Y\n"
 "İ\n"
 "Y\n"
 "E"
@@ -496,7 +495,7 @@ msgid "You have already cast a spell this round."
 msgstr "Bu turda zaten bir büyü yaptın."
 
 msgid "That spell will have no effect!"
-msgstr "Bu büyünün etkisi olmayacak."
+msgstr "Bu büyünün etkisi olmayacak!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Savaş başına yalnızca bir tür elemental çağırabilirsiniz."
@@ -532,7 +531,7 @@ msgid "Auto Spell Casting"
 msgstr "Otomatik Büyü Yapma"
 
 msgid "Grid"
-msgstr "Kafes"
+msgstr "Izgara"
 
 msgid "Shadow Movement"
 msgstr "Gölge Hareketi"
@@ -643,7 +642,7 @@ msgid "Defender"
 msgstr "Savunan"
 
 msgid "Click to leave the battle results."
-msgstr "Savaş sonuçlarından çıkmak için tıklayın"
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
 
 msgid "Click to restart the battle in manual mode."
 msgstr "Savaşı manuel modda bbaşlatmak için tıklayın."
@@ -667,7 +666,7 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Karanlık büyücülük sanatlarını uygulayarak, %{canavar} olarak hizmetinize "
+"Karanlık büyücülük sanatlarını uygulayarak, %{monster} olarak hizmetinize "
 "geri dönmek için düşmanın ölülerinin %{count} kadarını çağırabilirsiniz."
 
 msgid "%{name} the %{race}"
@@ -894,8 +893,8 @@ msgstr[1] "%{count} %{defender} yok oldu."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "1 ruh dahil edildi"
-msgstr[1] "%{count} ruh dahil edildi"
+msgstr[0] "1 ruh dahil edildi."
+msgstr[1] "%{count} ruh dahil edildi."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -1031,7 +1030,7 @@ msgid "Start"
 msgstr "Başla"
 
 msgid "Start the battle."
-msgstr "Savaşı başlat"
+msgstr "Savaşı başlat."
 
 msgid "Exit"
 msgstr "Çıkış"
@@ -1040,7 +1039,7 @@ msgid "Reset"
 msgstr "Sıfırla"
 
 msgid "Reset to default settings."
-msgstr "varsayılan ayarlara sıfırla"
+msgstr "Varsayılan ayarlara sıfırla."
 
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
@@ -1067,7 +1066,7 @@ msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
 
 msgid "The %{name} is destroyed."
-msgstr "%{name} yok edildi"
+msgstr "%{name} yok edildi."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1766,7 +1765,7 @@ msgid "campaignBonus|Tax Lien"
 msgstr ""
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Yıldırım Topuz'u"
+msgstr "Yıldırım Topuzu"
 
 msgid "campaignBonus|Traveler's Boots"
 msgstr ""
@@ -1973,17 +1972,14 @@ msgstr ""
 msgid "This building has been disabled."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
-msgstr "%{name} 'i hareket ettir"
+msgstr "%{name} karşılanamıyor."
 
-#, fuzzy
 msgid "The %{name} is already built."
-msgstr "Ayna görüntüsü yok edildi!"
+msgstr "%{name} zaten inşa edildi."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
-msgstr "%{name} 'i hareket ettir"
+msgstr "%{name} inşa edilemiyor."
 
 msgid "Build %{name}."
 msgstr ""
@@ -2210,9 +2206,8 @@ msgstr ""
 msgid "Cannot recruit - you have too many Heroes."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford a Hero."
-msgstr "Son birlik hareket ettirilemiyor"
+msgstr "Kahraman karşılanamıyor."
 
 msgid "There is no room in the garrison for this army."
 msgstr ""
@@ -2935,13 +2930,13 @@ msgid "Save Game"
 msgstr "Oyunu Kaydet"
 
 msgid "Save the current game."
-msgstr "Şu anki oyunu kaydet"
+msgstr "Şu anki oyunu kaydet."
 
 msgid "Quit"
 msgstr "Çıkış"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Heroes of Might and Magic II dan çık"
+msgstr "Heroes of Might and Magic II'den çık."
 
 msgid "Language"
 msgstr "Dil"
@@ -2962,7 +2957,7 @@ msgid "Text Support"
 msgstr "Yazı Desteği"
 
 msgid "Change the language of the game."
-msgstr "Oyunun dilini değiştir"
+msgstr "Oyunun dilini değiştir."
 
 msgid "Select Game Language"
 msgstr "Oyunun dilini seç"
@@ -3063,7 +3058,7 @@ msgid "System Info"
 msgstr "Sistem Bilgisi"
 
 msgid "Change the resolution of the game."
-msgstr "Oyunun çözünürlüğünü değiş"
+msgstr "Oyunun çözünürlüğünü değiş."
 
 msgid "Select Game Resolution"
 msgstr "Oyunun çözünürlüğünü seç"
@@ -3080,13 +3075,13 @@ msgid "Show extra information such as FPS and current time."
 msgstr "FPS ve zaman hakkında ekstra bilgi göster."
 
 msgid "Hotkey: "
-msgstr "Kısayol:"
+msgstr "Kısayol: "
 
 msgid "Category: "
-msgstr "Kategori:"
+msgstr "Kategori: "
 
 msgid "Event: "
-msgstr "Etkinlik:"
+msgstr "Etkinlik: "
 
 msgid "Hot Keys:"
 msgstr "Kısayollar:"
@@ -3128,7 +3123,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
-msgstr "Arayüz görünürlüğünü değiştirin"
+msgstr "Arayüz görünürlüğünü değiştirin."
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Pencereyi kaydırma hızını ayarlar."
@@ -3149,7 +3144,7 @@ msgid "%{skill} +1"
 msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr "%{skill} öğrendin"
+msgstr "%{skill} öğrendin."
 
 msgid ""
 "%{name} has gained a level.\n"
@@ -3221,9 +3216,8 @@ msgstr ""
 msgid "already learned"
 msgstr ""
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Bilgi"
+msgstr "ücretsiz"
 
 msgid "already claimed"
 msgstr ""
@@ -3412,9 +3406,8 @@ msgstr ""
 msgid "Click to start placing the selected hero."
 msgstr ""
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "%{name} %{race}"
+msgstr "%{color} %{race}"
 
 msgid "You will place"
 msgstr ""
@@ -3425,13 +3418,11 @@ msgstr ""
 msgid "Click to select this color."
 msgstr ""
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Büyü hedefini seç"
+msgstr "Defineyi seç:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Büyü hedefini seç"
+msgstr "Okyanus Hedefini Seç:"
 
 msgid "Castle/town placing"
 msgstr ""
@@ -4884,7 +4875,7 @@ msgid "hotkey|credits"
 msgstr ""
 
 msgid "hotkey|standard game"
-msgstr "hotkey|ÇŞİÖLĞÜçölşıüğ"
+msgstr ""
 
 msgid "hotkey|campaign game"
 msgstr ""
@@ -5261,7 +5252,7 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr "ÇŞİÖLĞÜçölşıüğ"
+msgstr ""
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
