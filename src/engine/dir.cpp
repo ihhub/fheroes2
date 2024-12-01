@@ -174,7 +174,7 @@ void ListFiles::FindFileInDir( const std::string_view path, const std::string_vi
         return;
     }
 
-    // In case the file system is case insensitive, we additionally check the file for existence.
+    // In case the file system is case-insensitive, we additionally check the file for existence.
     if ( !System::IsFile( correctedFilePath ) ) {
         return;
     }
