@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-21 10:15+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-10-21 20:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3451,8 +3451,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Opravdu chceš smazat soubor:"
 
-msgid "Warning!"
-msgstr "Varování!"
+msgid "Warning"
+msgstr "Varování"
 
 msgid "Click to save the current game."
 msgstr "Klikni pro uložení aktuální hry."
@@ -4394,9 +4394,6 @@ msgstr "Zrušit a vrátit se do hlavního menu editoru map."
 
 msgid "No maps available!"
 msgstr "Žádné mapy k dispozici!"
-
-msgid "Warning"
-msgstr "Varování"
 
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: %{race} hrdina"
@@ -6143,6 +6140,14 @@ msgstr "Mezerník"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Příjmy království"
@@ -11835,3 +11840,6 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Varování!"

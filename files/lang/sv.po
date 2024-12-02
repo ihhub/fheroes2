@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 00:20+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-11-11 20:10+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3468,8 +3468,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
 
-msgid "Warning!"
-msgstr "Varning!"
+msgid "Warning"
+msgstr "Varning"
 
 msgid "Click to save the current game."
 msgstr "Klicka för att spara nuvarande spel."
@@ -4414,9 +4414,6 @@ msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
-
-msgid "Warning"
-msgstr "Varning"
 
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: %{race}hjälte"
@@ -6180,6 +6177,14 @@ msgstr "MELLANSLAG"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Inkomst"
@@ -11929,6 +11934,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Varning!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Atrapp 1"

@@ -226,7 +226,7 @@ namespace
 
     void renderFileName( const Maps::FileInfo & info, bool selected, const int32_t posX, const int32_t posY, fheroes2::Display & display )
     {
-        fheroes2::Text text( System::GetBasename( info.filename ), selected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( System::GetFileName( info.filename ), selected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         text.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
 
         const int32_t xCoordinate = posX + SCENARIO_LIST_MAP_NAME_OFFSET_X;

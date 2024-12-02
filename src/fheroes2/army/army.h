@@ -97,7 +97,7 @@ public:
     void Clean();
     void UpgradeTroops( const Castle & castle ) const;
 
-    Troop * GetFirstValid();
+    Troop * GetFirstValid() const;
     Troop * GetWeakestTroop() const;
     Troop * GetSlowestTroop() const;
 

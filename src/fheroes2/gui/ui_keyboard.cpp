@@ -862,7 +862,7 @@ namespace fheroes2
                 break;
             case DialogAction::Close: {
                 const auto handleInvalidValue = [&action]() {
-                    showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+                    showStandardTextMessage( _( "Error" ), _( "The entered value is invalid." ), Dialog::OK );
 
                     action = DialogAction::DoNothing;
                 };
@@ -872,7 +872,7 @@ namespace fheroes2
                     StringReplace( errorMessage, "%{minValue}", minValue );
                     StringReplace( errorMessage, "%{maxValue}", maxValue );
 
-                    showStandardTextMessage( _( "Warning" ), std::move( errorMessage ), Dialog::OK );
+                    showStandardTextMessage( _( "Error" ), std::move( errorMessage ), Dialog::OK );
 
                     action = DialogAction::DoNothing;
                 };

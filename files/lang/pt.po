@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-02 10:11+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-10-14 16:46-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3489,8 +3489,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Você tem certeza de que deseja apagar este arquivo:"
 
-msgid "Warning!"
-msgstr "Aviso!"
+msgid "Warning"
+msgstr "Aviso"
 
 msgid "Click to save the current game."
 msgstr "Clique para salvar o jogo atual."
@@ -4443,9 +4443,6 @@ msgstr "Cancelar e voltar para o menu principal do Editor de Mapa."
 
 msgid "No maps available!"
 msgstr "Nenhum mapa disponível!"
-
-msgid "Warning"
-msgstr "Aviso"
 
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: herói %{race}"
@@ -6232,6 +6229,14 @@ msgstr "ESPAÇO"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Renda do Reino"
@@ -12050,6 +12055,9 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Aviso!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Fantoche 1"
