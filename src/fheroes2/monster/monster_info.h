@@ -56,6 +56,7 @@ namespace fheroes2
         COLD_SPELL_IMMUNITY,
         IMMUNE_TO_CERTAIN_SPELL,
         ELEMENTAL_SPELL_DAMAGE_REDUCTION,
+        CERTAIN_SPELL_DAMAGE_REDUCTION,
         SPELL_CASTER,
         HP_REGENERATION,
         TWO_CELL_MELEE_ATTACK,
@@ -72,7 +73,7 @@ namespace fheroes2
 
     enum class MonsterWeaknessType : int
     {
-        // Basic abilities.
+        // Basic weaknesses.
         NONE,
         // Advanced weaknesses.
         DOUBLE_DAMAGE_FROM_FIRE_SPELLS,

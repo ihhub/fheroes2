@@ -1372,52 +1372,47 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
 {
     assert( spell.isDamage() );
 
-    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     uint32_t dmg = spell.Damage() * spellPower;
 
-    switch ( GetID() ) {
-    case Monster::IRON_GOLEM:
-    case Monster::STEEL_GOLEM:
-        if ( spell.isElementalSpell() || spell.GetID() == Spell::ARMAGEDDON ) {
-            dmg /= 2;
-        }
-
-        break;
-
-    case Monster::WATER_ELEMENT:
-        if ( spell.isFire() ) {
-            // 200% damage
-            dmg *= 2;
-        }
-
-        break;
-
-    case Monster::AIR_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::LIGHTNINGBOLT:
-            dmg *= 2;
+    for ( const fheroes2::MonsterAbility & ability : fheroes2::getMonsterData( GetID() ).battleStats.abilities ) {
+        switch ( ability.type ) {
+        case fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
+            if ( spell.isElementalSpell() ) {
+                dmg = dmg * ability.percentage / 100;
+            }
+            break;
+        case fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION:
+            if ( ability.value == static_cast<uint32_t>( spell.GetID() ) ) {
+                dmg = dmg * ability.percentage / 100;
+            }
             break;
         default:
             break;
         }
-        break;
-
-    case Monster::FIRE_ELEMENT:
-        if ( spell.isCold() ) {
-            // 200% damage
-            dmg *= 2;
-        }
-
-        break;
-
-    default:
-        break;
     }
 
-    // check artifact
+    for ( const fheroes2::MonsterWeakness & weakness : fheroes2::getMonsterData( GetID() ).battleStats.weaknesses ) {
+        switch ( weakness.type ) {
+        case fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS:
+            if ( spell.isFire() ) {
+                dmg *= 2;
+            }
+            break;
+        case fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS:
+            if ( spell.isCold() ) {
+                dmg *= 2;
+            }
+            break;
+        case fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
+            if ( weakness.value == static_cast<uint32_t>( spell.GetID() ) ) {
+                dmg = dmg * ( 100 + weakness.percentage ) / 100;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
     if ( applyingHero ) {
         const HeroBase * defendingHero = GetCommander();
         const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
@@ -1485,7 +1480,6 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                 }
             }
 
-            // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 switch ( targetDamage ) {
                 case 0:

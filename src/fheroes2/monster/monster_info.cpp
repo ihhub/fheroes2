@@ -466,8 +466,10 @@ namespace
         monsterData[Monster::BOAR].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, 50, Spell::ARMAGEDDON );
 
         monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, 50, Spell::ARMAGEDDON );
 
         monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
@@ -643,6 +645,11 @@ namespace fheroes2
             }
         case MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
             return std::to_string( ability.percentage ) + _( "% damage from Elemental spells" );
+        case MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION: {
+            std::string str = _( "% damage from %{spell} spell" );
+            StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+            return std::to_string( ability.percentage ) + str;
+        }
         case MonsterAbilityType::SPELL_CASTER:
             if ( ability.value == Spell::DISPEL ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Dispel beneficial spells" );
