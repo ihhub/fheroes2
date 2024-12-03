@@ -316,7 +316,7 @@ void AI::Planner::reinforceCastle( Castle & castle )
     assert( castle.isControlAI() );
 
     const auto recruitMonster = [&castle]( const Troop & troop ) {
-        // This method can hire a unit to both the castle garrison and the guest hero's army (depending on the availability of free slots)
+        // This method can hire a unit to both the castle garrison and the guest hero's army (depending on the availability of suitable slots)
         if ( castle.RecruitMonster( troop, false ) ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, castle.GetName() << " hires " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() ) )
 
@@ -371,8 +371,7 @@ void AI::Planner::reinforceCastle( Castle & castle )
         if ( guestHero ) {
             Army & guestHeroArmy = guestHero->GetArmy();
 
-            // If there is a guest hero in the castle, and there is no free slot for a new unit, then we can try to free up a slot by transferring some unit to the guest
-            // hero
+            // If there is a guest hero in the castle, and there is no slot for a new unit, then we can try to free up a slot by transferring some unit to the guest hero
             if ( [&castle = std::as_const( castle ), &garrison, &guestHero = std::as_const( *guestHero ), &guestHeroArmy]() {
                      for ( size_t i = 0; i < garrison.Size(); ++i ) {
                          Troop * garrisonTroop = garrison.GetTroop( i );
@@ -418,8 +417,8 @@ void AI::Planner::reinforceCastle( Castle & castle )
             weakestTroop = weakestTroop && Troop( *weakestTroop ).GetStrength() < Troop( *weakestGarrisonTroop ).GetStrength() ? weakestTroop : weakestGarrisonTroop;
         }
 
-        // If we still can't find a free slot, let's try to dismiss the weakest unit of those that are present in the garrison and in the army of the guest hero -
-        // provided that it is weaker than the unit to hire
+        // If we still can't find a slot, let's try to dismiss the weakest unit of those that are present in the garrison and in the army of the guest hero - provided
+        // that it is weaker than the unit to hire
 
         assert( weakestTroop != nullptr );
 
