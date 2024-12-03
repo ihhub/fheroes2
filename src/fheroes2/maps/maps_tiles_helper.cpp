@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <initializer_list>
 #include <limits>
 #include <list>
 #include <optional>
@@ -240,32 +239,6 @@ namespace
         }
 
         return roadDirection;
-    }
-
-    // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
-    int getStreamDirecton( const Maps::Tile & tile )
-    {
-        const int32_t centerTileIndex = tile.GetIndex();
-        // Stream includes also the Deltas. Here we need to check only streams excluding Deltas.
-        int streamDirection = ( tile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } ) ) ? Direction::CENTER : 0;
-
-        // For streams we can check only the next four directions.
-        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
-                const Maps::Tile & currentTile = world.getTile( Maps::GetDirectionIndex( centerTileIndex, direction ) );
-
-                // Check also for Deltas connection.
-                if ( currentTile.containsAnyObjectIcnType( { MP2::OBJ_ICN_TYPE_STREAM } )
-                     || ( direction == Direction::TOP && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 13 ) )
-                     || ( direction == Direction::BOTTOM && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 0 ) )
-                     || ( direction == Direction::RIGHT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 ) )
-                     || ( direction == Direction::LEFT && currentTile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNMUL2, 218 + 13 ) ) ) {
-                    streamDirection |= direction;
-                }
-            }
-        }
-
-        return streamDirection;
     }
 
     bool hasBits( const int value, const int bits )
@@ -1074,91 +1047,6 @@ namespace
         updateRoadSpritesInArea( tile, 3, true );
     }
 
-    uint8_t getStreamImageForTile( const int streamDirection )
-    {
-        if ( hasNoBits( streamDirection, Direction::CENTER ) ) {
-            // This tile should not have a stream image.
-            return 255U;
-        }
-
-        if ( hasBits( streamDirection, Direction::LEFT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::RIGHT ) ) {
-            // \ - stream from the left to the bottom.
-            return 0U;
-        }
-        if ( hasBits( streamDirection, Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::LEFT ) ) {
-            // / - stream from the right to the bottom.
-            return 1U;
-        }
-        if ( hasBits( streamDirection, Direction::RIGHT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::LEFT ) ) {
-            // \ - stream from the top to the right.
-            return 4U;
-        }
-        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
-            // / - stream from the top to the left.
-            return 7U;
-        }
-        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::BOTTOM ) ) {
-            // _|_ - stream from the top to the left and right.
-            return 8U;
-        }
-        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::LEFT ) ) {
-            // |- - stream from the top to the right and bottom.
-            return 9U;
-        }
-        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::LEFT ) && hasNoBits( streamDirection, Direction::RIGHT ) ) {
-            // -| - stream from the top to the left and bottom.
-            return 10U;
-        }
-        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::TOP ) ) {
-            // \/ - stream from the left and right to the bottom.
-            return 11U;
-        }
-        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::TOP | Direction::RIGHT ) ) {
-            // -|- - streams are all around.
-            return 6U;
-        }
-        if ( ( hasBits( streamDirection, Direction::LEFT ) || hasBits( streamDirection, Direction::RIGHT ) )
-             && hasNoBits( streamDirection, Direction::TOP | Direction::BOTTOM ) ) {
-            // - - horizontal stream.
-            return Rand::Get( 1 ) ? 2U : 5U;
-        }
-
-        // | - in all other cases are the vertical stream sprite, including the case when there are no other streams around.
-        return Rand::Get( 1 ) ? 3U : 12U;
-    }
-
-    void updateStreamSpriteOnTile( Maps::Tile & tile, const bool forceStreamOnTile )
-    {
-        const uint8_t imageIndex = getStreamImageForTile( getStreamDirecton( tile ) | ( forceStreamOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
-
-        if ( imageIndex == 255U ) {
-            // After the check this tile should not contain a stream sprite.
-            return;
-        }
-
-        const uint32_t streamUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_STREAM );
-
-        if ( streamUid == 0 ) {
-            tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_STREAM, imageIndex ) );
-        }
-        else {
-            Maps::Tile::updateTileObjectIcnIndex( tile, streamUid, imageIndex );
-        }
-    }
-
-    // Update streams on the left, top, right and bottom tiles around.
-    void updateStreamSpritesAround( const Maps::Tile & centerTile )
-    {
-        const int32_t centerTileIndex = centerTile.GetIndex();
-
-        // For streams we should update only the next four directions.
-        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
-                updateStreamSpriteOnTile( world.getTile( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
-            }
-        }
-    }
-
     bool placeObjectOnTile( const Maps::Tile & tile, const Maps::ObjectInfo & info )
     {
         // If this assertion blows up then what kind of object you are trying to place if it's empty?
@@ -1399,49 +1287,6 @@ namespace Maps
         }
 
         return true;
-    }
-
-    bool updateStreamOnTile( Tile & tile, const bool setStream )
-    {
-        if ( setStream == tile.isStream() || ( tile.isWater() && setStream ) ) {
-            // We cannot place streams on the water or on already placed streams.
-            return false;
-        }
-
-        if ( setStream ) {
-            // Force set stream on this tile and update its sprite.
-            updateStreamSpriteOnTile( tile, true );
-
-            if ( !tile.isStream() ) {
-                // The stream was not set. How can it happen?
-                assert( 0 );
-
-                return false;
-            }
-
-            updateStreamSpritesAround( tile );
-
-            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
-                // We need to set terrain image without extra objects under the stream.
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
-            }
-        }
-        else {
-            // Remove all road object sprites from this tile.
-            tile.removeObjects( MP2::OBJ_ICN_TYPE_STREAM );
-
-            updateStreamSpritesAround( tile );
-        }
-
-        return true;
-    }
-
-    void updateStreamsToDeltaConnection( const Tile & tile, const int deltaDirection )
-    {
-        const int32_t tileIndex = tile.GetIndex();
-        if ( isValidDirection( tileIndex, deltaDirection ) ) {
-            updateStreamSpritesAround( world.getTile( GetDirectionIndex( tileIndex, deltaDirection ) ) );
-        }
     }
 
     int32_t getMineSpellIdFromTile( const Tile & tile )

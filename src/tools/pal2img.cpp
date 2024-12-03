@@ -39,10 +39,10 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        const std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " generates an image with colors based on a provided palette file." << std::endl
-                  << "Syntax: " << baseName << " palette_file.pal output.bmp|output.png" << std::endl;
+        std::cerr << toolName << " generates an image with colors based on a provided palette file." << std::endl
+                  << "Syntax: " << toolName << " palette_file.pal output.bmp|output.png" << std::endl;
         return EXIT_FAILURE;
     }
 

@@ -137,10 +137,6 @@ public:
 protected:
     StreamBase() = default;
 
-    StreamBase( StreamBase && stream ) noexcept;
-
-    StreamBase & operator=( StreamBase && stream ) noexcept;
-
     void setFail( bool f );
 
 private:
@@ -268,15 +264,6 @@ public:
 protected:
     IStreamBase() = default;
 
-    IStreamBase( IStreamBase && ) = default;
-
-    // All this operator does is call the corresponding base class operator. It is not recommended to
-    // declare these operators as default in the case of a virtual base, even if they are trivial, to
-    // catch a situation where, in the case of the diamond inheritance, the corresponding operator of
-    // the base class will be called multiple times. GCC has a special warning for this case (see the
-    // description of the -Wno-virtual-move-assign switch).
-    IStreamBase & operator=( IStreamBase && stream ) noexcept;
-
     virtual uint8_t get8() = 0;
 };
 
@@ -372,8 +359,6 @@ public:
 protected:
     OStreamBase() = default;
 
-    OStreamBase( OStreamBase && ) = default;
-
     virtual void put8( const uint8_t ) = 0;
 };
 
@@ -382,7 +367,7 @@ class IStreamBuf : public IStreamBase
 {
 public:
     virtual const uint8_t * data() const = 0;
-    virtual size_t size() = 0;
+    virtual size_t size() const = 0;
 
 protected:
     IStreamBuf() = default;
@@ -404,12 +389,12 @@ public:
         return _itget;
     }
 
-    size_t size() override
+    size_t size() const override
     {
         return sizeg();
     }
 
-    size_t tell()
+    size_t tell() const
     {
         return tellg();
     }
@@ -501,39 +486,14 @@ public:
 protected:
     StreamBufTmpl() = default;
 
-    StreamBufTmpl( StreamBufTmpl && stream ) noexcept
-        : IStreamBuf( std::move( stream ) )
-    {
-        std::swap( _itbeg, stream._itbeg );
-        std::swap( _itget, stream._itget );
-        std::swap( _itput, stream._itput );
-        std::swap( _itend, stream._itend );
-    }
-
-    StreamBufTmpl & operator=( StreamBufTmpl && stream ) noexcept
-    {
-        if ( this == &stream ) {
-            return *this;
-        }
-
-        IStreamBuf::operator=( std::move( stream ) );
-
-        std::swap( _itbeg, stream._itbeg );
-        std::swap( _itget, stream._itget );
-        std::swap( _itput, stream._itput );
-        std::swap( _itend, stream._itend );
-
-        return *this;
-    }
-
-    size_t sizeg()
+    size_t sizeg() const
     {
         assert( _itget <= _itput );
 
         return _itput - _itget;
     }
 
-    size_t tellg()
+    size_t tellg() const
     {
         assert( _itbeg <= _itget );
 
@@ -575,12 +535,10 @@ public:
     explicit RWStreamBuf( const size_t size );
 
     RWStreamBuf( const RWStreamBuf & ) = delete;
-    RWStreamBuf( RWStreamBuf && ) = default;
 
     ~RWStreamBuf() override = default;
 
     RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
-    RWStreamBuf & operator=( RWStreamBuf && stream ) noexcept;
 
     void putBE32( uint32_t v ) override;
     void putLE32( uint32_t v ) override;
@@ -592,8 +550,8 @@ public:
 private:
     void put8( const uint8_t v ) override;
 
-    size_t sizep();
-    size_t tellp();
+    size_t sizep() const;
+    size_t tellp() const;
 
     void reallocBuf( size_t size );
 

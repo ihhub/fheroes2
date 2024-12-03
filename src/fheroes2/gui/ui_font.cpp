@@ -1415,6 +1415,10 @@ namespace
 
             size_t offset = 0;
 
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 6 );
+
             // E with 2 dots on top.
             font[168 - 32].resize( font[37 + offset].width(), font[37 + offset].height() + 3 );
             font[168 - 32].reset();
@@ -1891,6 +1895,10 @@ namespace
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
             size_t offset = 0;
+
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 4 );
 
             // E with 2 dots on top.
             font[168 - 32].resize( font[37].width(), font[37].height() + 2 );
@@ -5269,7 +5277,7 @@ namespace
         fheroes2::SetPixel( released[109], offset + 7, offset + 11, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[109], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // '
+        // ' (right single quotation mark)
         released[114].resize( 3 + offset * 2, 4 + offset * 2 );
         released[114].reset();
         fheroes2::DrawLine( released[114], { offset + 1, offset + 0 }, { offset + 1, offset + 2 }, buttonGoodReleasedColor );

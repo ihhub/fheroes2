@@ -101,7 +101,7 @@ namespace
 
     void showWIPInfo()
     {
-        fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
     }
 
     Maps::MapSize selectMapSize()

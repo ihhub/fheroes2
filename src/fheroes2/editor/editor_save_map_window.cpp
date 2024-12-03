@@ -147,7 +147,7 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
-        std::string mapFileName( System::GetBasename( info.filename ) );
+        std::string mapFileName( System::GetFileName( info.filename ) );
         assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
@@ -353,7 +353,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName );
+                    fheroes2::openVirtualKeyboard( fileName, 255 );
                 }
 
                 charInsertPos = fileName.size();
@@ -402,9 +402,9 @@ namespace Editor
 
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+                msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
 
