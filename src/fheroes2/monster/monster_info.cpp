@@ -530,32 +530,36 @@ namespace
         monsterData[Monster::NOMAD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::AIR_CREATURE );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::CHAINLIGHTNING );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::ELEMENTALSTORM );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::LIGHTNINGBOLT );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::EARTH_CREATURE );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR );
         monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                  Spell::METEORSHOWER );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_AIR );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES );
 
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_CREATURE );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES );
 
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::WATER_CREATURE );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
-        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES );
 
         // Calculate base value of monster strength.
         for ( fheroes2::MonsterData & data : monsterData ) {
@@ -605,15 +609,15 @@ namespace fheroes2
         return monsterData[monsterId];
     }
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility )
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbilities )
     {
         switch ( ability.type ) {
         case MonsterAbilityType::NONE:
-            return ignoreBasicAbility ? "" : _( "None" );
+            return ignoreBasicAbilities ? "" : _( "None" );
         case MonsterAbilityType::DOUBLE_SHOOTING:
             return _( "Double shot" );
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return ignoreBasicAbility ? "" : _( "2-hex monster" );
+            return ignoreBasicAbilities ? "" : _( "2-hex monster" );
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
             return _( "Double strike" );
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
@@ -665,7 +669,7 @@ namespace fheroes2
         case MonsterAbilityType::TWO_CELL_MELEE_ATTACK:
             return _( "Two hexes attack" );
         case MonsterAbilityType::FLYING:
-            return ignoreBasicAbility ? "" : _( "Flyer" );
+            return ignoreBasicAbilities ? "" : _( "Flyer" );
         case MonsterAbilityType::ALWAYS_RETALIATE:
             return _( "Always retaliates" );
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
@@ -673,7 +677,7 @@ namespace fheroes2
         case MonsterAbilityType::NO_MELEE_PENALTY:
             return _( "No melee penalty" );
         case MonsterAbilityType::DRAGON:
-            return ignoreBasicAbility ? "" : _( "Dragon" );
+            return ignoreBasicAbilities ? "" : _( "Dragon" );
         case MonsterAbilityType::UNDEAD:
             return _( "Undead" );
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
@@ -689,11 +693,15 @@ namespace fheroes2
         case MonsterAbilityType::SOUL_EATER:
             return _( "Soul Eater" );
         case MonsterAbilityType::ELEMENTAL:
-            return ignoreBasicAbility ? _( "No Morale" ) : _( "Elemental" );
-        case MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR:
-            return ignoreBasicAbility ? "" : _( "Double damage to Air" );
-        case MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH:
-            return ignoreBasicAbility ? "" : _( "Double damage to Earth" );
+            return ignoreBasicAbilities ? _( "No Morale" ) : _( "Elemental" );
+        case MonsterAbilityType::EARTH_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Earth creature" );
+        case MonsterAbilityType::AIR_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Air creature" );
+        case MonsterAbilityType::FIRE_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Fire creature" );
+        case MonsterAbilityType::WATER_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Water creature" );
         default:
             break;
         }
@@ -702,24 +710,28 @@ namespace fheroes2
         return "";
     }
 
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility )
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbilities )
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return ignoreBasicAbility ? "" : _( "None" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE:
-            return _( "200% damage from Fire spells" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD:
-            return _( "200% damage from Cold spells" );
+            return ignoreBasicAbilities ? "" : _( "None" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS:
+            return _( "Double damage from Fire spells" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS:
+            return _( "Double damage from Cold spells" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL: {
             std::string str = _( "% damage from %{spell} spell" );
             StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
             return std::to_string( weakness.percentage + 100 ) + str;
         }
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_AIR:
-            return ignoreBasicAbility ? "" : _( "200% damage from Air spells" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH:
-            return ignoreBasicAbility ? "" : _( "200% damage from Earth spells" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES:
+            return ignoreBasicAbilities ? "" : _( "Double damage from Earth creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES:
+            return ignoreBasicAbilities ? "" : _( "Double damage from Air creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES:
+            return ignoreBasicAbilities ? "" : _( "Double damage from Fire creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES:
+            return ignoreBasicAbilities ? "" : _( "Double damage from Water creatures" );
         default:
             break;
         }

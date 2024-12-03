@@ -574,19 +574,22 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::EARTH_CREATURE )
+         && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES ) ) {
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::AIR_CREATURE ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES ) ) {
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_AIR ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_AIR ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_CREATURE )
+         && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES ) ) {
         dmg *= 2;
     }
 
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_EARTH ) && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_EARTH ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::WATER_CREATURE )
+         && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES ) ) {
         dmg *= 2;
     }
 

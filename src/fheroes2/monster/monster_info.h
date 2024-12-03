@@ -41,6 +41,10 @@ namespace fheroes2
         DRAGON,
         UNDEAD,
         ELEMENTAL,
+        EARTH_CREATURE,
+        AIR_CREATURE,
+        FIRE_CREATURE,
+        WATER_CREATURE,
         // Advanced abilities.
         DOUBLE_SHOOTING,
         DOUBLE_MELEE_ATTACK,
@@ -63,21 +67,21 @@ namespace fheroes2
         AREA_SHOT,
         MORAL_DECREMENT,
         ENEMY_HALVING,
-        SOUL_EATER,
-        DOUBLE_DAMAGE_TO_AIR,
-        DOUBLE_DAMAGE_TO_EARTH
+        SOUL_EATER
     };
 
     enum class MonsterWeaknessType : int
     {
         // Basic abilities.
         NONE,
-        // Advanced abilities.
-        EXTRA_DAMAGE_FROM_FIRE,
-        EXTRA_DAMAGE_FROM_COLD,
+        // Advanced weaknesses.
+        DOUBLE_DAMAGE_FROM_FIRE_SPELLS,
+        DOUBLE_DAMAGE_FROM_COLD_SPELLS,
         EXTRA_DAMAGE_FROM_CERTAIN_SPELL,
-        EXTRA_DAMAGE_FROM_AIR,
-        EXTRA_DAMAGE_FROM_EARTH
+        DOUBLE_DAMAGE_FROM_EARTH_CREATURES,
+        DOUBLE_DAMAGE_FROM_AIR_CREATURES,
+        DOUBLE_DAMAGE_FROM_FIRE_CREATURES,
+        DOUBLE_DAMAGE_FROM_WATER_CREATURES
     };
 
     struct MonsterAbility
@@ -211,8 +215,8 @@ namespace fheroes2
 
     const MonsterData & getMonsterData( const int monsterId );
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbilities );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbilities );
 
     std::string getMonsterDescription( const int monsterId ); // To be utilized in future.
 
