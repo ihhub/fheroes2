@@ -205,10 +205,11 @@ namespace fheroes2
             _updateButtonAreas();
         }
 
-    private:
+    protected:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
 
+    private:
         int _icnId{ -1 };
         uint32_t _releasedIndex{ 0 };
         uint32_t _pressedIndex{ 0 };
@@ -250,11 +251,12 @@ namespace fheroes2
             _updateButtonAreas();
         }
 
-    private:
+    protected:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
         const Sprite & _getDisabled() const override;
 
+    private:
         Sprite _released;
         Sprite _pressed;
         Sprite _disabled;
