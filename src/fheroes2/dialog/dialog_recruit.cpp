@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -35,9 +34,8 @@
 #include "army_troop.h"
 #include "bin_info.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -51,7 +49,9 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_keyboard.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -92,161 +92,162 @@ namespace
         fheroes2::Blit( recruitWindow, output, offset.x, offset.y );
         fheroes2::addGradientShadow( recruitWindow, output, { offset.x, offset.y }, { -5, 5 } );
     }
-}
 
-void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const Funds & paymentMonster, const Funds & paymentCosts, const Funds & funds,
-                        const std::string & label, const fheroes2::Image & background = {} )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
+    void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const Funds & paymentMonster, const Funds & paymentCosts, const Funds & funds,
+                            const std::string & label, const fheroes2::Image & background = {} )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Text text( std::to_string( result ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( std::to_string( result ), fheroes2::FontType::normalWhite() );
 
-    // Restore the background of the text before rendering it.
-    fheroes2::Copy( background, 118, 147, display, pos.x + 118, pos.y + 147, 68, text.height() );
+        // Restore the background of the text before rendering it.
+        fheroes2::Copy( background, 118, 147, display, pos.x + 118, pos.y + 147, 68, text.height() );
 
-    text.draw( pos.x + 151 - text.width() / 2, pos.y + 147, display );
+        text.draw( pos.x + 151 - text.width() / 2, pos.y + 147, display );
 
-    std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
-    const int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
+        std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
+        const int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
-    text.set( std::move( sgold ), fheroes2::FontType::smallWhite() );
+        text.set( std::move( sgold ), fheroes2::FontType::smallWhite() );
 
-    // Restore the background of the text before rendering it.
-    fheroes2::Copy( background, 0, 214, display, pos.x, pos.y + 214, background.width(), text.height() );
+        // Restore the background of the text before rendering it.
+        fheroes2::Copy( background, 0, 214, display, pos.x, pos.y + 214, background.width(), text.height() );
 
-    if ( rsext ) {
-        text.draw( pos.x + 117 - text.width() / 2, pos.y + 214, display );
+        if ( rsext ) {
+            text.draw( pos.x + 117 - text.width() / 2, pos.y + 214, display );
 
-        text.set( std::to_string( paymentCosts.Get( rsext ) ) + " " + "(" + std::to_string( funds.Get( rsext ) - paymentCosts.Get( rsext ) ) + ")",
-                  fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 179 - text.width() / 2, pos.y + 214, display );
-    }
-    else {
-        text.draw( pos.x + 144 - text.width() / 2, pos.y + 214, display );
-    }
-
-    // Restore the background of the text before rendering it or to leave it blank if there is no text.
-    fheroes2::Copy( background, 0, 166, display, pos.x, pos.y + 166, background.width(), text.height() );
-
-    if ( !label.empty() ) {
-        text.set( label, fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 151 - text.width() / 2, pos.y + 166, display );
-    }
-}
-
-void RedrawResourceInfo( const int resourceIcnIndex, const fheroes2::Point & pos, const int32_t value, const int32_t px1, const int32_t py1, const int32_t px2,
-                         const int32_t py2, const bool showTotalSum )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // In recruit dialog (where the total sum is also shown) the resource info is shifted by 10 pixels to the right.
-    const int32_t offsetX = showTotalSum ? 10 : 0;
-
-    const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceIcnIndex ) );
-    fheroes2::Blit( sres, fheroes2::Display::instance(), pos.x + px1 + offsetX, pos.y + py1 );
-
-    const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + px2 - text.width() / 2 + offsetX, pos.y + py2, display );
-
-    if ( showTotalSum ) {
-        fheroes2::Blit( sres, display, pos.x + px1 - 45, pos.y + py1 + 125 );
-    }
-}
-
-void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, const uint32_t available, const bool showTotalSum )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Funds paymentMonster = monster.GetCost();
-    const bool needExtraResources = 2 == paymentMonster.GetValidItemsCount();
-
-    // Recruit monster text.
-    std::string str = _( "Recruit %{name}" );
-    StringReplace( str, "%{name}", monster.GetMultiName() );
-    fheroes2::Text text( str, fheroes2::FontType::normalYellow() );
-    fheroes2::Point dst_pt( pos.x + ( pos.width - text.width() ) / 2, pos.y + 11 );
-    text.draw( dst_pt.x, dst_pt.y, display );
-
-    // Monster sprite.
-    const int monsterId = monster.GetID();
-    const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
-    assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
-
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
-    dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
-    dst_pt.y = pos.y + 119 - smon.height();
-
-    if ( monsterId == Monster::CHAMPION ) {
-        ++dst_pt.x;
-    }
-
-    fheroes2::Blit( smon, display, dst_pt.x, dst_pt.y );
-
-    // Resources needed to buy monster.
-    if ( needExtraResources ) {
-        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 134, 59, 167, 89, showTotalSum );
-
-        if ( paymentMonster.crystal > 0 ) {
-            RedrawResourceInfo( Resource::CRYSTAL, pos.getPosition(), paymentMonster.crystal, 206, 53, 224, 89, showTotalSum );
+            text.set( std::to_string( paymentCosts.Get( rsext ) ) + " " + "(" + std::to_string( funds.Get( rsext ) - paymentCosts.Get( rsext ) ) + ")",
+                      fheroes2::FontType::smallWhite() );
+            text.draw( pos.x + 179 - text.width() / 2, pos.y + 214, display );
         }
-        else if ( paymentMonster.mercury > 0 ) {
-            RedrawResourceInfo( Resource::MERCURY, pos.getPosition(), paymentMonster.mercury, 209, 56, 224, 89, showTotalSum );
-        }
-        else if ( paymentMonster.wood > 0 ) {
-            RedrawResourceInfo( Resource::WOOD, pos.getPosition(), paymentMonster.wood, 209, 56, 224, 89, showTotalSum );
-        }
-        else if ( paymentMonster.ore > 0 ) {
-            RedrawResourceInfo( Resource::ORE, pos.getPosition(), paymentMonster.ore, 209, 56, 224, 89, showTotalSum );
-        }
-        else if ( paymentMonster.sulfur > 0 ) {
-            RedrawResourceInfo( Resource::SULFUR, pos.getPosition(), paymentMonster.sulfur, 209, 59, 224, 89, showTotalSum );
-        }
-        else if ( paymentMonster.gems > 0 ) {
-            RedrawResourceInfo( Resource::GEMS, pos.getPosition(), paymentMonster.gems, 209, 59, 224, 89, showTotalSum );
-        }
-    }
-    else {
-        // Only gold is needed.
-        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 159, 59, 189, 89, showTotalSum );
-    }
-
-    str = _( "Available: %{count}" );
-    StringReplace( str, "%{count}", available );
-    text.set( std::move( str ), fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 64 - text.width() / 2, pos.y + 121, display );
-
-    if ( showTotalSum ) {
-        text.set( _( "Number to buy:" ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 107 - text.width(), pos.y + 149, display );
-    }
-}
-
-const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::ButtonBase & btnMin, bool max )
-{
-    if ( btnMax.isEnabled() || btnMin.isEnabled() ) {
-        if ( max ) {
-            btnMax.disable();
-            btnMin.enable();
-
-            return _( "Max" );
+        else {
+            text.draw( pos.x + 144 - text.width() / 2, pos.y + 214, display );
         }
 
-        btnMin.disable();
-        btnMax.enable();
+        // Restore the background of the text before rendering it or to leave it blank if there is no text.
+        fheroes2::Copy( background, 0, 166, display, pos.x, pos.y + 166, background.width(), text.height() );
 
-        return _( "Min" );
+        if ( !label.empty() ) {
+            text.set( label, fheroes2::FontType::smallWhite() );
+            text.draw( pos.x + 151 - text.width() / 2, pos.y + 166, display );
+        }
     }
 
-    return "";
-}
+    void RedrawResourceInfo( const int resourceIcnIndex, const fheroes2::Point & pos, const int32_t value, const int32_t px1, const int32_t py1, const int32_t px2,
+                             const int32_t py2, const bool showTotalSum )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-uint32_t CalculateMax( const Monster & monster, const Kingdom & kingdom, const uint32_t available )
-{
-    uint32_t max = 0;
-    while ( kingdom.AllowPayment( monster.GetCost() * ( max + 1 ) ) && ( max + 1 ) <= available ) {
-        ++max;
+        // In recruit dialog (where the total sum is also shown) the resource info is shifted by 10 pixels to the right.
+        const int32_t offsetX = showTotalSum ? 10 : 0;
+
+        const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceIcnIndex ) );
+        fheroes2::Blit( sres, fheroes2::Display::instance(), pos.x + px1 + offsetX, pos.y + py1 );
+
+        const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + px2 - text.width() / 2 + offsetX, pos.y + py2, display );
+
+        if ( showTotalSum ) {
+            fheroes2::Blit( sres, display, pos.x + px1 - 45, pos.y + py1 + 125 );
+        }
     }
 
-    return max;
+    void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, const uint32_t available, const bool showTotalSum )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const Funds paymentMonster = monster.GetCost();
+        const bool needExtraResources = 2 == paymentMonster.GetValidItemsCount();
+
+        // Recruit monster text.
+        std::string str = _( "Recruit %{name}" );
+        StringReplace( str, "%{name}", monster.GetMultiName() );
+        fheroes2::Text text( std::move( str ), fheroes2::FontType::normalYellow() );
+        fheroes2::Point dst_pt( pos.x + ( pos.width - text.width() ) / 2, pos.y + 11 );
+        text.draw( dst_pt.x, dst_pt.y, display );
+
+        // Monster sprite.
+        const int monsterId = monster.GetID();
+        const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
+        assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
+
+        const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+        dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
+        const int32_t monsterExtraOffsetY = std::max( 0, smon.height() - 96 );
+        dst_pt.y = pos.y + 119 - smon.height() + monsterExtraOffsetY;
+
+        if ( monsterId == Monster::CHAMPION ) {
+            ++dst_pt.x;
+        }
+
+        fheroes2::Blit( smon, display, dst_pt.x, dst_pt.y );
+
+        // Resources needed to buy monster.
+        if ( needExtraResources ) {
+            RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 134, 59, 167, 89, showTotalSum );
+
+            if ( paymentMonster.crystal > 0 ) {
+                RedrawResourceInfo( Resource::CRYSTAL, pos.getPosition(), paymentMonster.crystal, 206, 53, 224, 89, showTotalSum );
+            }
+            else if ( paymentMonster.mercury > 0 ) {
+                RedrawResourceInfo( Resource::MERCURY, pos.getPosition(), paymentMonster.mercury, 209, 56, 224, 89, showTotalSum );
+            }
+            else if ( paymentMonster.wood > 0 ) {
+                RedrawResourceInfo( Resource::WOOD, pos.getPosition(), paymentMonster.wood, 209, 56, 224, 89, showTotalSum );
+            }
+            else if ( paymentMonster.ore > 0 ) {
+                RedrawResourceInfo( Resource::ORE, pos.getPosition(), paymentMonster.ore, 209, 56, 224, 89, showTotalSum );
+            }
+            else if ( paymentMonster.sulfur > 0 ) {
+                RedrawResourceInfo( Resource::SULFUR, pos.getPosition(), paymentMonster.sulfur, 209, 59, 224, 89, showTotalSum );
+            }
+            else if ( paymentMonster.gems > 0 ) {
+                RedrawResourceInfo( Resource::GEMS, pos.getPosition(), paymentMonster.gems, 209, 59, 224, 89, showTotalSum );
+            }
+        }
+        else {
+            // Only gold is needed.
+            RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 159, 59, 189, 89, showTotalSum );
+        }
+
+        str = _( "Available: %{count}" );
+        StringReplace( str, "%{count}", available );
+        text.set( std::move( str ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + 64 - text.width() / 2, pos.y + 120 + std::max( monsterExtraOffsetY, 2 ), display );
+
+        if ( showTotalSum ) {
+            text.set( _( "Number to buy:" ), fheroes2::FontType::smallWhite() );
+            text.draw( pos.x + 107 - text.width(), pos.y + 149, display );
+        }
+    }
+
+    const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::ButtonBase & btnMin, bool max )
+    {
+        if ( btnMax.isEnabled() || btnMin.isEnabled() ) {
+            if ( max ) {
+                btnMax.disable();
+                btnMin.enable();
+
+                return _( "Max" );
+            }
+
+            btnMin.disable();
+            btnMax.enable();
+
+            return _( "Min" );
+        }
+
+        return "";
+    }
+
+    uint32_t CalculateMax( const Monster & monster, const Kingdom & kingdom, const uint32_t available )
+    {
+        uint32_t max = 0;
+        while ( kingdom.AllowPayment( monster.GetCost() * ( max + 1 ) ) && ( max + 1 ) <= available ) {
+            ++max;
+        }
+
+        return max;
+    }
 }
 
 Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
@@ -283,6 +284,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     // Render the recruit count background from original recruit dialog ICN.
     fheroes2::Image background( 68, 19 );
     fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, background.width(), background.height() );
+
+    const fheroes2::Rect recruitCountInputArea( dialogOffset.x + 118, dialogOffset.y + 147, background.width(), background.height() );
 
     if ( isEvilInterface ) {
         fheroes2::ApplyPalette( background, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -423,23 +426,37 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
 
-    // str loop
+    const auto updateCurrentInfo = [&paymentMonster = std::as_const( paymentMonster ), &max = std::as_const( max ), &result = std::as_const( result ), &paymentCosts,
+                                    &buttonMax, &buttonMin, &maxmin]() {
+        paymentCosts = paymentMonster * result;
+
+        if ( result == max ) {
+            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
+        }
+        else if ( result == 1 ) {
+            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
+        }
+        else {
+            maxmin.clear();
+        }
+    };
+
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         }
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MousePressLeft( buttonUp.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
         }
         else {
             buttonReleaseRestore( buttonUp );
         }
 
-        if ( le.MousePressLeft( buttonDn.area() ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
         else {
@@ -447,23 +464,23 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         if ( buttonMax.isEnabled() ) {
-            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         }
         if ( buttonMin.isEnabled() ) {
-            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
         }
 
         bool updateMonsterInfo = false;
 
         if ( showDowngradedMonsterSwitchButtons ) {
-            if ( le.MousePressLeft( monsterSwitchLeft.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchLeft.area() ) ) {
                 monsterSwitchLeft.drawOnPress();
             }
             else {
                 buttonReleaseRestore( monsterSwitchLeft );
             }
 
-            if ( le.MousePressLeft( monsterSwitchRight.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchRight.area() ) ) {
                 monsterSwitchRight.drawOnPress();
             }
             else {
@@ -516,14 +533,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             result = max;
             paymentMonster = monster.GetCost();
-            paymentCosts = paymentMonster * result;
-            redraw = true;
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
 
+            updateCurrentInfo();
             RedrawMonsterInfo( windowActiveArea, monster, available, true );
+
+            redraw = true;
         }
 
-        if ( le.MousePressRight( monsterArea ) ) {
+        if ( le.isMouseRightButtonPressedInArea( monsterArea ) ) {
             ArmyInfo( Troop( monster, available ), ZERO );
 
             // Perform a full rendering to properly restore the parts of the screen outside of this dialog
@@ -539,70 +556,68 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             continue;
         }
 
-        if ( fheroes2::PressIntKey( max, result ) ) {
-            paymentCosts = paymentMonster * result;
-            redraw = true;
-            maxmin.clear();
+        if ( int32_t temp = static_cast<int32_t>( result ); fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
+            result = temp;
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            updateCurrentInfo();
+
+            redraw = true;
         }
 
-        if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
-             && result < max ) {
-            ++result;
-            paymentCosts += paymentMonster;
-            redraw = true;
-            maxmin.clear();
+        if ( le.MouseClickLeft( recruitCountInputArea ) ) {
+            int32_t temp = static_cast<int32_t>( result );
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            fheroes2::openVirtualNumpad( temp, 0, static_cast<int32_t>( max ) );
+            assert( temp >= 0 && temp <= static_cast<int32_t>( max ) );
+
+            result = temp;
+
+            updateCurrentInfo();
+
+            redraw = true;
+        }
+        else if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP )
+                    || timedButtonUp.isDelayPassed() )
+                  && result < max ) {
+            ++result;
+
+            updateCurrentInfo();
+
+            redraw = true;
         }
         else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
                     || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
-            paymentCosts -= paymentMonster;
-            redraw = true;
-            maxmin.clear();
 
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-            }
-            else if ( result == 1 ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
-            }
+            updateCurrentInfo();
+
+            redraw = true;
         }
         else if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) && result != max ) {
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
             result = max;
-            paymentCosts = paymentMonster * max;
+
+            updateCurrentInfo();
+
             redraw = true;
         }
         else if ( buttonMin.isEnabled() && le.MouseClickLeft( buttonMin.area() ) && result != 1 ) {
-            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             result = 1;
-            paymentCosts = paymentMonster;
+
+            updateCurrentInfo();
+
             redraw = true;
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Recruit selected monsters." ), 0 );
         }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
         }
-        else if ( buttonMax.isEnabled() && le.MousePressRight( buttonMax.area() ) ) {
+        else if ( buttonMax.isEnabled() && le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
             fheroes2::showStandardTextMessage( _( "MAX" ), _( "Select maximum monsters to be recruited." ), 0 );
         }
-        else if ( buttonMin.isEnabled() && le.MousePressRight( buttonMin.area() ) ) {
+        else if ( buttonMin.isEnabled() && le.isMouseRightButtonPressedInArea( buttonMin.area() ) ) {
             fheroes2::showStandardTextMessage( _( "MIN" ), _( "Select only 1 monster to be recruited." ), 0 );
         }
 
@@ -650,14 +665,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
 void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 {
-    const fheroes2::Size windowSize{ 289, 139 };
+    const fheroes2::Size windowSize{ 289, 141 };
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // Set cursor.
     const CursorRestorer cursorRestorer( false );
 
-    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2,
+                                        display.height() / 2 - fheroes2::Display::DEFAULT_HEIGHT / 2 + fheroes2::borderWidthPx );
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 

@@ -21,22 +21,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SKILL_H
-#define H2SKILL_H
+#pragma once
 
 #include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>
 
-void StringAppendModifiers( std::string &, int );
+class IStreamBase;
+class OStreamBase;
 
 class Heroes;
 class HeroBase;
-class StreamBase;
 
 namespace Skill
 {
+    // Total number of primary skills available in the game
+    inline constexpr int numOfPrimarySkills{ 4 };
+    // Total number of secondary skills available in the game
+    inline constexpr int numOfSecondarySkills{ 14 };
+
     class Secondary;
 
     int GetLeadershipModifiers( int level, std::string * strs );
@@ -111,7 +115,7 @@ namespace Skill
         std::string GetName() const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        uint32_t GetValues() const;
+        uint32_t GetValue() const;
 
         // Returns the sprite index from SECSKILL
         int GetIndexSprite1() const;
@@ -122,24 +126,16 @@ namespace Skill
         static const char * String( int );
     };
 
-    StreamBase & operator>>( StreamBase &, Secondary & );
-
     class SecSkills final : protected std::vector<Secondary>
     {
     public:
         SecSkills();
-        explicit SecSkills( int race );
-        SecSkills( const SecSkills & ) = delete;
-
-        ~SecSkills() = default;
-
-        SecSkills & operator=( const SecSkills & ) = delete;
-        SecSkills & operator=( SecSkills && ) = default;
+        explicit SecSkills( const int race );
 
         int Count() const;
         int GetLevel( int skill ) const;
         int GetTotalLevel() const;
-        uint32_t GetValues( int skill ) const;
+        uint32_t GetValue( int skill ) const;
 
         Secondary * FindSkill( int );
 
@@ -153,18 +149,13 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    protected:
-        friend StreamBase & operator<<( StreamBase &, const SecSkills & );
-        friend StreamBase & operator>>( StreamBase &, SecSkills & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+        friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
-
-    StreamBase & operator<<( StreamBase &, const SecSkills & );
-    StreamBase & operator>>( StreamBase &, SecSkills & );
 
     class Primary
     {
     public:
-        Primary();
         virtual ~Primary() = default;
 
         enum
@@ -200,16 +191,18 @@ namespace Skill
     protected:
         void LoadDefaults( int type, int race );
 
-        friend StreamBase & operator<<( StreamBase &, const Primary & );
-        friend StreamBase & operator>>( StreamBase &, Primary & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+        friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
-        int attack;
-        int defense;
-        int power;
-        int knowledge;
+        int attack{ 0 };
+        int defense{ 0 };
+        int power{ 0 };
+        int knowledge{ 0 };
     };
 
-    StreamBase & operator<<( StreamBase &, const Primary & );
-    StreamBase & operator>>( StreamBase &, Primary & );
+    OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+    IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+    IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
-#endif

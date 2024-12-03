@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -308,6 +308,15 @@ msgstr ""
 "R\n"
 "D"
 
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Războinic"
 
@@ -477,6 +486,9 @@ msgid ""
 msgstr ""
 "Artefactul Sfera de Negare este în vigoare pentru această bătălie, "
 "dezactivând toate vrăjile de luptă."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Ai aruncat deja o vrajă în această rundă."
@@ -1920,6 +1932,12 @@ msgstr ""
 msgid "Descendants"
 msgstr ""
 
+msgid "Cannot build. You have already built here today."
+msgstr ""
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
 msgid "The %{building} produces %{monster}."
 msgstr ""
 
@@ -1927,12 +1945,6 @@ msgid "Requires:"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
-
-msgid "Cannot build. You have already built here today."
-msgstr ""
-
-msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2706,10 +2718,10 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
-msgid "Max"
+msgid "Hire all creatures in the town."
 msgstr ""
 
-msgid "Hire all creatures in the town."
+msgid "Max"
 msgstr ""
 
 msgid "Available"
@@ -2887,17 +2899,14 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
-msgid "Load Game"
-msgstr "Încarcă jocul"
-
-msgid "No save files to load."
-msgstr "Nu există fișiere salvate."
-
 msgid "New Game"
 msgstr ""
 
 msgid "Start a single or multi-player game."
 msgstr ""
+
+msgid "Load Game"
+msgstr "Încarcă jocul"
 
 msgid "Load a previously saved game."
 msgstr ""
@@ -3097,6 +3106,10 @@ msgstr ""
 msgid "Select Game Language:"
 msgstr "Selectați Limba:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Selectați Limba:"
+
 msgid "Click to choose the selected language."
 msgstr ""
 
@@ -3120,6 +3133,9 @@ msgid ""
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
+msgstr ""
+
+msgid "n/a"
 msgstr ""
 
 msgid ""
@@ -3151,9 +3167,6 @@ msgid "Your Resources"
 msgstr "Resursele voastre"
 
 msgid "Available Trades"
-msgstr ""
-
-msgid "n/a"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -3262,6 +3275,19 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+msgid "Select this game resolution."
+msgstr ""
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr ""
 
@@ -3307,8 +3333,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
-msgid "Warning!"
-msgstr ""
+msgid "Warning"
+msgstr "Atenție"
 
 msgid "Click to save the current game."
 msgstr ""
@@ -3322,13 +3348,10 @@ msgstr ""
 msgid "File to Load:"
 msgstr "Încarcă fișierul:"
 
-msgid "Accept the choice made."
-msgstr ""
-
-msgid "%{color} %{race} hero"
-msgstr ""
-
 msgid "Terrain object"
+msgstr ""
+
+msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
@@ -3346,6 +3369,25 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "race|Random"
+msgstr "Aleatorie"
+
+msgid "Click to start placing the selected hero."
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{name} cel %{race}"
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Selectați ținta vrăjii"
@@ -3360,9 +3402,6 @@ msgstr ""
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
-msgid "race|Random"
-msgstr "Aleatorie"
-
 msgid "Click to start placing the selected castle/town."
 msgstr ""
 
@@ -3376,15 +3415,6 @@ msgid "%{color} %{race} %{townOrCastle}"
 msgstr ""
 
 msgid "race|Neutral"
-msgstr ""
-
-msgid "You will place"
-msgstr ""
-
-msgid "Click to select this class."
-msgstr ""
-
-msgid "Click to select this color."
 msgstr ""
 
 #, fuzzy
@@ -3432,6 +3462,32 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3443,6 +3499,13 @@ msgstr ""
 
 msgid "Resurrection"
 msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Limbă"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3517,32 +3580,6 @@ msgid "All Maps"
 msgstr ""
 
 msgid "View all maps, regardless of size."
-msgstr ""
-
-msgid "Players Icon"
-msgstr ""
-
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-
-msgid "Size Icon"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-
-msgid "Map Type"
 msgstr ""
 
 msgid "Selected Name"
@@ -3736,7 +3773,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Bara de mesaje"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3745,7 +3782,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3772,6 +3812,55 @@ msgstr "Bara de mesaje"
 msgid "Click to save the Event properties."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Resursă"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ziua: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Add Event"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Programare suplimentară"
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Edit an existing event."
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete an existing event."
+msgstr ""
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artifact"
 
@@ -3785,27 +3874,10 @@ msgstr "Artifact"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Resursă"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
-
-msgid "Event Message Text"
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."
@@ -3893,6 +3965,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Acest fișier este corupt."
@@ -3901,6 +3976,9 @@ msgid "Unable to locate data directory to save the map."
 msgstr ""
 
 msgid "Unable to create a directory to save the map."
+msgstr ""
+
+msgid "Unable to locate a directory to save the map."
 msgstr ""
 
 #, fuzzy
@@ -4171,8 +4249,29 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
-msgid "Warning"
-msgstr "Atenție"
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{name} cel %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{name} cel %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{name} cel %{race}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1}"
 
 #, fuzzy
 msgid "None."
@@ -4189,6 +4288,86 @@ msgid "Run out of time."
 msgstr ""
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr "Ballista"
+
+msgid "alliance|2nd"
+msgstr ""
+
+msgid "alliance|3rd"
+msgstr ""
+
+msgid "alliance|4th"
+msgstr ""
+
+msgid "alliance|5th"
+msgstr ""
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Mulțumiri speciale către"
+
+msgid "Special Victory Condition"
+msgstr ""
+
+msgid "Allow standard victory conditions"
+msgstr ""
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr "Alianța Ogrilor"
+
+#
+msgid "{%number} alliance: "
+msgstr ""
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Aur"
+
+msgid "Select a Town to capture to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr "Dificultatea hărții:"
 
@@ -4196,12 +4375,16 @@ msgstr "Dificultatea hărții:"
 msgid "Map Description"
 msgstr "Designeri de hărți"
 
-msgid "Special Victory Condition"
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
 msgstr ""
 
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Mulțumiri speciale către"
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
 
 msgid "Change Map Name"
 msgstr ""
@@ -4209,13 +4392,26 @@ msgstr ""
 msgid "Change Map Description"
 msgstr ""
 
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Rumors"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
+msgid "Click to edit daily events."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to change the language of the map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Click to change your map name."
@@ -4226,6 +4422,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4251,6 +4455,39 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Programare suplimentară"
+
+#, fuzzy
+msgid "Edit Rumor"
+msgstr "Editor"
+
+msgid "Edit an existing rumor."
+msgstr ""
+
+msgid "Delete Rumor"
+msgstr ""
+
+msgid "Delete an existing rumor."
 msgstr ""
 
 msgid ""
@@ -4308,6 +4545,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4564,6 +4804,9 @@ msgstr "Designeri de hărți"
 msgid "Package Design"
 msgstr "Design de ambalaj"
 
+msgid "High Scores"
+msgstr ""
+
 msgid "Your Name"
 msgstr ""
 
@@ -4690,6 +4933,9 @@ msgstr "Personalizează opțiunile sistemului"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "Personalizează opțiunile sistemului"
+
+msgid "hotkey|toggle passability"
+msgstr ""
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -4975,6 +5221,9 @@ msgstr ""
 msgid "' language, but the current language of the game is '"
 msgstr ""
 
+msgid "No save files to load."
+msgstr "Nu există fișiere salvate."
+
 msgid "Hot Seat"
 msgstr ""
 
@@ -5055,9 +5304,6 @@ msgid "Credits"
 msgstr ""
 
 msgid "View the credits screen."
-msgstr ""
-
-msgid "High Scores"
 msgstr ""
 
 msgid "View the high scores screen."
@@ -5570,9 +5816,6 @@ msgstr ""
 msgid "Month: %{month} Week: %{week}"
 msgstr "Luna: %{month} Săptămâna: %{week}"
 
-msgid "Day: %{day}"
-msgstr "Ziua: %{day}"
-
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
@@ -5669,6 +5912,14 @@ msgid "Keyboard|SPACE"
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
 
 msgid "Kingdom Income"
@@ -6878,7 +7129,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -7728,6 +7983,12 @@ msgid "speed|Blazing"
 msgstr ""
 
 msgid "speed|Instant"
+msgstr ""
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
 msgstr ""
 
 msgid "week|Squirrel"
@@ -9715,13 +9976,13 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr ""
-
-msgid "The reserved artifact."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
 
 msgid "Dummy 2"
+msgstr ""
+
+msgid "The reserved artifact."
 msgstr ""
 
 msgid "Dummy 3"
@@ -10107,12 +10368,12 @@ msgstr ""
 msgid "Stoneskin"
 msgstr ""
 
+msgid "Steelskin"
+msgstr ""
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
-msgstr ""
-
-msgid "Steelskin"
 msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
@@ -10143,7 +10404,7 @@ msgstr ""
 msgid "Anti-Magic"
 msgstr ""
 
-msgid "Prevents harmful magic against the selected creatures."
+msgid "Prevents any magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
@@ -10466,7 +10727,7 @@ msgstr ""
 msgid "No spell to cast."
 msgstr "Nicio vrajă disponibilă."
 
-msgid "Your hero has %{point} spell points remaining."
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr ""
 
 msgid "View Adventure Spells"

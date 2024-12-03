@@ -28,7 +28,7 @@ class Army;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Map_Format
     {
@@ -46,12 +46,25 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object );
+    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info );
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
+
+    bool addStream( Map_Format::MapFormat & map, const int32_t tileId );
+
+    // Update the existing streams around the center tile to properly connect them to the center stream.
+    void updateStreamsAround( Map_Format::MapFormat & map, const int32_t centerTileId );
+
+    // Update the existing streams to connect them to the River Delta.
+    void updateStreamsToDeltaConnection( Map_Format::MapFormat & map, const int32_t tileId, const int deltaDirection );
+
+    // Returns 'Direction::UNKNOWN' if the index does not belong to River Delta object
+    int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex );
+
+    bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 

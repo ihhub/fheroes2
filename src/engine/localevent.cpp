@@ -31,6 +31,15 @@
 #include <set>
 #include <utility>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
@@ -45,12 +54,17 @@
 #include <SDL_version.h>
 #include <SDL_video.h>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
-#include "tools.h"
 
 namespace
 {
@@ -125,6 +139,26 @@ namespace
         case fheroes2::Key::KEY_KP_9:
             if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '9';
+            break;
+        case fheroes2::Key::KEY_KP_PERIOD:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '.';
+            break;
+        case fheroes2::Key::KEY_KP_DIVIDE:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '/';
+            break;
+        case fheroes2::Key::KEY_KP_MULTIPLY:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '*';
+            break;
+        case fheroes2::Key::KEY_KP_MINUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '-';
+            break;
+        case fheroes2::Key::KEY_KP_PLUS:
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
+                return '+';
             break;
         case fheroes2::Key::KEY_MINUS:
             return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '_' : '-' );
@@ -331,16 +365,22 @@ namespace EventProcessing
 
         static void initTouchpad()
         {
-            const int touchNumber = SDL_GetNumTouchDevices();
-            if ( touchNumber > 0 ) {
-                fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
-                const SDL_bool value = SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
-                if ( value != SDL_TRUE ) {
-                    ERROR_LOG( "Failed to set SDL_HINT_TOUCH_MOUSE_EVENTS." )
-                }
-#endif
+            if ( SDL_SetHint( SDL_HINT_MOUSE_TOUCH_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_MOUSE_TOUCH_EVENTS " hint." )
             }
+#endif
+#if SDL_VERSION_ATLEAST( 2, 0, 6 )
+            if ( SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" ) != SDL_TRUE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_TOUCH_MOUSE_EVENTS " hint." )
+            }
+#endif
+
+            if ( SDL_GetNumTouchDevices() <= 0 ) {
+                return;
+            }
+
+            fheroes2::cursor().enableSoftwareEmulation( true );
         }
 
         void initController()
@@ -389,18 +429,26 @@ namespace EventProcessing
             SDL_Event event;
 
             while ( SDL_PollEvent( &event ) ) {
+                // Most SDL events should be processed sequentially one event at a time, but for some
+                // event types, the processing of intermediate events may be skipped in order to gain
+                // overall event processing speed.
+                bool processImmediately = true;
+
                 switch ( event.type ) {
                 case SDL_WINDOWEVENT:
                     if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-                        // A special case since we need to exit the loop.
                         if ( allowExit ) {
                             // Try to perform clear exit to catch all memory leaks, for example.
                             return false;
                         }
+                        processImmediately = false;
                         break;
                     }
                     if ( onWindowEvent( event.window ) ) {
                         updateDisplay = true;
+                    }
+                    else {
+                        processImmediately = false;
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -409,6 +457,7 @@ namespace EventProcessing
                     break;
                 case SDL_MOUSEMOTION:
                     onMouseMotionEvent( eventHandler, event.motion );
+                    processImmediately = false;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -434,9 +483,11 @@ namespace EventProcessing
                     // SDL requires joystick events to be enabled in order to handle controller events.
                     // This is because the controller related code depends on the joystick related code.
                     // See SDL_gamecontroller.c within SDL source code for implementation details.
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERAXISMOTION:
                     onControllerAxisEvent( eventHandler, event.caxis );
+                    processImmediately = false;
                     break;
                 case SDL_CONTROLLERBUTTONDOWN:
                 case SDL_CONTROLLERBUTTONUP:
@@ -446,6 +497,9 @@ namespace EventProcessing
                 case SDL_FINGERUP:
                 case SDL_FINGERMOTION:
                     onTouchEvent( eventHandler, event.tfinger );
+                    if ( event.type == SDL_FINGERMOTION ) {
+                        processImmediately = false;
+                    }
                     break;
                 case SDL_RENDER_TARGETS_RESET:
                     // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
@@ -466,6 +520,7 @@ namespace EventProcessing
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
                     }
+                    processImmediately = false;
                     break;
                 case SDL_APP_LOWMEMORY:
                     // According to SDL this event can only happen on Android or iOS.
@@ -478,8 +533,16 @@ namespace EventProcessing
                     assert( eventTypeStatus.count( event.type ) == 0 );
 
                     // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
+                    processImmediately = false;
                     break;
                 }
+
+                // If the current event does require immediate processing, then we need to return immediately.
+                if ( processImmediately ) {
+                    break;
+                }
+
+                // Otherwise, we can process it later along with the newly received events, if any.
             }
 
             return true;
@@ -495,8 +558,7 @@ namespace EventProcessing
 
         static void setEventProcessingState( const uint32_t eventType, const bool enable )
         {
-            const auto [dummy, inserted] = eventTypeStatus.emplace( eventType );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = eventTypeStatus.emplace( eventType ); !inserted ) {
                 assert( 0 );
             }
 
@@ -826,8 +888,8 @@ namespace EventProcessing
                 buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_RIGHT;
                 break;
             default:
-                VERBOSE_LOG( "Unknown mouse button " << button.button )
-                break;
+                VERBOSE_LOG( "Unknown mouse button " << static_cast<int>( button.button ) )
+                return;
             }
 
             eventHandler.onMouseButtonEvent( button.state == SDL_PRESSED, buttonType, { button.x, button.y } );
@@ -972,9 +1034,23 @@ namespace EventProcessing
         static void onTouchEvent( LocalEvent & eventHandler, const SDL_TouchFingerEvent & event )
         {
 #if defined( TARGET_PS_VITA )
-            if ( event.touchId != 0 ) {
-                // Ignore rear touchpad on PS Vita
-                return;
+            {
+                // PS Vita has two touchpads: front and rear. The ID of the front touchpad must match the value of
+                // 'SDL_TouchID' used in the 'SDL_AddTouch()' call in the 'VITA_InitTouch()' function in this SDL2
+                // source file: video/vita/SDL_vitatouch.c.
+                constexpr SDL_TouchID frontTouchpadDeviceID
+                {
+#if SDL_VERSION_ATLEAST( 2, 30, 7 )
+                    1
+#else
+                    0
+#endif
+                };
+
+                // Use only front touchpad on PS Vita.
+                if ( event.touchId != frontTouchpadDeviceID ) {
+                    return;
+                }
             }
 #endif
 
@@ -1044,57 +1120,6 @@ namespace fheroes2
         return EventProcessing::EventEngine::getKeyName( key );
     }
 
-    bool PressIntKey( const uint32_t max, uint32_t & result )
-    {
-        const LocalEvent & le = LocalEvent::Get();
-
-        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
-            result /= 10;
-            return true;
-        }
-
-        if ( !le.isAnyKeyPressed() ) {
-            // No key is pressed.
-            return false;
-        }
-
-        if ( le.KeyValue() >= fheroes2::Key::KEY_0 && le.KeyValue() <= fheroes2::Key::KEY_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        if ( le.KeyValue() >= fheroes2::Key::KEY_KP_0 && le.KeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            if ( max <= result ) {
-                // We reached the maximum.
-                return true;
-            }
-
-            result *= 10;
-
-            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
-
-            if ( result > max ) {
-                result = max;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
         switch ( key ) {
@@ -1108,9 +1133,8 @@ namespace fheroes2
             }
             break;
         case fheroes2::Key::KEY_DELETE:
-            if ( !res.empty() ) {
-                if ( pos < res.size() )
-                    res.erase( pos, 1 );
+            if ( pos < res.size() ) {
+                res.erase( pos, 1 );
             }
             break;
 
@@ -1293,6 +1317,7 @@ void LocalEvent::onTouchFingerEvent( const TouchFingerEventType eventType, const
         // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+        assert( windowRect.width > 0 );
 
         _emulatedPointerPos.x = static_cast<double>( screenResolution.width * position.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
         _emulatedPointerPos.y

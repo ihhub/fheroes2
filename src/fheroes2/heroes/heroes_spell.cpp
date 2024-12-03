@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -37,7 +37,7 @@
 #include "dialog_selectitems.h"
 #include "direction.h"
 #include "game_interface.h"
-#include "heroes.h"
+#include "heroes.h" // IWYU pragma: associated
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
@@ -167,16 +167,16 @@ namespace
 
         Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
 
-        Maps::Tiles & tileSource = world.GetTiles( boatSource );
+        Maps::Tile & tileSource = world.getTile( boatSource );
 
-        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.getMainObjectPart()._uid, boatSource, MP2::OBJ_BOAT ) );
 
-        Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+        Maps::Tile & tileDest = world.getTile( boatDestination );
 
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
 
-        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.getMainObjectPart()._uid, boatDestination, MP2::OBJ_BOAT ) );
 
         return true;
     }
@@ -274,7 +274,7 @@ namespace
         assert( !monsters.empty() );
 
         for ( const int32_t monsterIndex : monsters ) {
-            const Maps::Tiles & tile = world.GetTiles( monsterIndex );
+            const Maps::Tile & tile = world.getTile( monsterIndex );
 
             const Troop troop = getTroopFromTile( tile );
             const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
@@ -323,8 +323,8 @@ namespace
 
     bool ActionSpellSetGuardian( const Heroes & hero, const Spell & spell )
     {
-        Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
-        assert( MP2::OBJ_MINE == tile.GetObject( false ) );
+        Maps::Tile & tile = world.getTile( hero.GetIndex() );
+        assert( MP2::OBJ_MINE == tile.getMainObjectType( false ) );
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
@@ -336,7 +336,6 @@ namespace
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::NONE );
-            tile.removeOwnershipFlag( MP2::OBJ_MINE );
 
             // Update the color of haunted mine on radar.
             Interface::AdventureMap & I = Interface::AdventureMap::Get();

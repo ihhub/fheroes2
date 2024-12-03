@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,14 +25,20 @@
 
 #include <list>
 #include <string>
+#include <string_view>
 
 struct ListFiles : public std::list<std::string>
 {
     void Append( ListFiles && files );
-    void ReadDir( const std::string & path, const std::string & filter = "", bool sensitive = true );
-    static bool IsEmpty( const std::string & path, const std::string & filter = "", bool sensitive = true );
 
-    void FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive );
+    // Adds files from the 'path' directory ending in 'filter' to the list, case-insensitive.
+    void ReadDir( const std::string & path, const std::string & filter );
+
+    // Adds the first found file from the 'path' directory with a name matching 'fileName' to the list, case-insensitive.
+    void FindFileInDir( const std::string_view path, const std::string_view fileName );
+
+    // Returns true if there are no files in the 'path' directory with names ending in 'filter', case-insensitive, otherwise returns false.
+    static bool IsEmpty( const std::string & path, const std::string & filter );
 };
 
 #endif

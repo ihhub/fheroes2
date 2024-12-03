@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,13 +25,13 @@
 #include <cstdint>
 
 #include "agg_image.h"
-#include "dialog.h"
 #include "game.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "ui_constants.h"
 #include "ui_tool.h"
 
 namespace
@@ -121,11 +121,11 @@ namespace fheroes2
         const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
 
-        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-        const uint32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
+        const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+        const int32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
         fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset + back.y() );
 
-        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+        const int32_t buttonMiddlePos = panelXPos + fheroes2::shadowWidthPx + ( panel.width() - fheroes2::shadowWidthPx ) / 2;
 
         const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
         const int32_t buttonWidth = buttonSample.width();

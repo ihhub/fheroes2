@@ -26,8 +26,10 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    enum class FontSize : uint8_t;
+
     struct FontType;
+
+    enum class FontSize : uint8_t;
     enum class SupportedLanguage : uint8_t;
 
     namespace AGG
@@ -43,7 +45,7 @@ namespace fheroes2
         uint32_t getCharacterLimit( const FontSize fontSize );
         const Sprite & getChar( const uint8_t character, const FontType & fontType );
 
-        // This function must be called only at the type of setting up a new language.
+        // This function must be called only at the time of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }
 }

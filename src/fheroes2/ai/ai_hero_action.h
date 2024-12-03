@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,27 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2OBJXLOC_H
-#define H2OBJXLOC_H
+#pragma once
 
 #include <cstdint>
 
-namespace ObjXlc1
+class Heroes;
+class Spell;
+
+namespace AI
 {
-    bool isShadow( const uint8_t index );
+    void HeroesAction( Heroes & hero, const int32_t dst_index );
+    void HeroesMove( Heroes & hero );
+
+    // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+
+    // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
+    // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
+
+    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 }
-
-namespace ObjXlc2
-{
-    bool isShadow( const uint8_t index );
-
-    // Returns true if the index belongs to Reefs type of the object.
-    bool isReefs( const uint8_t index );
-}
-
-namespace ObjXlc3
-{
-    bool isShadow( const uint8_t index );
-}
-
-#endif

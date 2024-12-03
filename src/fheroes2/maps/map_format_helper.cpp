@@ -25,10 +25,9 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <deque>
+#include <initializer_list>
 #include <list>
 #include <map>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -36,13 +35,20 @@
 #include "army_troop.h"
 #include "castle.h"
 #include "color.h"
-#include "gamedefs.h"
+#include "direction.h"
+#include "ground.h"
+#include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "race.h"
+#include "rand.h"
 #include "world.h"
 #include "world_object_uid.h"
 
@@ -88,6 +94,195 @@ namespace
             unitCount[i] = static_cast<int32_t>( troop->GetCount() );
         }
     }
+
+    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            for ( const auto & object : map.tiles[i].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( i ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
+                        hero->SetColor( color );
+                    }
+                }
+            }
+        }
+    }
+
+    // This function only checks for Streams and ignores River Deltas.
+    bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
+    {
+        return std::any_of( mapTile.objects.cbegin(), mapTile.objects.cend(),
+                            []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
+    }
+
+    bool isStreamToDeltaConnectionNeeded( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
+    {
+        if ( direction != Direction::TOP && direction != Direction::BOTTOM && direction != Direction::RIGHT && direction != Direction::LEFT ) {
+            return false;
+        }
+
+        if ( !Maps::isValidDirection( tileId, direction ) ) {
+            return false;
+        }
+
+        // The center tile of river delta is located in the next tile.
+        const int32_t nextTileId = Maps::GetDirectionIndex( tileId, direction );
+
+        return std::any_of( map.tiles[nextTileId].objects.cbegin(), map.tiles[nextTileId].objects.cend(),
+                            [&direction]( const Maps::Map_Format::TileObjectInfo & object ) {
+                                return Maps::getRiverDeltaDirectionByIndex( object.group, static_cast<int32_t>( object.index ) ) == Direction::Reflect( direction );
+                            } );
+    }
+
+    // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
+    int getStreamDirecton( Maps::Map_Format::MapFormat & map, const int32_t currentTileId, const bool forceStreamOnTile )
+    {
+        assert( currentTileId >= 0 && map.tiles.size() > static_cast<size_t>( currentTileId ) );
+
+        // Stream includes also the Deltas. For the current tile we need to check only streams excluding Deltas.
+        if ( !forceStreamOnTile && !isStreamPresent( map.tiles[currentTileId] ) ) {
+            // Current tile has no streams.
+            return Direction::UNKNOWN;
+        }
+
+        int streamDirection = Direction::CENTER;
+
+        // For streams we can check only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+            if ( !Maps::isValidDirection( currentTileId, direction ) ) {
+                continue;
+            }
+
+            const int32_t tileId = Maps::GetDirectionIndex( currentTileId, direction );
+            assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
+
+            // Check also for Deltas connection.
+            if ( isStreamPresent( map.tiles[tileId] ) || isStreamToDeltaConnectionNeeded( map, tileId, direction ) ) {
+                streamDirection |= direction;
+            }
+        }
+
+        return streamDirection;
+    }
+
+    bool hasBits( const int value, const int bits )
+    {
+        return ( value & bits ) == bits;
+    }
+
+    bool hasNoBits( const int value, const int bits )
+    {
+        return ( value & bits ) == 0;
+    }
+
+    uint8_t getStreamIndex( const int streamDirection )
+    {
+        if ( hasNoBits( streamDirection, Direction::CENTER ) ) {
+            // This tile should not have a stream image.
+            assert( 0 );
+            return 255U;
+        }
+
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::RIGHT ) ) {
+            // \ - stream from the left to the bottom.
+            return 0U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::LEFT ) ) {
+            // / - stream from the right to the bottom.
+            return 1U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::LEFT ) ) {
+            // \ - stream from the top to the right.
+            return 4U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
+            // / - stream from the top to the left.
+            return 7U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::BOTTOM ) ) {
+            // _|_ - stream from the top to the left and right.
+            return 8U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::LEFT ) ) {
+            // |- - stream from the top to the right and bottom.
+            return 9U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::LEFT ) && hasNoBits( streamDirection, Direction::RIGHT ) ) {
+            // -| - stream from the top to the left and bottom.
+            return 10U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::TOP ) ) {
+            // \/ - stream from the left and right to the bottom.
+            return 11U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::TOP | Direction::RIGHT ) ) {
+            // -|- - streams are all around.
+            return 6U;
+        }
+        if ( ( hasBits( streamDirection, Direction::LEFT ) || hasBits( streamDirection, Direction::RIGHT ) )
+             && hasNoBits( streamDirection, Direction::TOP | Direction::BOTTOM ) ) {
+            // - - horizontal stream.
+            return Rand::Get( 1 ) ? 2U : 5U;
+        }
+
+        // | - in all other cases are the vertical stream sprite, including the case when there are no other streams around.
+        return Rand::Get( 1 ) ? 3U : 12U;
+    }
+
+    void updateStreamObjectOnMapTile( Maps::Map_Format::MapFormat & map, const int32_t tileId, const bool forceStreamOnTile )
+    {
+        const int direction = getStreamDirecton( map, tileId, forceStreamOnTile );
+
+        if ( hasNoBits( direction, Direction::CENTER ) ) {
+            // There is no stream on this tile.
+            return;
+        }
+
+        const uint8_t objectIndex = getStreamIndex( direction );
+
+        if ( objectIndex == 255U ) {
+            return;
+        }
+
+        assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
+
+        auto & tileObjects = map.tiles[tileId].objects;
+
+        auto streamIter = std::find_if( tileObjects.begin(), tileObjects.end(),
+                                        []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
+
+        if ( streamIter == tileObjects.end() ) {
+            // Add stream to this tile.
+            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::STREAMS, objectIndex );
+
+            if ( !Maps::setObjectOnTile( world.getTile( tileId ), objectInfo, true ) ) {
+                assert( 0 );
+                return;
+            }
+
+            Maps::addObjectToMap( map, tileId, Maps::ObjectGroup::STREAMS, objectIndex );
+        }
+        else {
+            streamIter->index = objectIndex;
+
+            // Update image index for the `world` tile.
+            Maps::Tile::updateTileObjectIcnIndex( world.getTile( tileId ), streamIter->id, objectIndex );
+        }
+    }
 }
 
 namespace Maps
@@ -102,6 +297,8 @@ namespace Maps
 
         world.updatePassabilities();
 
+        updateWorldCastlesHeroes( map );
+
         return true;
     }
 
@@ -111,14 +308,14 @@ namespace Maps
 
         // We must clear all tiles before writing something on them.
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            auto & tile = world.GetTiles( static_cast<int32_t>( i ) );
+            auto & tile = world.getTile( static_cast<int32_t>( i ) );
             tile = {};
 
             tile.setIndex( static_cast<int32_t>( i ) );
         }
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            readTileTerrain( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            readTileTerrain( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         // Read objects from all tiles and place them based on their IDs.
@@ -136,7 +333,7 @@ namespace Maps
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );
-            if ( !readTileObject( world.GetTiles( info.tileIndex ), *info.info ) ) {
+            if ( !readTileObject( world.getTile( info.tileIndex ), *info.info ) ) {
                 return false;
             }
         }
@@ -155,18 +352,18 @@ namespace Maps
         map.tiles.resize( size );
 
         for ( size_t i = 0; i < size; ++i ) {
-            writeTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            writeTile( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
     }
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info )
+    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info )
     {
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
     }
 
-    bool readTileObject( Tiles & tile, const Map_Format::TileObjectInfo & object )
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
         if ( object.index >= objectInfos.size() ) {
@@ -188,20 +385,19 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info )
     {
-        std::deque<const TilesAddon *> roadParts;
-        std::deque<const TilesAddon *> streamParts;
+        // A tile cannot contain an exactly the same road or stream parts.
+        std::set<std::pair<uint32_t, uint8_t>> roadParts;
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
-                if ( isRoad ) {
-                    roadParts.push_back( &addon );
-                }
-                else {
-                    streamParts.push_back( &addon );
-                }
+        const MP2::ObjectIcnType mainObjectIcnType = tile.getMainObjectPart().icnType;
+        if ( mainObjectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+            roadParts.emplace( tile.getMainObjectPart()._uid, tile.getMainObjectPart().icnIndex );
+        }
+
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                roadParts.emplace( part._uid, part.icnIndex );
             }
         }
 
@@ -210,36 +406,21 @@ namespace Maps
 
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
-                    // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
+                    // This object was removed from the tile. Delete the object.
+                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
-                object.id = roadParts.front()->_uid;
-                object.index = roadParts.front()->_imageIndex;
-                roadParts.pop_front();
-            }
-            else if ( object.group == ObjectGroup::STREAMS ) {
-                if ( streamParts.empty() ) {
-                    // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::TileObjectInfo>::difference_type>( objectIndex ) );
-                    continue;
-                }
-
-                object.id = streamParts.front()->_uid;
-                object.index = streamParts.front()->_imageIndex;
-                streamParts.pop_front();
+                object.id = roadParts.begin()->first;
+                object.index = roadParts.begin()->second;
+                roadParts.erase( roadParts.begin() );
             }
 
             ++objectIndex;
         }
 
-        for ( const TilesAddon * addon : roadParts ) {
-            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
-        }
-
-        for ( const TilesAddon * addon : streamParts ) {
-            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
+        for ( const auto & [uid, index] : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, index, uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
@@ -261,7 +442,7 @@ namespace Maps
             auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
-            const auto & objects = Maps::getObjectsByGroup( group );
+            const auto & objects = getObjectsByGroup( group );
             assert( index < objects.size() );
             // Set race according the object metadata.
             heroMetadata->second.race = Race::IndexToRace( static_cast<int>( objects[index].metadata[1] ) );
@@ -270,7 +451,7 @@ namespace Maps
             auto [metadata, isMetadataEmplaced] = map.castleMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
-            const auto & objects = Maps::getObjectsByGroup( group );
+            const auto & objects = getObjectsByGroup( group );
             assert( index < objects.size() );
             // Add town or castle main buildings.
             metadata->second.builtBuildings.push_back( objects[index].metadata[1] == 0 ? BUILD_TENT : BUILD_CASTLE );
@@ -290,8 +471,8 @@ namespace Maps
             (void)isMetadataEmplaced;
 #endif
         }
-        else if ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-            const auto & objects = Maps::getObjectsByGroup( group );
+        else if ( group == ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+            const auto & objects = getObjectsByGroup( group );
 
             assert( index < objects.size() );
             const auto objectType = objects[index].objectType;
@@ -328,8 +509,8 @@ namespace Maps
                 break;
             }
         }
-        else if ( group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-            const auto & objects = Maps::getObjectsByGroup( group );
+        else if ( group == ObjectGroup::ADVENTURE_WATER ) {
+            const auto & objects = getObjectsByGroup( group );
 
             assert( index < objects.size() );
             const auto objectType = objects[index].objectType;
@@ -342,8 +523,8 @@ namespace Maps
 #endif
             }
         }
-        else if ( group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            assert( index < Maps::getObjectsByGroup( group ).size() );
+        else if ( group == ObjectGroup::ADVENTURE_ARTIFACTS ) {
+            assert( index < getObjectsByGroup( group ).size() );
 
             const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
@@ -352,6 +533,91 @@ namespace Maps
             (void)isMetadataEmplaced;
 #endif
         }
+    }
+
+    bool addStream( Map_Format::MapFormat & map, const int32_t tileId )
+    {
+        assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
+
+        Map_Format::TileInfo & thisTile = map.tiles[tileId];
+
+        if ( isStreamPresent( thisTile ) || Ground::getGroundByImageIndex( thisTile.terrainIndex ) == Ground::WATER ) {
+            // We cannot place streams on the water or on already placed streams.
+            return false;
+        }
+
+        // Force set stream on this tile and update its sprite.
+        updateStreamObjectOnMapTile( map, tileId, true );
+
+        updateStreamsAround( map, tileId );
+
+        if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( thisTile.terrainIndex ) ) {
+            // We need to set terrain image without extra objects under the stream.
+            thisTile.terrainIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( thisTile.terrainIndex ), false );
+        }
+
+        return true;
+    }
+
+    void updateStreamsAround( Map_Format::MapFormat & map, const int32_t centerTileId )
+    {
+        // For streams we should update only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+            if ( isValidDirection( centerTileId, direction ) ) {
+                updateStreamObjectOnMapTile( map, GetDirectionIndex( centerTileId, direction ), false );
+            }
+        }
+    }
+
+    void updateStreamsToDeltaConnection( Map_Format::MapFormat & map, const int32_t tileId, const int deltaDirection )
+    {
+        if ( !isValidDirection( tileId, deltaDirection ) ) {
+            return;
+        }
+
+        const int32_t nextTileId = GetDirectionIndex( tileId, deltaDirection );
+
+        if ( !isValidDirection( nextTileId, deltaDirection ) ) {
+            return;
+        }
+
+        updateStreamObjectOnMapTile( map, GetDirectionIndex( nextTileId, deltaDirection ), false );
+    }
+
+    int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex )
+    {
+        if ( group != ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            return Direction::UNKNOWN;
+        }
+
+        const auto & objectInfo = getObjectInfo( ObjectGroup::LANDSCAPE_MISCELLANEOUS, objectIndex );
+
+        assert( !objectInfo.groundLevelParts.empty() );
+
+        const auto & firstObjectPart = objectInfo.groundLevelParts.front();
+
+        // Yes, the below code is very hacky but so far this is the best we can do.
+        if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 ) {
+            switch ( firstObjectPart.icnIndex ) {
+            case 2U:
+                return Direction::TOP;
+            case 11U:
+                return Direction::BOTTOM;
+            case 218U + 2U:
+                return Direction::LEFT;
+            case 218U + 11U:
+                return Direction::RIGHT;
+            default:
+                break;
+            }
+        }
+
+        return Direction::UNKNOWN;
+    }
+
+    bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex )
+    {
+        return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
@@ -373,7 +639,7 @@ namespace Maps
         static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
         static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
 
-        constexpr size_t mainColors{ KINGDOMMAX };
+        constexpr size_t mainColors{ maxNumOfPlayers };
 
         if ( map.playerRace.size() != mainColors ) {
             // Possibly corrupted map.
@@ -441,20 +707,10 @@ namespace Maps
         // Update map format settings based on the gathered information.
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
-            if ( heroColorsPresent[i] || townColorsPresent[i] ) {
-                assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
+            map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
 
+            if ( map.playerRace[i] != 0 ) {
                 map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
-                map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
-
-                if ( map.playerRace[i] == 0 ) {
-                    map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
-                }
-            }
-            else {
-                assert( heroRacesPresent[i] == 0 && townRacesPresent[i] == 0 );
-
-                map.playerRace[i] = 0;
             }
 
             // Only one race can be present.
@@ -512,11 +768,19 @@ namespace Maps
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
                     uint8_t & allianceColors = *iter;
 
+                    // Only available players should be in the alliances.
+                    allianceColors &= map.availablePlayerColors;
+
                     for ( size_t i = 0; i < mainColors; ++i ) {
                         const uint8_t color = static_cast<uint8_t>( 1 << i );
-                        if ( ( allianceColors & color ) != 0 && usedAllianceColors[i] ) {
-                            // This color is used in another alliance. Remove it from here.
-                            allianceColors = allianceColors & ( ~color );
+                        if ( ( allianceColors & color ) != 0 ) {
+                            if ( usedAllianceColors[i] ) {
+                                // This color is used in another alliance. Remove it from here.
+                                allianceColors = allianceColors & ( ~color );
+                            }
+                            else {
+                                usedAllianceColors[i] = true;
+                            }
                         }
                     }
 
@@ -561,6 +825,101 @@ namespace Maps
         for ( auto & [dummy, eventMetadata] : map.adventureMapEventMetadata ) {
             eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & map.humanPlayerColors;
             eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & map.computerPlayerColors;
+        }
+
+        // Check and update the special victory and loss conditions that depend on player objects.
+
+        // Returns true if all is OK.
+        auto checkSpecialCondition = [&map, &heroObjects, &townObjects]( const std::vector<uint32_t> & conditionMetadata, const ObjectGroup objectGroup ) {
+            if ( conditionMetadata.size() != 2 ) {
+                return false;
+            }
+
+            // Verify that this is a valid map object.
+            const uint32_t tileIndex = conditionMetadata[0];
+
+            assert( tileIndex < map.tiles.size() );
+
+            for ( const auto & object : map.tiles[tileIndex].objects ) {
+                if ( object.group != objectGroup ) {
+                    continue;
+                }
+
+                switch ( objectGroup ) {
+                case ObjectGroup::KINGDOM_TOWNS: {
+                    if ( object.index >= townObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = Color::IndexToColor( getTownColorIndex( map, tileIndex, object.id ) );
+                    if ( color != conditionMetadata[1] ) {
+                        // Current town color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                case ObjectGroup::KINGDOM_HEROES: {
+                    if ( object.index >= heroObjects.size() ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t color = 1 << heroObjects[object.index].metadata[0];
+                    if ( color != conditionMetadata[1] ) {
+                        // Current hero color is incorrect.
+                        continue;
+                    }
+
+                    return true;
+                }
+                default:
+                    // Have you added a new object type for victory or loss conditions? Update the logic!
+                    assert( 0 );
+                    break;
+                }
+            }
+
+            return false;
+        };
+
+        switch ( map.victoryConditionType ) {
+        case FileInfo::VICTORY_CAPTURE_TOWN:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        case FileInfo::VICTORY_KILL_HERO:
+            if ( !checkSpecialCondition( map.victoryConditionMetadata, ObjectGroup::KINGDOM_HEROES ) ) {
+                map.victoryConditionMetadata.clear();
+                map.victoryConditionType = FileInfo::VICTORY_DEFEAT_EVERYONE;
+            }
+
+            break;
+        default:
+            break;
+        }
+
+        switch ( map.lossConditionType ) {
+        case FileInfo::LOSS_TOWN:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, ObjectGroup::KINGDOM_TOWNS ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        case FileInfo::LOSS_HERO:
+            if ( !checkSpecialCondition( map.lossConditionMetadata, ObjectGroup::KINGDOM_HEROES ) ) {
+                map.lossConditionMetadata.clear();
+                map.lossConditionType = FileInfo::LOSS_EVERYTHING;
+            }
+
+            break;
+        default:
+            break;
         }
 
         return true;
@@ -617,7 +976,7 @@ namespace Maps
 
     bool isJailObject( const ObjectGroup group, const uint32_t index )
     {
-        return ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
+        return ( group == ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
     }
 
     uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )

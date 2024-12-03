@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2RECRUITS_H
-#define H2RECRUITS_H
+#pragma once
 
 #include <cstdint>
 #include <utility>
 
+class IStreamBase;
+class OStreamBase;
+
 class Heroes;
-class StreamBase;
 
 class Recruit
 {
@@ -36,12 +37,6 @@ public:
     Recruit();
     Recruit( const Heroes & hero, const uint32_t surrenderDay );
     explicit Recruit( const Heroes & hero );
-    Recruit( const Recruit & ) = delete;
-
-    ~Recruit() = default;
-
-    Recruit & operator=( const Recruit & ) = delete;
-    Recruit & operator=( Recruit && ) = default;
 
     int getID() const
     {
@@ -57,8 +52,8 @@ private:
     int _id;
     uint32_t _surrenderDay;
 
-    friend StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
-    friend StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );
+    friend IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
 };
 
 class Recruits : public std::pair<Recruit, Recruit>
@@ -83,7 +78,5 @@ public:
     void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
-StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
-StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );
+IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );

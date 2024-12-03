@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "game_delays.h"
+#include "game_video_type.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -48,11 +49,9 @@ namespace
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
-        Mixer::setVolume( -1, 100 * Settings::Get().SoundVolume() / 10 );
-
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
-                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), -1, false );
+                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), false );
             }
         }
     }
@@ -68,7 +67,7 @@ namespace Video
 
                 if ( System::IsDirectory( fullDirPath ) ) {
                     ListFiles videoFiles;
-                    videoFiles.FindFileInDir( fullDirPath, fileName, false );
+                    videoFiles.FindFileInDir( fullDirPath, fileName );
                     if ( videoFiles.empty() ) {
                         continue;
                     }

@@ -26,7 +26,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -40,7 +39,7 @@
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "editor_mainmenu.h"
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -93,7 +92,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
 
-        if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_MAIN_MENU ) << " to open Editor." )
         }
 
@@ -166,12 +165,18 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
             break;
-        case fheroes2::GameMode::SCENARIO_INFO:
-            result = Game::ScenarioInfo();
+        case fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER:
+        case fheroes2::GameMode::SELECT_SCENARIO_TWO_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_THREE_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS:
+        case fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS: {
+            const uint8_t humanPlayerCount
+                = static_cast<uint8_t>( static_cast<int>( result ) - static_cast<int>( fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER ) );
+            // Add +1 since we don't have zero human player option.
+            result = Game::SelectScenario( humanPlayerCount + 1 );
             break;
-        case fheroes2::GameMode::SELECT_SCENARIO:
-            result = Game::SelectScenario();
-            break;
+        }
         case fheroes2::GameMode::START_GAME:
             result = Game::StartGame();
             break;
@@ -232,7 +237,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
         fheroes2::validateFadeInAndRender();
 
-        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
 
         if ( System::isHandheldDevice() ) {
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
@@ -279,7 +284,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
-    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
+    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, 0 ) );
     fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
 
     buttonNewGame.draw();
@@ -302,7 +307,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     uint32_t lantern_frame = 0;
 
-    const bool isPOLPresent = Game::isPriceOfLoyaltyCampaignPresent();
+    const bool isPOLPresent = conf.isPriceOfLoyaltySupported();
 
     std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false }, ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
                                      ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
@@ -335,14 +340,14 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         for ( size_t i = 0; i < buttons.size(); ++i ) {
             buttons[i].wasOver = buttons[i].isOver;
 
-            if ( le.MousePressLeft( buttons[i].button.area() ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( buttons[i].button.area() ) ) {
                 buttons[i].button.drawOnPress();
             }
             else {
                 buttons[i].button.drawOnRelease();
             }
 
-            buttons[i].isOver = le.MouseCursor( buttons[i].button.area() );
+            buttons[i].isOver = le.isMouseCursorPosInArea( buttons[i].button.area() );
 
             if ( buttons[i].isOver != buttons[i].wasOver ) {
                 uint32_t frame = buttons[i].frame;
@@ -393,27 +398,27 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         }
 
         // right info
-        if ( le.MousePressRight( buttonQuit.area() ) )
+        if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) )
             fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Dialog::ZERO );
-        else if ( le.MousePressRight( buttonLoadGame.area() ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
-        else if ( le.MousePressRight( buttonCredits.area() ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonCredits.area() ) )
             fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
-        else if ( le.MousePressRight( buttonHighScores.area() ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonHighScores.area() ) )
             fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
-        else if ( le.MousePressRight( buttonNewGame.area() ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonNewGame.area() ) )
             fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
-        else if ( isPOLPresent && le.MousePressRight( buttonEditor.area() ) ) {
+        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditor.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( settingsArea ) )
+        else if ( le.isMouseRightButtonPressedInArea( settingsArea ) )
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
-            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
+            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            if ( le.MouseCursor( settingsArea ) ) {
+            if ( le.isMouseCursorPosInArea( settingsArea ) ) {
                 const int32_t doorOffsetY = static_cast<int32_t>( 55 * scale ) + offsetY;
                 fheroes2::Blit( highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(),
                                 highlightDoor.height() );

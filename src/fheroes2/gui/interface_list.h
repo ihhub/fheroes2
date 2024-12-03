@@ -334,8 +334,8 @@ namespace Interface
         {
             LocalEvent & le = LocalEvent::Get();
 
-            le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
-            le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
             if ( !IsValid() ) {
                 return false;
@@ -427,19 +427,19 @@ namespace Interface
 
                 return true;
             }
-            if ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) {
-                const fheroes2::Point mousePosition = le.GetMouseCursor();
+            if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) || le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
+                const fheroes2::Point mousePosition = le.getMouseCursorPos();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
                 const int32_t prevScrollbarY = _scrollbar.y();
 
                 UpdateScrollbarRange();
 
-                if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+                if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                     _scrollbar.moveToPos( mousePosition );
                 }
 
-                if ( le.MousePressLeft( rtAreaItems ) ) {
+                if ( le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         _dragStartPos = mousePosition;
@@ -484,7 +484,7 @@ namespace Interface
                 }
             }
 
-            const fheroes2::Point & mousePos = le.GetMouseCursor();
+            const fheroes2::Point & mousePos = le.getMouseCursorPos();
             if ( rtAreaItems & mousePos ) { // within our rectangle
                 needRedraw = true;
 
@@ -494,8 +494,9 @@ namespace Interface
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, mousePos ) )
+                    if ( ActionListCursor( item, mousePos ) ) {
                         return true;
+                    }
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
@@ -509,7 +510,7 @@ namespace Interface
                         return true;
                     }
 
-                    if ( le.MousePressRight( rtAreaItems ) ) {
+                    if ( le.isMouseRightButtonPressedInArea( rtAreaItems ) ) {
                         ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }

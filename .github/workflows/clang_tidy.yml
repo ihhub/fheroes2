@@ -14,7 +14,7 @@ permissions: {}
 jobs:
   tidy:
     name: Clang-Tidy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     defaults:
       run:
@@ -31,11 +31,11 @@ jobs:
     - name: Install dependencies and clang-tidy
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tidy-15
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev clang-tidy-18
     - name: Setup clang-tidy
       run: |
-        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 100
-        sudo update-alternatives --install /usr/bin/clang-tidy-diff clang-tidy-diff /usr/bin/clang-tidy-diff-15.py 100
+        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+        sudo update-alternatives --install /usr/bin/clang-tidy-diff clang-tidy-diff /usr/bin/clang-tidy-diff-18.py 100
     - name: Prepare compile_commands.json
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON

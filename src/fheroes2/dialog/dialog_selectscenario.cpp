@@ -41,10 +41,11 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 
@@ -85,26 +86,40 @@ namespace
         MAP_SIZE_BUTTON_OFFSET_Y = 23
     };
 
-    Maps::mapsize_t currentMapFilter = Maps::ZERO;
+    Maps::MapSize currentMapFilter = Maps::ZERO;
 
     void ShowToolTip( const std::string & header, const std::string & body )
     {
         fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
     }
 
-    void mapInfo( const Maps::FileInfo & info )
+    void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
     {
-        // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-        // To avoid this we have to replace all '\' symbols with '/' symbols.
-        std::string fullPath = info.filename;
-        StringReplace( fullPath, "\\", "/" );
+        ShowToolTip( _( "Players Icon" ),
+                     _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
+    }
 
-        fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
+    void SizeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    {
+        ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
+    }
+
+    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    {
+        ShowToolTip( _( "Map Type" ),
+                     _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+    }
+
+    void mapInfo( const Maps::FileInfo * info )
+    {
+        assert( info != nullptr );
+
+        const fheroes2::Text header( info->name, fheroes2::FontType::normalYellow(), info->getSupportedLanguage() );
 
         fheroes2::MultiFontText body;
 
         body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info.version ) {
+        switch ( info->version ) {
         case GameVersion::SUCCESSION_WARS:
             body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
@@ -120,17 +135,22 @@ namespace
             break;
         }
 
+        if ( info->version == GameVersion::RESURRECTION ) {
+            body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
+            body.add( { fheroes2::getLanguageName( info->mainLanguage ), fheroes2::FontType::normalWhite() } );
+        }
+
         body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-        body.add( { fullPath, fheroes2::FontType::smallWhite() } );
+        body.add( { info->filename, fheroes2::FontType::smallWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
 
-    void LossConditionInfo( const Maps::FileInfo & info )
+    void LossConditionInfo( const Maps::FileInfo * info )
     {
         std::string msg;
 
-        switch ( info.lossConditionType ) {
+        switch ( info->lossConditionType ) {
         case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
@@ -152,11 +172,11 @@ namespace
         ShowToolTip( _( "Loss Condition" ), msg );
     }
 
-    void VictoryConditionInfo( const Maps::FileInfo & info )
+    void VictoryConditionInfo( const Maps::FileInfo * info )
     {
         std::string msg;
 
-        switch ( info.victoryConditionType ) {
+        switch ( info->victoryConditionType ) {
         case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
@@ -185,12 +205,12 @@ namespace
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
     {
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+        const Maps::FileInfo & currentMapinfo = Settings::Get().getCurrentMapInfo();
 
-        const std::string & mapFileName = System::GetBasename( mapInfo.filename );
         size_t mapId = 0;
+
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapInfo.name ) && ( System::GetBasename( mapIter->filename ) == mapFileName ) ) {
+            if ( mapIter->name == currentMapinfo.name && mapIter->filename == currentMapinfo.filename ) {
                 return mapId;
             }
         }
@@ -206,13 +226,22 @@ namespace
 
     void renderFileName( const Maps::FileInfo & info, bool selected, const int32_t posX, const int32_t posY, fheroes2::Display & display )
     {
-        fheroes2::Text text( System::GetBasename( info.filename ), selected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( System::GetFileName( info.filename ), selected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         text.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
 
         const int32_t xCoordinate = posX + SCENARIO_LIST_MAP_NAME_OFFSET_X;
         const int32_t yCoordinate = posY + MAP_LIST_ROW_SPACING_Y - 1;
 
         text.draw( xCoordinate, yCoordinate, display );
+    }
+
+    template <class ShowFunction>
+    void ShowIfFound( ScenarioListBox & listbox, const fheroes2::Point & mouseLocation, const ShowFunction & function )
+    {
+        const Maps::FileInfo * item = listbox.GetFromPosition( mouseLocation );
+        if ( item ) {
+            function( item );
+        }
     }
 }
 
@@ -257,7 +286,8 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     _renderMapIcon( info.width, display, dst.x + SELECTED_SCENARIO_MAP_SIZE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getMapTypeIcon( info.version ), display, dst.x + SELECTED_SCENARIO_MAP_TYPE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
-    fheroes2::Text mapNameText( info.name, fheroes2::FontType::normalWhite() );
+    fheroes2::Text mapNameText{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
+    mapNameText.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
     mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
                       dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 2, display );
 
@@ -273,7 +303,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     difficultyText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, difficultyText.width() ),
                          dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
 
-    fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
+    fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() );
     descriptionText.setUniformVerticalAlignment( false );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X + 4, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 3,
                           SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
@@ -281,10 +311,12 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
 {
-    fheroes2::Text mapName( info.name, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
+    fheroes2::Text mapName{ info.name,
+                            { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
+                            info.getSupportedLanguage() };
+    mapName.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
     const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
     const int32_t yCoordinate = baseYOffset + MAP_LIST_ROW_SPACING_Y - 1;
-
     mapName.draw( xCoordinate, yCoordinate, display );
 }
 
@@ -435,10 +467,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
-    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
+    const fheroes2::ImageRestorer background( display, rt.x - fheroes2::shadowWidthPx, rt.y, rt.width + fheroes2::shadowWidthPx, rt.height + fheroes2::shadowWidthPx );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
-    fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
+    fheroes2::Blit( shadow, display, rt.x - fheroes2::shadowWidthPx, rt.y + fheroes2::shadowWidthPx );
 
     const fheroes2::Rect countPlayers( rt.x + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );
     const fheroes2::Rect sizeMaps( rt.x + SCENARIO_LIST_MAP_SIZE_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );
@@ -538,7 +570,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     display.render();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         listbox.QueueEventProcessing();
 
@@ -616,74 +648,72 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
 
         // The currentPressedButton must be set correctly before the following button redrawing code block, otherwise, the map size selection button that has just been
         // clicked will be redrawn in the released state for a short time.
-        buttonSelectSmall.drawOnState( le.MousePressLeft( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
-        buttonSelectMedium.drawOnState( le.MousePressLeft( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
-        buttonSelectLarge.drawOnState( le.MousePressLeft( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
-        buttonSelectXLarge.drawOnState( le.MousePressLeft( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
-        buttonSelectAll.drawOnState( le.MousePressLeft( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
+        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
+        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
+        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
+        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
+        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
 
-        if ( le.MousePressRight( buttonSelectSmall.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonSelectSmall.area() ) ) {
             ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectMedium.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectMedium.area() ) ) {
             ShowToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectLarge.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectLarge.area() ) ) {
             ShowToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectXLarge.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectXLarge.area() ) ) {
             ShowToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
         }
-        else if ( le.MousePressRight( buttonSelectAll.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonSelectAll.area() ) ) {
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         }
-        else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) ) {
-            ShowToolTip( _( "Players Icon" ),
-                         _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
+        else if ( le.isMouseRightButtonPressedInArea( countPlayers ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), PlayersToolTip );
         }
-        else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) ) {
-            ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
+        else if ( le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
+            PlayersToolTip();
         }
-        else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) ) {
-            // TODO: update this tooltip once the Editor is out for public.
-            ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
+        else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), SizeToolTip );
         }
-        else if ( le.MousePressRight( mapNames ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
-            if ( item ) {
-                mapInfo( *item );
-            }
+        else if ( le.isMouseRightButtonPressedInArea( curMapSize ) ) {
+            SizeToolTip();
         }
-        else if ( le.MousePressRight( curMapName ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( mapTypes ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), MapTypeToolTip );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
+            MapTypeToolTip();
+        }
+        else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), mapInfo );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( curMapName ) ) {
             ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         }
-        else if ( le.MousePressRight( victoryConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
-            if ( item ) {
-                VictoryConditionInfo( *item );
-            }
+        else if ( le.isMouseRightButtonPressedInArea( victoryConds ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), VictoryConditionInfo );
         }
-        else if ( le.MousePressRight( lossConds ) ) {
-            const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
-            if ( item ) {
-                LossConditionInfo( *item );
-            }
+        else if ( le.isMouseRightButtonPressedInArea( lossConds ) ) {
+            ShowIfFound( listbox, le.getMouseCursorPos(), LossConditionInfo );
         }
-        else if ( le.MousePressRight( curVictoryCond ) ) {
-            VictoryConditionInfo( listbox.GetCurrent() );
+        else if ( le.isMouseRightButtonPressedInArea( curVictoryCond ) ) {
+            VictoryConditionInfo( &( listbox.GetCurrent() ) );
         }
-        else if ( le.MousePressRight( curLossCond ) ) {
-            LossConditionInfo( listbox.GetCurrent() );
+        else if ( le.isMouseRightButtonPressedInArea( curLossCond ) ) {
+            LossConditionInfo( &( listbox.GetCurrent() ) );
         }
-        else if ( le.MousePressRight( curDifficulty ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curDifficulty ) ) {
             ShowToolTip(
                 _( "Selected Map Difficulty" ),
                 _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         }
-        else if ( le.MousePressRight( curDescription ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( curDescription ) ) {
             ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
         }
 

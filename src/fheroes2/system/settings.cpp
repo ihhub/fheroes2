@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <memory>
+#include <sstream>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -34,9 +34,10 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
-#include "gamedefs.h"
+#include "game_io.h"
 #include "logging.h"
 #include "render_processor.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -106,9 +107,8 @@ Settings::Settings()
     , heroes_speed( defaultSpeedDelay )
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
-    , battle_speed( DEFAULT_BATTLE_SPEED )
+    , battle_speed( defaultBattleSpeed )
     , game_type( 0 )
-    , preferably_count_players( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
     _gameOptions.SetModes( GAME_SHOW_INTRO );
@@ -495,13 +495,11 @@ std::string Settings::String() const
     return os.str();
 }
 
-void Settings::SetCurrentFileInfo( Maps::FileInfo fi )
+void Settings::setCurrentMapInfo( Maps::FileInfo fi )
 {
-    current_maps_file = std::move( fi );
+    _currentMapInfo = std::move( fi );
 
-    players.Init( current_maps_file );
-
-    preferably_count_players = 0;
+    players.Init( _currentMapInfo );
 }
 
 bool Settings::setGameLanguage( const std::string & language )
@@ -515,6 +513,11 @@ bool Settings::setGameLanguage( const std::string & language )
         return true;
     }
 
+    // First, let's see if the translation for the requested language is already cached
+    if ( const auto [isCached, isSet] = Translation::setLanguage( language ); isCached ) {
+        return isSet;
+    }
+
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
@@ -522,12 +525,12 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
-    if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
+    if ( translations.empty() ) {
+        ERROR_LOG( "Translation file " << fileName << " was not found." )
     }
 
-    ERROR_LOG( "Translation file " << fileName << " was not found." )
-    return false;
+    // If the translation for this language could not be loaded, it will still remain in the cache as invalid
+    return Translation::setLanguage( language, translations.empty() ? std::string_view{} : translations.back() );
 }
 
 void Settings::setEditorAnimation( const bool enable )
@@ -550,70 +553,75 @@ void Settings::setEditorPassability( const bool enable )
     }
 }
 
-void Settings::SetProgramPath( const char * argv0 )
+void Settings::SetProgramPath( const char * path )
 {
-    if ( argv0 )
-        path_program = argv0;
+    if ( path == nullptr ) {
+        return;
+    }
+
+    _programPath = path;
 }
 
 const std::vector<std::string> & Settings::GetRootDirs()
 {
-    static std::vector<std::string> dirs;
-    if ( !dirs.empty() ) {
-        return dirs;
-    }
+    static const std::vector<std::string> rootDirs = []() {
+        std::vector<std::string> result;
 
 #ifdef FHEROES2_DATA
-    // Macro-defined path.
-    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
+        // Macro-defined path.
+        result.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
-    // Environment variable.
-    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
-    if ( dataEnvPath != nullptr && std::find( dirs.begin(), dirs.end(), dataEnvPath ) == dirs.end() ) {
-        dirs.emplace_back( dataEnvPath );
-    }
+        // Environment variable.
+        const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+        if ( dataEnvPath != nullptr && std::find( result.begin(), result.end(), dataEnvPath ) == result.end() ) {
+            result.emplace_back( dataEnvPath );
+        }
 
-    // The location of the application.
-    std::string appPath = System::GetDirname( Settings::Get().path_program );
-    if ( !appPath.empty() && std::find( dirs.begin(), dirs.end(), appPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( appPath ) );
-    }
+        // The location of the application.
+        std::string appPath = System::GetParentDirectory( Settings::Get()._programPath );
+        if ( std::find( result.begin(), result.end(), appPath ) == result.end() ) {
+            result.emplace_back( std::move( appPath ) );
+        }
 
-    // OS specific directories.
-    System::appendOSSpecificDirectories( dirs );
+        // OS specific directories.
+        System::appendOSSpecificDirectories( result );
 
 #if defined( MACOS_APP_BUNDLE )
-    // macOS app bundle Resources directory
-    char resourcePath[PATH_MAX];
+        // macOS app bundle Resources directory
+        char resourcePath[PATH_MAX];
 
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
-    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
-         && std::find( dirs.begin(), dirs.end(), resourcePath ) == dirs.end() ) {
-        dirs.emplace_back( resourcePath );
-    }
-    else {
-        ERROR_LOG( "Unable to get app bundle path" )
-    }
-    CFRelease( resourcesURL );
+        CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+        if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
+             && std::find( result.begin(), result.end(), resourcePath ) == result.end() ) {
+            result.emplace_back( resourcePath );
+        }
+        else {
+            ERROR_LOG( "Unable to get app bundle path" )
+        }
+        CFRelease( resourcesURL );
 #endif
 
-    // User config directory.
-    std::string configPath = System::GetConfigDirectory( "fheroes2" );
-    if ( !configPath.empty() && std::find( dirs.begin(), dirs.end(), configPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( configPath ) );
-    }
+        // User config directory.
+        std::string configPath = System::GetConfigDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), configPath ) == result.end() ) {
+            result.emplace_back( std::move( configPath ) );
+        }
 
-    // User data directory.
-    std::string dataPath = System::GetDataDirectory( "fheroes2" );
-    if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( dataPath ) );
-    }
+        // User data directory.
+        std::string dataPath = System::GetDataDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), dataPath ) == result.end() ) {
+            result.emplace_back( std::move( dataPath ) );
+        }
 
-    // Remove all paths that are not directories.
-    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
+        // Remove all paths that are not directories. Empty path should not be removed because it in fact means the current directory.
+        result.erase( std::remove_if( result.begin(), result.end(), []( const std::string & path ) { return !path.empty() && !System::IsDirectory( path ); } ),
+                      result.end() );
 
-    return dirs;
+        return result;
+    }();
+
+    return rootDirs;
 }
 
 ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )
@@ -625,10 +633,10 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
-                res.FindFileInDir( path, fileNameFilter, false );
+                res.FindFileInDir( path, fileNameFilter );
             }
             else {
-                res.ReadDir( path, fileNameFilter, false );
+                res.ReadDir( path, fileNameFilter );
             }
         }
     }
@@ -1005,11 +1013,6 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-void Settings::SetPreferablyCountPlayers( int c )
-{
-    preferably_count_players = std::min( c, 6 );
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
@@ -1092,12 +1095,20 @@ void Settings::resetFirstGameRun()
     _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.preferably_count_players << conf.players;
+    return stream << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
 }
 
-StreamBase & operator>>( StreamBase & msg, Settings & conf )
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 {
-    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
+    stream >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
+        int temp;
+        stream >> temp;
+    }
+
+    return stream >> conf.players;
 }

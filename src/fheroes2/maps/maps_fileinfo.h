@@ -26,13 +26,16 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
+#include "game_language.h"
 #include "math_base.h"
+#include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 enum class GameVersion : int
 {
@@ -74,8 +77,6 @@ namespace Maps
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
-
-        bool isAllowCountPlayers( int playerCount ) const;
 
         int AllowCompHumanColors() const
         {
@@ -145,6 +146,16 @@ namespace Maps
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
 
+        // Only Resurrection Maps contain supported language.
+        std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
+        {
+            if ( version == GameVersion::RESURRECTION ) {
+                return mainLanguage;
+            }
+
+            return {};
+        }
+
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
@@ -171,8 +182,8 @@ namespace Maps
         uint16_t height;
         uint8_t difficulty;
 
-        std::array<uint8_t, KINGDOMMAX> races;
-        std::array<uint8_t, KINGDOMMAX> unions;
+        std::array<uint8_t, maxNumOfPlayers> races;
+        std::array<uint8_t, maxNumOfPlayers> unions;
 
         uint8_t kingdomColors;
         uint8_t colorsAvailableForHumans;
@@ -202,12 +213,16 @@ namespace Maps
         uint32_t worldWeek;
         uint32_t worldMonth;
 
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
+
     private:
         void FillUnions( const int side1Colors, const int side2Colors );
     };
 
-    StreamBase & operator<<( StreamBase &, const FileInfo & );
-    StreamBase & operator>>( StreamBase &, FileInfo & );
+    OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );
+    IStreamBase & operator>>( IStreamBase & stream, FileInfo & fi );
 }
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
@@ -215,10 +230,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For all map files.
-    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
     // Only for RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
 
 #endif

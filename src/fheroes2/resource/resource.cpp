@@ -26,8 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
-#include <ostream>
+#include <sstream>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -41,6 +40,20 @@
 #include "serialize.h"
 #include "translations.h"
 #include "ui_text.h"
+
+namespace
+{
+    void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & pos, int32_t count, int32_t width, int32_t offset, int32_t value )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
+        fheroes2::Blit( sf, display, dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
+
+        const fheroes2::Text text{ std::to_string( value ), fheroes2::FontType::smallWhite() };
+        text.draw( dst_pt.x - text.width() / 2, dst_pt.y + 4, display );
+    }
+}
 
 Funds::Funds( const int type, const uint32_t count )
 {
@@ -148,7 +161,7 @@ int32_t Funds::Get( const int type ) const
     return 0;
 }
 
-Funds & Funds::operator=( const cost_t & cost )
+Funds & Funds::operator=( const Cost & cost )
 {
     wood = cost.wood;
     mercury = cost.mercury;
@@ -608,17 +621,6 @@ void Resource::BoxSprite::SetPos( int32_t px, int32_t py )
     y = py;
 }
 
-void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & pos, int32_t count, int32_t width, int32_t offset, int32_t value )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
-    fheroes2::Blit( sf, display, dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
-
-    const fheroes2::Text text{ std::to_string( value ), fheroes2::FontType::smallWhite() };
-    text.draw( dst_pt.x - text.width() / 2, dst_pt.y + 4, display );
-}
-
 void Resource::BoxSprite::Redraw() const
 {
     std::vector<std::pair<int32_t, uint32_t>> valueVsSprite;
@@ -682,12 +684,12 @@ void Resource::BoxSprite::Redraw() const
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Funds & res )
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res )
 {
-    return msg << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
+    return stream << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
 }
 
-StreamBase & operator>>( StreamBase & msg, Funds & res )
+IStreamBase & operator>>( IStreamBase & stream, Funds & res )
 {
-    return msg >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
+    return stream >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,24 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <functional>
 #include <iostream>
-#include <iterator>
 #include <map>
 #include <optional>
-#include <sstream>
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include "agg_file.h"
 #include "serialize.h"
 #include "system.h"
 #include "tools.h"
@@ -50,37 +47,20 @@ namespace
 
     struct AGGItemInfo
     {
-        // Hash of this item's name, see calculateHash() for details
+        // Hash of this item's name, see fheroes2::calculateAggFilenameHash() for details
         uint32_t hash;
         uint32_t offset;
         uint32_t size;
     };
-
-    uint32_t calculateHash( const std::string_view str )
-    {
-        uint32_t hash = 0;
-        int32_t sum = 0;
-
-        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
-            const char c = static_cast<char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
-
-            hash = ( hash << 5 ) + ( hash >> 25 );
-
-            sum += c;
-            hash += sum + c;
-        }
-
-        return hash;
-    }
 }
 
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts the contents of the specified AGG file(s)." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.agg ..." << std::endl;
+        std::cerr << toolName << " extracts the contents of the specified AGG file(s)." << std::endl
+                  << "Syntax: " << toolName << " dst_dir input_file.agg ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -122,14 +102,14 @@ int main( int argc, char ** argv )
         const size_t inputStreamSize = inputStream.size();
         const uint16_t itemsCount = inputStream.getLE16();
 
-        StreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
+        ROStreamBuf itemsStream = inputStream.getStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
-        StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
+        ROStreamBuf namesStream = inputStream.getStreamBuf( AGGItemNameLen * itemsCount );
 
         std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
-            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
+            AGGItemInfo & info = aggItemsMap[StringLower( namesStream.getString( AGGItemNameLen ) )];
 
             info.hash = itemsStream.getLE32();
             info.offset = itemsStream.getLE32();
@@ -146,7 +126,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const uint32_t hash = calculateHash( name );
+            const uint32_t hash = fheroes2::calculateAggFilenameHash( name );
             if ( hash != info.hash ) {
                 ++itemsFailed;
 
@@ -157,7 +137,7 @@ int main( int argc, char ** argv )
 
             inputStream.seek( info.offset );
 
-            static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+            static_assert( std::is_same_v<uint8_t, unsigned char> );
 
             const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
             if ( buf.size() != info.size ) {

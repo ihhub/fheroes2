@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,32 +17,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2GAMEDEFS_H
-#define H2GAMEDEFS_H
 
-// hardcore defines: kingdom
-#define KINGDOMMAX 6
+#pragma once
 
-// hardcore defines: world
-#define DAYOFWEEK 7
-#define WEEKOFMONTH 4
+#include "world_pathfinding.h"
 
-// hardcore defines: castle
-#define CASTLEMAXMONSTER 6
+namespace AI
+{
+    const double ARMY_ADVANTAGE_DESPERATE = 0.8;
+    const double ARMY_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_ADVANTAGE_MEDIUM = 1.5;
+    const double ARMY_ADVANTAGE_LARGE = 1.8;
 
-// hardcore defines: heroes
-#define HEROESMAXARTIFACT 14
-#define HEROESMAXSKILL 8
+    class AIWorldPathfinderStateRestorer
+    {
+    public:
+        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+            : _pathfinder( pathfinder )
+            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+        {}
 
-// hardcore defines: skill
-#define MAXPRIMARYSKILL 4
-#define MAXSECONDARYSKILL 14
+        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
 
-// hardcore defines: interface
-#define RADARWIDTH 144
-#define BORDERWIDTH 16
+        ~AIWorldPathfinderStateRestorer()
+        {
+            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+        }
 
-// ai/hero speed
-#define DEFAULT_BATTLE_SPEED 4
+        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
 
-#endif
+    private:
+        AIWorldPathfinder & _pathfinder;
+
+        const double _originalMinimalArmyStrengthAdvantage;
+        const double _originalSpellPointsReserveRatio;
+    };
+}

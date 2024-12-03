@@ -175,8 +175,6 @@ namespace fheroes2
 
     const char * KeySymGetName( const Key key );
 
-    bool PressIntKey( const uint32_t max, uint32_t & result );
-
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
 
@@ -219,7 +217,7 @@ public:
         return ( _actionStates & MOUSE_MOTION ) == MOUSE_MOTION;
     }
 
-    const fheroes2::Point & GetMouseCursor() const
+    const fheroes2::Point & getMouseCursorPos() const
     {
         return _mouseCursorPos;
     }
@@ -255,7 +253,7 @@ public:
         return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_LEFT;
     }
 
-    bool MousePressLeft( const fheroes2::Rect & area ) const
+    bool isMouseLeftButtonPressedInArea( const fheroes2::Rect & area ) const
     {
         return isMouseLeftButtonPressed() && ( area & _mousePressLeftPos );
     }
@@ -265,7 +263,7 @@ public:
         return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_RIGHT;
     }
 
-    bool MousePressRight( const fheroes2::Rect & area ) const
+    bool isMouseRightButtonPressedInArea( const fheroes2::Rect & area ) const
     {
         return isMouseRightButtonPressed() && ( area & _mousePressRightPos );
     }
@@ -275,7 +273,7 @@ public:
         return ( _actionStates & MOUSE_RELEASED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_LEFT;
     }
 
-    bool MouseReleaseLeft( const fheroes2::Rect & area ) const
+    bool isMouseLeftButtonReleasedInArea( const fheroes2::Rect & area ) const
     {
         return isMouseLeftButtonReleased() && ( area & _mouseReleaseLeftPos );
     }
@@ -290,7 +288,7 @@ public:
         return isMouseWheelDown() && ( area & _mouseCursorPos );
     }
 
-    bool MouseCursor( const fheroes2::Rect & area ) const
+    bool isMouseCursorPosInArea( const fheroes2::Rect & area ) const
     {
         return area & _mouseCursorPos;
     }
@@ -314,12 +312,12 @@ public:
         return key == _currentKeyboardValue && ( _actionStates & KEY_PRESSED );
     }
 
-    bool KeyHold() const
+    bool isKeyBeingHold() const
     {
         return ( _actionStates & KEY_HOLD ) != 0;
     }
 
-    fheroes2::Key KeyValue() const
+    fheroes2::Key getPressedKeyValue() const
     {
         return _currentKeyboardValue;
     }

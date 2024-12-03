@@ -28,7 +28,6 @@
 #include <cassert>
 #include <utility>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "localevent.h"
 
@@ -156,7 +155,7 @@ namespace Interface
                 return false;
             }
 
-            const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
+            const fheroes2::Point & cursor = LocalEvent::Get().getMouseCursorPos();
             return ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
         }
 
@@ -180,10 +179,6 @@ namespace Interface
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
-        std::vector<Item *> items;
-
-        std::vector<int32_t> _customItemsCountInRow;
-
         virtual void SetContentItems()
         {
             // Do nothing.
@@ -195,11 +190,6 @@ namespace Interface
         }
 
         ItemsIterator GetEndItemIter()
-        {
-            return items.end();
-        }
-
-        virtual ItemsIterator GetCurItemIter()
         {
             return items.end();
         }
@@ -224,7 +214,7 @@ namespace Interface
                 return ActionBarLeftMouseSingleClick( **iterPos.first );
             }
 
-            if ( le.MousePressRight( iterPos.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarRightMouseHold( **iterPos.first );
             }
 
@@ -270,6 +260,9 @@ namespace Interface
 
             return { items.end(), {} };
         }
+
+        std::vector<Item *> items;
+        std::vector<int32_t> _customItemsCountInRow;
 
     private:
         void calculateItemsPos()
@@ -438,7 +431,7 @@ namespace Interface
         bool QueueEventProcessing( ItemsActionBar<Item> & other )
         {
             const LocalEvent & le = LocalEvent::Get();
-            const fheroes2::Point & cursor = le.GetMouseCursor();
+            const fheroes2::Point & cursor = le.getMouseCursorPos();
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() ) {
                 return false;
@@ -455,15 +448,12 @@ namespace Interface
         using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
         using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
-        ItemsIterator topItem;
-        ItemIterPos curItemPos;
-
-        ItemsIterator GetCurItemIter() override
+        ItemsIterator GetCurItemIter()
         {
             return curItemPos.first;
         }
 
-        void SetContentItems() override
+        void SetContentItems() final
         {
             ResetSelected();
         }
@@ -484,11 +474,11 @@ namespace Interface
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
                 return false;
 
-            if ( le.MousePressLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos1.first, *otherItemPress );
             }
 
-            if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonReleasedInArea( iterPos1.second ) ) {
                 if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
                     other.ResetSelected();
                 }
@@ -525,11 +515,11 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressLeft( iterPos.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos.first, iterPos.second );
             }
 
-            if ( le.MouseReleaseLeft( iterPos.second ) ) {
+            if ( le.isMouseLeftButtonReleasedInArea( iterPos.second ) ) {
                 return ActionBarLeftMouseRelease( **iterPos.first );
             }
 
@@ -537,7 +527,7 @@ namespace Interface
                 return ActionBarRightMouseSingleClick( **iterPos.first );
             }
 
-            if ( le.MousePressRight( iterPos.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarRightMouseHold( **iterPos.first );
             }
 
@@ -567,7 +557,7 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
@@ -581,12 +571,15 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressRight( iterPos1.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
             return false;
         }
+
+        ItemsIterator topItem;
+        ItemIterPos curItemPos;
     };
 }
 

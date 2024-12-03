@@ -37,7 +37,7 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarcloud-github-c-cpp@v2
+    - uses: SonarSource/sonarcloud-github-c-cpp@v3
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v4
       with:
@@ -59,7 +59,7 @@ jobs:
       run: |
         sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
                       -Dsonar.cfamily.analysisCache.mode=fs \
-                      -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
+                      -Dsonar.cfamily.analysisCache.path="$HOME/.sonar-cfamily-cache" \
                       -Dsonar.java.binaries="android/*/build/**/classes" \
                       -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar" \
                       -Dsonar.host.url=https://sonarcloud.io

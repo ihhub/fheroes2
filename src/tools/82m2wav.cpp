@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,12 +25,11 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <iostream>
 #include <limits>
 #include <memory>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <system_error>
 #include <type_traits>
@@ -48,10 +47,10 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " converts the specified 82M file(s) to WAV format." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.82m ..." << std::endl;
+        std::cerr << toolName << " converts the specified 82M file(s) to WAV format." << std::endl
+                  << "Syntax: " << toolName << " dst_dir input_file.82m ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -130,9 +129,9 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+        static_assert( std::is_same_v<uint8_t, unsigned char> );
 
-        StreamBuf wavHeader( wavHeaderLen );
+        RWStreamBuf wavHeader( wavHeaderLen );
         wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
         wavHeader.putLE32( static_cast<uint32_t>( size.value() ) + ( wavHeaderLen - 8 ) ); // Total size minus the size of this and previous fields
         wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")

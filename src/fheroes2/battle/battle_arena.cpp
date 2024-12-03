@@ -34,7 +34,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "ai.h"
+#include "ai_battle.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -59,13 +59,13 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
 #include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
-#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
@@ -73,9 +73,55 @@ namespace
 {
     Battle::Arena * arena = nullptr;
 
+    template <typename T>
+    Battle::Unit * getLastResurrectableUnitFromGraveyardTmpl( const Battle::Graveyard & graveyard, const HeroBase * commander, const int32_t index, const T & spells )
+    {
+        if ( commander == nullptr ) {
+            return nullptr;
+        }
+
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr bool isSingleSpell{ std::is_same_v<std::remove_cv_t<std::remove_reference_t<decltype( spells )>>, Spell> };
+
+        if constexpr ( isSingleSpell ) {
+            if ( !spells.isResurrect() ) {
+                return nullptr;
+            }
+        }
+        else {
+            if ( !std::all_of( spells.begin(), spells.end(), []( const Spell & spell ) { return spell.isResurrect(); } ) ) {
+                return nullptr;
+            }
+        }
+
+        const std::vector<Battle::Unit *> units = graveyard.getUnits( index );
+
+        const auto iter = std::find_if( units.rbegin(), units.rend(), [commander, &spells]( const Battle::Unit * unit ) {
+            assert( unit != nullptr && !unit->isValid() );
+
+            if ( unit->GetArmyColor() != commander->GetColor() ) {
+                return false;
+            }
+
+            if constexpr ( isSingleSpell ) {
+                return unit->AllowApplySpell( spells, commander );
+            }
+            else {
+                return std::any_of( spells.begin(), spells.end(), [commander, unit]( const Spell & spell ) { return unit->AllowApplySpell( spell, commander ); } );
+            }
+        } );
+
+        if ( iter == units.rend() ) {
+            return nullptr;
+        }
+
+        return *iter;
+    }
+
     int GetCovr( int ground, std::mt19937 & gen )
     {
         std::vector<int> covrs;
+        covrs.reserve( 6 );
 
         switch ( ground ) {
         case Maps::Ground::SNOW:
@@ -203,6 +249,35 @@ namespace
             orderOfUnits.push_back( unit );
         }
     }
+
+    size_t getPositionOfCastleDefenseStructure( const Battle::CastleDefenseStructure structure )
+    {
+        switch ( structure ) {
+        case Battle::CastleDefenseStructure::BRIDGE:
+            return Battle::Arena::CASTLE_GATE_POS;
+        case Battle::CastleDefenseStructure::TOWER1:
+            return Battle::Arena::CASTLE_TOP_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::TOWER2:
+            return Battle::Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS;
+        case Battle::CastleDefenseStructure::WALL1:
+            return Battle::Arena::CASTLE_FIRST_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL2:
+            return Battle::Arena::CASTLE_SECOND_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL3:
+            return Battle::Arena::CASTLE_THIRD_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::WALL4:
+            return Battle::Arena::CASTLE_FOURTH_TOP_WALL_POS;
+        case Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_TOP_GATE_TOWER_POS;
+        case Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER:
+            return Battle::Arena::CASTLE_BOTTOM_GATE_TOWER_POS;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
 }
 
 Battle::Arena * Battle::GetArena()
@@ -235,7 +310,7 @@ Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
     assert( arena != nullptr );
 
-    return &arena->graveyard;
+    return &arena->_graveyard;
 }
 
 Battle::Interface * Battle::Arena::GetInterface()
@@ -274,7 +349,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     , _isTown( castle != nullptr )
     , _randomGenerator( randomGenerator )
 {
-    usage_spells.reserve( 20 );
+    _usedSpells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
@@ -327,17 +402,21 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         board[CATAPULT_POS].SetObject( 1 );
 
         // wall (3,2,1,0)
-        const int wallObject = castle->isFortificationBuild() ? 3 : 2;
+        const int wallObject = castle->isFortificationBuilt() ? 3 : 2;
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( wallObject );
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( wallObject );
 
-        // tower
+        // NOTE: All towers can be destroyed but can not be passable.
+        // Initially their condition is 2 and becomes 1 after their upper part is destroyed.
+        // The tower's condition should not be 0 to keep them non-passable by the troops.
+
+        // Towers near the bridge. Does not shoot arrows. Can be damaged only by the Earthquake spell.
         board[CASTLE_TOP_GATE_TOWER_POS].SetObject( 2 );
         board[CASTLE_BOTTOM_GATE_TOWER_POS].SetObject( 2 );
 
-        // archers tower
+        // Turret towers with small ballista.
         board[CASTLE_TOP_ARCHER_TOWER_POS].SetObject( 2 );
         board[CASTLE_BOTTOM_ARCHER_TOWER_POS].SetObject( 2 );
 
@@ -349,16 +428,16 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( _covrIcnId != ICN::UNKNOWN ) {
             board.SetCovrObjects( _covrIcnId );
         }
 
-        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+        board.SetCobjObjects( world.getTile( tileIndex ), seededGen );
     }
 
-    AI::Get().battleBegins();
+    AI::BattlePlanner::Get().battleBegins();
 
     if ( _interface ) {
         _interface->fullRedraw();
@@ -428,7 +507,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
             }
 
             if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
-                AI::Get().BattleTurn( *this, *_currentUnit, actions );
+                AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
                 assert( _interface != nullptr );
@@ -632,7 +711,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     }
 
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
-    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
+    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t> );
 
     Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 
@@ -643,42 +722,42 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
 void Battle::Arena::CatapultAction()
 {
-    if ( _catapult ) {
-        uint32_t shots = _catapult->GetShots();
-
-        std::map<CastleDefenseElement, uint32_t> stateOfCatapultTargets
-            = { { CastleDefenseElement::WALL1, GetCastleTargetValue( CastleDefenseElement::WALL1 ) },
-                { CastleDefenseElement::WALL2, GetCastleTargetValue( CastleDefenseElement::WALL2 ) },
-                { CastleDefenseElement::WALL3, GetCastleTargetValue( CastleDefenseElement::WALL3 ) },
-                { CastleDefenseElement::WALL4, GetCastleTargetValue( CastleDefenseElement::WALL4 ) },
-                { CastleDefenseElement::TOWER1, GetCastleTargetValue( CastleDefenseElement::TOWER1 ) },
-                { CastleDefenseElement::TOWER2, GetCastleTargetValue( CastleDefenseElement::TOWER2 ) },
-                { CastleDefenseElement::BRIDGE, GetCastleTargetValue( CastleDefenseElement::BRIDGE ) },
-                { CastleDefenseElement::CENTRAL_TOWER, GetCastleTargetValue( CastleDefenseElement::CENTRAL_TOWER ) } };
-
-        Command cmd( Command::CATAPULT );
-
-        cmd << shots;
-
-        while ( shots-- ) {
-            const CastleDefenseElement target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
-            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
-            const bool hit = _catapult->IsNextShotHit( _randomGenerator );
-
-            using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
-
-            cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
-
-            if ( hit ) {
-                stateOfCatapultTargets[target] -= damage;
-            }
-        }
-
-        // Preserve the order of shots - command arguments will be extracted in reverse order
-        std::reverse( cmd.begin(), cmd.end() );
-
-        ApplyAction( cmd );
+    if ( !_catapult ) {
+        return;
     }
+
+    uint32_t shots = _catapult->GetShots();
+
+    std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
+    for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
+        if ( const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+             !inserted ) {
+            assert( 0 );
+        }
+    }
+
+    Command cmd( Command::CATAPULT );
+
+    cmd << shots;
+
+    while ( shots-- ) {
+        const CastleDefenseStructure target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
+        const int damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
+        const bool hit = _catapult->IsNextShotHit( _randomGenerator );
+
+        using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+        cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
+
+        if ( hit ) {
+            stateOfCatapultTargets[target] -= damage;
+        }
+    }
+
+    // Preserve the order of shots - command arguments will be extracted in reverse order
+    std::reverse( cmd.begin(), cmd.end() );
+
+    ApplyAction( cmd );
 }
 
 Battle::Indexes Battle::Arena::GetPath( const Unit & unit, const Position & position )
@@ -710,12 +789,12 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1() const
+HeroBase * Battle::Arena::GetCommander1() const
 {
     return _army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2() const
+HeroBase * Battle::Arena::GetCommander2() const
 {
     return _army2->GetCommander();
 }
@@ -748,37 +827,42 @@ int Battle::Arena::GetOppositeColor( const int col ) const
 
 Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
-    Units::iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
-    Units::const_iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
-    if ( _interface )
-        _interface->FadeArena( clearMessageLog );
+    if ( !_interface ) {
+        return;
+    }
+
+    _interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells() const
+const SpellStorage & Battle::Arena::GetUsedSpells() const
 {
-    return usage_spells;
+    return _usedSpells;
 }
 
 int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
@@ -839,7 +923,6 @@ bool Battle::Arena::isSpellcastDisabled() const
 
 bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ ) const
 {
-    // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
         if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
@@ -847,71 +930,78 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
         return true;
     }
 
-    const HeroBase * current_commander = GetCurrentCommander();
+    const HeroBase * commander = GetCurrentCommander();
+    if ( commander == nullptr ) {
+        // This should not normally happen, but there are places where the ability to "basically"
+        // cast a spell is checked before checking for the presence of a commanding hero.
+        if ( msg ) {
+            *msg = _( "You cannot cast spells without a commanding hero." );
+        }
+        return true;
+    }
 
-    // check casted
-    if ( current_commander ) {
-        if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
+    if ( commander->Modes( Heroes::SPELLCASTED ) ) {
+        if ( msg ) {
+            *msg = _( "You have already cast a spell this round." );
+        }
+        return true;
+    }
+
+    // An empty spell can be used to test the ability to cast spells in principle
+    if ( !spell.isValid() ) {
+        return false;
+    }
+
+    if ( spell == Spell::EARTHQUAKE && !castle ) {
+        if ( msg ) {
+            *msg = _( "That spell will have no effect!" );
+        }
+        return true;
+    }
+
+    if ( spell.isSummon() ) {
+        const Monster mons( spell );
+        assert( mons.isValid() && mons.isElemental() );
+
+        const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
+        if ( elem && elem->GetID() != mons.GetID() ) {
             if ( msg ) {
-                *msg = _( "You have already cast a spell this round." );
+                *msg = _( "You may only summon one type of elemental per combat." );
             }
             return true;
         }
 
-        if ( spell == Spell::EARTHQUAKE && !castle ) {
+        if ( GetFreePositionNearHero( GetCurrentColor() ) < 0 ) {
             if ( msg ) {
-                *msg = _( "That spell will have no effect!" );
+                *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
             }
             return true;
         }
-        else if ( spell.isSummon() ) {
-            const Monster mons( spell );
-            assert( mons.isValid() && mons.isElemental() );
 
-            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            if ( elem && elem->GetID() != mons.GetID() ) {
-                if ( msg ) {
-                    *msg = _( "You may only summon one type of elemental per combat." );
-                }
-                return true;
+        return false;
+    }
+
+    for ( const Cell & cell : board ) {
+        if ( const Battle::Unit * unit = cell.GetUnit(); unit != nullptr ) {
+            if ( unit->AllowApplySpell( spell, commander ) ) {
+                return false;
             }
 
-            if ( 0 > GetFreePositionNearHero( GetCurrentColor() ) ) {
-                if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
-                }
-                return true;
-            }
+            continue;
         }
-        else if ( spell.isValid() ) {
-            // check army
-            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const Battle::Unit * b = ( *it ).GetUnit();
 
-                if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander ) ) {
-                        return false;
-                    }
-                }
-                else {
-                    // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
-                        return false;
-                    }
-                }
-            }
-
-            if ( msg ) {
-                *msg = _( "That spell will have no effect!" );
-            }
-            return true;
+        if ( isAbleToResurrectFromGraveyard( cell.GetIndex(), spell ) ) {
+            return false;
         }
     }
 
-    return false;
+    if ( msg ) {
+        *msg = _( "That spell will have no effect!" );
+    }
+    return true;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const
+bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const
 {
     if ( !spell.isResurrect() ) {
         return false;
@@ -922,7 +1012,7 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
         return false;
     }
 
-    const Unit * unit = GraveyardLastTroop( index );
+    const Unit * unit = getLastResurrectableUnitFromGraveyard( index, spell );
     if ( unit == nullptr ) {
         return false;
     }
@@ -954,130 +1044,245 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastUnitFromGraveyard( const int32_t index ) const
 {
-    return GetTroopUID( graveyard.GetLastTroopUID( index ) );
+    return _graveyard.getLastUnit( index );
 }
 
-std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index ) const
 {
-    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
+    static const std::vector<Spell> resurrectionSpells = []() {
+        std::vector<Spell> result;
 
-    std::vector<const Unit *> result;
-    result.reserve( troopUIDs.size() );
+        for ( int spellId = Spell::NONE; spellId < Spell::SPELL_COUNT; ++spellId ) {
+            const Spell spell( spellId );
+            if ( !spell.isResurrect() ) {
+                continue;
+            }
 
-    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
-        const Unit * unit = GetTroopUID( uid );
-        assert( unit != nullptr );
+            result.push_back( spell );
+        }
 
-        result.push_back( unit );
-    } );
+        return result;
+    }();
 
-    return result;
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, resurrectionSpells );
 }
 
-Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
+Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const
 {
-    return graveyard.GetOccupiedCells();
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, spell );
 }
 
-void Battle::Arena::SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value )
+std::vector<const Battle::Unit *> Battle::Arena::getGraveyardUnits( const int32_t index ) const
 {
+    const std::vector<Battle::Unit *> units = _graveyard.getUnits( index );
+
+    return { units.begin(), units.end() };
+}
+
+Battle::Indexes Battle::Arena::getCellsOccupiedByGraveyard() const
+{
+    return _graveyard.getOccupiedCells();
+}
+
+void Battle::Arena::applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage )
+{
+    assert( castle != nullptr );
+
     switch ( target ) {
-    case CastleDefenseElement::WALL1:
-        board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL2:
-        board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL3:
-        board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
-        break;
-    case CastleDefenseElement::WALL4:
-        board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
-        break;
+    // Sections of the castle wall can be completely destroyed and it will be possible to pass through the corresponding cells.
+    case CastleDefenseStructure::WALL1:
+    case CastleDefenseStructure::WALL2:
+    case CastleDefenseStructure::WALL3:
+    case CastleDefenseStructure::WALL4: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
 
-    case CastleDefenseElement::TOWER1:
-        if ( _towers[0] && _towers[0]->isValid() ) {
-            _towers[0]->SetDestroy();
-        }
-        break;
-    case CastleDefenseElement::TOWER2:
-        if ( _towers[2] && _towers[2]->isValid() ) {
-            _towers[2]->SetDestroy();
-        }
-        break;
-    case CastleDefenseElement::CENTRAL_TOWER:
-        if ( _towers[1] && _towers[1]->isValid() ) {
-            _towers[1]->SetDestroy();
-        }
-        break;
+        assert( damage > 0 && damage <= condition );
 
-    case CastleDefenseElement::BRIDGE:
-        if ( _bridge->isValid() ) {
-            _bridge->SetDestroyed();
-        }
+        board[position].SetObject( condition - damage );
         break;
+    }
+
+    // Tete-de-pont towers can be damaged, but not fully demolished (it is still impossible to pass through the corresponding cells).
+    case CastleDefenseStructure::TOP_BRIDGE_TOWER:
+    case CastleDefenseStructure::BOTTOM_BRIDGE_TOWER: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        assert( damage == 1 && damage < condition );
+
+        board[position].SetObject( condition - damage );
+        break;
+    }
+
+    // Wall towers (with or without built turret) can be damaged (and they will stop shooting in this case), but not fully demolished
+    // (it is still impossible to pass through the corresponding cells).
+    case CastleDefenseStructure::TOWER1:
+    case CastleDefenseStructure::TOWER2:
+    case CastleDefenseStructure::CENTRAL_TOWER: {
+        const size_t towerIdx = [target]() -> size_t {
+            switch ( target ) {
+            case CastleDefenseStructure::TOWER1:
+                return 0;
+            case CastleDefenseStructure::TOWER2:
+                return 2;
+            case CastleDefenseStructure::CENTRAL_TOWER:
+                return 1;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return 0;
+        }();
+
+        assert( ( [this, target, damage, towerIdx]() {
+            if ( damage != 1 ) {
+                return false;
+            }
+
+            if ( target == CastleDefenseStructure::CENTRAL_TOWER ) {
+                return _towers[towerIdx] && _towers[towerIdx]->isValid();
+            }
+
+            const size_t position = getPositionOfCastleDefenseStructure( target );
+            const int condition = board[position].GetObject();
+
+            if ( damage >= condition ) {
+                return false;
+            }
+
+            if ( !_towers[towerIdx] ) {
+                return ( condition == 1 || condition == 2 );
+            }
+
+            if ( _towers[towerIdx]->isValid() ) {
+                return condition == 2;
+            }
+
+            return condition == 1;
+        }() ) );
+
+        if ( _towers[towerIdx] ) {
+            _towers[towerIdx]->SetDestroyed();
+            break;
+        }
+
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        board[position].SetObject( condition - damage );
+        break;
+    }
+
+    // Castle bridge can be completely destroyed and it will be possible to pass through the corresponding cell.
+    case CastleDefenseStructure::BRIDGE: {
+        assert( damage == 1 && _bridge && _bridge->isValid() );
+
+        _bridge->SetDestroyed();
+        break;
+    }
 
     default:
+        assert( 0 );
         break;
     }
 }
 
-uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target ) const
+int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const
 {
+    assert( castle != nullptr );
+
     switch ( target ) {
-    case CastleDefenseElement::WALL1:
-        return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL2:
-        return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL3:
-        return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
-    case CastleDefenseElement::WALL4:
-        return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
+    case CastleDefenseStructure::WALL1:
+    case CastleDefenseStructure::WALL2:
+    case CastleDefenseStructure::WALL3:
+    case CastleDefenseStructure::WALL4: {
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
 
-    case CastleDefenseElement::TOWER1:
-        return _towers[0] && _towers[0]->isValid() ? 1 : 0;
-    case CastleDefenseElement::TOWER2:
-        return _towers[2] && _towers[2]->isValid() ? 1 : 0;
-    case CastleDefenseElement::CENTRAL_TOWER:
-        return _towers[1] && _towers[1]->isValid() ? 1 : 0;
+        assert( condition >= 0 );
 
-    case CastleDefenseElement::BRIDGE:
+        return condition;
+    }
+
+    case CastleDefenseStructure::TOP_BRIDGE_TOWER:
+    case CastleDefenseStructure::BOTTOM_BRIDGE_TOWER: {
+        assert( siegeWeapon == SiegeWeaponType::EarthquakeSpell );
+
+        const size_t position = getPositionOfCastleDefenseStructure( target );
+        const int condition = board[position].GetObject();
+
+        assert( condition == 1 || condition == 2 );
+
+        return condition - 1;
+    }
+
+    case CastleDefenseStructure::TOWER1:
+    case CastleDefenseStructure::TOWER2:
+    case CastleDefenseStructure::CENTRAL_TOWER: {
+        const size_t towerIdx = [target]() -> size_t {
+            switch ( target ) {
+            case CastleDefenseStructure::TOWER1:
+                return 0;
+            case CastleDefenseStructure::TOWER2:
+                return 2;
+            case CastleDefenseStructure::CENTRAL_TOWER:
+                return 1;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return 0;
+        }();
+
+        assert( ( [this, target, siegeWeapon, towerIdx]() {
+            if ( target == CastleDefenseStructure::CENTRAL_TOWER ) {
+                return ( siegeWeapon == SiegeWeaponType::Catapult );
+            }
+
+            const size_t position = getPositionOfCastleDefenseStructure( target );
+            const int condition = board[position].GetObject();
+
+            if ( !_towers[towerIdx] ) {
+                return ( condition == 1 || condition == 2 );
+            }
+
+            if ( _towers[towerIdx]->isValid() ) {
+                return condition == 2;
+            }
+
+            return condition == 1;
+        }() ) );
+
+        switch ( siegeWeapon ) {
+        case SiegeWeaponType::Catapult:
+            return _towers[towerIdx] && _towers[towerIdx]->isValid() ? 1 : 0;
+        case SiegeWeaponType::EarthquakeSpell:
+            return board[getPositionOfCastleDefenseStructure( target )].GetObject() - 1;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        break;
+    }
+
+    case CastleDefenseStructure::BRIDGE: {
+        assert( _bridge );
+
         return _bridge->isValid() ? 1 : 0;
+    }
 
     default:
+        assert( 0 );
         break;
     }
+
     return 0;
-}
-
-std::vector<Battle::CastleDefenseElement> Battle::Arena::GetEarthQuakeTargets() const
-{
-    std::vector<CastleDefenseElement> targets;
-    targets.reserve( 8 );
-
-    if ( board[CASTLE_FIRST_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL1 );
-    }
-    if ( board[CASTLE_SECOND_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL2 );
-    }
-    if ( board[CASTLE_THIRD_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL3 );
-    }
-    if ( board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() > 0 ) {
-        targets.push_back( CastleDefenseElement::WALL4 );
-    }
-
-    if ( _towers[0] && _towers[0]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER1 );
-    }
-    if ( _towers[2] && _towers[2]->isValid() ) {
-        targets.push_back( CastleDefenseElement::TOWER2 );
-    }
-
-    return targets;
 }
 
 const HeroBase * Battle::Arena::getCommander( const int color ) const
@@ -1180,7 +1385,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     }
 
     // penalty does not apply if the target unit is exposed due to the broken castle wall
-    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), Cell::widthPx / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,11 +24,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
+#include <functional>
 #include <iostream>
 #include <optional>
 #include <set>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -62,11 +62,11 @@ namespace
 
     void printUsage( char ** argv )
     {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
-                  << "Syntax: " << baseName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl
-                  << "        " << baseName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
+        std::cerr << toolName << " manages the contents of the specified H2D file(s)." << std::endl
+                  << "Syntax: " << toolName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl
+                  << "        " << toolName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
     }
 
     bool loadPalette( const char * paletteFileName )
@@ -77,7 +77,7 @@ namespace
             return false;
         }
 
-        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
         if ( palette.size() != validPaletteSize ) {
             std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return false;
@@ -154,7 +154,7 @@ namespace
                     }
                 }
                 else {
-                    static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+                    static_assert( std::is_same_v<uint8_t, unsigned char> );
 
                     const std::vector<uint8_t> buf = reader.getFile( name );
 
@@ -278,7 +278,7 @@ namespace
                     return EXIT_FAILURE;
                 }
 
-                static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+                static_assert( std::is_same_v<uint8_t, unsigned char> );
 
                 std::vector<uint8_t> buf( size.value() );
 

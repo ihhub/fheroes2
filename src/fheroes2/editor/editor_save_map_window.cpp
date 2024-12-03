@@ -18,11 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_save_map_window.h"
+
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <ctime>
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -96,25 +100,18 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols with '/' symbols.
-            std::string fullPath = info.filename;
-
-            // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
-            StringReplace( fullPath, "\\", "/" );
-
-            const fheroes2::Text header( System::truncateFileExtensionAndPath( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
             body.add( { info.description, fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-            body.add( { fullPath, fheroes2::FontType::smallWhite() } );
+            body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
@@ -150,11 +147,8 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
-        std::string mapFileName( System::GetBasename( info.filename ) );
-
-        if ( mapFileName.empty() ) {
-            return;
-        }
+        std::string mapFileName( System::GetFileName( info.filename ) );
+        assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
@@ -201,11 +195,11 @@ namespace
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName )
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
+        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
@@ -241,7 +235,7 @@ namespace Editor
             mapName = fileName;
         }
 
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite(), language );
         const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );
@@ -290,7 +284,7 @@ namespace Editor
 
         MapsFileInfoList::iterator it = lists.begin();
         for ( ; it != lists.end(); ++it ) {
-            if ( System::truncateFileExtensionAndPath( ( *it ).filename ) == fileName ) {
+            if ( System::GetStem( ( *it ).filename ) == fileName ) {
                 break;
             }
         }
@@ -334,9 +328,9 @@ namespace Editor
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -359,7 +353,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName );
+                    fheroes2::openVirtualKeyboard( fileName, 255 );
                 }
 
                 charInsertPos = fileName.size();
@@ -375,22 +369,25 @@ namespace Editor
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 const fheroes2::Text text( fileName, fheroes2::FontType::normalWhite() );
 
-                charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, fileNameRoi.x );
+                charInsertPos
+                    = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x, fileNameRoi.x );
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
+
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, 17, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
                     }
 
                     mapName = std::move( editableMapName );
-                    mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
+                    mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
@@ -405,14 +402,16 @@ namespace Editor
 
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
+
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
+
                     if ( lists.empty() ) {
                         isListboxSelected = false;
-                        fileName.clear();
                         charInsertPos = 0;
+                        fileName.clear();
 
                         buttonOk.disable();
                         buttonOk.draw();
@@ -425,9 +424,9 @@ namespace Editor
                 needFileNameRedraw = true;
             }
             else if ( !listboxEvent && le.isAnyKeyPressed()
-                      && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() )
-                      && le.KeyValue() != fheroes2::Key::KEY_UP && le.KeyValue() != fheroes2::Key::KEY_DOWN ) {
-                charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                      && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue() || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
+                      && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
+                charInsertPos = InsertKeySym( fileName, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
                 buttonOkDisabler();
 
@@ -436,16 +435,16 @@ namespace Editor
                 isListboxSelected = false;
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the current map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( mapNameRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
             }
 
@@ -460,7 +459,7 @@ namespace Editor
             }
 
             if ( needFileNameRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::truncateFileExtensionAndPath( listbox.GetCurrent().filename ) : "";
+                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     fileName = selectedFileName;

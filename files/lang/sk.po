@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 14:43+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -318,6 +318,15 @@ msgstr ""
 "R\n"
 "D"
 
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Bojovník"
 
@@ -488,6 +497,9 @@ msgid ""
 "combat spells."
 msgstr ""
 "Tento boj je ovplyvnený artefaktom Guľa negácie, ktorá znemožní kúzliť."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "V tomto kole už bolo použité kúzlo."
@@ -2017,6 +2029,12 @@ msgstr "Čarodejov ostrov"
 msgid "Descendants"
 msgstr "Potomkovia"
 
+msgid "Cannot build. You have already built here today."
+msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr "Pre tento krok je potrebné najprv postaviť hrad."
+
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} produkuje: %{monster}."
 
@@ -2025,12 +2043,6 @@ msgstr "Potrebuje:"
 
 msgid "Exit this menu without doing anything."
 msgstr "Opusti túto ponuku bez vykonania akcie."
-
-msgid "Cannot build. You have already built here today."
-msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
-
-msgid "For this action it is necessary to build a castle first."
-msgstr "Pre tento krok je potrebné najprv postaviť hrad."
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
@@ -2844,11 +2856,11 @@ msgstr "Žiadni bojovníci nie sú k dispozícii na nákup."
 msgid "Recruit Creatures"
 msgstr "Najať bojovníkov"
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Hire all creatures in the town."
 msgstr "Najmi všetkých bojovníkov v meste."
+
+msgid "Max"
+msgstr "Max"
 
 msgid "Available"
 msgstr "Dostupné"
@@ -3045,17 +3057,14 @@ msgstr "Celkovo: "
 msgid "Need: "
 msgstr "Potreba: "
 
-msgid "Load Game"
-msgstr "Nahraj hru"
-
-msgid "No save files to load."
-msgstr "Žiadne uložené hry."
-
 msgid "New Game"
 msgstr "Nová hra"
 
 msgid "Start a single or multi-player game."
 msgstr "Začni hru jedného alebo viac hráčov."
+
+msgid "Load Game"
+msgstr "Nahraj hru"
 
 msgid "Load a previously saved game."
 msgstr "Nahraj predtým uloženú hru."
@@ -3267,6 +3276,10 @@ msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
 msgid "Select Game Language:"
 msgstr "Zvoľ jazyk hry:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Zvoľ jazyk hry:"
+
 msgid "Click to choose the selected language."
 msgstr "Klikni pre výber zvoleného jazyka."
 
@@ -3293,6 +3306,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
+
+msgid "n/a"
+msgstr "nie je"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3328,9 +3344,6 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možné obchody"
-
-msgid "n/a"
-msgstr "nie je"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "strážené: %{monster} (%{count})"
@@ -3440,6 +3453,20 @@ msgstr "Zvoľ najväčší možný počet bojovníkov k nájmu."
 msgid "Select only 1 monster to be recruited."
 msgstr "Zvoľ iba jedného bojovníka k nájmu."
 
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Zvoľ rozlíšenie hry"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Zvoľ rozlíšenie hry:"
 
@@ -3493,8 +3520,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Určite chceš vymazať súbor:"
 
-msgid "Warning!"
-msgstr "Pozor!"
+msgid "Warning"
+msgstr "Pozor"
 
 msgid "Click to save the current game."
 msgstr "Klikni pre uloženie terajšej hry."
@@ -3508,16 +3535,12 @@ msgstr "Uložiť súbor:"
 msgid "File to Load:"
 msgstr "Nahrať súbor:"
 
-msgid "Accept the choice made."
-msgstr "Prijať uskutočnený výber."
-
-#, fuzzy
-msgid "%{color} %{race} hero"
-msgstr "%{color} hráč"
-
 #, fuzzy
 msgid "Terrain object"
 msgstr "Režim terénu"
+
+msgid "Accept the choice made."
+msgstr "Prijať uskutočnený výber."
 
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
@@ -3534,6 +3557,28 @@ msgstr "Zvoľ bojovníka:"
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
 
+msgid "race|Random"
+msgstr "Náhodná"
+
+#, fuzzy
+msgid "Click to start placing the selected hero."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "%{color} %{race}"
+msgstr "%{color} hráč"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Zvoľ hrdinu:"
@@ -3548,9 +3593,6 @@ msgstr "Možnosti hradu"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutrálna"
-
-msgid "race|Random"
-msgstr "Náhodná"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3570,17 +3612,6 @@ msgstr "%{color} hráč"
 
 msgid "race|Neutral"
 msgstr "Neutrálna"
-
-msgid "You will place"
-msgstr ""
-
-#, fuzzy
-msgid "Click to select this class."
-msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
-
-#, fuzzy
-msgid "Click to select this color."
-msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3627,6 +3658,40 @@ msgstr "Objekty oceánu"
 msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
+msgid "Players Icon"
+msgstr "Ikona hráča"
+
+#, fuzzy
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by human players will be occupied by computer players."
+msgstr ""
+"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
+"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
+"alebo extra veľká (144 x 144)."
+
+msgid "Size Icon"
+msgstr "Ikona veľkosti"
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+#, fuzzy
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
+"of Loyalty\" or \"Resurrection\" version of the game."
+msgstr ""
+"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
+"Price of Loyalty\"."
+
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
 
@@ -3639,6 +3704,13 @@ msgstr "Cena vernosti"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Vzkriesenie"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Jazyk"
 
 msgid "Lose all your heroes and towns."
 msgstr "Strať všetkých hrdinov a mestá."
@@ -3716,39 +3788,6 @@ msgstr "Všetky mapy"
 
 msgid "View all maps, regardless of size."
 msgstr "Zobraz všetky mapy bez ohľadu na veľkosť."
-
-msgid "Players Icon"
-msgstr "Ikona hráča"
-
-#, fuzzy
-msgid ""
-"Indicates how many players total are in the scenario. Any positions not "
-"occupied by human players will be occupied by computer players."
-msgstr ""
-"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
-"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
-
-msgid ""
-"Indicates whether the map\n"
-"is small (36 x 36), medium\n"
-"(72 x 72), large (108 x 108),\n"
-"or extra large (144 x 144)."
-msgstr ""
-"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
-"alebo extra veľká (144 x 144)."
-
-msgid "Size Icon"
-msgstr "Ikona veľkosti"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
-"of Loyalty\" version of the game."
-msgstr ""
-"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
-"Price of Loyalty\"."
-
-msgid "Map Type"
-msgstr "Typ mapy"
 
 msgid "Selected Name"
 msgstr "Zvolené meno"
@@ -3955,7 +3994,7 @@ msgstr ""
 msgid "Message Text:"
 msgstr "Panel správ"
 
-msgid "Cancel event after first visit"
+msgid "Reward:"
 msgstr ""
 
 msgid "Player colors allowed to get event:"
@@ -3964,7 +4003,10 @@ msgstr ""
 msgid "Computer colors allowed to get event:"
 msgstr ""
 
-msgid "Reward:"
+msgid "First day of occurrence:"
+msgstr ""
+
+msgid "Repeat period (days):"
 msgstr ""
 
 msgid "Allow %{color} human player to get event"
@@ -3991,6 +4033,59 @@ msgstr "Panel správ"
 msgid "Click to save the Event properties."
 msgstr "Klikni pre uloženie terajšej hry."
 
+msgid "No resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Resources"
+msgstr "Surovina"
+
+msgid "Resources will be given as a reward."
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the event message."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Event Message Text"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Deň: %{day}"
+
+msgid "Daily Events"
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the events."
+msgstr "Klikni pre uloženie terajšej hry."
+
+#, fuzzy
+msgid "Add Event"
+msgstr "Udalosť"
+
+#, fuzzy
+msgid "Add an additional event."
+msgstr "Dodatočné programovanie"
+
+#, fuzzy
+msgid "Edit Event"
+msgstr "Udalosť"
+
+#, fuzzy
+msgid "Edit an existing event."
+msgstr "Načítať existujúcu mapu."
+
+msgid "Delete Event"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing event."
+msgstr "Načítať existujúcu mapu."
+
+msgid "Cancel event after first visit"
+msgstr ""
+
 msgid "Artifact"
 msgstr "Artefakt"
 
@@ -4004,27 +4099,10 @@ msgstr "Zvoľ artefakt:"
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "No resources will be given as a reward."
-msgstr ""
-
-#, fuzzy
-msgid "Resources"
-msgstr "Surovina"
-
-msgid "Resources will be given as a reward."
-msgstr ""
-
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
-msgstr ""
-
-#, fuzzy
-msgid "Click here to change the event message."
-msgstr "Klikni pre uloženie terajšej hry."
-
-msgid "Event Message Text"
 msgstr ""
 
 #, fuzzy
@@ -4129,6 +4207,9 @@ msgstr ""
 msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
+msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Uložený súbor je poškodený."
@@ -4138,6 +4219,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Unable to create a directory to save the map."
+msgstr "Slúži na vymazanie objektov z mapy."
+
+#, fuzzy
+msgid "Unable to locate a directory to save the map."
 msgstr "Slúži na vymazanie objektov z mapy."
 
 #, fuzzy
@@ -4438,8 +4523,29 @@ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
 msgid "No maps available!"
 msgstr "Žiadne dostupné mapy!"
 
-msgid "Warning"
-msgstr "Pozor"
+#, fuzzy
+msgid "[%{pos}]: %{race} hero"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} hero"
+msgstr "%{name1} a %{name2} sa stretávajú"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{race} castle"
+msgstr "%{color} hráč"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{name1} a %{name2} sa stretávajú"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} a %{name2} sa stretávajú"
 
 #, fuzzy
 msgid "None."
@@ -4458,6 +4564,93 @@ msgid "Run out of time."
 msgstr "Ukončiť prácu v editore máp."
 
 #, fuzzy
+msgid "alliance|1st"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|2nd"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|3rd"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|4th"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "alliance|5th"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "Special Loss Condition"
+msgstr "Podmienka prehry"
+
+#, fuzzy
+msgid "Special Victory Condition"
+msgstr "Podmienka výhry"
+
+#, fuzzy
+msgid "Allow standard victory conditions"
+msgstr "Podmienka výhry"
+
+msgid "Allow this condition also for AI"
+msgstr ""
+
+#, fuzzy
+msgid "Set alliances:"
+msgstr " aliancia"
+
+#, fuzzy
+msgid "{%number} alliance: "
+msgstr " aliancia"
+
+#, fuzzy
+msgid "Gold:"
+msgstr "Zlato"
+
+#, fuzzy
+msgid "Select a Town to capture to achieve victory"
+msgstr "Vyber mesto, do ktorého sa chceš preniesť."
+
+#, fuzzy
+msgid "Click here to change the town needed to capture to achieve victory."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Select a Hero to defeat to achieve victory"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero needed to defeat to achieve victory."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Put %{color} player in the %{alliance} alliance"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the %{color} player will be in the %{alliance} "
+"alliance."
+msgstr ""
+
+msgid "Days:"
+msgstr ""
+
+msgid "Select a Town to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the town whose loss would mean defeat."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Select a Hero to lose to suffer defeat"
+msgstr ""
+
+#, fuzzy
+msgid "Click here to change the hero whose loss would mean defeat."
+msgstr "Klikni pre uloženie terajšej hry."
+
+#, fuzzy
 msgid "Map Difficulty"
 msgstr ""
 "Obtiažnosť\n"
@@ -4470,13 +4663,16 @@ msgstr ""
 "\n"
 "Umiestnenie: "
 
-#, fuzzy
-msgid "Special Victory Condition"
-msgstr "Podmienka výhry"
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
 
-#, fuzzy
-msgid "Special Loss Condition"
-msgstr "Podmienka prehry"
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
 
 msgid "Change Map Name"
 msgstr ""
@@ -4485,14 +4681,28 @@ msgstr ""
 msgid "Change Map Description"
 msgstr "Zvolený opis"
 
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to edit custom rumors."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Rumors"
+msgstr ""
+
+#, fuzzy
+msgid "Click to edit daily events."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Events"
+msgstr "Udalosť"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Zmeň jazyk hry."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4504,6 +4714,14 @@ msgstr "Veľkosť mapy"
 
 #, fuzzy
 msgid "Click to change the description of the current map."
+msgstr "Opis aktuálne zvolenej mapy."
+
+#, fuzzy
+msgid "Click to change the victory condition of the current map."
+msgstr "Opis aktuálne zvolenej mapy."
+
+#, fuzzy
+msgid "Click to change the loss condition of the current map."
 msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Indicates the player types in the scenario. Click to change."
@@ -4537,6 +4755,40 @@ msgstr ""
 
 msgid "Toggle display of objects' passability."
 msgstr ""
+
+msgid "Rumor:"
+msgstr ""
+
+msgid "Rumor"
+msgstr ""
+
+msgid "This rumor already exists in the list."
+msgstr ""
+
+#, fuzzy
+msgid "Click to save the rumors."
+msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Add Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Add an additional rumor."
+msgstr "Dodatočné programovanie"
+
+msgid "Edit Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Edit an existing rumor."
+msgstr "Načítať existujúcu mapu."
+
+msgid "Delete Rumor"
+msgstr ""
+
+#, fuzzy
+msgid "Delete an existing rumor."
+msgstr "Načítať existujúcu mapu."
 
 msgid ""
 "\n"
@@ -4597,6 +4849,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -4875,6 +5130,9 @@ msgstr "Návrhári máp"
 msgid "Package Design"
 msgstr "Dizajn balíkov"
 
+msgid "High Scores"
+msgstr "Najvyššie skóre"
+
 msgid "Your Name"
 msgstr "Tvoje meno"
 
@@ -5002,6 +5260,10 @@ msgstr "predvolená činnosť"
 #, fuzzy
 msgid "hotkey|open game main menu"
 msgstr "nová mapa"
+
+#, fuzzy
+msgid "hotkey|toggle passability"
+msgstr "prepni status"
 
 msgid "hotkey|roland campaign"
 msgstr "kampaň roland"
@@ -5293,6 +5555,9 @@ msgstr "Táto uložená hra je zlokalizovaná na jazyk '"
 msgid "' language, but the current language of the game is '"
 msgstr "', ale aktuálny jazyk hry je '"
 
+msgid "No save files to load."
+msgstr "Žiadne uložené hry."
+
 msgid "Hot Seat"
 msgstr "Horúce kreslo"
 
@@ -5381,9 +5646,6 @@ msgstr "Zásluhy"
 
 msgid "View the credits screen."
 msgstr "Zobrazenie obrazovky so zásluhami."
-
-msgid "High Scores"
-msgstr "Najvyššie skóre"
 
 msgid "View the high scores screen."
 msgstr "Zobrazenie obrazovky s najvyššími výsledkami."
@@ -5963,9 +6225,6 @@ msgstr ""
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mesiac: %{month} Týždeň: %{week}"
 
-msgid "Day: %{day}"
-msgstr "Deň: %{day}"
-
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
@@ -6090,6 +6349,14 @@ msgstr "MEDZERNÍK"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Príjmy kráľovstva"
@@ -7624,18 +7891,23 @@ msgstr ""
 "\"Mám pre teba hádanku,\" hovorí Sfinga. \"Odpovedz správne a dostane sa ti "
 "odmeny. Ak odpovieš nesprávne, zjem ťa. Prijímaš túto výzvu?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Sfinga ti položí nasledujúcu hádanku:\n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Tvoja odpoveď?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8611,6 +8883,12 @@ msgstr "Spaľujúca"
 
 msgid "speed|Instant"
 msgstr "Okamžitá"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Veverice"
@@ -10858,14 +11136,14 @@ msgid ""
 "say a word, he hands you a Magic Book."
 msgstr ""
 
-msgid "Dummy 1"
-msgstr "Atrapa 1"
-
-msgid "The reserved artifact."
-msgstr "Vyhradený artefakt."
+msgid "Victory can be achieved by finding any Ultimate Artifact."
+msgstr ""
 
 msgid "Dummy 2"
 msgstr "Atrapa 2"
+
+msgid "The reserved artifact."
+msgstr "Vyhradený artefakt."
 
 msgid "Dummy 3"
 msgstr "Atrapa 3"
@@ -11349,15 +11627,15 @@ msgstr "Magicky zvýši obrannú schopnosť vybraných tvorov."
 msgid "Stoneskin"
 msgstr "Kamenná koža"
 
+msgid "Steelskin"
+msgstr "Oceľová koža"
+
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Zvyšuje obrannú schopnosť cielených tvorov. Ide o vylepšenú verziu Kamennej "
 "kože."
-
-msgid "Steelskin"
-msgstr "Oceľová koža"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Zapríčiní, že vybrané bytosti spôsobia minimálne poškodenie."
@@ -11388,7 +11666,8 @@ msgstr "Svätý výkrik"
 msgid "Anti-Magic"
 msgstr "Protimágia"
 
-msgid "Prevents harmful magic against the selected creatures."
+#, fuzzy
+msgid "Prevents any magic against the selected creatures."
 msgstr "Bráni škodlivým kúzlam proti vybraným tvorom."
 
 msgid "Dispel Magic"
@@ -11744,7 +12023,8 @@ msgstr "Nemáš knihu kúziel, takže nemôžeš zosielať kúzla."
 msgid "No spell to cast."
 msgstr "Žiadne kúzla na zoslanie."
 
-msgid "Your hero has %{point} spell points remaining."
+#, fuzzy
+msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Tvojmu hrdinovi zostáva %{point} bodov kúziel."
 
 msgid "View Adventure Spells"
@@ -11856,3 +12136,9 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Pozor!"
+
+#~ msgid "Dummy 1"
+#~ msgstr "Atrapa 1"

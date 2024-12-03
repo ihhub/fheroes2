@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,14 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2OBJSNOW_H
-#define H2OBJSNOW_H
+#pragma once
 
 #include <cstdint>
+#include <string>
+#include <vector>
 
-namespace ObjSnow
+namespace fheroes2
 {
-    bool isShadow( const uint8_t index );
+    enum class SupportedLanguage : uint8_t;
 }
 
-#endif
+namespace Editor
+{
+    bool openRumorWindow( std::vector<std::string> & rumors, const fheroes2::SupportedLanguage language );
+}

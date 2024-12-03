@@ -20,7 +20,6 @@
 
 #include "castle_building_info.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 
@@ -30,7 +29,7 @@
 
 namespace
 {
-    fheroes2::Rect getKnightBuildingArea( const building_t buildingId )
+    fheroes2::Rect getKnightBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -98,7 +97,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getBarbarianBuildingArea( const building_t buildingId )
+    fheroes2::Rect getBarbarianBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -166,7 +165,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getSorceressBuildingArea( const building_t buildingId )
+    fheroes2::Rect getSorceressBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -231,7 +230,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getWarlockBuildingArea( const building_t buildingId )
+    fheroes2::Rect getWarlockBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -299,7 +298,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getWizardBuildingArea( const building_t buildingId )
+    fheroes2::Rect getWizardBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -367,7 +366,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getNecromancerBuildingArea( const building_t buildingId )
+    fheroes2::Rect getNecromancerBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -435,7 +434,7 @@ namespace
         return {};
     }
 
-    const char * getKnightBuildingName( const building_t buildingId )
+    const char * getKnightBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -473,7 +472,7 @@ namespace
         return nullptr;
     }
 
-    const char * getBarbarianBuildingName( const building_t buildingId )
+    const char * getBarbarianBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -507,7 +506,7 @@ namespace
         return nullptr;
     }
 
-    const char * getSorceressBuildingName( const building_t buildingId )
+    const char * getSorceressBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -541,7 +540,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWarlockBuildingName( const building_t buildingId )
+    const char * getWarlockBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -575,7 +574,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWizardBuildingName( const building_t buildingId )
+    const char * getWizardBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -609,7 +608,7 @@ namespace
         return nullptr;
     }
 
-    const char * getNecromancerBuildingName( const building_t buildingId )
+    const char * getNecromancerBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -647,7 +646,7 @@ namespace
         return nullptr;
     }
 
-    const char * getRandomBuildingName( const building_t buildingId )
+    const char * getRandomBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -687,7 +686,7 @@ namespace
         return nullptr;
     }
 
-    const char * getKnightBuildingDescription( const building_t buildingId )
+    const char * getKnightBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -703,7 +702,7 @@ namespace
         return nullptr;
     }
 
-    const char * getBarbarianBuildingDescription( const building_t buildingId )
+    const char * getBarbarianBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -719,7 +718,7 @@ namespace
         return nullptr;
     }
 
-    const char * getSorceressBuildingDescription( const building_t buildingId )
+    const char * getSorceressBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -735,7 +734,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWarlockBuildingDescription( const building_t buildingId )
+    const char * getWarlockBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -751,7 +750,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWizardBuildingDescription( const building_t buildingId )
+    const char * getWizardBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -767,7 +766,7 @@ namespace
         return nullptr;
     }
 
-    const char * getNecromancerBuildingDescription( const building_t buildingId )
+    const char * getNecromancerBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -783,7 +782,7 @@ namespace
         return nullptr;
     }
 
-    const char * getRandomBuildingDescription( const building_t buildingId )
+    const char * getRandomBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -802,7 +801,7 @@ namespace
 
 namespace fheroes2
 {
-    Rect getCastleBuildingArea( const int race, const building_t buildingId )
+    Rect getCastleBuildingArea( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -832,7 +831,7 @@ namespace fheroes2
         return {};
     }
 
-    const char * getBuildingName( const int race, const building_t buildingId )
+    const char * getBuildingName( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -904,7 +903,7 @@ namespace fheroes2
         return nullptr;
     }
 
-    const char * getBuildingDescription( const int race, const building_t buildingId )
+    const char * getBuildingDescription( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -974,7 +973,7 @@ namespace fheroes2
         return nullptr;
     }
 
-    building_t getUpgradeForBuilding( const int race, const building_t buildingId )
+    BuildingType getUpgradeForBuilding( const int race, const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_TENT:
@@ -1091,7 +1090,7 @@ namespace fheroes2
         return buildingId;
     }
 
-    building_t getBuildingRequirement( const int race, const building_t building )
+    BuildingType getBuildingRequirement( const int race, const BuildingType building )
     {
         uint32_t requirement = 0;
 
@@ -1343,10 +1342,10 @@ namespace fheroes2
             break;
         }
 
-        return static_cast<building_t>( requirement );
+        return static_cast<BuildingType>( requirement );
     }
 
-    std::string getBuildingRequirementString( const int race, const building_t building )
+    std::string getBuildingRequirementString( const int race, const BuildingType building )
     {
         // prepare requirement build string
         std::string requirement;
@@ -1367,7 +1366,7 @@ namespace fheroes2
         return requirement;
     }
 
-    int getIndexBuildingSprite( const building_t build )
+    int getIndexBuildingSprite( const BuildingType build )
     {
         switch ( build ) {
         case DWELLING_MONSTER1:
@@ -1434,9 +1433,9 @@ namespace fheroes2
         return 0;
     }
 
-    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version )
+    std::vector<BuildingType> getBuildingDrawingPriorities( const int race, const GameVersion version )
     {
-        std::vector<building_t> priorities;
+        std::vector<BuildingType> priorities;
         priorities.reserve( 32 );
 
         switch ( race ) {

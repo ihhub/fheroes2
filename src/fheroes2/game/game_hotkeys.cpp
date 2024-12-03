@@ -31,6 +31,7 @@
 #include <functional>
 #include <map>
 #include <set>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
@@ -160,6 +161,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
+            = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
@@ -358,13 +361,13 @@ bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
         // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
         Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
     }
-    return le.isAnyKeyPressed() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    return le.isAnyKeyPressed() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+    return le.isKeyBeingHold() && le.getPressedKeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
 fheroes2::Key Game::getHotKeyForEvent( const HotKeyEvent eventID )

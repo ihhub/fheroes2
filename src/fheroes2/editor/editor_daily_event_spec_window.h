@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,19 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "trees.h"
+#pragma once
 
-#include <bitset>
-#include <vector>
+#include <cstdint>
 
-#include "tools.h"
-
-namespace
+namespace Maps::Map_Format
 {
-    const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
+    struct DailyEvent;
 }
 
-bool ObjTree::isShadow( const uint8_t index )
+namespace fheroes2
 {
-    return objTreeShadowBitset[index];
+    enum class SupportedLanguage : uint8_t;
+}
+
+namespace Editor
+{
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                         const fheroes2::SupportedLanguage language );
 }

@@ -34,37 +34,36 @@ Cursor & Cursor::Get()
     return _cursor;
 }
 
-bool Cursor::SetThemes( int name, bool force )
+void Cursor::SetThemes( const int theme, const bool force /* = false */ )
 {
-    if ( force || _theme != name ) {
-        _theme = name;
-
-        // Video pointer cannot be properly rendered in black-white so we have to force to use color cursor.
-        int icnID = ( _monochromeCursorThemes && ( name != Cursor::POINTER_VIDEO ) ) ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
-        switch ( 0xF000 & name ) {
-        case 0x3000:
-            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;
-            break;
-        case 0x2000:
-            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_CMSSBW : ICN::CMSECO;
-            break;
-        case 0x4000:
-            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
-            break;
-        default:
-            break;
-        }
-        const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
-        SetOffset( name, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
-        fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
-
-        // Apply new offset.
-        const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
-        Move( currentPos.x, currentPos.y );
-        return true;
+    if ( _theme == theme && !force ) {
+        return;
     }
 
-    return false;
+    _theme = theme;
+
+    // Video pointer cannot be properly rendered in black-white so we have to force to use color cursor.
+    int icnID = ( _monochromeCursorThemes && ( theme != Cursor::POINTER_VIDEO ) ) ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
+    switch ( 0xF000 & theme ) {
+    case 0x3000:
+        icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;
+        break;
+    case 0x2000:
+        icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_CMSSBW : ICN::CMSECO;
+        break;
+    case 0x4000:
+        icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
+        break;
+    default:
+        break;
+    }
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & theme );
+    SetOffset( theme, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
+    fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
+
+    // Apply new offset.
+    const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
+    Move( currentPos.x, currentPos.y );
 }
 
 void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset )
@@ -74,7 +73,7 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
     fheroes2::cursor().update( image, -offset.x, -offset.y );
 
     // Immediately apply new mouse offset.
-    const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
+    const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
     _offset = offset;
 
     Move( currentPos.x, currentPos.y );
@@ -252,7 +251,7 @@ CursorRestorer::~CursorRestorer()
     // In case of software emulated cursor when cursor theme is not changed and it is shown after it was hidden
     // we force render the cursor area. It is needed to reduce the cursor show delay.
     if ( isShown && noThemeChange && cursorRenderer.isSoftwareEmulation() ) {
-        const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
+        const fheroes2::Point & pos = LocalEvent::Get().getMouseCursorPos();
         fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );
     }
 }

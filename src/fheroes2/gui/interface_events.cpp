@@ -24,8 +24,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact.h"
@@ -38,7 +40,7 @@
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -68,7 +70,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -90,7 +91,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
         _gameArea.SetRedraw();
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
@@ -107,7 +108,7 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
     }
 
     const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
-    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+    const Maps::Tile & tile = world.getTile( dstIndex );
 
     if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
         return;
@@ -131,7 +132,7 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 
 void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
 {
-    Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
+    Heroes * selectedHero = world.getTile( tileIndex ).getHero();
     if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
         return;
     }
@@ -210,7 +211,7 @@ void Interface::AdventureMap::EventKingdomInfo() const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
 
-    iconsPanel.SetRedraw();
+    _iconsPanel.setRedraw();
 }
 
 void Interface::AdventureMap::EventCastSpell()
@@ -224,15 +225,17 @@ void Interface::AdventureMap::EventCastSpell()
     _gameArea.SetCenter( hero->GetCenter() );
     redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
-    if ( spell.isValid() ) {
-        hero->ActionSpellCast( spell );
-
-        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
-        // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES, true );
-        RedrawFocus();
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, {} );
+    if ( !spell.isValid() ) {
+        return;
     }
+
+    hero->ActionSpellCast( spell );
+
+    // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+    // hero to another location, so we may have to update the terrain music theme and environment sounds
+    ResetFocus( GameFocus::HEROES, true );
+    RedrawFocus();
 }
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
@@ -405,7 +408,7 @@ void Interface::AdventureMap::EventSwitchHeroSleeping()
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         setRedraw( REDRAW_HEROES );
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
 }
 
@@ -436,7 +439,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
@@ -462,8 +465,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             StringReplace( msg, "%{artifact}", ultimate.GetName() );
 
             const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( _( "Congratulations!" ), std::move( msg ), Dialog::OK, { &artifactUI } );
         }
         else {
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
@@ -545,7 +547,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
         }
         else {
             conf.SetShowButtons( true );
-            buttonsArea.SetRedraw();
+            _buttonsPanel.setRedraw();
         }
     }
 }
@@ -561,7 +563,7 @@ void Interface::AdventureMap::EventSwitchShowStatus() const
         }
         else {
             conf.SetShowStatus( true );
-            _statusWindow.SetRedraw();
+            _statusPanel.setRedraw();
         }
     }
 }
@@ -577,7 +579,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetRedraw();
+            _iconsPanel.setRedraw();
         }
     }
 }
