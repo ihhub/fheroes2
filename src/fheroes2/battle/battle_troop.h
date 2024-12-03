@@ -320,7 +320,7 @@ namespace Battle
         uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
-        uint32_t disruptingray;
+        uint32_t _disruptingRaysNum;
         bool reflect;
 
         Position position;

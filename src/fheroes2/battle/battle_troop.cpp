@@ -163,7 +163,7 @@ Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool ref, c
     , _initialCount( troop.GetCount() )
     , dead( 0 )
     , shots( troop.GetShots() )
-    , disruptingray( 0 )
+    , _disruptingRaysNum( 0 )
     , reflect( ref )
     , mirror( nullptr )
     , idleTimer( animation.getIdleDelay() )
@@ -1036,8 +1036,9 @@ uint32_t Battle::Unit::GetAttack() const
 {
     uint32_t res = ArmyTroop::GetAttack();
 
-    if ( Modes( SP_BLOODLUST ) )
+    if ( Modes( SP_BLOODLUST ) ) {
         res += Spell( Spell::BLOODLUST ).ExtraValue();
+    }
 
     return res;
 }
@@ -1046,31 +1047,35 @@ uint32_t Battle::Unit::GetDefense() const
 {
     uint32_t res = ArmyTroop::GetDefense();
 
-    if ( Modes( SP_STONESKIN ) )
+    if ( Modes( SP_STONESKIN ) ) {
         res += Spell( Spell::STONESKIN ).ExtraValue();
-    else if ( Modes( SP_STEELSKIN ) )
+    }
+    else if ( Modes( SP_STEELSKIN ) ) {
         res += Spell( Spell::STEELSKIN ).ExtraValue();
-
-    // disrupting ray accumulate effect
-    if ( disruptingray ) {
-        const uint32_t step = disruptingray * Spell( Spell::DISRUPTINGRAY ).ExtraValue();
-
-        if ( step >= res )
-            res = 1;
-        else
-            res -= step;
     }
 
-    // check moat
+    if ( _disruptingRaysNum ) {
+        const uint32_t step = _disruptingRaysNum * Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+
+        if ( step >= res ) {
+            res = 1;
+        }
+        else {
+            res -= step;
+        }
+    }
+
     const Castle * castle = Arena::GetCastle();
 
     if ( castle && castle->isBuild( BUILD_MOAT ) && ( Board::isMoatIndex( GetHeadIndex(), *this ) || Board::isMoatIndex( GetTailIndex(), *this ) ) ) {
         const uint32_t step = GameStatic::GetBattleMoatReduceDefense();
 
-        if ( step >= res )
+        if ( step >= res ) {
             res = 1;
-        else
+        }
+        else {
             res -= step;
+        }
     }
 
     return res;
@@ -1345,7 +1350,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     case Spell::DISRUPTINGRAY:
-        ++disruptingray;
+        ++_disruptingRaysNum;
         break;
 
     default:
