@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "resource.h"
@@ -108,6 +109,11 @@ namespace fheroes2
             return type == anotherType;
         }
 
+        bool operator==( const std::pair<MonsterAbilityType, uint32_t> & typeValuePair ) const
+        {
+            return type == typeValuePair.first && value == typeValuePair.second;
+        }
+
         MonsterAbilityType type;
 
         uint32_t percentage;
@@ -141,6 +147,11 @@ namespace fheroes2
         bool operator==( const MonsterWeaknessType anotherType ) const
         {
             return type == anotherType;
+        }
+
+        bool operator==( const std::pair<MonsterWeaknessType, uint32_t> & typeValuePair ) const
+        {
+            return type == typeValuePair.first && value == typeValuePair.second;
         }
 
         MonsterWeaknessType type;
