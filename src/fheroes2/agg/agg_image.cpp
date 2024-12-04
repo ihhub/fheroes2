@@ -582,8 +582,29 @@ namespace
 
     void loadICN( const int id );
 
+    void replacePOLAssetWithSW( const int id, const int assetIndex )
+    {
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), true );
+        ROStreamBuf imageStream( body );
+
+        imageStream.seek( headerSize + assetIndex * 13 );
+
+        fheroes2::ICNHeader header1;
+        imageStream >> header1;
+
+        fheroes2::ICNHeader header2;
+        imageStream >> header2;
+        const uint32_t dataSize = header2.offsetData - header1.offsetData;
+
+        const uint8_t * data = body.data() + headerSize + header1.offsetData;
+        const uint8_t * dataEnd = data + dataSize;
+
+        _icnVsSprite[id][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
+    }
+
     void LoadOriginalICN( const int id )
     {
+        
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
@@ -4220,22 +4241,7 @@ namespace
                 // The French and German Price of Loyalty assets contain a wrong artifact sprite at index 6. We replace it with the correct sprite from SW assets.
                 const int assetIndex = 6;
                 if ( _icnVsSprite[id][assetIndex].width() == 21 ) {
-                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), true );
-                    ROStreamBuf imageStream( body );
-
-                    imageStream.seek( headerSize + assetIndex * 13 );
-
-                    fheroes2::ICNHeader header1;
-                    imageStream >> header1;
-
-                    fheroes2::ICNHeader header2;
-                    imageStream >> header2;
-                    const uint32_t dataSize = header2.offsetData - header1.offsetData;
-
-                    const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                    const uint8_t * dataEnd = data + dataSize;
-
-                    _icnVsSprite[id][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
+                    replacePOLAssetWithSW( id, assetIndex );
                 }
             }
             return true;
