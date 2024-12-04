@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -25,6 +25,7 @@
 # FHEROES2_WITH_ASAN: build with UB Sanitizer and Address Sanitizer (small runtime overhead, incompatible with FHEROES2_WITH_TSAN)
 # FHEROES2_WITH_TSAN: build with UB Sanitizer and Thread Sanitizer (large runtime overhead, incompatible with FHEROES2_WITH_ASAN)
 # FHEROES2_WITH_IMAGE: build with SDL_image (requires libpng)
+# FHEROES2_WITH_SYSTEM_SMACKER: build with an external libsmacker instead of the bundled one
 # FHEROES2_WITH_TOOLS: build additional tools
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
 # FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)

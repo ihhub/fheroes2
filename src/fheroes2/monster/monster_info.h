@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,9 @@
 
 namespace fheroes2
 {
+    // Spell power value, based on which the effect of the monsters' built-in spells is calculated
+    inline constexpr int spellPowerForBuiltinMonsterSpells{ 3 };
+
     enum class MonsterAbilityType : int
     {
         // Basic abilities.
@@ -59,7 +62,7 @@ namespace fheroes2
         HP_DRAIN,
         AREA_SHOT,
         MORAL_DECREMENT,
-        ENEMY_HALFING,
+        ENEMY_HALVING,
         SOUL_EATER
     };
 
@@ -150,7 +153,7 @@ namespace fheroes2
         uint32_t race;
         uint32_t level;
 
-        cost_t cost;
+        Cost cost;
     };
 
     struct MonsterSound

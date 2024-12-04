@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MONSTER_H
-#define H2MONSTER_H
+#pragma once
 
 #include <cstdint>
 
@@ -36,6 +35,7 @@ class Monster
 public:
     enum
     {
+        JOIN_CONDITION_UNSET = -1,
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
         JOIN_CONDITION_FREE = 2
@@ -50,7 +50,7 @@ public:
         LEVEL_4
     };
 
-    enum monster_t : int32_t
+    enum MonsterType : int32_t
     {
         UNKNOWN,
 
@@ -138,9 +138,17 @@ public:
     {
         // Do nothing.
     }
-    explicit Monster( const Spell & );
-    Monster( int race, uint32_t dw );
+
+    explicit Monster( const Spell & sp );
+    Monster( const int race, const uint32_t dw );
+
+    Monster( const Monster & ) = default;
+    Monster( Monster && ) = default;
+
     virtual ~Monster() = default;
+
+    Monster & operator=( const Monster & ) = default;
+    Monster & operator=( Monster && ) = default;
 
     bool operator==( const Monster & monster ) const
     {
@@ -172,7 +180,6 @@ public:
 
     virtual uint32_t GetAttack() const;
     virtual uint32_t GetDefense() const;
-    virtual int GetColor() const;
     virtual int GetMorale() const;
     virtual int GetLuck() const;
     virtual int GetRace() const;
@@ -215,6 +222,7 @@ public:
     const char * GetName() const;
     const char * GetMultiName() const;
     const char * GetPluralName( uint32_t ) const;
+    static const char * getRandomRaceMonstersName( const uint32_t building );
 
     bool isValid() const
     {
@@ -324,5 +332,3 @@ protected:
 
     int id;
 };
-
-#endif

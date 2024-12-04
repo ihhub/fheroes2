@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CAPTAIN_H
-#define H2CAPTAIN_H
+
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -35,7 +35,8 @@ class Castle;
 class Captain final : public HeroBase
 {
 public:
-    explicit Captain( Castle & );
+    explicit Captain( Castle & castle );
+
     Captain( const Captain & ) = delete;
 
     ~Captain() override = default;
@@ -63,7 +64,7 @@ public:
         return 0;
     }
 
-    uint32_t GetSecondaryValues( int ) const override
+    uint32_t GetSecondarySkillValue( int /* skill */ ) const override
     {
         return 0;
     }
@@ -87,5 +88,3 @@ private:
 
     Castle & home;
 };
-
-#endif

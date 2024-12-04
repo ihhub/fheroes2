@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,7 +73,7 @@ namespace
         return WeekName::PLAGUE;
     }
 
-    Monster::monster_t RandomMonsterWeekOf( const uint32_t seed )
+    Monster::MonsterType RandomMonsterWeekOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
         fheroes2::hashCombine( monsterSeed, 886473 ); // Salt
@@ -81,7 +81,7 @@ namespace
         return Rand::GetWithSeed( Monster::PEASANT, Monster::BONE_DRAGON, monsterSeed );
     }
 
-    Monster::monster_t RandomMonsterMonthOf( const uint32_t seed )
+    Monster::MonsterType RandomMonsterMonthOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
         fheroes2::hashCombine( monsterSeed, 1130906 ); // Salt

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,10 +25,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <iostream>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <system_error>
 #include <type_traits>
@@ -41,10 +40,10 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " converts the specified XMI file(s) to MIDI format." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.xmi ..." << std::endl;
+        std::cerr << toolName << " converts the specified XMI file(s) to MIDI format." << std::endl
+                  << "Syntax: " << toolName << " dst_dir input_file.xmi ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -91,7 +90,7 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+        static_assert( std::is_same_v<uint8_t, unsigned char> );
 
         std::vector<uint8_t> buf( size.value() );
 

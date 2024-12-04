@@ -152,11 +152,11 @@ namespace std
     {
         std::size_t operator()( const Battle::CommandType key ) const noexcept
         {
-            using UnderlyingCommandType = typename std::underlying_type<Battle::CommandType>::type;
+            using BattleCommandTypeUnderlyingType = std::underlying_type_t<Battle::CommandType>;
 
-            std::hash<UnderlyingCommandType> hasher;
+            const std::hash<BattleCommandTypeUnderlyingType> hasher;
 
-            return hasher( static_cast<UnderlyingCommandType>( key ) );
+            return hasher( static_cast<BattleCommandTypeUnderlyingType>( key ) );
         }
     };
 }

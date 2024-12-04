@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -55,9 +55,9 @@ namespace Battle
         uint32_t GetAttack() const override;
 
         const char * GetName() const;
-
-        void SetDestroy();
         fheroes2::Point GetPortPosition() const;
+
+        void SetDestroyed();
 
         // Returns a text description of the parameters of the towers of a given castle. Can be
         // called both during combat and outside of it. In the former case, the current state of

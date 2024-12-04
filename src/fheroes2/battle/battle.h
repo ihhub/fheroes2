@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,12 +24,10 @@
 #ifndef H2BATTLE_H
 #define H2BATTLE_H
 
-#include <utility>
+#include <cstdint>
 #include <vector>
 
-#include "army.h"
-#include "gamedefs.h"
-#include "m82.h"
+class Army;
 
 namespace Battle
 {
@@ -70,17 +68,15 @@ namespace Battle
 
         TargetInfo() = default;
 
-        explicit TargetInfo( Unit * defender_ )
-            : defender( defender_ )
+        explicit TargetInfo( Unit * def )
+            : defender( def )
         {}
 
         static bool isFinishAnimFrame( const TargetInfo & info );
     };
 
     struct TargetsInfo : public std::vector<TargetInfo>
-    {
-        TargetsInfo() = default;
-    };
+    {};
 
     enum MonsterState : uint32_t
     {
@@ -128,7 +124,7 @@ namespace Battle
         IS_MIND_MAGIC = SP_BERSERKER | SP_HYPNOTIZE | SP_BLIND | SP_PARALYZE,
     };
 
-    enum class CastleDefenseElement : int
+    enum class CastleDefenseStructure : int
     {
         NONE = 0,
         WALL1 = 1,
@@ -138,7 +134,9 @@ namespace Battle
         TOWER1 = 5,
         TOWER2 = 6,
         BRIDGE = 7,
-        CENTRAL_TOWER = 8
+        CENTRAL_TOWER = 8,
+        TOP_BRIDGE_TOWER = 9,
+        BOTTOM_BRIDGE_TOWER = 10
     };
 }
 

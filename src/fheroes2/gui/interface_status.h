@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <cstdint>
 
 #include "interface_border.h"
+#include "resource.h"
 #include "timing.h"
 
 namespace Interface
@@ -43,27 +44,45 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow final : public BorderWindow
+    class StatusPanel final : public BorderWindow
     {
     public:
-        explicit StatusWindow( BaseInterface & interface );
-        StatusWindow( const StatusWindow & ) = delete;
+        explicit StatusPanel( BaseInterface & interface )
+            : BorderWindow( { 0, 0, 144, 72 } )
+            , _interface( interface )
+        {
+            // Do nothing.
+        }
 
-        ~StatusWindow() override = default;
+        StatusPanel( const StatusPanel & ) = delete;
 
-        StatusWindow & operator=( const StatusWindow & ) = delete;
+        ~StatusPanel() override = default;
 
-        void SetPos( int32_t ox, int32_t oy ) override;
+        StatusPanel & operator=( const StatusPanel & ) = delete;
+
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
-        void SetRedraw() const;
+        void setRedraw() const;
 
-        void Reset();
+        void Reset()
+        {
+            _state = StatusType::STATUS_DAY;
+            _lastResource = Resource::UNKNOWN;
+            _lastResourceCount = 0;
+        }
 
         void NextState();
 
         void SetState( const StatusType status );
-        void SetResource( int, uint32_t );
-        void DrawAITurnProgress( const uint32_t progressValue );
+        void SetResource( const int resource, const uint32_t count );
+        void drawAITurnProgress( const uint32_t progressValue );
+
+        void resetAITurnProgress()
+        {
+            // We set _aiTurnProgress equal to 10 to properly handle the first draw call for the '0' progress.
+            _aiTurnProgress = 10;
+        }
+
         void QueueEventProcessing();
         void TimerEventProcessing();
 
@@ -72,21 +91,22 @@ namespace Interface
         void _redraw() const;
 
     private:
-        void DrawKingdomInfo( int oh = 0 ) const;
-        void DrawDayInfo( int oh = 0 ) const;
-        void DrawArmyInfo( int oh = 0 ) const;
-        void DrawResourceInfo( int oh = 0 ) const;
-        void DrawBackground() const;
-        void DrawAITurns() const;
+        void _drawKingdomInfo( const int32_t offsetY = 0 ) const;
+        void _drawDayInfo( const int32_t offsetY = 0 ) const;
+        void _drawArmyInfo( const int32_t offsetY = 0 ) const;
+        void _drawResourceInfo( const int32_t offsetY = 0 ) const;
+        void _drawBackground() const;
+        void _drawAITurns() const;
+
+        fheroes2::TimeDelay _showLastResourceDelay{ 2500 };
 
         BaseInterface & _interface;
 
-        StatusType _state;
-        int lastResource;
-        uint32_t countLastResource;
-        uint32_t turn_progress;
-
-        fheroes2::TimeDelay showLastResourceDelay;
+        StatusType _state{ StatusType::STATUS_UNKNOWN };
+        int _lastResource{ Resource::UNKNOWN };
+        uint32_t _lastResourceCount{ 0 };
+        uint32_t _aiTurnProgress{ 10 };
+        uint32_t _grainsAnimationIndexOffset{ 0 };
     };
 }
 

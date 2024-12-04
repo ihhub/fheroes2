@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_GAMEAREA_H
-#define H2INTERFACE_GAMEAREA_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -55,6 +54,8 @@ namespace Interface
         LEVEL_FOG = 0x02,
         LEVEL_ROUTES = 0x04,
         LEVEL_TOWNS = 0x08, // this level is used only for View All / View Towns spells.
+
+        LEVEL_PASSABILITIES = 0x10, // this level is used only by the Editor.
 
         LEVEL_ALL = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_FOG | LEVEL_ROUTES
     };
@@ -151,13 +152,6 @@ namespace Interface
     {
     public:
         explicit GameArea( BaseInterface & interface );
-        GameArea( const GameArea & ) = default;
-        GameArea( GameArea && ) = delete;
-
-        ~GameArea() = default;
-
-        GameArea & operator=( const GameArea & ) = delete;
-        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -186,7 +180,7 @@ namespace Interface
         }
 
         void Scroll();
-        void SetScroll( int );
+        void SetScroll( const int direction );
 
         void SetCenter( const fheroes2::Point & point )
         {
@@ -204,7 +198,7 @@ namespace Interface
         // Interface::BaseInterface::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const;
+        void renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const;
 
         void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
@@ -222,17 +216,12 @@ namespace Interface
         // Update fog directions data for entire map tiles by checking fog data for current player and its allies.
         static void updateMapFogDirections();
 
-        void QueueEventProcessing( bool isCursorOverGamearea );
+        void QueueEventProcessing();
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
         int32_t GetValidTileIdFromPoint( const fheroes2::Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         fheroes2::Point GetRelativeTilePosition( const fheroes2::Point & tileId ) const; // in relation to screen
-
-        void ResetCursorPosition()
-        {
-            _prevIndexPos = -1;
-        }
 
         void SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h );
 
@@ -271,6 +260,11 @@ namespace Interface
         void setFastScrollStatus( const bool enable );
 
         bool mouseIndicatesFastScroll( const fheroes2::Point & mousePosition );
+
+        fheroes2::Point getInternalPosition( const fheroes2::Point & position ) const
+        {
+            return _topLeftTileOffset + position - _windowROI.getPosition();
+        }
 
     private:
         BaseInterface & _interface;
@@ -316,5 +310,3 @@ namespace Interface
         void updateObjectAnimationInfo() const;
     };
 }
-
-#endif

@@ -22,11 +22,19 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
-#include <functional>
 #include <memory>
 #include <ostream>
 #include <string_view>
 #include <vector>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
 
 #include <SDL_error.h>
 #include <SDL_pixels.h>
@@ -35,13 +43,19 @@
 #include <SDL_version.h>
 
 #if defined( WITH_IMAGE )
-#define ENABLE_PNG
 #include <SDL_image.h>
 #endif
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
+#include "agg_file.h"
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
+#include "system.h"
 
 namespace
 {
@@ -63,7 +77,7 @@ namespace
         return palette;
     }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
 #else
     bool SaveImage( const fheroes2::Image & image, std::string path )
@@ -75,8 +89,8 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
-        if ( surface == nullptr ) {
+        const std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 ), SDL_FreeSurface );
+        if ( !surface ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
         }
@@ -108,23 +122,22 @@ namespace
             memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height ) );
         }
 
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         int res = 0;
+
         if ( isPNGFilePath( path ) ) {
-            res = IMG_SavePNG( surface, path.c_str() );
+            res = IMG_SavePNG( surface.get(), System::encLocalToUTF8( path ).c_str() );
         }
         else {
-            res = SDL_SaveBMP( surface, path.c_str() );
+            res = SDL_SaveBMP( surface.get(), System::encLocalToUTF8( path ).c_str() );
         }
 #else
         if ( isPNGFilePath( path ) ) {
             memcpy( path.data() + path.size() - 3, "bmp", 3 );
         }
 
-        const int res = SDL_SaveBMP( surface, path.c_str() );
+        const int res = SDL_SaveBMP( surface.get(), System::encLocalToUTF8( path ).c_str() );
 #endif
-
-        SDL_FreeSurface( surface );
 
         return res == 0;
     }
@@ -161,13 +174,13 @@ namespace fheroes2
             return false;
         }
 
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
-        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
 
-#if defined( ENABLE_PNG )
-        loadedSurface.reset( IMG_Load( path.c_str() ) );
+#if defined( WITH_IMAGE )
+        loadedSurface.reset( IMG_Load( System::encLocalToUTF8( path ).c_str() ) );
 #else
-        loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
+        loadedSurface.reset( SDL_LoadBMP( System::encLocalToUTF8( path ).c_str() ) );
 #endif
         if ( !loadedSurface ) {
             return false;
@@ -180,7 +193,7 @@ namespace fheroes2
 
         // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
         // processing
-        const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+        const std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
         if ( !pixelFormat ) {
             return false;
         }
@@ -195,7 +208,7 @@ namespace fheroes2
         image.resize( surface->w, surface->h );
         image.reset();
 
-        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        const uint8_t * inY = static_cast<uint8_t *>( surface->pixels );
         uint8_t * outY = image.image();
         uint8_t * transformY = image.transform();
 
@@ -233,101 +246,156 @@ namespace fheroes2
         return true;
     }
 
-    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    Sprite decodeICNSprite( const uint8_t * data, const uint8_t * dataEnd, const ICNHeader & icnHeader )
     {
-        Sprite sprite( width, height, offsetX, offsetY );
+        Sprite sprite( icnHeader.width, icnHeader.height, icnHeader.offsetX, icnHeader.offsetY );
         sprite.reset();
 
-        uint8_t * imageData = sprite.image();
         uint8_t * imageTransform = sprite.transform();
 
         uint32_t posX = 0;
 
-        const uint8_t * dataEnd = data + sizeData;
-
         // The need for a transform layer can only be determined during ICN decoding.
         bool noTransformLayer = true;
 
-        while ( true ) {
-            if ( 0 == *data ) { // 0x00 - end of row
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+        // When the 6th bit in animationFrames is set then it is Monochromatic ICN image.
+        const bool isMonochromatic = ( icnHeader.animationFrames & 0x20 );
 
-                imageData += width;
-                imageTransform += width;
-                posX = 0;
-                ++data;
-            }
-            else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                const uint8_t pixelCount = *data;
-                ++data;
+        if ( isMonochromatic ) {
+            while ( data < dataEnd ) {
+                if ( *data == 0 ) {
+                    // 0x00 - end of row reached, go to the first pixel of next row.
 
-                if ( data + pixelCount > dataEnd ) {
-                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
+
+                    imageTransform += icnHeader.width;
+                    posX = 0;
+                    ++data;
+                }
+                else if ( *data < 0x80 ) {
+                    // 0x01-0x7F - number of black pixels.
+                    // Image data is all already set to 0. Just set transform layer to 0.
+
+                    const uint8_t pixelCount = *data;
+
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                    ++data;
+                    posX += pixelCount;
+                }
+                else if ( *data == 0x80 ) {
+                    // 0x80 - end of image.
+
                     break;
                 }
+                else {
+                    // 0x81 to 0xFF - number of empty (transparent) pixels + 0x80.
+                    // The (n - 128) pixels are transparent.
 
-                memcpy( imageData + posX, data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                    noTransformLayer = false;
 
-                data += pixelCount;
-                posX += pixelCount;
-            }
-            else if ( 0x80 == *data ) { // 0x80 - end of image
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
-
-                break;
-            }
-            else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
-                noTransformLayer = false;
-
-                posX += *data - 0x80;
-                ++data;
-            }
-            else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                noTransformLayer = false;
-
-                ++data;
-
-                const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
-
-                const uint32_t countValue = transformValue & 0x03;
-                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
-
-                if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    memset( imageTransform + posX, transformType, pixelCount );
+                    posX += *data - 0x80;
+                    ++data;
                 }
-
-                posX += pixelCount;
-
-                ++data;
             }
-            else if ( 0xC1 == *data ) { // 0xC1
-                ++data;
-                const uint32_t pixelCount = *data;
-                ++data;
+        }
+        else {
+            uint8_t * imageData = sprite.image();
 
-                memset( imageData + posX, *data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+            while ( data < dataEnd ) {
+                if ( *data == 0 ) {
+                    // 0x00 - end of row reached, go to the first pixel of next row.
+                    // All of remaining pixels of current line are transparent.
 
-                posX += pixelCount;
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
 
-                ++data;
-            }
-            else {
-                const uint32_t pixelCount = *data - 0xC0;
-                ++data;
+                    imageData += icnHeader.width;
+                    imageTransform += icnHeader.width;
+                    posX = 0;
+                    ++data;
+                }
+                else if ( *data < 0x80 ) {
+                    // 0x01-0x7F - number N of sprite pixels.
+                    // The next N bytes are the colors of the next N pixels.
 
-                memset( imageData + posX, *data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                    const uint8_t pixelCount = *data;
+                    ++data;
 
-                posX += pixelCount;
+                    if ( data + pixelCount > dataEnd ) {
+                        // Image data is corrupted - we can not read data beyond dataEnd.
+                        break;
+                    }
 
-                ++data;
-            }
+                    memcpy( imageData + posX, data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
 
-            if ( data >= dataEnd ) {
-                break;
+                    data += pixelCount;
+                    posX += pixelCount;
+                }
+                else if ( *data == 0x80 ) {
+                    // 0x80 - end of image
+
+                    noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= icnHeader.width );
+
+                    break;
+                }
+                else if ( *data < 0xC0 ) {
+                    // 0x81 to 0xBF - number of empty (transparent) pixels + 0x80. The (n - 128) pixels are transparent.
+
+                    noTransformLayer = false;
+
+                    posX += *data - 0x80;
+                    ++data;
+                }
+                else if ( *data == 0xC0 ) {
+                    // 0xC0 - put here N transform layer pixels.
+                    // If the next byte modulo 4 is not null, N equals the next byte modulo 4,
+                    // otherwise N equals the second next byte.
+
+                    noTransformLayer = false;
+
+                    ++data;
+
+                    const uint8_t transformValue = *data;
+
+                    const uint32_t countValue = transformValue & 0x03;
+                    const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
+
+                    if ( transformValue & 0x40 ) {
+                        // Transform layer data types:
+                        // 0 - no transparency,
+                        // 1 - full transparency (to skip image data),
+                        // from 5 (light) to 2 (strong) - for darkening,
+                        // from 10 (light) to 6 (strong) - for lightening
+                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 );
+
+                        if ( transformType < 16 ) {
+                            memset( imageTransform + posX, transformType, pixelCount );
+                        }
+                    }
+
+                    // TODO: Use ( transformValue & 0x80 ) to detect and store shining contour data bit.
+                    // It is used for units on the Battlefield and for icons in the View World.
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else {
+                    // 0xC1 - next byte stores the number of next pixels of same color, or
+                    // 0xC2 to 0xFF - the number of pixels of same color plus 0xC0.
+                    // Next byte is the color of these pixels.
+
+                    const uint32_t pixelCount = ( *data == 0xC1 ) ? *( ++data ) : *data - 0xC0;
+                    ++data;
+
+                    memset( imageData + posX, *data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
             }
         }
 
@@ -356,7 +424,7 @@ namespace fheroes2
 
     bool isPNGFormatSupported()
     {
-#if defined( ENABLE_PNG )
+#if defined( WITH_IMAGE )
         return true;
 #else
         return false;

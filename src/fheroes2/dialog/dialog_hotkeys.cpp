@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -41,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -59,7 +61,7 @@ namespace
             , _key( key )
         {
             // Text always occupies the whole width of the dialog.
-            _area = { BOXAREA_WIDTH, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
+            _area = { fheroes2::boxAreaWidthPx, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
         }
 
         ~HotKeyElement() override = default;
@@ -72,16 +74,16 @@ namespace
             text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
 
-            _restorer.update( offset.x, offset.y, BOXAREA_WIDTH, text.height() );
+            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height() );
 
-            text.draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+            text.draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
         }
 
         void processEvents( const fheroes2::Point & /*offset*/ ) const override
         {
             const LocalEvent & le = LocalEvent::Get();
-            if ( le.KeyPress() ) {
-                _key = le.KeyValue();
+            if ( le.isAnyKeyPressed() ) {
+                _key = le.getPressedKeyValue();
                 _keyChanged = true;
             }
         }
@@ -298,7 +300,7 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
             listbox.QueueEventProcessing();
 
@@ -306,10 +308,8 @@ namespace fheroes2
                 return;
             }
 
-            if ( le.MousePressRight( buttonOk.area() ) ) {
-                const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
 
                 continue;
             }

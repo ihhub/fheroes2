@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,10 +22,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <iostream>
 #include <optional>
-#include <sstream>
 #include <string>
 #include <system_error>
 #include <vector>
@@ -42,10 +41,10 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts various data from monster animation files." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.bin ..." << std::endl;
+        std::cerr << toolName << " extracts various data from monster animation files." << std::endl
+                  << "Syntax: " << toolName << " dst_dir input_file.bin ..." << std::endl;
         return EXIT_FAILURE;
     }
 

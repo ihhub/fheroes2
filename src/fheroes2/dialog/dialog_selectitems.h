@@ -25,23 +25,93 @@
 #define H2EDITOR_DIALOGS_H
 
 #include <cstdint>
+#include <memory>
 #include <string>
 
 #include "artifact.h"
 #include "heroes.h"
+#include "image.h"
+#include "interface_list.h"
+#include "math_base.h"
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
+#include "ui_button.h"
+#include "ui_window.h"
 
 class Kingdom;
 
 namespace Dialog
 {
+    class ItemSelectionWindow : public Interface::ListBox<int>
+    {
+    public:
+        using Interface::ListBox<int>::ActionListDoubleClick;
+        using Interface::ListBox<int>::ActionListSingleClick;
+        using Interface::ListBox<int>::ActionListPressRight;
+
+        ItemSelectionWindow() = delete;
+
+        explicit ItemSelectionWindow( const fheroes2::Size & dialogSize, std::string title, std::string description = {} );
+
+        void RedrawBackground( const fheroes2::Point & /* unused */ ) override
+        {
+            _backgroundRestorer->restore();
+        }
+
+        void ActionListDoubleClick( int & /* unused */ ) override
+        {
+            _isDoubleClicked = true;
+        }
+
+        void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( int & /* unused */ ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( int & /* unused */ ) override
+        {
+            // Do nothing.
+        }
+
+        void updateScrollBarImage();
+
+        // An image with text should have offset of 10 pixels from all left and right edges.
+        void renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
+                         const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
+
+        int32_t selectItemsEventProcessing();
+
+        fheroes2::Rect getBackgroundArea() const;
+
+    private:
+        bool _isDoubleClicked{ false };
+        std::unique_ptr<fheroes2::StandardWindow> _window;
+        std::unique_ptr<fheroes2::ImageRestorer> _backgroundRestorer;
+        fheroes2::Button _buttonOk;
+        fheroes2::Button _buttonCancel;
+    };
+
     Monster selectMonster( const int monsterId );
 
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId );
+    Artifact selectArtifact( const int artifactId, const bool isForVictoryConditions );
 
     Spell selectSpell( const int spellId, const bool includeRandomSpells );
 

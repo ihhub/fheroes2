@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_TROOP_H
-#define H2BATTLE_TROOP_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -74,8 +73,11 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
+        Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid );
+
         Unit( const Unit & ) = delete;
+
+        ~Unit() override = default;
 
         Unit & operator=( const Unit & ) = delete;
 
@@ -147,12 +149,7 @@ namespace Battle
 
         int GetArmyColor() const
         {
-            return ArmyTroop::GetColor();
-        }
-
-        int GetColor() const override
-        {
-            return GetArmyColor();
+            return GetColor();
         }
 
         // Returns the current color of the unit according to its current combat state (the unit
@@ -302,7 +299,7 @@ namespace Battle
 
     private:
         uint32_t ApplyDamage( const uint32_t dmg );
-        uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
+        uint32_t Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
 
         // Applies a damage-causing spell to this unit
         void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target );
@@ -323,7 +320,7 @@ namespace Battle
         uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
-        uint32_t disruptingray;
+        uint32_t _disruptingRaysNum;
         bool reflect;
 
         Position position;
@@ -337,5 +334,3 @@ namespace Battle
         uint8_t customAlphaMask;
     };
 }
-
-#endif

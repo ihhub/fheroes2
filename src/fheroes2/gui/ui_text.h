@@ -20,8 +20,12 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <string_view>
+#include <utility>
 #include <vector>
 
 #include "image.h"
@@ -29,6 +33,8 @@
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     enum class FontSize : uint8_t
     {
         SMALL,
@@ -43,7 +49,9 @@ namespace fheroes2
     {
         WHITE,
         GRAY,
-        YELLOW
+        YELLOW,
+        GOLDEN_GRADIENT,
+        SILVER_GRADIENT,
     };
 
     struct FontType
@@ -130,7 +138,7 @@ namespace fheroes2
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
-        // Returns full text. Multi-text class cannot return by reference hence returning by value .
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
 
         void setUniformVerticalAlignment( const bool isUniform )
@@ -138,17 +146,38 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
+        const std::optional<SupportedLanguage> & getLanguage() const
+        {
+            return _language;
+        }
+
     protected:
         bool _isUniformedVerticalAlignment{ true };
+
+        std::optional<SupportedLanguage> _language;
     };
 
-    class Text : public TextBase
+    class Text final : public TextBase
     {
     public:
         friend class MultiFontText;
 
         Text() = default;
-        Text( std::string text, const FontType fontType );
+
+        Text( std::string text, const FontType fontType )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            // Do nothing.
+        }
+
+        Text( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            _language = language;
+        }
+
         Text( const Text & text ) = default;
         Text( Text && text ) = default;
         Text & operator=( const Text & text ) = default;
@@ -167,14 +196,38 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _text.empty();
+        }
 
-        void set( std::string text, const FontType fontType );
+        void set( std::string text, const FontType fontType )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+            _language = std::nullopt;
+        }
+
+        void set( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+            _language = language;
+        }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        void fitToOneRow( const int32_t maxWidth );
+        // By default it ignores spaces at the end of the text phrase.
+        void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        std::string text() const override;
+        std::string text() const override
+        {
+            return _text;
+        }
+
+        FontType getFontType() const
+        {
+            return _fontType;
+        }
 
     private:
         std::string _text;
@@ -182,7 +235,7 @@ namespace fheroes2
         FontType _fontType;
     };
 
-    class MultiFontText : public TextBase
+    class MultiFontText final : public TextBase
     {
     public:
         MultiFontText() = default;
@@ -201,7 +254,10 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _texts.empty();
+        }
 
         std::string text() const override;
 
@@ -209,6 +265,37 @@ namespace fheroes2
         std::vector<Text> _texts;
     };
 
+    class FontCharHandler
+    {
+    public:
+        explicit FontCharHandler( const FontType fontType );
+
+        // Returns true if character is available to render, including space (' ') and new line ('\n').
+        bool isAvailable( const uint8_t character ) const;
+
+        const Sprite & getSprite( const uint8_t character ) const;
+
+        int32_t getWidth( const uint8_t character ) const;
+
+        int32_t getSpaceCharWidth() const
+        {
+            return _spaceCharWidth;
+        }
+
+    private:
+        // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
+        bool _isValid( const uint8_t character ) const;
+
+        int32_t _getSpaceCharWidth() const;
+
+        const FontType _fontType;
+        const uint32_t _charLimit;
+        const int32_t _spaceCharWidth;
+    };
+
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
-    bool isFontAvailable( const std::string & text, const FontType fontType );
+    bool isFontAvailable( const std::string_view text, const FontType fontType );
 }
