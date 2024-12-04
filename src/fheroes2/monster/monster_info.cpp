@@ -102,20 +102,18 @@ namespace
             monsterSpecial += 0.3;
         }
 
-        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
-
-        if ( foundAbility != abilities.end() ) {
+        if ( const auto abilityIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER ); abilityIter != abilities.end() ) {
             // This is a tricky evaluation. Spell casting ability depends on a type of spell and chance to inflict the spell.
-            switch ( foundAbility->value ) {
+            switch ( abilityIter->value ) {
             case Spell::PARALYZE:
             case Spell::BLIND:
             case Spell::PETRIFY:
-                monsterSpecial += foundAbility->percentage / 100.0;
+                monsterSpecial += abilityIter->percentage / 100.0;
                 break;
             case Spell::DISPEL:
             case Spell::CURSE:
                 // These spell are very weak and do not impact much during battle.
-                monsterSpecial += foundAbility->percentage / 100.0 / 10.0;
+                monsterSpecial += abilityIter->percentage / 100.0 / 10.0;
                 break;
             default:
                 // Did you add a new spell casting ability? Add the logic above!
@@ -890,71 +888,50 @@ namespace fheroes2
 
         Spell spell( spellId );
 
-        std::vector<MonsterAbility>::const_iterator foundAbility;
-
         if ( spell.isMindInfluence() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MIND_SPELL_IMMUNITY );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MIND_SPELL_IMMUNITY ) != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL ) != abilities.end() ) {
                 return 100;
             }
         }
 
-        if ( spell.isAliveOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isAliveOnly() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isUndeadOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
-            if ( foundAbility == abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isUndeadOnly() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) == abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isCold() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::COLD_SPELL_IMMUNITY );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isCold() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::COLD_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isFire() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::FIRE_SPELL_IMMUNITY );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isFire() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::FIRE_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isElementalSpell() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isElementalSpell() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
         uint32_t spellResistance = 0;
 
         // Find magic immunity for every spell.
-        foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MAGIC_RESISTANCE );
-        if ( foundAbility != abilities.end() ) {
-            if ( foundAbility->percentage == 100 ) {
+        if ( const auto abilityIter = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MAGIC_RESISTANCE ); abilityIter != abilities.end() ) {
+            if ( abilityIter->percentage == 100 ) {
                 // Immune to everything.
                 return 100;
             }
             if ( spell.isDamage() || spell.isApplyToEnemies() ) {
-                spellResistance = foundAbility->percentage;
+                spellResistance = abilityIter->percentage;
             }
         }
 
