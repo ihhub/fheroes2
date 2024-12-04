@@ -1382,23 +1382,24 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
 
         // Abilities
         //
-        if ( const auto certainSpellIter
+        if ( const auto certainSpellDmgRedIter
              = std::find( abilities.begin(), abilities.end(),
                           std::make_pair( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, static_cast<uint32_t>( spell.GetID() ) ) );
-             certainSpellIter != abilities.end() ) {
-            dmg = dmg * certainSpellIter->percentage / 100;
+             certainSpellDmgRedIter != abilities.end() ) {
+            dmg = dmg * certainSpellDmgRedIter->percentage / 100;
         }
-        else if ( const auto elementalSpellIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION );
-                  elementalSpellIter != abilities.end() && spell.isElementalSpell() ) {
-            dmg = dmg * elementalSpellIter->percentage / 100;
+        else if ( const auto elementalSpellDmgRedIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION );
+                  elementalSpellDmgRedIter != abilities.end() && spell.isElementalSpell() ) {
+            dmg = dmg * elementalSpellDmgRedIter->percentage / 100;
         }
         //
         // Weaknesses
         //
-        else if ( const auto iter = std::find( weaknesses.begin(), weaknesses.end(),
-                                               std::make_pair( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, static_cast<uint32_t>( spell.GetID() ) ) );
-                  iter != weaknesses.end() ) {
-            dmg = dmg * ( 100 + iter->percentage ) / 100;
+        else if ( const auto certainSpellExtraDmgIter
+                  = std::find( weaknesses.begin(), weaknesses.end(),
+                               std::make_pair( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, static_cast<uint32_t>( spell.GetID() ) ) );
+                  certainSpellExtraDmgIter != weaknesses.end() ) {
+            dmg = dmg * ( 100 + certainSpellExtraDmgIter->percentage ) / 100;
         }
         else if ( ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS ) && spell.isFire() )
                   || ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS ) && spell.isCold() ) ) {
