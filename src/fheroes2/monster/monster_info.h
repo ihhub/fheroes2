@@ -34,18 +34,18 @@ namespace fheroes2
 
     enum class MonsterAbilityType : int
     {
-        // Basic abilities.
+        // Basic abilities (usually not shown in the unit description).
         NONE,
         DOUBLE_HEX_SIZE,
         FLYING,
         DRAGON,
-        UNDEAD,
-        ELEMENTAL,
         EARTH_CREATURE,
         AIR_CREATURE,
         FIRE_CREATURE,
         WATER_CREATURE,
-        // Advanced abilities.
+        // Advanced abilities (shown in the unit description).
+        UNDEAD,
+        ELEMENTAL,
         DOUBLE_SHOOTING,
         DOUBLE_MELEE_ATTACK,
         DOUBLE_DAMAGE_TO_UNDEAD,
@@ -73,16 +73,16 @@ namespace fheroes2
 
     enum class MonsterWeaknessType : int
     {
-        // Basic weaknesses.
+        // Basic weaknesses (usually not shown in the unit description).
         NONE,
-        // Advanced weaknesses.
-        DOUBLE_DAMAGE_FROM_FIRE_SPELLS,
-        DOUBLE_DAMAGE_FROM_COLD_SPELLS,
-        EXTRA_DAMAGE_FROM_CERTAIN_SPELL,
         DOUBLE_DAMAGE_FROM_EARTH_CREATURES,
         DOUBLE_DAMAGE_FROM_AIR_CREATURES,
         DOUBLE_DAMAGE_FROM_FIRE_CREATURES,
-        DOUBLE_DAMAGE_FROM_WATER_CREATURES
+        DOUBLE_DAMAGE_FROM_WATER_CREATURES,
+        // Advanced weaknesses (shown in the unit description).
+        DOUBLE_DAMAGE_FROM_FIRE_SPELLS,
+        DOUBLE_DAMAGE_FROM_COLD_SPELLS,
+        EXTRA_DAMAGE_FROM_CERTAIN_SPELL
     };
 
     struct MonsterAbility
@@ -217,7 +217,7 @@ namespace fheroes2
     const MonsterData & getMonsterData( const int monsterId );
 
     std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbilities );
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbilities );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicWeaknesses );
 
     std::string getMonsterDescription( const int monsterId ); // To be utilized in future.
 

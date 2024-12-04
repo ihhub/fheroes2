@@ -717,11 +717,11 @@ namespace fheroes2
         return "";
     }
 
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbilities )
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicWeaknesses )
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return ignoreBasicAbilities ? "" : _( "None" );
+            return ignoreBasicWeaknesses ? "" : _( "None" );
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS:
             return _( "Double damage from Fire spells" );
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS:
@@ -732,13 +732,13 @@ namespace fheroes2
             return std::to_string( weakness.percentage + 100 ) + str;
         }
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES:
-            return ignoreBasicAbilities ? "" : _( "Double damage from Earth creatures" );
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Earth creatures" );
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES:
-            return ignoreBasicAbilities ? "" : _( "Double damage from Air creatures" );
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Air creatures" );
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES:
-            return ignoreBasicAbilities ? "" : _( "Double damage from Fire creatures" );
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Fire creatures" );
         case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES:
-            return ignoreBasicAbilities ? "" : _( "Double damage from Water creatures" );
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Water creatures" );
         default:
             break;
         }
