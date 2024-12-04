@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <functional>
 
 #include "army_troop.h"
 #include "artifact.h"
