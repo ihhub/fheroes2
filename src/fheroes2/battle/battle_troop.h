@@ -210,7 +210,7 @@ namespace Battle
         void PostAttackAction( const Unit & enemy );
 
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
-        void SetBlindRetaliation( bool value );
+        void SetBlindRetaliation( const bool value );
 
         uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                        const bool ignoreDefendingHero ) const;

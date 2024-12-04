@@ -1023,7 +1023,7 @@ void Battle::Unit::PostAttackAction( const Unit & enemy )
     ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
-void Battle::Unit::SetBlindRetaliation( bool value )
+void Battle::Unit::SetBlindRetaliation( const bool value )
 {
     _blindRetaliation = value;
 }
