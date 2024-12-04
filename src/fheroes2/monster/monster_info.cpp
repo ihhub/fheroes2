@@ -799,6 +799,27 @@ namespace fheroes2
     {
         std::vector<std::string> output;
 
+        const auto listSpells = []( const std::vector<int> & sortedSpells ) {
+            std::string result;
+
+            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                if ( i > 0 ) {
+                    result += ", ";
+                }
+
+                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                    result += _( "Lightning" );
+                }
+                else {
+                    result += Spell( sortedSpells[i] ).GetName();
+                }
+            }
+
+            result += '.';
+
+            return result;
+        };
+
         const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
 
         const std::vector<MonsterAbility> & abilities = battleStats.abilities;
@@ -827,58 +848,14 @@ namespace fheroes2
             for ( const auto & [percentage, spells] : immuneToSpells ) {
                 assert( !spells.empty() );
 
-                std::string temp;
-
-                if ( percentage == 100 ) {
-                    temp += _( "Immune to " );
-                }
-                else {
-                    temp += std::to_string( percentage ) + _( "% immunity to " );
-                }
-
-                const std::vector<int> sortedSpells = replaceMassSpells( spells );
-
-                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                    if ( i > 0 ) {
-                        temp += ", ";
-                    }
-
-                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                        temp += _( "Lightning" );
-                    }
-                    else {
-                        temp += Spell( sortedSpells[i] ).GetName();
-                    }
-                }
-
-                temp += '.';
-
-                output.emplace_back( std::move( temp ) );
+                output.emplace_back( ( percentage == 100 ? _( "Immune to " ) : std::to_string( percentage ) + _( "% immunity to " ) )
+                                     + listSpells( replaceMassSpells( spells ) ) );
             }
 
             for ( const auto & [percentage, spells] : reducedDamageFromSpells ) {
                 assert( !spells.empty() );
 
-                std::string temp = std::to_string( percentage ) + _( "% damage from " );
-
-                const std::vector<int> sortedSpells = replaceMassSpells( spells );
-
-                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                    if ( i > 0 ) {
-                        temp += ", ";
-                    }
-
-                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                        temp += _( "Lightning" );
-                    }
-                    else {
-                        temp += Spell( sortedSpells[i] ).GetName();
-                    }
-                }
-
-                temp += '.';
-
-                output.emplace_back( std::move( temp ) );
+                output.emplace_back( std::to_string( percentage ) + _( "% damage from " ) + listSpells( replaceMassSpells( spells ) ) );
             }
         }
 
@@ -901,26 +878,7 @@ namespace fheroes2
             for ( const auto & [percentage, spells] : extraDamageFromSpells ) {
                 assert( !spells.empty() );
 
-                std::string temp = std::to_string( percentage + 100 ) + _( "% damage from " );
-
-                const std::vector<int> sortedSpells = replaceMassSpells( spells );
-
-                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                    if ( i > 0 ) {
-                        temp += ", ";
-                    }
-
-                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                        temp += _( "Lightning" );
-                    }
-                    else {
-                        temp += Spell( sortedSpells[i] ).GetName();
-                    }
-                }
-
-                temp += '.';
-
-                output.emplace_back( std::move( temp ) );
+                output.emplace_back( std::to_string( percentage + 100 ) + _( "% damage from " ) + listSpells( replaceMassSpells( spells ) ) );
             }
         }
 
