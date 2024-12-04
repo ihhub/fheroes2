@@ -58,11 +58,13 @@ namespace
 
     bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Spell & spell )
     {
-        if ( unit.isImmovable() && spell.GetID() != Spell::ANTIMAGIC ) {
+        const int spellID = spell.GetID();
+
+        if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
             return true;
         }
 
-        switch ( spell.GetID() ) {
+        switch ( spellID ) {
         case Spell::BLESS:
         case Spell::MASSBLESS:
             return unit.Modes( Battle::SP_BLESS );
