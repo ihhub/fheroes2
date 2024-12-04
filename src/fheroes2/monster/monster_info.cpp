@@ -803,87 +803,125 @@ namespace fheroes2
 
         const std::vector<MonsterAbility> & abilities = battleStats.abilities;
 
-        std::map<uint32_t, std::vector<int>> immuneToSpells;
-        for ( const MonsterAbility & ability : abilities ) {
-            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
-                immuneToSpells[ability.percentage].emplace_back( ability.value );
-                continue;
-            }
-            const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
-            if ( !abilityDescription.empty() ) {
-                output.emplace_back( abilityDescription + '.' );
-            }
-        }
+        {
+            std::map<uint32_t, std::vector<int>> immuneToSpells;
+            std::map<uint32_t, std::vector<int>> reducedDamageFromSpells;
 
-        for ( auto spellInfoIter = immuneToSpells.begin(); spellInfoIter != immuneToSpells.end(); ++spellInfoIter ) {
-            assert( !spellInfoIter->second.empty() );
-
-            std::string temp;
-
-            if ( spellInfoIter->first == 100 ) {
-                temp += _( "Immune to " );
-            }
-            else {
-                temp += std::to_string( spellInfoIter->first ) + _( "% immunity to " );
-            }
-
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
-
-            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                if ( i > 0 ) {
-                    temp += ", ";
+            for ( const MonsterAbility & ability : abilities ) {
+                if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
+                    immuneToSpells[ability.percentage].emplace_back( ability.value );
+                    continue;
                 }
 
-                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += _( "Lightning" );
+                if ( ability.type == MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION ) {
+                    reducedDamageFromSpells[ability.percentage].emplace_back( ability.value );
+                    continue;
+                }
+
+                const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
+                if ( !abilityDescription.empty() ) {
+                    output.emplace_back( abilityDescription + '.' );
+                }
+            }
+
+            for ( const auto & [percentage, spells] : immuneToSpells ) {
+                assert( !spells.empty() );
+
+                std::string temp;
+
+                if ( percentage == 100 ) {
+                    temp += _( "Immune to " );
                 }
                 else {
-                    temp += Spell( sortedSpells[i] ).GetName();
+                    temp += std::to_string( percentage ) + _( "% immunity to " );
                 }
+
+                const std::vector<int> sortedSpells = replaceMassSpells( spells );
+
+                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                    if ( i > 0 ) {
+                        temp += ", ";
+                    }
+
+                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                        temp += _( "Lightning" );
+                    }
+                    else {
+                        temp += Spell( sortedSpells[i] ).GetName();
+                    }
+                }
+
+                temp += '.';
+
+                output.emplace_back( std::move( temp ) );
             }
 
-            temp += '.';
-            output.emplace_back( std::move( temp ) );
+            for ( const auto & [percentage, spells] : reducedDamageFromSpells ) {
+                assert( !spells.empty() );
+
+                std::string temp = std::to_string( percentage ) + _( "% damage from " );
+
+                const std::vector<int> sortedSpells = replaceMassSpells( spells );
+
+                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                    if ( i > 0 ) {
+                        temp += ", ";
+                    }
+
+                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                        temp += _( "Lightning" );
+                    }
+                    else {
+                        temp += Spell( sortedSpells[i] ).GetName();
+                    }
+                }
+
+                temp += '.';
+
+                output.emplace_back( std::move( temp ) );
+            }
         }
 
-        std::map<uint32_t, std::vector<int>> extraDamageSpells;
-        const std::vector<MonsterWeakness> & weaknesses = battleStats.weaknesses;
-        for ( const MonsterWeakness & weakness : weaknesses ) {
-            if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
-                extraDamageSpells[weakness.percentage].emplace_back( weakness.value );
-                continue;
-            }
+        {
+            std::map<uint32_t, std::vector<int>> extraDamageFromSpells;
 
-            const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
-            if ( !weaknessDescription.empty() ) {
-                output.emplace_back( weaknessDescription + '.' );
-            }
-        }
-
-        for ( auto spellInfoIter = extraDamageSpells.begin(); spellInfoIter != extraDamageSpells.end(); ++spellInfoIter ) {
-            assert( !spellInfoIter->second.empty() );
-
-            std::string temp;
-
-            temp += std::to_string( spellInfoIter->first + 100 ) + _( "% damage from " );
-
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
-
-            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                if ( i > 0 ) {
-                    temp += ", ";
+            const std::vector<MonsterWeakness> & weaknesses = battleStats.weaknesses;
+            for ( const MonsterWeakness & weakness : weaknesses ) {
+                if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
+                    extraDamageFromSpells[weakness.percentage].emplace_back( weakness.value );
+                    continue;
                 }
 
-                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += _( "Lightning" );
-                }
-                else {
-                    temp += Spell( sortedSpells[i] ).GetName();
+                const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
+                if ( !weaknessDescription.empty() ) {
+                    output.emplace_back( weaknessDescription + '.' );
                 }
             }
 
-            temp += '.';
-            output.emplace_back( std::move( temp ) );
+            for ( const auto & [percentage, spells] : extraDamageFromSpells ) {
+                assert( !spells.empty() );
+
+                std::string temp = std::to_string( percentage + 100 ) + _( "% damage from " );
+
+                const std::vector<int> sortedSpells = replaceMassSpells( spells );
+
+                for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                    if ( i > 0 ) {
+                        temp += ", ";
+                    }
+
+                    if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                        temp += _( "Lightning" );
+                    }
+                    else {
+                        temp += Spell( sortedSpells[i] ).GetName();
+                    }
+                }
+
+                temp += '.';
+
+                output.emplace_back( std::move( temp ) );
+            }
         }
 
         return output;
