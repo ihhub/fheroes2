@@ -577,23 +577,15 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     }
 
     // If multiple options are suitable at the same time, the damage should be doubled only once
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) ) {
-        dmg *= 2;
-    }
-    else if ( isAbilityPresent( fheroes2::MonsterAbilityType::EARTH_CREATURE )
-              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES ) ) {
-        dmg *= 2;
-    }
-    else if ( isAbilityPresent( fheroes2::MonsterAbilityType::AIR_CREATURE )
-              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES ) ) {
-        dmg *= 2;
-    }
-    else if ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_CREATURE )
-              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES ) ) {
-        dmg *= 2;
-    }
-    else if ( isAbilityPresent( fheroes2::MonsterAbilityType::WATER_CREATURE )
-              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES ) ) {
+    if ( ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::EARTH_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::AIR_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::WATER_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES ) ) ) {
         dmg *= 2;
     }
 
