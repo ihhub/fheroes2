@@ -103,7 +103,7 @@ namespace
             monsterSpecial += 0.3;
         }
 
-        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
 
         if ( foundAbility != abilities.end() ) {
             // This is a tricky evaluation. Spell casting ability depends on a type of spell and chance to inflict the spell.
@@ -898,52 +898,52 @@ namespace fheroes2
         std::vector<MonsterAbility>::const_iterator foundAbility;
 
         if ( spell.isMindInfluence() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MIND_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MIND_SPELL_IMMUNITY );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isAliveOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isUndeadOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD );
             if ( foundAbility == abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isCold() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::COLD_SPELL_IMMUNITY );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isFire() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::FIRE_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::FIRE_SPELL_IMMUNITY );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
 
         if ( spell.isElementalSpell() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
+            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
@@ -952,7 +952,7 @@ namespace fheroes2
         uint32_t spellResistance = 0;
 
         // Find magic immunity for every spell.
-        foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MAGIC_RESISTANCE ) );
+        foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MAGIC_RESISTANCE );
         if ( foundAbility != abilities.end() ) {
             if ( foundAbility->percentage == 100 ) {
                 // Immune to everything.
@@ -974,11 +974,11 @@ namespace fheroes2
 
     bool isAbilityPresent( const std::vector<MonsterAbility> & abilities, const MonsterAbilityType abilityType )
     {
-        return std::find( abilities.begin(), abilities.end(), MonsterAbility( abilityType ) ) != abilities.end();
+        return std::find( abilities.begin(), abilities.end(), abilityType ) != abilities.end();
     }
 
     bool isWeaknessPresent( const std::vector<MonsterWeakness> & weaknesses, const MonsterWeaknessType weaknessType )
     {
-        return std::find( weaknesses.begin(), weaknesses.end(), MonsterWeakness( weaknessType ) ) != weaknesses.end();
+        return std::find( weaknesses.begin(), weaknesses.end(), weaknessType ) != weaknesses.end();
     }
 }

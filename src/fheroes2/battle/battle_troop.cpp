@@ -1178,9 +1178,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
     {
         const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-        const auto spellCasterAbilityIter
-            = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-        if ( spellCasterAbilityIter != attackerAbilities.end() ) {
+        if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+             abilityIter != attackerAbilities.end() ) {
             const auto getDefenderDamage = [&defender]() {
                 if ( defender.Modes( SP_CURSE ) ) {
                     return defender.GetDamageMin();
@@ -1193,14 +1192,14 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
                 return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
             };
 
-            switch ( spellCasterAbilityIter->value ) {
+            switch ( abilityIter->value ) {
             case Spell::BLIND:
             case Spell::PARALYZE:
             case Spell::PETRIFY:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0;
+                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0;
                 }
                 break;
             case Spell::DISPEL:
@@ -1209,8 +1208,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             case Spell::CURSE:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0;
+                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0 / 10.0;
                 }
                 break;
             default:
@@ -1637,18 +1636,19 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
 int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
-    const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-    if ( foundAbility == abilities.end() ) {
+
+    const auto abilityIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+    if ( abilityIter == abilities.end() ) {
         // Not a spell caster.
         return Spell::NONE;
     }
 
-    if ( randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( randomGenerator.Get( 1, 100 ) > abilityIter->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
 
-    return foundAbility->value;
+    return abilityIter->value;
 }
 
 bool Battle::Unit::isHaveDamage() const

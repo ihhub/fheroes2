@@ -103,9 +103,9 @@ namespace fheroes2
             // Do nothing.
         }
 
-        bool operator==( const MonsterAbility & another ) const
+        bool operator==( const MonsterAbilityType anotherType ) const
         {
-            return type == another.type;
+            return type == anotherType;
         }
 
         MonsterAbilityType type;
@@ -138,9 +138,9 @@ namespace fheroes2
             return type < another.type || ( type == another.type && value < another.value );
         }
 
-        bool operator==( const MonsterWeakness & another ) const
+        bool operator==( const MonsterWeaknessType anotherType ) const
         {
-            return type == another.type;
+            return type == anotherType;
         }
 
         MonsterWeaknessType type;
