@@ -55,6 +55,66 @@ namespace
 
         return result;
     }
+
+    bool isUnitUnderSpellEffect( const Battle::Unit & unit, const Spell & spell )
+    {
+        switch ( spell.GetID() ) {
+        case Spell::BLESS:
+        case Spell::MASSBLESS:
+            return unit.Modes( Battle::SP_BLESS );
+
+        case Spell::BLOODLUST:
+            return unit.Modes( Battle::SP_BLOODLUST );
+
+        case Spell::CURSE:
+        case Spell::MASSCURSE:
+            return unit.Modes( Battle::SP_CURSE );
+
+        case Spell::HASTE:
+        case Spell::MASSHASTE:
+            return unit.Modes( Battle::SP_HASTE );
+
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
+            return unit.Modes( Battle::SP_SHIELD );
+
+        case Spell::SLOW:
+        case Spell::MASSSLOW:
+            return unit.Modes( Battle::SP_SLOW );
+
+        case Spell::STONESKIN:
+        case Spell::STEELSKIN:
+            return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
+
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::PETRIFY:
+            return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
+
+        case Spell::DRAGONSLAYER:
+            return unit.Modes( Battle::SP_DRAGONSLAYER );
+
+        case Spell::ANTIMAGIC:
+            return unit.Modes( Battle::SP_ANTIMAGIC );
+
+        case Spell::BERSERKER:
+            return unit.Modes( Battle::SP_BERSERKER );
+
+        case Spell::HYPNOTIZE:
+            return unit.Modes( Battle::SP_HYPNOTIZE );
+
+        case Spell::MIRRORIMAGE:
+            return unit.Modes( Battle::CAP_MIRROROWNER );
+
+        case Spell::DISRUPTINGRAY:
+            return unit.GetDefense() < spell.ExtraValue();
+
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
@@ -330,7 +390,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
 
     // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
     if ( !forDispel
-         && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
+         && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || isUnitUnderSpellEffect( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
 
