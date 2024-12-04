@@ -316,7 +316,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
                 adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
             }
             else if ( it != myCastles.end() ) {
-                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).getHero();
+                Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
                 if ( heroInCastle == nullptr ) {
                     adventureMapInterface.SetFocus( *it );
                 }
@@ -440,9 +440,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     }
 }
 
-int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tile & tile )
 {
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * otherCastle = world.getCastle( tile.GetCenter() );
@@ -471,17 +471,17 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
     return Cursor::POINTER;
 }
 
-int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tile & tile )
 {
     const bool isWater = tile.isWater();
 
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+            if ( tile.getMainObjectType() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -526,7 +526,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
 
     default:
         if ( isWater ) {
-            if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
+            if ( MP2::isWaterActionObject( tile.getMainObjectType() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -541,9 +541,9 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     return Cursor::POINTER;
 }
 
-int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
+int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tile & tile )
 {
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
@@ -566,7 +566,7 @@ int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
     return Cursor::POINTER;
 }
 
-int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tile & tile )
 {
     if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
@@ -576,13 +576,13 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return GetCursorFocusShipmaster( hero, tile );
     }
 
-    switch ( tile.GetObject() ) {
+    switch ( tile.getMainObjectType() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
+            if ( tile.getMainObjectType() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
@@ -643,7 +643,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( MP2::isInGameActionObject( tile.GetObject() ) ) {
+        if ( MP2::isInGameActionObject( tile.getMainObjectType() ) ) {
             const bool isProtected
                 = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
@@ -672,7 +672,7 @@ int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
         return Cursor::POINTER;
     }
 
-    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+    const Maps::Tile & tile = world.getTile( dstIndex );
 
     if ( tile.isFog( Settings::Get().CurrentColor() ) ) {
         return Cursor::POINTER;
@@ -703,7 +703,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     _radar.Build();
     _radar.SetHide( true );
-    _iconsPanel.HideIcons( ICON_ANY );
+    _iconsPanel.hideIcons( ICON_ANY );
     _statusPanel.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
@@ -785,7 +785,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        _iconsPanel.HideIcons( ICON_ANY );
+                        _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
@@ -808,8 +808,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    _iconsPanel.ShowIcons( ICON_ANY );
-                    _iconsPanel.SetRedraw();
+                    _iconsPanel.showIcons( ICON_ANY );
+                    _iconsPanel.setRedraw();
 
                     res = HumanTurn( isLoadedFromSave );
 
@@ -1200,40 +1200,31 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             // followed by the buttons panel, followed by the icons panel, followed by the radar, followed by the control panel, and under all
             // of them there is a game area. It is necessary to process events in exactly the same order in which all these UI elements overlap.
             //
-            // When the mouse is captured by any UI element, events should not be handled by other UI elements, even if the UI element that
-            // captured the mouse cannot handle them itself (for example, because it was hidden after the mouse was captured by it).
+            // When the mouse is captured by any UI element, events should not be handled by other UI elements.
             //
             // Mouse is captured by the status panel
             if ( _statusPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowStatus() ) {
-                    _statusPanel.QueueEventProcessing();
-                }
+                _statusPanel.QueueEventProcessing();
             }
             // Mouse is captured by the buttons panel
             else if ( _buttonsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowButtons() ) {
-                    res = _buttonsPanel.QueueEventProcessing();
-                }
+                res = _buttonsPanel.queueEventProcessing();
             }
             // Mouse is captured by the icons panel
             else if ( _iconsPanel.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowIcons() ) {
-                    _iconsPanel.QueueEventProcessing();
-                }
+                _iconsPanel.queueEventProcessing();
             }
             // Mouse is captured by radar
             else if ( _radar.isMouseCaptured() ) {
                 resetCursor();
 
-                if ( !isHiddenInterface || conf.ShowRadar() ) {
-                    _radar.QueueEventProcessing();
-                }
+                _radar.QueueEventProcessing();
             }
             // Mouse is captured by the game area for scrolling by dragging
             else if ( _gameArea.isDragScroll() ) {
@@ -1288,13 +1279,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.isMouseCursorPosInArea( _buttonsPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
-                    res = _buttonsPanel.QueueEventProcessing();
+                    res = _buttonsPanel.queueEventProcessing();
                 }
                 // Cursor is over the icons panel
                 else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.isMouseCursorPosInArea( _iconsPanel.GetRect() ) ) {
                     resetCursorIfNoNeedToScroll();
 
-                    _iconsPanel.QueueEventProcessing();
+                    _iconsPanel.queueEventProcessing();
                 }
                 // Cursor is over the radar
                 else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.isMouseCursorPosInArea( _radar.GetRect() ) ) {
@@ -1533,7 +1524,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
     Heroes * focusedHero = GetFocusHeroes();
     assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
@@ -1554,7 +1545,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
     }
 
     case Cursor::CASTLE: {
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType ) {
             break;
         }
@@ -1605,7 +1596,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
     const Settings & conf = Settings::Get();
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
 
     DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
@@ -1613,7 +1604,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
         Dialog::QuickInfo( tile );
     }
     else {
-        switch ( tile.GetObject() ) {
+        switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastle( tile.GetCenter() );

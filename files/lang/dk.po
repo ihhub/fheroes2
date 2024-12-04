@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-12 11:25+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3527,8 +3527,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
 
-msgid "Warning!"
-msgstr "Advarsel!"
+msgid "Warning"
+msgstr "Advarsel"
 
 msgid "Click to save the current game."
 msgstr "Klik for at gemme igangværende spil."
@@ -4484,9 +4484,6 @@ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
 
 msgid "No maps available!"
 msgstr "Intet kort tilgængelig!"
-
-msgid "Warning"
-msgstr "Advarsel"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -6300,6 +6297,14 @@ msgstr "MELLEMRUM"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Kongerigets indkomst"
@@ -8824,6 +8829,12 @@ msgstr "Stormende"
 
 msgid "speed|Instant"
 msgstr "Fantom"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "egern"
@@ -12095,6 +12106,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Advarsel!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Pladsholder 1"

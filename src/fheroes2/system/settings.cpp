@@ -514,8 +514,8 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     // First, let's see if the translation for the requested language is already cached
-    if ( const auto [isCached, isValid] = Translation::setLanguage( language ); isCached ) {
-        return isValid;
+    if ( const auto [isCached, isSet] = Translation::setLanguage( language ); isCached ) {
+        return isSet;
     }
 
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
@@ -553,70 +553,75 @@ void Settings::setEditorPassability( const bool enable )
     }
 }
 
-void Settings::SetProgramPath( const char * argv0 )
+void Settings::SetProgramPath( const char * path )
 {
-    if ( argv0 )
-        path_program = argv0;
+    if ( path == nullptr ) {
+        return;
+    }
+
+    _programPath = path;
 }
 
 const std::vector<std::string> & Settings::GetRootDirs()
 {
-    static std::vector<std::string> dirs;
-    if ( !dirs.empty() ) {
-        return dirs;
-    }
+    static const std::vector<std::string> rootDirs = []() {
+        std::vector<std::string> result;
 
 #ifdef FHEROES2_DATA
-    // Macro-defined path.
-    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
+        // Macro-defined path.
+        result.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
-    // Environment variable.
-    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
-    if ( dataEnvPath != nullptr && std::find( dirs.begin(), dirs.end(), dataEnvPath ) == dirs.end() ) {
-        dirs.emplace_back( dataEnvPath );
-    }
+        // Environment variable.
+        const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+        if ( dataEnvPath != nullptr && std::find( result.begin(), result.end(), dataEnvPath ) == result.end() ) {
+            result.emplace_back( dataEnvPath );
+        }
 
-    // The location of the application.
-    std::string appPath = System::GetDirname( Settings::Get().path_program );
-    if ( !appPath.empty() && std::find( dirs.begin(), dirs.end(), appPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( appPath ) );
-    }
+        // The location of the application.
+        std::string appPath = System::GetParentDirectory( Settings::Get()._programPath );
+        if ( std::find( result.begin(), result.end(), appPath ) == result.end() ) {
+            result.emplace_back( std::move( appPath ) );
+        }
 
-    // OS specific directories.
-    System::appendOSSpecificDirectories( dirs );
+        // OS specific directories.
+        System::appendOSSpecificDirectories( result );
 
 #if defined( MACOS_APP_BUNDLE )
-    // macOS app bundle Resources directory
-    char resourcePath[PATH_MAX];
+        // macOS app bundle Resources directory
+        char resourcePath[PATH_MAX];
 
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
-    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
-         && std::find( dirs.begin(), dirs.end(), resourcePath ) == dirs.end() ) {
-        dirs.emplace_back( resourcePath );
-    }
-    else {
-        ERROR_LOG( "Unable to get app bundle path" )
-    }
-    CFRelease( resourcesURL );
+        CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+        if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
+             && std::find( result.begin(), result.end(), resourcePath ) == result.end() ) {
+            result.emplace_back( resourcePath );
+        }
+        else {
+            ERROR_LOG( "Unable to get app bundle path" )
+        }
+        CFRelease( resourcesURL );
 #endif
 
-    // User config directory.
-    std::string configPath = System::GetConfigDirectory( "fheroes2" );
-    if ( !configPath.empty() && std::find( dirs.begin(), dirs.end(), configPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( configPath ) );
-    }
+        // User config directory.
+        std::string configPath = System::GetConfigDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), configPath ) == result.end() ) {
+            result.emplace_back( std::move( configPath ) );
+        }
 
-    // User data directory.
-    std::string dataPath = System::GetDataDirectory( "fheroes2" );
-    if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( dataPath ) );
-    }
+        // User data directory.
+        std::string dataPath = System::GetDataDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), dataPath ) == result.end() ) {
+            result.emplace_back( std::move( dataPath ) );
+        }
 
-    // Remove all paths that are not directories.
-    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
+        // Remove all paths that are not directories. Empty path should not be removed because it in fact means the current directory.
+        result.erase( std::remove_if( result.begin(), result.end(), []( const std::string & path ) { return !path.empty() && !System::IsDirectory( path ); } ),
+                      result.end() );
 
-    return dirs;
+        return result;
+    }();
+
+    return rootDirs;
 }
 
 ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )

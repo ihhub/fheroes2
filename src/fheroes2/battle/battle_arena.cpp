@@ -428,13 +428,13 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( _covrIcnId != ICN::UNKNOWN ) {
             board.SetCovrObjects( _covrIcnId );
         }
 
-        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+        board.SetCobjObjects( world.getTile( tileIndex ), seededGen );
     }
 
     AI::BattlePlanner::Get().battleBegins();
@@ -711,7 +711,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     }
 
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
-    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
+    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t> );
 
     Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 

@@ -282,8 +282,8 @@ namespace
         // Skip the second byte
         imageStream.get();
 
-        const int32_t width = imageStream.get16();
-        const int32_t height = imageStream.get16();
+        const int32_t width = imageStream.getLE16();
+        const int32_t height = imageStream.getLE16();
 
         if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
@@ -2539,34 +2539,54 @@ namespace
                 std::swap( imageArray[220], imageArray[222] );
                 imageArray.erase( imageArray.begin() + 221, imageArray.end() );
             }
-            // French version has its own special encoding but should conform to CP1252 too
+            // The French version replaces several ASCII special characters with language-specific characters.
+            // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
+            // of the original so that original French maps' texts are displayed correctly.
             if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
+                // The engine expects that letter indexes correspond to charcode - 0x20, but the original French
+                // Price of Loyalty maps use 0x09 for lowercase i with circonflex. This is currently not supported
+                // by the engine.
                 const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 96, 160 - 32, firstSprite );
+                imageArray.insert( imageArray.begin() + 96, 128, firstSprite );
+                // Capital letters with accents aren't present in the original assets so we use unaccented letters.
                 imageArray[192 - 32] = imageArray[33];
                 imageArray[199 - 32] = imageArray[35];
                 imageArray[201 - 32] = imageArray[37];
                 imageArray[202 - 32] = imageArray[37];
-                imageArray[244 - 32] = imageArray[3];
-                imageArray[251 - 32] = imageArray[4];
-                imageArray[249 - 32] = imageArray[6];
-                imageArray[226 - 32] = imageArray[10];
-                imageArray[239 - 32] = imageArray[28];
-                imageArray[238 - 32] = imageArray[30];
+
                 imageArray[224 - 32] = imageArray[32];
+                imageArray[226 - 32] = imageArray[10];
                 imageArray[231 - 32] = imageArray[62];
                 imageArray[232 - 32] = imageArray[64];
-                imageArray[239 - 32] = imageArray[91];
-                imageArray[234 - 32] = imageArray[92];
-                imageArray[238 - 32] = imageArray[93];
                 imageArray[233 - 32] = imageArray[94];
-                imageArray[238 - 32] = imageArray[95];
-                imageArray.erase( imageArray.begin() + 252 - 32, imageArray.end() );
+                imageArray[234 - 32] = imageArray[92];
+                imageArray[239 - 32] = imageArray[91];
+                imageArray[244 - 32] = imageArray[3];
+                imageArray[249 - 32] = imageArray[6];
+                imageArray[251 - 32] = imageArray[4];
+                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
+                // area that we need to remove. Plus we need to add a missing pixel.
+                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
+                    imageArray[238 - 32].resize( 4, 9 );
+                    imageArray[238 - 32].reset();
+                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
+                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
+                    imageArray[238 - 32].setPosition( 0, -1 );
+                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
+                    // Copy the fixed sprite back.
+                    for ( const int charCode : { 30, 93, 95 } ) {
+                        imageArray[charCode] = imageArray[238 - 32];
+                    }
+                }
+                else {
+                    imageArray[238 - 32] = imageArray[93];
+                }
+                imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
             if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
                 const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 101, 155 - 32, firstSprite );
+                imageArray.insert( imageArray.begin() + 101, 123, firstSprite );
                 imageArray[192 - 32] = imageArray[33];
                 imageArray[200 - 32] = imageArray[37];
                 imageArray[201 - 32] = imageArray[37];
@@ -2579,7 +2599,7 @@ namespace
                 imageArray[236 - 32] = imageArray[98];
                 imageArray[242 - 32] = imageArray[99];
                 imageArray[249 - 32] = imageArray[100];
-                imageArray.erase( imageArray.begin() + 250 - 32, imageArray.end() );
+                imageArray.erase( imageArray.begin() + 218, imageArray.end() );
             }
             return true;
         }
@@ -4226,37 +4246,48 @@ namespace
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
-                _icnVsSprite[id][206] = _icnVsSprite[id][162];
-                FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 2, 1, 4, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 0, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 18, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 17, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 19, 3, 2, 1, 3U );
+                fheroes2::Sprite shadow = _icnVsSprite[id][162];
+                FillTransform( shadow, 0, 0, 5, 1, 1U );
+                FillTransform( shadow, 0, 1, 2, 1, 1U );
+                FillTransform( shadow, 2, 1, 4, 1, 3U );
+                FillTransform( shadow, 0, 2, 3, 1, 3U );
+                FillTransform( shadow, 18, 1, 2, 1, 1U );
+                FillTransform( shadow, 17, 2, 3, 1, 3U );
+                FillTransform( shadow, 20, 2, 1, 1, 1U );
+                FillTransform( shadow, 19, 3, 2, 1, 3U );
 
                 // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
-                _icnVsSprite[id][207].resize( 21, 32 );
-                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
-                FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 1, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 2, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 4, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 3, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 25, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 18, 26, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 27, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 14, 28, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 29, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 12, 29, 11, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 8, 31, 15, 1, 1U );
+                fheroes2::Sprite body( 21, 32 );
+                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, body, 0, 0, 21, 32 );
+                FillTransform( body, 0, 0, 12, 1, 1U );
+                FillTransform( body, 15, 0, 6, 1, 1U );
+                FillTransform( body, 0, 1, 9, 1, 1U );
+                FillTransform( body, 16, 1, 5, 1, 1U );
+                FillTransform( body, 0, 2, 6, 1, 1U );
+                FillTransform( body, 20, 2, 1, 1, 1U );
+                FillTransform( body, 0, 4, 1, 1, 1U );
+                FillTransform( body, 0, 3, 3, 1, 1U );
+                FillTransform( body, 20, 25, 1, 1, 1U );
+                FillTransform( body, 18, 26, 3, 1, 1U );
+                FillTransform( body, 16, 27, 5, 1, 1U );
+                FillTransform( body, 14, 28, 9, 1, 1U );
+                FillTransform( body, 0, 29, 1, 1, 1U );
+                FillTransform( body, 12, 29, 11, 1, 1U );
+                FillTransform( body, 0, 30, 3, 1, 1U );
+                FillTransform( body, 10, 30, 13, 1, 1U );
+                FillTransform( body, 0, 31, 5, 1, 1U );
+                FillTransform( body, 8, 31, 15, 1, 1U );
+
+                const int32_t shadowOffset = ( 32 - body.width() ) / 2;
+
+                _icnVsSprite[id][206].resize( shadow.width() - shadowOffset, shadow.height() );
+                Copy( shadow, 0, 0, _icnVsSprite[id][206], 0, 0, shadow.width(), shadow.height() );
+                _icnVsSprite[id][206].setPosition( shadow.x() + shadowOffset, shadow.y() );
+
+                _icnVsSprite[id][207].resize( 21 + shadowOffset, 32 );
+                _icnVsSprite[id][207].reset();
+                Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
+                Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
             }
             return true;
         case ICN::TWNSDW_5:
@@ -5021,7 +5052,7 @@ namespace
         case ICN::OBJNGRAS: {
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 151 ) {
-                _icnVsSprite[id].resize( 153 );
+                _icnVsSprite[id].resize( 155 );
 
                 loadICN( ICN::OBJNSNOW );
 
@@ -5039,6 +5070,22 @@ namespace
                     Blit( temp, _icnVsSprite[id][152] );
 
                     ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part1.image", temp );
+                    _icnVsSprite[id][153] = _icnVsSprite[ICN::OBJNSNOW][12];
+                    Blit( temp, _icnVsSprite[id][153] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 255, 3 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part2.image", temp );
+                    _icnVsSprite[id][154] = _icnVsSprite[ICN::OBJNSNOW][13];
+                    Blit( temp, _icnVsSprite[id][154] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 255, 3 );
                 }
             }
 
@@ -5057,6 +5104,37 @@ namespace
                     images[218 + i].setPosition( images[i].y(), images[i].x() );
                 }
             }
+
+            return true;
+        }
+        case ICN::SCENIBKG_EVIL: {
+            const int32_t originalId = ICN::SCENIBKG;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() != 1 ) {
+                return true;
+            }
+
+            _icnVsSprite[id].resize( 1 );
+
+            const auto & originalImage = _icnVsSprite[originalId][0];
+            auto & outputImage = _icnVsSprite[id][0];
+
+            outputImage = originalImage;
+            convertToEvilInterface( outputImage, { 0, 0, outputImage.width(), outputImage.height() } );
+
+            loadICN( ICN::METALLIC_BORDERED_TEXTBOX_EVIL );
+            if ( _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL].empty() ) {
+                return true;
+            }
+
+            const auto & evilTextBox = _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL][0];
+
+            // The original text area is shorter than one we are using so we need to make 2 image copy operations to compensate this.
+            const int32_t textWidth = 361;
+            fheroes2::Copy( evilTextBox, 0, 0, outputImage, 46, 23, textWidth / 2, evilTextBox.height() );
+            fheroes2::Copy( evilTextBox, evilTextBox.width() - ( textWidth - textWidth / 2 ), 0, outputImage, 46 + textWidth / 2, 23, ( textWidth - textWidth / 2 ),
+                            evilTextBox.height() );
 
             return true;
         }

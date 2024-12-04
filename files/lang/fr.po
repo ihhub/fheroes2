@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-12 11:25+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3546,8 +3546,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Voulez-vous vraiment effacer le fichier :"
 
-msgid "Warning!"
-msgstr "Attention !"
+msgid "Warning"
+msgstr "Attention"
 
 msgid "Click to save the current game."
 msgstr "Enregistrer le jeu en cours."
@@ -4540,9 +4540,6 @@ msgstr "Annuler et revenir au menu principal de l'éditeur."
 
 msgid "No maps available!"
 msgstr "Aucune carte disponible !"
-
-msgid "Warning"
-msgstr "Attention"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -6377,6 +6374,14 @@ msgstr "ESPACE"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Revenu du royaume"
@@ -8961,6 +8966,12 @@ msgstr "Foudroyante"
 
 msgid "speed|Instant"
 msgstr "Téléportée"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "de l'écureuil"
@@ -12242,6 +12253,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Attention !"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Emplacement 1"

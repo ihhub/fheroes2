@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-12 11:25+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3477,8 +3477,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Ви впевнені, що хочете видалити файл:"
 
-msgid "Warning!"
-msgstr "Попередження!"
+msgid "Warning"
+msgstr "Попередження"
 
 msgid "Click to save the current game."
 msgstr "Натисніть, щоб зберегти поточну гру."
@@ -4426,9 +4426,6 @@ msgstr "Повернутися до головного меню Редактор
 
 msgid "No maps available!"
 msgstr "Нема доступних мап!"
-
-msgid "Warning"
-msgstr "Попередження"
 
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: %{race} герой"
@@ -6211,6 +6208,14 @@ msgstr "ПРОБІЛ"
 
 msgid "Keyboard|ABC"
 msgstr "АБВ"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Прибутки королівства"
@@ -8727,6 +8732,12 @@ msgstr "Блискавична"
 
 msgid "speed|Instant"
 msgstr "Миттєва"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Білки"
@@ -11953,6 +11964,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Попередження!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Заповнювач 1"

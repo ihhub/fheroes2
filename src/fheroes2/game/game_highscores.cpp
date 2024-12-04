@@ -66,6 +66,11 @@
 #include "logging.h"
 #endif
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace
 {
     const std::string highScoreFileName = "fheroes2.hgs";
@@ -201,12 +206,15 @@ namespace
         for ( const fheroes2::HighscoreData & data : highScores ) {
             const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::getLanguageFromAbbreviation( data.languageAbbreviation ) );
+            // TODO: scenario name can have its own independent language.
+            const fheroes2::SupportedLanguage language = fheroes2::getLanguageFromAbbreviation( data.languageAbbreviation );
 
-            text.set( data.playerName, font );
+            text.set( data.playerName, font, language );
+            text.fitToOneRow( scenarioNameOffset - playerNameOffset );
             text.draw( position.x + playerNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
-            text.set( data.scenarioName, font );
+            text.set( data.scenarioName, font, language );
+            text.fitToOneRow( dayCountOffset - scenarioNameOffset );
             text.draw( position.x + scenarioNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
             text.set( std::to_string( data.dayCount ), font );

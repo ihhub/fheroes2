@@ -49,11 +49,11 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        const std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
+        std::cerr << toolName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
                   << std::endl
-                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
+                  << "Syntax: " << toolName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
         return EXIT_FAILURE;
     }
 

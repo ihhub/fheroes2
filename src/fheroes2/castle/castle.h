@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CASTLE_H
-#define H2CASTLE_H
+
+#pragma once
 
 #include <array>
 #include <cstddef>
@@ -146,7 +146,9 @@ public:
 
     Castle() = default;
     Castle( const int32_t posX, const int32_t posY, int race );
+
     Castle( const Castle & ) = delete;
+
     ~Castle() override = default;
 
     Castle & operator=( const Castle & ) = delete;
@@ -262,7 +264,6 @@ public:
     // Returns true in case of successful recruitment.
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
 
-    void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
@@ -406,7 +407,6 @@ private:
 
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );
-    bool _recruitMonsterFromDwelling( const uint32_t buildingType, const uint32_t count, const bool force = false );
 
     friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
     friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
@@ -511,12 +511,6 @@ namespace CastleDialog
 struct VecCastles : public std::vector<Castle *>
 {
     VecCastles() = default;
-    VecCastles( const VecCastles & ) = delete;
-
-    ~VecCastles() = default;
-
-    VecCastles & operator=( const VecCastles & ) = delete;
-    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };
@@ -590,5 +584,3 @@ IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
 OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
 IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
-
-#endif

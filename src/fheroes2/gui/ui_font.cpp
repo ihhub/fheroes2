@@ -1415,6 +1415,10 @@ namespace
 
             size_t offset = 0;
 
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 6 );
+
             // E with 2 dots on top.
             font[168 - 32].resize( font[37 + offset].width(), font[37 + offset].height() + 3 );
             font[168 - 32].reset();
@@ -1891,6 +1895,10 @@ namespace
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
             size_t offset = 0;
+
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 4 );
 
             // E with 2 dots on top.
             font[168 - 32].resize( font[37].width(), font[37].height() + 2 );
@@ -5269,7 +5277,7 @@ namespace
         fheroes2::SetPixel( released[109], offset + 7, offset + 11, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[109], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // '
+        // ' (right single quotation mark)
         released[114].resize( 3 + offset * 2, 4 + offset * 2 );
         released[114].reset();
         fheroes2::DrawLine( released[114], { offset + 1, offset + 0 }, { offset + 1, offset + 2 }, buttonGoodReleasedColor );
@@ -5639,7 +5647,7 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 214 } ) {
+        for ( const int & charCode : { 196, 197, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
@@ -5788,6 +5796,13 @@ namespace
         released[218 - 32].reset();
         fheroes2::Copy( released[85 - 32], 0, 0, released[218 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
         fheroes2::DrawLine( released[218 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // U with diaeresis.
+        released[220 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 2 );
+        released[220 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 2, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::SetPixel( released[220 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
     }
 }
 

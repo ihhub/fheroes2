@@ -64,7 +64,7 @@
 
 namespace
 {
-    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
 
@@ -73,12 +73,12 @@ namespace
                 return true;
             }
 
-            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            const Maps::Tile & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() ) {
                 continue;
             }
 
-            const MP2::MapObjectType objectType = indexedTile.GetObject( true );
+            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
             if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
@@ -87,7 +87,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId, const bool allDirections )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections )
     {
         std::vector<int32_t> suitableIds;
 
@@ -99,14 +99,14 @@ namespace
                 continue;
             }
 
-            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            const Maps::Tile & indexedTile = mapTiles[indexId];
 
             if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
             // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
-            if ( indexedTile.GetObject( false ) == MP2::OBJ_COAST ) {
+            if ( indexedTile.getMainObjectType( false ) == MP2::OBJ_COAST ) {
                 const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
 
                 if ( coastTiles.empty() ) {
@@ -124,14 +124,14 @@ namespace
         return Rand::Get( suitableIds );
     }
 
-    int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tiles> & mapTiles, const int32_t tileId )
+    int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId )
     {
         int32_t count = 0;
 
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId );
 
         for ( const int32_t indexId : indexes ) {
-            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            const Maps::Tile & indexedTile = mapTiles[indexId];
             if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
@@ -223,7 +223,7 @@ uint32_t CapturedObjects::GetCountMines( const int resourceType, const int owner
             continue;
         }
 
-        if ( resourceType != Maps::getDailyIncomeObjectResources( world.GetTiles( idx ) ).getFirstValidResource().first ) {
+        if ( resourceType != Maps::getDailyIncomeObjectResources( world.getTile( idx ) ).getFirstValidResource().first ) {
             continue;
         }
 
@@ -285,7 +285,7 @@ void CapturedObjects::ResetColor( const int color )
         auto & [objectType, col] = objCol;
 
         col = Color::NONE;
-        world.GetTiles( idx ).setOwnershipFlag( objectType, col );
+        world.getTile( idx ).setOwnershipFlag( objectType, col );
     }
 }
 
@@ -445,7 +445,7 @@ Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 
 bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
-    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
+    return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( getTile( tilePosition.x, tilePosition.y ).getMainObjectType( false ) == MP2::OBJ_CASTLE );
 }
 
 Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
@@ -558,8 +558,8 @@ void World::NewWeek()
 {
     // update objects
     if ( week > 1 ) {
-        for ( Maps::Tiles & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+        for ( Maps::Tile & tile : vec_tiles ) {
+            if ( MP2::isWeekLife( tile.getMainObjectType( false ) ) || tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
                 updateObjectInfoTile( tile, false );
             }
         }
@@ -603,14 +603,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    for ( const Maps::Tiles & tile : vec_tiles ) {
+    for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             // Monsters are not placed on water.
             continue;
         }
 
         const int32_t tileId = tile.GetIndex();
-        const MP2::MapObjectType objectType = tile.GetObject( true );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
 
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
@@ -785,17 +785,24 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entranceTile = GetTiles( index );
+    const Maps::Tile & entranceTile = getTile( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONE_LITHS ) {
+    if ( entranceTile.getMainObjectType( false ) != MP2::OBJ_STONE_LITHS ) {
+        return result;
+    }
+
+    const Maps::ObjectPart * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_STONE_LITHS );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Stone Liths but somehow it doesn't even have Stone Liths' object parts.
+        assert( 0 );
         return result;
     }
 
     // The type of destination stone liths must match the type of the source stone liths.
-    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
-        const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceObjectPart->icnIndex ) ) {
+        const Maps::Tile & teleportTile = getTile( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetObject() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.getMainObjectType() != MP2::OBJ_STONE_LITHS || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -822,17 +829,33 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entranceTile = GetTiles( index );
+    const Maps::Tile & entranceTile = getTile( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+    if ( entranceTile.getMainObjectType( false ) != MP2::OBJ_WHIRLPOOL ) {
         return result;
     }
 
-    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
-    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.getMainObjectPart()._imageIndex ) ) {
-        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+    const Maps::ObjectPart * entranceObjectPart = Maps::getObjectPartByActionType( entranceTile, MP2::OBJ_WHIRLPOOL );
+    if ( entranceObjectPart == nullptr ) {
+        // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+        assert( 0 );
+        return result;
+    }
 
-        if ( whirlpoolTile.getMainObjectPart()._uid == entranceTile.getMainObjectPart()._uid || whirlpoolTile.GetObject() != MP2::OBJ_WHIRLPOOL ) {
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceObjectPart->icnIndex ) ) {
+        const Maps::Tile & whirlpoolTile = getTile( whirlpoolIndex );
+        if ( whirlpoolTile.getMainObjectType() != MP2::OBJ_WHIRLPOOL ) {
+            continue;
+        }
+
+        const Maps::ObjectPart * destinationObjectPart = Maps::getObjectPartByActionType( whirlpoolTile, MP2::OBJ_WHIRLPOOL );
+        if ( destinationObjectPart == nullptr ) {
+            // This tile is marked as Whirlpool but somehow it doesn't even have whirlpool's object parts.
+            assert( 0 );
+            continue;
+        }
+
+        if ( destinationObjectPart->_uid == entranceObjectPart->_uid ) {
             continue;
         }
 
@@ -878,7 +901,7 @@ void World::CaptureObject( const int32_t index, const int color )
 {
     assert( CountBits( color ) <= 1 );
 
-    const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
+    const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {
@@ -890,7 +913,7 @@ void World::CaptureObject( const int32_t index, const int color )
         castle->ChangeColor( color );
     }
 
-    GetTiles( index ).setOwnershipFlag( objectType, color );
+    getTile( index ).setOwnershipFlag( objectType, color );
 }
 
 int World::ColorCapturedObject( const int32_t index ) const
@@ -928,7 +951,7 @@ const UltimateArtifact & World::GetUltimateArtifact() const
 
 bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
-    Maps::Tiles & tile = GetTiles( center.x, center.y );
+    Maps::Tile & tile = getTile( center.x, center.y );
 
     // Get digging hole sprite.
     MP2::ObjectIcnType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
@@ -941,7 +964,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
+    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -981,7 +1004,7 @@ std::string World::DateString() const
 
 uint32_t World::CountObeliskOnMaps()
 {
-    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
+    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return MP2::OBJ_OBELISK == tile.getMainObjectType( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 
@@ -992,7 +1015,7 @@ void World::ActionForMagellanMaps( int color )
 
     const int alliedColors = Players::GetPlayerFriends( color );
 
-    for ( Maps::Tiles & tile : vec_tiles ) {
+    for ( Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             if ( isAIPlayer && tile.isFog( color ) ) {
                 AI::Planner::Get().revealFog( tile, kingdom );
@@ -1303,9 +1326,9 @@ void World::resetPathfinder()
 
 void World::updatePassabilities()
 {
-    for ( Maps::Tiles & tile : vec_tiles ) {
+    for ( Maps::Tile & tile : vec_tiles ) {
         // If tile is empty then update tile's object type if needed.
-        if ( tile.isSameMainObject( MP2::OBJ_NONE ) ) {
+        if ( tile.getMainObjectType() == MP2::OBJ_NONE ) {
             tile.updateObjectType();
         }
 
@@ -1313,7 +1336,7 @@ void World::updatePassabilities()
     }
 
     // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
-    for ( Maps::Tiles & tile : vec_tiles ) {
+    for ( Maps::Tile & tile : vec_tiles ) {
         tile.updatePassability();
     }
 }
@@ -1328,14 +1351,32 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     _allTeleports.clear();
 
     for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
-        _allTeleports[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+        const auto * objectPart = Maps::getObjectPartByActionType( getTile( index ), MP2::OBJ_STONE_LITHS );
+        if ( objectPart == nullptr ) {
+            // It looks like it is a broken map. No way the tile doesn't have this object.
+            assert( 0 );
+            continue;
+        }
+
+        _allTeleports[objectPart->icnIndex].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
-        _allWhirlpools[GetTiles( index ).getMainObjectPart()._imageIndex].push_back( index );
+    // Whirlpools are unique objects because they can have boats on them which are leftovers from heroes
+    // which disembarked on land. Tiles with boats and whirlpools are marked as Boat objects.
+    // So, searching by type is not accurate as these tiles will be skipped.
+    for ( const auto & [index, objectPart] : Maps::getObjectParts( MP2::OBJ_WHIRLPOOL ) ) {
+        assert( objectPart != nullptr );
+
+        _allWhirlpools[objectPart->icnIndex].push_back( index );
+    }
+
+    // Cache all positions of Eye of Magi objects.
+    _allEyeOfMagi.clear();
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI ) ) {
+        _allEyeOfMagi.emplace_back( index );
     }
 
     resetPathfinder();
@@ -1344,15 +1385,15 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     // Find the maximum UID value.
     uint32_t maxUid = 0;
 
-    for ( const Maps::Tiles & tile : vec_tiles ) {
+    for ( const Maps::Tile & tile : vec_tiles ) {
         maxUid = std::max( tile.getMainObjectPart()._uid, maxUid );
 
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            maxUid = std::max( addon._uid, maxUid );
+        for ( const auto & part : tile.getGroundObjectParts() ) {
+            maxUid = std::max( part._uid, maxUid );
         }
 
-        for ( const auto & addon : tile.getTopLayerAddons() ) {
-            maxUid = std::max( addon._uid, maxUid );
+        for ( const auto & part : tile.getTopObjectParts() ) {
+            maxUid = std::max( part._uid, maxUid );
         }
     }
 
@@ -1675,7 +1716,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
         colors |= Color::PURPLE;
     }
 
-    message = dataStream.toString();
+    message = dataStream.getString();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
