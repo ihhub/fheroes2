@@ -834,9 +834,8 @@ namespace fheroes2
                     continue;
                 }
 
-                const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
-                if ( !abilityDescription.empty() ) {
-                    output.emplace_back( abilityDescription + '.' );
+                if ( const std::string description = getMonsterAbilityDescription( ability, true ); !description.empty() ) {
+                    output.emplace_back( description + '.' );
                 }
             }
 
@@ -863,9 +862,8 @@ namespace fheroes2
                     continue;
                 }
 
-                const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
-                if ( !weaknessDescription.empty() ) {
-                    output.emplace_back( weaknessDescription + '.' );
+                if ( const std::string description = getMonsterWeaknessDescription( weakness, true ); !description.empty() ) {
+                    output.emplace_back( description + '.' );
                 }
             }
 
