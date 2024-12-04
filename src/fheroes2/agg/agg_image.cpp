@@ -604,7 +604,6 @@ namespace
 
     void LoadOriginalICN( const int id )
     {
-        
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
