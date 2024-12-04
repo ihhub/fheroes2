@@ -3451,8 +3451,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Opravdu chceš smazat soubor:"
 
-msgid "Warning!"
-msgstr "Varování!"
+msgid "Warning"
+msgstr "Varování"
 
 msgid "Click to save the current game."
 msgstr "Klikni pro uložení aktuální hry."
@@ -4394,9 +4394,6 @@ msgstr "Zrušit a vrátit se do hlavního menu editoru map."
 
 msgid "No maps available!"
 msgstr "Žádné mapy k dispozici!"
-
-msgid "Warning"
-msgstr "Varování"
 
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: %{race} hrdina"
@@ -11844,3 +11841,6 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Varování!"

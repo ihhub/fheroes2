@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-24 10:21+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3539,8 +3539,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Сигурен ли си, че искаш да изтриеш файла:"
 
-msgid "Warning!"
-msgstr "Внимание!"
+msgid "Warning"
+msgstr "Внимание"
 
 msgid "Click to save the current game."
 msgstr "Кликни, за да запазиш текущата игра."
@@ -4556,9 +4556,6 @@ msgstr "Отказ обратно към главното меню на Създ
 
 msgid "No maps available!"
 msgstr "Няма налични карти!"
-
-msgid "Warning"
-msgstr "Внимание"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -12239,6 +12236,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Внимание!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Манекен 1"

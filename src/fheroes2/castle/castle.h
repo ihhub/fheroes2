@@ -264,7 +264,6 @@ public:
     // Returns true in case of successful recruitment.
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
 
-    void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
@@ -408,7 +407,6 @@ private:
 
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );
-    bool _recruitMonsterFromDwelling( const uint32_t buildingType, const uint32_t count, const bool force = false );
 
     friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
     friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
