@@ -58,6 +58,10 @@ namespace
 
     bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Spell & spell )
     {
+        if ( unit.isImmovable() && spell.GetID() != Spell::ANTIMAGIC ) {
+            return true;
+        }
+
         switch ( spell.GetID() ) {
         case Spell::BLESS:
         case Spell::MASSBLESS:
@@ -388,9 +392,8 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
 {
     const int spellID = spell.GetID();
 
-    // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
-    if ( !forDispel
-         && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || isSpellcastUselessForUnit( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
+    // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
+    if ( !forDispel && ( isSpellcastUselessForUnit( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
 
