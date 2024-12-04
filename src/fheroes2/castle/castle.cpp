@@ -344,7 +344,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
-        _name = dataStream.toString( 13 );
+        _name = dataStream.getString( 13 );
     }
     else {
         // Skip 13 bytes since the name is not set.
@@ -1093,51 +1093,6 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     DEBUG_LOG( DBG_GAME, DBG_TRACE, _name << " recruit: " << troop.GetMultiName() << "(" << count << ")" )
 
     return true;
-}
-
-bool Castle::_recruitMonsterFromDwelling( const uint32_t buildingType, const uint32_t count, const bool force /* = false */ )
-{
-    const Monster monster( _race, GetActualDwelling( buildingType ) );
-    assert( count <= getRecruitLimit( monster, GetKingdom().GetFunds() ) );
-
-    const Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
-
-    if ( RecruitMonster( troop, false ) ) {
-        return true;
-    }
-
-    // TODO: before removing an existing stack of monsters try to upgrade them and also merge some stacks.
-
-    if ( force ) {
-        Troop * weak = GetArmy().GetWeakestTroop();
-        if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO,
-                       _name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
-            weak->Set( troop );
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void Castle::recruitBestAvailable( Funds budget )
-{
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( !isBuild( dw ) ) {
-            continue;
-        }
-
-        const Monster monster( _race, GetActualDwelling( dw ) );
-        const uint32_t willRecruit = getRecruitLimit( monster, budget );
-        if ( willRecruit == 0 ) {
-            continue;
-        }
-
-        if ( _recruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-            budget -= ( monster.GetCost() * willRecruit );
-        }
-    }
 }
 
 uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const

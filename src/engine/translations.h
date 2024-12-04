@@ -35,13 +35,13 @@ namespace Translation
     // set to true if the translation for the given language is already present in the cache (even if this
     // translation is invalid), and the second is set to true if the current language has been successfully
     // set.
-    std::pair<bool, bool> setLanguage( const std::string_view name );
+    std::pair<bool, bool> setLanguage( const std::string_view langName );
 
     // Sets the language with the given name as the current language if the translation for this language is
     // already cached and valid. If this translation is not yet cached, then tries to load it from the given
     // file. If the load fails, then adds this language to the cache as invalid and does nothing else. Returns
     // true if the current language has been successfully set, otherwise returns false.
-    bool setLanguage( const std::string & name, const std::string_view fileName );
+    bool setLanguage( const std::string & langName, const std::string_view fileName );
 
     // Resets the current language to the default language (English).
     void reset();

@@ -277,10 +277,10 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
             if ( textLanguage.has_value() ) {
                 const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
-                fheroes2::openVirtualKeyboard( result );
+                fheroes2::openVirtualKeyboard( result, charLimit );
             }
             else {
-                fheroes2::openVirtualKeyboard( result );
+                fheroes2::openVirtualKeyboard( result, charLimit );
             }
 
             if ( charLimit > 0 && result.size() > charLimit ) {

@@ -1716,7 +1716,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
         colors |= Color::PURPLE;
     }
 
-    message = dataStream.toString();
+    message = dataStream.getString();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
