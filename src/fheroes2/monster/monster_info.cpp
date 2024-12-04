@@ -819,13 +819,11 @@ namespace fheroes2
 
         const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
 
-        const std::vector<MonsterAbility> & abilities = battleStats.abilities;
-
         {
             std::map<uint32_t, std::vector<int>> immuneToSpells;
             std::map<uint32_t, std::vector<int>> reducedDamageFromSpells;
 
-            for ( const MonsterAbility & ability : abilities ) {
+            for ( const MonsterAbility & ability : battleStats.abilities ) {
                 if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
                     immuneToSpells[ability.percentage].emplace_back( ability.value );
                     continue;
@@ -859,8 +857,7 @@ namespace fheroes2
         {
             std::map<uint32_t, std::vector<int>> extraDamageFromSpells;
 
-            const std::vector<MonsterWeakness> & weaknesses = battleStats.weaknesses;
-            for ( const MonsterWeakness & weakness : weaknesses ) {
+            for ( const MonsterWeakness & weakness : battleStats.weaknesses ) {
                 if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
                     extraDamageFromSpells[weakness.percentage].emplace_back( weakness.value );
                     continue;
