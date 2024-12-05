@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <memory>
 
 #include "agg_image.h"
