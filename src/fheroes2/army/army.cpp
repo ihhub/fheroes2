@@ -504,6 +504,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
 {
     for ( Troop * troop : *this ) {
         assert( troop != nullptr );
+
         if ( !troop->isValid() ) {
             continue;
         }
@@ -512,7 +513,6 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
-        Kingdom & kingdom = castle.GetKingdom();
         if ( castle.GetRace() != troop->GetRace() ) {
             continue;
         }
@@ -521,18 +521,26 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
+        Kingdom & kingdom = castle.GetKingdom();
+
         const Funds payment = troop->GetTotalUpgradeCost();
-        if ( kingdom.AllowPayment( payment ) ) {
-            kingdom.OddFundsResource( payment );
-            troop->Upgrade();
+        if ( !kingdom.AllowPayment( payment ) ) {
+            continue;
         }
+
+        kingdom.OddFundsResource( payment );
+
+        troop->Upgrade();
     }
 }
 
-Troop * Troops::GetFirstValid()
+Troop * Troops::GetFirstValid() const
 {
-    iterator it = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } );
-    return it == end() ? nullptr : *it;
+    if ( const const_iterator iter = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } ); iter != end() ) {
+        return *iter;
+    }
+
+    return nullptr;
 }
 
 Troop * Troops::getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const

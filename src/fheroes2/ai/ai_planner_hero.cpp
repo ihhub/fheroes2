@@ -2644,10 +2644,8 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
     // This method is called upon action completion and the hero could no longer be available.
     // So it is to check if the hero is still present.
     if ( hero.isActive() ) {
-        Castle * castle = hero.inCastleMutable();
-
-        if ( castle ) {
-            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        if ( Castle * castle = hero.inCastleMutable(); castle ) {
+            reinforceCastle( *castle );
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );

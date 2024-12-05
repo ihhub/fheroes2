@@ -73,7 +73,8 @@ namespace
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
 #endif
-        uint16_t format = AUDIO_S16;
+        // Signed 16-bit samples with platform-dependent byte order
+        uint16_t format = AUDIO_S16SYS;
         // Stereo audio support
         int channels = 2;
 #if defined( ANDROID )

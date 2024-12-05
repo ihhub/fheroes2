@@ -1107,11 +1107,11 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonNew.area() ) ? buttonNew.drawOnPress() : buttonNew.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) ? buttonLoad.drawOnPress() : buttonLoad.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonSave.area() ) ? buttonSave.drawOnPress() : buttonSave.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
+            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
+            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
+            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
@@ -1132,7 +1132,8 @@ namespace Interface
 
                 break;
             }
-            else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+
+            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
@@ -1141,7 +1142,8 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
@@ -1759,12 +1761,12 @@ namespace Interface
     bool EditorInterface::loadMap( const std::string & filePath )
     {
         if ( !Maps::Map_Format::loadMap( filePath, _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), "Failed to load the map.", Dialog::OK );
             return false;
         }
 
         if ( !Maps::readMapInEditor( _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), "Failed to read the map.", Dialog::OK );
             return false;
         }
 
@@ -1785,20 +1787,20 @@ namespace Interface
     void EditorInterface::saveMapToFile()
     {
         if ( !Maps::updateMapPlayers( _mapFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "The map is corrupted." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "The map is corrupted." ), Dialog::OK );
             return;
         }
 
         const std::string dataPath = System::GetDataDirectory( "fheroes2" );
         if ( dataPath.empty() ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate data directory to save the map." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to locate data directory to save the map." ), Dialog::OK );
             return;
         }
 
         std::string mapDirectory = System::concatPath( dataPath, "maps" );
 
         if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to create a directory to save the map." ), Dialog::OK );
             return;
         }
 
@@ -1807,7 +1809,7 @@ namespace Interface
             std::string correctedMapDirectory;
 
             if ( !System::GetCaseInsensitivePath( mapDirectory, correctedMapDirectory ) ) {
-                fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Unable to locate a directory to save the map." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Unable to locate a directory to save the map." ), Dialog::OK );
                 return;
             }
 
@@ -1849,7 +1851,7 @@ namespace Interface
             return;
         }
 
-        fheroes2::showStandardTextMessage( _( "Warning!" ), _( "Failed to save the map." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Error" ), _( "Failed to save the map." ), Dialog::OK );
     }
 
     void EditorInterface::openMapSpecificationsDialog()

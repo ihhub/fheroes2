@@ -231,8 +231,11 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            if ( buttonOk.isEnabled() ) {
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            }
+
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.isMouseRightButtonPressedInArea( listRoi ) ) {
                 continue;

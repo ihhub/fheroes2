@@ -68,17 +68,15 @@ namespace Battle
 
         TargetInfo() = default;
 
-        explicit TargetInfo( Unit * defender_ )
-            : defender( defender_ )
+        explicit TargetInfo( Unit * def )
+            : defender( def )
         {}
 
         static bool isFinishAnimFrame( const TargetInfo & info );
     };
 
     struct TargetsInfo : public std::vector<TargetInfo>
-    {
-        TargetsInfo() = default;
-    };
+    {};
 
     enum MonsterState : uint32_t
     {
