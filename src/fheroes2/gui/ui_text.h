@@ -178,7 +178,8 @@ namespace fheroes2
         // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
         // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
         virtual void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                       const bool ignoreSpacesAtTextEnd = true ) const = 0;
+                                       const bool ignoreSpacesAtTextEnd = true ) const
+            = 0;
 
     protected:
         std::optional<SupportedLanguage> _language;
