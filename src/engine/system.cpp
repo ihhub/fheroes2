@@ -42,7 +42,7 @@
 #include <algorithm>
 #endif
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
 #include <dirent.h>
 #include <strings.h>
 #endif
@@ -449,7 +449,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_MORPHOS )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA ) && !defined( TARGET_MORPHOS )
     // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 

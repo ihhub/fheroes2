@@ -2245,28 +2245,23 @@ namespace Editor
         fheroes2::Button buttonCancel;
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
-        const fheroes2::Rect buttonCancelRoi( buttonCancel.area() );
 
         fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancelRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
-        const fheroes2::Rect buttonOkRoi( buttonOk.area() );
+        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         fheroes2::Button buttonRumors;
         const int buttonRumorsIcn = isEvilInterface ? ICN::BUTTON_RUMORS_EVIL : ICN::BUTTON_RUMORS_GOOD;
         background.renderButton( buttonRumors, buttonRumorsIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
-        const fheroes2::Rect buttonRumorsRoi( buttonRumors.area() );
 
         fheroes2::Button buttonEvents;
         const int buttonEventsIcn = isEvilInterface ? ICN::BUTTON_EVENTS_EVIL : ICN::BUTTON_EVENTS_GOOD;
-        background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumorsRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
-        const fheroes2::Rect buttonEventsRoi( buttonEvents.area() );
+        background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumors.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::Button buttonLanguage;
         const int buttonLanguageIcn = isEvilInterface ? ICN::BUTTON_LANGUAGE_EVIL : ICN::BUTTON_LANGUAGE_GOOD;
-        background.renderButton( buttonLanguage, buttonLanguageIcn, 0, 1, { 20 + buttonRumorsRoi.width + buttonEventsRoi.width + 2 * 10, 6 },
+        background.renderButton( buttonLanguage, buttonLanguageIcn, 0, 1, { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
-        const fheroes2::Rect buttonLanguageRoi( buttonLanguage.area() );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
@@ -2299,19 +2294,19 @@ namespace Editor
         display.render( background.totalArea() );
 
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkRoi ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
-            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
-            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEventsRoi ) );
-            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguageRoi ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumors.area() ) );
+            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEvents.area() ) );
+            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguage.area() ) );
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelRoi ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkRoi ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 break;
             }
 
@@ -2323,7 +2318,7 @@ namespace Editor
                 lossConditionUI.render( display, false );
                 display.render( lossConditionUIRoi );
             }
-            else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
+            else if ( le.MouseClickLeft( buttonRumors.area() ) ) {
                 auto temp = mapFormat.rumors;
                 if ( openRumorWindow( temp, mapFormat.mainLanguage ) ) {
                     mapFormat.rumors = std::move( temp );
@@ -2331,7 +2326,7 @@ namespace Editor
 
                 display.render( background.totalArea() );
             }
-            else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
+            else if ( le.MouseClickLeft( buttonEvents.area() ) ) {
                 auto temp = mapFormat.dailyEvents;
                 if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors, mapFormat.mainLanguage ) ) {
                     mapFormat.dailyEvents = std::move( temp );
@@ -2339,7 +2334,7 @@ namespace Editor
 
                 display.render( background.totalArea() );
             }
-            else if ( le.MouseClickLeft( buttonLanguageRoi ) ) {
+            else if ( le.MouseClickLeft( buttonLanguage.area() ) ) {
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
                 const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
                 if ( language != mapFormat.mainLanguage ) {
@@ -2419,19 +2414,19 @@ namespace Editor
 
                 display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonRumorsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonRumors.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Rumors" ), _( "Click to edit custom rumors." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonEventsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonEvents.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Events" ), _( "Click to edit daily events." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLanguageRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLanguage.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
