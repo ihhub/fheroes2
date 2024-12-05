@@ -40,7 +40,7 @@
 
 namespace
 {
-    std::string getObjectInfoText( const Maps::Tiles & tile )
+    std::string getObjectInfoText( const Maps::Tile & tile )
     {
         const MP2::MapObjectType type = tile.getMainObjectType();
         switch ( type ) {
@@ -66,15 +66,15 @@ namespace
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tiles & tile )
+    void showPopupWindow( const Maps::Tile & tile )
     {
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
         std::string infoString;
-        const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+        const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
         if ( mainTileIndex != -1 ) {
-            infoString = getObjectInfoText( world.GetTiles( mainTileIndex ) );
+            infoString = getObjectInfoText( world.getTile( mainTileIndex ) );
         }
         else {
             infoString = getObjectInfoText( tile );

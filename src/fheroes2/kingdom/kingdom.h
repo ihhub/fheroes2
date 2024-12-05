@@ -52,7 +52,7 @@ namespace MP2
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Kingdom : public BitModes, public Control
@@ -188,10 +188,10 @@ public:
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
-    bool isVisited( const Maps::Tiles & ) const;
+    bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+    bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
 
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;

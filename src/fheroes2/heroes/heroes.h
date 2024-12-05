@@ -57,7 +57,7 @@ namespace Battle
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Map_Format
     {
@@ -537,7 +537,7 @@ public:
 
     void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tiles &, Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;

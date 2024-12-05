@@ -253,7 +253,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -271,7 +271,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.isMouseRightButtonPressed() ) {
-                Dialog::QuickInfo( world.GetTiles( dst ) );
+                Dialog::QuickInfo( world.getTile( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;

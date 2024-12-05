@@ -42,12 +42,17 @@ class OStreamBase;
 
 namespace Maps
 {
+    // Layer types. They affect passability and also rendering. Rendering must be in the following order:
+    // - terrain objects (they have no shadows)
+    // - shadows
+    // - background objects
+    // - objects
     enum ObjectLayerType : uint8_t
     {
-        OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
-        BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
-        SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
-        TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
+        OBJECT_LAYER = 0, // Common objects like mines, forest, mountains, castles and etc. They affect passability.
+        BACKGROUND_LAYER = 1, // Objects that still affect passability but they must be rendered as background. Such objects are lakes, bushes and etc.
+        SHADOW_LAYER = 2, // Shadows and some special objects like castle's entrance road. No passability changes.
+        TERRAIN_LAYER = 3 // Roads, water flaws and cracks. Essentially everything what is a part of terrain. No passability changes.
     };
 
     struct ObjectPart
@@ -91,12 +96,12 @@ namespace Maps
         uint8_t icnIndex{ 255 };
     };
 
-    class Tiles
+    class Tile
     {
     public:
-        Tiles() = default;
+        Tile() = default;
 
-        bool operator==( const Tiles & tile ) const
+        bool operator==( const Tile & tile ) const
         {
             return ( _groundObjectPart == tile._groundObjectPart ) && ( _topObjectPart == tile._topObjectPart ) && ( _index == tile._index )
                    && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainObjectPart == tile._mainObjectPart )
@@ -104,7 +109,7 @@ namespace Maps
                    && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
         }
 
-        bool operator!=( const Tiles & tile ) const
+        bool operator!=( const Tile & tile ) const
         {
             return !operator==( tile );
         }
@@ -324,12 +329,12 @@ namespace Maps
         }
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixMP2MapTileObjectType( Tiles & tile );
+        static void fixMP2MapTileObjectType( Tile & tile );
 
-        static int32_t getIndexOfMainTile( const Tiles & tile );
+        static int32_t getIndexOfMainTile( const Tile & tile );
 
         // Update tile or bottom layer object image index.
-        static void updateTileObjectIcnIndex( Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+        static void updateTileObjectIcnIndex( Tile & tile, const uint32_t uid, const uint8_t newIndex );
 
     private:
         bool isShadow() const;
@@ -341,18 +346,18 @@ namespace Maps
 
         void _updateRoadFlag();
 
-        bool isTallObject() const;
+        bool isAnyTallObjectOnTile() const;
 
         bool isDetachedObject() const;
 
-        int getOriginalPassability() const;
+        int getTileIndependentPassability() const;
 
         bool doesObjectExist( const uint32_t uid ) const;
 
         std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
-        friend OStreamBase & operator<<( OStreamBase & stream, const Tiles & tile );
-        friend IStreamBase & operator>>( IStreamBase & stream, Tiles & tile );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
+        friend IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
 
         // The following members are used in the Editor and in the game.
 
@@ -396,9 +401,9 @@ namespace Maps
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const ObjectPart & ta );
-    OStreamBase & operator<<( OStreamBase & stream, const Tiles & tile );
+    OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
     IStreamBase & operator>>( IStreamBase & stream, ObjectPart & ta );
-    IStreamBase & operator>>( IStreamBase & stream, Tiles & tile );
+    IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
 }
 
 #endif

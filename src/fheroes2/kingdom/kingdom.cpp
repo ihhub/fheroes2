@@ -420,7 +420,7 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
            && ( resource.gold >= funds.gold || 0 == funds.gold );
 }
 
-bool Kingdom::isVisited( const Maps::Tiles & tile ) const
+bool Kingdom::isVisited( const Maps::Tile & tile ) const
 {
     return isVisited( tile.GetIndex(), tile.getMainObjectType( false ) );
 }
@@ -448,7 +448,7 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
         visit_object.emplace_front( index, objectType );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
 {
     if ( !MP2::isInGameActionObject( objectType ) )
         return false;
@@ -606,7 +606,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
         // Check if there is a hero placed by the map creator near the castle entrance (castle position + point(0, 1))
         const fheroes2::Point & cp = castle->GetCenter();
-        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
+        Heroes * hero = world.getTile( cp.x, cp.y + 1 ).getHero();
 
         // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {

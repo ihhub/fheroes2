@@ -204,7 +204,6 @@ namespace Battle
 
         bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
         bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
-        bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
         void PostAttackAction( const Unit & enemy );
@@ -320,7 +319,7 @@ namespace Battle
         uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
-        uint32_t disruptingray;
+        uint32_t _disruptingRaysNum;
         bool reflect;
 
         Position position;

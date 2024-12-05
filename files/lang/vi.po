@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 00:20+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3525,8 +3525,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Ngươi có chắc muốn xóa file:"
 
-msgid "Warning!"
-msgstr "Cảnh báo!"
+msgid "Warning"
+msgstr "Cảnh báo"
 
 msgid "Click to save the current game."
 msgstr "Nhấp để lưu trò chơi hiện tại."
@@ -4519,9 +4519,6 @@ msgstr "Hủy quay lại menu chính của Biên tập Bản đồ."
 
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
-
-msgid "Warning"
-msgstr "Cảnh báo"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -6342,6 +6339,14 @@ msgid "Keyboard|SPACE"
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
 
 msgid "Kingdom Income"
@@ -12258,6 +12263,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Cảnh báo!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Bù nhìn 1"

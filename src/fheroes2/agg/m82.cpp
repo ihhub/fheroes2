@@ -202,7 +202,7 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
+M82::SoundType M82::getAdventureMapTileSound( const Maps::Tile & tile )
 {
     if ( tile.isStream() ) {
         return LOOP0014;

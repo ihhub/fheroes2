@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
 
 namespace fheroes2
@@ -27,5 +29,9 @@ namespace fheroes2
     // fheroes2 does not support UTF-8 so on mobile devices with virtual keyboard it might be a big problem.
     // As a solution we should utilize an in-game virtual keyboard which supports all code pages available by the engine.
     // The default language in the keyboard is English.
-    void openVirtualKeyboard( std::string & output );
+    //
+    // If length limit is set to 0 then no limit will be applied.
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit );
+
+    void openVirtualNumpad( int32_t & output, const int32_t minValue = INT32_MIN, const int32_t maxValue = INT32_MAX );
 }

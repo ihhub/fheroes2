@@ -292,6 +292,8 @@ namespace fheroes2
     {
         _isEnabled = true;
         notifySubscriber();
+
+        _updateReleasedArea();
     }
 
     void ButtonBase::disable()
@@ -299,6 +301,8 @@ namespace fheroes2
         _isEnabled = false;
         _isPressed = false; // button can't be disabled and pressed
         notifySubscriber();
+
+        _updateReleasedArea();
     }
 
     void ButtonBase::show()
@@ -322,11 +326,11 @@ namespace fheroes2
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = _getPressed();
-            Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
+            Blit( sprite, output, _areaPressed );
         }
         else {
             const Sprite & sprite = isEnabled() ? _getReleased() : _getDisabled();
-            Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
+            Blit( sprite, output, _areaReleased );
         }
 
         return true;
@@ -366,12 +370,6 @@ namespace fheroes2
             output.render( area() );
         }
         return true;
-    }
-
-    Rect ButtonBase::area() const
-    {
-        const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
-        return { _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() };
     }
 
     const Sprite & ButtonBase::_getDisabled() const

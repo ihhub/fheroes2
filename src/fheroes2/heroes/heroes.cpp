@@ -560,7 +560,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
         // An empty name can be set in the original Editor which is wrong.
-        std::string temp = dataStream.toString( 13 );
+        std::string temp = dataStream.getString( 13 );
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
@@ -1132,7 +1132,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         army.Reset( false );
     }
 
-    world.GetTiles( pt.x, pt.y ).setHero( this );
+    world.getTile( pt.x, pt.y ).setHero( this );
 
     kingdom.AddHero( this );
     // Update the set of recruits in the kingdom
@@ -1264,7 +1264,7 @@ Castle * Heroes::inCastleMutable() const
     return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
-bool Heroes::isVisited( const Maps::Tiles & tile, Visit::Type type ) const
+bool Heroes::isVisited( const Maps::Tile & tile, Visit::Type type ) const
 {
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
@@ -1287,7 +1287,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
 
 void Heroes::SetVisited( int32_t index, Visit::Type type )
 {
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     if ( Visit::GLOBAL == type ) {
@@ -1300,7 +1300,7 @@ void Heroes::SetVisited( int32_t index, Visit::Type type )
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     // Set visited to all allies as well.
@@ -1312,7 +1312,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 
 void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
 {
-    const Maps::Tiles & tile = world.GetTiles( index );
+    const Maps::Tile & tile = world.getTile( index );
     const uint32_t uid = tile.getMainObjectPart()._uid;
     int wide = 0;
 
@@ -1332,7 +1332,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 
     if ( tile.getMainObjectType( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).getMainObjectPart()._uid == uid )
+            if ( Maps::isValidAbsIndex( ii ) && world.getTile( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
     }
 }
@@ -1623,7 +1623,7 @@ bool Heroes::isMoveEnabled() const
 
 bool Heroes::CanMove() const
 {
-    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    const Maps::Tile & tile = world.getTile( GetIndex() );
     return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
@@ -1952,7 +1952,7 @@ void Heroes::Dismiss( int reason )
     }
     SetColor( Color::NONE );
 
-    world.GetTiles( GetIndex() ).setHero( nullptr );
+    world.getTile( GetIndex() ).setHero( nullptr );
     SetIndex( -1 );
 
     modes = 0;
@@ -2026,9 +2026,9 @@ void Heroes::Move2Dest( const int32_t dstIndex )
         return;
     }
 
-    world.GetTiles( currentIndex ).setHero( nullptr );
+    world.getTile( currentIndex ).setHero( nullptr );
     SetIndex( dstIndex );
-    world.GetTiles( dstIndex ).setHero( this );
+    world.getTile( dstIndex ).setHero( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
@@ -2133,7 +2133,7 @@ std::string Heroes::String() const
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
-       << "save object     : " << MP2::StringObject( world.GetTiles( GetIndex() ).getMainObjectType( false ) ) << std::endl
+       << "save object     : " << MP2::StringObject( world.getTile( GetIndex() ).getMainObjectType( false ) ) << std::endl
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( CUSTOM ) ? "CUSTOM," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" )
        << std::endl;
 
