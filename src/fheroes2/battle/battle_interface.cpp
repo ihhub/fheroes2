@@ -3202,6 +3202,56 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
     humanturn_exit = true;
 }
 
+void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    const Dialog::FrameBox box( 100, true );
+    const fheroes2::Rect roiArea = box.GetArea();
+    fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - fheroes2::AGG::GetICN( ICN::UNIFORM_GOOD_CANCEL_BUTTON, 0 ).width() / 2, roiArea.y + roiArea.height - 20,
+                             ICN::UNIFORM_GOOD_CANCEL_BUTTON, 0, 1 );
+
+    fheroes2::Sprite releasedCombatButton;
+    fheroes2::Sprite pressedCombatButton;
+    fheroes2::Sprite releasedResolveButton;
+    fheroes2::Sprite pressedResolveButton;
+
+    fheroes2::getTextAdaptedButton( releasedCombatButton, pressedCombatButton, _( "AUTO-\nCOMBAT" ), ICN::EMPTY_GOOD_BUTTON, ICN::UNIFORMBAK_GOOD );
+    fheroes2::getTextAdaptedButton( releasedResolveButton, pressedResolveButton, _( "AUTO-\nRESOLVE" ), ICN::EMPTY_GOOD_BUTTON, ICN::UNIFORMBAK_GOOD );
+
+    fheroes2::ButtonSprite autoCombat( roiArea.x, roiArea.y + 40, releasedCombatButton, pressedCombatButton );
+    fheroes2::ButtonSprite autoResolve( roiArea.x + roiArea.width - releasedCombatButton.width(), roiArea.y + 40, releasedResolveButton, pressedResolveButton );
+
+    // To-do: add a title and a header to the dialog. "Automatic Battle Modes" and Choose an automatic battle mode:
+
+    cancel.draw();
+    autoResolve.draw();
+    autoCombat.draw();
+    display.render();
+    while ( le.HandleEvents() ) {
+        le.isMouseLeftButtonPressedInArea( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( autoResolve.area() ) ? autoResolve.drawOnPress() : autoResolve.drawOnRelease();
+        le.isMouseLeftButtonPressedInArea( autoCombat.area() ) ? autoCombat.drawOnPress() : autoCombat.drawOnRelease();
+
+        // To-do: add right-click infos for the buttons.
+
+        if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return;
+        }
+        if ( le.MouseClickLeft( autoResolve.area() ) ) {
+            EventAutoFinish( actions );
+            return;
+        }
+        if ( le.MouseClickLeft( autoCombat.area() ) ) {
+            EventStartAutoBattle( unit, actions );
+            return;
+        }
+        display.render( roiArea );
+    }
+}
+
 void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -3209,7 +3259,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
 
     if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
-        EventStartAutoBattle( unit, actions );
+        OpenAutoModeDialog( unit, actions );
     }
 }
 
