@@ -439,6 +439,7 @@ namespace
                 return fheroes2::GameMode::START_GAME;
             }
 
+            fheroes2::drawMainMenuScreen();
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
             return fheroes2::GameMode::MAIN_MENU;
         }
@@ -448,6 +449,7 @@ namespace
             return fheroes2::GameMode::START_GAME;
         }
 
+        fheroes2::drawMainMenuScreen();
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
