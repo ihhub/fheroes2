@@ -55,6 +55,72 @@ namespace
 
         return result;
     }
+
+    bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Spell & spell )
+    {
+        const int spellID = spell.GetID();
+
+        if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
+            return true;
+        }
+
+        switch ( spellID ) {
+        case Spell::BLESS:
+        case Spell::MASSBLESS:
+            return unit.Modes( Battle::SP_BLESS );
+
+        case Spell::BLOODLUST:
+            return unit.Modes( Battle::SP_BLOODLUST );
+
+        case Spell::CURSE:
+        case Spell::MASSCURSE:
+            return unit.Modes( Battle::SP_CURSE );
+
+        case Spell::HASTE:
+        case Spell::MASSHASTE:
+            return unit.Modes( Battle::SP_HASTE );
+
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
+            return unit.Modes( Battle::SP_SHIELD );
+
+        case Spell::SLOW:
+        case Spell::MASSSLOW:
+            return unit.Modes( Battle::SP_SLOW );
+
+        case Spell::STONESKIN:
+        case Spell::STEELSKIN:
+            return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
+
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::PETRIFY:
+            return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
+
+        case Spell::DRAGONSLAYER:
+            return unit.Modes( Battle::SP_DRAGONSLAYER );
+
+        case Spell::ANTIMAGIC:
+            return unit.Modes( Battle::SP_ANTIMAGIC );
+
+        case Spell::BERSERKER:
+            return unit.Modes( Battle::SP_BERSERKER );
+
+        case Spell::HYPNOTIZE:
+            return unit.Modes( Battle::SP_HYPNOTIZE );
+
+        case Spell::MIRRORIMAGE:
+            return unit.Modes( Battle::CAP_MIRROROWNER );
+
+        case Spell::DISRUPTINGRAY:
+            return unit.GetDefense() < spell.ExtraValue();
+
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
@@ -328,9 +394,8 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
 {
     const int spellID = spell.GetID();
 
-    // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
-    if ( !forDispel
-         && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
+    // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
+    if ( !forDispel && ( isSpellcastUselessForUnit( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
 
@@ -555,12 +620,12 @@ AI::SpellcastOutcome AI::BattlePlanner::spellResurrectValue( const Spell & spell
     }
 
     // Then consider the stacks from the graveyard
-    for ( const int32_t idx : arena.GraveyardOccupiedCells() ) {
-        if ( !arena.GraveyardAllowResurrect( idx, spell ) ) {
+    for ( const int32_t idx : arena.getCellsOccupiedByGraveyard() ) {
+        if ( !arena.isAbleToResurrectFromGraveyard( idx, spell ) ) {
             continue;
         }
 
-        const Battle::Unit * unit = arena.GraveyardLastTroop( idx );
+        const Battle::Unit * unit = arena.getLastResurrectableUnitFromGraveyard( idx, spell );
         assert( unit != nullptr && !unit->isValid() );
 
         updateBestOutcome( unit );

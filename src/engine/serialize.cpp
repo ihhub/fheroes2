@@ -24,7 +24,6 @@
 #include "serialize.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstring>
 #include <ostream>
 #include <string>
@@ -35,22 +34,6 @@
 namespace
 {
     const size_t minBufferCapacity = 1024;
-}
-
-StreamBase::StreamBase( StreamBase && stream ) noexcept
-{
-    std::swap( _flags, stream._flags );
-}
-
-StreamBase & StreamBase::operator=( StreamBase && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    std::swap( _flags, stream._flags );
-
-    return *this;
 }
 
 void StreamBase::setBigendian( bool f )
@@ -71,17 +54,6 @@ void StreamBase::setFail( bool f )
     else {
         _flags &= ~FAILURE;
     }
-}
-
-IStreamBase & IStreamBase::operator=( IStreamBase && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    StreamBase::operator=( std::move( stream ) );
-
-    return *this;
 }
 
 uint16_t IStreamBase::get16()
@@ -245,28 +217,13 @@ OStreamBase & OStreamBase::operator<<( const fheroes2::Point & v )
     return *this << v.x << v.y;
 }
 
-RWStreamBuf::RWStreamBuf( const size_t sz )
+RWStreamBuf::RWStreamBuf( const size_t size )
 {
-    if ( sz ) {
-        reallocBuf( sz );
+    if ( size ) {
+        reallocBuf( size );
     }
 
     setBigendian( IS_BIGENDIAN );
-}
-
-RWStreamBuf & RWStreamBuf::operator=( RWStreamBuf && stream ) noexcept
-{
-    if ( this == &stream ) {
-        return *this;
-    }
-
-    // Only the StreamBufTmpl move assignment operator should be called to avoid multiple calls
-    // of the StreamBase move assignment operator due to the multiple inheritance scheme
-    StreamBufTmpl::operator=( std::move( stream ) );
-
-    std::swap( _buf, stream._buf );
-
-    return *this;
 }
 
 void RWStreamBuf::putBE16( uint16_t v )
@@ -297,29 +254,29 @@ void RWStreamBuf::putLE32( uint32_t v )
     put8( v >> 24 );
 }
 
-void RWStreamBuf::putRaw( const void * ptr, size_t sz )
+void RWStreamBuf::putRaw( const void * ptr, size_t size )
 {
-    if ( sz == 0 ) {
+    if ( size == 0 ) {
         return;
     }
 
-    if ( sizep() < sz ) {
-        if ( sz < capacity() / 2 ) {
+    if ( sizep() < size ) {
+        if ( size < capacity() / 2 ) {
             reallocBuf( capacity() + capacity() / 2 );
         }
         else {
-            reallocBuf( capacity() + sz );
+            reallocBuf( capacity() + size );
         }
     }
 
-    if ( sizep() < sz ) {
+    if ( sizep() < size ) {
         assert( 0 );
         return;
     }
 
-    memcpy( _itput, ptr, sz );
+    memcpy( _itput, ptr, size );
 
-    _itput = _itput + sz;
+    _itput = _itput + size;
 }
 
 void RWStreamBuf::put8( const uint8_t v )
@@ -337,13 +294,17 @@ void RWStreamBuf::put8( const uint8_t v )
     ++_itput;
 }
 
-size_t RWStreamBuf::tellp()
+size_t RWStreamBuf::tellp() const
 {
+    assert( _itbeg <= _itput );
+
     return _itput - _itbeg;
 }
 
-size_t RWStreamBuf::sizep()
+size_t RWStreamBuf::sizep() const
 {
+    assert( _itput <= _itend );
+
     return _itend - _itput;
 }
 
@@ -365,7 +326,8 @@ void RWStreamBuf::reallocBuf( size_t size )
         return;
     }
 
-    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) );
+    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) && _itbeg <= _itget && _itget <= _itput
+            && _itput <= _itend );
 
     if ( sizep() < size ) {
         size = std::max( size, minBufferCapacity );
@@ -392,6 +354,45 @@ ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
     _itput = _itend;
 
     setBigendian( IS_BIGENDIAN );
+}
+
+ROStreamBuf::ROStreamBuf( std::vector<uint8_t> && buf )
+    : _buf( std::move( buf ) )
+{
+    _itbeg = _buf.data();
+    _itend = _itbeg + _buf.size();
+    _itget = _itbeg;
+    _itput = _itend;
+
+    setBigendian( IS_BIGENDIAN );
+}
+
+std::pair<const uint8_t *, size_t> ROStreamBuf::getRawView( const size_t size /* = 0 */ )
+{
+    const size_t remainSize = sizeg();
+    const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+    auto v = std::make_pair( _itget, resultSize );
+
+    _itget += resultSize;
+
+    return v;
+}
+
+std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
+{
+    const size_t remainSize = sizeg();
+    const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
+
+    const uint8_t * strBeg = _itget;
+    _itget += sizeToSkip;
+
+    const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
+    assert( strBeg <= strEnd );
+
+    static_assert( std::is_same_v<std::remove_const_t<std::remove_reference_t<decltype( *strBeg )>>, unsigned char> );
+
+    return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
 }
 
 bool StreamFile::open( const std::string & fn, const std::string & mode )
@@ -448,10 +449,21 @@ size_t StreamFile::size()
 
 size_t StreamFile::tell()
 {
-    return tellg();
+    if ( !_file ) {
+        return 0;
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    return static_cast<size_t>( pos );
 }
 
-void StreamFile::seek( size_t pos )
+void StreamFile::seek( const size_t pos )
 {
     if ( !_file ) {
         return;
@@ -504,39 +516,13 @@ size_t StreamFile::sizeg()
     return static_cast<size_t>( len - pos );
 }
 
-size_t StreamFile::tellg()
-{
-    if ( !_file ) {
-        return 0;
-    }
-
-    const long pos = std::ftell( _file.get() );
-    if ( pos < 0 ) {
-        setFail();
-
-        return 0;
-    }
-
-    return static_cast<size_t>( pos );
-}
-
-size_t StreamFile::sizep()
-{
-    return sizeg();
-}
-
-size_t StreamFile::tellp()
-{
-    return tellg();
-}
-
-void StreamFile::skip( size_t pos )
+void StreamFile::skip( size_t size )
 {
     if ( !_file ) {
         return;
     }
 
-    if ( std::fseek( _file.get(), static_cast<long int>( pos ), SEEK_CUR ) != 0 ) {
+    if ( std::fseek( _file.get(), static_cast<long int>( size ), SEEK_CUR ) != 0 ) {
         setFail();
     }
 }
@@ -571,24 +557,24 @@ uint32_t StreamFile::getLE32()
     return le32toh( getUint<uint32_t>() );
 }
 
-void StreamFile::putBE16( uint16_t val )
+void StreamFile::putBE16( uint16_t v )
 {
-    putUint<uint16_t>( htobe16( val ) );
+    putUint<uint16_t>( htobe16( v ) );
 }
 
-void StreamFile::putLE16( uint16_t val )
+void StreamFile::putLE16( uint16_t v )
 {
-    putUint<uint16_t>( htole16( val ) );
+    putUint<uint16_t>( htole16( v ) );
 }
 
-void StreamFile::putBE32( uint32_t val )
+void StreamFile::putBE32( uint32_t v )
 {
-    putUint<uint32_t>( htobe32( val ) );
+    putUint<uint32_t>( htobe32( v ) );
 }
 
-void StreamFile::putLE32( uint32_t val )
+void StreamFile::putLE32( uint32_t v )
 {
-    putUint<uint32_t>( htole32( val ) );
+    putUint<uint32_t>( htole32( v ) );
 }
 
 std::vector<uint8_t> StreamFile::getRaw( const size_t size )
@@ -598,7 +584,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
         return {};
     }
 
-    std::vector<uint8_t> v( chunkSize );
+    std::vector<uint8_t> v( chunkSize, 0 );
 
     if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
         setFail();
@@ -609,9 +595,9 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     return v;
 }
 
-void StreamFile::putRaw( const void * ptr, size_t sz )
+void StreamFile::putRaw( const void * ptr, size_t size )
 {
-    if ( sz == 0 ) {
+    if ( size == 0 ) {
         // Nothing to write. Ignore it.
         return;
     }
@@ -620,32 +606,17 @@ void StreamFile::putRaw( const void * ptr, size_t sz )
         return;
     }
 
-    if ( std::fwrite( ptr, sz, 1, _file.get() ) != 1 ) {
+    if ( std::fwrite( ptr, size, 1, _file.get() ) != 1 ) {
         setFail();
     }
 }
 
-RWStreamBuf StreamFile::toStreamBuf( const size_t size /* = 0 */ )
+ROStreamBuf StreamFile::getStreamBuf( const size_t size /* = 0 */ )
 {
-    const size_t chunkSize = size > 0 ? size : sizeg();
-    if ( chunkSize == 0 || !_file ) {
-        return {};
-    }
-
-    RWStreamBuf buffer( chunkSize );
-
-    if ( std::fread( buffer.rwData(), chunkSize, 1, _file.get() ) != 1 ) {
-        setFail();
-
-        return {};
-    }
-
-    buffer.advance( chunkSize );
-
-    return buffer;
+    return ROStreamBuf{ getRaw( size ) };
 }
 
-std::string StreamFile::toString( const size_t size /* = 0 */ )
+std::string StreamFile::getString( const size_t size /* = 0 */ )
 {
     const std::vector<uint8_t> buf = getRaw( size );
 

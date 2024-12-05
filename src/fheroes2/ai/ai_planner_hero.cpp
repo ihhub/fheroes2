@@ -186,7 +186,7 @@ namespace
         return heroArmyStrength > castleStrength;
     }
 
-    bool isHeroStrongerThan( const Maps::Tiles & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
+    bool isHeroStrongerThan( const Maps::Tile & tile, AI::Planner & ai, const double heroArmyStrength, const double targetStrengthMultiplier )
     {
         return heroArmyStrength > ai.getTileArmyStrength( tile ) * targetStrengthMultiplier;
     }
@@ -202,7 +202,7 @@ namespace
         return monster.GetStrength() > armyStrengthThreshold;
     }
 
-    bool isArmyValuableToHire( const Army & army, const Kingdom & kingdom, const Maps::Tiles & tile, const double armyStrengthThreshold )
+    bool isArmyValuableToHire( const Army & army, const Kingdom & kingdom, const Maps::Tile & tile, const double armyStrengthThreshold )
     {
         const Troop & troop = getTroopFromTile( tile );
         if ( !troop.isValid() ) {
@@ -261,8 +261,8 @@ namespace
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
                             const double armyStrengthThreshold, const bool underHero )
     {
-        const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
+        const Maps::Tile & tile = world.getTile( index );
+        const MP2::MapObjectType objectType = tile.getMainObjectType( !underHero );
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
@@ -981,8 +981,8 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
 {
     // In the future these hardcoded values could be configured by the mod
     // 1 tile distance is 100.0 value approximately
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const Maps::Tile & tile = world.getTile( index );
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
         assert( castle != nullptr );
@@ -1534,8 +1534,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return 3000;
     }
     case MP2::OBJ_HUT_OF_MAGI: {
-        // TODO: cache Maps::GetObjectPositions() call as this is a very heavy operation.
-        const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+        const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
         int fogCountToUncover = 0;
         const int heroColor = hero.GetColor();
         const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -1619,8 +1618,8 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     // Fighters have higher priority for battles and smaller values for other objects.
     assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
 
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const Maps::Tile & tile = world.getTile( index );
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
         assert( castle != nullptr );
@@ -1928,8 +1927,8 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
     const double fiveTiles = 1400;
     const double tenTiles = 3000;
 
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const Maps::Tile & tile = world.getTile( index );
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
     case MP2::OBJ_HERO: {
@@ -2038,8 +2037,8 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
     // Courier should focus on its main task and visit other objects only if it's close to the destination
     assert( hero.getAIRole() == Heroes::Role::SCOUT );
 
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject();
+    const Maps::Tile & tile = world.getTile( index );
+    const MP2::MapObjectType objectType = tile.getMainObjectType();
 
     switch ( objectType ) {
     case MP2::OBJ_WITCHS_HUT: {
@@ -2083,7 +2082,7 @@ double AI::Planner::getScoutObjectValue( const Heroes & hero, const int32_t inde
 double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                     const uint32_t distanceToObject ) const
 {
-    assert( objectType == world.GetTiles( index ).GetObject() );
+    assert( objectType == world.getTile( index ).getMainObjectType() );
 
 #ifdef NDEBUG
     (void)objectType;
@@ -2177,7 +2176,7 @@ int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestP
             continue;
         }
 
-        const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
+        const int safetyFactor = _regions[world.getTile( currentCastleIndex ).GetRegion()].safetyFactor;
         if ( safetyFactor > 100 ) {
             value *= 2;
         }
@@ -2211,7 +2210,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
         for ( const auto & [idx, objType] : _mapActionObjects ) {
             if ( objType == MP2::OBJ_HERO ) {
-                assert( world.GetTiles( idx ).getHero() != nullptr );
+                assert( world.getTile( idx ).getHero() != nullptr );
             }
 
             if ( const auto [dummy, inserted] = objectIndexes.emplace( idx ); !inserted ) {
@@ -2368,7 +2367,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             maxPriority = 0;
             priorityTarget = courierTarget;
 #ifdef WITH_DEBUG
-            objectType = world.GetTiles( courierTarget ).GetObject();
+            objectType = world.getTile( courierTarget ).getMainObjectType();
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
@@ -2479,7 +2478,7 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
                 updatePriorityForCastle( *castle );
             }
             else {
-                updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                updatePriorityAttackTarget( hero.GetKingdom(), world.getTile( tileIndex ) );
             }
         };
 
@@ -2487,12 +2486,12 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             updateCastle();
         }
         else if ( objectType == MP2::OBJ_HERO ) {
-            const Maps::Tiles & tile = world.GetTiles( tileIndex );
+            const Maps::Tile & tile = world.getTile( tileIndex );
 
             const Heroes * anotherHero = tile.getHero();
             if ( anotherHero == nullptr ) {
                 // Another hero lost the battle, but he could defend a castle
-                if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
+                if ( tile.getMainObjectType() == MP2::OBJ_CASTLE ) {
                     updateCastle();
                 }
                 else {
@@ -2534,9 +2533,9 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
             // one of these cases.
 #ifndef NDEBUG
-            const Maps::Tiles & tile = world.GetTiles( tileIndex );
+            const Maps::Tile & tile = world.getTile( tileIndex );
 #endif
-            assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
+            assert( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
             assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
             // In case the castle has just been captured, we need to update the information related to the object on the corresponding tile.
@@ -2624,10 +2623,10 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, frontDirection );
 
-    const Maps::Tiles & currTile = world.GetTiles( heroIdx );
-    const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+    const Maps::Tile & currTile = world.getTile( heroIdx );
+    const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;
     }
 
@@ -2645,10 +2644,8 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
     // This method is called upon action completion and the hero could no longer be available.
     // So it is to check if the hero is still present.
     if ( hero.isActive() ) {
-        Castle * castle = hero.inCastleMutable();
-
-        if ( castle ) {
-            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        if ( Castle * castle = hero.inCastleMutable(); castle ) {
+            reinforceCastle( *castle );
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );
@@ -2683,10 +2680,10 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, nextStepDirection );
 
-    const Maps::Tiles & currTile = world.GetTiles( heroIdx );
-    const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+    const Maps::Tile & currTile = world.getTile( heroIdx );
+    const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
         return;
     }
 
@@ -2722,7 +2719,7 @@ void AI::Planner::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     }
 }
 
-bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
+bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue )
 {
     if ( heroes.empty() ) {
         // No heroes so we indicate that all heroes moved.
@@ -2730,6 +2727,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
     }
 
     std::vector<Heroes *> availableHeroes;
+    availableHeroes.reserve( heroes.size() );
 
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
@@ -2737,9 +2735,19 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         addHeroToMove( hero, availableHeroes );
     }
 
-    Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
+    Interface::StatusPanel & status = Interface::AdventureMap::Get().getStatusPanel();
 
-    uint32_t currentProgressValue = startProgressValue;
+    uint32_t heroesToMoveTotalCount = static_cast<uint32_t>( availableHeroes.size() );
+    uint32_t startProgressValue = currentProgressValue;
+
+    if ( endProgressValue - currentProgressValue >= heroesToMoveTotalCount * 2 ) {
+        // An extra case when there is only one hero and we have more than 2 points to display the turn progress.
+        // We increase the start value to display this progress after the pathfinder ends his work
+        // and the next progress increase will be aster the hero makes his move.
+        ++startProgressValue;
+    }
+
+    uint32_t turnProgressScale = 4 * ( endProgressValue - startProgressValue );
 
     while ( !availableHeroes.empty() ) {
         const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
@@ -2770,12 +2778,25 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
                         bestTargetIndex = targetIndex;
                         bestHero = hero;
                     }
+
+                    // This loop may take many time for computations so update hourglass grains animation.
+                    status.drawAITurnProgress( currentProgressValue );
                 }
 
                 if ( bestTargetIndex != -1 ) {
                     break;
                 }
             }
+        }
+
+        // Calculate turn progress taking into account that the current 'bestHero' most likely will end his turn
+        // and will be removed from 'availableHeroes' vector: we add 3/4 (not 1/2) to help rounding the result.
+        uint32_t progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + 3 * heroesToMoveTotalCount )
+                                     / ( 4 * heroesToMoveTotalCount )
+                                 + startProgressValue;
+        if ( currentProgressValue < progressValue ) {
+            currentProgressValue = progressValue;
+            status.drawAITurnProgress( currentProgressValue );
         }
 
         if ( bestTargetIndex == -1 ) {
@@ -2805,7 +2826,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
         }
 
         if ( bestTargetIndex == -1 ) {
-            // Nothing to do. Stop everything
+            // Nothing to do. Stop everything.
             break;
         }
 
@@ -2865,28 +2886,36 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressVa
             }
         }
 
+        // The size of heroes can be increased if a new hero is released from Jail.
         if ( heroes.size() > heroesBefore ) {
+            const size_t availableHeroesBefore = availableHeroes.size();
+
             addHeroToMove( heroes.back(), availableHeroes );
+
+            if ( availableHeroesBefore < availableHeroes.size() ) {
+                ++heroesToMoveTotalCount;
+
+                if ( endProgressValue < 8 ) {
+                    ++endProgressValue;
+                    turnProgressScale += 4;
+                }
+            }
         }
 
         availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
                                                []( const Heroes * hero ) { return !hero->MayStillMove( false, false ); } ),
                                availableHeroes.end() );
 
-        // The size of heroes can be increased if a new hero is released from Jail.
-        const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
-
-        if ( maxHeroCount > 0 ) {
-            // At least one hero still exist in the kingdom.
-            const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
-            if ( currentProgressValue < progressValue ) {
-                currentProgressValue = static_cast<uint32_t>( progressValue );
-                status.DrawAITurnProgress( currentProgressValue );
-            }
+        progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + heroesToMoveTotalCount )
+                            / ( 4 * heroesToMoveTotalCount )
+                        + startProgressValue;
+        if ( currentProgressValue < progressValue ) {
+            currentProgressValue = progressValue;
+            status.drawAITurnProgress( currentProgressValue );
         }
     }
 
-    status.DrawAITurnProgress( endProgressValue );
+    status.drawAITurnProgress( endProgressValue );
 
     return availableHeroes.empty();
 }

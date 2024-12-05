@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_GAMEAREA_H
-#define H2INTERFACE_GAMEAREA_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -153,13 +152,6 @@ namespace Interface
     {
     public:
         explicit GameArea( BaseInterface & interface );
-        GameArea( const GameArea & ) = default;
-        GameArea( GameArea && ) = delete;
-
-        ~GameArea() = default;
-
-        GameArea & operator=( const GameArea & ) = delete;
-        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -188,7 +180,7 @@ namespace Interface
         }
 
         void Scroll();
-        void SetScroll( int );
+        void SetScroll( const int direction );
 
         void SetCenter( const fheroes2::Point & point )
         {
@@ -224,17 +216,12 @@ namespace Interface
         // Update fog directions data for entire map tiles by checking fog data for current player and its allies.
         static void updateMapFogDirections();
 
-        void QueueEventProcessing( bool isCursorOverGamearea );
+        void QueueEventProcessing();
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
         int32_t GetValidTileIdFromPoint( const fheroes2::Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         fheroes2::Point GetRelativeTilePosition( const fheroes2::Point & tileId ) const; // in relation to screen
-
-        void ResetCursorPosition()
-        {
-            _prevIndexPos = -1;
-        }
 
         void SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h );
 
@@ -323,5 +310,3 @@ namespace Interface
         void updateObjectAnimationInfo() const;
     };
 }
-
-#endif

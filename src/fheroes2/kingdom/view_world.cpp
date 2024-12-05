@@ -32,6 +32,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -48,8 +49,10 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -372,10 +375,10 @@ namespace
 
         for ( int32_t posY = 0; posY < worldWidth; ++posY ) {
             for ( int32_t posX = 0; posX < worldHeight; ++posX ) {
-                const Maps::Tiles & tile = world.GetTiles( posX, posY );
+                const Maps::Tile & tile = world.getTile( posX, posY );
 
-                objectTypes[0] = tile.GetObject( false );
-                objectTypes[1] = tile.GetObject( true );
+                objectTypes[0] = tile.getMainObjectType( false );
+                objectTypes[1] = tile.getMainObjectType( true );
                 objectCount = ( objectTypes[0] == objectTypes[1] ) ? 1 : 2;
 
                 for ( uint32_t i = 0; i < objectCount; ++i ) {
@@ -648,12 +651,14 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Zoom button
     const fheroes2::Point buttonZoomPosition( display.width() - fheroes2::radarWidthPx + 16, 2 * fheroes2::borderWidthPx + fheroes2::radarWidthPx + 128 );
     fheroes2::Button buttonZoom( buttonZoomPosition.x, buttonZoomPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 0, 1 );
+
     buttonZoom.draw();
 
     // Exit button
     const fheroes2::Point buttonExitPosition( display.width() - fheroes2::radarWidthPx + 16, 2 * fheroes2::borderWidthPx + fheroes2::radarWidthPx + 236 );
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::BUTTON_VIEWWORLD_EXIT_EVIL : ICN::BUTTON_VIEWWORLD_EXIT_GOOD ), 0,
                                  1 );
+
     buttonExit.draw();
 
     // Fade-in View World screen.
@@ -675,8 +680,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // message loop
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonZoom.drawOnState( le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) );
 
         bool changed = false;
 
@@ -709,6 +714,12 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
         else if ( le.isMouseWheelDown() ) {
             changed = currentROI.zoomOut( false );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonZoom.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Zoom" ), _( "Click this button to adjust the level of zoom." ), Dialog::ZERO );
         }
 
         if ( !le.isMouseLeftButtonPressedInArea( visibleScreenInPixels ) || !le.isMouseCursorPosInArea( visibleScreenInPixels ) ) {

@@ -67,6 +67,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_option_item.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -286,6 +287,7 @@ namespace
 
         const fheroes2::Point buttonOffset( 112 + pos_rt.x, 362 + pos_rt.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+
         buttonOkay.draw();
 
         RedrawBattleSettings( optionAreas );
@@ -293,7 +295,7 @@ namespace
         display.render();
 
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
 
             bool redrawScreen = false;
 
@@ -335,15 +337,16 @@ namespace
             else if ( le.MouseClickLeft( optionAreas[6] ) ) {
                 return DialogAction::AudioSettings;
             }
+
             if ( le.MouseClickLeft( optionAreas[7] ) ) {
                 return DialogAction::HotKeys;
             }
+
             if ( le.MouseClickLeft( optionAreas[8] ) ) {
                 conf.setBattleDamageInfo( !conf.isBattleShowDamageInfoEnabled() );
                 redrawScreen = true;
             }
-
-            if ( le.isMouseRightButtonPressedInArea( optionAreas[0] ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( optionAreas[0] ) ) {
                 fheroes2::showStandardTextMessage( _( "Speed" ), _( "Set the speed of combat actions and animations." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( optionAreas[1] ) ) {
@@ -660,14 +663,16 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     int sequenceId = sequence.id();
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+
         if ( allowToRestart ) {
-            le.isMouseLeftButtonPressedInArea( buttonRestart->area() ) ? buttonRestart->drawOnPress() : buttonRestart->drawOnRelease();
+            buttonRestart->drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart->area() ) );
         }
 
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
         }
+
         if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to leave the battle results." ), Dialog::ZERO );
         }
@@ -694,6 +699,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
             display.render( animationRoi );
         }
+    }
+
+    // Free memory because RESTART button is not used more.
+    if ( allowToRestart ) {
+        buttonRestart.reset();
     }
 
     if ( !artifacts.empty() ) {
@@ -789,7 +799,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             }
 
             while ( le.HandleEvents() ) {
-                le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
                 // Display captured artifact info on right click
                 if ( le.isMouseRightButtonPressedInArea( artifactArea ) ) {
@@ -798,9 +808,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 else if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                     break;
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+
+                if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 }
+
                 // Animation
                 if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
                     if ( sequenceId != sequence.id() ) {
@@ -885,13 +897,14 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     const int buttonOffset = 121;
     const int buttonICN = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
     fheroes2::Button buttonOk( renderArea.x + buttonOffset, renderArea.y + 410, buttonICN, 0, 1 );
+
     buttonOk.draw();
 
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         // exit
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
@@ -1010,16 +1023,32 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         btnSurrender.disable();
     }
 
-    if ( !buttons ) {
-        btnClose.disable();
-    }
-
     btnCast.draw();
     btnRetreat.draw();
     btnSurrender.draw();
-    btnClose.draw();
 
     int result = 0;
+
+    LocalEvent & le = LocalEvent::Get();
+
+    if ( !buttons ) {
+        // This is a case when this dialog was called by the right mouse button press.
+
+        btnClose.disable();
+        btnClose.draw();
+
+        display.render( pos_rt );
+
+        while ( le.HandleEvents() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    btnClose.draw();
 
     display.render( pos_rt );
 
@@ -1028,20 +1057,18 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     std::string statusMessage = _( "Hero's Options" );
 
-    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && !result ) {
-        btnCast.isEnabled() && le.isMouseLeftButtonPressedInArea( btnCast.area() ) ? btnCast.drawOnPress() : btnCast.drawOnRelease();
-        btnRetreat.isEnabled() && le.isMouseLeftButtonPressedInArea( btnRetreat.area() ) ? btnRetreat.drawOnPress() : btnRetreat.drawOnRelease();
-        btnSurrender.isEnabled() && le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
-
-        if ( !buttons ) {
-            if ( !le.isMouseRightButtonPressed() ) {
-                break;
-            }
-
-            continue;
+        if ( btnCast.isEnabled() ) {
+            btnCast.drawOnState( le.isMouseLeftButtonPressedInArea( btnCast.area() ) );
         }
+        if ( btnRetreat.isEnabled() ) {
+            btnRetreat.drawOnState( le.isMouseLeftButtonPressedInArea( btnRetreat.area() ) );
+        }
+        if ( btnSurrender.isEnabled() ) {
+            btnSurrender.drawOnState( le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) );
+        }
+
+        btnClose.drawOnState( le.isMouseLeftButtonPressedInArea( btnClose.area() ) );
 
         // The Cast Spell is available for a hero and a captain.
         if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
@@ -1088,7 +1115,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         if ( le.MouseClickLeft( portraitArea ) && heroForHeroScreen != nullptr ) {
             LocalEvent::Get().reset();
 
-            heroForHeroScreen->OpenDialog( true, true, true, true, false, false );
+            heroForHeroScreen->OpenDialog( true, true, true, true, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
@@ -1130,8 +1157,12 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
 bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom )
 {
-    if ( kingdom.GetColor() == hero.GetColor() ) // this is weird. You're surrending to yourself!
+    if ( kingdom.GetColor() == hero.GetColor() ) {
+        // This is weird. You're surrendering to yourself!
+        assert( 0 );
+
         return false;
+    }
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -1180,16 +1211,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     btnAccept.draw();
     btnDecline.draw();
 
-    const auto drawGoldMsg = [cost, &kingdom, &btnAccept]() {
+    const auto drawGoldMsg = [cost, &kingdom, &display]( const fheroes2::Rect & btnAcceptArea ) {
         std::string str = _( "Not enough gold (%{gold})" );
 
         StringReplace( str, "%{gold}", cost - kingdom.GetFunds().gold );
 
         const fheroes2::Text text( str, fheroes2::FontType::smallWhite() );
-        const fheroes2::Rect rect = btnAccept.area();
 
         // Since button area includes 3D effect on the left side we need to shift the text by X axis to center it in relation to the button.
-        text.draw( rect.x + ( rect.width - text.width() ) / 2 + 2, rect.y - 13, fheroes2::Display::instance() );
+        text.draw( btnAcceptArea.x + ( btnAcceptArea.width - text.width() ) / 2 + 2, btnAcceptArea.y - 13, display );
     };
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
@@ -1212,7 +1242,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
 
     if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
-        drawGoldMsg();
+        drawGoldMsg( btnAccept.area() );
     }
 
     display.render();
@@ -1220,12 +1250,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     bool result = false;
 
     while ( le.HandleEvents() && !result ) {
-        if ( btnAccept.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( btnAccept.area() ) ? btnAccept.drawOnPress() : btnAccept.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( btnDecline.area() ) ? btnDecline.drawOnPress() : btnDecline.drawOnRelease();
+        if ( btnAccept.isEnabled() ) {
+            btnAccept.drawOnState( le.isMouseLeftButtonPressedInArea( btnAccept.area() ) );
+        }
 
-        if ( btnMarket.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( btnMarket.area() ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
+        btnDecline.drawOnState( le.isMouseLeftButtonPressedInArea( btnDecline.area() ) );
+
+        if ( btnMarket.isEnabled() ) {
+            btnMarket.drawOnState( le.isMouseLeftButtonPressedInArea( btnMarket.area() ) );
+        }
 
         if ( btnAccept.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( btnAccept.area() ) ) ) {
             result = true;
@@ -1242,7 +1275,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
             else {
                 btnAccept.disable();
 
-                drawGoldMsg();
+                drawGoldMsg( btnAccept.area() );
             }
 
             btnAccept.draw();

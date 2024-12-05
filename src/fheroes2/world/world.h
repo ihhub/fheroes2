@@ -28,6 +28,7 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -36,6 +37,7 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
+#include "game_language.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -215,7 +217,7 @@ public:
         return height;
     }
 
-    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const
+    const Maps::Tile & getTile( const int32_t x, const int32_t y ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -224,7 +226,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t x, const int32_t y )
+    Maps::Tile & getTile( const int32_t x, const int32_t y )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -233,7 +235,7 @@ public:
 #endif
     }
 
-    const Maps::Tiles & GetTiles( const int32_t tileId ) const
+    const Maps::Tile & getTile( const int32_t tileId ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -242,7 +244,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t tileId )
+    Maps::Tile & getTile( const int32_t tileId )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -356,7 +358,7 @@ public:
     void NewWeek();
     void NewMonth();
 
-    std::string getCurrentRumor() const;
+    std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -364,13 +366,16 @@ public:
     int32_t NextWhirlpool( const int32_t index ) const;
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
-    void CaptureObject( int32_t, int col );
-    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const int col ) const;
-    uint32_t CountCapturedMines( int type, int col ) const;
+    void CaptureObject( const int32_t index, const int color );
+
+    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const int color ) const;
+    uint32_t CountCapturedMines( const int type, const int color ) const;
     uint32_t CountObeliskOnMaps();
-    int ColorCapturedObject( int32_t ) const;
-    void ResetCapturedObjects( int );
-    CapturedObject & GetCapturedObject( int32_t );
+
+    int ColorCapturedObject( const int32_t index ) const;
+    void ResetCapturedObjects( const int color );
+
+    CapturedObject & GetCapturedObject( const int32_t index );
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color ) const;
@@ -413,6 +418,11 @@ public:
 
     void updatePassabilities();
 
+    const std::vector<int32_t> & getAllEyeOfMagiPositions() const
+    {
+        return _allEyeOfMagi;
+    }
+
 private:
     World() = default;
 
@@ -422,7 +432,7 @@ private:
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
-    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
+    bool updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -436,7 +446,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
     friend IStreamBase & operator>>( IStreamBase & stream, World & w );
 
-    std::vector<Maps::Tiles> vec_tiles;
+    std::vector<Maps::Tile> vec_tiles;
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
@@ -463,6 +473,7 @@ private:
 
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
+    std::vector<int32_t> _allEyeOfMagi;
 
     uint8_t _waterPercentage{ 0 };
     double _landRoughness{ 1.0 };

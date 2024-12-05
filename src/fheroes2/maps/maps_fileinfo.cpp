@@ -38,6 +38,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
 #include "map_format_info.h"
@@ -46,6 +47,7 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
@@ -123,7 +125,7 @@ namespace
                 }
             }
 
-            uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
+            uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
         }
 
         MapsFileInfoList result;
@@ -166,8 +168,8 @@ void Maps::FileInfo::Reset()
     height = 0;
     difficulty = Difficulty::NORMAL;
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         races[i] = Race::NONE;
@@ -196,6 +198,8 @@ void Maps::FileInfo::Reset()
     worldDay = 0;
     worldWeek = 0;
     worldMonth = 0;
+
+    mainLanguage = fheroes2::SupportedLanguage::English;
 }
 
 bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
@@ -288,7 +292,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Does the game start with a hero in the first castle?
     startWithHeroInFirstCastle = ( 0 == fs.get() );
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
 
     // Initial races.
     for ( const int color : colors ) {
@@ -318,10 +322,10 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         MP2::MP2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
 
-        Maps::Tiles tile;
+        Maps::Tile tile;
         tile.Init( 0, mp2tile );
 
-        const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart()._imageIndex );
+        const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
         if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
             const int side1 = colorRace.first | colorsAvailableForHumans;
             const int side2 = colorsAvailableForComp ^ colorRace.first;
@@ -336,11 +340,11 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
     // Map name
     fs.seek( 58 );
-    name = fs.toString( mapNameLength );
+    name = fs.getString( mapNameLength );
 
     // Map description
     fs.seek( 118 );
-    description = fs.toString( mapDescriptionLength );
+    description = fs.getString( mapDescriptionLength );
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
@@ -519,12 +523,14 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
 
     version = GameVersion::RESURRECTION;
 
+    mainLanguage = map.mainLanguage;
+
     return true;
 }
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     using UnionsItemType = decltype( unions )::value_type;
 
@@ -629,11 +635,11 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
-    // Only the basename of map filename (fi.file) is saved
-    stream << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
+    // Only the filename part of the path to the map file is saved
+    stream << System::GetFileName( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     for ( size_t i = 0; i < maxNumOfPlayers; ++i ) {
         stream << fi.races[i] << fi.unions[i];
@@ -641,18 +647,19 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 
     return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
-                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth;
+                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
+                  << fi.mainLanguage;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 {
     uint8_t kingdommax = 0;
 
-    // Only the basename of map filename (fi.file) is loaded
+    // Only the filename part of the path to the map file is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     using RacesItemType = decltype( fi.races )::value_type;
     using UnionsItemType = decltype( fi.unions )::value_type;
@@ -669,9 +676,19 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         }
     }
 
-    return stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
-           >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
-           >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
+        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        fi.mainLanguage = fheroes2::SupportedLanguage::English;
+    }
+    else {
+        stream >> fi.mainLanguage;
+    }
+
+    return stream;
 }
 
 MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )

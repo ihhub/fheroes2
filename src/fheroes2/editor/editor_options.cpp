@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
@@ -166,21 +167,17 @@ namespace
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
-        okayButton.draw();
+        fheroes2::ButtonSprite buttonOk( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
+
+        buttonOk.draw();
 
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -220,7 +217,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowPassabilityRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle display of objects' passability." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
@@ -233,6 +230,8 @@ namespace Editor
 {
     void openEditorSettings()
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
@@ -263,7 +262,7 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );

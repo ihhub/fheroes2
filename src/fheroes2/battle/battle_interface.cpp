@@ -442,26 +442,18 @@ namespace
 
     fheroes2::Image DrawHexagon( const uint8_t colorId )
     {
-        const int32_t r = 22;
-        const int32_t l = 10;
-        const int32_t w = Battle::Cell::widthPx;
-        const int32_t h = Battle::Cell::heightPx;
+        const fheroes2::Sprite & originalGrid = fheroes2::AGG::GetICN( ICN::CMBTMISC, 0 );
 
-        fheroes2::Image sf( w + 1, h + 1 );
-        sf.reset();
+        // Move hexagon by 1 pixel down to match the original game's grid.
+        fheroes2::Image hexagonSprite( originalGrid.width(), originalGrid.height() + 1 );
 
-        fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
-        fheroes2::SetPixel( sf, r, 1, colorId );
-        fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
+        // Make the upper image line transparent. The other part will be filled with the copied image.
+        fheroes2::FillTransform( hexagonSprite, 0, 0, originalGrid.width(), 1, 1 );
+        fheroes2::Copy( originalGrid, 0, 0, hexagonSprite, 0, 1, originalGrid.width(), originalGrid.height() );
 
-        fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
-        fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
+        fheroes2::ReplaceColorId( hexagonSprite, 0, colorId );
 
-        fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
-        fheroes2::SetPixel( sf, r, h, colorId );
-        fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
-
-        return sf;
+        return hexagonSprite;
     }
 
     fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
@@ -690,9 +682,9 @@ namespace Battle
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax, area.y + area.height - 11 ) );
 
-            const fheroes2::Rect & buttonPgUpArea = buttonPgUp.area();
+            const fheroes2::Rect & buttonPgUpArea = _buttonPgUp.area();
 
-            _scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUpArea.y + buttonPgUpArea.height ) - 7;
+            _scrollbarSliderAreaLength = _buttonPgDn.area().y - ( buttonPgUpArea.y + buttonPgUpArea.height ) - 7;
 
             setScrollBarArea( { ax + 5, buttonPgUpArea.y + buttonPgUpArea.height + 3, 12, _scrollbarSliderAreaLength } );
 
@@ -782,9 +774,9 @@ namespace Battle
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Rect & buttonPgUpArea = buttonPgUp.area();
+            const fheroes2::Rect & buttonPgUpArea = _buttonPgUp.area();
             const int32_t buttonPgUpBottom = buttonPgUpArea.y + buttonPgUpArea.height;
-            const int32_t buttonPgDnAreaY = buttonPgDn.area().y;
+            const int32_t buttonPgDnAreaY = _buttonPgDn.area().y;
 
             const int32_t ax = buttonPgUpArea.x;
             const int32_t ah = buttonPgDnAreaY - buttonPgUpBottom;
@@ -1051,18 +1043,7 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
-{
-    _area = rt;
-    _orders = units;
-    _army2Color = army2Color;
-
-    if ( units ) {
-        _rects.reserve( units->size() );
-    }
-}
-
-void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1084,35 +1065,36 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
     }
 }
 
-void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                                    fheroes2::Image & output ) const
+void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                     fheroes2::Image & output ) const
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, turnOrderMonsterIconSize - 2, turnOrderMonsterIconSize - 2 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, pos.width - 2, pos.height - 2 );
 
     // Draw a monster's sprite.
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    const int32_t monsterSpriteHeight = monsterSprite.height();
     if ( unit.Modes( Battle::CAP_MIRRORIMAGE ) ) {
-        fheroes2::Sprite mirroredMonster = mons32;
+        fheroes2::Sprite mirroredMonster = monsterSprite;
 
         fheroes2::ApplyPalette( mirroredMonster, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
-        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - mons32.width() ) / 2,
-                        pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ), revert );
+        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - monsterSprite.width() ) / 2,
+                        pos.y + pos.height - monsterSpriteHeight - ( monsterSpriteHeight + 3 < pos.height ? 3 : 0 ), revert );
     }
     else {
-        fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
-                        revert );
+        fheroes2::Blit( monsterSprite, output, pos.x + ( pos.width - monsterSprite.width() ) / 2,
+                        pos.y + pos.height - monsterSpriteHeight - ( monsterSpriteHeight + 3 < pos.height ? 3 : 0 ), revert );
     }
 
     const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
-    number.draw( pos.x + 2, pos.y + 4, output );
+    number.drawInRoi( pos.x + 2, pos.y + 4, output, pos );
 
     if ( isCurrentUnit ) {
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, currentUnitColor );
+        fheroes2::DrawRect( output, pos, currentUnitColor );
     }
     else {
-        uint8_t color = 0;
+        uint8_t color = ARMY_COLOR_GRAY;
 
         switch ( unit.GetCurrentColor() ) {
         case -1: // Berserkers
@@ -1137,14 +1119,13 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
             color = ARMY_COLOR_PURPLE;
             break;
         case Color::NONE:
-            color = ARMY_COLOR_GRAY;
             break;
         default:
             assert( 0 ); // Did you add another player color?
             break;
         }
 
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, color );
+        fheroes2::DrawRect( output, pos, color );
 
         if ( unit.Modes( Battle::TR_MOVED ) ) {
             fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
@@ -1154,43 +1135,50 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
     }
 }
 
-void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( _orders.expired() ) {
+    if ( _orderOfUnits.expired() ) {
         // Nothing to show.
         return;
     }
 
-    const std::shared_ptr<const Units> orders = _orders.lock();
+    const std::shared_ptr<const Units> unitsOrder = _orderOfUnits.lock();
 
-    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( unitsOrder->begin(), unitsOrder->end(), []( const Unit * unit ) {
         assert( unit != nullptr );
         return unit->isValid();
     } ) );
 
-    const int32_t maximumUnitsToDraw = _area.width / turnOrderMonsterIconSize;
+    const int32_t unitsToDraw = std::min( _area.width / turnOrderMonsterIconSize, validUnitCount );
 
-    int32_t offsetX = 0;
+    if ( _rects.size() != static_cast<size_t>( unitsToDraw ) ) {
+        // Update units icons positions.
 
-    if ( validUnitCount > maximumUnitsToDraw ) {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+        width = turnOrderMonsterIconSize * unitsToDraw;
+
+        int32_t offsetX = ( _area.width - width ) / 2;
+
+        x = _area.x + offsetX;
+        y = _area.y;
+        height = turnOrderMonsterIconSize;
+
+        _rects.clear();
+        _rects.reserve( unitsToDraw );
+
+        for ( int32_t index = 0; index < unitsToDraw; ++index ) {
+            // Just for now place 'nullptr' instead of a pointer to unit.
+            // These pointers will be updated in the next loop.
+            _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+
+            offsetX += turnOrderMonsterIconSize;
+        }
     }
-    else {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * validUnitCount ) / 2;
-    }
 
-    x = _area.x + offsetX;
-    y = _area.y;
-    height = turnOrderMonsterIconSize;
-    width = 0;
-
-    _rects.clear();
-
-    int32_t unitsDrawn = 0;
+    int32_t unitRectIndex = 0;
     int32_t unitsProcessed = 0;
 
-    for ( const Unit * unit : *orders ) {
-        if ( unitsDrawn == maximumUnitsToDraw ) {
+    for ( const Unit * unit : *unitsOrder ) {
+        if ( unitRectIndex == unitsToDraw ) {
             break;
         }
 
@@ -1199,18 +1187,15 @@ void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitC
             continue;
         }
 
-        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > maximumUnitsToDraw ) ) {
+        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > unitsToDraw ) ) {
             ++unitsProcessed;
             continue;
         }
 
-        _rects.emplace_back( unit, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
-        RedrawUnit( _rects.back().second, *unit, unit->GetColor() == _army2Color, current == unit, currentUnitColor, output );
+        _rects[unitRectIndex].first = unit;
+        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, current == unit, currentUnitColor, output );
 
-        offsetX += turnOrderMonsterIconSize;
-        width += turnOrderMonsterIconSize;
-
-        ++unitsDrawn;
+        ++unitRectIndex;
         ++unitsProcessed;
     }
 }
@@ -1233,7 +1218,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     // cover
     const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -1292,8 +1277,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
-    btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
+    _buttonAuto.setICNInfo( ICN::TEXTBAR, 4, 5 );
+    _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
     if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
@@ -1309,13 +1294,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect settingsRect = btn_settings.area();
-    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - btn_auto.area().height;
-    btn_auto.setPosition( area.x, satusOffsetY );
-    btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
+    const fheroes2::Rect & settingsRect = _buttonSettings.area();
+    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - _buttonAuto.area().height;
+    _buttonAuto.setPosition( area.x, satusOffsetY );
+    _buttonSettings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
-    btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
+    _buttonSkip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    _buttonSkip.setPosition( area.x + area.width - _buttonSkip.area().width, area.y + area.height - _buttonSkip.area().height );
 
     status.setPosition( area.x + settingsRect.width, satusOffsetY );
 
@@ -1361,7 +1346,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    _turnOrder.Set( _interfacePosition, units, arena.GetArmy2Color() );
+    _turnOrder.set( _interfacePosition, units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
@@ -1464,7 +1449,7 @@ void Battle::Interface::RedrawPartialFinish()
 void Battle::Interface::redrawPreRender()
 {
     if ( Settings::Get().BattleShowTurnOrder() ) {
-        _turnOrder.Redraw( _currentUnit, _contourColor, _mainSurface );
+        _turnOrder.redraw( _currentUnit, _contourColor, _mainSurface );
     }
 
 #ifdef WITH_DEBUG
@@ -1487,9 +1472,9 @@ void Battle::Interface::RedrawInterface()
 {
     status.redraw( fheroes2::Display::instance() );
 
-    btn_auto.draw();
-    btn_settings.draw();
-    btn_skip.draw();
+    _buttonAuto.draw();
+    _buttonSettings.draw();
+    _buttonSkip.draw();
 
     popup.redraw();
 
@@ -1564,7 +1549,7 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     if ( deadUnit && cellId != deadUnit->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnit );
@@ -1692,7 +1677,7 @@ void Battle::Interface::RedrawArmies()
                 const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
-                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                for ( const Unit * deadUnit : arena.getGraveyardUnits( cellId ) ) {
                     for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
                         if ( overlaySprite.unitId == deadUnit->GetUID() ) {
                             troopOverlaySprite.emplace_back( &overlaySprite );
@@ -2531,8 +2516,8 @@ void Battle::Interface::RedrawHighObjects( const int32_t cellId )
 void Battle::Interface::RedrawKilled()
 {
     // Redraw killed troops.
-    for ( const int32_t & cell : arena.GraveyardOccupiedCells() ) {
-        for ( const Unit * unit : arena.GetGraveyardTroops( cell ) ) {
+    for ( const int32_t & cell : arena.getCellsOccupiedByGraveyard() ) {
+        for ( const Unit * unit : arena.getGraveyardUnits( cell ) ) {
             if ( unit && cell != unit->GetTailIndex() ) {
                 RedrawTroopSprite( *unit );
             }
@@ -2664,8 +2649,8 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         const Unit * unitOnCell = cell->GetUnit();
 
         // Cursor is over some dead unit that we can resurrect
-        if ( unitOnCell == nullptr && arena.GraveyardAllowResurrect( _curentCellIndex, spell ) ) {
-            unitOnCell = arena.GraveyardLastTroop( _curentCellIndex );
+        if ( unitOnCell == nullptr && arena.isAbleToResurrectFromGraveyard( _curentCellIndex, spell ) ) {
+            unitOnCell = arena.getLastResurrectableUnitFromGraveyard( _curentCellIndex, spell );
             assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
@@ -2877,9 +2862,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        _turnOrder.QueueEventProcessing( msg, _interfacePosition.getPosition() );
+        _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() );
     }
-    else if ( le.isMouseCursorPosInArea( btn_auto.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Enable auto combat" );
         ButtonAutoAction( unit, actions );
@@ -2888,7 +2873,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
-    else if ( le.isMouseCursorPosInArea( btn_settings.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Customize system options" );
         ButtonSettingsAction();
@@ -2897,7 +2882,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
-    else if ( le.isMouseCursorPosInArea( btn_skip.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonSkip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
         ButtonSkipAction( actions );
@@ -3182,9 +3167,9 @@ void Battle::Interface::_openBattleSettingsDialog()
 
 void Battle::Interface::EventShowOptions()
 {
-    btn_settings.drawOnPress();
+    _buttonSettings.drawOnPress();
     _openBattleSettingsDialog();
-    btn_settings.drawOnRelease();
+    _buttonSettings.drawOnRelease();
     humanturn_redraw = true;
 }
 
@@ -3271,9 +3256,9 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
+    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
 
-    if ( le.MouseClickLeft( btn_auto.area() ) ) {
+    if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
         OpenAutoModeDialog( unit, actions );
     }
 }
@@ -3282,9 +3267,9 @@ void Battle::Interface::ButtonSettingsAction()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
+    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
 
-    if ( le.MouseClickLeft( btn_settings.area() ) ) {
+    if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
         _openBattleSettingsDialog();
 
         humanturn_redraw = true;
@@ -3295,9 +3280,9 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
+    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
 
-    if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
+    if ( le.MouseClickLeft( _buttonSkip.area() ) && _currentUnit ) {
         actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
@@ -3305,16 +3290,24 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
 
 void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
-    const Unit * unitOnCell = cell.GetUnit();
-
-    if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
-    }
-    else {
-        unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
-        if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
+    const auto getUnit = [this, &cell]() -> const Unit * {
+        if ( const Unit * unit = cell.GetUnit(); unit != nullptr ) {
+            return unit;
         }
+
+        if ( const Unit * unit = arena.getLastResurrectableUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+            return unit;
+        }
+
+        if ( const Unit * unit = arena.getLastUnitFromGraveyard( cell.GetIndex() ); unit != nullptr ) {
+            return unit;
+        }
+
+        return nullptr;
+    };
+
+    if ( const Unit * unit = getUnit(); unit != nullptr ) {
+        Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
     }
 }
 

@@ -107,7 +107,7 @@ Monster::Monster( const Spell & sp )
     }
 }
 
-Monster::Monster( int race, uint32_t dw )
+Monster::Monster( const int race, const uint32_t dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
@@ -143,21 +143,22 @@ uint32_t Monster::GetShots() const
     return fheroes2::getMonsterData( id ).battleStats.shots;
 }
 
-// Get universal heuristic of Monster type regardless of context; both combat and strategic value
-// Doesn't account for situational special bonuses such as spell immunity
-double Monster::GetMonsterStrength( int attack, int defense ) const
+double Monster::GetMonsterStrength( int attack /* = -1 */, int defense /* = -1 */ ) const
 {
     // TODO: do not use virtual functions when calculating strength for troops without hero's skills.
 
-    // If no modified values were provided then re-calculate
-    // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
-    if ( attack == -1 )
+    if ( attack < 0 ) {
+        // This is a virtual function that can be overridden in subclasses and take into account various bonuses (for example, hero bonuses)
         attack = GetAttack();
+    }
 
-    if ( defense == -1 )
+    if ( defense < 0 ) {
+        // This is a virtual function that can be overridden in subclasses and take into account various bonuses (for example, hero bonuses)
         defense = GetDefense();
+    }
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
+
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -29,6 +29,7 @@ MAKE := make
 
 PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
+PROJECT_VERSION := $(file < version.txt)
 
 .PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf translations
 
@@ -56,7 +57,7 @@ eboot.bin: $(TARGET).velf
 	vita-make-fself $(TARGET).velf eboot.bin
 
 param.sfo:
-	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
+	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" -s APP_VER="$(PROJECT_VERSION)" "$(PROJECT_TITLE)" param.sfo
 
 $(TARGET).velf: $(TARGET).elf
 	arm-vita-eabi-strip -g $<

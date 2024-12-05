@@ -46,7 +46,7 @@ namespace MP2
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Skill
@@ -168,7 +168,7 @@ namespace AI
 
         void resetPathfinder();
 
-        void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom );
+        void revealFog( const Maps::Tile & tile, const Kingdom & kingdom );
 
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero );
 
@@ -177,7 +177,7 @@ namespace AI
 
         // Returns the strength of the army guarding the given tile. Note that the army is obtained by calling
         // Army::setFromTile(), so this method is not suitable for hero armies or castle garrisons.
-        double getTileArmyStrength( const Maps::Tiles & tile );
+        double getTileArmyStrength( const Maps::Tile & tile );
 
         static void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         static void CastlePreBattle( Castle & castle );
@@ -189,11 +189,14 @@ namespace AI
 
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
 
+        // Upgrades & hires the maximum possible number of troops in the given castle, and also purposefully reinforces the castle's guest hero
+        // (if there is one) by giving him the best available troops.
+        void reinforceCastle( Castle & castle );
+
         // Returns true if heroes can still do tasks but they have no move points.
-        bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
+        bool HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue );
 
         bool recruitHero( Castle & castle, bool buyArmy );
-        void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
 
         void evaluateRegionSafety();
 
@@ -229,7 +232,7 @@ namespace AI
         bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
 
         void removePriorityAttackTarget( const int32_t tileIndex );
-        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tile & tile );
 
         bool isPriorityTask( const int32_t index ) const
         {

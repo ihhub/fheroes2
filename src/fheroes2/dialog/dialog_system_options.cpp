@@ -245,13 +245,14 @@ namespace
         drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        okayButton.draw();
+        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+        buttonOk.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            okayButton.draw();
+            buttonOk.draw();
             display.render( emptyDialogRestorer.rect() );
         };
 
@@ -261,14 +262,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -393,7 +389,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowBattlesRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Battles" ), _( "Toggle instant battle mode." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -438,7 +434,7 @@ namespace fheroes2
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );

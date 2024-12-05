@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CASTLE_H
-#define H2CASTLE_H
+
+#pragma once
 
 #include <array>
 #include <cstddef>
@@ -42,6 +42,7 @@
 #include "monster.h"
 #include "players.h"
 #include "position.h"
+#include "race.h"
 
 class IStreamBase;
 class OStreamBase;
@@ -143,9 +144,11 @@ public:
         PreviousCostructionWindow // Open construction dialog of the previous castle.
     };
 
-    Castle();
-    Castle( int32_t cx, int32_t cy, int rc );
+    Castle() = default;
+    Castle( const int32_t posX, const int32_t posY, int race );
+
     Castle( const Castle & ) = delete;
+
     ~Castle() override = default;
 
     Castle & operator=( const Castle & ) = delete;
@@ -156,12 +159,12 @@ public:
 
     Captain & GetCaptain()
     {
-        return captain;
+        return _captain;
     }
 
     const Captain & GetCaptain() const
     {
-        return captain;
+        return _captain;
     }
 
     bool isCastle() const
@@ -175,23 +178,26 @@ public:
     // Returns a tile ID where it is possible to place a boat or -1 if it is not.
     int32_t getTileIndexToPlaceBoat() const;
 
-    bool AllowBuyHero( std::string * = nullptr ) const;
+    bool AllowBuyHero( std::string * msg = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
-    bool isNecromancyShrineBuild() const;
+    bool isNecromancyShrineBuild() const
+    {
+        return _race == Race::NECR && ( BUILD_SHRINE & _constructedBuildings );
+    }
 
     uint32_t CountBuildings() const;
 
-    Heroes * RecruitHero( Heroes * );
+    Heroes * RecruitHero( Heroes * hero );
     Heroes * GetHero() const;
 
     int GetRace() const
     {
-        return race;
+        return _race;
     }
 
     const std::string & GetName() const
     {
-        return name;
+        return _name;
     }
 
     // This method must be called only at the time of map loading and only for castles with empty names.
@@ -203,20 +209,44 @@ public:
 
     const MageGuild & GetMageGuild() const
     {
-        return mageguild;
+        return _mageGuild;
     }
 
-    bool HaveLibraryCapability() const;
-    bool isLibraryBuild() const;
-    void MageGuildEducateHero( HeroBase & ) const;
+    bool HaveLibraryCapability() const
+    {
+        return _race == Race::WZRD;
+    }
 
-    bool isFortificationBuilt() const;
+    bool isLibraryBuild() const
+    {
+        return _race == Race::WZRD && isBuild( BUILD_SPEC );
+    }
 
-    const Army & GetArmy() const;
-    Army & GetArmy();
+    void MageGuildEducateHero( HeroBase & hero ) const
+    {
+        _mageGuild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+    }
+
+    bool isFortificationBuilt() const
+    {
+        return _race == Race::KNGT && isBuild( BUILD_SPEC );
+    }
+
+    const Army & GetArmy() const
+    {
+        return _army;
+    }
+
+    Army & GetArmy()
+    {
+        return _army;
+    }
+
     const Army & GetActualArmy() const;
     Army & GetActualArmy();
-    uint32_t getMonstersInDwelling( uint32_t ) const;
+
+    // Returns current monsters count in dwelling.
+    uint32_t getMonstersInDwelling( const uint32_t buildingType ) const;
 
     // Returns the garrison strength estimation calculated as if this castle had really been attacked, including
     // an estimate of the strength of the combined army consisting of the garrison and the guest hero's troops
@@ -234,7 +264,6 @@ public:
     // Returns true in case of successful recruitment.
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
 
-    void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
@@ -243,55 +272,90 @@ public:
     double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
-    void ChangeColor( int );
+    void ChangeColor( const int newColor );
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth() const;
+    void ActionNewMonth() const
+    {
+        // Do nothing.
+    }
 
     void ActionPreBattle();
-    void ActionAfterBattle( bool attacker_wins );
+    void ActionAfterBattle( const bool attackerWins );
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
     CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog );
 
-    int GetAttackModificator( const std::string * ) const;
-    int GetDefenseModificator( const std::string * ) const;
-    int GetPowerModificator( std::string * ) const;
-    int GetKnowledgeModificator( const std::string * ) const;
-    int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( std::string * ) const;
-
-    bool AllowBuyBuilding( uint32_t ) const;
-
-    bool isBuild( uint32_t bd ) const
+    int GetAttackModificator( const std::string * /* unused */ ) const
     {
-        return ( _constructedBuildings & bd ) != 0;
+        return 0;
     }
 
-    bool BuyBuilding( uint32_t );
+    int GetDefenseModificator( const std::string * /* unused */ ) const
+    {
+        return 0;
+    }
+
+    int GetPowerModificator( std::string * strs ) const;
+
+    int GetKnowledgeModificator( const std::string * /* unused */ ) const
+    {
+        return 0;
+    }
+
+    int GetMoraleModificator( std::string * strs ) const;
+    int GetLuckModificator( std::string * strs ) const;
+
+    bool AllowBuyBuilding( const uint32_t buildingType ) const
+    {
+        return BuildingStatus::ALLOW_BUILD == CheckBuyBuilding( buildingType );
+    }
+
+    bool isBuild( const uint32_t buildingType ) const
+    {
+        return ( _constructedBuildings & buildingType ) != 0;
+    }
+
+    bool BuyBuilding( const uint32_t buildingType );
 
     BuildingStatus CheckBuyBuilding( const uint32_t build ) const;
-    static BuildingStatus GetAllBuildingStatus( const Castle & );
+    static BuildingStatus GetAllBuildingStatus( const Castle & castle );
 
     bool AllowBuyBoat( const bool checkPayment ) const;
     bool BuyBoat() const;
 
     void Scout() const;
 
-    std::string GetStringBuilding( uint32_t ) const;
-    std::string GetDescriptionBuilding( uint32_t ) const;
+    std::string GetStringBuilding( const uint32_t buildingType ) const
+    {
+        return GetStringBuilding( buildingType, _race );
+    }
 
-    static const char * GetStringBuilding( uint32_t, int race );
+    std::string GetDescriptionBuilding( const uint32_t buildingType ) const;
 
-    static int GetICNBuilding( uint32_t, int race );
-    static int GetICNBoat( int race );
+    static const char * GetStringBuilding( const uint32_t buildingType, const int race );
+
+    // Get building ICN ID for given race and building type.
+    static int GetICNBuilding( const uint32_t buildingType, const int race );
+    static int GetICNBoat( const int race );
     uint32_t GetUpgradeBuilding( const uint32_t buildingId ) const;
 
-    static bool PredicateIsCastle( const Castle * );
-    static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
+    static bool PredicateIsCastle( const Castle * castle )
+    {
+        return castle && castle->isCastle();
+    }
+
+    static bool PredicateIsTown( const Castle * castle )
+    {
+        return castle && !castle->isCastle();
+    }
+
+    static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t buildingType )
+    {
+        return castle && castle->isBuild( buildingType );
+    }
 
     static uint32_t GetGrownWell();
     static uint32_t GetGrownWel2();
@@ -300,8 +364,8 @@ public:
 
     std::string String() const;
 
-    int DialogBuyHero( const Heroes * ) const;
-    int DialogBuyCastle( bool fixed = true ) const;
+    int DialogBuyHero( const Heroes * hero ) const;
+    int DialogBuyCastle( const bool hasButtons = true ) const;
 
     Troops getAvailableArmy( Funds potentialBudget ) const;
 
@@ -322,18 +386,18 @@ private:
 
     // Checks whether this particular building is currently built in the castle (unlike
     // the isBuild(), upgraded versions of the same building are not taken into account)
-    bool isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
+    bool _isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
-    uint32_t * GetDwelling( uint32_t dw );
-    void EducateHeroes();
+    uint32_t * _getDwelling( const uint32_t buildingType );
+    void _educateHeroes();
 
-    ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
+    ConstructionDialogResult _openConstructionDialog( uint32_t & dwellingTobuild );
 
-    void OpenTavern() const;
-    void OpenWell();
-    void OpenMageGuild( const Heroes * hero ) const;
-    void JoinRNDArmy();
-    void PostLoad();
+    void _openTavern() const;
+    void _openWell();
+    void _openMageGuild( const Heroes * hero ) const;
+    void _joinRNDArmy();
+    void _postLoad();
 
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
@@ -343,22 +407,21 @@ private:
 
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );
-    bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
     friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
     friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
-    int race;
-    uint32_t _constructedBuildings;
-    uint32_t _disabledBuildings;
+    int _race{ Race::NONE };
+    uint32_t _constructedBuildings{ 0 };
+    uint32_t _disabledBuildings{ 0 };
 
-    Captain captain;
+    Captain _captain{ *this };
 
-    std::string name;
+    std::string _name;
 
-    MageGuild mageguild;
-    std::array<uint32_t, maxNumOfDwellings> dwelling;
-    Army army;
+    MageGuild _mageGuild;
+    std::array<uint32_t, maxNumOfDwellings> _dwelling{ 0 };
+    Army _army{ &_captain };
 };
 
 namespace CastleDialog
@@ -369,40 +432,40 @@ namespace CastleDialog
     public:
         FadeBuilding() = default;
 
-        void StartFadeBuilding( const uint32_t building )
+        void startFadeBuilding( const uint32_t building )
         {
             _alpha = 0;
             _building = building;
             _isOnlyBoat = false;
         }
 
-        void StartFadeBoat()
+        void startFadeBoat()
         {
             _alpha = 0;
             _building = BUILD_SHIPYARD;
             _isOnlyBoat = true;
         }
 
-        bool UpdateFade();
+        bool updateFadeAlpha();
 
-        bool IsFadeDone() const
+        bool isFadeDone() const
         {
             return _alpha == 255;
         }
 
-        void StopFade()
+        void stopFade()
         {
             _alpha = 255;
             _building = BUILD_NOTHING;
             _isOnlyBoat = false;
         }
 
-        uint8_t GetAlpha() const
+        uint8_t getAlpha() const
         {
             return _alpha;
         }
 
-        uint32_t GetBuilding() const
+        uint32_t getBuilding() const
         {
             return _building;
         }
@@ -413,45 +476,41 @@ namespace CastleDialog
         }
 
     private:
-        uint8_t _alpha{ 255 };
         uint32_t _building{ BUILD_NOTHING };
+        uint8_t _alpha{ 255 };
         bool _isOnlyBoat{ false };
     };
 
     struct BuildingRenderInfo
     {
-        BuildingRenderInfo( BuildingType b, const fheroes2::Rect & r )
-            : id( b )
-            , coord( r )
-        {}
-
-        bool operator==( uint32_t b ) const
+        BuildingRenderInfo( const BuildingType buildingType, const fheroes2::Rect & buildingRect )
+            : id( buildingType )
+            , coord( buildingRect )
         {
-            return b == static_cast<uint32_t>( id );
+            // Do nothing.
+        }
+
+        bool operator==( const uint32_t buildingType ) const
+        {
+            return buildingType == static_cast<uint32_t>( id );
         }
 
         BuildingType id;
         fheroes2::Rect coord;
     };
 
-    struct CacheBuildings : std::vector<BuildingRenderInfo>
+    struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>
     {
-        CacheBuildings( const Castle & castle, const fheroes2::Point & top );
+        BuildingsRenderQueue( const Castle & castle, const fheroes2::Point & top );
     };
 
-    void RedrawAllBuildings( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
-                             const uint32_t animationIndex );
+    void redrawAllBuildings( const Castle & castle, const fheroes2::Point & offset, const BuildingsRenderQueue & buildings,
+                             const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex );
 }
 
 struct VecCastles : public std::vector<Castle *>
 {
     VecCastles() = default;
-    VecCastles( const VecCastles & ) = delete;
-
-    ~VecCastles() = default;
-
-    VecCastles & operator=( const VecCastles & ) = delete;
-    VecCastles & operator=( VecCastles && ) = default;
 
     Castle * GetFirstCastle() const;
 };
@@ -509,7 +568,7 @@ public:
             : BaseIterator( std::move( other ) )
         {}
 
-        auto operator*() const noexcept
+        auto * operator*() const noexcept
         {
             return BaseIterator::operator*().get();
         }
@@ -525,5 +584,3 @@ IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles );
 
 OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles );
 IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles );
-
-#endif

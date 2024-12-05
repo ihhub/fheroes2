@@ -337,7 +337,7 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    void SetProgramPath( const char * );
+    void SetProgramPath( const char * path );
 
     static std::string GetVersion();
 
@@ -364,7 +364,7 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
 
-    std::string path_program;
+    std::string _programPath;
 
     std::string _gameLanguage;
     // Not saved in the config file or savefile

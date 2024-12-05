@@ -46,11 +46,17 @@ namespace System
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
+
+    // Returns the path to the app settings directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
     std::string GetConfigDirectory( const std::string_view appName );
+
+    // Returns the path to the app data directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
     std::string GetDataDirectory( const std::string_view appName );
 
-    std::string GetDirname( std::string_view path );
-    std::string GetBasename( std::string_view path );
+    std::string GetParentDirectory( std::string_view path );
+    std::string GetFileName( std::string_view path );
     std::string GetStem( const std::string_view path );
 
     bool IsFile( const std::string_view path );

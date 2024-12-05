@@ -31,7 +31,7 @@
 namespace Maps
 {
     // An object usually contains of multiple parts / tiles. Each part has its own features like object layer type or image index.
-    // An object always contains a main object part (addon).
+    // An object always contains a main object part.
     // All object's parts shares images from the same ICN source (MP2::ObjectIcnType).
     struct ObjectPartInfo
     {
@@ -71,7 +71,7 @@ namespace Maps
             // Do nothing.
         }
 
-        // A layer where this object part / addon sits on.
+        // A layer where this object part sits on.
         // The layer is used for passability calculations as well as an order of rendering objects.
         ObjectLayerType layerType{ OBJECT_LAYER };
     };
@@ -164,6 +164,10 @@ namespace Maps
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
 
     const ObjectInfo & getObjectInfo( const ObjectGroup group, const int32_t objectIndex );
+
+    // The function can return nullptr if an object does not exist.
+    // A valid pointer could also point to LayeredObjectPartInfo object.
+    const ObjectPartInfo * getObjectPartByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
 
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
 

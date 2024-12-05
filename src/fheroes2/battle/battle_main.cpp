@@ -453,7 +453,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         }
 
         if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLE_EYE ) && loserHero->isHeroes() ) {
-            eagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+            eagleEyeSkillAction( *winnerHero, arena.GetUsedSpells(), winnerHero->isControlHuman(), randomGenerator );
         }
 
         if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) ) {

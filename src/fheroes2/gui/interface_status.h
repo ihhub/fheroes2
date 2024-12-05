@@ -44,25 +44,25 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow final : public BorderWindow
+    class StatusPanel final : public BorderWindow
     {
     public:
-        explicit StatusWindow( BaseInterface & interface )
+        explicit StatusPanel( BaseInterface & interface )
             : BorderWindow( { 0, 0, 144, 72 } )
             , _interface( interface )
         {
             // Do nothing.
         }
 
-        StatusWindow( const StatusWindow & ) = delete;
+        StatusPanel( const StatusPanel & ) = delete;
 
-        ~StatusWindow() override = default;
+        ~StatusPanel() override = default;
 
-        StatusWindow & operator=( const StatusWindow & ) = delete;
+        StatusPanel & operator=( const StatusPanel & ) = delete;
 
-        void SetPos( const int32_t ox, const int32_t oy ) override;
+        void SetPos( int32_t x, int32_t y ) override;
         void SavePosition() override;
-        void SetRedraw() const;
+        void setRedraw() const;
 
         void Reset()
         {
@@ -75,7 +75,14 @@ namespace Interface
 
         void SetState( const StatusType status );
         void SetResource( const int resource, const uint32_t count );
-        void DrawAITurnProgress( const uint32_t progressValue );
+        void drawAITurnProgress( const uint32_t progressValue );
+
+        void resetAITurnProgress()
+        {
+            // We set _aiTurnProgress equal to 10 to properly handle the first draw call for the '0' progress.
+            _aiTurnProgress = 10;
+        }
+
         void QueueEventProcessing();
         void TimerEventProcessing();
 
@@ -91,14 +98,15 @@ namespace Interface
         void _drawBackground() const;
         void _drawAITurns() const;
 
+        fheroes2::TimeDelay _showLastResourceDelay{ 2500 };
+
         BaseInterface & _interface;
 
         StatusType _state{ StatusType::STATUS_UNKNOWN };
         int _lastResource{ Resource::UNKNOWN };
         uint32_t _lastResourceCount{ 0 };
-        uint32_t _aiTurnProgress{ 0 };
-
-        fheroes2::TimeDelay _showLastResourceDelay{ 2500 };
+        uint32_t _aiTurnProgress{ 10 };
+        uint32_t _grainsAnimationIndexOffset{ 0 };
     };
 }
 

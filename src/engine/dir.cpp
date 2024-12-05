@@ -23,9 +23,14 @@
 
 #include "dir.h"
 
+#include <utility>
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/dirent.h>
+#else
 #include <filesystem>
 #include <system_error>
-#include <utility>
+#endif
 
 #if defined( _WIN32 )
 #include <cstring>
@@ -57,7 +62,7 @@ namespace
         return ( strCmp( filenamePtr, filter.c_str() ) == 0 );
     }
 
-    void getFilesFromDirectory( const std::string_view path, const std::string & filter, const bool needExactMatch, ListFiles & files )
+    void getFilesFromDirectory( const std::string & path, const std::string & filter, const bool needExactMatch, ListFiles & files )
     {
         std::string correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
@@ -70,6 +75,62 @@ namespace
         auto * const strCmp = strcasecmp;
 #endif
 
+#if defined( TARGET_PS_VITA )
+        // On PS Vita, getting a list of files using std::filesystem for some reason works much slower than using the native file system API
+        class SceUIDWrapper
+        {
+        public:
+            SceUIDWrapper( const std::string & path )
+                : uid( sceIoDopen( path.c_str() ) )
+            {}
+
+            SceUIDWrapper( const SceUIDWrapper & ) = delete;
+
+            ~SceUIDWrapper()
+            {
+                if ( !isValid() ) {
+                    return;
+                }
+
+                sceIoDclose( uid );
+            }
+
+            SceUIDWrapper & operator=( const SceUIDWrapper & ) = delete;
+
+            bool isValid() const
+            {
+                return uid >= 0;
+            }
+
+            SceUID get() const
+            {
+                return uid;
+            }
+
+        private:
+            const SceUID uid;
+        };
+
+        const SceUIDWrapper uid( path );
+        if ( !uid.isValid() ) {
+            return;
+        }
+
+        SceIoDirent entry;
+
+        while ( sceIoDread( uid.get(), &entry ) > 0 ) {
+            // Ensure that this directory entry is a regular file
+            if ( !SCE_S_ISREG( entry.d_stat.st_mode ) ) {
+                continue;
+            }
+
+            if ( !nameFilter( entry.d_name, needExactMatch, filter, strCmp ) ) {
+                continue;
+            }
+
+            files.emplace_back( System::concatPath( path, entry.d_name ) );
+        }
+#else
         std::error_code ec;
 
         // Using the non-throwing overload
@@ -87,6 +148,7 @@ namespace
 
             files.emplace_back( System::fsPathToString( entryPath ) );
         }
+#endif
     }
 }
 
@@ -97,17 +159,30 @@ void ListFiles::Append( ListFiles && files )
     }
 }
 
-void ListFiles::ReadDir( const std::string_view path, const std::string & filter )
+void ListFiles::ReadDir( const std::string & path, const std::string & filter )
 {
     getFilesFromDirectory( path, filter, false, *this );
 }
 
-void ListFiles::FindFileInDir( const std::string_view path, const std::string & fileName )
+void ListFiles::FindFileInDir( const std::string_view path, const std::string_view fileName )
 {
-    getFilesFromDirectory( path, fileName, true, *this );
+    std::string correctedFilePath;
+    // If the file system is case-sensitive, then here we will get the actual file path using the case-insensitive
+    // search (if such a file exists). If the file system is case-insensitive, we will just get the passed path to
+    // the file back intact.
+    if ( !System::GetCaseInsensitivePath( System::concatPath( path, fileName ), correctedFilePath ) ) {
+        return;
+    }
+
+    // In case the file system is case-insensitive, we additionally check the file for existence.
+    if ( !System::IsFile( correctedFilePath ) ) {
+        return;
+    }
+
+    emplace_back( std::move( correctedFilePath ) );
 }
 
-bool ListFiles::IsEmpty( const std::string_view path, const std::string & filter )
+bool ListFiles::IsEmpty( const std::string & path, const std::string & filter )
 {
     ListFiles list;
     list.ReadDir( path, filter );

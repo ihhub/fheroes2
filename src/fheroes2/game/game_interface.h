@@ -39,7 +39,7 @@ class Heroes;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace GameFocus
@@ -96,17 +96,17 @@ namespace Interface
 
         IconsPanel & GetIconsPanel()
         {
-            return iconsPanel;
+            return _iconsPanel;
         }
 
         ControlPanel & getControlPanel()
         {
-            return controlPanel;
+            return _controlPanel;
         }
 
-        StatusWindow & getStatusWindow()
+        StatusPanel & getStatusPanel()
         {
-            return _statusWindow;
+            return _statusPanel;
         }
 
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
@@ -158,22 +158,22 @@ namespace Interface
     private:
         AdventureMap();
 
-        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
-        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
-        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
-        static int _getCursorNoFocus( const Maps::Tiles & tile );
+        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tile & tile );
+        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tile & tile );
+        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tile & tile );
+        static int _getCursorNoFocus( const Maps::Tile & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
         void _startHeroMove( Heroes & hero );
 
-        fheroes2::GameMode HumanTurn( const bool isload );
+        fheroes2::GameMode HumanTurn( const bool isLoadedFromSave );
 
-        IconsPanel iconsPanel;
-        ButtonsArea buttonsArea;
-        ControlPanel controlPanel;
-        StatusWindow _statusWindow;
+        IconsPanel _iconsPanel;
+        ButtonsPanel _buttonsPanel;
+        ControlPanel _controlPanel;
+        StatusPanel _statusPanel;
 
         bool _lockRedraw;
     };

@@ -186,7 +186,9 @@ namespace
                                                 ICN::BUTTON_RUMORS_GOOD,
                                                 ICN::BUTTON_RUMORS_EVIL,
                                                 ICN::BUTTON_EVENTS_GOOD,
-                                                ICN::BUTTON_EVENTS_EVIL };
+                                                ICN::BUTTON_EVENTS_EVIL,
+                                                ICN::BUTTON_LANGUAGE_GOOD,
+                                                ICN::BUTTON_LANGUAGE_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -266,7 +268,7 @@ namespace
     // BMP files within AGG are not Bitmap images!
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
-        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
+        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path, false );
         if ( data.size() < 6 ) {
             // It is an invalid BMP file.
             return {};
@@ -280,8 +282,8 @@ namespace
         // Skip the second byte
         imageStream.get();
 
-        const int32_t width = imageStream.get16();
-        const int32_t height = imageStream.get16();
+        const int32_t width = imageStream.getLE16();
+        const int32_t height = imageStream.getLE16();
 
         if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
@@ -580,12 +582,32 @@ namespace
 
     void loadICN( const int id );
 
+    void replacePOLAssetWithSW( const int id, const int assetIndex )
+    {
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), true );
+        ROStreamBuf imageStream( body );
+
+        imageStream.seek( headerSize + assetIndex * 13 );
+
+        fheroes2::ICNHeader header1;
+        imageStream >> header1;
+
+        fheroes2::ICNHeader header2;
+        imageStream >> header2;
+        const uint32_t dataSize = header2.offsetData - header1.offsetData;
+
+        const uint8_t * data = body.data() + headerSize + header1.offsetData;
+        const uint8_t * dataEnd = data + dataSize;
+
+        _icnVsSprite[id][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
+    }
+
     void LoadOriginalICN( const int id )
     {
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
 
-        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
+        const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), false );
 
         if ( body.empty() ) {
             return;
@@ -607,17 +629,20 @@ namespace
             fheroes2::ICNHeader header1;
             imageStream >> header1;
 
-            uint32_t sizeData = 0;
+            // There should be enough frames for ICNs with animation. When animationFrames is equal to 32 then it is a Monochromatic image
+            assert( header1.animationFrames == 32 || header1.animationFrames <= count );
+
+            uint32_t dataSize = 0;
             if ( i + 1 != count ) {
                 fheroes2::ICNHeader header2;
                 imageStream >> header2;
-                sizeData = header2.offsetData - header1.offsetData;
+                dataSize = header2.offsetData - header1.offsetData;
             }
             else {
-                sizeData = blockSize - header1.offsetData;
+                dataSize = blockSize - header1.offsetData;
             }
 
-            if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+            if ( headerSize + header1.offsetData + dataSize > body.size() ) {
                 // This is a corrupted AGG file.
                 throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
                                                       + " is being corrupted. "
@@ -625,8 +650,9 @@ namespace
             }
 
             const uint8_t * data = body.data() + headerSize + header1.offsetData;
+            const uint8_t * dataEnd = data + dataSize;
 
-            _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
+            _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
         }
     }
 
@@ -2090,6 +2116,17 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_LANGUAGE_GOOD:
+        case ICN::BUTTON_LANGUAGE_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_LANGUAGE_EVIL );
+
+            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LANGUAGE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
         default:
             // You're calling this function for non-specified ICN id. Check your logic!
             // Did you add a new image for one language without generating a default
@@ -2475,7 +2512,7 @@ namespace
                 throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
             }
 
-            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), false );
             const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
 
             if ( id == ICN::SMALFONT ) {
@@ -2522,34 +2559,54 @@ namespace
                 std::swap( imageArray[220], imageArray[222] );
                 imageArray.erase( imageArray.begin() + 221, imageArray.end() );
             }
-            // French version has its own special encoding but should conform to CP1252 too
+            // The French version replaces several ASCII special characters with language-specific characters.
+            // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
+            // of the original so that original French maps' texts are displayed correctly.
             if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
+                // The engine expects that letter indexes correspond to charcode - 0x20, but the original French
+                // Price of Loyalty maps use 0x09 for lowercase i with circonflex. This is currently not supported
+                // by the engine.
                 const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 96, 160 - 32, firstSprite );
+                imageArray.insert( imageArray.begin() + 96, 128, firstSprite );
+                // Capital letters with accents aren't present in the original assets so we use unaccented letters.
                 imageArray[192 - 32] = imageArray[33];
                 imageArray[199 - 32] = imageArray[35];
                 imageArray[201 - 32] = imageArray[37];
                 imageArray[202 - 32] = imageArray[37];
-                imageArray[244 - 32] = imageArray[3];
-                imageArray[251 - 32] = imageArray[4];
-                imageArray[249 - 32] = imageArray[6];
-                imageArray[226 - 32] = imageArray[10];
-                imageArray[239 - 32] = imageArray[28];
-                imageArray[238 - 32] = imageArray[30];
+
                 imageArray[224 - 32] = imageArray[32];
+                imageArray[226 - 32] = imageArray[10];
                 imageArray[231 - 32] = imageArray[62];
                 imageArray[232 - 32] = imageArray[64];
-                imageArray[239 - 32] = imageArray[91];
-                imageArray[234 - 32] = imageArray[92];
-                imageArray[238 - 32] = imageArray[93];
                 imageArray[233 - 32] = imageArray[94];
-                imageArray[238 - 32] = imageArray[95];
-                imageArray.erase( imageArray.begin() + 252 - 32, imageArray.end() );
+                imageArray[234 - 32] = imageArray[92];
+                imageArray[239 - 32] = imageArray[91];
+                imageArray[244 - 32] = imageArray[3];
+                imageArray[249 - 32] = imageArray[6];
+                imageArray[251 - 32] = imageArray[4];
+                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
+                // area that we need to remove. Plus we need to add a missing pixel.
+                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
+                    imageArray[238 - 32].resize( 4, 9 );
+                    imageArray[238 - 32].reset();
+                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
+                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
+                    imageArray[238 - 32].setPosition( 0, -1 );
+                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
+                    // Copy the fixed sprite back.
+                    for ( const int charCode : { 30, 93, 95 } ) {
+                        imageArray[charCode] = imageArray[238 - 32];
+                    }
+                }
+                else {
+                    imageArray[238 - 32] = imageArray[93];
+                }
+                imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
             if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
                 const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 101, 155 - 32, firstSprite );
+                imageArray.insert( imageArray.begin() + 101, 123, firstSprite );
                 imageArray[192 - 32] = imageArray[33];
                 imageArray[200 - 32] = imageArray[37];
                 imageArray[201 - 32] = imageArray[37];
@@ -2562,7 +2619,7 @@ namespace
                 imageArray[236 - 32] = imageArray[98];
                 imageArray[242 - 32] = imageArray[99];
                 imageArray[249 - 32] = imageArray[100];
-                imageArray.erase( imageArray.begin() + 250 - 32, imageArray.end() );
+                imageArray.erase( imageArray.begin() + 218, imageArray.end() );
             }
             return true;
         }
@@ -2780,6 +2837,8 @@ namespace
         case ICN::BUTTON_RUMORS_EVIL:
         case ICN::BUTTON_EVENTS_GOOD:
         case ICN::BUTTON_EVENTS_EVIL:
+        case ICN::BUTTON_LANGUAGE_GOOD:
+        case ICN::BUTTON_LANGUAGE_EVIL:
             generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:
@@ -3366,7 +3425,7 @@ namespace
 
                 // Since we cannot access game settings from here we are checking an existence
                 // of one of POL resources as an indicator for this version.
-                if ( !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ) ).empty() ) {
+                if ( !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ), false ).empty() ) {
                     fheroes2::Sprite editorIcon;
                     fheroes2::h2d::readImage( "main_menu_editor_icon.image", editorIcon );
 
@@ -4177,6 +4236,12 @@ namespace
                 fheroes2::Sprite & targetImage = _icnVsSprite[id][83];
                 targetImage = CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 );
                 ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+                // The French and German Price of Loyalty assets contain a wrong artifact sprite at index 6. We replace it with the correct sprite from SW assets.
+                const int assetIndex = 6;
+                if ( _icnVsSprite[id][assetIndex].width() == 21 ) {
+                    replacePOLAssetWithSW( id, assetIndex );
+                }
             }
             return true;
         case ICN::OBJNARTI:
@@ -4186,37 +4251,48 @@ namespace
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
-                _icnVsSprite[id][206] = _icnVsSprite[id][162];
-                FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 2, 1, 4, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 0, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 18, 1, 2, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 17, 2, 3, 1, 3U );
-                FillTransform( _icnVsSprite[id][206], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][206], 19, 3, 2, 1, 3U );
+                fheroes2::Sprite shadow = _icnVsSprite[id][162];
+                FillTransform( shadow, 0, 0, 5, 1, 1U );
+                FillTransform( shadow, 0, 1, 2, 1, 1U );
+                FillTransform( shadow, 2, 1, 4, 1, 3U );
+                FillTransform( shadow, 0, 2, 3, 1, 3U );
+                FillTransform( shadow, 18, 1, 2, 1, 1U );
+                FillTransform( shadow, 17, 2, 3, 1, 3U );
+                FillTransform( shadow, 20, 2, 1, 1, 1U );
+                FillTransform( shadow, 19, 3, 2, 1, 3U );
 
                 // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
-                _icnVsSprite[id][207].resize( 21, 32 );
-                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
-                FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 1, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 2, 6, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 2, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 4, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 3, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 20, 25, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 18, 26, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 16, 27, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 14, 28, 9, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 29, 1, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 12, 29, 11, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
-                FillTransform( _icnVsSprite[id][207], 8, 31, 15, 1, 1U );
+                fheroes2::Sprite body( 21, 32 );
+                Copy( fheroes2::AGG::GetICN( ICN::ARTFX, 81 ), 6, 0, body, 0, 0, 21, 32 );
+                FillTransform( body, 0, 0, 12, 1, 1U );
+                FillTransform( body, 15, 0, 6, 1, 1U );
+                FillTransform( body, 0, 1, 9, 1, 1U );
+                FillTransform( body, 16, 1, 5, 1, 1U );
+                FillTransform( body, 0, 2, 6, 1, 1U );
+                FillTransform( body, 20, 2, 1, 1, 1U );
+                FillTransform( body, 0, 4, 1, 1, 1U );
+                FillTransform( body, 0, 3, 3, 1, 1U );
+                FillTransform( body, 20, 25, 1, 1, 1U );
+                FillTransform( body, 18, 26, 3, 1, 1U );
+                FillTransform( body, 16, 27, 5, 1, 1U );
+                FillTransform( body, 14, 28, 9, 1, 1U );
+                FillTransform( body, 0, 29, 1, 1, 1U );
+                FillTransform( body, 12, 29, 11, 1, 1U );
+                FillTransform( body, 0, 30, 3, 1, 1U );
+                FillTransform( body, 10, 30, 13, 1, 1U );
+                FillTransform( body, 0, 31, 5, 1, 1U );
+                FillTransform( body, 8, 31, 15, 1, 1U );
+
+                const int32_t shadowOffset = ( 32 - body.width() ) / 2;
+
+                _icnVsSprite[id][206].resize( shadow.width() - shadowOffset, shadow.height() );
+                Copy( shadow, 0, 0, _icnVsSprite[id][206], 0, 0, shadow.width(), shadow.height() );
+                _icnVsSprite[id][206].setPosition( shadow.x() + shadowOffset, shadow.y() );
+
+                _icnVsSprite[id][207].resize( 21 + shadowOffset, 32 );
+                _icnVsSprite[id][207].reset();
+                Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
+                Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
             }
             return true;
         case ICN::TWNSDW_5:
@@ -4981,7 +5057,7 @@ namespace
         case ICN::OBJNGRAS: {
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 151 ) {
-                _icnVsSprite[id].resize( 153 );
+                _icnVsSprite[id].resize( 155 );
 
                 loadICN( ICN::OBJNSNOW );
 
@@ -4999,6 +5075,22 @@ namespace
                     Blit( temp, _icnVsSprite[id][152] );
 
                     ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part1.image", temp );
+                    _icnVsSprite[id][153] = _icnVsSprite[ICN::OBJNSNOW][12];
+                    Blit( temp, _icnVsSprite[id][153] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 255, 3 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part2.image", temp );
+                    _icnVsSprite[id][154] = _icnVsSprite[ICN::OBJNSNOW][13];
+                    Blit( temp, _icnVsSprite[id][154] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 255, 3 );
                 }
             }
 
@@ -5017,6 +5109,37 @@ namespace
                     images[218 + i].setPosition( images[i].y(), images[i].x() );
                 }
             }
+
+            return true;
+        }
+        case ICN::SCENIBKG_EVIL: {
+            const int32_t originalId = ICN::SCENIBKG;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() != 1 ) {
+                return true;
+            }
+
+            _icnVsSprite[id].resize( 1 );
+
+            const auto & originalImage = _icnVsSprite[originalId][0];
+            auto & outputImage = _icnVsSprite[id][0];
+
+            outputImage = originalImage;
+            convertToEvilInterface( outputImage, { 0, 0, outputImage.width(), outputImage.height() } );
+
+            loadICN( ICN::METALLIC_BORDERED_TEXTBOX_EVIL );
+            if ( _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL].empty() ) {
+                return true;
+            }
+
+            const auto & evilTextBox = _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL][0];
+
+            // The original text area is shorter than one we are using so we need to make 2 image copy operations to compensate this.
+            const int32_t textWidth = 361;
+            fheroes2::Copy( evilTextBox, 0, 0, outputImage, 46, 23, textWidth / 2, evilTextBox.height() );
+            fheroes2::Copy( evilTextBox, evilTextBox.width() - ( textWidth - textWidth / 2 ), 0, outputImage, 46 + textWidth / 2, 23, ( textWidth - textWidth / 2 ),
+                            evilTextBox.height() );
 
             return true;
         }
@@ -5059,7 +5182,7 @@ namespace
         if ( tilImages.empty() ) {
             tilImages.resize( 4 ); // 4 possible sides
 
-            const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
+            const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id], false );
             if ( data.size() < headerSize ) {
                 // The important resource is absent! Make sure that you are using the correct version of the game.
                 assert( 0 );

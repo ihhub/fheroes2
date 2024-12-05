@@ -59,7 +59,7 @@ jobs:
       run: |
         sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
                       -Dsonar.cfamily.analysisCache.mode=fs \
-                      -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
+                      -Dsonar.cfamily.analysisCache.path="$HOME/.sonar-cfamily-cache" \
                       -Dsonar.java.binaries="android/*/build/**/classes" \
                       -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar" \
                       -Dsonar.host.url=https://sonarcloud.io

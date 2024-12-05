@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2024-11-28 15:55+0000\n"
 "PO-Revision-Date: 2024-10-04 15:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -325,6 +325,9 @@ msgstr "СЛУХИ"
 msgid "EVENTS"
 msgstr "СОБЫТИЯ"
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Воин"
 
@@ -494,6 +497,9 @@ msgid ""
 "combat spells."
 msgstr ""
 "Сфера Отрицания лишила возможности использовать любые заклинания в битве."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "Вы уже использовали магию на этом ходу."
@@ -3237,6 +3243,10 @@ msgstr "Устанавливает скорость прокрутки окна 
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Выберите язык игры:"
+
 msgid "Click to choose the selected language."
 msgstr "Нажмите, чтобы применить выбранный язык интерфейса игры."
 
@@ -3487,8 +3497,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
 
-msgid "Warning!"
-msgstr "Внимание!"
+msgid "Warning"
+msgstr "Внимание"
 
 msgid "Click to save the current game."
 msgstr "Нажмите, чтобы сохранить текущую игру."
@@ -3650,6 +3660,13 @@ msgstr "Цена верности"
 
 msgid "Resurrection"
 msgstr "Возрождение"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Язык"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -4423,9 +4440,6 @@ msgstr "Вернуться в главное меню редактора кар�
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
 
-msgid "Warning"
-msgstr "Внимание"
-
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: герой - %{race}"
 
@@ -4541,18 +4555,24 @@ msgstr "Сложность карты"
 msgid "Map Description"
 msgstr "Описание карты"
 
-msgid "Change Map Name"
-msgstr "Изменить название карты"
-
-msgid "Change Map Description"
-msgstr "Изменить описание карты"
-
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
 "Введённое описание карты превышает максимально допустимый размер в 5 строк. "
 "Оно будет сокращено до размера текстового поля описания карты."
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
+msgid "Change Map Name"
+msgstr "Изменить название карты"
+
+msgid "Change Map Description"
+msgstr "Изменить описание карты"
 
 msgid "Click to accept the changes made."
 msgstr "Нажмите, чтобы применить внесённые изменения."
@@ -4568,6 +4588,10 @@ msgstr "Нажмите, чтобы отредактировать календа
 
 msgid "Events"
 msgstr "События"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Изменить язык интерфейса."
 
 msgid "Click to change your map name."
 msgstr "Нажмите, чтобы изменить название Вашей карты."
@@ -6189,6 +6213,14 @@ msgstr "ПРОБЕЛ"
 msgid "Keyboard|ABC"
 msgstr "АБВ"
 
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
+
 msgid "Kingdom Income"
 msgstr "Доход королевства"
 
@@ -7738,18 +7770,23 @@ msgstr ""
 "\"Есть у меня загадка для тебя,\" - сказал Сфинкс. \"Ответишь верно - "
 "получишь награду. Ошибешься - и я тебя съем. Принимаешь ли ты мой вызов?"
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Сфинкс загадал Вам следующую загадку: \n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Ваш ответ?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8689,6 +8726,12 @@ msgstr "Молниеносная"
 
 msgid "speed|Instant"
 msgstr "Мгновенная"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Белки"
@@ -11915,6 +11958,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Warning!"
+#~ msgstr "Внимание!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Болванка 1"
