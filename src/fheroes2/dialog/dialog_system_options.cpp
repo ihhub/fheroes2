@@ -424,7 +424,7 @@ namespace fheroes2
 
         auto rebildAdventureMap = [&redrawAdventureMap]() {
             Interface::AdventureMap::Get().reset();
-            
+
             redrawAdventureMap();
         };
 
