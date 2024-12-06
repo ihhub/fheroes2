@@ -202,7 +202,8 @@ void ExperienceIndicator::Redraw() const
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( _isDefault ? "-" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
+    // For the default range of experience see Heroes::GetStartingXp() method.
+    const fheroes2::Text text( _isDefault ? "40-90" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
     text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
 }
 
