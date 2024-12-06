@@ -662,6 +662,7 @@ namespace
             int32_t xOffset = offset.x + offsets[i];
             for ( auto & buttonInfo : buttonLayout[i] ) {
                 buttonInfo.button.setPosition( xOffset, yOffset );
+
                 if ( buttonInfo.isInvertedRenderingLogic ) {
                     buttonInfo.button.press();
                 }
@@ -694,10 +695,10 @@ namespace
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
                 if ( buttonInfo.isInvertedRenderingLogic ) {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
+                    buttonInfo.button.drawOnState( !le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
                 }
                 else {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
+                    buttonInfo.button.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
                 }
             }
         }
