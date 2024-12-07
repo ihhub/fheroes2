@@ -921,9 +921,9 @@ namespace
                         return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                     }
 
-                    for (auto iter = resolutionSet.begin(); iter != resolutionSet.end(); ) {
+                    for ( auto iter = resolutionSet.begin(); iter != resolutionSet.end(); ) {
                         if ( iter->screenWidth > displayMode.w || iter->screenHeight > displayMode.h ) {
-                            iter = resolutionSet.erase(iter);
+                            iter = resolutionSet.erase( iter );
                         }
                         else {
                             ++iter;
