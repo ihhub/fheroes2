@@ -18,8 +18,6 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET := fheroes2
-
 LIBENGINE := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../../engine
 
@@ -31,18 +29,17 @@ endif
 SOURCEROOT := ../../fheroes2
 SOURCEDIRS := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
 SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)
-POT := $(TARGET).pot
 
 .PHONY: all pot clean
 
-all: $(TARGET)
+all: fheroes2
 
-$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(LIBENGINE)
+fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(LIBENGINE)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 pot: $(SOURCES)
-	xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(SOURCES))
-	sed -i~ -e 's/, c-format//' $(POT)
+	xgettext -d fheroes2 -C -F -k_ -k_n:1,2 -o fheroes2.pot $(sort $(SOURCES))
+	sed -i~ -e 's/, c-format//' fheroes2.pot
 
 VPATH := $(SOURCEDIRS)
 
@@ -52,4 +49,4 @@ VPATH := $(SOURCEDIRS)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o $(TARGET) $(POT) $(POT)~
+	rm -f *.d *.o fheroes2 fheroes2.pot fheroes2.pot~

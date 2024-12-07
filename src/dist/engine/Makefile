@@ -18,8 +18,6 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET := libengine
-
 ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
 endif
@@ -30,9 +28,9 @@ SOURCES := $(wildcard $(SOURCEDIRS)/*.cpp)
 
 .PHONY: all clean
 
-all: $(TARGET).a
+all: libengine.a
 
-$(TARGET).a: $(notdir $(patsubst %.cpp, %.o, $(SOURCES)))
+libengine.a: $(notdir $(patsubst %.cpp, %.o, $(SOURCES)))
 	$(AR) crvs $@ $^
 
 VPATH := $(SOURCEDIRS)
@@ -43,4 +41,4 @@ VPATH := $(SOURCEDIRS)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.a *.d *.o
+	rm -f *.d *.o libengine.a
