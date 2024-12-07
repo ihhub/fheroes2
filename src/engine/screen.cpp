@@ -921,14 +921,14 @@ namespace
                         return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                     }
 
-                    for ( auto iter = resolutionSet.begin(); iter != resolutionSet.end(); ) {
-                        if ( iter->screenWidth > displayMode.w || iter->screenHeight > displayMode.h ) {
-                            iter = resolutionSet.erase( iter );
-                        }
-                        else {
-                            ++iter;
+                    std::vector<fheroes2::ResolutionInfo> temp;
+                    for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
+                        if ( iter->screenWidth <= displayMode.w && iter->screenHeight <= displayMode.h ) {
+                            temp.emplace_back( std::move( *iter ) );
                         }
                     }
+
+                    return temp;
                 }
 #endif
 
