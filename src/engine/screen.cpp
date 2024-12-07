@@ -870,9 +870,12 @@ namespace
             static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
+                // At the moment we retrieve resolutions only from the first display.
+                const int displayId = 0;
+
                 const int displayCount = SDL_GetNumVideoDisplays();
                 if ( displayCount >= 1 ) {
-                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+                    const int displayModeCount = SDL_GetNumDisplayModes( displayId );
                     if ( displayModeCount >= 1 ) {
                         for ( int i = 0; i < displayModeCount; ++i ) {
                             SDL_DisplayMode videoMode;
@@ -899,6 +902,35 @@ namespace
                 resolutionSet.emplace( 848, 480 );
 #endif
                 resolutionSet = FilterResolutions( resolutionSet );
+
+#if defined( __APPLE__ )
+                if ( displayCount >= 1 ) {
+                    // We should limit all available resolutions to the one which is currently chosen
+                    // on the system to avoid ending up having application window which is bigger than screen resolution.
+                    SDL_DisplayMode displayMode;
+
+                    const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
+                    if ( returnValue < 0 ) {
+                        ERROR_LOG( "Failed to retrieve the current display mode. The error value: " << returnValue << ", description: " << SDL_GetError() )
+                        return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                    }
+
+                    // If the current display resolution is somehow very small, then ignore it.
+                    // It could appear in cases when the device has smaller than the required by the game resolution.
+                    if ( displayMode.w < fheroes2::Display::DEFAULT_WIDTH || displayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
+                        return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                    }
+
+                    for (auto iter = resolutionSet.begin(); iter != resolutionSet.end(); ) {
+                        if ( iter->screenWidth > displayMode.w || iter->screenHeight > displayMode.h ) {
+                            iter = resolutionSet.erase(iter);
+                        }
+                        else {
+                            ++iter;
+                        }
+                    }
+                }
+#endif
 
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }();
