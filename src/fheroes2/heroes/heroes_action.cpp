@@ -221,18 +221,28 @@ namespace
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
-    void runActionObjectFadeOutAnumation( const Maps::Tile & tile, const MP2::MapObjectType objectType )
+    void runActionObjectFadeOutAnimation( const Maps::Tile & tile, const MP2::MapObjectType objectType )
     {
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
+        // There are hacked maps (or made with the original editor's bugs) that have not corresponding object type ant its sprite.
+        // So we also search object ID by checking if the object is action because on one tile there might be only one action object.
+        MP2::MapObjectType actualObjectType = MP2::OBJ_NONE;
+
+        if ( const MP2::MapObjectType mainObjectType = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
+             mainObjectType == objectType || MP2::isInGameActionObject( mainObjectType ) ) {
             objectUID = tile.getMainObjectPart()._uid;
+
+            actualObjectType = mainObjectType;
         }
         else {
             // In maps made by the original map editor the action object can be in the ground layer.
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                if ( const MP2::MapObjectType partObjectType = Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex );
+                     partObjectType == objectType || MP2::isInGameActionObject( partObjectType ) ) {
                     objectUID = iter->_uid;
+
+                    actualObjectType = partObjectType;
                     break;
                 }
             }
@@ -242,6 +252,12 @@ namespace
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+
+        // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
+        if ( actualObjectType != objectType ) {
+            // Remove an object by its actual sprite type.
+            removeObjectFromTileByType( tile, actualObjectType );
+        }
 
         // Update radar in the place of the removed object.
         I.getRadar().SetRenderArea( { Maps::GetPoint( tile.GetIndex() ), { 1, 1 } } );
@@ -259,7 +275,7 @@ namespace
                 if ( remove && recruit == troop.GetCount() ) {
                     Game::PlayPickupSound();
 
-                    runActionObjectFadeOutAnumation( tile, tile.getMainObjectType() );
+                    runActionObjectFadeOutAnimation( tile, tile.getMainObjectType() );
 
                     resetObjectMetadata( tile );
                 }
@@ -453,7 +469,7 @@ namespace
 
             assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
-            runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+            runActionObjectFadeOutAnimation( tile, MP2::OBJ_MONSTER );
 
             resetObjectMetadata( tile );
         }
@@ -723,8 +739,6 @@ namespace
 
         Maps::Tile & tile = world.getTile( dst_index );
 
-        Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
             fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), ( sign ? sign->message : "No message provided" ), Dialog::OK );
@@ -741,6 +755,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
                 I.getStatusPanel().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
@@ -750,7 +765,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -768,8 +783,7 @@ namespace
         switch ( objectType ) {
         case MP2::OBJ_WINDMILL:
             msg = funds.GetValidItemsCount() > 0
-                      ? _(
-                          "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
+                      ? _( "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
                       : _( "The keeper of the mill announces:\n\"Milord, I am sorry, there are no resources currently available. Please try again next week.\"" );
             break;
 
@@ -786,10 +800,8 @@ namespace
 
         case MP2::OBJ_MAGIC_GARDEN:
             msg = funds.GetValidItemsCount() > 0
-                      ? _(
-                          "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
-                      : _(
-                          "You've found a magic garden, the kind of place that leprechauns and faeries like to cavort in, but there is no one here today.\nPerhaps you should try again next week." );
+                      ? _( "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
+                      : _( "You've found a magic garden, the kind of place that leprechauns and faeries like to cavort in, but there is no one here today.\nPerhaps you should try again next week." );
             break;
 
         default:
@@ -950,7 +962,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -1087,16 +1099,15 @@ namespace
             break;
 
         case MP2::OBJ_IDOL:
-            msg = visited ? _(
-                      "You've found an ancient and weathered stone idol.\nIt is supposed to grant luck to visitors, but since the stars are already smiling upon you, it does nothing." )
-                          : _( "You've found an ancient and weathered stone idol.\nKissing it is supposed to be lucky, so you do. The stone is very cold to the touch." );
+            msg = visited
+                      ? _( "You've found an ancient and weathered stone idol.\nIt is supposed to grant luck to visitors, but since the stars are already smiling upon you, it does nothing." )
+                      : _( "You've found an ancient and weathered stone idol.\nKissing it is supposed to be lucky, so you do. The stone is very cold to the touch." );
             break;
 
         case MP2::OBJ_MERMAID:
             msg = visited
                       ? _( "The mermaids silently entice you to return later and be blessed again." )
-                      : _(
-                          "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids' charms bless you with increased luck for your next combat." );
+                      : _( "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids' charms bless you with increased luck for your next combat." );
             break;
 
         default:
@@ -1271,25 +1282,23 @@ namespace
 
         case MP2::OBJ_MERCENARY_CAMP:
             skill = Skill::Primary::ATTACK;
-            msg = visited ? _(
-                      "You've come upon a mercenary camp practicing their tactics. \"You're too advanced for us,\" the mercenary captain says. \"We can teach nothing more.\"" )
-                          : _(
-                              "You've come upon a mercenary camp practicing their tactics. The mercenaries welcome you and your troops and invite you to train with them." );
+            msg = visited
+                      ? _( "You've come upon a mercenary camp practicing their tactics. \"You're too advanced for us,\" the mercenary captain says. \"We can teach nothing more.\"" )
+                      : _( "You've come upon a mercenary camp practicing their tactics. The mercenaries welcome you and your troops and invite you to train with them." );
             break;
 
         case MP2::OBJ_WITCH_DOCTORS_HUT:
             skill = Skill::Primary::KNOWLEDGE;
             msg = visited
                       ? _( "\"Go 'way!\", the witch doctor barks, \"you know all I know.\"" )
-                      : _(
-                          "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails." );
+                      : _( "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails." );
             break;
 
         case MP2::OBJ_STANDING_STONES:
             skill = Skill::Primary::POWER;
-            msg = visited ? _(
-                      "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, the Druids turn you away, indicating they have nothing new to teach you." )
-                          : _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, they teach you new ways to cast spells." );
+            msg = visited
+                      ? _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, the Druids turn you away, indicating they have nothing new to teach you." )
+                      : _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, they teach you new ways to cast spells." );
             break;
 
         default:
@@ -1446,9 +1455,9 @@ namespace
             break;
 
         case MP2::OBJ_WATERING_HOLE:
-            msg = visited ? _(
-                      "The drink at the watering hole is refreshing, but offers no further benefit. The watering hole might help again if you fought a battle first." )
-                          : _( "A drink at the watering hole fills your troops with strength and lifts their spirits. You can travel a bit further today." );
+            msg = visited
+                      ? _( "The drink at the watering hole is refreshing, but offers no further benefit. The watering hole might help again if you fought a battle first." )
+                      : _( "A drink at the watering hole fills your troops with strength and lifts their spirits. You can travel a bit further today." );
             move = GameStatic::getMovementPointBonus( MP2::OBJ_WATERING_HOLE );
             break;
 
@@ -1571,7 +1580,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -1754,7 +1763,7 @@ namespace
 
             assert( tile.getMainObjectType() == MP2::OBJ_ARTIFACT );
 
-            runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
+            runActionObjectFadeOutAnimation( tile, MP2::OBJ_ARTIFACT );
 
             resetObjectMetadata( tile );
         }
@@ -1858,7 +1867,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -3308,7 +3317,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            runActionObjectFadeOutAnumation( tile, objectType );
+            runActionObjectFadeOutAnimation( tile, objectType );
 
             // TODO: add hero fading in animation together with jail animation.
             Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3563,7 +3572,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            runActionObjectFadeOutAnumation( tile, objectType );
+            runActionObjectFadeOutAnimation( tile, objectType );
         }
         else {
             fheroes2::showStandardTextMessage(
