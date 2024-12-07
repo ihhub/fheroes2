@@ -2260,8 +2260,6 @@ namespace Maps
             assert( isFirstLoad );
 
             if ( tile.isWater() ) {
-                const MP2::MapObjectType mainObjectType = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
-
                 // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
                 // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
                 if ( removeObjectFromTileByType( tile, MP2::OBJ_TREASURE_CHEST ) ) {
