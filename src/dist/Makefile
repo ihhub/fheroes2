@@ -18,8 +18,6 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET := fheroes2
-
 #
 # Common build options for fheroes2 and third-party libraries
 #
