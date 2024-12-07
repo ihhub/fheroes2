@@ -175,7 +175,7 @@ jobs:
       run: |
         make -j 2
       env: ${{ matrix.config.env }}
-    - name: Create app bundle
+    - name: Create MacOS app bundle
       if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         make -j 2 bundle
