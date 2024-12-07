@@ -21,15 +21,24 @@
 TARGETS := 82m2wav bin2txt extractor h2dmgr icn2img pal2img til2img xmi2midi
 
 LIBENGINE := ../engine/libengine.a
-CCFLAGS := $(CCFLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) -I../../engine
+
+SOURCEROOT := ../../tools
+SOURCEDIRS := $(SOURCEROOT)
 
 .PHONY: all clean
 
 all: $(TARGETS)
 
-$(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $@.cpp
-	$(CXX) -o $@ $@.o $(LIBENGINE) $(LIBS) $(LDFLAGS)
+$(TARGETS): %: %.o $(LIBENGINE)
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+
+VPATH := $(SOURCEDIRS)
+
+%.o: %.cpp
+	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+
+include $(wildcard *.d)
 
 clean:
-	rm -f *.o *.exe $(TARGETS)
+	rm -f *.d *.o $(TARGETS)

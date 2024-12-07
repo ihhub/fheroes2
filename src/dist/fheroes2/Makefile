@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,28 +18,38 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-# Options:
-#
-# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
-# FHEROES2_WITH_DEBUG: build in debug mode
-# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
-
 TARGET := fheroes2
 
-PROJECT_TITLE := fheroes2
-PROJECT_AUTHOR := fheroes2 resurrection team
-PROJECT_VERSION := $(file < version.txt)
+LIBENGINE := ../engine/libengine.a
+CCFLAGS := $(CCFLAGS) -I../../engine
 
-PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
+LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
+endif
 
-.PHONY: all clean
+SOURCEROOT := ../../fheroes2
+SOURCEDIRS := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
+SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)
+POT := $(TARGET).pot
 
-all:
-	$(MAKE) -f Makefile -C src PLATFORM=switch
-	cp src/dist/$(TARGET) $(TARGET).elf
-	nacptool --create "$(PROJECT_TITLE)" "$(PROJECT_AUTHOR)" "$(PROJECT_VERSION)" $(TARGET).nacp
-	elf2nro $(TARGET).elf $(TARGET).nro --icon=files/images/platform/switch/icon.jpg --nacp=$(TARGET).nacp
+.PHONY: all pot clean
+
+all: $(TARGET)
+
+$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(LIBENGINE)
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+
+pot: $(SOURCES)
+	xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(SOURCES))
+	sed -i~ -e 's/, c-format//' $(POT)
+
+VPATH := $(SOURCEDIRS)
+
+%.o: %.cpp
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIRS)) $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+
+include $(wildcard *.d)
 
 clean:
-	$(MAKE) -f Makefile -C src clean
-	rm -rf $(TARGET).elf $(TARGET).nacp $(TARGET).nro
+	rm -f *.d *.o $(TARGET) $(POT) $(POT)~

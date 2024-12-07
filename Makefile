@@ -33,31 +33,32 @@
 TARGET := fheroes2
 PROJECT_VERSION := $(file < version.txt)
 
-.PHONY: all bundle clean
+.PHONY: all clean
 
 all:
-	$(MAKE) -C src
+	$(MAKE) -C src/dist
 	$(MAKE) -C files/lang
-ifndef FHEROES2_MACOS_APP_BUNDLE
-	@cp src/dist/$(TARGET) .
-endif
-
-bundle:
 ifdef FHEROES2_MACOS_APP_BUNDLE
-	@mkdir -p "src/dist/$(TARGET).app/Contents/Resources/translations"
-	@mkdir -p "src/dist/$(TARGET).app/Contents/Resources/h2d"
-	@mkdir -p "src/dist/$(TARGET).app/Contents/MacOS"
-	@cp ./src/resources/fheroes2.icns "src/dist/$(TARGET).app/Contents/Resources"
-	@cp ./files/lang/*.mo "src/dist/$(TARGET).app/Contents/Resources/translations"
-	@cp ./files/data/*.h2d "src/dist/$(TARGET).app/Contents/Resources/h2d"
-	@sed -e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/$(TARGET)/" -e "s/\$${MACOSX_BUNDLE_ICON_FILE}/fheroes2.icns/" -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/com.fheroes2.$(TARGET)/" -e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/$(TARGET)/" -e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(PROJECT_VERSION)/" -e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(PROJECT_VERSION)/" ./src/resources/Info.plist.in > "src/dist/$(TARGET).app/Contents/Info.plist"
-	@mv "src/dist/$(TARGET)" "src/dist/$(TARGET).app/Contents/MacOS"
-	@dylibbundler -od -b -x "src/dist/$(TARGET).app/Contents/MacOS/$(TARGET)" -d "src/dist/$(TARGET).app/Contents/libs"
-	@cp -R "src/dist/$(TARGET).app" .
+	mkdir -p "$(TARGET).app/Contents/Resources/translations"
+	mkdir -p "$(TARGET).app/Contents/Resources/h2d"
+	mkdir -p "$(TARGET).app/Contents/MacOS"
+	cp src/resources/fheroes2.icns "$(TARGET).app/Contents/Resources"
+	cp files/lang/*.mo "$(TARGET).app/Contents/Resources/translations"
+	cp files/data/*.h2d "$(TARGET).app/Contents/Resources/h2d"
+	sed -e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/$(TARGET)/" \
+	    -e "s/\$${MACOSX_BUNDLE_ICON_FILE}/fheroes2.icns/" \
+	    -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/com.fheroes2.$(TARGET)/" \
+	    -e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/$(TARGET)/" \
+	    -e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(PROJECT_VERSION)/" \
+	    -e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(PROJECT_VERSION)/" src/resources/Info.plist.in > "$(TARGET).app/Contents/Info.plist"
+	mv "src/dist/fheroes2/$(TARGET)" "$(TARGET).app/Contents/MacOS"
+	dylibbundler -od -b -x "$(TARGET).app/Contents/MacOS/$(TARGET)" -d "$(TARGET).app/Contents/libs"
+else
+	cp src/dist/fheroes2/$(TARGET) .
 endif
 
 clean:
-	$(MAKE) -C src clean
+	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	@rm -f ./$(TARGET)
-	@rm -rf ./$(TARGET).app
+	rm -f $(TARGET)
+	rm -rf $(TARGET).app

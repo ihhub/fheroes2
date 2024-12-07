@@ -37,7 +37,7 @@ endif
 .PHONY: all clean
 
 all:
-	@sed -e '$(SEDEX)' fheroes2.6.in > fheroes2.6
+	sed -e '$(SEDEX)' fheroes2.6.in > fheroes2.6
 
 clean:
-	@rm -f fheroes2.6
+	rm -f fheroes2.6

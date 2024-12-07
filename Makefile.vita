@@ -25,7 +25,6 @@
 # FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
 TARGET := fheroes2
-MAKE := make
 
 PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
@@ -46,7 +45,7 @@ $(TARGET).vpk: eboot.bin param.sfo translations
 		--add files/data=files/data \
 		--add files/lang/vita_temp=files/lang \
 	$(TARGET).vpk
-	@rm -r files/lang/vita_temp
+	rm -r files/lang/vita_temp
 
 translations: $(TARGET).elf
 	$(MAKE) -C files/lang
@@ -65,9 +64,9 @@ $(TARGET).velf: $(TARGET).elf
 
 $(TARGET).elf:
 	$(MAKE) -f Makefile -C src PLATFORM=vita
-	@cp src/dist/$(TARGET) $(TARGET).elf
+	cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:
 	$(MAKE) -f Makefile -C src clean
 	$(MAKE) -C files/lang clean
-	@rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo
+	rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo
