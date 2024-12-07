@@ -51,7 +51,7 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 	    -e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/$(TARGET)/" \
 	    -e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(PROJECT_VERSION)/" \
 	    -e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(PROJECT_VERSION)/" src/resources/Info.plist.in > "$(TARGET).app/Contents/Info.plist"
-	mv "src/dist/fheroes2/$(TARGET)" "$(TARGET).app/Contents/MacOS"
+	cp "src/dist/fheroes2/$(TARGET)" "$(TARGET).app/Contents/MacOS"
 	dylibbundler -od -b -x "$(TARGET).app/Contents/MacOS/$(TARGET)" -d "$(TARGET).app/Contents/libs"
 else
 	cp src/dist/fheroes2/$(TARGET) .
