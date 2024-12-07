@@ -35,11 +35,11 @@ PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 .PHONY: all clean
 
 all:
-	$(MAKE) -f Makefile -C src PLATFORM=switch
-	cp src/dist/$(TARGET) $(TARGET).elf
+	$(MAKE) -C src/dist PLATFORM=switch
+	cp src/dist/fheroes2/$(TARGET) $(TARGET).elf
 	nacptool --create "$(PROJECT_TITLE)" "$(PROJECT_AUTHOR)" "$(PROJECT_VERSION)" $(TARGET).nacp
 	elf2nro $(TARGET).elf $(TARGET).nro --icon=files/images/platform/switch/icon.jpg --nacp=$(TARGET).nacp
 
 clean:
-	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -C src/dist clean
 	rm -rf $(TARGET).elf $(TARGET).nacp $(TARGET).nro

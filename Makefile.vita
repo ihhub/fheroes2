@@ -63,10 +63,10 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src PLATFORM=vita
-	cp src/dist/$(TARGET) $(TARGET).elf
+	$(MAKE) -C src/dist PLATFORM=vita
+	cp src/dist/fheroes2/$(TARGET) $(TARGET).elf
 
 clean:
-	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
 	rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo
