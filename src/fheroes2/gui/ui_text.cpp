@@ -371,8 +371,7 @@ namespace fheroes2
         _text += truncatedEnding;
     }
 
-    void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                 const bool ignoreSpacesAtTextEnd /* = true */ ) const
+    void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const
     {
         assert( !_text.empty() );
 
@@ -388,7 +387,7 @@ namespace fheroes2
             // The text will be displayed in a single line.
 
             const int32_t size = static_cast<int32_t>( _text.size() );
-            lineWidth += getLineWidth( data, size, charHandler, _ignoreSpacesAtLineEnd && ignoreSpacesAtTextEnd );
+            lineWidth += getLineWidth( data, size, charHandler, _ignoreSpacesAtLineEnd && _ignoreSpacesAtTextEnd );
 
             textLineInfos.emplace_back( firstLineOffsetX, offsetY, lineWidth, size );
             return;
@@ -505,7 +504,7 @@ namespace fheroes2
             }
         }
 
-        if ( _ignoreSpacesAtLineEnd && ignoreSpacesAtTextEnd ) {
+        if ( _ignoreSpacesAtLineEnd && _ignoreSpacesAtTextEnd ) {
             lineWidth -= spaceCharCount * charHandler.getSpaceCharWidth();
         }
 
@@ -517,6 +516,11 @@ namespace fheroes2
     void MultiFontText::add( Text text )
     {
         if ( !text._text.empty() ) {
+            if ( !_texts.empty() ) {
+                // To properly render a multi - font text we must not ignore spaces at the end of a text entry which is not the last one.
+                _texts.back()._ignoreSpacesAtTextEnd = false;
+            }
+
             _texts.emplace_back( std::move( text ) );
         }
     }
@@ -676,16 +680,13 @@ namespace fheroes2
         return output;
     }
 
-    void MultiFontText::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                          const bool ignoreSpacesAtTextEnd ) const
+    void MultiFontText::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const
     {
         const size_t textsCount = _texts.size();
         for ( size_t i = 0; i < textsCount; ++i ) {
             const auto langugeSwitcher = getLanguageSwitcher( _texts[i] );
 
-            // To properly join multi-font text we must not ignore spaces at the text end if there is next text.
-            const bool ignoreSpacesAtSubTextEnd = ( i + 1 == textsCount );
-            _texts[i].getTextLineInfos( textLineInfos, maxWidth, rowHeight, ignoreSpacesAtSubTextEnd && ignoreSpacesAtTextEnd );
+            _texts[i].getTextLineInfos( textLineInfos, maxWidth, rowHeight );
         }
     }
 

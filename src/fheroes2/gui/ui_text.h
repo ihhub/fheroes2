@@ -164,11 +164,6 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
-        void setIgnoreSpacesAtLineEnd( const bool ignoreSpacesAtLineEnd )
-        {
-            _ignoreSpacesAtLineEnd = ignoreSpacesAtLineEnd;
-        }
-
         const std::optional<SupportedLanguage> & getLanguage() const
         {
             return _language;
@@ -176,15 +171,12 @@ namespace fheroes2
 
         // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
         // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
-        virtual void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                       const bool ignoreSpacesAtTextEnd = true ) const
-            = 0;
+        virtual void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const = 0;
 
     protected:
         std::optional<SupportedLanguage> _language;
 
         bool _isUniformedVerticalAlignment{ true };
-        bool _ignoreSpacesAtLineEnd{ true };
     };
 
     class Text final : public TextBase
@@ -259,13 +251,22 @@ namespace fheroes2
             return _fontType;
         }
 
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                               const bool ignoreSpacesAtTextEnd = true ) const override;
+        void setIgnoreSpacesAtLineEnd( const bool ignoreSpacesAtLineEnd )
+        {
+            _ignoreSpacesAtLineEnd = ignoreSpacesAtLineEnd;
+        }
+
+        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const override;
 
     private:
         std::string _text;
 
         FontType _fontType;
+
+        // There might be spaces at line end and at the end of the whole text. They are ignored by default on rendering or getting text parameters.
+        // Setting one of both of the next two variables to 'false' will make text methods to take into account the widths of these spaces.
+        bool _ignoreSpacesAtLineEnd{ true };
+        bool _ignoreSpacesAtTextEnd{ true };
     };
 
     class MultiFontText final : public TextBase
@@ -294,8 +295,7 @@ namespace fheroes2
 
         std::string text() const override;
 
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                               const bool ignoreSpacesAtTextEnd = true ) const override;
+        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const override;
 
     private:
         std::vector<Text> _texts;
