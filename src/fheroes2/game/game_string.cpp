@@ -20,6 +20,7 @@
 
 #include "game_string.h"
 
+#include "game_language.h"
 #include "serialize.h"
 
 OStreamBase & operator<<( OStreamBase & stream, const fheroes2::LocalizedString & string )
