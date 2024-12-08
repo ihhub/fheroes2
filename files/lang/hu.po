@@ -6187,12 +6187,14 @@ msgid "Keyboard|ABC"
 msgstr "ABC"
 
 msgid "The entered value is invalid."
-msgstr ""
+msgstr "A megadott érték helytelen."
 
 msgid ""
 "The entered value is out of range.\n"
 "It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
+"A megadható érték nem lehet kevesebb, mint %{minValue} és nem lehet több, mint %{maxValue},\n"
+"de a megadott érték ezen a tartományon kívül van."
 
 msgid "Kingdom Income"
 msgstr "Királyság jövedelme"
@@ -6257,7 +6259,7 @@ msgid "Dutch"
 msgstr "holland"
 
 msgid "Hungarian"
-msgstr "magyar"
+msgstr "Magyar"
 
 msgid "Danish"
 msgstr "dán"
@@ -8691,10 +8693,10 @@ msgid "speed|Instant"
 msgstr "Itt terem"
 
 msgid "Click this button to adjust the level of zoom."
-msgstr ""
+msgstr "Nyomd meg ezt a gombot a nagyítás mértékének beállításához."
 
 msgid "Zoom"
-msgstr ""
+msgstr "Nagyítás"
 
 msgid "week|Squirrel"
 msgstr "Mókus"
