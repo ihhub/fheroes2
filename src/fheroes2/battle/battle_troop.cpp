@@ -562,42 +562,31 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
 
     // The retaliatory damage of a blinded unit is halved
     if ( _blindRetaliation ) {
+        // Petrified units cannot attack, respectively, there should be no retaliation
+        assert( !enemy.Modes( SP_STONE ) );
+
         dmg /= 2;
     }
 
     // A petrified unit takes only half of the damage
     if ( enemy.Modes( SP_STONE ) ) {
+        // Petrified units cannot attack, respectively, there should be no retaliation
+        assert( !_blindRetaliation );
+
         dmg /= 2;
     }
 
-    switch ( GetID() ) {
-    case Monster::CRUSADER:
-        if ( enemy.isUndead() ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    default:
-        break;
+    // If multiple options are suitable at the same time, the damage should be doubled only once
+    if ( ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::EARTH_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::AIR_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::WATER_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES ) ) ) {
+        dmg *= 2;
     }
 
     int r = GetAttack() - enemy.GetDefense();
@@ -975,7 +964,7 @@ void Battle::Unit::PostAttackAction( const Unit & enemy )
     ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
-void Battle::Unit::SetBlindRetaliation( bool value )
+void Battle::Unit::SetBlindRetaliation( const bool value )
 {
     _blindRetaliation = value;
 }
@@ -1126,9 +1115,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
     {
         const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-        const auto spellCasterAbilityIter
-            = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-        if ( spellCasterAbilityIter != attackerAbilities.end() ) {
+        if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+             abilityIter != attackerAbilities.end() ) {
             const auto getDefenderDamage = [&defender]() {
                 if ( defender.Modes( SP_CURSE ) ) {
                     return defender.GetDamageMin();
@@ -1141,14 +1129,14 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
                 return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
             };
 
-            switch ( spellCasterAbilityIter->value ) {
+            switch ( abilityIter->value ) {
             case Spell::BLIND:
             case Spell::PARALYZE:
             case Spell::PETRIFY:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0;
+                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0;
                 }
                 break;
             case Spell::DISPEL:
@@ -1157,8 +1145,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             case Spell::CURSE:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0;
+                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0 / 10.0;
                 }
                 break;
             default:
@@ -1307,11 +1295,11 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
-    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, applyingHero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPower, applyingHero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1320,76 +1308,46 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
     }
 }
 
-uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                              const bool ignoreDefendingHero ) const
 {
     assert( spell.isDamage() );
 
-    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spellPoints;
+    uint32_t dmg = spell.Damage() * spellPower;
 
-    switch ( GetID() ) {
-    case Monster::IRON_GOLEM:
-    case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
-            // 50% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::ARMAGEDDON:
-            dmg /= 2;
-            break;
-        default:
-            break;
+    // If multiple options are suitable at the same time, then the abilities are considered first (in order from more specific to less specific),
+    // and then the weaknesses are considered (also in order from more specific to less specific)
+    {
+        const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
+        const std::vector<fheroes2::MonsterWeakness> & weaknesses = fheroes2::getMonsterData( GetID() ).battleStats.weaknesses;
+
+        // Abilities
+        //
+        if ( const auto certainSpellDmgRedIter
+             = std::find( abilities.begin(), abilities.end(),
+                          std::make_pair( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, static_cast<uint32_t>( spell.GetID() ) ) );
+             certainSpellDmgRedIter != abilities.end() ) {
+            dmg = dmg * certainSpellDmgRedIter->percentage / 100;
         }
-        break;
-
-    case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
+        else if ( const auto elementalSpellDmgRedIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION );
+                  elementalSpellDmgRedIter != abilities.end() && spell.isElementalSpell() ) {
+            dmg = dmg * elementalSpellDmgRedIter->percentage / 100;
+        }
+        //
+        // Weaknesses
+        //
+        else if ( const auto certainSpellExtraDmgIter
+                  = std::find( weaknesses.begin(), weaknesses.end(),
+                               std::make_pair( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, static_cast<uint32_t>( spell.GetID() ) ) );
+                  certainSpellExtraDmgIter != weaknesses.end() ) {
+            dmg = dmg * ( 100 + certainSpellExtraDmgIter->percentage ) / 100;
+        }
+        else if ( ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS ) && spell.isFire() )
+                  || ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS ) && spell.isCold() ) ) {
             dmg *= 2;
-            break;
-        default:
-            break;
         }
-        break;
-
-    case Monster::AIR_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::ELEMENTALSTORM:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
     }
 
-    // check artifact
     if ( applyingHero ) {
         const HeroBase * defendingHero = GetCommander();
         const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
@@ -1457,7 +1415,6 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                 }
             }
 
-            // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 switch ( targetDamage ) {
                 case 0:
@@ -1610,18 +1567,19 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
 int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
-    const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-    if ( foundAbility == abilities.end() ) {
+
+    const auto abilityIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+    if ( abilityIter == abilities.end() ) {
         // Not a spell caster.
         return Spell::NONE;
     }
 
-    if ( randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( randomGenerator.Get( 1, 100 ) > abilityIter->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
 
-    return foundAbility->value;
+    return abilityIter->value;
 }
 
 bool Battle::Unit::isHaveDamage() const

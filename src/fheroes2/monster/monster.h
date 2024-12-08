@@ -292,6 +292,8 @@ public:
 
     bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
 
+    bool isWeaknessPresent( const fheroes2::MonsterWeaknessType weaknessType ) const;
+
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 
     int ICNMonh() const;
