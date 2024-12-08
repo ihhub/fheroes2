@@ -26,7 +26,7 @@ MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | if msgfmt 
 
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
 
-merge: ../../src/dist/fheroes2.pot
+merge: ../../src/dist/fheroes2/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
 # Czech, Hungarian, Polish and Slovak versions use CP1250
