@@ -60,5 +60,4 @@ endif
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2
-	rm -rf fheroes2.app
+	rm -rf fheroes2 fheroes2.app
