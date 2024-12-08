@@ -704,7 +704,7 @@ namespace fheroes2
         }
 
         std::vector<TextLineInfo> lineInfos;
-        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight );
+        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, false );
 
         if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
             // Pointer is lower than the last text line.
