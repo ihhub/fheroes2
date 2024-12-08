@@ -392,6 +392,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
+    if ( spell.isCombat() && !spell.canCastCombatSpell() ) {
+        if ( res ) {
+            *res = _( "This spell will have no effect!" );
+        }
+        return false;
+    }
+
     if ( spell.isAdventure() ) {
         const Heroes * hero = dynamic_cast<const Heroes *>( this );
         if ( hero == nullptr ) {
