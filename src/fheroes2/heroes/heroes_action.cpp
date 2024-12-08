@@ -225,12 +225,13 @@ namespace
     {
         uint32_t objectUID = 0;
 
-        // There are hacked maps (or made with the original editor's bugs) that have not corresponding object type ant its sprite.
-        // So we also search object ID by checking if the object is action because on one tile there might be only one action object.
+        // There are original hacked maps (or made with exploitation of the original Editor's bugs) that have wrong object type in relation to its image sprite.
+        // So, we also search for object ID by checking if the object is an action type because one tile can have only one action object.
         MP2::MapObjectType actualObjectType = MP2::OBJ_NONE;
+        const bool isActionObject = MP2::isInGameActionObject( objectType );
 
         if ( const MP2::MapObjectType mainObjectType = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
-             mainObjectType == objectType || MP2::isInGameActionObject( mainObjectType ) ) {
+             mainObjectType == objectType || ( isActionObject && MP2::isInGameActionObject( mainObjectType ) ) ) {
             objectUID = tile.getMainObjectPart()._uid;
 
             actualObjectType = mainObjectType;
@@ -239,7 +240,7 @@ namespace
             // In maps made by the original map editor the action object can be in the ground layer.
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
                 if ( const MP2::MapObjectType partObjectType = Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex );
-                     partObjectType == objectType || MP2::isInGameActionObject( partObjectType ) ) {
+                     partObjectType == objectType || ( isActionObject && MP2::isInGameActionObject( partObjectType ) ) ) {
                     objectUID = iter->_uid;
 
                     actualObjectType = partObjectType;
@@ -254,7 +255,7 @@ namespace
         I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
 
         // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
-        if ( actualObjectType != objectType ) {
+        if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
             // Remove an object by its actual sprite type.
             removeObjectFromTileByType( tile, actualObjectType );
         }

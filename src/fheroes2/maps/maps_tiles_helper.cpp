@@ -2263,12 +2263,16 @@ namespace Maps
                 // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
                 // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
                 if ( removeObjectFromTileByType( tile, MP2::OBJ_TREASURE_CHEST ) ) {
-                    // WARNING. The 'seaChestObjectId' must match the Sea Chest object info position in 'Maps::ObjectGroup::ADVENTURE_WATER' group.
-                    const int32_t seaChestObjectId = 1;
-                    const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ADVENTURE_WATER, seaChestObjectId );
-                    assert( objectInfo.objectType == MP2::OBJ_SEA_CHEST );
+                    const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
-                    setObjectOnTile( tile, objectInfo, true );
+                    for ( size_t i = 0; i < objects.size(); ++i ) {
+                        if ( objects[i].objectType == MP2::OBJ_SEA_CHEST ) {
+                            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
+                            setObjectOnTile( tile, objectInfo, true );
+
+                            break;
+                        }
+                    }
                 }
                 else {
                     tile.setMainObjectType( MP2::OBJ_SEA_CHEST );
