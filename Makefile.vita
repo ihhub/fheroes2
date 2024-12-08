@@ -65,4 +65,4 @@ fheroes2.elf:
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -rf fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo
+	rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo

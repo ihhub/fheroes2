@@ -40,4 +40,4 @@ all:
 
 clean:
 	$(MAKE) -C src/dist clean
-	rm -rf fheroes2.elf fheroes2.nacp fheroes2.nro
+	rm -f fheroes2.elf fheroes2.nacp fheroes2.nro
