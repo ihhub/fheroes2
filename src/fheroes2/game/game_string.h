@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <cstding>
+#include <cstdint>
 #include <optional>
 #include <string>
 
