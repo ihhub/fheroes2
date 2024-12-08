@@ -1,5 +1,5 @@
 # Russian translation of fheroes2
-# Copyright (C) 2021 - 2023 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2021 - 2024 fheroes2 team <fhomm2@gmail.com>
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-28 15:55+0000\n"
-"PO-Revision-Date: 2024-10-04 15:32+0300\n"
+"PO-Revision-Date: 2024-12-07 21:22+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -326,7 +326,7 @@ msgid "EVENTS"
 msgstr "СОБЫТИЯ"
 
 msgid "LANGUAGE"
-msgstr ""
+msgstr "ЯЗЫК"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -499,7 +499,7 @@ msgstr ""
 "Сфера Отрицания лишила возможности использовать любые заклинания в битве."
 
 msgid "You cannot cast spells without a commanding hero."
-msgstr ""
+msgstr "Вы не можете произносить заклинания без героя на Вашей стороне."
 
 msgid "You have already cast a spell this round."
 msgstr "Вы уже использовали магию на этом ходу."
@@ -3243,9 +3243,8 @@ msgstr "Устанавливает скорость прокрутки окна 
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
-#, fuzzy
 msgid "Select Language:"
-msgstr "Выберите язык игры:"
+msgstr "Выберите язык:"
 
 msgid "Click to choose the selected language."
 msgstr "Нажмите, чтобы применить выбранный язык интерфейса игры."
@@ -3661,12 +3660,14 @@ msgstr "Цена верности"
 msgid "Resurrection"
 msgstr "Возрождение"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Language:\n"
-msgstr "Язык"
+msgstr ""
+"\n"
+"\n"
+"Язык:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -4567,6 +4568,9 @@ msgid ""
 "%{newLanguage}. Some texts might not be displayed properly after this. Do "
 "you want to proceed?"
 msgstr ""
+"Вы собираетесь изменить текущий язык карты (%{oldLanguage}) на "
+"%{newLanguage}. После этого некоторые сообщения могут отображаться "
+"некорректно. Вы хотите продолжить?"
 
 msgid "Change Map Name"
 msgstr "Изменить название карты"
@@ -4589,9 +4593,8 @@ msgstr "Нажмите, чтобы отредактировать календа
 msgid "Events"
 msgstr "События"
 
-#, fuzzy
 msgid "Click to change the language of the map."
-msgstr "Изменить язык интерфейса."
+msgstr "Изменить язык, используемый на карте."
 
 msgid "Click to change your map name."
 msgstr "Нажмите, чтобы изменить название Вашей карты."
@@ -6214,12 +6217,14 @@ msgid "Keyboard|ABC"
 msgstr "АБВ"
 
 msgid "The entered value is invalid."
-msgstr ""
+msgstr "Введено некорректное значение."
 
 msgid ""
 "The entered value is out of range.\n"
 "It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
+"Введённое значение находится за пределами допустимого диапазона.\n"
+"Оно должно быть не менее %{minValue} и не более %{maxValue}."
 
 msgid "Kingdom Income"
 msgstr "Доход королевства"
@@ -7770,23 +7775,23 @@ msgstr ""
 "\"Есть у меня загадка для тебя,\" - сказал Сфинкс. \"Ответишь верно - "
 "получишь награду. Ошибешься - и я тебя съем. Принимаешь ли ты мой вызов?"
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
 "'"
 msgstr ""
-"Сфинкс загадал Вам следующую загадку: \n"
+"Сфинкс загадал Вам следующую загадку:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Ваш ответ?"
+"'"
 
 msgid ""
 "sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
+"'\n"
+"\n"
+"Ваш ответ?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8728,10 +8733,10 @@ msgid "speed|Instant"
 msgstr "Мгновенная"
 
 msgid "Click this button to adjust the level of zoom."
-msgstr ""
+msgstr "Нажмите эту кнопку, чтобы изменить коэффициент масштабирования."
 
 msgid "Zoom"
-msgstr ""
+msgstr "Масштаб"
 
 msgid "week|Squirrel"
 msgstr "Белки"
