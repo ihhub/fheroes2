@@ -413,11 +413,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         // When the "Up"/"Down" button is pressed it is shifted 1 pixel down so we need to properly restore the background.
-        const fheroes2::Rect buttonRoi = button.area();
         button.release();
 
+        const fheroes2::Rect & buttonRoi = button.area();
+
         fheroes2::Copy( background, buttonRoi.x - dialogOffset.x, buttonRoi.y - dialogOffset.y, display, buttonRoi.x, buttonRoi.y, buttonRoi.width, buttonRoi.height );
-        // A the non-pressed button is already on the "background" copy so we do not render the button.
+        // The non-pressed button is already on the "background" copy so we do not render the button.
         display.render( buttonRoi );
     };
 
@@ -445,9 +446,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
         }
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
@@ -464,10 +466,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         if ( buttonMax.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
         }
         if ( buttonMin.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
         bool updateMonsterInfo = false;

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,6 +18,37 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifndef CXX
-CXX := g++
+LIBENGINE := ../engine/libengine.a
+CCFLAGS := $(CCFLAGS) -I../../engine
+
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
+LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
 endif
+
+SOURCEROOT := ../../fheroes2
+SOURCEDIRS := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
+SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)
+
+.PHONY: all pot clean
+
+all: fheroes2 pot
+
+pot: fheroes2.pot
+
+fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(LIBENGINE)
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+
+fheroes2.pot: $(SOURCES)
+	xgettext -d fheroes2 -C -F -k_ -k_n:1,2 -o fheroes2.pot $(sort $(SOURCES))
+	sed -i~ -e 's/, c-format//' fheroes2.pot
+
+VPATH := $(SOURCEDIRS)
+
+%.o: %.cpp
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIRS)) $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+
+include $(wildcard *.d)
+
+clean:
+	rm -f *.d *.o fheroes2 fheroes2.pot fheroes2.pot~

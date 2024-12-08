@@ -204,7 +204,6 @@ namespace Battle
 
         bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
         bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
-        bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
         void PostAttackAction( const Unit & enemy );

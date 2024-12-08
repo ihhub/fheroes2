@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,23 +18,22 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET := libengine
-
-ifndef FHEROES2_WITH_SYSTEM_SMACKER
-CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
-endif
+SOURCEROOT := ../../../thirdparty/libsmacker
+SOURCEDIRS := $(SOURCEROOT)
 
 .PHONY: all clean
 
-all: $(TARGET).a
+all: libsmacker.a
 
-$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) 
+libsmacker.a: smacker.o
 	$(AR) crvs $@ $^
 
-%.o: %.cpp
-	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+VPATH := $(SOURCEDIRS)
+
+smacker.o: smacker.c
+	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
 
 clean:
-	rm -f *.a *.so *.d *.o
+	rm -f *.d *.o libsmacker.a
