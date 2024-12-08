@@ -29,6 +29,7 @@
 #include "castle.h" // IWYU pragma: associated
 #include "dialog.h"
 #include "game_delays.h"
+#include "game_string.h"
 #include "icn.h"
 #include "translations.h"
 #include "ui_dialog.h"

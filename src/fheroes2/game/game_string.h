@@ -23,13 +23,14 @@
 #include <optional>
 #include <string>
 
-#include "game_language.h"
-
 class IStreamBase;
 class OStreamBase;
 
 namespace fheroes2
 {
+
+    enum class SupportedLanguage : uint8_t;
+
     struct LocalizedString
     {
         std::string text;

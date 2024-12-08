@@ -28,7 +28,6 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -37,7 +36,6 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
-#include "game_language.h"
 #include "game_string.h"
 #include "heroes.h"
 #include "kingdom.h"
