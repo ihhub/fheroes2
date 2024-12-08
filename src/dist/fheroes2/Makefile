@@ -32,12 +32,14 @@ SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)
 
 .PHONY: all pot clean
 
-all: fheroes2
+all: fheroes2 pot
+
+pot: fheroes2.pot
 
 fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(LIBENGINE)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
-pot: $(SOURCES)
+fheroes2.pot: $(SOURCES)
 	xgettext -d fheroes2 -C -F -k_ -k_n:1,2 -o fheroes2.pot $(sort $(SOURCES))
 	sed -i~ -e 's/, c-format//' fheroes2.pot
 

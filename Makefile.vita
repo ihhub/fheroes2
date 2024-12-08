@@ -30,9 +30,7 @@ PROJECT_VERSION := $(file < version.txt)
 
 .PHONY: all clean fheroes2.vpk param.sfo fheroes2.elf translations
 
-all: package
-
-package: fheroes2.vpk
+all: fheroes2.vpk
 
 fheroes2.vpk: eboot.bin param.sfo translations
 	vita-pack-vpk -s param.sfo -b eboot.bin \
