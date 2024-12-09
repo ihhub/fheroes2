@@ -22,20 +22,16 @@ ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
 endif
 
-SOURCEROOT := ../../engine
-SOURCEDIRS := $(SOURCEROOT)
-SOURCES := $(wildcard $(SOURCEDIRS)/*.cpp)
+SOURCEDIR := ../../engine
 
 .PHONY: all clean
 
 all: libengine.a
 
-libengine.a: $(notdir $(patsubst %.cpp, %.o, $(SOURCES)))
+libengine.a: $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SOURCEDIR)/*.cpp)))
 	$(AR) crvs $@ $^
 
-VPATH := $(SOURCEDIRS)
-
-%.o: %.cpp
+%.o: $(SOURCEDIR)/%.cpp
 	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
