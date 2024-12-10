@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2024-12-10 01:42+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -9070,6 +9070,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9138,19 +9141,44 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Pasamdyti %{name}"
+
+msgid "Double damage from Fire spells"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Double damage from Cold spells"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Double damage from Earth creatures"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
