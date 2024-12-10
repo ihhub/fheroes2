@@ -225,6 +225,22 @@ public:
         return id == COLDRAY || id == COLDRING;
     }
 
+    bool isElementalSpell() const
+    {
+        switch ( id ) {
+        case COLDRAY:
+        case COLDRING:
+        case FIREBALL:
+        case FIREBLAST:
+        case LIGHTNINGBOLT:
+        case CHAINLIGHTNING:
+        case ELEMENTALSTORM:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     bool isBuiltinOnly() const
     {
         return id == PETRIFY;
