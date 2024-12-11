@@ -236,10 +236,9 @@ namespace Editor
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
-        auto redrawEditorMap = [&conf]() {
+        auto redrawEditor = [&conf]() {
             Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
-            editorInterface.reset();
             // Since the radar interface has a restorer we must redraw it first to avoid the restorer doing something nasty.
             editorInterface.redraw( Interface::REDRAW_RADAR );
 
@@ -249,6 +248,12 @@ namespace Editor
             }
 
             editorInterface.redraw( redrawOptions & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebuildEditor = [&redrawEditor]() {
+            Interface::EditorInterface::Get().reset();
+
+            redrawEditor();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -273,13 +278,13 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawEditorMap();
+                redrawEditor();
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebuildEditor );
 
                 action = DialogAction::Configuration;
                 break;
@@ -310,7 +315,7 @@ namespace Editor
                 conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
                 saveConfiguration = true;
 
-                redrawEditorMap();
+                redrawEditor();
 
                 action = DialogAction::Configuration;
                 break;
