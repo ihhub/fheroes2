@@ -126,11 +126,10 @@ Follow the [**instructions below**](#macos-resources) to gather resources necess
 <a name="macos-native-app"></a>
 ### macOS native app
 
-* Download the source and compile with the `-DMACOS_APP_BUNDLE=ON` option (if using CMake) or using the following commands (with make):
+* Download the source and compile with the `-DMACOS_APP_BUNDLE=ON` option (if using CMake) or using the following command (with make):
 
 ```sh
 make FHEROES2_MACOS_APP_BUNDLE=ON
-make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
 
 Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
@@ -159,8 +158,8 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
   * `fheroes2-install-demo` if you used a package manager (MacPorts or Homebrew);
-  * `script/homm2/download_demo_version_for_app_bundles.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `script/homm2/download_demo_version.sh` for all other cases.
+  * `script/demo/download_demo_version_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
+  * `script/demo/download_demo_version.sh` for all other cases.
 
 <a name="linux"></a>
 ## Linux
