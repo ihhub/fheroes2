@@ -72,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 6 };
+    constexpr uint16_t currentSupportedVersion{ 7 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -178,6 +178,24 @@ namespace
         }
     }
 
+    void convertFromV6ToV7( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 6, "Remove this function." );
+
+        if ( map.version > 6 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 38 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add new Stone Liths object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -275,6 +293,7 @@ namespace
         convertFromV3ToV4( map );
         convertFromV4ToV5( map );
         convertFromV5ToV6( map );
+        convertFromV6ToV7( map );
 
         return !stream.fail();
     }

@@ -4426,6 +4426,18 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // A new variant (Resurrection expansion) of Stone Liths.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_STONE_LITHS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 232U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STONE_LITHS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 233U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 234U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_STONE_LITHS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Event, generic terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_EVENT };

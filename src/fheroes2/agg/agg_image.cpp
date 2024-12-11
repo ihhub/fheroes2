@@ -5101,13 +5101,25 @@ namespace
             auto & images = _icnVsSprite[id];
             if ( images.size() == 218 ) {
                 // Add 2 extra river deltas. Each delta has 7 parts.
-                images.resize( 218 + 14 );
+                // Add a new Stone Liths with 3 more images.
+                images.resize( 218 + 14 + 3 );
 
                 for ( size_t i = 0; i < 14; ++i ) {
                     images[218 + i].resize( images[i].height(), images[i].width() );
                     fheroes2::Transpose( images[i], images[218 + i] );
                     images[218 + i].setPosition( images[i].y(), images[i].x() );
                 }
+
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "circular_stone_liths_center.image", temp );
+
+                images[232].resize( 32, 32 );
+                images[232].reset();
+                Copy( temp, 0, 0, images[232], 0, 0, temp.width(), temp.height() );
+                Copy( images[116], 0, temp.height(), images[232], 0, temp.height(), images[116].width(), images[116].height() - temp.height() );
+
+                fheroes2::h2d::readImage( "circular_stone_liths_left.image", images[233] );
+                fheroes2::h2d::readImage( "circular_stone_liths_top.image", images[234] );
             }
 
             return true;
