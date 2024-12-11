@@ -210,8 +210,9 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     bool isCursorVisible = true;
     const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
     fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
+    text.keepLineTrailingSpaces();
     if ( !isMultiLine ) {
-        text.fitToOneRow( textInputArea.width, false );
+        text.fitToOneRow( textInputArea.width );
     }
     text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
 
@@ -343,7 +344,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
 
             if ( !isMultiLine ) {
-                text.fitToOneRow( textInputArea.width, false );
+                text.fitToOneRow( textInputArea.width );
             }
 
             textBackground.restore();
