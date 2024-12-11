@@ -18,9 +18,6 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-SOURCEROOT := ../../../thirdparty/libsmacker
-SOURCEDIRS := $(SOURCEROOT)
-
 .PHONY: all clean
 
 all: libsmacker.a
@@ -28,9 +25,7 @@ all: libsmacker.a
 libsmacker.a: smacker.o
 	$(AR) crvs $@ $^
 
-VPATH := $(SOURCEDIRS)
-
-smacker.o: smacker.c
+smacker.o: ../../../thirdparty/libsmacker/smacker.c
 	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
