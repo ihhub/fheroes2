@@ -2775,6 +2775,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     }
 
     popup.reset();
+
     _currentUnit = nullptr;
 }
 
@@ -3071,6 +3072,8 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
 
     // Cancel the spellcast
     if ( le.isMouseRightButtonPressed() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        popup.reset();
+
         humanturn_spell = Spell::NONE;
 
         _teleportSpellSrcIdx = -1;
