@@ -34,14 +34,14 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
@@ -79,14 +79,14 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
@@ -124,14 +124,14 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
@@ -174,11 +174,6 @@ jobs:
     - name: Build
       run: |
         make -j 2
-      env: ${{ matrix.config.env }}
-    - name: Create app bundle
-      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
-      run: |
-        make -j 2 bundle
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}

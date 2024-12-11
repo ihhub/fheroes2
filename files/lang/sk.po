@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2024-12-10 01:42+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -9882,6 +9882,9 @@ msgstr "% imunity voči kúzlu %{spell}"
 msgid "% damage from Elemental spells"
 msgstr "% poškodenia od elementálnych kúziel"
 
+msgid "% damage from %{spell} spell"
+msgstr "% poškodenia od kúzla %{spell}"
+
 msgid "% chance to Dispel beneficial spells"
 msgstr "% šanca na rozptýlenie prospešných kúziel"
 
@@ -9948,20 +9951,51 @@ msgstr "Elementál"
 msgid "No Morale"
 msgstr "Žiadna morálka"
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Jazero s vodou"
+
+#, fuzzy
+msgid "Double damage from Fire spells"
 msgstr "Dvojité poškodenie od kúziel ohňa"
 
-msgid "200% damage from Cold spells"
+#, fuzzy
+msgid "Double damage from Cold spells"
 msgstr "Dvojité poškodenie od kúziel chladu"
 
-msgid "% damage from %{spell} spell"
-msgstr "% poškodenia od kúzla %{spell}"
+#, fuzzy
+msgid "Double damage from Earth creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
-msgid "% immunity to "
-msgstr "% imunity voči: "
+#, fuzzy
+msgid "Double damage from Air creatures"
+msgstr "Dvojité poškodenie nemŕtvym"
+
+#, fuzzy
+msgid "Double damage from Fire creatures"
+msgstr "Dvojité poškodenie od kúziel ohňa"
+
+#, fuzzy
+msgid "Double damage from Water creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
 msgid "Lightning"
 msgstr "Blesk"
+
+msgid "% immunity to "
+msgstr "% imunity voči: "
 
 msgid "% damage from "
 msgstr "% poškodenie od: "
