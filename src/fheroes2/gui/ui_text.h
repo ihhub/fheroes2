@@ -169,12 +169,6 @@ namespace fheroes2
             return _language;
         }
 
-        // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
-        // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
-        virtual void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                       const bool ignoreSpacesAtTextEnd ) const
-            = 0;
-
     protected:
         std::optional<SupportedLanguage> _language;
 
@@ -240,7 +234,6 @@ namespace fheroes2
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        // By default it ignores spaces at the end of the text phrase.
         void fitToOneRow( const int32_t maxWidth );
 
         std::string text() const override
@@ -253,20 +246,23 @@ namespace fheroes2
             return _fontType;
         }
 
-        void setIgnoreSpacesAtLineEnd( const bool ignoreSpacesAtLineEnd )
+        // Sets to keep trailing spaces at each text line end including the end of the text.
+        void keepLineTrailingSpaces()
         {
-            _ignoreSpacesAtLineEnd = ignoreSpacesAtLineEnd;
+            _keepLineTrailingSpaces = true;
         }
 
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                               const bool ignoreSpacesAtTextEnd ) const override;
+        // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
+        // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
+        // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
+        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
 
     private:
         std::string _text;
 
         FontType _fontType;
 
-        bool _ignoreSpacesAtLineEnd{ true };
+        bool _keepLineTrailingSpaces{ false };
     };
 
     class MultiFontText final : public TextBase
@@ -295,10 +291,9 @@ namespace fheroes2
 
         std::string text() const override;
 
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                               const bool ignoreSpacesAtTextEnd ) const override;
-
     private:
+        void _getMultiFontTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const;
+
         std::vector<Text> _texts;
     };
 

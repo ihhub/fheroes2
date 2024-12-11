@@ -210,7 +210,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     bool isCursorVisible = true;
     const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
     fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
-    text.setIgnoreSpacesAtLineEnd( false );
+    text.keepLineTrailingSpaces();
     if ( !isMultiLine ) {
         text.fitToOneRow( textInputArea.width );
     }

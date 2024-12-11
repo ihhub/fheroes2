@@ -46,33 +46,33 @@ namespace
         return ( character == ' ' );
     }
 
-    int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler, const bool ignoreSpacesAtLineEnd )
+    int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler, const bool keepTrailingSpaces )
     {
         assert( data != nullptr && size > 0 );
 
         int32_t width = 0;
         const uint8_t * dataEnd = data + size;
 
-        if ( ignoreSpacesAtLineEnd ) {
-            int32_t spaceWidth = 0;
-            const int32_t spaceCharWidth = charHandler.getSpaceCharWidth();
-
+        if ( keepTrailingSpaces ) {
             for ( ; data != dataEnd; ++data ) {
-                if ( isSpaceChar( *data ) ) {
-                    spaceWidth += spaceCharWidth;
-                }
-                else if ( !isLineSeparator( *data ) ) {
-                    width += spaceWidth + charHandler.getWidth( *data );
-
-                    spaceWidth = 0;
-                }
+                width += charHandler.getWidth( *data );
             }
 
             return width;
         }
 
+        int32_t spaceWidth = 0;
+        const int32_t spaceCharWidth = charHandler.getSpaceCharWidth();
+
         for ( ; data != dataEnd; ++data ) {
-            width += charHandler.getWidth( *data );
+            if ( isSpaceChar( *data ) ) {
+                spaceWidth += spaceCharWidth;
+            }
+            else if ( !isLineSeparator( *data ) ) {
+                width += spaceWidth + charHandler.getWidth( *data );
+
+                spaceWidth = 0;
+            }
         }
 
         return width;
@@ -211,7 +211,7 @@ namespace fheroes2
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
-        return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _ignoreSpacesAtLineEnd );
+        return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
     }
 
     // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
@@ -231,7 +231,7 @@ namespace fheroes2
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, fontHeight, true );
+        getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
 
         if ( lineInfos.size() == 1 ) {
             // This is a single-line message.
@@ -251,7 +251,7 @@ namespace fheroes2
         while ( startWidth + 1 < endWidth ) {
             const int32_t currentWidth = ( endWidth + startWidth ) / 2;
             std::vector<TextLineInfo> tempLineInfos;
-            getTextLineInfos( tempLineInfos, currentWidth, fontHeight, true );
+            getTextLineInfos( tempLineInfos, currentWidth, fontHeight, false );
 
             if ( tempLineInfos.size() > lineInfos.size() ) {
                 startWidth = currentWidth;
@@ -274,7 +274,7 @@ namespace fheroes2
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, fontHeight, true );
+        getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
 
         return lineInfos.back().offsetY + fontHeight;
     }
@@ -287,7 +287,7 @@ namespace fheroes2
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, height(), true );
+        getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         return static_cast<int32_t>( lineInfos.size() );
     }
@@ -320,7 +320,7 @@ namespace fheroes2
         const auto langugeSwitcher = getLanguageSwitcher( *this );
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, height(), true );
+        getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
         const fheroes2::FontCharHandler charHandler( _fontType );
@@ -354,7 +354,7 @@ namespace fheroes2
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         const int32_t originalTextWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _ignoreSpacesAtLineEnd );
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is not longer than the provided maximum width.
             return;
@@ -362,7 +362,7 @@ namespace fheroes2
 
         const std::string truncatedEnding( "..." );
         const int32_t truncationSymbolWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, false );
+            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
 
         const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler,
                                                                 maxWidth - truncationSymbolWidth );
@@ -371,7 +371,7 @@ namespace fheroes2
         _text += truncatedEnding;
     }
 
-    void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool ignoreSpacesAtTextEnd ) const
+    void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );
 
@@ -387,7 +387,7 @@ namespace fheroes2
             // The text will be displayed in a single line.
 
             const int32_t size = static_cast<int32_t>( _text.size() );
-            lineWidth += getLineWidth( data, size, charHandler, _ignoreSpacesAtLineEnd && ignoreSpacesAtTextEnd );
+            lineWidth += getLineWidth( data, size, charHandler, _keepLineTrailingSpaces || keepTextTrailingSpaces );
 
             textLineInfos.emplace_back( firstLineOffsetX, offsetY, lineWidth, size );
             return;
@@ -402,7 +402,7 @@ namespace fheroes2
 
         while ( data != dataEnd ) {
             if ( isLineSeparator( *data ) ) {
-                if ( _ignoreSpacesAtLineEnd ) {
+                if ( !_keepLineTrailingSpaces ) {
                     lineWidth -= spaceCharCount * charHandler.getSpaceCharWidth();
                 }
 
@@ -425,14 +425,10 @@ namespace fheroes2
                 if ( lineWidth + charWidth > maxWidth ) {
                     // Current character has exceeded the maximum line width.
 
-                    if ( isSpaceChar( *data ) ) {
+                    if ( !_keepLineTrailingSpaces && isSpaceChar( *data ) ) {
                         // Current character could be a space character then current line is over.
                         // For the characters count we take this space into the account.
                         ++lineCharCount;
-
-                        if ( !_ignoreSpacesAtLineEnd ) {
-                            lineWidth += charWidth;
-                        }
 
                         // Skip this space character.
                         ++data;
@@ -452,7 +448,7 @@ namespace fheroes2
                             const int32_t postHyphenCharCount = static_cast<int32_t>( data - hyphenPos ) - 1;
 
                             lineCharCount -= postHyphenCharCount;
-                            lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, false );
+                            lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, true );
 
                             data = hyphenPos;
                             ++data;
@@ -471,10 +467,10 @@ namespace fheroes2
                         data -= lastWordCharCount;
 
                         lineCharCount -= lastWordCharCount;
-                        lineWidth -= getLineWidth( data, lastWordCharCount, charHandler, false );
+                        lineWidth -= getLineWidth( data, lastWordCharCount, charHandler, true );
                     }
 
-                    if ( _ignoreSpacesAtLineEnd ) {
+                    if ( !_keepLineTrailingSpaces ) {
                         lineWidth -= spaceCharCount * charHandler.getSpaceCharWidth();
                     }
 
@@ -504,7 +500,7 @@ namespace fheroes2
             }
         }
 
-        if ( _ignoreSpacesAtLineEnd && ignoreSpacesAtTextEnd ) {
+        if ( !_keepLineTrailingSpaces && !keepTextTrailingSpaces ) {
             lineWidth -= spaceCharCount * charHandler.getSpaceCharWidth();
         }
 
@@ -546,7 +542,7 @@ namespace fheroes2
         const int32_t maxFontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, maxFontHeight, true );
+        _getMultiFontTextLineInfos( lineInfos, maxWidth, maxFontHeight );
 
         int32_t maxRowWidth = lineInfos.front().lineWidth;
         for ( const TextLineInfo & lineInfo : lineInfos ) {
@@ -561,7 +557,7 @@ namespace fheroes2
         const int32_t maxFontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, maxFontHeight, true );
+        _getMultiFontTextLineInfos( lineInfos, maxWidth, maxFontHeight );
 
         return lineInfos.back().offsetY + maxFontHeight;
     }
@@ -575,7 +571,7 @@ namespace fheroes2
         const int32_t maxFontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, maxFontHeight, true );
+        _getMultiFontTextLineInfos( lineInfos, maxWidth, maxFontHeight );
 
         if ( lineInfos.empty() ) {
             return 0;
@@ -614,7 +610,7 @@ namespace fheroes2
         const int32_t maxFontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, maxFontHeight, true );
+        _getMultiFontTextLineInfos( lineInfos, maxWidth, maxFontHeight );
 
         if ( lineInfos.empty() ) {
             return;
@@ -675,17 +671,16 @@ namespace fheroes2
         return output;
     }
 
-    void MultiFontText::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight,
-                                          const bool ignoreSpacesAtTextEnd ) const
+    void MultiFontText::_getMultiFontTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const
     {
         const size_t textsCount = _texts.size();
         for ( size_t i = 0; i < textsCount; ++i ) {
             const auto langugeSwitcher = getLanguageSwitcher( _texts[i] );
 
             // To properly render a multi-font text we must not ignore spaces at the end of a text entry which is not the last one.
-            const bool isLastTextEntry = ( i == textsCount - 1 );
+            const bool isNotLastTextEntry = ( i != textsCount - 1 );
 
-            _texts[i].getTextLineInfos( textLineInfos, maxWidth, rowHeight, isLastTextEntry && ignoreSpacesAtTextEnd );
+            _texts[i].getTextLineInfos( textLineInfos, maxWidth, rowHeight, isNotLastTextEntry );
         }
     }
 
