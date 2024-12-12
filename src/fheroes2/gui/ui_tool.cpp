@@ -687,6 +687,69 @@ namespace fheroes2
         return textSize;
     }
 
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    {
+        if ( text.empty() ) {
+            // The text is empty.
+            return 0;
+        }
+
+        const FontType fontType = text.getFontType();
+        const int32_t fontHeight = getFontHeight( fontType.size );
+        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
+
+        if ( pointerLine < 0 ) {
+            // Pointer is upper than the first text line.
+            return 0;
+        }
+
+        std::vector<TextLineInfo> lineInfos;
+        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, true );
+
+        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
+            // Pointer is lower than the last text line.
+            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+            return text.text().size() - 1;
+        }
+
+        size_t cursorPosition = 0;
+        for ( int32_t i = 0; i < pointerLine; ++i ) {
+            cursorPosition += lineInfos[i].characterCount;
+        }
+
+        int32_t positionOffsetX = 0;
+        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].lineWidth ) / 2;
+
+        if ( maxOffsetX <= 0 ) {
+            // Pointer is to the left of the text line.
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+        }
+
+        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
+            // Pointer is to the right of the text line.
+            cursorPosition += lineInfos[pointerLine].characterCount;
+
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+        }
+
+        const FontCharHandler charHandler( fontType );
+        const std::string & textString = text.text();
+        const size_t textSize = textString.size();
+
+        for ( size_t i = cursorPosition; i < textSize; ++i ) {
+            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
+            positionOffsetX += charWidth;
+
+            if ( positionOffsetX > maxOffsetX ) {
+                // Take into account that the cursor character ('_') was added to the line.
+                return ( i > currentTextCursorPosition ) ? i - 1 : i;
+            }
+        }
+
+        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+        return textSize - 1;
+    }
+
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
     {
         Display & display = Display::instance();
