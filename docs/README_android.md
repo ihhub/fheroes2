@@ -34,6 +34,11 @@ performed (the cell/cells to be moved to, the angle of attack and the cells subj
 affected by this spell, potential damage, and so on). The second touch event is confirmatory, and performs the corresponding
 action if and only if this action exactly corresponds to the action that the first touch demonstrates.
 
+To make it easier to adjust the angle of attack on touchscreens, you can "draw" it by swiping your finger from the cell next to
+the attacked unit, from which the attacking unit will perform its attack, to the cell occupied by the enemy unit that you plan
+to attack. Then, by removing your finger from the screen, you can double-check your future action, as described in the previous
+paragraph, and confirm it by touching the target cell with your finger again.
+
 ## Android specific notes
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
