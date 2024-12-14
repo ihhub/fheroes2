@@ -251,7 +251,7 @@ public:
     // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
-    static Spell getRandomSpell( const uint8_t level );
+    static Spell getRandomSpell( const int level );
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.

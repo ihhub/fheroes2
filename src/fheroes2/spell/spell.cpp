@@ -511,9 +511,12 @@ uint32_t Spell::weightForRace( const int race ) const
     return 10;
 }
 
-Spell Spell::getRandomSpell( const uint8_t level )
+Spell Spell::getRandomSpell( const int level )
 {
+    assert( level > 0 && level < 6 );
+
     std::vector<Spell> validSpells;
+    validSpells.reserve( Spell::SPELL_COUNT );
 
     for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
         const Spell spell( spellId );
