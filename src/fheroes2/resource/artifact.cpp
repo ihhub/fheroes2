@@ -391,7 +391,7 @@ void Artifact::SetSpell( const int v )
 
     switch ( v ) {
     case Spell::RANDOM:
-        ext = Spell::getRandomSpell( Rand::Get( 1, 5 ) ).GetID();
+        ext = Spell::getRandomSpell( static_cast<int>( Rand::Get( 1, 5 ) ) ).GetID();
         break;
     case Spell::RANDOM1:
         ext = Spell::getRandomSpell( 1 ).GetID();
