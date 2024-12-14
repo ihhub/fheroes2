@@ -1961,19 +1961,19 @@ namespace Maps
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID();
+            setSpellOnTile( tile, Spell::getRandomSpell( 1 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID();
+            setSpellOnTile( tile, Spell::getRandomSpell( 2 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID();
+            setSpellOnTile( tile, Spell::getRandomSpell( 3 ).GetID() );
             break;
 
         case MP2::OBJ_SKELETON: {
@@ -2379,8 +2379,7 @@ namespace Maps
             assert( isFirstLoad );
 
             // Random spell of level 5.
-            const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
-            setSpellOnTile( tile, spell.GetID() );
+            setSpellOnTile( tile, Spell::getRandomSpell( 5 ).GetID() );
             break;
         }
 
