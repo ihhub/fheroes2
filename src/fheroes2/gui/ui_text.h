@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -94,6 +93,25 @@ namespace fheroes2
         }
     };
 
+    struct TextLineInfo
+    {
+        TextLineInfo() = default;
+
+        TextLineInfo( const int32_t offsetX_, const int32_t offsetY_, const int32_t lineWidth_, const int32_t count )
+            : offsetX( offsetX_ )
+            , offsetY( offsetY_ )
+            , lineWidth( lineWidth_ )
+            , characterCount( count )
+        {
+            // Do nothing.
+        }
+
+        int32_t offsetX{ 0 };
+        int32_t offsetY{ 0 };
+        int32_t lineWidth{ 0 };
+        int32_t characterCount{ 0 };
+    };
+
     int32_t getFontHeight( const FontSize fontSize );
 
     class TextBase
@@ -152,9 +170,9 @@ namespace fheroes2
         }
 
     protected:
-        bool _isUniformedVerticalAlignment{ true };
-
         std::optional<SupportedLanguage> _language;
+
+        bool _isUniformedVerticalAlignment{ true };
     };
 
     class Text final : public TextBase
@@ -216,8 +234,7 @@ namespace fheroes2
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        // By default it ignores spaces at the end of the text phrase.
-        void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
+        void fitToOneRow( const int32_t maxWidth );
 
         std::string text() const override
         {
@@ -229,10 +246,23 @@ namespace fheroes2
             return _fontType;
         }
 
+        // Sets to keep trailing spaces at each text line end including the end of the text.
+        void keepLineTrailingSpaces()
+        {
+            _keepLineTrailingSpaces = true;
+        }
+
+        // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
+        // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
+        // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
+        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
+
     private:
         std::string _text;
 
         FontType _fontType;
+
+        bool _keepLineTrailingSpaces{ false };
     };
 
     class MultiFontText final : public TextBase
@@ -262,6 +292,8 @@ namespace fheroes2
         std::string text() const override;
 
     private:
+        void _getMultiFontTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const;
+
         std::vector<Text> _texts;
     };
 
@@ -292,9 +324,6 @@ namespace fheroes2
         const uint32_t _charLimit;
         const int32_t _spaceCharWidth;
     };
-
-    // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );
