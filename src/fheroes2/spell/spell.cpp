@@ -511,10 +511,9 @@ uint32_t Spell::weightForRace( const int race ) const
     return 10;
 }
 
-Spell Spell::Rand( const int level, const bool isAdventure )
+Spell Spell::getRandomSpell( const uint8_t level )
 {
-    std::vector<Spell> vec;
-    vec.reserve( 15 );
+    std::vector<Spell> validSpells;
 
     for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
         const Spell spell( spellId );
@@ -523,33 +522,12 @@ Spell Spell::Rand( const int level, const bool isAdventure )
             continue;
         }
 
-        if ( isAdventure ) {
-            if ( !spell.isAdventure() ) {
-                continue;
-            }
-        }
-        else {
-            if ( !spell.isCombat() ) {
-                continue;
-            }
-        }
-
-        vec.push_back( spell );
+        validSpells.push_back( spell );
     }
 
-    return !vec.empty() ? Rand::Get( vec ) : Spell::NONE;
-}
+    assert( !validSpells.empty() );
 
-Spell Spell::RandCombat( const int level )
-{
-    return Rand( level, false );
-}
-
-Spell Spell::RandAdventure( const int level )
-{
-    const Spell spell = Rand( level, true );
-
-    return spell.isValid() ? spell : RandCombat( level );
+    return validSpells.empty() ? Spell::NONE : Rand::Get( validSpells );
 }
 
 std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )

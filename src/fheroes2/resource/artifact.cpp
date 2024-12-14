@@ -389,26 +389,24 @@ void Artifact::SetSpell( const int v )
         return;
     }
 
-    const bool adv = Rand::Get( 1 ) != 0;
-
     switch ( v ) {
     case Spell::RANDOM:
-        ext = Spell::Rand( Rand::Get( 1, 5 ), adv ).GetID();
+        ext = Spell::getRandomSpell( static_cast<uint8_t>( Rand::Get( 1, 5 ) ) ).GetID();
         break;
     case Spell::RANDOM1:
-        ext = Spell::Rand( 1, adv ).GetID();
+        ext = Spell::getRandomSpell( 1 ).GetID();
         break;
     case Spell::RANDOM2:
-        ext = Spell::Rand( 2, adv ).GetID();
+        ext = Spell::getRandomSpell( 2 ).GetID();
         break;
     case Spell::RANDOM3:
-        ext = Spell::Rand( 3, adv ).GetID();
+        ext = Spell::getRandomSpell( 3 ).GetID();
         break;
     case Spell::RANDOM4:
-        ext = Spell::Rand( 4, adv ).GetID();
+        ext = Spell::getRandomSpell( 4 ).GetID();
         break;
     case Spell::RANDOM5:
-        ext = Spell::Rand( 5, adv ).GetID();
+        ext = Spell::getRandomSpell( 5 ).GetID();
         break;
     default:
         ext = v;
