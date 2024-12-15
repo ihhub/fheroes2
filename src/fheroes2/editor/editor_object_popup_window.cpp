@@ -20,16 +20,19 @@
 
 #include "editor_object_popup_window.h"
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <ostream>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"

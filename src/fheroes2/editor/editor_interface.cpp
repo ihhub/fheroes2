@@ -71,6 +71,7 @@
 #include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
