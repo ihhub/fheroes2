@@ -22,6 +22,6 @@
 
 namespace Dialog
 {
-    // Returns true if the screen resolution has been changed, otherwise returns false
+    // Returns true if the screen resolution has been changed, otherwise returns false.
     bool SelectResolution();
 }
