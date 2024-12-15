@@ -34,7 +34,6 @@
 #include "logging.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "resource.h"
 #include "translations.h"
