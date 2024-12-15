@@ -1013,13 +1013,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-                // Resource count setup was implemented in version 7.
+                // Resource amount setup was implemented in map format version 7.
                 if ( map.version >= 7 ) {
-                    const auto & objectInfo = Maps::getObjectInfo( object.group, object.index );
+                    const auto & objectInfo = Maps::getObjectInfo( object.group, static_cast<int32_t>( object.index ) );
 
                     if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
-                        // Some maps may have resource objects which were set by older Editor version.
-                        // Therefore, we cannot have a strict check whether metadata for this object exists.
+                        // Some maps may have resource objects being set by older Editor versions.
+                        // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
                         if ( map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
 #if defined( WITH_DEBUG )
                             standardMetadataUIDs.emplace( object.id );

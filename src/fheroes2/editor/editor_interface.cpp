@@ -1302,10 +1302,12 @@ namespace Interface
                         _mapFormat.standardMetadata[object.id] = { 0, 0, 0 };
                     }
 
-                    const fheroes2::ResourceDialogElement resourceUI( objectInfo.metadata[0], {} );
+                    const int32_t resourceType = static_cast<int32_t>( objectInfo.metadata[0] );
+
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
                     std::string str = _( "Set %{resource-type} Count" );
-                    StringReplace( str, "%{resource-type}", Resource::String( objectInfo.metadata[0] ) );
+                    StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
                     if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {

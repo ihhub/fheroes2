@@ -57,7 +57,7 @@ namespace
 
                 if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
-                    return Resource::String( info.metadata[0] );
+                    return Resource::String( static_cast<int32_t>( info.metadata[0] ) );
                 }
             }
 
