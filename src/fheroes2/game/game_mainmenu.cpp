@@ -261,7 +261,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         }
 
         {
-            fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
             body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
