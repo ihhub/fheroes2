@@ -533,6 +533,20 @@ namespace Maps
             (void)isMetadataEmplaced;
 #endif
         }
+        else if ( group == ObjectGroup::ADVENTURE_TREASURES ) {
+            const auto & objects = getObjectsByGroup( group );
+
+            assert( index < objects.size() );
+            const auto objectType = objects[index].objectType;
+            if ( objectType == MP2::OBJ_RESOURCE ) {
+                const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+                assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+                (void)isMetadataEmplaced;
+#endif
+            }
+        }
     }
 
     bool addStream( Map_Format::MapFormat & map, const int32_t tileId )

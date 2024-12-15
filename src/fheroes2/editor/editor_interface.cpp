@@ -1290,6 +1290,30 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                    int32_t resourceCount = 0;
+
+                    auto resourceMetadata = _mapFormat.standardMetadata.find( object.id );
+                    if ( resourceMetadata != _mapFormat.standardMetadata.end() ) {
+                        resourceCount = resourceMetadata->second.metadata[0];
+                    }
+                    else {
+                        // This could be a corrupted or older format map. Add missing metadata into it. This action should be outside action manager scope.
+                        _mapFormat.standardMetadata[object.id] = { 0, 0, 0 };
+                    }
+
+                    const fheroes2::ResourceDialogElement resourceUI( objectInfo.metadata[0], {} );
+
+                    std::string str = _( "Set %{resource-type} Count" );
+                    StringReplace( str, "%{resource-type}", Resource::String( objectInfo.metadata[0] ) );
+
+                    // We cannot support more than 6 digits in the dialog due to its UI element size.
+                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
+                        action.commit();
+                    }
+                }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                         assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );

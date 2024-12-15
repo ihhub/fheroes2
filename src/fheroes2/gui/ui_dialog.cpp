@@ -340,22 +340,33 @@ namespace fheroes2
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( std::move( text ) )
     {
-        const Text quantityText( _text, FontType::smallWhite() );
-
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
+
+        if ( _text.empty() ) {
+            _area = { icn.width(), icn.height() };
+        }
+        else {
+            const Text quantityText( _text, FontType::smallWhite() );
+            _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
+        }
     }
 
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
     {
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        const Text quantityText( _text, FontType::smallWhite() );
 
-        const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
+        if ( _text.empty() ) {
+            Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
+        }
+        else {
+            const Text quantityText( _text, FontType::smallWhite() );
 
-        Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
+            const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
 
-        quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
+            Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
+
+            quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
+        }
     }
 
     void ResourceDialogElement::processEvents( const Point & offset ) const

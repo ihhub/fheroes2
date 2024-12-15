@@ -51,10 +51,19 @@ namespace
 
             return Maps::Ground::String( tile.GetGround() );
         case MP2::OBJ_RESOURCE: {
-            const Funds funds = getFundsFromTile( tile );
-            assert( funds.GetValidItemsCount() == 1 );
+            const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+            for ( const auto & info : objects ) {
+                assert( !info.groundLevelParts.empty() );
 
-            return Resource::String( funds.getFirstValidResource().first );
+                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex &&
+                    info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    return Resource::String( info.metadata[0] );
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            return "Invalid resource";
         }
         default:
             break;

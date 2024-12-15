@@ -1012,6 +1012,27 @@ bool World::loadResurrectionMap( const std::string & filename )
                     tileData[0] = tileData[0] - 1U;
                 }
             }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                // Resource count setup was implemented in version 7.
+                if ( map.version >= 7 ) {
+                    const auto & objectInfo = Maps::getObjectInfo( object.group, object.index );
+
+                    if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                        // Some maps may have resource objects which were set by older Editor version.
+                        // Therefore, we cannot have a strict check whether metadata for this object exists.
+                        if ( map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
+#if defined( WITH_DEBUG )
+                            standardMetadataUIDs.emplace( object.id );
+#endif
+
+                            std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                            tileData[0] = objectInfo.metadata[0];
+                            tileData[1] = map.standardMetadata[object.id].metadata[0];
+                        }
+                    }
+                }
+            }
         }
     }
 
