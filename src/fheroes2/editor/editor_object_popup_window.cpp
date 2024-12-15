@@ -55,8 +55,8 @@ namespace
             for ( const auto & info : objects ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex &&
-                    info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
                     return Resource::String( info.metadata[0] );
                 }
             }
