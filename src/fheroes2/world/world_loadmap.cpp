@@ -1012,25 +1012,21 @@ bool World::loadResurrectionMap( const std::string & filename )
                     tileData[0] = tileData[0] - 1U;
                 }
             }
-            else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+            else if ( map.version >= 7 && object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
                 // Resource amount setup was implemented in map format version 7.
-                if ( map.version >= 7 ) {
                     const auto & objectInfo = Maps::getObjectInfo( object.group, static_cast<int32_t>( object.index ) );
 
-                    if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
-                        // Some maps may have resource objects being set by older Editor versions.
-                        // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
-                        if ( map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
+                    // Some maps may have resource objects being set by older Editor versions.
+                    // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
 #if defined( WITH_DEBUG )
-                            standardMetadataUIDs.emplace( object.id );
+                    standardMetadataUIDs.emplace( object.id );
 #endif
 
-                            std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+                    std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
-                            tileData[0] = objectInfo.metadata[0];
-                            tileData[1] = map.standardMetadata[object.id].metadata[0];
-                        }
-                    }
+                    tileData[0] = objectInfo.metadata[0];
+                    tileData[1] = map.standardMetadata[object.id].metadata[0];
                 }
             }
         }
