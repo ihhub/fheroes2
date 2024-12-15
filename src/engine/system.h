@@ -34,6 +34,9 @@ namespace System
 {
     bool isHandheldDevice();
 
+    // Returns true if the target platform supports touch input, otherwise returns false.
+    bool isTouchInputAvailable();
+
     bool isVirtualKeyboardSupported();
 
     // Returns true if target platform supports shell-level globbing (Unix-like platforms with POSIX-compatible shells).
