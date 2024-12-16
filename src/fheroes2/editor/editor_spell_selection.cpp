@@ -232,14 +232,17 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            if ( buttonOk.isEnabled() ) {
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            }
+
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+            if ( buttonOk.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) ) {
                 break;
             }
 
@@ -254,6 +257,25 @@ namespace Editor
                 restorer.restore();
 
                 spellContainer.draw( display );
+
+                // Check if all spells are being disabled. If they are disable OKAY button.
+                bool areAllSpelledDisabled = true;
+                for ( const auto & [spell, isSelected] : spells ) {
+                    if ( isSelected ) {
+                        areAllSpelledDisabled = false;
+                        break;
+                    }
+                }
+
+                if ( areAllSpelledDisabled ) {
+                    buttonOk.disable();
+                    buttonOk.draw();
+                }
+                else {
+                    buttonOk.enable();
+                    buttonOk.draw();
+                }
+
                 display.render( activeArea );
             }
         }
