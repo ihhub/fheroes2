@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -253,7 +254,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
                 body += _( "\n\nBefore starting the game, please select a game resolution." );
             }
 
-            fheroes2::showStandardTextMessage( _( "Greetings!" ), body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), std::move( body ), Dialog::OK );
 
             if ( !System::isHandheldDevice() && Dialog::SelectResolution() ) {
                 fheroes2::drawMainMenuScreen();
