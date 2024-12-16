@@ -246,7 +246,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
             if ( System::isTouchInputAvailable() ) {
                 body += _(
-                    "\n\nTo simulate a right-click with a touch to get info on various items, you need to first touch and keep touching on the item of interest and then touch anywhere else on the screen. You can then remove your first finger from the screen and keep viewing the info on the item." );
+                    "\n\nTo simulate a right-click with a touch to get info on various items, you need to first touch and keep touching on the item of interest and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen and keep viewing the information on the item." );
             }
 
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
