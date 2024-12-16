@@ -52,7 +52,7 @@ namespace
 
     // Up to 5 spells can be displayed in a row.
     // Up to 5 rows can be displayed.
-    // So far the number spells of any level is much more than 25.
+    // So far the number of spells of any level is much more than 25.
     class SpellContainerUI final
     {
     public:
@@ -258,7 +258,7 @@ namespace Editor
 
                 spellContainer.draw( display );
 
-                // Check if all spells are being disabled. If they are disable OKAY button.
+                // Check if all spells are being disabled. If they are disable the OKAY button.
                 bool areAllSpelledDisabled = true;
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
@@ -288,7 +288,7 @@ namespace Editor
             }
         }
 
-        // If all are selected, remove all spells from the selection since empty container means a use of default behavior of the game.
+        // If all spells are selected, remove all spells from the selection since an empty container means the use of the default behavior of the game.
         if ( selectedSpells.size() == spells.size() ) {
             selectedSpells = {};
         }

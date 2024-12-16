@@ -1963,7 +1963,7 @@ namespace Maps
 
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
-                // The spell was set externally.
+                // The spell has been set externally.
                 break;
             }
 
@@ -1975,7 +1975,7 @@ namespace Maps
 
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
-                // The spell was set externally.
+                // The spell has been set externally.
                 break;
             }
 
@@ -1987,7 +1987,7 @@ namespace Maps
 
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
-                // The spell was set externally.
+                // The spell has been set externally.
                 break;
             }
 

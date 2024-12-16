@@ -407,7 +407,7 @@ namespace
                     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
                     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
                     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-                        // We cannot assert non existing metadata as these objects could have been created by older Editor version.
+                        // We cannot assert non-existing metadata as these objects could have been created by an older Editor version.
                         mapFormat.shrineMetadata.erase( objectIter->id );
                         break;
                     default:
