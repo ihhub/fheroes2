@@ -116,8 +116,8 @@ namespace
                                     _spellRoi[i].y + 31 - inactiveSpellImage.height() / 2 );
                 }
                 else {
-                    fheroes2::Blit(
-                        spellImage, output, _spellRoi[i].x + 3 + ( _spellRoi[i].width - spellImage.width() ) / 2, _spellRoi[i].y + 31 - spellImage.height() / 2 );
+                    fheroes2::Blit( spellImage, output, _spellRoi[i].x + 3 + ( _spellRoi[i].width - spellImage.width() ) / 2,
+                                    _spellRoi[i].y + 31 - spellImage.height() / 2 );
                 }
 
                 const fheroes2::Text text( _spells[i].first.GetName(), fheroes2::FontType::smallWhite() );
