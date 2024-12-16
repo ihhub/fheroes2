@@ -21,13 +21,19 @@
 #include "editor_spell_selection.h"
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <initializer_list>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "math_tools.h"
 #include "pal.h"
 #include "screen.h"

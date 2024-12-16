@@ -62,6 +62,7 @@
 #include "resource.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
