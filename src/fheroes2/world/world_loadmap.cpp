@@ -1023,16 +1023,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                         return false;
                     }
 
-                    const auto & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
-                    // If any of spells are invalid this means that metadata is corrupted.
-                    if ( std::any_of( metadata.allowedSpells.begin(), metadata.allowedSpells.end(),
-                                      [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) == spells.end(); } ) ) {
-                        // An invalid spell has been detected. Ignore all the spells.
-                        return false;
-                    }
+                    const std::vector<int32_t> & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
 
-                    // All the spells are valid.
-                    return true;
+                    return std::all_of( metadata.allowedSpells.begin(), metadata.allowedSpells.end(),
+                                        [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) != spells.end(); } );
                 };
 
                 switch ( powerUpsObjects[object.index].objectType ) {

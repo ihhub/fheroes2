@@ -53,7 +53,7 @@ namespace
         SpellContainerUI( fheroes2::Point offset, std::vector<std::pair<Spell, bool>> & spells )
             : _spells( spells )
         {
-            assert( spells.size() > 0 && spells.size() < 25 );
+            assert( !spells.empty() && spells.size() < 25 );
 
             // Figure out how many rows and columns we want to display.
             for ( size_t i = 1; i < 5; ++i ) {
@@ -78,7 +78,7 @@ namespace
                 const int32_t rowId = static_cast<int32_t>( i / _spellsPerRow );
                 const int32_t columnId = static_cast<int32_t>( i % _spellsPerRow );
 
-                if ( rowId == _spells.size() / _spellsPerRow ) {
+                if ( rowId == static_cast<int32_t>( _spells.size() / _spellsPerRow ) ) {
                     // This is the last row.
                     _spellRoi.emplace_back( offset.x + columnId * spellItemWidth + lastRowOffsetX, offset.y + rowId * spellRowOffsetY, scrollImage.width(),
                                             scrollImage.height() );
@@ -165,7 +165,7 @@ namespace Editor
             return false;
         }
 
-        const auto & availableSpells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
+        const std::vector<int32_t> & availableSpells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
         assert( !availableSpells.empty() );
 
         // Create a container of active and disabled spells.
@@ -174,8 +174,8 @@ namespace Editor
 
         bool isAnySpellEnabled = false;
 
-        for ( const Spell & spell : availableSpells ) {
-            const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell.GetID() ) != selectedSpells.end() );
+        for ( const int & spell : availableSpells ) {
+            const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() );
 
             spells.emplace_back( spell, isSelected );
 
@@ -207,7 +207,7 @@ namespace Editor
             fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
         }
 
-        fheroes2::Text text( std::move( title ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( std::move( title ), fheroes2::FontType::normalYellow() );
         text.draw( activeArea.x + ( activeArea.width - text.width() ) / 2, activeArea.y + 10, display );
 
         // Buttons.
