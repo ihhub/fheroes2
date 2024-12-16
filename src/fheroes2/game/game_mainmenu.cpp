@@ -59,7 +59,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -259,21 +258,6 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             if ( !System::isHandheldDevice() && Dialog::SelectResolution() ) {
                 fheroes2::drawMainMenuScreen();
             }
-        }
-
-        {
-            const fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
-
-            fheroes2::MultiFontText body;
-            body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-            body.add( { _( " on the left side of the Main Menu, or with the " ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "CONFIG" ), fheroes2::FontType::normalYellow() } );
-            body.add( { _( " button from the " ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "NEW GAME" ), fheroes2::FontType::normalYellow() } );
-            body.add( { _( " menu. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
-
-            fheroes2::showMessage( header, body, Dialog::OK );
         }
 
         conf.resetFirstGameRun();
