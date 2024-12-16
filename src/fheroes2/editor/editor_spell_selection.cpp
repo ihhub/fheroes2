@@ -20,6 +20,8 @@
 
 #include "editor_spell_selection.h"
 
+#include <algorithm>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -28,16 +30,14 @@
 #include "localevent.h"
 #include "math_tools.h"
 #include "pal.h"
+#include "screen.h"
 #include "settings.h"
 #include "spell.h"
-#include "screen.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_window.h"
-
-#include <algorithm>
 
 namespace
 {
