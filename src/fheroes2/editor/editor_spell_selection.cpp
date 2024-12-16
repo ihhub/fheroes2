@@ -260,7 +260,7 @@ namespace Editor
 
         selectedSpells.clear();
 
-        for ( auto & [spell, isSelected] : spells ) {
+        for ( const auto & [spell, isSelected] : spells ) {
             if ( isSelected ) {
                 selectedSpells.emplace_back( spell.GetID() );
             }
