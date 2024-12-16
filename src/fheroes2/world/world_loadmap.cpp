@@ -1030,42 +1030,51 @@ bool World::loadResurrectionMap( const std::string & filename )
                 };
 
                 switch ( powerUpsObjects[object.index].objectType ) {
-                case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
-#if defined( WITH_DEBUG )
-                        shrineMetadataUIDs.emplace( object.id );
-#endif
-                        const auto & metadata = map.shrineMetadata[object.id];
-
-                        if ( areSpellsValid( metadata, 1 ) ) {
-                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
-                        }
+                case MP2::OBJ_SHRINE_FIRST_CIRCLE: {
+                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
+                        break;
                     }
-                    break;
-                case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
 #if defined( WITH_DEBUG )
-                        shrineMetadataUIDs.emplace( object.id );
+                    shrineMetadataUIDs.emplace( object.id );
 #endif
-                        const auto & metadata = map.shrineMetadata[object.id];
+                    const auto & metadata = map.shrineMetadata[object.id];
 
-                        if ( areSpellsValid( metadata, 2 ) ) {
-                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
-                        }
+                    if ( areSpellsValid( metadata, 1 ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
                     }
+
                     break;
-                case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
+                }
+                case MP2::OBJ_SHRINE_SECOND_CIRCLE: {
+                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
+                        break;
+                    }
 #if defined( WITH_DEBUG )
-                        shrineMetadataUIDs.emplace( object.id );
+                    shrineMetadataUIDs.emplace( object.id );
 #endif
-                        const auto & metadata = map.shrineMetadata[object.id];
+                    const auto & metadata = map.shrineMetadata[object.id];
 
-                        if ( areSpellsValid( metadata, 3 ) ) {
-                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
-                        }
+                    if ( areSpellsValid( metadata, 2 ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
                     }
+
                     break;
+                }
+                case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
+                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    shrineMetadataUIDs.emplace( object.id );
+#endif
+                    const auto & metadata = map.shrineMetadata[object.id];
+
+                    if ( areSpellsValid( metadata, 3 ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                    }
+
+                    break;
+                }
                 default:
                     break;
                 }
