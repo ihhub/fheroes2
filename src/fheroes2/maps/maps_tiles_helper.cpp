@@ -1961,17 +1961,35 @@ namespace Maps
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
             assert( isFirstLoad );
 
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell was set externally.
+                break;
+            }
+
             setSpellOnTile( tile, Spell::getRandomSpell( 1 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
             assert( isFirstLoad );
 
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell was set externally.
+                break;
+            }
+
             setSpellOnTile( tile, Spell::getRandomSpell( 2 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
             assert( isFirstLoad );
+
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell was set externally.
+                break;
+            }
 
             setSpellOnTile( tile, Spell::getRandomSpell( 3 ).GetID() );
             break;

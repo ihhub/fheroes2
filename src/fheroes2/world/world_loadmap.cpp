@@ -711,6 +711,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
     const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+    const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -719,6 +720,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     std::set<uint32_t> sphinxMetadataUIDs;
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
+    std::set<uint32_t> shrineMetadataUIDs;
 #endif
 
     std::set<size_t> hiredHeroTileId;
@@ -1012,6 +1014,69 @@ bool World::loadResurrectionMap( const std::string & filename )
                     tileData[0] = tileData[0] - 1U;
                 }
             }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                assert( object.index < powerUpsObjects.size() );
+
+                const auto areSpellsValid = []( const Maps::Map_Format::ShrineMetadata & metadata, const int spellLevel ) {
+                    if ( metadata.allowedSpells.empty() ) {
+                        // No spells are being set which means that we fall to the default behavior.
+                        return false;
+                    }
+
+                    const auto & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
+                    // If any of spells are invalid this means that metadata is corrupted.
+                    if ( std::any_of( metadata.allowedSpells.begin(), metadata.allowedSpells.end(), [&spells]( const int32_t spellId ) {
+                            return std::find( spells.begin(), spells.end(), spellId ) == spells.end();
+                        } ) ) {
+                        // An invalid spell has been detected. Ignore all the spells.
+                        return false;
+                    }
+
+                    // All the spells are valid.
+                    return true;
+                };
+
+                switch ( powerUpsObjects[object.index].objectType ) {
+                case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
+#if defined( WITH_DEBUG )
+                        shrineMetadataUIDs.emplace( object.id );
+#endif
+                        const auto & metadata = map.shrineMetadata[object.id];
+
+                        if ( areSpellsValid( metadata, 1 ) ) {
+                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                        }
+                    }
+                    break;
+                case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
+#if defined( WITH_DEBUG )
+                        shrineMetadataUIDs.emplace( object.id );
+#endif
+                        const auto & metadata = map.shrineMetadata[object.id];
+
+                        if ( areSpellsValid( metadata, 2 ) ) {
+                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                        }
+                    }
+                    break;
+                case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+                    if ( map.shrineMetadata.find( object.id ) != map.shrineMetadata.end() ) {
+#if defined( WITH_DEBUG )
+                        shrineMetadataUIDs.emplace( object.id );
+#endif
+                        const auto & metadata = map.shrineMetadata[object.id];
+
+                        if ( areSpellsValid( metadata, 3 ) ) {
+                            vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                        }
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
         }
     }
 
@@ -1022,6 +1087,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
     assert( signMetadataUIDs.size() == map.signMetadata.size() );
     assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
+    assert( shrineMetadataUIDs.size() == map.shrineMetadata.size() );
 
     for ( const uint32_t uid : standardMetadataUIDs ) {
         assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
@@ -1045,6 +1111,10 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     for ( const uint32_t uid : adventureMapEventMetadataUIDs ) {
         assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
+    }
+
+    for ( const uint32_t uid : shrineMetadataUIDs ) {
+        assert( map.shrineMetadata.find( uid ) != map.shrineMetadata.end() );
     }
 #endif
 
