@@ -385,6 +385,18 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    if ( objectType == MP2::OBJ_RESOURCE ) {
+                        mapFormat.standardMetadata.erase( objectIter->id );
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
                     // We need to check if the object being removed is a River Delta, and if so, use that data to update the nearby Stream correctly.
                     const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );

@@ -53,8 +53,7 @@ namespace
 
             return Maps::Ground::String( tile.GetGround() );
         case MP2::OBJ_RESOURCE: {
-            const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
-            for ( const auto & info : objects ) {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES ) ) {
                 assert( !info.groundLevelParts.empty() );
 
                 if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex

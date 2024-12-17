@@ -711,6 +711,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
     const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+    const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -1012,9 +1013,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                     tileData[0] = tileData[0] - 1U;
                 }
             }
-            else if ( map.version >= 7 && object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-                // Resource amount setup was implemented in map format version 7.
-                const auto & objectInfo = Maps::getObjectInfo( object.group, static_cast<int32_t>( object.index ) );
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                assert( object.index < treasuresObjects.size() );
+
+                const auto & objectInfo = treasuresObjects[object.index];
 
                 if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
                     // Some maps may have resource objects being set by older Editor versions.

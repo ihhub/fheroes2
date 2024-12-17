@@ -72,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 7 };
+    constexpr uint16_t currentSupportedVersion{ 6 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
