@@ -1046,17 +1046,17 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     int spellLevel = 0;
                     if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
-                       spellLevel = 1;
+                        spellLevel = 1;
                     }
-                       else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
-                       spellLevel = 2;
+                        else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                        spellLevel = 2;
                     }
-                       else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
-                       spellLevel = 3;
+                        else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                        spellLevel = 3;
                     }
                     else {
-                       assert( 0 );
-                       spellLevel = 1;
+                        assert( 0 );
+                        spellLevel = 1;
                     }
 
                     if ( areSpellsValid( metadata, spellLevel ) ) {
