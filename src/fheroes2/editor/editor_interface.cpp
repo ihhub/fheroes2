@@ -44,6 +44,7 @@
 #include "editor_map_specs_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
+#include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
@@ -395,6 +396,25 @@ namespace
                         Maps::updateStreamsToDeltaConnection( mapFormat, static_cast<int32_t>( mapTileIndex ), riverDeltaDirection );
                     }
 
+                    needRedraw = true;
+                }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    switch ( objectType ) {
+                    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+                    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+                        // We cannot assert non-existing metadata as these objects could have been created by an older Editor version.
+                        mapFormat.shrineMetadata.erase( objectIter->id );
+                        break;
+                    default:
+                        break;
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
                 else {
@@ -1338,6 +1358,37 @@ namespace Interface
                     Maps::Map_Format::SphinxMetadata newMetadata = originalMetadata;
 
                     if ( Editor::openSphinxWindow( newMetadata, _mapFormat.mainLanguage ) && newMetadata != originalMetadata ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                    auto shrineMetadata = _mapFormat.shrineMetadata.find( object.id );
+                    if ( shrineMetadata == _mapFormat.shrineMetadata.end() ) {
+                        _mapFormat.shrineMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.shrineMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    int spellLevel = 0;
+                    if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
+                        spellLevel = 1;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                        spellLevel = 2;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                        spellLevel = 3;
+                    }
+                    else {
+                        assert( 0 );
+                        spellLevel = 1;
+                    }
+
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.allowedSpells )
+                         && originalMetadata.allowedSpells != newMetadata.allowedSpells ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
