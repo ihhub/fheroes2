@@ -62,6 +62,7 @@
 #include "resource.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
@@ -712,6 +713,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
     const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+    const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -720,6 +722,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     std::set<uint32_t> sphinxMetadataUIDs;
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
+    std::set<uint32_t> shrineMetadataUIDs;
 #endif
 
     std::set<size_t> hiredHeroTileId;
@@ -1031,6 +1034,60 @@ bool World::loadResurrectionMap( const std::string & filename )
                     tileData[1] = map.standardMetadata[object.id].metadata[0];
                 }
             }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                assert( object.index < powerUpsObjects.size() );
+
+                const auto areSpellsValid = []( const Maps::Map_Format::ShrineMetadata & metadata, const int spellLevel ) {
+                    if ( metadata.allowedSpells.empty() ) {
+                        // No spells are being set which means that we fall to the default behavior.
+                        return false;
+                    }
+
+                    const std::vector<int32_t> & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
+
+                    return std::all_of( metadata.allowedSpells.begin(), metadata.allowedSpells.end(),
+                                        [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) != spells.end(); } );
+                };
+
+                const MP2::MapObjectType objectType = powerUpsObjects[object.index].objectType;
+
+                switch ( objectType ) {
+                case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+                case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
+                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    shrineMetadataUIDs.emplace( object.id );
+#endif
+                    const auto & metadata = map.shrineMetadata[object.id];
+
+                    int spellLevel = 0;
+                    if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
+                        spellLevel = 1;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                        spellLevel = 2;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                        spellLevel = 3;
+                    }
+                    else {
+                        assert( 0 );
+                        spellLevel = 1;
+                    }
+
+                    if ( areSpellsValid( metadata, spellLevel ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                    }
+
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
         }
     }
 
@@ -1041,6 +1098,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
     assert( signMetadataUIDs.size() == map.signMetadata.size() );
     assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
+    assert( shrineMetadataUIDs.size() == map.shrineMetadata.size() );
 
     for ( const uint32_t uid : standardMetadataUIDs ) {
         assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
@@ -1064,6 +1122,10 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     for ( const uint32_t uid : adventureMapEventMetadataUIDs ) {
         assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
+    }
+
+    for ( const uint32_t uid : shrineMetadataUIDs ) {
+        assert( map.shrineMetadata.find( uid ) != map.shrineMetadata.end() );
     }
 #endif
 
