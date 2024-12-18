@@ -36,7 +36,6 @@ namespace Skill
 {
     struct FactionProperties;
     struct SecondarySkillValuesPerLevel;
-    struct SecondarySkillValues;
 }
 
 class Heroes;
