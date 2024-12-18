@@ -148,7 +148,7 @@ namespace
             }
 
             if ( eventProcessor.isMouseRightButtonPressed() ) {
-                Heroes fakeHero;
+                const Heroes fakeHero;
                 fheroes2::SecondarySkillDialogElement( _skills[skillIndex].first, fakeHero ).showPopup( Dialog::ZERO );
             }
 
