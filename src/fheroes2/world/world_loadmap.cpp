@@ -1048,10 +1048,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                     if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
                         spellLevel = 1;
                     }
-                        else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                    else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
                         spellLevel = 2;
                     }
-                        else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                    else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
                         spellLevel = 3;
                     }
                     else {
