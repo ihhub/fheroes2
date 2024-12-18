@@ -42,6 +42,7 @@
 #include "castle.h"
 #include "color.h"
 #include "game_over.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -721,7 +722,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     std::set<uint32_t> sphinxMetadataUIDs;
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
-    std::set<uint32_t> shrineMetadataUIDs;
+    std::set<uint32_t> selectionObjectMetadataUIDs;
 #endif
 
     std::set<size_t> hiredHeroTileId;
@@ -968,6 +969,33 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     break;
                 }
+                case MP2::OBJ_WITCHS_HUT: {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    selectionObjectMetadataUIDs.emplace( object.id );
+#endif
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
+
+                    const auto areSkillsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata ) {
+                        if ( metadata.selectedItems.empty() ) {
+                            // No spells are being set which means that we fall to the default behavior.
+                            return false;
+                        }
+
+                        const std::vector<int32_t> & skills = GameStatic::getSecondarySkillsForWitchsHut();
+
+                        return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
+                                            [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
+                    };
+
+                    if ( areSkillsValid( metadata ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
+                    }
+
+                    break;
+                }
                 default:
                     // Other objects do not have metadata as of now.
                     break;
@@ -1018,15 +1046,15 @@ bool World::loadResurrectionMap( const std::string & filename )
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
                 assert( object.index < powerUpsObjects.size() );
 
-                const auto areSpellsValid = []( const Maps::Map_Format::ShrineMetadata & metadata, const int spellLevel ) {
-                    if ( metadata.allowedSpells.empty() ) {
+                const auto areSpellsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata, const int spellLevel ) {
+                    if ( metadata.selectedItems.empty() ) {
                         // No spells are being set which means that we fall to the default behavior.
                         return false;
                     }
 
                     const std::vector<int32_t> & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
 
-                    return std::all_of( metadata.allowedSpells.begin(), metadata.allowedSpells.end(),
+                    return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
                                         [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) != spells.end(); } );
                 };
 
@@ -1036,13 +1064,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                 case MP2::OBJ_SHRINE_FIRST_CIRCLE:
                 case MP2::OBJ_SHRINE_SECOND_CIRCLE:
                 case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
                         break;
                     }
 #if defined( WITH_DEBUG )
-                    shrineMetadataUIDs.emplace( object.id );
+                    selectionObjectMetadataUIDs.emplace( object.id );
 #endif
-                    const auto & metadata = map.shrineMetadata[object.id];
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
 
                     int spellLevel = 0;
                     if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
@@ -1060,7 +1088,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
 
                     if ( areSpellsValid( metadata, spellLevel ) ) {
-                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
                     }
 
                     break;
@@ -1079,7 +1107,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
     assert( signMetadataUIDs.size() == map.signMetadata.size() );
     assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
-    assert( shrineMetadataUIDs.size() == map.shrineMetadata.size() );
+    assert( selectionObjectMetadataUIDs.size() == map.selectionObjectMetadata.size() );
 
     for ( const uint32_t uid : standardMetadataUIDs ) {
         assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
@@ -1105,8 +1133,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
     }
 
-    for ( const uint32_t uid : shrineMetadataUIDs ) {
-        assert( map.shrineMetadata.find( uid ) != map.shrineMetadata.end() );
+    for ( const uint32_t uid : selectionObjectMetadataUIDs ) {
+        assert( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() );
     }
 #endif
 

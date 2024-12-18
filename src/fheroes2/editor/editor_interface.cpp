@@ -44,6 +44,7 @@
 #include "editor_map_specs_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
+#include "editor_secondary_skill_selection.h"
 #include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
@@ -358,6 +359,9 @@ namespace
                         assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
                         mapFormat.sphinxMetadata.erase( objectIter->id );
                         break;
+                    case MP2::OBJ_WITCHS_HUT:
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
+                        break;
                     default:
                         break;
                     }
@@ -408,7 +412,7 @@ namespace
                     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
                     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
                         // We cannot assert non-existing metadata as these objects could have been created by an older Editor version.
-                        mapFormat.shrineMetadata.erase( objectIter->id );
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
                         break;
                     default:
                         break;
@@ -1364,12 +1368,12 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
-                    auto shrineMetadata = _mapFormat.shrineMetadata.find( object.id );
-                    if ( shrineMetadata == _mapFormat.shrineMetadata.end() ) {
-                        _mapFormat.shrineMetadata[object.id] = {};
+                    auto shrineMetadata = _mapFormat.selectionObjectMetadata.find( object.id );
+                    if ( shrineMetadata == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
                     }
 
-                    auto & originalMetadata = _mapFormat.shrineMetadata[object.id];
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
                     int spellLevel = 0;
@@ -1387,8 +1391,23 @@ namespace Interface
                         spellLevel = 1;
                     }
 
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.allowedSpells )
-                         && originalMetadata.allowedSpells != newMetadata.allowedSpells ) {
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_WITCHS_HUT ) {
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    if ( Editor::openSecondarySkillSelectionWindow( MP2::StringObject( objectType ), 1, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
@@ -2075,7 +2094,7 @@ namespace Interface
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.shrineMetadata, object.id, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.selectionObjectMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
