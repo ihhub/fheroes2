@@ -105,32 +105,54 @@ namespace
             fheroes2::ApplyPalette( inactiveFrameImage, PAL::GetPalette( PAL::PaletteType::GRAY ) );
 
             for ( size_t i = 0; i < _skills.size(); ++i ) {
-                if ( !_skills[i].second ) {
-                    // The skill is being inactive.
-                    fheroes2::Blit( inactiveFrameImage, output, _skillRoi[i].x, _skillRoi[i].y );
-                }
-                else {
+                const Skill::Secondary & skill = _skills[i].first;
+
+                const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+                fheroes2::Copy( skillImage, 0, 0, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, skillImage.width(), skillImage.height() );
+
+                if ( _skills[i].second ) {
                     fheroes2::Blit( frameImage, output, _skillRoi[i].x, _skillRoi[i].y );
                 }
-
-                const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, _skills[i].first.GetIndexSprite1() );
-
-                if ( !_skills[i].second ) {
-                    // The skill is being inactive.
-                    fheroes2::Sprite inactiveSkillImage( skillImage );
-                    fheroes2::ApplyPalette( inactiveSkillImage, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-
-                    fheroes2::Blit( inactiveSkillImage, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3 );
-                }
                 else {
-                    fheroes2::Blit( skillImage, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3 );
+                    // The skill is being inactive.
+                    fheroes2::Blit( inactiveFrameImage, output, _skillRoi[i].x, _skillRoi[i].y );
+                    fheroes2::ApplyPalette( output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, skillImage.width(),
+                                            skillImage.height(), PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 }
 
-                fheroes2::Text text{ Skill::Secondary::String( _skills[i].first.Skill() ), fheroes2::FontType::smallWhite() };
+                fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
                 text.draw( _skillRoi[i].x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + 7, output );
-                text.set( Skill::Level::String( _skills[i].first.Level() ), fheroes2::FontType::smallWhite() );
+                text.set( Skill::Level::String( skill.Level() ), fheroes2::FontType::smallWhite() );
                 text.draw( _skillRoi[i].x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + skillImage.height() - 10, output );
             }
+        }
+
+        const fheroes2::Rect & redrawChangedSkill( fheroes2::Image & output )
+        {
+            assert( _skillToRedraw >= 0 && _skillToRedraw < _skillRoi.size() );
+
+            const fheroes2::Rect & roi = _skillRoi[_skillToRedraw];
+
+            if ( _skills[_skillToRedraw].second ) {
+                const Skill::Secondary & skill = _skills[_skillToRedraw].first;
+
+                const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
+                const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+
+                fheroes2::Blit( frameImage, output, roi.x, roi.y );
+                fheroes2::Copy( skillImage, 0, 0, output, roi.x + 3, roi.y + 3, skillImage.width(), skillImage.height() );
+
+                fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
+                text.draw( roi.x + ( skillImage.width() - text.width() ) / 2, roi.y + 7, output );
+                text.set( Skill::Level::String( skill.Level() ), fheroes2::FontType::smallWhite() );
+                text.draw( roi.x + ( skillImage.width() - text.width() ) / 2, roi.y + skillImage.height() - 10, output );
+            }
+            else {
+                // The skill is being inactive. Just make it grayscale.
+                fheroes2::ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return roi;
         }
 
         bool processEvents( LocalEvent & eventProcessor )
@@ -144,6 +166,8 @@ namespace
                 assert( static_cast<size_t>( skillIndex ) < _skillRoi.size() );
 
                 _skills[skillIndex].second = !_skills[skillIndex].second;
+
+                _skillToRedraw = skillIndex;
                 return true;
             }
 
@@ -161,6 +185,7 @@ namespace
         std::vector<fheroes2::Rect> _skillRoi;
 
         size_t _skillsPerRow{ 0 };
+        int32_t _skillToRedraw{ 0 };
     };
 }
 
@@ -224,8 +249,6 @@ namespace Editor
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-        fheroes2::ImageRestorer restorer( display, activeArea.x, activeArea.y, activeArea.width, activeArea.height );
-
         SecondarySkillContainerUI skillContainer( activeArea.getPosition(), skills );
 
         skillContainer.draw( display );
@@ -256,9 +279,7 @@ namespace Editor
             }
 
             if ( skillContainer.processEvents( le ) ) {
-                restorer.restore();
-
-                skillContainer.draw( display );
+                const fheroes2::Rect & roi = skillContainer.redrawChangedSkill( display );
 
                 // Check if all skills are being disabled. If they are disable the OKAY button.
                 bool areAllSkillsDisabled = true;
@@ -269,16 +290,20 @@ namespace Editor
                     }
                 }
 
-                if ( areAllSkillsDisabled ) {
+                if ( areAllSkillsDisabled && buttonOk.isEnabled() ) {
                     buttonOk.disable();
                     buttonOk.draw();
+
+                    display.updateNextRenderRoi( buttonOk.area() );
                 }
-                else {
+                else if ( buttonOk.isDisabled() ) {
                     buttonOk.enable();
                     buttonOk.draw();
+
+                    display.updateNextRenderRoi( buttonOk.area() );
                 }
 
-                display.render( activeArea );
+                display.render( roi );
             }
         }
 
