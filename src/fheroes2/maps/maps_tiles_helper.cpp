@@ -2396,6 +2396,12 @@ namespace Maps
         case MP2::OBJ_PYRAMID: {
             assert( isFirstLoad );
 
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
+
             // Random spell of level 5.
             setSpellOnTile( tile, Spell::getRandomSpell( 5 ).GetID() );
             break;
