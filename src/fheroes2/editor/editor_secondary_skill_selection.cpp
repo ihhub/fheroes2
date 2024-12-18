@@ -129,7 +129,7 @@ namespace
 
         const fheroes2::Rect & redrawChangedSkill( fheroes2::Image & output )
         {
-            assert( _skillToRedraw >= 0 && _skillToRedraw < _skillRoi.size() );
+            assert( _skillToRedraw >= 0 && _skillToRedraw < static_cast<int32_t>( _skillRoi.size() ) );
 
             const fheroes2::Rect & roi = _skillRoi[_skillToRedraw];
 
