@@ -263,9 +263,9 @@ const Skill::SecondarySkillValuesPerLevel * GameStatic::GetSecondarySkillValuesP
 std::vector<int32_t> GameStatic::getSecondarySkillsForWitchsHut()
 {
     // Every skill except Leadership and Necromancy.
-    return { Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY, Skill::Secondary::LOGISTICS, Skill::Secondary::SCOUTING, Skill::Secondary::DIPLOMACY,
-             Skill::Secondary::NAVIGATION, Skill::Secondary::WISDOM, Skill::Secondary::MYSTICISM, Skill::Secondary::LUCK,
-             Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE, Skill::Secondary::ESTATES };
+    return { Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS, Skill::Secondary::SCOUTING,
+             Skill::Secondary::DIPLOMACY,   Skill::Secondary::NAVIGATION, Skill::Secondary::WISDOM,    Skill::Secondary::MYSTICISM,
+             Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE, Skill::Secondary::ESTATES };
 }
 
 int GameStatic::GetBattleMoatReduceDefense()
