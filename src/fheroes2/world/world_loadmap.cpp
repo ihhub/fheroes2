@@ -976,11 +976,10 @@ bool World::loadResurrectionMap( const std::string & filename )
 #if defined( WITH_DEBUG )
                     selectionObjectMetadataUIDs.emplace( object.id );
 #endif
-                    const auto & metadata = map.selectionObjectMetadata[object.id];
 
                     const auto areSkillsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata ) {
                         if ( metadata.selectedItems.empty() ) {
-                            // No spells are being set which means that we fall to the default behavior.
+                            // No skills are being set which means that we fall to the default behavior.
                             return false;
                         }
 
@@ -990,6 +989,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                                             [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
                     };
 
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
                     if ( areSkillsValid( metadata ) ) {
                         vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
                     }
