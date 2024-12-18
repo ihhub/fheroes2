@@ -1030,37 +1030,11 @@ bool World::loadResurrectionMap( const std::string & filename )
                                         [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) != spells.end(); } );
                 };
 
-                switch ( powerUpsObjects[object.index].objectType ) {
-                case MP2::OBJ_SHRINE_FIRST_CIRCLE: {
-                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
-                        break;
-                    }
-#if defined( WITH_DEBUG )
-                    shrineMetadataUIDs.emplace( object.id );
-#endif
-                    const auto & metadata = map.shrineMetadata[object.id];
+                const MP2::MapObjectType objectType = powerUpsObjects[object.index].objectType;
 
-                    if ( areSpellsValid( metadata, 1 ) ) {
-                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
-                    }
-
-                    break;
-                }
-                case MP2::OBJ_SHRINE_SECOND_CIRCLE: {
-                    if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
-                        break;
-                    }
-#if defined( WITH_DEBUG )
-                    shrineMetadataUIDs.emplace( object.id );
-#endif
-                    const auto & metadata = map.shrineMetadata[object.id];
-
-                    if ( areSpellsValid( metadata, 2 ) ) {
-                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
-                    }
-
-                    break;
-                }
+                switch ( objectType ) {
+                case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                case MP2::OBJ_SHRINE_SECOND_CIRCLE:
                 case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
                     if ( map.shrineMetadata.find( object.id ) == map.shrineMetadata.end() ) {
                         break;
@@ -1070,7 +1044,22 @@ bool World::loadResurrectionMap( const std::string & filename )
 #endif
                     const auto & metadata = map.shrineMetadata[object.id];
 
-                    if ( areSpellsValid( metadata, 3 ) ) {
+                    int spellLevel = 0;
+                    if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
+                       spellLevel = 1;
+                    }
+                       else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                       spellLevel = 2;
+                    }
+                       else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                       spellLevel = 3;
+                    }
+                    else {
+                       assert( 0 );
+                       spellLevel = 1;
+                    }
+
+                    if ( areSpellsValid( metadata, spellLevel ) ) {
                         vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
                     }
 
