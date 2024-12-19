@@ -248,7 +248,7 @@ namespace Maps::Map_Format
         }
     };
 
-    struct ShrineMetadata
+    struct SpellObjectMetadata
     {
         std::vector<int32_t> allowedSpells;
     };
@@ -329,7 +329,7 @@ namespace Maps::Map_Format
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
-        std::map<uint32_t, ShrineMetadata> shrineMetadata;
+        std::map<uint32_t, SpellObjectMetadata> spellObjectMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

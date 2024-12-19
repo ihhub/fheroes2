@@ -57,8 +57,8 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata );
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SpellObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SpellObjectMetadata & metadata );
 }
 
 namespace
@@ -238,7 +238,7 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.spellObjectMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -287,7 +287,7 @@ namespace
         }
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.shrineMetadata;
+            >> map.adventureMapEventMetadata >> map.spellObjectMetadata;
 
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
@@ -405,12 +405,12 @@ namespace Maps::Map_Format
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SpellObjectMetadata & metadata )
     {
         return stream << metadata.allowedSpells;
     }
 
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SpellObjectMetadata & metadata )
     {
         return stream >> metadata.allowedSpells;
     }
