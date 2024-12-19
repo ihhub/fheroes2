@@ -138,14 +138,16 @@ namespace
                 return false;
             }
 
-            if ( eventProcessor.MouseClickLeft() ) {
+            const fheroes2::Rect spellRoi = _spellRoi[spellIndex];
+
+            if ( eventProcessor.MouseClickLeft( spellRoi ) ) {
                 assert( static_cast<size_t>( spellIndex ) < _spellRoi.size() );
 
                 _spells[spellIndex].second = !_spells[spellIndex].second;
                 return true;
             }
 
-            if ( eventProcessor.isMouseRightButtonPressed() ) {
+            if ( eventProcessor.isMouseRightButtonPressedInArea( spellRoi ) ) {
                 fheroes2::SpellDialogElement( _spells[spellIndex].first, nullptr ).showPopup( Dialog::ZERO );
             }
 
