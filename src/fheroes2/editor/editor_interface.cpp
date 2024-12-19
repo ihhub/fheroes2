@@ -72,6 +72,7 @@
 #include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
@@ -350,6 +351,9 @@ namespace
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
                         mapFormat.adventureMapEventMetadata.erase( objectIter->id );
                         break;
+                    case MP2::OBJ_PYRAMID:
+                        mapFormat.spellObjectMetadata.erase( objectIter->id );
+                        break;
                     case MP2::OBJ_SIGN:
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
@@ -385,6 +389,18 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    if ( objectType == MP2::OBJ_RESOURCE ) {
+                        mapFormat.standardMetadata.erase( objectIter->id );
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
                     // We need to check if the object being removed is a River Delta, and if so, use that data to update the nearby Stream correctly.
                     const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
@@ -408,7 +424,7 @@ namespace
                     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
                     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
                         // We cannot assert non-existing metadata as these objects could have been created by an older Editor version.
-                        mapFormat.shrineMetadata.erase( objectIter->id );
+                        mapFormat.spellObjectMetadata.erase( objectIter->id );
                         break;
                     default:
                         break;
@@ -1310,6 +1326,32 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                    int32_t resourceCount = 0;
+
+                    auto resourceMetadata = _mapFormat.standardMetadata.find( object.id );
+                    if ( resourceMetadata != _mapFormat.standardMetadata.end() ) {
+                        resourceCount = resourceMetadata->second.metadata[0];
+                    }
+                    else {
+                        // This could be a corrupted or older format map. Add missing metadata into it. This action should be outside action manager scope.
+                        _mapFormat.standardMetadata[object.id] = { 0, 0, 0 };
+                    }
+
+                    const int32_t resourceType = static_cast<int32_t>( objectInfo.metadata[0] );
+
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string str = _( "Set %{resource-type} Count" );
+                    StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
+
+                    // We cannot support more than 6 digits in the dialog due to its UI element size.
+                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
+                        action.commit();
+                    }
+                }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                         assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
@@ -1364,12 +1406,11 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
-                    auto shrineMetadata = _mapFormat.shrineMetadata.find( object.id );
-                    if ( shrineMetadata == _mapFormat.shrineMetadata.end() ) {
-                        _mapFormat.shrineMetadata[object.id] = {};
+                    if ( _mapFormat.spellObjectMetadata.find( object.id ) == _mapFormat.spellObjectMetadata.end() ) {
+                        _mapFormat.spellObjectMetadata[object.id] = {};
                     }
 
-                    auto & originalMetadata = _mapFormat.shrineMetadata[object.id];
+                    auto & originalMetadata = _mapFormat.spellObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
                     int spellLevel = 0;
@@ -1388,6 +1429,21 @@ namespace Interface
                     }
 
                     if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.allowedSpells )
+                         && originalMetadata.allowedSpells != newMetadata.allowedSpells ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_PYRAMID ) {
+                    if ( _mapFormat.spellObjectMetadata.find( object.id ) == _mapFormat.spellObjectMetadata.end() ) {
+                        _mapFormat.spellObjectMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.spellObjectMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), 5, newMetadata.allowedSpells )
                          && originalMetadata.allowedSpells != newMetadata.allowedSpells ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
@@ -2075,7 +2131,7 @@ namespace Interface
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.shrineMetadata, object.id, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.spellObjectMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 

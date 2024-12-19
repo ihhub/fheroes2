@@ -20,18 +20,20 @@
 
 #include "editor_object_popup_window.h"
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <ostream>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "resource.h"
 #include "translations.h"
@@ -51,10 +53,18 @@ namespace
 
             return Maps::Ground::String( tile.GetGround() );
         case MP2::OBJ_RESOURCE: {
-            const Funds funds = getFundsFromTile( tile );
-            assert( funds.GetValidItemsCount() == 1 );
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES ) ) {
+                assert( !info.groundLevelParts.empty() );
 
-            return Resource::String( funds.getFirstValidResource().first );
+                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    return Resource::String( static_cast<int32_t>( info.metadata[0] ) );
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            return "Invalid resource";
         }
         default:
             break;
