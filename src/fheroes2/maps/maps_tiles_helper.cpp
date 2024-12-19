@@ -2124,6 +2124,11 @@ namespace Maps
                 }
             }
 
+            if ( ( tile.metadata()[0] & Resource::ALL ) != 0 && tile.metadata()[1] > 0 ) {
+                // The resource was set externally.
+                break;
+            }
+
             uint32_t count = 0;
             switch ( resourceType ) {
             case Resource::GOLD:
@@ -2402,6 +2407,12 @@ namespace Maps
 
         case MP2::OBJ_PYRAMID: {
             assert( isFirstLoad );
+
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
 
             // Random spell of level 5.
             setSpellOnTile( tile, Spell::getRandomSpell( 5 ).GetID() );
@@ -3089,13 +3100,6 @@ namespace Maps
             setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
             // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
             setMonsterCountOnTile( tile, 0 );
-            return true;
-        case MP2::OBJ_RESOURCE:
-            // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
-            if ( !placeObjectOnTile( tile, info ) ) {
-                return false;
-            }
-            setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
             return true;
         case MP2::OBJ_ARTIFACT:
             if ( !placeObjectOnTile( tile, info ) ) {
