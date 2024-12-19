@@ -926,16 +926,16 @@ bool World::loadResurrectionMap( const std::string & filename )
                     break;
                 }
                 case MP2::OBJ_PYRAMID: {
-                    if ( map.spellObjectMetadata.find( object.id ) == map.spellObjectMetadata.end() ) {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
                         break;
                     }
 #if defined( WITH_DEBUG )
-                    spellObjectMetadataUIDs.emplace( object.id );
+                    selectionObjectMetadataUIDs.emplace( object.id );
 #endif
-                    const auto & metadata = map.spellObjectMetadata[object.id];
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
 
                     if ( areSpellsValid( metadata, 5 ) ) {
-                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.allowedSpells );
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
                     }
 
                     break;
@@ -1075,6 +1075,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( object.index < treasuresObjects.size() );
 
                 const auto & objectInfo = treasuresObjects[object.index];
+
                 if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
                     // Some maps may have resource objects being set by older Editor versions.
                     // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
