@@ -712,6 +712,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
     const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+    const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
     const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
 
 #if defined( WITH_DEBUG )
@@ -1013,6 +1014,24 @@ bool World::loadResurrectionMap( const std::string & filename )
                     // TODO: fix this hack.
                     assert( tileData[0] > 0 );
                     tileData[0] = tileData[0] - 1U;
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                assert( object.index < treasuresObjects.size() );
+
+                const auto & objectInfo = treasuresObjects[object.index];
+
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
+                    // Some maps may have resource objects being set by older Editor versions.
+                    // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
+#if defined( WITH_DEBUG )
+                    standardMetadataUIDs.emplace( object.id );
+#endif
+
+                    std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                    tileData[0] = objectInfo.metadata[0];
+                    tileData[1] = map.standardMetadata[object.id].metadata[0];
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
