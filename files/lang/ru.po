@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-19 00:51+0000\n"
 "PO-Revision-Date: 2024-12-15 16:55+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4112,6 +4112,10 @@ msgstr "Выйти из редактора карт."
 
 msgid "Input %{object} text"
 msgstr "%{object}: введите текст"
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "%{monster}: введите количество"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Установить радиус появления великого артефакта"

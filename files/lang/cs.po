@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-19 00:51+0000\n"
 "PO-Revision-Date: 2024-11-26 19:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4066,6 +4066,10 @@ msgstr "Ukončit editor map."
 
 msgid "Input %{object} text"
 msgstr "Zadejte text %{object}"
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Nastavit počet %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Nastavit náhodný rádius Ultimátního artefaktu"
