@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-19 00:51+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4171,6 +4171,10 @@ msgstr "Thoát khỏi biên tập bản đồ."
 
 msgid "Input %{object} text"
 msgstr ""
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Bắn %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"

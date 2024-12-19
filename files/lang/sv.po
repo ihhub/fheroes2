@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-19 00:51+0000\n"
 "PO-Revision-Date: 2024-11-11 20:10+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4088,6 +4088,10 @@ msgstr "Lämna kartredigeraren."
 
 msgid "Input %{object} text"
 msgstr "Skriv in %{object} text"
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Ange antal %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ange slumpad radie för Främsta artefakt"

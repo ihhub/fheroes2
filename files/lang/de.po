@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-19 00:51+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4226,6 +4226,10 @@ msgstr "Den Karteneditor verlassen."
 
 msgid "Input %{object} text"
 msgstr ""
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Schieße auf %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
