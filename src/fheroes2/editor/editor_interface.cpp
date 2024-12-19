@@ -353,7 +353,7 @@ namespace
                         mapFormat.adventureMapEventMetadata.erase( objectIter->id );
                         break;
                     case MP2::OBJ_PYRAMID:
-                        mapFormat.spellObjectMetadata.erase( objectIter->id );
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
                         break;
                     case MP2::OBJ_SIGN:
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
@@ -1410,11 +1410,11 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
-                    if ( _mapFormat.spellObjectMetadata.find( object.id ) == _mapFormat.spellObjectMetadata.end() ) {
-                        _mapFormat.spellObjectMetadata[object.id] = {};
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
                     }
 
-                    auto & originalMetadata = _mapFormat.spellObjectMetadata[object.id];
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
                     int spellLevel = 0;
@@ -1455,15 +1455,15 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_PYRAMID ) {
-                    if ( _mapFormat.spellObjectMetadata.find( object.id ) == _mapFormat.spellObjectMetadata.end() ) {
-                        _mapFormat.spellObjectMetadata[object.id] = {};
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
                     }
 
-                    auto & originalMetadata = _mapFormat.spellObjectMetadata[object.id];
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), 5, newMetadata.allowedSpells )
-                         && originalMetadata.allowedSpells != newMetadata.allowedSpells ) {
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), 5, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
