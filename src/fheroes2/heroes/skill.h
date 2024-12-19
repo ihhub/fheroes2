@@ -122,7 +122,6 @@ namespace Skill
         // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
-        static int RandForWitchsHut();
         static const char * String( int );
     };
 

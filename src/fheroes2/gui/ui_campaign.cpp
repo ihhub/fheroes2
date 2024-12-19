@@ -122,7 +122,7 @@ namespace fheroes2
             break;
         }
         case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
-            Heroes fakeHero;
+            const Heroes fakeHero;
             Skill::Secondary skill( bonusData._subType, bonusData._amount );
             const SecondarySkillDialogElement secondarySkillUI( skill, fakeHero );
             const TextDialogElement skillDescriptionUI( std::make_shared<Text>( skill.GetDescription( fakeHero ), FontType::normalWhite() ) );

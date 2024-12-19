@@ -39,6 +39,7 @@
 #include "castle.h"
 #include "color.h"
 #include "direction.h"
+#include "game_static.h"
 #include "ground.h"
 #include "logging.h"
 #include "map_object_info.h"
@@ -1955,7 +1956,13 @@ namespace Maps
         case MP2::OBJ_WITCHS_HUT:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Skill::Secondary::RandForWitchsHut();
+            static_assert( Skill::Secondary::UNKNOWN == 0, "You are breaking the logic by changing the Skill::Secondary::UNKNOWN value!" );
+            if ( tile.metadata()[0] != Skill::Secondary::UNKNOWN ) {
+                // The skill has been set externally.
+                break;
+            }
+
+            tile.metadata()[0] = Rand::Get( GameStatic::getSecondarySkillsForWitchsHut() );
             break;
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
