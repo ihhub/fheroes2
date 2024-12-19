@@ -138,12 +138,13 @@ namespace
                 return false;
             }
 
+            assert( static_cast<size_t>( spellIndex ) < _spellRoi.size() );
+
             const fheroes2::Rect spellRoi = _spellRoi[spellIndex];
 
             if ( eventProcessor.MouseClickLeft( spellRoi ) ) {
-                assert( static_cast<size_t>( spellIndex ) < _spellRoi.size() );
-
                 _spells[spellIndex].second = !_spells[spellIndex].second;
+
                 return true;
             }
 
