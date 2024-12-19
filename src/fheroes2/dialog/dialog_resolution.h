@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,5 +22,6 @@
 
 namespace Dialog
 {
-    bool SelectResolution(); // returns true if a new resolution is set
+    // Returns true if the screen resolution has been changed, otherwise returns false.
+    bool SelectResolution();
 }

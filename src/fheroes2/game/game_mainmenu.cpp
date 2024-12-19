@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -58,7 +59,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -232,40 +232,33 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // image background
     fheroes2::drawMainMenuScreen();
+
     if ( isFirstGameRun ) {
         // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
         fheroes2::validateFadeInAndRender();
 
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
 
-        if ( System::isHandheldDevice() ) {
+        {
+            std::string body( _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ) );
+
+            if ( System::isTouchInputAvailable() ) {
+                body += _(
+                    "\n\nTo simulate a right-click with a touch to get info on various items, you need to first touch and keep touching on the item of interest and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen and keep viewing the information on the item." );
+            }
+
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
-            fheroes2::showStandardTextMessage( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ), Dialog::OK );
-        }
-        else {
-            fheroes2::showStandardTextMessage(
-                _( "Greetings!" ),
-                _( "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\nBefore starting the game, please select a game resolution." ), Dialog::OK );
-            const bool isResolutionChanged = Dialog::SelectResolution();
-            if ( isResolutionChanged ) {
+            if ( !System::isHandheldDevice() ) {
+                body += _( "\n\nBefore starting the game, please select a game resolution." );
+            }
+
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), std::move( body ), Dialog::OK );
+
+            if ( !System::isHandheldDevice() && Dialog::SelectResolution() ) {
                 fheroes2::drawMainMenuScreen();
             }
         }
-
-        fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
-
-        fheroes2::MultiFontText body;
-        body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of the Main Menu, or with the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "CONFIG" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " button from the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "NEW GAME" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " menu. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
-
-        fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
         conf.Save( Settings::configFileName );
