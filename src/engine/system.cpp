@@ -83,6 +83,8 @@ namespace
         return System::concatPath( "ux0:data", appName );
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::concatPath( "/switch", appName );
+#elif defined( TARGET_MORPHOS )
+        return { "PROGDIR:" };
 #elif defined( ANDROID )
         (void)appName;
 
@@ -453,7 +455,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA ) && !defined( TARGET_MORPHOS )
     // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 
