@@ -787,6 +787,10 @@ namespace Interface
 
         _gameArea.SetUpdateCursor();
 
+        // The cursor parameters may contain values from a previously edited map that are not suitable for this one. Reset them.
+        _tileUnderCursor = -1;
+        _areaSelectionStartTileId = -1;
+
         uint32_t redrawFlags = REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER;
         if ( conf.isEditorPassabilityEnabled() ) {
             redrawFlags |= REDRAW_PASSABILITIES;
