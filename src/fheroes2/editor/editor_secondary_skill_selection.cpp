@@ -74,7 +74,7 @@ namespace
             offset.x += ( fheroes2::Display::DEFAULT_WIDTH - static_cast<int32_t>( _skillsPerRow ) * skillItemWidth ) / 2;
             offset.y += ( fheroes2::Display::DEFAULT_HEIGHT - 50 - skillRowOffsetY * static_cast<int32_t>( _skills.size() / _skillsPerRow ) ) / 2;
 
-            // Calculate all areas where we are going to render spells.
+            // Calculate all areas where we are going to render skills.
             _skillRoi.reserve( _skills.size() );
 
             const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
