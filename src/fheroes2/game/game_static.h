@@ -72,7 +72,7 @@ namespace GameStatic
     const Skill::FactionProperties * GetFactionProperties( const int race );
     const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
 
-    std::vector<int32_t> getSecondarySkillsForWitchsHut();
+    const std::vector<int32_t> & getSecondarySkillsForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
