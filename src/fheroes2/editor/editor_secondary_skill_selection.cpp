@@ -108,7 +108,9 @@ namespace
                 const Skill::Secondary & skill = _skills[i].first;
 
                 const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-                fheroes2::Copy( skillImage, 0, 0, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, skillImage.width(), skillImage.height() );
+                const fheroes2::Point skillImagePos( _skillRoi[i].x + 3, _skillRoi[i].y + 3 );
+
+                fheroes2::Copy( skillImage, 0, 0, output, skillImagePos.x, skillImagePos.y, skillImage.width(), skillImage.height() );
 
                 if ( _skills[i].second ) {
                     fheroes2::Blit( frameImage, output, _skillRoi[i].x, _skillRoi[i].y );
@@ -116,14 +118,14 @@ namespace
                 else {
                     // The skill is being inactive.
                     fheroes2::Blit( inactiveFrameImage, output, _skillRoi[i].x, _skillRoi[i].y );
-                    fheroes2::ApplyPalette( output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, skillImage.width(),
+                    fheroes2::ApplyPalette( output, skillImagePos.x, skillImagePos.y, output, _skillRoi[i].x + 3, _skillRoi[i].y + 3, skillImage.width(),
                                             skillImage.height(), PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 }
 
                 fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
-                text.draw( _skillRoi[i].x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + 7, output );
+                text.drawInRoi( skillImagePos.x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + 7, output, _skillRoi[i] );
                 text.set( Skill::Level::String( skill.Level() ), fheroes2::FontType::smallWhite() );
-                text.draw( _skillRoi[i].x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + skillImage.height() - 10, output );
+                text.drawInRoi( skillImagePos.x + ( skillImage.width() - text.width() ) / 2, _skillRoi[i].y + skillImage.height() - 10, output, _skillRoi[i] );
             }
         }
 
@@ -138,14 +140,15 @@ namespace
 
                 const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
                 const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+                const int32_t skillImageOffsetX = roi.x + 3;
 
                 fheroes2::Blit( frameImage, output, roi.x, roi.y );
-                fheroes2::Copy( skillImage, 0, 0, output, roi.x + 3, roi.y + 3, skillImage.width(), skillImage.height() );
+                fheroes2::Copy( skillImage, 0, 0, output, skillImageOffsetX, roi.y + 3, skillImage.width(), skillImage.height() );
 
                 fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
-                text.draw( roi.x + ( skillImage.width() - text.width() ) / 2, roi.y + 7, output );
+                text.drawInRoi( skillImageOffsetX + ( skillImage.width() - text.width() ) / 2, roi.y + 7, output, roi );
                 text.set( Skill::Level::String( skill.Level() ), fheroes2::FontType::smallWhite() );
-                text.draw( roi.x + ( skillImage.width() - text.width() ) / 2, roi.y + skillImage.height() - 10, output );
+                text.drawInRoi( skillImageOffsetX + ( skillImage.width() - text.width() ) / 2, roi.y + skillImage.height() - 10, output, roi );
             }
             else {
                 // The skill is being inactive. Just make it grayscale.
