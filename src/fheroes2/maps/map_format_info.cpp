@@ -57,8 +57,8 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
 
-    OStreamBase & operator<<( OStreamBase & stream, const SpellObjectMetadata & metadata );
-    IStreamBase & operator>>( IStreamBase & stream, SpellObjectMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata );
 }
 
 namespace
@@ -238,7 +238,7 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.spellObjectMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -287,7 +287,7 @@ namespace
         }
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.spellObjectMetadata;
+            >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
 
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
@@ -405,14 +405,14 @@ namespace Maps::Map_Format
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    OStreamBase & operator<<( OStreamBase & stream, const SpellObjectMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata )
     {
-        return stream << metadata.allowedSpells;
+        return stream << metadata.selectedItems;
     }
 
-    IStreamBase & operator>>( IStreamBase & stream, SpellObjectMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata )
     {
-        return stream >> metadata.allowedSpells;
+        return stream >> metadata.selectedItems;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

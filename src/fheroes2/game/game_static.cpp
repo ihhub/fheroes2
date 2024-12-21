@@ -114,23 +114,6 @@ namespace
         { "estates", { 100, 250, 500 } },
         { nullptr, { 0, 0, 0 } },
     } };
-
-    const Skill::SecondarySkillValues secondarySkillValuesForWitchsHut = {
-        1, // archery
-        1, // ballistics
-        1, // diplomacy
-        1, // eagleeye
-        1, // estates
-        0, // leadership
-        1, // logistics
-        1, // luck
-        1, // mysticism
-        1, // navigation
-        0, // necromancy
-        1, // pathfinding
-        1, // scouting
-        1 // wisdom
-    };
 }
 
 uint32_t GameStatic::GetLostOnWhirlpoolPercent()
@@ -277,9 +260,14 @@ const Skill::SecondarySkillValuesPerLevel * GameStatic::GetSecondarySkillValuesP
     return nullptr;
 }
 
-const Skill::SecondarySkillValues * GameStatic::GetSecondarySkillValuesForWitchsHut()
+const std::vector<int32_t> & GameStatic::getSecondarySkillsForWitchsHut()
 {
-    return &secondarySkillValuesForWitchsHut;
+    // Every skill except Leadership and Necromancy.
+    static const std::vector<int32_t> skills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS, Skill::Secondary::SCOUTING,
+                                              Skill::Secondary::DIPLOMACY,   Skill::Secondary::NAVIGATION, Skill::Secondary::WISDOM,    Skill::Secondary::MYSTICISM,
+                                              Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE, Skill::Secondary::ESTATES };
+
+    return skills;
 }
 
 int GameStatic::GetBattleMoatReduceDefense()

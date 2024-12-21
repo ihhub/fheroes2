@@ -387,62 +387,6 @@ bool Skill::Secondary::isValid() const
     return Skill() != UNKNOWN && Level() != Level::NONE;
 }
 
-int Skill::Secondary::RandForWitchsHut()
-{
-    const Skill::SecondarySkillValues * ptr = GameStatic::GetSecondarySkillValuesForWitchsHut();
-    if ( ptr == nullptr ) {
-        return UNKNOWN;
-    }
-
-    std::vector<int> v;
-    v.reserve( 14 );
-
-    if ( ptr->archery ) {
-        v.push_back( ARCHERY );
-    }
-    if ( ptr->ballistics ) {
-        v.push_back( BALLISTICS );
-    }
-    if ( ptr->diplomacy ) {
-        v.push_back( DIPLOMACY );
-    }
-    if ( ptr->eagleeye ) {
-        v.push_back( EAGLE_EYE );
-    }
-    if ( ptr->estates ) {
-        v.push_back( ESTATES );
-    }
-    if ( ptr->leadership ) {
-        v.push_back( LEADERSHIP );
-    }
-    if ( ptr->logistics ) {
-        v.push_back( LOGISTICS );
-    }
-    if ( ptr->luck ) {
-        v.push_back( LUCK );
-    }
-    if ( ptr->mysticism ) {
-        v.push_back( MYSTICISM );
-    }
-    if ( ptr->navigation ) {
-        v.push_back( NAVIGATION );
-    }
-    if ( ptr->necromancy ) {
-        v.push_back( NECROMANCY );
-    }
-    if ( ptr->pathfinding ) {
-        v.push_back( PATHFINDING );
-    }
-    if ( ptr->scouting ) {
-        v.push_back( SCOUTING );
-    }
-    if ( ptr->wisdom ) {
-        v.push_back( WISDOM );
-    }
-
-    return v.empty() ? UNKNOWN : Rand::Get( v );
-}
-
 int Skill::Secondary::GetIndexSprite1() const
 {
     return ( Skill() > UNKNOWN && Skill() <= ESTATES ) ? Skill() : 0;
