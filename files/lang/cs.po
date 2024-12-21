@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-19 00:51+0000\n"
+"POT-Creation-Date: 2024-12-21 09:39+0000\n"
 "PO-Revision-Date: 2024-11-26 19:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -5404,47 +5404,29 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Tým fheroes2 Resurrection uvádí"
 
-msgid "Greetings!"
-msgstr "Vítej!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!\n"
 "Před samotným startem je potřeba nastavit rozlišení."
 
-msgid "Please Remember"
-msgstr "Prosím pamatujte"
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Vždy můžete změnit jazyk, rozlišení a nastavení hry kliknutím na "
-
-msgid "door"
-msgstr "dveře"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr " na levé straně hlavního menu, nebo pomocí "
-
-msgid " button from the "
-msgstr " tlačítka z "
-
-msgid "NEW GAME"
-msgstr "NOVÁ HRA"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
-" menu. \n"
-"\n"
-"Užijte si hru!"
+msgid "Greetings!"
+msgstr "Vítej!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
@@ -11878,6 +11860,35 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Please Remember"
+#~ msgstr "Prosím pamatujte"
+
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Vždy můžete změnit jazyk, rozlišení a nastavení hry kliknutím na "
+
+#~ msgid "door"
+#~ msgstr "dveře"
+
+#~ msgid " on the left side of the Main Menu, or with the "
+#~ msgstr " na levé straně hlavního menu, nebo pomocí "
+
+#~ msgid " button from the "
+#~ msgstr " tlačítka z "
+
+#~ msgid "NEW GAME"
+#~ msgstr "NOVÁ HRA"
+
+#~ msgid ""
+#~ " menu. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " menu. \n"
+#~ "\n"
+#~ "Užijte si hru!"
 
 #~ msgid "Warning!"
 #~ msgstr "Varování!"
