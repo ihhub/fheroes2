@@ -162,16 +162,18 @@ namespace
                 return false;
             }
 
-            if ( eventProcessor.MouseClickLeft() ) {
-                assert( static_cast<size_t>( skillIndex ) < _skillRoi.size() );
+            assert( static_cast<size_t>( skillIndex ) < _skillRoi.size() );
 
+            const fheroes2::Rect skillRoi = _skillRoi[skillIndex];
+
+            if ( eventProcessor.MouseClickLeft( skillRoi ) ) {
                 _skills[skillIndex].second = !_skills[skillIndex].second;
 
                 _skillToRedraw = skillIndex;
                 return true;
             }
 
-            if ( eventProcessor.isMouseRightButtonPressed() ) {
+            if ( eventProcessor.isMouseRightButtonPressedInArea( skillRoi ) ) {
                 const Heroes fakeHero;
                 fheroes2::SecondarySkillDialogElement( _skills[skillIndex].first, fakeHero ).showPopup( Dialog::ZERO );
             }
