@@ -431,7 +431,7 @@ namespace fheroes2
         assert( spell.isValid() );
 
         std::string spellText( _spell.GetName() );
-        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        const uint32_t spellPoints = _spell.spellPoints( _hero );
         if ( spellPoints > 0 ) {
             spellText += " [" + std::to_string( spellPoints ) + ']';
         }
@@ -445,7 +445,7 @@ namespace fheroes2
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
         std::string spellText( _spell.GetName() );
-        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        const uint32_t spellPoints = _spell.spellPoints( _hero );
         if ( spellPoints > 0 ) {
             spellText += " [" + std::to_string( spellPoints ) + ']';
         }
