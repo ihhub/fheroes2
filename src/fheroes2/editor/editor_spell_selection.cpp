@@ -183,7 +183,7 @@ namespace Editor
 
         bool isAnySpellEnabled = false;
 
-        for ( const int & spell : availableSpells ) {
+        for ( const int spell : availableSpells ) {
             const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() );
 
             spells.emplace_back( spell, isSelected );
@@ -262,15 +262,15 @@ namespace Editor
                 spellContainer.draw( display );
 
                 // Check if all spells are being disabled. If they are disable the OKAY button.
-                bool areAllSpelledDisabled = true;
+                bool areAllSpellsDisabled = true;
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
-                        areAllSpelledDisabled = false;
+                        areAllSpellsDisabled = false;
                         break;
                     }
                 }
 
-                if ( areAllSpelledDisabled ) {
+                if ( areAllSpellsDisabled ) {
                     buttonOk.disable();
                     buttonOk.draw();
                 }
