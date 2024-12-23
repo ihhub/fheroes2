@@ -259,7 +259,7 @@ jobs:
     - name: Build
       run: |
         export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j 2
+        make -f Makefile.vita -j 4
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -308,7 +308,7 @@ jobs:
     - name: Build
       run: |
         export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j 2
+        make -f Makefile.switch -j 4
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
