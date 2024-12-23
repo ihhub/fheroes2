@@ -9856,7 +9856,7 @@ msgid "Double damage from Fire spells"
 msgstr "Dano em dobro por feitiços de Fogo"
 
 msgid "Double damage from Cold spells"
-msgstr "Dano em dobro por feitiços Frios."
+msgstr "Dano em dobro por feitiços Frios"
 
 msgid "Double damage from Earth creatures"
 msgstr "Dano em dobro por criaturas terrestres"
