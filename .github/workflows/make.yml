@@ -171,9 +171,15 @@ jobs:
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-    - name: Build
+    - name: Build (Linux)
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
-        make -j 4
+        make -j $(nproc --all)
+      env: ${{ matrix.config.env }}
+    - name: Build (MacOS)
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
+      run: |
+        make -j $(sysctl -n hw.ncpu)
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
