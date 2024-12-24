@@ -33,10 +33,10 @@ jobs:
         echo "PR_BRANCH=$PR_BRANCH" >> "$GITHUB_ENV"
     - name: Generate POT
       run: |
-        make -C src/dist/fheroes2 -j $(nproc --all) pot
+        make -C src/dist/fheroes2 -j "$(nproc)" pot
     - name: Merge PO with POT
       run: |
-        make -C files/lang -j $(nproc --all) merge
+        make -C files/lang -j "$(nproc)" merge
     - name: Generate statistics
       run: |
         mkdir -p docs/json

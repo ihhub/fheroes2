@@ -174,7 +174,7 @@ jobs:
     - name: Build (Linux)
       if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
-        make -j $(nproc --all)
+        make -j "$(nproc)"
       env: ${{ matrix.config.env }}
     - name: Build (MacOS)
       if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
@@ -265,7 +265,7 @@ jobs:
     - name: Build
       run: |
         export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j $(nproc --all)
+        make -f Makefile.vita -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -314,13 +314,13 @@ jobs:
     - name: Build
       run: |
         export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j $(nproc --all)
+        make -f Makefile.switch -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
     - name: Generate translations
       run: |
-        make -C files/lang -j $(nproc --all)
+        make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
