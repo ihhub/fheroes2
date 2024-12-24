@@ -70,7 +70,7 @@ jobs:
     - name: Build
       run: |
         cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON \
-                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" \
+                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE=C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake \
                            -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake.exe --build build --config Debug
     - name: Install
