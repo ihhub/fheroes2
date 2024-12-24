@@ -47,7 +47,7 @@ jobs:
       if: ${{ github.event_name == 'pull_request' || env.KEYSTORE_BASE64 == '' }}
       run: |
         cd android
-        ./gradlew assembleDebug bundleDebug --max-workers=4
+        ./gradlew assembleDebug bundleDebug
         cp app/build/outputs/apk/debug/app-debug.apk ../fheroes2.apk
         cp app/build/outputs/bundle/debug/app-debug.aab ../fheroes2.aab
     - name: Build release AAB and APK
