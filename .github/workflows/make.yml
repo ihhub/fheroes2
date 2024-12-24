@@ -173,7 +173,7 @@ jobs:
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
     - name: Build
       run: |
-        make -j 2
+        make -j $(nproc --all)
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
@@ -259,7 +259,7 @@ jobs:
     - name: Build
       run: |
         export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j 4
+        make -f Makefile.vita -j $(nproc --all)
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -308,13 +308,13 @@ jobs:
     - name: Build
       run: |
         export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j 4
+        make -f Makefile.switch -j $(nproc --all)
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j $(nproc --all)
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
