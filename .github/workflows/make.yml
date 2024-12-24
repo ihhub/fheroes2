@@ -179,7 +179,7 @@ jobs:
     - name: Build (MacOS)
       if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
-        make -j $(sysctl -n hw.ncpu)
+        make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
