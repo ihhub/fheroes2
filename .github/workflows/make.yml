@@ -173,7 +173,7 @@ jobs:
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
     - name: Build
       run: |
-        make -j $(nproc --all)
+        make -j 4
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
