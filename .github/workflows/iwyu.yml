@@ -24,6 +24,7 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
+        echo $(nproc --all)
         iwyu_tool -p build -j $(nproc --all) -- -Xiwyu --cxx17ns -Xiwyu --error -Xiwyu --mapping_file="$GITHUB_WORKSPACE/iwyu.map" | (grep -E -v "^$|has correct #includes/fwd-decls" || true) \
                                                                                                                       | tee iwyu-result.txt
     - uses: actions/upload-artifact@v4
