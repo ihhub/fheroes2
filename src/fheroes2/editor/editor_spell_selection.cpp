@@ -138,14 +138,17 @@ namespace
                 return false;
             }
 
-            if ( eventProcessor.MouseClickLeft() ) {
-                assert( static_cast<size_t>( spellIndex ) < _spellRoi.size() );
+            assert( static_cast<size_t>( spellIndex ) < _spellRoi.size() );
 
+            const fheroes2::Rect spellRoi = _spellRoi[spellIndex];
+
+            if ( eventProcessor.MouseClickLeft( spellRoi ) ) {
                 _spells[spellIndex].second = !_spells[spellIndex].second;
+
                 return true;
             }
 
-            if ( eventProcessor.isMouseRightButtonPressed() ) {
+            if ( eventProcessor.isMouseRightButtonPressedInArea( spellRoi ) ) {
                 fheroes2::SpellDialogElement( _spells[spellIndex].first, nullptr ).showPopup( Dialog::ZERO );
             }
 
@@ -180,7 +183,7 @@ namespace Editor
 
         bool isAnySpellEnabled = false;
 
-        for ( const int & spell : availableSpells ) {
+        for ( const int spell : availableSpells ) {
             const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() );
 
             spells.emplace_back( spell, isSelected );
@@ -259,15 +262,15 @@ namespace Editor
                 spellContainer.draw( display );
 
                 // Check if all spells are being disabled. If they are disable the OKAY button.
-                bool areAllSpelledDisabled = true;
+                bool areAllSpellsDisabled = true;
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
-                        areAllSpelledDisabled = false;
+                        areAllSpellsDisabled = false;
                         break;
                     }
                 }
 
-                if ( areAllSpelledDisabled ) {
+                if ( areAllSpellsDisabled ) {
                     buttonOk.disable();
                     buttonOk.draw();
                 }

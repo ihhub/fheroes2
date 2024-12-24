@@ -25,6 +25,7 @@
 #define H2GAMESTATIC_H
 
 #include <cstdint>
+#include <vector>
 
 namespace MP2
 {
@@ -35,7 +36,6 @@ namespace Skill
 {
     struct FactionProperties;
     struct SecondarySkillValuesPerLevel;
-    struct SecondarySkillValues;
 }
 
 class Heroes;
@@ -71,7 +71,8 @@ namespace GameStatic
 
     const Skill::FactionProperties * GetFactionProperties( const int race );
     const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
-    const Skill::SecondarySkillValues * GetSecondarySkillValuesForWitchsHut();
+
+    const std::vector<int32_t> & getSecondarySkillsForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
