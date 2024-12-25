@@ -445,6 +445,7 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
 const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor )
 {
     if ( allMaps.empty() ) {
+        outputNoMapInTextSupportMode();
         return nullptr;
     }
 

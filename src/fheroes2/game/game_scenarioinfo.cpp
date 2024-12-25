@@ -75,6 +75,13 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to start the chosen map." )
     }
 
+    void showCurrentlySelectedMapInfoInTextSupportMode( const Maps::FileInfo & mapInfo )
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Currently selected map:\n" )
+        COUT( mapInfo.getSummary() )
+    }
+
     void updatePlayers( Players & players, const int humanPlayerCount )
     {
         if ( humanPlayerCount < 2 )
@@ -237,6 +244,7 @@ namespace
 
         Players & players = conf.GetPlayers();
 
+        showCurrentlySelectedMapInfoInTextSupportMode( mapInfo );
         conf.setCurrentMapInfo( mapInfo );
         updatePlayers( players, humanPlayerCount );
         Game::LoadPlayers( mapInfo.filename, players );
@@ -338,6 +346,7 @@ namespace
                 const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
                 if ( fi && fi->filename != currentMapName ) {
+                    showCurrentlySelectedMapInfoInTextSupportMode( *fi );
                     Game::SavePlayers( currentMapName, conf.GetPlayers() );
                     conf.setCurrentMapInfo( *fi );
 

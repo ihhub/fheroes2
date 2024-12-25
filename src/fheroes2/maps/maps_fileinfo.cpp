@@ -633,6 +633,20 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
     return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
+std::string Maps::FileInfo::getSummary() const
+{
+    std::ostringstream os;
+
+    os << "Map information:" << std::endl
+       << "Map name: " << name << std::endl
+       << "File name: " << filename << std::endl
+       << "Description: " << description << std::endl
+       << "Size: " << width << "x" << height << std::endl
+       << "Difficulty: " << Difficulty::String( difficulty ) << std::endl;
+
+    return os.str();
+}
+
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
     // Only the filename part of the path to the map file is saved
