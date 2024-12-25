@@ -28,12 +28,14 @@
 #include <utility>
 #include <vector>
 
+#include "artifact.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
+#include "monster.h"
 #include "mp2.h"
 #include "resource.h"
 #include "translations.h"
