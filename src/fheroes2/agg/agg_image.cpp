@@ -4247,7 +4247,12 @@ namespace
         case ICN::OBJNARTI:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 206 ) {
-                // If we have the Price of Loyalty assets we make a map sprite for the Magic Book artifact.
+                // These are the Price of Loyalty assets.
+
+                // Spell Scroll has an invalid offset by X axis.
+                _icnVsSprite[id][173].setPosition( ( 32 - _icnVsSprite[id][173].width() ) / 2, _icnVsSprite[id][173].y() );
+
+                // Make a map sprite for the Magic Book artifact.
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
