@@ -637,8 +637,7 @@ std::string Maps::FileInfo::getSummary() const
 {
     std::ostringstream os;
 
-    os << "Map information:" << std::endl
-       << "Map name: " << name << std::endl
+    os << "Map name: " << name << std::endl
        << "File name: " << filename << std::endl
        << "Description: " << description << std::endl
        << "Size: " << width << "x" << height << std::endl
