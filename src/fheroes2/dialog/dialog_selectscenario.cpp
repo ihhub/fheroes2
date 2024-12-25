@@ -38,6 +38,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -87,6 +88,27 @@ namespace
     };
 
     Maps::MapSize currentMapFilter = Maps::ZERO;
+
+    void outputMapSelectionInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Choose Map\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) << " to view only maps of size small (36 x 36)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) << " to view only maps of size medium (72 x 72)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) << " to view only maps of size large (108 x 108)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) << " to view only maps of size extra large (144 x 144)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) << " to view all maps, regardless of size." )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to close the dialog and return to the previous menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to select the map." )
+    }
+
+    void outputNoMapInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "No maps exist for the chosen type. Returning to the previous menu." )
+    }
 
     void ShowToolTip( const std::string & header, const std::string & body )
     {
@@ -425,6 +447,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     if ( allMaps.empty() ) {
         return nullptr;
     }
+
+    outputMapSelectionInTextSupportMode();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
