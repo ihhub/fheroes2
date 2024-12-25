@@ -543,42 +543,21 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         return false;
     }
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    pos.x = dialogRoi.x;
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height();
-
-    fheroes2::Button buttonOkay( pos.x, pos.y, buttonOkayIcnID, 0, 1 );
-
-    const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-
-    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
-    fheroes2::Button buttonCancel( pos.x, pos.y, buttonCancelIcnID, 0, 1 );
+    fheroes2::ButtonGroup buttonGroup( dialogRoi, Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonBase & buttonOkay = buttonGroup.button( 0 );
+    fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
 
     if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
         buttonOkay.disable();
     }
 
-    buttonOkay.draw();
-    buttonCancel.draw();
-
+    buttonGroup.draw();
     display.render();
 
     while ( le.HandleEvents() ) {
-        if ( buttonOkay.isEnabled() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
-        }
-
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-
-        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
-            return true;
-        }
-
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            break;
+        const int result = buttonGroup.processEvents();
+        if ( result != Dialog::ZERO ) {
+            return result == Dialog::OK;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
