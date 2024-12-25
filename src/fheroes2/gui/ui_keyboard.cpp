@@ -567,9 +567,8 @@ namespace
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & ) {
-                return DialogAction::DoNothing;
-            } );
+            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "0", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
