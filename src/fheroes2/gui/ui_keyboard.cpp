@@ -472,7 +472,7 @@ namespace
     }
 
     void addExtraStandardButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface,
-                                  const bool isExtraLanguageSupported, const fheroes2::SupportedLanguage /* unused */ )
+                                  const bool isExtraLanguageSupported )
     {
         auto & lastButtonRow = buttons.emplace_back();
 
@@ -603,7 +603,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported, language );
+            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
             break;
         default:
             assert( 0 );
