@@ -31,7 +31,7 @@
 #include <list>
 #include <locale>
 #include <map>
-#include <ostream>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
