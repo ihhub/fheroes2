@@ -64,7 +64,35 @@ namespace
 
             // This is an invalid object!
             assert( 0 );
-            return "Invalid resource";
+            break;
+        }
+        case MP2::OBJ_ARTIFACT: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == MP2::OBJ_ARTIFACT && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    return MP2::StringObject( MP2::OBJ_ARTIFACT ) + std::string( " - " ) + Artifact( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_MONSTER: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == MP2::OBJ_MONSTER && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    return MP2::StringObject( MP2::OBJ_MONSTER ) + std::string( " - " ) + Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName();
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
         }
         default:
             break;
