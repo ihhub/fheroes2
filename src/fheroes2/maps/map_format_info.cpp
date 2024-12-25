@@ -72,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 7 };
+    constexpr uint16_t currentSupportedVersion{ 8 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -196,6 +196,24 @@ namespace
         }
     }
 
+    void convertFromV7ToV8( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 7, "Remove this function." );
+
+        if ( map.version > 7 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 43 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 3 position "down" to add new Observation Tower variants.
+                    objInfo.index += 3;
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -294,6 +312,7 @@ namespace
         convertFromV4ToV5( map );
         convertFromV5ToV6( map );
         convertFromV6ToV7( map );
+        convertFromV7ToV8( map );
 
         return !stream.fail();
     }

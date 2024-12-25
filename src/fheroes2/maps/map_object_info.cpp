@@ -4474,7 +4474,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Observation Tower, generic terrain.
+        // Observation Tower, grass terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 201U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
@@ -4483,6 +4483,49 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 235U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 236U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 237U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER,
+                                                  Maps::BACKGROUND_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 238U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 239U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER,
+                                                  Maps::BACKGROUND_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 240U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
 
             objects.emplace_back( std::move( object ) );
         }
