@@ -425,25 +425,33 @@ namespace fheroes2
         Point offset;
 
         switch ( buttonTypes ) {
-        case Dialog::YES | Dialog::NO:
-            offset.x = area.x;
+        case Dialog::YES | Dialog::NO: {
+            const int32_t horizontalFreeSpace = area.width - AGG::GetICN( buttonYesIcnID, 0 ).width() - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            const int32_t padding = static_cast<int32_t>( 0.25f * horizontalFreeSpace );
+
+            offset.x = area.x + padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width() - padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
-            break;
+        } 
+        break;
 
-        case Dialog::OK | Dialog::CANCEL:
-            offset.x = area.x;
+        case Dialog::OK | Dialog::CANCEL: {
+            const int32_t horizontalFreeSpace = area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            const int32_t padding = static_cast<int32_t>( 0.25f * horizontalFreeSpace );
+
+            offset.x = area.x + padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() - padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
-            break;
+        }
+        break;
 
         case Dialog::OK:
             offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
