@@ -427,7 +427,7 @@ namespace fheroes2
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO: {
             const int32_t horizontalFreeSpace = area.width - AGG::GetICN( buttonYesIcnID, 0 ).width() - AGG::GetICN( buttonNoIcnID, 0 ).width();
-            const int32_t padding = static_cast<int32_t>( 0.25f * horizontalFreeSpace );
+            const int32_t padding = static_cast<int32_t>( 0.25F * static_cast<float>( horizontalFreeSpace ) );
 
             offset.x = area.x + padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
@@ -440,7 +440,7 @@ namespace fheroes2
 
         case Dialog::OK | Dialog::CANCEL: {
             const int32_t horizontalFreeSpace = area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() - AGG::GetICN( buttonCancelIcnID, 0 ).width();
-            const int32_t padding = static_cast<int32_t>( 0.25f * horizontalFreeSpace );
+            const int32_t padding = static_cast<int32_t>( 0.25F * static_cast<float>( horizontalFreeSpace ) );
 
             offset.x = area.x + padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();

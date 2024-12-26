@@ -545,7 +545,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::ButtonGroup buttonGroup( dialogRoi, Dialog::OK | Dialog::CANCEL );
     fheroes2::ButtonBase & buttonOkay = buttonGroup.button( 0 );
-    fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
+    const fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
 
     if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
         buttonOkay.disable();
