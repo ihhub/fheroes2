@@ -436,7 +436,8 @@ namespace fheroes2
             offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width() - padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
-        } break;
+            break;
+        }
 
         case Dialog::OK | Dialog::CANCEL: {
             const int32_t horizontalFreeSpace = area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() - AGG::GetICN( buttonCancelIcnID, 0 ).width();
@@ -449,7 +450,8 @@ namespace fheroes2
             offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() - padding;
             offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
-        } break;
+            break;
+        }
 
         case Dialog::OK:
             offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
