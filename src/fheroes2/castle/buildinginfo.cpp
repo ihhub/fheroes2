@@ -34,7 +34,6 @@
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "m82.h"
