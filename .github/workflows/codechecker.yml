@@ -26,9 +26,9 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
-        export PATH="$HOME/.python-venv/bin:$PATH"
+        export PATH=$HOME/.python-venv/bin:$PATH
         CodeChecker analyze --analyzers clangsa --ctu-all --ctu-ast-mode load-from-pch --output codechecker-output --ignore .codechecker-ignore build/compile_commands.json
     - name: Display results
       run: |
-        export PATH="$HOME/.python-venv/bin:$PATH"
+        export PATH=$HOME/.python-venv/bin:$PATH
         CodeChecker parse --print-steps codechecker-output

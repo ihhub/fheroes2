@@ -171,9 +171,15 @@ jobs:
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-    - name: Build
+    - name: Build (Linux)
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
-        make -j 2
+        make -j "$(nproc)"
+      env: ${{ matrix.config.env }}
+    - name: Build (MacOS)
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
+      run: |
+        make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
@@ -244,7 +250,7 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/vitasdk/vdpm
         cd vdpm
-        export PATH="$VITASDK/bin:$PATH"
+        export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
         ./install-all.sh
         rm -rf ~/.vitasdk-cache
@@ -258,8 +264,8 @@ jobs:
         fi
     - name: Build
       run: |
-        export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j 2
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -307,14 +313,14 @@ jobs:
         sudo apt-get -y install gettext p7zip-full
     - name: Build
       run: |
-        export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j 2
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        make -f Makefile.switch -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
