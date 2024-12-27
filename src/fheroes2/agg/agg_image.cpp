@@ -4250,7 +4250,9 @@ namespace
                 // These are the Price of Loyalty assets.
 
                 // Spell Scroll has an invalid offset by X axis.
-                _icnVsSprite[id][173].setPosition( ( 32 - _icnVsSprite[id][173].width() ) / 2, _icnVsSprite[id][173].y() );
+                if ( _icnVsSprite[id][173].width() == 21 ) {
+                    _icnVsSprite[id][173].setPosition( 2, _icnVsSprite[id][173].y() );
+                }
 
                 // Make a map sprite for the Magic Book artifact.
                 _icnVsSprite[id].resize( 208 );
