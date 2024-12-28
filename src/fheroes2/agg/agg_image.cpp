@@ -3245,52 +3245,48 @@ namespace
             const int32_t arrowTipToShaftLength = 18;
             const int32_t arrowHeadWidth = 20;
 
-            fheroes2::Image unRotated;
-            unRotated.resize( arrowTipToShaftLength, arrowHeadWidth );
-            unRotated.reset();
-            Copy( original, original.width() - arrowTipToShaftLength, 0, unRotated, 0, 0, arrowTipToShaftLength, arrowHeadWidth );
-            fheroes2::Image rotated;
-            rotated.resize( arrowHeadWidth, arrowTipToShaftLength );
-            rotated.reset();
+            fheroes2::Image rotatedArrow;
+            rotatedArrow.resize( arrowHeadWidth, arrowTipToShaftLength );
+            rotatedArrow.reset();
             for ( int x = 0; x < arrowTipToShaftLength; ++x ) {
                 for ( int y = 0; y < arrowHeadWidth; ++y ) {
-                    Copy( unRotated, x, y, rotated, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
+                    Copy( original, x + ( original.width() - arrowTipToShaftLength ), y, rotatedArrow, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
                 }
             }
+            
+            fheroes2::Copy( Flip( rotatedArrow, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
+            fheroes2::Copy( Flip( rotatedArrow, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
 
-            // Rotate arrow ends
+            // Rotate arrow ends.
             const int32_t arrowEndHeight = 11;
             const int32_t arrowEndWidth = 9;
 
-            fheroes2::Image endRotated;
-            endRotated.resize( arrowEndWidth, arrowEndHeight );
+            rotatedArrow.resize( arrowEndWidth, arrowEndHeight );
+            rotatedArrow.reset();
 
             for ( int x = 0; x < arrowEndHeight; ++x ) {
                 for ( int y = 0; y < arrowEndWidth; ++y ) {
-                    Copy( original, x + 2, y + 5, endRotated, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
+                    Copy( original, x + 2, y + 5, rotatedArrow, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
                 }
             }
-            // Remove black corner.
-            fheroes2::Copy( original, 0, 0, endRotated, 0, endRotated.height() - 1, 1, 1 );
 
-            fheroes2::Copy( endRotated, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
-            fheroes2::Copy( Flip( endRotated, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
+            // Clean black corner.
+            fheroes2::Copy( original, 0, 0, rotatedArrow, 0, rotatedArrow.height() - 1, 1, 1 );
 
-            fheroes2::Copy( Flip( rotated, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
-            fheroes2::Copy( Flip( rotated, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
+            fheroes2::Copy( rotatedArrow, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
+            fheroes2::Copy( Flip( rotatedArrow, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
 
-            // add straight shafts
+            // Add straight shafts.
             Copy( original, 5, 5, out, 13, 0, 21, 10 );
             Copy( original, 5, 5, out, 12, 32, 22, 10 );
 
-            // Lower arrow
-            // Fix overlaps
+            // Lower arrow.
+            // Fix overlaps.
             fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
             fheroes2::DrawLine( out, { out.width() - 13, out.height() - 6 }, { out.width() - 12, out.height() - 6 }, 109 );
             fheroes2::SetPixel( out, 12, out.height() - 10, 119 );
             fheroes2::SetPixel( out, out.width() - 14, out.height() - 10, 119 );
 
-            // Add corners.
             // Lower right corner.
             Copy( original, 5, 10, out, out.width() - 13, out.height() - 5, 4, 5 );
             fheroes2::DrawLine( out, { out.width() - 6, out.height() - 4 }, { out.width() - 9, out.height() - 1 }, 59 );
@@ -3302,7 +3298,7 @@ namespace
 
             // Lower left corner.
             Copy( original, 5, 9, out, 9, out.height() - 6, 3, 6 );
-            Copy( endRotated, 0, 0, out, 5, out.height() - 7, 4, 2 );
+            Copy( rotatedArrow, 0, 0, out, 5, out.height() - 7, 4, 2 );
             fheroes2::DrawLine( out, { 5, out.height() - 5 }, { 8, out.height() - 2 }, 129 );
             fheroes2::DrawLine( out, { 6, out.height() - 5 }, { 8, out.height() - 3 }, 123 );
             fheroes2::DrawLine( out, { 7, out.height() - 5 }, { 8, out.height() - 4 }, 119 );
