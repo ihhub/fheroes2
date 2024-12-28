@@ -3232,6 +3232,129 @@ namespace
 
             return true;
         }
+        case ICN::SWAP_ARROWS_CIRCULAR: {
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0 );
+
+            const int32_t width = 47;
+            const int32_t height = 42;
+            fheroes2::Image out;
+            out.resize( width, height );
+            out.reset();
+
+            // Rotate arrow heads.
+            const int32_t arrowTipToShaftLength = 18;
+            const int32_t arrowHeadWidth = 20;
+
+            fheroes2::Image unRotated;
+            unRotated.resize( arrowTipToShaftLength, arrowHeadWidth );
+            unRotated.reset();
+            Copy( original, original.width() - arrowTipToShaftLength, 0, unRotated, 0, 0, arrowTipToShaftLength, arrowHeadWidth );
+            fheroes2::Image rotated;
+            rotated.resize( arrowHeadWidth, arrowTipToShaftLength );
+            rotated.reset();
+            for ( int x = 0; x < arrowTipToShaftLength; ++x ) {
+                for ( int y = 0; y < arrowHeadWidth; ++y ) {
+                    Copy( unRotated, x, y, rotated, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
+                }
+            }
+
+            // Rotate arrow ends
+            const int32_t arrowEndHeight = 11;
+            const int32_t arrowEndWidth = 9;
+
+            fheroes2::Image endRotated;
+            endRotated.resize( arrowEndWidth, arrowEndHeight );
+
+            for ( int x = 0; x < arrowEndHeight; ++x ) {
+                for ( int y = 0; y < arrowEndWidth; ++y ) {
+                    Copy( original, x + 2, y + 5, endRotated, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
+                }
+            }
+            // Remove black corner.
+            fheroes2::Copy( original, 0, 0, endRotated, 0, endRotated.height() - 1, 1, 1 );
+
+            fheroes2::Copy( endRotated, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
+            fheroes2::Copy( Flip( endRotated, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
+
+            fheroes2::Copy( Flip( rotated, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
+            fheroes2::Copy( Flip( rotated, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
+
+            // add straight shafts
+            Copy( original, 5, 5, out, 13, 0, 21, 10 );
+            Copy( original, 5, 5, out, 12, 32, 22, 10 );
+
+            // Lower arrow
+            // Fix overlaps
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::DrawLine( out, { out.width() - 13, out.height() - 6 }, { out.width() - 12, out.height() - 6 }, 109 );
+            fheroes2::SetPixel( out, 12, out.height() - 10, 119 );
+            fheroes2::SetPixel( out, out.width() - 14, out.height() - 10, 119 );
+
+            // Add corners.
+            // Lower right corner.
+            Copy( original, 5, 10, out, out.width() - 13, out.height() - 5, 4, 5 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 4 }, { out.width() - 9, out.height() - 1 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 5 }, { out.width() - 9, out.height() - 2 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 7, out.height() - 5 }, { out.width() - 9, out.height() - 3 }, 129 );
+            fheroes2::DrawLine( out, { out.width() - 8, out.height() - 5 }, { out.width() - 9, out.height() - 4 }, 123 );
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::SetPixel( out, out.width() - 11, out.height() - 6, 112 );
+
+            // Lower left corner.
+            Copy( original, 5, 9, out, 9, out.height() - 6, 3, 6 );
+            Copy( endRotated, 0, 0, out, 5, out.height() - 7, 4, 2 );
+            fheroes2::DrawLine( out, { 5, out.height() - 5 }, { 8, out.height() - 2 }, 129 );
+            fheroes2::DrawLine( out, { 6, out.height() - 5 }, { 8, out.height() - 3 }, 123 );
+            fheroes2::DrawLine( out, { 7, out.height() - 5 }, { 8, out.height() - 4 }, 119 );
+            fheroes2::SetPixel( out, 8, out.height() - 5, 116 );
+            fheroes2::SetPixel( out, 9, out.height() - 6, 112 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 14, out.height() - 15 }, { 14, out.height() - 11 }, 59 );
+
+            // Upper arrow.
+            // Upper left corner.
+            fheroes2::Copy( out, 15, 0, out, 9, 0, 4, 5 );
+            fheroes2::Copy( out, 21, 5, out, 11, 5, 3, 2 );
+            fheroes2::DrawLine( out, { 8, 1 }, { 5, 4 }, 129 );
+            fheroes2::DrawLine( out, { 8, 2 }, { 6, 4 }, 119 );
+            fheroes2::DrawLine( out, { 8, 3 }, { 7, 4 }, 114 );
+            fheroes2::SetPixel( out, 8, 4, 112 );
+            fheroes2::SetPixel( out, 9, 4, 112 );
+
+            // Upper right corner.
+            fheroes2::Copy( out, 21, 0, out, 33, 0, 3, 6 );
+            fheroes2::Copy( out, 36, 7, out, 36, 5, 5, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 34, 1, out, 36, 1, 1, 3 );
+            fheroes2::DrawLine( out, { 36, 0 }, { 40, 4 }, 129 );
+            fheroes2::DrawLine( out, { 37, 2 }, { 38, 3 }, 119 );
+            fheroes2::DrawLine( out, { 36, 4 }, { 37, 3 }, 113 );
+
+            // Fix overlap.
+            fheroes2::DrawLine( out, { 33, 8 }, { 33, 9 }, 123 );
+            fheroes2::SetPixel( out, 32, 9, 129 );
+            fheroes2::SetPixel( out, 13, 9, 129 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 10, 22 }, { 18, 14 }, 59 );
+            fheroes2::DrawLine( out, { 11, 22 }, { 19, 14 }, 59 );
+            fheroes2::DrawLine( out, { 34, 17 }, { 40, 17 }, 59 );
+            fheroes2::DrawLine( out, { 41, 5 }, { 41, 16 }, 59 );
+            fheroes2::SetPixel( out, 40, 16, 59 );
+            fheroes2::Copy( original, 0, 0, out, 1, 12, 4, 1 );
+            fheroes2::Copy( original, 0, 0, out, 15, 12, 5, 1 );
+
+            // Make pressed state.
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = out;
+            _icnVsSprite[id][1] = _icnVsSprite[id][0];
+            _icnVsSprite[id][1].setPosition( -1, 1 );
+            ApplyPalette( _icnVsSprite[id][1], 4 );
+
+            return true;
+        }
         case ICN::EDITBTNS:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
