@@ -1,7 +1,7 @@
 version 1.1.5 (30 December 2024)
 - add 3 new variants of the Observation Tower object
 - show Monster and Artifact names in the popup dialog of the Editor
-- show the minus sign for the numeric keypad only if a range allows to use of negative values
+- show the minus sign for the numeric keypad only if a range allows the use of negative values
 - fix Spell Scroll artifact horizontal position on the Adventure Map
 - update the Portuguese translation
 - update the Swedish translation
@@ -16,11 +16,11 @@ version 1.1.5 (30 December 2024)
 - add the ability to set spells in Shrine in the Editor
 - add a new variant of Stone Liths object
 - update the Russian translation
-- show a warning dialog upon a map file loading failure
+- show a warning dialog upon map file loading failure
 - fix spell randomization logic for Artifacts and the Adventure Map objects
 - fix text input cursor setting for multi-line text input with many spaces at the line end
-- fix scrollbars being shifted while changing a resolution on the Adventure Map
-- reset the damage info popup when spellcast has been cancelled
+- fix scrollbars being shifted while changing resolution on the Adventure Map
+- reset the damage info popup when spellcasting is cancelled
 - fix a bug when picking up an object whose type does not match its sprite on the map
 - update the Hungarian translation
 - add range values for default experience within the Editor

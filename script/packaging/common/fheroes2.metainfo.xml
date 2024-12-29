@@ -44,7 +44,7 @@
         <ul>
           <li>add 3 new variants of the Observation Tower object</li>
           <li>show Monster and Artifact names in the popup dialog of the Editor</li>
-          <li>show the minus sign for the numeric keypad only if a range allows to use of negative values</li>
+          <li>show the minus sign for the numeric keypad only if a range allows the use of negative values</li>
           <li>fix Spell Scroll artifact horizontal position on the Adventure Map</li>
           <li>update the Portuguese translation</li>
           <li>update the Swedish translation</li>
@@ -59,11 +59,11 @@
           <li>add the ability to set spells in Shrine in the Editor</li>
           <li>add a new variant of Stone Liths object</li>
           <li>update the Russian translation</li>
-          <li>show a warning dialog upon a map file loading failure</li>
+          <li>show a warning dialog upon map file loading failure</li>
           <li>fix spell randomization logic for Artifacts and the Adventure Map objects</li>
           <li>fix text input cursor setting for multi-line text input with many spaces at the line end</li>
-          <li>fix scrollbars being shifted while changing a resolution on the Adventure Map</li>
-          <li>reset the damage info popup when spellcast has been cancelled</li>
+          <li>fix scrollbars being shifted while changing resolution on the Adventure Map</li>
+          <li>reset the damage info popup when spellcasting is cancelled</li>
           <li>fix a bug when picking up an object whose type does not match its sprite on the map</li>
           <li>update the Hungarian translation</li>
           <li>add range values for default experience within the Editor</li>
