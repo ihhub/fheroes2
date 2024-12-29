@@ -624,14 +624,19 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
         else if ( le.MouseClickLeft( swapArmies.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
             GetArmy().SwapTroops( otherHero.GetArmy() );
+
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
+
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
+
             selectArmy1.Redraw( display );
             selectArmy2.Redraw( display );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
