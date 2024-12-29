@@ -379,7 +379,7 @@ namespace
         offsetY = textInitialOffsetY;
         offsetX += textInitialOffsetX;
 
-        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.gg/xF85vbZ" );
+        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.com/servers/fheroes2-733093692860137523" );
         offsetY += 10;
 
         fheroes2::Sprite labyrinth = fheroes2::AGG::GetICN( ICN::TWNWUP_3, 0 );
