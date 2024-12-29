@@ -237,19 +237,16 @@ Troops::~Troops()
     } );
 }
 
-void Troops::Assign( const Troop * itbeg, const Troop * itend )
+void Troops::Assign( const Troop * troopsBegin, const Troop * troopsEnd )
 {
     Clean();
 
-    iterator it = begin();
+    for ( iterator iter = begin(); iter != end() && troopsBegin != troopsEnd; ++iter, ++troopsBegin ) {
+        assert( *iter != nullptr && troopsBegin != nullptr );
 
-    while ( it != end() && itbeg != itend ) {
-        if ( itbeg->isValid() ) {
-            ( *it )->Set( *itbeg );
+        if ( troopsBegin->isValid() ) {
+            ( *iter )->Set( *troopsBegin );
         }
-
-        ++it;
-        ++itbeg;
     }
 }
 
@@ -257,27 +254,25 @@ void Troops::Assign( const Troops & troops )
 {
     Clean();
 
-    iterator it1 = begin();
-    const_iterator it2 = troops.begin();
+    for ( auto [thisIter, troopsIter] = std::make_pair( begin(), troops.begin() ); thisIter != end() && troopsIter != troops.end(); ++thisIter, ++troopsIter ) {
+        assert( *thisIter != nullptr && *troopsIter != nullptr );
 
-    while ( it1 != end() && it2 != troops.end() ) {
-        if ( ( *it2 )->isValid() ) {
-            ( *it1 )->Set( **it2 );
+        if ( ( *troopsIter )->isValid() ) {
+            ( *thisIter )->Set( **troopsIter );
         }
-
-        ++it2;
-        ++it1;
     }
 }
 
 void Troops::Insert( const Troops & troops )
 {
-    for ( const_iterator it = troops.begin(); it != troops.end(); ++it ) {
-        push_back( new Troop( **it ) );
+    for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
+        push_back( new Troop( *troop ) );
     }
 }
 
-void Troops::PushBack( const Monster & mons, uint32_t count )
+void Troops::PushBack( const Monster & mons, const uint32_t count )
 {
     push_back( new Troop( mons, count ) );
 }

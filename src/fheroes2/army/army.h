@@ -57,10 +57,10 @@ public:
 
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop * itbeg, const Troop * itend );
+    void Assign( const Troop * troopsBegin, const Troop * troopsEnd );
     void Assign( const Troops & troops );
     void Insert( const Troops & troops );
-    void PushBack( const Monster &, uint32_t );
+    void PushBack( const Monster & mons, const uint32_t count );
     void PopBack();
 
     size_t Size() const
