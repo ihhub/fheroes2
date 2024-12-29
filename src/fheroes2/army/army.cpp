@@ -1513,7 +1513,6 @@ void Army::SwapTroops( Army & from )
 {
     assert( this != &from );
     const Troops temp = this->getTroops();
-    this->Reset();
     Assign( from );
     from.Assign( temp );
 }
