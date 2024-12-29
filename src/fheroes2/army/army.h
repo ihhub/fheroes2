@@ -58,8 +58,8 @@ public:
     Troops & operator=( const Troops & ) = delete;
 
     void Assign( const Troop * itbeg, const Troop * itend );
-    void Assign( const Troops & );
-    void Insert( const Troops & );
+    void Assign( const Troops & troops );
+    void Insert( const Troops & troops );
     void PushBack( const Monster &, uint32_t );
     void PopBack();
 

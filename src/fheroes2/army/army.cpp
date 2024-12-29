@@ -261,8 +261,10 @@ void Troops::Assign( const Troops & troops )
     const_iterator it2 = troops.begin();
 
     while ( it1 != end() && it2 != troops.end() ) {
-        if ( ( *it2 )->isValid() )
+        if ( ( *it2 )->isValid() ) {
             ( *it1 )->Set( **it2 );
+        }
+
         ++it2;
         ++it1;
     }
@@ -270,8 +272,9 @@ void Troops::Assign( const Troops & troops )
 
 void Troops::Insert( const Troops & troops )
 {
-    for ( const_iterator it = troops.begin(); it != troops.end(); ++it )
+    for ( const_iterator it = troops.begin(); it != troops.end(); ++it ) {
         push_back( new Troop( **it ) );
+    }
 }
 
 void Troops::PushBack( const Monster & mons, uint32_t count )
