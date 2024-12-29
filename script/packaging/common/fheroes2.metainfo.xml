@@ -42,21 +42,21 @@
       <description>
         <p>Changes in v1.1.5 (30 December 2024):</p>
         <ul>
-          <li>add 3 new variants of Observation Tower object</li>
+          <li>add 3 new variants of the Observation Tower object</li>
           <li>show Monster and Artifact names in the popup dialog of the Editor</li>
-          <li>show '-' sign for numeric keypad only if a range allows to use negative values</li>
+          <li>show the minus sign for the numeric keypad only if a range allows to use of negative values</li>
           <li>fix Spell Scroll artifact horizontal position on the Adventure Map</li>
           <li>update the Portuguese translation</li>
           <li>update the Swedish translation</li>
-          <li>fix the spell cost displayed in the quick info window when hero has artifact that reduces this cost</li>
-          <li>add ability to setup Secondary Skills in Witch's Hut inside the Editor</li>
+          <li>fix the spell cost displayed in the quick info window when a hero has an artifact that reduces this cost</li>
+          <li>add the ability to set Secondary Skills in Witch's Hut inside the Editor</li>
           <li>fix the mouse interaction in the Editor's spell selection and castle properties windows</li>
           <li>fix cursor positioning with non-English characters and improve positioning at the end of the line</li>
           <li>display a description of the mechanics of right-clicking on devices with touch input</li>
           <li>fix assertion while loading different maps in the Editor</li>
-          <li>add ability to edit spells in Pyramid inside the Editor</li>
-          <li>add ability to set the amount in Resource object in the Editor</li>
-          <li>add ability to set spells in Shrine in the Editor</li>
+          <li>add the ability to edit spells in Pyramid inside the Editor</li>
+          <li>add the ability to set the amount in the Resource object in the Editor</li>
+          <li>add the ability to set spells in Shrine in the Editor</li>
           <li>add a new variant of Stone Liths object</li>
           <li>update the Russian translation</li>
           <li>show a warning dialog upon a map file loading failure</li>
@@ -72,7 +72,7 @@
           <li>updated the Czech translation</li>
           <li>update the Turkish translation</li>
           <li>improve the castle reinforcement logic for AI</li>
-          <li>synchronize maximum allowed number of characters for input and the Virtual Keyboard</li>
+          <li>synchronize the maximum allowed number of characters for input and the Virtual Keyboard</li>
           <li>fix PS Vita touchpad usage</li>
           <li>add file support for non-quite-POSIX-compliant filesystems (such as Amiga FS)</li>
           <li>put several dialog box headers in order</li>
