@@ -228,8 +228,10 @@ public:
 
     void JoinStrongestFromArmy( Army & giver );
 
-    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    // Implements the necessary logic to move unit stacks from army to army in the heroes meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
+    // Implements the necessary logic to swap all unit stacks from an army to another army in the heroes meeting dialog and in the castle dialog
+    void SwapTroops( Army & from );
 
     void SetSpreadFormation( const bool spread )
     {

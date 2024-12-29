@@ -1509,6 +1509,15 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
     moveTroops( false );
 }
 
+void Army::SwapTroops( Army & from )
+{
+    assert( this != &from );
+    const Troops temp = this->getTroops();
+    this->Reset();
+    Assign( from );
+    from.Assign( temp );
+}
+
 uint32_t Army::ActionToSirens() const
 {
     uint32_t experience = 0;
