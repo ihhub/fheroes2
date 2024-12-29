@@ -396,6 +396,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
     fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 426, display );
     fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 426, display );
+    fheroes2::ButtonSprite swapArtifacts = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 361, display );
 
     // button exit
     dst_pt.x = cur_pt.x + 280;
@@ -407,6 +408,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     swapArmies.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
+    swapArtifacts.draw();
     buttonExit.draw();
 
     // Fade-in heroes meeting dialog. Use half fade if game resolution is not 640x480.
@@ -447,9 +449,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapArtifacts.area() ) ) {
+            swapArtifacts.drawOnPress();
+        }
         else {
             moveArtifactsToHero1.drawOnRelease();
             moveArtifactsToHero2.drawOnRelease();
+            swapArtifacts.drawOnRelease();
         }
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
@@ -659,6 +665,22 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
             moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
 
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
+
+            backPrimary.restore();
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
+            std::swap( GetBagArtifacts(), otherHero.GetBagArtifacts() );
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
             selectArtifacts1.Redraw( display );
