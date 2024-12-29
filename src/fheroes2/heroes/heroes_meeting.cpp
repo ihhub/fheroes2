@@ -348,6 +348,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // The original resources do not have such animated buttons so we have to create those.
     fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 319, display );
     fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 319, display );
+    fheroes2::ButtonSprite swapArmies = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 268, display );
 
     fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 311, 223, 8 );
     fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 311, 223, 8 );
@@ -403,6 +404,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
+    swapArmies.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
     buttonExit.draw();
@@ -420,17 +422,25 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     while ( le.HandleEvents() ) {
         buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) )
+        {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+        else if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) )
+        {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
-        else {
+        else if ( le.isMouseLeftButtonPressedInArea( swapArmies.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SWAP ) )
+        {
+            swapArmies.drawOnPress();
+        }
+        else
+        {
             moveArmyToHero1.drawOnRelease();
             moveArmyToHero2.drawOnRelease();
+            swapArmies.drawOnRelease();
         }
 
         if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
@@ -614,6 +624,18 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
+            display.render();
+        }
+        else if ( le.MouseClickLeft( swapArmies.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+            GetArmy().SwapTroops( otherHero.GetArmy() );
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
