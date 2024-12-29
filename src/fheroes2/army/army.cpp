@@ -1512,7 +1512,13 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
 void Army::SwapTroops( Army & from )
 {
     assert( this != &from );
+
+    // Heroes need to have at least one occupied slot in their army, so both armies should have at least one
+    // occupied slot, even if the exchange of armies takes place between a castle garrison and a hero.
+    assert( from.isValid() && isValid() );
+
     const Troops temp = this->getTroops();
+
     Assign( from );
     from.Assign( temp );
 }
