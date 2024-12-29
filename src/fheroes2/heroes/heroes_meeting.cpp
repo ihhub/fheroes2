@@ -449,6 +449,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapAllArtifacts.area() ) ) {
+            swapAllArtifacts.drawOnPress();
+        }
         else {
             moveArtifactsToHero1.drawOnRelease();
             moveArtifactsToHero2.drawOnRelease();
