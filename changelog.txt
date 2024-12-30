@@ -1,3 +1,41 @@
+version 1.1.5 (30 December 2024)
+- add 3 new variants of the Observation Tower object
+- show Monster and Artifact names in the popup dialog of the Editor
+- show the minus sign for the numeric keypad only if a range allows the use of negative values
+- fix Spell Scroll artifact horizontal position on the Adventure Map
+- update the Portuguese translation
+- update the Swedish translation
+- fix the spell cost displayed in the quick info window when a hero has an artifact that reduces this cost
+- add the ability to set Secondary Skills in Witch's Hut inside the Editor
+- fix the mouse interaction in the Editor's spell selection and castle properties windows
+- fix cursor positioning with non-English characters and improve positioning at the end of the line
+- display a description of the mechanics of right-clicking on devices with touch input
+- fix assertion while loading different maps in the Editor
+- add the ability to edit spells in Pyramid inside the Editor
+- add the ability to set the amount in the Resource object in the Editor
+- add the ability to set spells in Shrine in the Editor
+- add a new variant of Stone Liths object
+- update the Russian translation
+- show a warning dialog upon map file loading failure
+- fix spell randomization logic for Artifacts and the Adventure Map objects
+- fix text input cursor setting for multi-line text input with many spaces at the line end
+- fix scrollbars being shifted while changing resolution on the Adventure Map
+- reset the damage info popup when spellcasting is cancelled
+- fix a bug when picking up an object whose type does not match its sprite on the map
+- update the Hungarian translation
+- add range values for default experience within the Editor
+- add missing CP1254 button letters
+- fix French and German ultimate staff sprite with PoL assets
+- updated the Czech translation
+- update the Turkish translation
+- improve the castle reinforcement logic for AI
+- synchronize the maximum allowed number of characters for input and the Virtual Keyboard
+- fix PS Vita touchpad usage
+- add file support for non-quite-POSIX-compliant filesystems (such as Amiga FS)
+- put several dialog box headers in order
+- enable the number input dialog for the recruitment window
+- use the platform-dependent byte order for the SDL audio format
+
 version 1.1.4 (27 November 2024)
 - add Virtual Numpad support for integer inputs
 - add new Lean-To object variant
