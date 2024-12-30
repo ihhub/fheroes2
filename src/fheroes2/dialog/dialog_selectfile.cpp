@@ -102,20 +102,19 @@ namespace
         text.draw( dstx + 105 - text.width() / 2, dsty, output );
     }
 
-    bool redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool isEditing )
+    void redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool isEditing )
     {
         if ( filename.empty() ) {
-            return false;
+            return;
         }
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
-        const int32_t initialTextWidth = currentFilename.width();
-        currentFilename.fitToOneRow( maxFileNameWidth );
-        currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
+        // Do not ignore spaces at the end.
+        currentFilename.fitToOneRow( maxFileNameWidth, false );
 
-        return ( initialTextWidth + 10 ) > maxFileNameWidth;
+        currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -199,7 +198,7 @@ namespace
         dsty += 2;
 
         fheroes2::Text text{ std::move( savname ), font };
-        text.fitToOneRow( maxFileNameWidth );
+        text.fitToOneRow( maxFileNameWidth, false );
         text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
 
         redrawDateTime( display, info.timestamp, dstx + maxFileNameWidth + 9, dsty, font );
@@ -387,12 +386,13 @@ namespace
         display.render( background.totalArea() );
 
         std::string result;
-        bool isTextLimit = false;
         std::string lastSelectedSaveFileName;
 
         const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
         bool isCursorVisible = true;
+
+        const size_t lengthLimit{ 255 };
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -423,7 +423,7 @@ namespace
                 msg.append( "\n\n" );
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
 
@@ -455,7 +455,7 @@ namespace
             }
             else if ( isEditing ) {
                 if ( le.MouseClickLeft( buttonVirtualKB->area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputRoi ) ) ) {
-                    fheroes2::openVirtualKeyboard( filename );
+                    fheroes2::openVirtualKeyboard( filename, lengthLimit );
 
                     charInsertPos = filename.size();
                     listbox.Unselect();
@@ -469,7 +469,7 @@ namespace
                 }
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
                     const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
-                    const int32_t textStartOffsetX = isTextLimit ? 8 : ( textInputRoi.width - text.width() ) / 2;
+                    const int32_t textStartOffsetX = std::max( 0, ( textInputRoi.width - text.width() ) / 2 );
                     charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x,
                                                                           textInputRoi.x + textStartOffsetX );
 
@@ -478,7 +478,8 @@ namespace
                     needRedraw = true;
                 }
                 else if ( !listboxEvent && le.isAnyKeyPressed()
-                          && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue() || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
+                          && ( filename.size() < lengthLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue()
+                               || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
                           && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
                     charInsertPos = InsertKeySym( filename, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
 
@@ -533,7 +534,7 @@ namespace
                 textInputAndDateBackground.restore();
 
                 if ( isEditing ) {
-                    isTextLimit = redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
+                    redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
                     redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
                 else if ( isListboxSelected ) {

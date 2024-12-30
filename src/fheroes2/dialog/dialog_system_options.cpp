@@ -245,13 +245,14 @@ namespace
         drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        okayButton.draw();
+        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+        buttonOk.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            okayButton.draw();
+            buttonOk.draw();
             display.render( emptyDialogRestorer.rect() );
         };
 
@@ -261,14 +262,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -393,7 +389,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowBattlesRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Battles" ), _( "Toggle instant battle mode." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -420,11 +416,16 @@ namespace fheroes2
         auto redrawAdventureMap = []() {
             Interface::AdventureMap & adventureMap = Interface::AdventureMap::Get();
 
-            adventureMap.reset();
             // Since radar interface has a restorer we must redraw it first to avoid the restorer do some nasty work.
             adventureMap.redraw( Interface::REDRAW_RADAR );
 
             adventureMap.redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebildAdventureMap = [&redrawAdventureMap]() {
+            Interface::AdventureMap::Get().reset();
+
+            redrawAdventureMap();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -449,13 +450,15 @@ namespace fheroes2
                                                        Dialog::OK );
                 }
 
+                // We can redraw only status window as it is the only place that has text but to be safe let's redraw everything.
                 redrawAdventureMap();
+
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
@@ -470,7 +473,7 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceSettings:
-                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;

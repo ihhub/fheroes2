@@ -336,7 +336,7 @@ int main( int argc, char ** argv )
         const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
 
         // Load palette.
-        fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
+        fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
 
         // init game data

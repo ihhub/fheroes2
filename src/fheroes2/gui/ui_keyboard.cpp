@@ -22,9 +22,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <stdexcept>
 #include <utility>
@@ -112,9 +112,10 @@ namespace
     class KeyboardRenderer
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool evilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool evilInterface )
             : _output( output )
             , _info( info )
+            , _lengthLimit( lengthLimit )
             , _isEvilInterface( evilInterface )
             , _cursorPosition( info.size() )
         {
@@ -171,7 +172,7 @@ namespace
 
         void insertCharacter( const char character )
         {
-            if ( _info.size() >= 255 ) {
+            if ( _info.size() >= _lengthLimit ) {
                 // Do not add more characters as the string is already long enough.
                 return;
             }
@@ -242,6 +243,7 @@ namespace
     private:
         fheroes2::Display & _output;
         std::string & _info;
+        size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
@@ -660,6 +662,7 @@ namespace
             int32_t xOffset = offset.x + offsets[i];
             for ( auto & buttonInfo : buttonLayout[i] ) {
                 buttonInfo.button.setPosition( xOffset, yOffset );
+
                 if ( buttonInfo.isInvertedRenderingLogic ) {
                     buttonInfo.button.press();
                 }
@@ -692,10 +695,10 @@ namespace
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
                 if ( buttonInfo.isInvertedRenderingLogic ) {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
+                    buttonInfo.button.drawOnState( !le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
                 }
                 else {
-                    le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
+                    buttonInfo.button.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
                 }
             }
         }
@@ -785,8 +788,13 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit )
     {
+        if ( lengthLimit == 0 ) {
+            // A string longer than 64KB is extremely impossible.
+            lengthLimit = std::numeric_limits<uint16_t>::max();
+        }
+
         SupportedLanguage language = SupportedLanguage::English;
         DialogAction action = DialogAction::DoNothing;
         LayoutType layoutType = LayoutType::LowerCase;
@@ -796,7 +804,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), output, lengthLimit, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
@@ -845,7 +853,8 @@ namespace fheroes2
         std::string strValue = std::to_string( output );
         DialogAction action = DialogAction::DoNothing;
 
-        KeyboardRenderer renderer( Display::instance(), strValue, Settings::Get().isEvilInterfaceEnabled() );
+        // Lets limit to 11 digits: minus and 10 digits for INT32_MIN
+        KeyboardRenderer renderer( Display::instance(), strValue, 10, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
@@ -862,7 +871,7 @@ namespace fheroes2
                 break;
             case DialogAction::Close: {
                 const auto handleInvalidValue = [&action]() {
-                    showStandardTextMessage( _( "Warning" ), _( "The entered value is invalid." ), Dialog::OK );
+                    showStandardTextMessage( _( "Error" ), _( "The entered value is invalid." ), Dialog::OK );
 
                     action = DialogAction::DoNothing;
                 };
@@ -872,7 +881,7 @@ namespace fheroes2
                     StringReplace( errorMessage, "%{minValue}", minValue );
                     StringReplace( errorMessage, "%{maxValue}", maxValue );
 
-                    showStandardTextMessage( _( "Warning" ), std::move( errorMessage ), Dialog::OK );
+                    showStandardTextMessage( _( "Error" ), std::move( errorMessage ), Dialog::OK );
 
                     action = DialogAction::DoNothing;
                 };

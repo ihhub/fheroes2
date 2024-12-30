@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-24 10:21+0000\n"
+"POT-Creation-Date: 2024-12-10 01:42+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3295,8 +3295,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Ar jūs tikrai norite ištrinti failą:"
 
-msgid "Warning!"
-msgstr "Įspėjimas!"
+msgid "Warning"
+msgstr ""
 
 msgid "Click to save the current game."
 msgstr ""
@@ -4251,9 +4251,6 @@ msgid "Cancel back to the Map Editor main menu."
 msgstr ""
 
 msgid "No maps available!"
-msgstr ""
-
-msgid "Warning"
 msgstr ""
 
 msgid "[%{pos}]: %{race} hero"
@@ -9073,6 +9070,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9141,19 +9141,44 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Pasamdyti %{name}"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Pasamdyti %{name}"
+
+msgid "Double damage from Fire spells"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Double damage from Cold spells"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Double damage from Earth creatures"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
@@ -10952,3 +10977,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Warning!"
+#~ msgstr "Įspėjimas!"

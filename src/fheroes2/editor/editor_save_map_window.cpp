@@ -353,7 +353,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName );
+                    fheroes2::openVirtualKeyboard( fileName, 255 );
                 }
 
                 charInsertPos = fileName.size();
@@ -404,7 +404,7 @@ namespace Editor
                 msg.append( "\n\n" );
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
 

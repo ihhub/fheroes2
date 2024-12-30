@@ -245,9 +245,9 @@ void Castle::_openWell()
     Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+        buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
         const BuildingType pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {

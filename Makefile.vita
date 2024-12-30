@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -24,19 +24,15 @@
 # FHEROES2_WITH_DEBUG: build in debug mode
 # FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
-TARGET := fheroes2
-MAKE := make
-
 PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
+PROJECT_VERSION := $(file < version.txt)
 
-.PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf translations
+.PHONY: all clean fheroes2.vpk param.sfo fheroes2.elf translations
 
-all: package
+all: fheroes2.vpk
 
-package: $(TARGET).vpk
-
-$(TARGET).vpk: eboot.bin param.sfo translations
+fheroes2.vpk: eboot.bin param.sfo translations
 	vita-pack-vpk -s param.sfo -b eboot.bin \
 		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
 		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
@@ -44,29 +40,29 @@ $(TARGET).vpk: eboot.bin param.sfo translations
 		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
 		--add files/data=files/data \
 		--add files/lang/vita_temp=files/lang \
-	$(TARGET).vpk
-	@rm -r files/lang/vita_temp
+	fheroes2.vpk
+	rm -r files/lang/vita_temp
 
-translations: $(TARGET).elf
+translations: fheroes2.elf
 	$(MAKE) -C files/lang
 	mkdir -p files/lang/vita_temp
 	cp files/lang/*.mo files/lang/vita_temp
 
-eboot.bin: $(TARGET).velf
-	vita-make-fself $(TARGET).velf eboot.bin
+eboot.bin: fheroes2.velf
+	vita-make-fself fheroes2.velf eboot.bin
 
 param.sfo:
-	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
+	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" -s APP_VER="$(PROJECT_VERSION)" "$(PROJECT_TITLE)" param.sfo
 
-$(TARGET).velf: $(TARGET).elf
+fheroes2.velf: fheroes2.elf
 	arm-vita-eabi-strip -g $<
 	vita-elf-create $< $@
 
-$(TARGET).elf:
-	$(MAKE) -f Makefile -C src PLATFORM=vita
-	@cp src/dist/$(TARGET) $(TARGET).elf
+fheroes2.elf:
+	$(MAKE) -C src/dist PLATFORM=vita
+	cp src/dist/fheroes2/fheroes2 fheroes2.elf
 
 clean:
-	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	@rm -rf $(TARGET).velf $(TARGET).elf $(TARGET).vpk eboot.bin param.sfo
+	rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo

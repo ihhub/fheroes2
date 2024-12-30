@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,15 +18,37 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-include $(DEVKITPRO)/libnx/switch_rules
+DEPLIBS := ../engine/libengine.a
+CCFLAGS := $(CCFLAGS) -I../../engine
 
-# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
-CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -fPIE
-LDFLAGS := $(LDFLAGS) -specs=$(DEVKITPRO)/libnx/switch.specs
-# Common flags (for both C and C++ compilers) for fheroes2 only
-CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
+DEPLIBS := $(DEPLIBS) ../thirdparty/libsmacker/libsmacker.a
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
+endif
 
-LIBS := $(LIBS) -lvorbisidec -lmodplug -lmpg123 -lopusfile -lopus -logg
+SOURCEROOT := ../../fheroes2
+SOURCEDIRS := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
+SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)
 
-# Prevent sdl2-config --cflags from running once again in the main Makefile
-SDL_FLAGS :=
+VPATH := $(SOURCEDIRS)
+
+.PHONY: all pot clean
+
+all: fheroes2 pot
+
+pot: fheroes2.pot
+
+fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+
+fheroes2.pot: $(SOURCES)
+	xgettext -d fheroes2 -C -F -k_ -k_n:1,2 -o fheroes2.pot $(sort $(SOURCES))
+	sed -i~ -e 's/, c-format//' fheroes2.pot
+
+%.o: %.cpp
+	$(CXX) -c -MD $< $(addprefix -I, $(SOURCEDIRS)) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+
+include $(wildcard *.d)
+
+clean:
+	rm -f *.d *.o fheroes2 fheroes2.pot fheroes2.pot~

@@ -167,21 +167,17 @@ namespace
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
-        okayButton.draw();
+        fheroes2::ButtonSprite buttonOk( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
+
+        buttonOk.draw();
 
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -221,7 +217,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowPassabilityRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle display of objects' passability." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
@@ -240,10 +236,9 @@ namespace Editor
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
-        auto redrawEditorMap = [&conf]() {
+        auto redrawEditor = [&conf]() {
             Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
-            editorInterface.reset();
             // Since the radar interface has a restorer we must redraw it first to avoid the restorer doing something nasty.
             editorInterface.redraw( Interface::REDRAW_RADAR );
 
@@ -253,6 +248,12 @@ namespace Editor
             }
 
             editorInterface.redraw( redrawOptions & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebuildEditor = [&redrawEditor]() {
+            Interface::EditorInterface::Get().reset();
+
+            redrawEditor();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -277,13 +278,13 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawEditorMap();
+                redrawEditor();
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebuildEditor );
 
                 action = DialogAction::Configuration;
                 break;
@@ -314,7 +315,7 @@ namespace Editor
                 conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
                 saveConfiguration = true;
 
-                redrawEditorMap();
+                redrawEditor();
 
                 action = DialogAction::Configuration;
                 break;
