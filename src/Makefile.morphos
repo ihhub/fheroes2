@@ -23,16 +23,16 @@ CC = ppc-morphos-gcc-11
 CXX = ppc-morphos-g++-11
 # Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
 AMIGADATE = $(shell date +"%-d.%-m.%Y")
-CCFLAGS := $(CCFLAGS) -noixemul -I/gg/usr/local/include -I/gg/usr/local/include/SDL2 -D__MORPHOS_SHAREDLIBS -D__STDC_LIMIT_MACROS -D__AMIGADATE__=\"$(AMIGADATE)\"
+CCFLAGS := $(CCFLAGS) -noixemul -I/gg/usr/local/include -I/gg/usr/local/include/SDL2 -D__STDC_LIMIT_MACROS -D__AMIGADATE__=\"$(AMIGADATE)\"
 LDFLAGS := -L/gg/usr/local/lib $(LDFLAGS) 
 # Common flags (for both C and C++ compilers) for fheroes2 only
 CCFLAGS_FH2 := -DTARGET_MORPHOS
-# -DNDEBUG
+
 
 LIBS := $(LIBS) -latomic
 
 ifdef FHEROES2_WITH_IMAGE
-LIBS := $(LIBS) -ljpeg -lwebp
+LIBS := $(LIBS)
 endif
 
 # Prevent sdl2-config --cflags from running once again in the main Makefile
