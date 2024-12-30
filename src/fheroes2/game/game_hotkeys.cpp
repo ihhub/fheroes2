@@ -316,6 +316,8 @@ namespace
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss hero or troop" ), fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SWAP )]
+            = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|exchange all troops" ), fheroes2::Key::KEY_S };
     }
 
     std::string getHotKeyFileContent()

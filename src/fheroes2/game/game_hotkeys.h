@@ -163,6 +163,7 @@ namespace Game
         ARMY_JOIN_STACKS,
         ARMY_UPGRADE_TROOP,
         ARMY_DISMISS,
+        ARMY_SWAP,
 
         // WARNING! Put all new event only above this line. No adding in between.
         NO_EVENT,
