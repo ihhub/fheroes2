@@ -48,14 +48,14 @@ USB mice and keyboards connected via an OTG adapter are supported.
 
 Working controls are:
 
-- Touchscreen - emulates mouse, including dragging
-- L-stick - move mouse cursor
-- R-stick/D-pad - scroll
-- A - left mouse click
-- B - Right mouse click
-- X - Escape
-- Y - Enter
-- (+) - Cast spell
-- (-) - End turn
-- R - Cycle through towns
-- L - Cycle through heroes
+* Touchscreen - emulates mouse, including dragging
+* L-stick - move mouse cursor
+* R-stick/D-pad - scroll
+* A - left mouse click
+* B - Right mouse click
+* X - Escape
+* Y - Enter
+* (+) - Cast spell
+* (-) - End turn
+* R - Cycle through towns
+* L - Cycle through heroes

@@ -21,9 +21,9 @@ is required for proper suspend/resume support (only use one at a time).
 
 ### Prerequisites
 
-- VitaSDK
-- libSDL2
-- libSDL2-mixer
+* VitaSDK
+* libSDL2
+* libSDL2-mixer
 
 To build the game just run
 
@@ -33,26 +33,26 @@ make -f Makefile.vita
 
 ## Controls
 
-- Left analog stick - Pointer movement
-- Right analog stick - Map scrolling
-- × - Left mouse button
-- ○ - Right mouse button
-- □ - End turn
-- △ - Open spellbook
-- D-Pad left - Next hero
-- D-Pad right - Next castle
-- D-Pad down - Re-visit the object that hero stands on
-- R1 - Cursor acceleration
-- SELECT - System menu
-- START - Enter
+* Left analog stick - Pointer movement
+* Right analog stick - Map scrolling
+* × - Left mouse button
+* ○ - Right mouse button
+* □ - End turn
+* △ - Open spellbook
+* D-Pad left - Next hero
+* D-Pad right - Next castle
+* D-Pad down - Re-visit the object that hero stands on
+* R1 - Cursor acceleration
+* SELECT - System menu
+* START - Enter
 
 Text input is done with D-Pad.
 
-- Left - Remove character
-- Right - Add new character
-- Down - Next character (alphabetically)
-- Up - Previous character
-- R1, L1 - Switch current character between uppercase/lowercase
+* Left - Remove character
+* Right - Add new character
+* Down - Next character (alphabetically)
+* Up - Previous character
+* R1, L1 - Switch current character between uppercase/lowercase
 
 ## Vita specific options
 
