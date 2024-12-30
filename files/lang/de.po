@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5564,6 +5564,10 @@ msgstr "Truppen aufrüsten"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "Held oder Truppe entlassen"
+
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "Truppen aufrüsten"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
