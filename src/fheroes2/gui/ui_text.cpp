@@ -481,6 +481,46 @@ namespace fheroes2
         _text += truncatedEnding;
     }
 
+    void TextInput::fitToOneRow( const int32_t maxWidth )
+    {
+        assert( maxWidth > 0 );
+        if ( maxWidth <= 0 ) {
+            return;
+        }
+
+        if ( _text.empty() ) {
+            return;
+        }
+
+        computeTextOffset( maxWidth );
+
+        const fheroes2::FontCharHandler charHandler( _fontType );
+        const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
+                                                                static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
+
+        _text = _text.substr( _textOffset, maxCharacterCount );
+    }
+
+    void TextInput::computeTextOffset( const int32_t maxWidth )
+    {
+        if ( _cursorPosition < _textOffset ) {
+            // If the cursor is to the left of the textBox
+            _textOffset = _cursorPosition;
+            return;
+        }
+
+        const fheroes2::FontCharHandler charHandler( _fontType );
+
+        int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
+                                                          static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
+        while ( _textOffset + maxCharacterCount <= _cursorPosition ) {
+            // If the cursor is to the right of the textBox
+            ++_textOffset;
+            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
+                                                      charHandler, maxWidth );
+        }
+    }
+
     void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );
