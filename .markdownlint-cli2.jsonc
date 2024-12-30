@@ -1,0 +1,28 @@
+{
+    "config": {
+        "MD013": {
+            "code_block_line_length": 170,
+            "heading_line_length": 170,
+            "line_length": 170
+        },
+
+        "MD033": {
+            "allowed_elements": [
+                "a",
+                "br",
+                "details",
+                "img",
+                "p",
+                "summary"
+            ]
+        },
+    },
+
+    "globs": [
+        "**/*.md"
+    ],
+
+    "ignores": [
+        "cmake/README_findsdl2.md"
+    ]
+}

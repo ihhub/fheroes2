@@ -21,7 +21,6 @@ You can download the precompiled tools for your operating system (OS) of choice 
 [Linux Ubuntu 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-sdl2_dev/fheroes2_tools_ubuntu_x86-64_SDL2.zip)<br>
 [Linux Ubuntu ARM 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-arm-sdl2_dev/fheroes2_tools_ubuntu_arm64_SDL2.zip)
 
-
 Here is a list and short description of the various graphical artist tools:
 
 - extractor
@@ -37,6 +36,7 @@ This tool converts the various graphical assets contained within the ICNs into P
 This tool generates a PNG or BMP file from the palette file `KB.PAL`. It displays it as 16x16 tiles of 16 pixels each.
 Some colors in the game are used for the cycling animation. They are marked in the generated image by a black area in
 the top-left corner on a tile. Use these colors only if the animation is a requirement:
+
 - 214, 215, 216, 217
 - 218, 219, 220, 221
 - 231, 232, 233, 234, 235

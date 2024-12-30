@@ -1,6 +1,7 @@
 # PlayStation Vita port of [**fheroes2**](README.md) project
 
 ## Install
+
 Install fheroes2.vpk to your Vita.
 
 fheroes2 requires data files from the original Heroes of Might and Magic II.
@@ -17,17 +18,21 @@ inside "ux0:data/fheroes2/heroes2/anim/" folder.
 is required for proper suspend/resume support (only use one at a time).
 
 ## Building
+
 ### Prerequisites
+
 - VitaSDK
 - libSDL2
 - libSDL2-mixer
 
 To build the game just run
-```
+
+```sh
 make -f Makefile.vita
 ```
 
 ## Controls
+
 - Left analog stick - Pointer movement
 - Right analog stick - Map scrolling
 - × - Left mouse button
