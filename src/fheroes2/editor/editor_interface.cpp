@@ -44,6 +44,8 @@
 #include "editor_map_specs_window.h"
 #include "editor_object_popup_window.h"
 #include "editor_save_map_window.h"
+#include "editor_secondary_skill_selection.h"
+#include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
@@ -71,6 +73,7 @@
 #include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
@@ -349,6 +352,9 @@ namespace
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
                         mapFormat.adventureMapEventMetadata.erase( objectIter->id );
                         break;
+                    case MP2::OBJ_PYRAMID:
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
+                        break;
                     case MP2::OBJ_SIGN:
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
@@ -356,6 +362,9 @@ namespace
                     case MP2::OBJ_SPHINX:
                         assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
                         mapFormat.sphinxMetadata.erase( objectIter->id );
+                        break;
+                    case MP2::OBJ_WITCHS_HUT:
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
                         break;
                     default:
                         break;
@@ -384,6 +393,18 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    if ( objectType == MP2::OBJ_RESOURCE ) {
+                        mapFormat.standardMetadata.erase( objectIter->id );
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
                     // We need to check if the object being removed is a River Delta, and if so, use that data to update the nearby Stream correctly.
                     const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( objectIter->group, static_cast<int32_t>( objectIter->index ) );
@@ -395,6 +416,25 @@ namespace
                         Maps::updateStreamsToDeltaConnection( mapFormat, static_cast<int32_t>( mapTileIndex ), riverDeltaDirection );
                     }
 
+                    needRedraw = true;
+                }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    switch ( objectType ) {
+                    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+                    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+                        // We cannot assert non-existing metadata as these objects could have been created by an older Editor version.
+                        mapFormat.selectionObjectMetadata.erase( objectIter->id );
+                        break;
+                    default:
+                        break;
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
                 else {
@@ -746,6 +786,10 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         _gameArea.SetUpdateCursor();
+
+        // The cursor parameters may contain values from a previously edited map that are not suitable for this one. Reset them.
+        _tileUnderCursor = -1;
+        _areaSelectionStartTileId = -1;
 
         uint32_t redrawFlags = REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER;
         if ( conf.isEditorPassabilityEnabled() ) {
@@ -1290,6 +1334,32 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                    int32_t resourceCount = 0;
+
+                    auto resourceMetadata = _mapFormat.standardMetadata.find( object.id );
+                    if ( resourceMetadata != _mapFormat.standardMetadata.end() ) {
+                        resourceCount = resourceMetadata->second.metadata[0];
+                    }
+                    else {
+                        // This could be a corrupted or older format map. Add missing metadata into it. This action should be outside action manager scope.
+                        _mapFormat.standardMetadata[object.id] = { 0, 0, 0 };
+                    }
+
+                    const int32_t resourceType = static_cast<int32_t>( objectInfo.metadata[0] );
+
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string str = _( "Set %{resource-type} Count" );
+                    StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
+
+                    // We cannot support more than 6 digits in the dialog due to its UI element size.
+                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
+                        action.commit();
+                    }
+                }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                         assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
@@ -1338,6 +1408,66 @@ namespace Interface
                     Maps::Map_Format::SphinxMetadata newMetadata = originalMetadata;
 
                     if ( Editor::openSphinxWindow( newMetadata, _mapFormat.mainLanguage ) && newMetadata != originalMetadata ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    int spellLevel = 0;
+                    if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
+                        spellLevel = 1;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                        spellLevel = 2;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                        spellLevel = 3;
+                    }
+                    else {
+                        assert( 0 );
+                        spellLevel = 1;
+                    }
+
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_WITCHS_HUT ) {
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    if ( Editor::openSecondarySkillSelectionWindow( MP2::StringObject( objectType ), 1, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        originalMetadata = std::move( newMetadata );
+                        action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_PYRAMID ) {
+                    if ( _mapFormat.selectionObjectMetadata.find( object.id ) == _mapFormat.selectionObjectMetadata.end() ) {
+                        _mapFormat.selectionObjectMetadata[object.id] = {};
+                    }
+
+                    auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
+                    auto newMetadata = originalMetadata;
+
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), 5, newMetadata.selectedItems )
+                         && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
@@ -2024,7 +2154,7 @@ namespace Interface
             ++objectsReplaced;
         }
 
-        if ( replaceKey( _mapFormat.shrineMetadata, object.id, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.selectionObjectMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 

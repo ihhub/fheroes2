@@ -4247,7 +4247,14 @@ namespace
         case ICN::OBJNARTI:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 206 ) {
-                // If we have the Price of Loyalty assets we make a map sprite for the Magic Book artifact.
+                // These are the Price of Loyalty assets.
+
+                // Spell Scroll has an invalid offset by X axis.
+                if ( _icnVsSprite[id][173].width() == 21 ) {
+                    _icnVsSprite[id][173].setPosition( 2, _icnVsSprite[id][173].y() );
+                }
+
+                // Make a map sprite for the Magic Book artifact.
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
@@ -5100,14 +5107,53 @@ namespace
             LoadOriginalICN( id );
             auto & images = _icnVsSprite[id];
             if ( images.size() == 218 ) {
-                // Add 2 extra river deltas. Each delta has 7 parts.
-                images.resize( 218 + 14 );
+                // Expand the existing set of Adventure Map objects:
+                // - 2 extra River Delta objects. Each object has 7 image parts.
+                // - 1 new Stone Liths with 3 image parts.
+                // - 3 new variants of Observation Tower object. In total, 6 new image parts.
+                images.resize( 218 + ( 7 * 2 ) + 3 + 6 );
 
+                // 2 River Deltas.
                 for ( size_t i = 0; i < 14; ++i ) {
                     images[218 + i].resize( images[i].height(), images[i].width() );
                     fheroes2::Transpose( images[i], images[218 + i] );
                     images[218 + i].setPosition( images[i].y(), images[i].x() );
                 }
+
+                // 1 Stone Liths.
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "circular_stone_liths_center.image", temp );
+
+                images[232].resize( 32, 32 );
+                images[232].reset();
+                Copy( temp, 0, 0, images[232], 0, 0, temp.width(), temp.height() );
+                Copy( images[116], 0, temp.height(), images[232], 0, temp.height(), images[116].width(), images[116].height() - temp.height() );
+
+                fheroes2::h2d::readImage( "circular_stone_liths_left.image", images[233] );
+                fheroes2::h2d::readImage( "circular_stone_liths_top.image", images[234] );
+
+                // Generic Observation Tower.
+                images[235] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_generic_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[235], 0, temp.y() - images[235].y(), temp.width(), temp.height() );
+
+                // Desert Observation Tower.
+                images[236] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_desert_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[236], 0, temp.y() - images[236].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_desert_right_part.image", images[237] );
+
+                // Snow Observation Tower.
+                images[238] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_snow_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[238], 0, temp.y() - images[238].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_snow_right_part.image", images[239] );
+
+                images[240] = images[198];
+                fheroes2::h2d::readImage( "observation_tower_snow_top_part.image", temp );
+                Blit( temp, 0, 0, images[240], 0, 0, temp.width(), temp.height() );
             }
 
             return true;

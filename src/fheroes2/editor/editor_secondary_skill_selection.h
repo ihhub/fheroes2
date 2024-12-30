@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +20,11 @@
 
 #pragma once
 
-namespace Dialog
+#include <cstdint>
+#include <string>
+#include <vector>
+
+namespace Editor
 {
-    // Returns true if the screen resolution has been changed, otherwise returns false.
-    bool SelectResolution();
+    bool openSecondarySkillSelectionWindow( std::string title, const int skillLevel, std::vector<int32_t> & selectedSkills );
 }

@@ -22,8 +22,8 @@ your Heroes 2 installation directory.
 
 ## Controls
 To simulate a right-click to get info on various items, you need to first touch and keep touching on the item of interest
-and then touch anywhere else on the screen. You can then remove your first finger from the screen and keep viewing the info
-on the item.
+and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen
+and keep viewing the information on the item.
 
 By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.
@@ -33,6 +33,10 @@ confirmed. The first touch event just places the cursor at the touch point, disp
 performed (the cell/cells to be moved to, the angle of attack and the cells subject to attack, the spell and the cells
 affected by this spell, potential damage, and so on). The second touch event is confirmatory, and performs the corresponding
 action if and only if this action exactly corresponds to the action that the first touch demonstrates.
+
+To make it easier to select the angle of attack on touchscreens, you can "draw" the angle by swiping your finger from the cell you
+intend to attack from, to the cell occupied by the enemy unit. Next, you should remove your finger from the screen, double-check
+your planned attack, and then confirm the action by touching the target cell with your finger again.
 
 ## Android specific notes
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the

@@ -952,11 +952,15 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
         return false;
     }
 
-    if ( spell == Spell::EARTHQUAKE && !castle ) {
-        if ( msg ) {
-            *msg = _( "That spell will have no effect!" );
+    if ( spell == Spell::EARTHQUAKE ) {
+        if ( castle == nullptr ) {
+            if ( msg ) {
+                *msg = _( "That spell will have no effect!" );
+            }
+            return true;
         }
-        return true;
+
+        return false;
     }
 
     if ( spell.isSummon() ) {

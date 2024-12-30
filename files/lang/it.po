@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 01:42+0000\n"
+"POT-Creation-Date: 2024-12-21 09:39+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4014,6 +4014,10 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Tira a %{monster}"
+
+#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Artefatto estremo casuale"
 
@@ -5411,50 +5415,32 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Il Team di fheroes2 Resurrection presenta"
 
-msgid "Greetings!"
-msgstr "Saluti!"
-
 #, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
 
-msgid "Please Remember"
-msgstr "Non Dimenticare"
-
-# Needs extra whitespace to avoid yellow word splitting
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Puoi sempre modificare la risoluzione cliccando sulla  "
-
-msgid "door"
-msgstr "porta"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-msgid "NEW GAME"
-msgstr ""
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
+msgid "Greetings!"
+msgstr "Saluti!"
 
 #, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -11254,6 +11240,19 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Please Remember"
+#~ msgstr "Non Dimenticare"
+
+# Needs extra whitespace to avoid yellow word splitting
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Puoi sempre modificare la risoluzione cliccando sulla  "
+
+#~ msgid "door"
+#~ msgstr "porta"
 
 #~ msgid "Warning!"
 #~ msgstr "Attenzione!"
