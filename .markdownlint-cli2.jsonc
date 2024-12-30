@@ -1,20 +1,21 @@
 {
     "config": {
-        "MD003": {
+        "default": true,
+        "heading-style": {
             "style": "atx"
         },
-        "MD004": {
+        "ul-style": {
             "style": "asterisk"
         },
-        "MD009": {
+        "no-trailing-spaces": {
             "strict": true
         },
-        "MD013": {
+        "line-length": {
             "code_block_line_length": 170,
             "heading_line_length": 170,
             "line_length": 170
         },
-        "MD033": {
+        "no-inline-html": {
             "allowed_elements": [
                 "a",
                 "details",
@@ -23,19 +24,19 @@
                 "summary"
             ]
         },
-        "MD046": {
+        "code-block-style": {
             "style": "fenced"
         },
-        "MD048": {
+        "code-fence-style": {
             "style": "backtick"
         },
-        "MD049": {
+        "emphasis-style": {
             "style": "underscore"
         },
-        "MD050": {
+        "strong-style": {
             "style": "asterisk"
         },
-        "MD055": {
+        "table-pipe-style": {
             "style": "leading_and_trailing"
         }
     },
