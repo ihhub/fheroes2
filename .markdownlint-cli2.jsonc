@@ -22,6 +22,21 @@
                 "p",
                 "summary"
             ]
+        },
+        "MD046": {
+            "style": "fenced"
+        },
+        "MD048": {
+            "style": "backtick"
+        },
+        "MD049": {
+            "style": "underscore"
+        },
+        "MD050": {
+            "style": "asterisk"
+        },
+        "MD055": {
+            "style": "leading_and_trailing"
         }
     },
     "globs": [
