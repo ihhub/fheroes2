@@ -156,6 +156,9 @@ namespace Maps
             return {};
         }
 
+        // This method is mostly used for Text Support mode or debug purposes.
+        std::string getSummary() const;
+
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
