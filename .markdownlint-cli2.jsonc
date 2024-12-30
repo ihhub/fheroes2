@@ -1,5 +1,11 @@
 {
     "config": {
+        "MD003": {
+            "style": "atx"
+        },
+        "MD004": {
+            "style": "asterisk"
+        },
         "MD009": {
             "strict": true
         },
@@ -11,7 +17,6 @@
         "MD033": {
             "allowed_elements": [
                 "a",
-                "br",
                 "details",
                 "img",
                 "p",
