@@ -118,7 +118,7 @@ namespace
         textInput.keepLineTrailingSpaces();
         textInput.fitToOneRow( maxFileNameWidth );
 
-        textInput.draw( field.x + 4 + (( maxFileNameWidth - textInput.width() ) / 2), field.y + 4, display );
+        textInput.draw( field.x + 4 + ( ( maxFileNameWidth - textInput.width() ) / 2 ), field.y + 4, display );
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
