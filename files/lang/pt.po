@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-24 05:02+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2024-12-23 08:39-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -5363,6 +5363,10 @@ msgstr "atualizar tropa"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "dispensar herói ou tropa"
+
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "atualizar tropa"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -5506,6 +5506,10 @@ msgstr "Améliorer une troupe"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "Renvoyer un héros ou une troupe"
+
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "Améliorer une troupe"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
