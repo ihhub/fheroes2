@@ -5,7 +5,6 @@
             "heading_line_length": 170,
             "line_length": 170
         },
-
         "MD033": {
             "allowed_elements": [
                 "a",
@@ -15,13 +14,11 @@
                 "p",
                 "summary"
             ]
-        },
+        }
     },
-
     "globs": [
         "**/*.md"
     ],
-
     "ignores": [
         "cmake/README_findsdl2.md"
     ]
