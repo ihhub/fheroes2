@@ -102,7 +102,7 @@ namespace
         text.draw( dstx + 105 - text.width() / 2, dsty, output );
     }
 
-    void redrawTextInputField( fheroes2::TextInput & currentFilename, const std::string & filename, const fheroes2::Rect & field, const size_t cursorLocation,
+    void redrawTextInputField( fheroes2::TextInput & textInput, const std::string & filename, const fheroes2::Rect & field, const size_t cursorLocation,
                                const bool isEditing )
     {
         if ( filename.empty() ) {
@@ -111,14 +111,14 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        currentFilename.set( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
-        currentFilename.setCursorPosition( cursorLocation );
+        textInput.set( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
+        textInput.setCursorPosition( cursorLocation );
 
         // Do not ignore spaces at the end.
-        currentFilename.keepLineTrailingSpaces();
-        currentFilename.fitToOneRow( maxFileNameWidth );
+        textInput.keepLineTrailingSpaces();
+        textInput.fitToOneRow( maxFileNameWidth );
 
-        currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
+        textInput.draw( field.x + 4 + (( maxFileNameWidth - textInput.width() ) / 2), field.y + 4, display );
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
