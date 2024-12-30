@@ -31,7 +31,7 @@
 #include <list>
 #include <locale>
 #include <map>
-#include <ostream>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
@@ -631,6 +631,19 @@ uint32_t Maps::FileInfo::ConditionLoss() const
 bool Maps::FileInfo::WinsCompAlsoWins() const
 {
     return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
+}
+
+std::string Maps::FileInfo::getSummary() const
+{
+    std::ostringstream os;
+
+    os << "Map name: " << name << std::endl
+       << "File name: " << filename << std::endl
+       << "Description: " << description << std::endl
+       << "Size: " << width << "x" << height << std::endl
+       << "Difficulty: " << Difficulty::String( difficulty ) << std::endl;
+
+    return os.str();
 }
 
 OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
