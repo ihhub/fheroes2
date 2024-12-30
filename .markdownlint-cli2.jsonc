@@ -1,5 +1,8 @@
 {
     "config": {
+        "MD009": {
+            "strict": true
+        },
         "MD013": {
             "code_block_line_length": 170,
             "heading_line_length": 170,
