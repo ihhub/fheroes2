@@ -762,10 +762,9 @@ namespace
         if ( isFullInfo ) {
             const int32_t morale = hero.GetMorale();
             fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
-            if(hero.GetArmy().AllTroopsAreUndead())
-            {
-                fheroes2::ApplyPalette(sprite, PAL::GetPalette(PAL::PaletteType::GRAY));
-                fheroes2::ApplyPalette(sprite, PAL::GetPalette(PAL::PaletteType::DARKENING));
+            if ( hero.GetArmy().AllTroopsAreUndead() ) {
+                fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             }
             uint32_t count = ( 0 == morale ? 1 : std::abs( morale ) );
             dst_pt.x = cur_rt.x + 10;
