@@ -22,21 +22,23 @@
 
 #include <cassert>
 #include <memory>
+#include "logging.h"
 
 namespace MultiThreading
 {
     void AsyncManager::createWorker()
     {
+#if !defined( __EMSCRIPTEN__ ) // disable pthread for web target
         if ( !_worker ) {
             _runFlag = true;
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
-
             {
                 std::unique_lock<std::mutex> lock( _mutex );
 
                 _masterNotification.wait( lock, [this] { return !_runFlag; } );
             }
         }
+#endif
     }
 
     void AsyncManager::stopWorker()
@@ -59,8 +61,15 @@ namespace MultiThreading
     void AsyncManager::notifyWorker()
     {
         _runFlag = true;
-
+#if !defined( __EMSCRIPTEN__ )
         _workerNotification.notify_all();
+#else
+        if ( this->_exitFlag ) return;
+        const bool moreTasks = this->prepareTask();
+        if ( !moreTasks ) this->_runFlag = false;
+
+        this->executeTask();
+#endif
     }
 
     void AsyncManager::_workerThread( AsyncManager * manager )

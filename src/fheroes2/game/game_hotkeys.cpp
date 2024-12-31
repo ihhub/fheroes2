@@ -51,6 +51,10 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 namespace
 {
     struct HotKeyEventInfo
@@ -463,6 +467,11 @@ void Game::HotKeySave()
 
     const std::string & data = getHotKeyFileContent();
     file.write( data.data(), data.size() );
+#ifdef __EMSCRIPTEN__
+    EM_ASM(
+        FS.syncfs( err => err && console.warn( "Error saving:", err ) )
+    );
+#endif
 }
 
 void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
