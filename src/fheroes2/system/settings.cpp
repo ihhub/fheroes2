@@ -47,6 +47,10 @@
 #include "ui_language.h"
 #include "version.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
 
@@ -358,7 +362,9 @@ bool Settings::Save( const std::string_view fileName ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
-
+#ifdef __EMSCRIPTEN__
+    EM_ASM( FS.syncfs( err = > err && console.warn( "Error saving:", err ) ) );
+#endif
     return true;
 }
 

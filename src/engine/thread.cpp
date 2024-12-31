@@ -29,13 +29,14 @@ namespace MultiThreading
     {
         if ( !_worker ) {
             _runFlag = true;
+#if !defined( __EMSCRIPTEN__ ) // disable pthread for web target
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
-
             {
                 std::unique_lock<std::mutex> lock( _mutex );
 
                 _masterNotification.wait( lock, [this] { return !_runFlag; } );
             }
+#endif
         }
     }
 

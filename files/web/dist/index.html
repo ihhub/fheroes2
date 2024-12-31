@@ -1,0 +1,60 @@
+<html lang="en">
+  <head>
+    <title>fheroes2</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progress.min.js" integrity="sha512-CklrzCqwODBOEJHJq73SZrgWC7xcxssgg5M1xokosfDDz2/nLTCuMDyc51gbJtb8DriV4EYjJSlklPH5Ejn9XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progressjs.min.css" integrity="sha512-ovRFHsWpnYUBNZd/8CmbaWAKBDO8xb0l5Y8PdIae1O5RXO2QyU3CZGNzuYuE0CQHKazIzWMQpnTn26WpPjexfw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body { margin: 0; height: 0; }
+        canvas {
+            height: 100vh;
+            width: 100vw;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+  </head>
+<body>
+  <canvas id="canvas" width="640" height="400"></canvas>
+  <script>
+    const progressBar = progressJs("#canvas").setOptions({
+        theme: 'blueOverlayRadiusWithPercentBar',
+        overlayMode: true,
+        considerTransition: true
+    });
+    const canvas = document.querySelector('canvas');
+    canvas.oncontextmenu = event => event.preventDefault();
+    Object.assign(window, { Module: {
+      preRun: [
+        () => Object.assign(window.ENV, {
+          FHEROES2_DATA: `data`,
+          HOME: '/fheroes2'
+        }),
+        () => {
+          addRunDependency('syncfs');
+          FS.mkdir('/fheroes2');
+          FS.mount(IDBFS, { root: '/' }, '/fheroes2');
+          FS.syncfs(true, (err) => {
+            if (err) throw err;
+            console.log('IDBFS Synced')
+            removeRunDependency('syncfs')
+          });
+        }
+      ],
+      setStatus: status => {
+        const dlProgressRE = /(?<progress>\d+)\/(?<total>\d+)/ig;
+        if (!status || !dlProgressRE.test(status)) {
+          if ((status??'').startsWith('Downloading data')) progressBar.start();
+          return;
+        }
+        dlProgressRE.lastIndex = 0;
+        const { groups: { progress, total } } = [...status.matchAll(dlProgressRE)][0];
+        const done = Math.round(progress/total*100);
+        progressBar.set(done);
+        if (100 === done) progressBar.end();
+      },
+      canvas
+    } } );
+
+    document.head.append(Object.assign(document.createElement('script'), { src: './fheroes2.js' }));
+  </script>
+</body>
