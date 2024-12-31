@@ -365,11 +365,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             Log.e( "fheroes2", "Failed to import save files.", ex );
 
             ( new AlertDialog.Builder( this ) )
-                    .setTitle( R.string.activity_save_file_manager_import_error_title )
-                    .setMessage( R.string.activity_save_file_manager_import_error_message )
-                    .setPositiveButton( R.string.activity_save_file_manager_import_error_positive_btn_text, ( dialog, which ) -> {} )
-                    .create()
-                    .show();
+                .setTitle( R.string.activity_save_file_manager_import_error_title )
+                .setMessage( R.string.activity_save_file_manager_import_error_message )
+                .setPositiveButton( R.string.activity_save_file_manager_import_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
         }
     }
 
@@ -394,11 +394,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             Log.e( "fheroes2", "Failed to export save files.", ex );
 
             ( new AlertDialog.Builder( this ) )
-                    .setTitle( R.string.activity_save_file_manager_export_error_title )
-                    .setMessage( R.string.activity_save_file_manager_export_error_message )
-                    .setPositiveButton( R.string.activity_save_file_manager_export_error_positive_btn_text, ( dialog, which ) -> {} )
-                    .create()
-                    .show();
+                .setTitle( R.string.activity_save_file_manager_export_error_title )
+                .setMessage( R.string.activity_save_file_manager_export_error_message )
+                .setPositiveButton( R.string.activity_save_file_manager_export_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
         }
     }
 

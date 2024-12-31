@@ -175,11 +175,11 @@ public final class ToolsetActivity extends AppCompatActivity
             Log.e( "fheroes2", "Failed to extract HoMM2 assets.", ex );
 
             ( new AlertDialog.Builder( this ) )
-                    .setTitle( R.string.activity_toolset_extract_homm2_assets_error_title )
-                    .setMessage( R.string.activity_toolset_extract_homm2_assets_error_message )
-                    .setPositiveButton( R.string.activity_toolset_extract_homm2_assets_error_positive_btn_text, ( dialog, which ) -> {} )
-                    .create()
-                    .show();
+                .setTitle( R.string.activity_toolset_extract_homm2_assets_error_title )
+                .setMessage( R.string.activity_toolset_extract_homm2_assets_error_message )
+                .setPositiveButton( R.string.activity_toolset_extract_homm2_assets_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
         }
     }
 

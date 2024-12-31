@@ -339,11 +339,11 @@ public final class MapFileManagerActivity extends AppCompatActivity
             Log.e( "fheroes2", "Failed to import map files.", ex );
 
             ( new AlertDialog.Builder( this ) )
-                    .setTitle( R.string.activity_map_file_manager_import_error_title )
-                    .setMessage( R.string.activity_map_file_manager_import_error_message )
-                    .setPositiveButton( R.string.activity_map_file_manager_import_error_positive_btn_text, ( dialog, which ) -> {} )
-                    .create()
-                    .show();
+                .setTitle( R.string.activity_map_file_manager_import_error_title )
+                .setMessage( R.string.activity_map_file_manager_import_error_message )
+                .setPositiveButton( R.string.activity_map_file_manager_import_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
         }
     }
 
@@ -368,11 +368,11 @@ public final class MapFileManagerActivity extends AppCompatActivity
             Log.e( "fheroes2", "Failed to export map files.", ex );
 
             ( new AlertDialog.Builder( this ) )
-                    .setTitle( R.string.activity_map_file_manager_export_error_title )
-                    .setMessage( R.string.activity_map_file_manager_export_error_message )
-                    .setPositiveButton( R.string.activity_map_file_manager_export_error_positive_btn_text, ( dialog, which ) -> {} )
-                    .create()
-                    .show();
+                .setTitle( R.string.activity_map_file_manager_export_error_title )
+                .setMessage( R.string.activity_map_file_manager_export_error_message )
+                .setPositiveButton( R.string.activity_map_file_manager_export_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
         }
     }
 
