@@ -332,7 +332,19 @@ public final class MapFileManagerActivity extends AppCompatActivity
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void importButtonClicked( final View view )
     {
-        zipFileChooserLauncher.launch( "application/zip" );
+        try {
+            zipFileChooserLauncher.launch( "application/zip" );
+        }
+        catch ( final Exception ex ) {
+            Log.e( "fheroes2", "Failed to import map files.", ex );
+
+            ( new AlertDialog.Builder( this ) )
+                    .setTitle( R.string.activity_map_file_manager_import_error_title )
+                    .setMessage( R.string.activity_map_file_manager_import_error_message )
+                    .setPositiveButton( R.string.activity_map_file_manager_import_error_positive_btn_text, ( dialog, which ) -> {} )
+                    .create()
+                    .show();
+        }
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -349,7 +361,19 @@ public final class MapFileManagerActivity extends AppCompatActivity
             return;
         }
 
-        zipFileLocationChooserLauncher.launch( getString( R.string.activity_map_file_manager_suggested_zip_file_name ) );
+        try {
+            zipFileLocationChooserLauncher.launch( getString( R.string.activity_map_file_manager_suggested_zip_file_name ) );
+        }
+        catch ( final Exception ex ) {
+            Log.e( "fheroes2", "Failed to export map files.", ex );
+
+            ( new AlertDialog.Builder( this ) )
+                    .setTitle( R.string.activity_map_file_manager_export_error_title )
+                    .setMessage( R.string.activity_map_file_manager_export_error_message )
+                    .setPositiveButton( R.string.activity_map_file_manager_export_error_positive_btn_text, ( dialog, which ) -> {} )
+                    .create()
+                    .show();
+        }
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
