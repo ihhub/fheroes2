@@ -1207,17 +1207,12 @@ int Army::GetMoraleModificator( std::string * strs ) const
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
-    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
-            allUndead = allUndead && troop->isUndead();
         }
-
-    if ( allUndead )
-        return Morale::NORMAL;
 
     int result = Morale::NORMAL;
 
