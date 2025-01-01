@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_OBJECTS_H
-#define H2MAPS_OBJECTS_H
+
+#pragma once
 
 #include <cstdint>
 #include <initializer_list>
@@ -155,5 +155,3 @@ IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj );
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj );
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj );
-
-#endif
