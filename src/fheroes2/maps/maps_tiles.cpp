@@ -735,16 +735,17 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // Check a tile below which can affect the passability.
     if ( !isValidDirection( _index, Direction::BOTTOM ) ) {
         // This object "touches" the bottom part of the map. Mark is as inaccessible.
         _tilePassabilityDirections = 0;
         return;
     }
 
-    const Tile & bottomTile = world.getTile( GetDirectionIndex( _index, Direction::BOTTOM ) );
-    // If an object locates on land and the bottom tile is water mark the current tile as impassable. It's done for cases that a hero won't be able to
-    // disembark on the tile.
-    if ( !isWater() && bottomTile.isWater() ) {
+    const Tile & belowTile = world.getTile( GetDirectionIndex( _index, Direction::BOTTOM ) );
+    // If an object locates on land and the below tile is water, mark the current tile as impassable.
+    // It's done for cases that a hero won't be able to disembark on the tile.
+    if ( !isWater() && belowTile.isWater() ) {
         _tilePassabilityDirections = 0;
         return;
     }
@@ -765,7 +766,7 @@ void Maps::Tile::updatePassability()
     }
 
     for ( const uint32_t objectId : tileUIDs ) {
-        if ( bottomTile.doesObjectExist( objectId ) ) {
+        if ( belowTile.doesObjectExist( objectId ) ) {
             _tilePassabilityDirections = 0;
             return;
         }
@@ -780,17 +781,17 @@ void Maps::Tile::updatePassability()
         return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
     } );
 
-    const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
+    const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( belowTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
     // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
-         && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
-        const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
-        const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
+    if ( !singleObjectTile && !isDetachedObject() && ( belowTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
+         && !belowTile._mainObjectPart.isPassabilityTransparent() ) {
+        const MP2::MapObjectType belowTileObjectType = belowTile.getMainObjectType( false );
+        const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( belowTileObjectType );
 
-        if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
-                if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
+        if ( MP2::isOffGameActionObject( belowTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
+            if ( ( belowTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+                if ( isShortObject( belowTileObjectType ) || isShortObject( correctedObjectType ) ) {
                     _tilePassabilityDirections &= ~Direction::BOTTOM;
                 }
                 else {
@@ -799,9 +800,9 @@ void Maps::Tile::updatePassability()
                 }
             }
         }
-        else if ( isShortObject( bottomTileObjectType )
-                  || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
-                       && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+        else if ( isShortObject( belowTileObjectType )
+                  || ( !belowTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
+                       && ( isCombinedObject( objectType ) || isCombinedObject( belowTileObjectType ) ) ) ) {
             _tilePassabilityDirections &= ~Direction::BOTTOM;
         }
         else {
@@ -1700,43 +1701,29 @@ bool Maps::Tile::containsSprite( const MP2::ObjectIcnType objectIcnType, const u
 
 bool Maps::Tile::isAnyTallObjectOnTile() const
 {
-    // TODO: possibly cache the output of the method.
     if ( !isValidDirection( _index, Direction::TOP ) ) {
-        // This tile is on the first row. Any object on this tile cannot be tall.
+        // This tile is on a first row. Any object on this tile cannot be tall.
         return false;
     }
 
-    std::vector<uint32_t> tileUIDs;
-    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainObjectPart._uid != 0 && !_mainObjectPart.isPassabilityTransparent() ) {
-        tileUIDs.emplace_back( _mainObjectPart._uid );
+    // An object is considered a tall if it has a top part.
+    // So, we need to get all object UIDs at this tile and later verify if any of object part of a top layer for a tile above contains the same UID.
+    std::vector<uint32_t> objectUids;
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !_mainObjectPart.isPassabilityTransparent() ) {
+        objectUids.emplace_back( _mainObjectPart._uid );
     }
 
     for ( const auto & part : _groundObjectPart ) {
-        if ( part._uid != 0 && !part.isPassabilityTransparent() ) {
-            tileUIDs.emplace_back( part._uid );
-        }
-    }
-
-    for ( const auto & part : _topObjectPart ) {
-        if ( part._uid != 0 ) {
-            tileUIDs.emplace_back( part._uid );
+        if ( !part.isPassabilityTransparent() ) {
+            objectUids.emplace_back( part._uid );
         }
     }
 
     const Tile & topTile = world.getTile( GetDirectionIndex( _index, Direction::TOP ) );
-    for ( const uint32_t tileUID : tileUIDs ) {
-        if ( topTile._mainObjectPart._uid == tileUID && !isObjectPartShadow( topTile._mainObjectPart ) ) {
-            return true;
-        }
-
-        for ( const auto & part : topTile._groundObjectPart ) {
-            if ( part._uid == tileUID && !isObjectPartShadow( part ) ) {
-                return true;
-            }
-        }
-
+    for ( const uint32_t uid : objectUids ) {
+        // Check only object parts located at the top layer.
         for ( const auto & part : topTile._topObjectPart ) {
-            if ( part._uid == tileUID ) {
+            if ( part._uid == uid ) {
                 return true;
             }
         }
