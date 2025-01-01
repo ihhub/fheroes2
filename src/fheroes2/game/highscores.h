@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HIGHSCORES_H
-#define H2HIGHSCORES_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -125,5 +124,3 @@ namespace fheroes2
     OStreamBase & operator<<( OStreamBase & stream, const HighscoreData & data );
     IStreamBase & operator>>( IStreamBase & stream, HighscoreData & data );
 }
-
-#endif

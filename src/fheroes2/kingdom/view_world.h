@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2VIEWWORLD_H
-#define H2VIEWWORLD_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -88,5 +87,3 @@ public:
         fheroes2::Rect _visibleROI;
     };
 };
-
-#endif
