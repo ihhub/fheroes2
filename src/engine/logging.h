@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2LOGGING_H
-#define H2LOGGING_H
+#pragma once
 
 #include <iostream>
 #include <sstream> // IWYU pragma: keep
@@ -191,5 +190,3 @@ namespace Logging
         return;                                                                                                                                                          \
     }                                                                                                                                                                    \
     const Logging::TextSupportLogger _temp_logger; // The name was chosen on purpose to avoid collisions with other variable names within a code block.
-
-#endif // H2LOGGING_H
