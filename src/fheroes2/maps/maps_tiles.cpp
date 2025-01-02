@@ -724,13 +724,7 @@ void Maps::Tile::updatePassability()
         return;
     }
 
-    if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        // The main object part is not set. Ignore the tile.
-        // TODO: this is wrong as tiles can have object parts at the ground layer. Fix it!
-        return;
-    }
-
-    if ( _mainObjectPart.isPassabilityTransparent() ) {
+    if ( isPassabilityTransparent() ) {
         // This object does not affect passability.
         return;
     }
@@ -771,6 +765,11 @@ void Maps::Tile::updatePassability()
         }
     }
 
+    // If the tile below has an unblocked passability to top, we should ignore it.
+    if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
+        return;
+    }
+
     // Count how many objects are there excluding shadows, roads and river streams.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
         if ( isObjectPartShadow( part ) ) {
@@ -783,20 +782,16 @@ void Maps::Tile::updatePassability()
     const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
     // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
-         && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
+    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
         const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
         if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
-                if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
-                    _tilePassabilityDirections &= ~Direction::BOTTOM;
-                }
-                else {
-                    _tilePassabilityDirections = 0;
-                    return;
-                }
+            if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
+                _tilePassabilityDirections &= ~Direction::BOTTOM;
+            }
+            else {
+                _tilePassabilityDirections = 0;
             }
         }
         else if ( isShortObject( bottomTileObjectType )
@@ -806,7 +801,6 @@ void Maps::Tile::updatePassability()
         }
         else {
             _tilePassabilityDirections = 0;
-            return;
         }
     }
 }
@@ -1035,7 +1029,7 @@ bool Maps::Tile::isPassabilityTransparent() const
         }
     }
 
-    return _mainObjectPart.isPassabilityTransparent();
+    return _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent();
 }
 
 bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const
@@ -1299,6 +1293,8 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
          && ( tile._mainObjectPart.icnIndex == 105 || tile._mainObjectPart.icnIndex == 106 ) ) {
         tile._topObjectPart.emplace_back();
         std::swap( tile._topObjectPart.back(), tile._mainObjectPart );
+        // Sorting ground object parts is a must after making the main object part empty!
+        tile.sortObjectParts();
 
         return;
     }
