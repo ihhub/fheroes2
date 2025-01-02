@@ -735,7 +735,7 @@ void Maps::Tile::updatePassability()
         return;
     }
 
-    // Check a tile below which can affect the passability.
+    // Check the tile located below the object, which may affect the passability.
     if ( !isValidDirection( _index, Direction::BOTTOM ) ) {
         // This object "touches" the bottom part of the map. Mark is as inaccessible.
         _tilePassabilityDirections = 0;
@@ -743,8 +743,8 @@ void Maps::Tile::updatePassability()
     }
 
     const Tile & bottomTile = world.getTile( GetDirectionIndex( _index, Direction::BOTTOM ) );
-    // If an object locates on land and the below tile is water, mark the current tile as impassable.
-    // It's done for cases that a hero won't be able to disembark on the tile.
+    // If an object is located on land and the tile below it is a water tile, then mark the current tile as impassable.
+    // It's done for cases when a hero won't be able to disembark on the tile.
     if ( !isWater() && bottomTile.isWater() ) {
         _tilePassabilityDirections = 0;
         return;
