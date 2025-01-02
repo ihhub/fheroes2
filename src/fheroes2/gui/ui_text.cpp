@@ -27,6 +27,7 @@
 
 #include "agg_image.h"
 #include "icn.h"
+#include "logging.h"
 #include "ui_language.h"
 
 namespace
@@ -484,41 +485,41 @@ namespace fheroes2
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
         assert( maxWidth > 0 );
-        if ( maxWidth <= 0 ) {
+        if ( maxWidth <= 0 || _text.empty() ) {
             return;
         }
 
-        if ( _text.empty() ) {
-            return;
-        }
-
-        computeTextOffset( maxWidth );
-
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
-        const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
-                                                                static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
-
-        _text = _text.substr( _textOffset, maxCharacterCount );
-    }
-
-    void TextInput::computeTextOffset( const int32_t maxWidth )
-    {
-        if ( _cursorPosition < _textOffset ) {
-            // If the cursor is to the left of the textBox
-            _textOffset = _cursorPosition;
+        const int32_t fullLineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
+        if ( fullLineWidth < maxWidth ) {
             return;
         }
 
-        const fheroes2::FontCharHandler charHandler( _fontType );
+        // If the cursor is to the left of the textBox
+        _textOffset = std::min( _textOffset, _cursorPosition );
 
+        // If some characters were deleted and we have space for new characters.
+        while ( _textOffset > 0 ) {
+            const int32_t lineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset - 1 ), static_cast<int32_t>( _text.size() - _textOffset + 1 ),
+                                      charHandler, _keepLineTrailingSpaces );
+            if ( lineWidth > maxWidth ) {
+                break;
+            }
+
+            --_textOffset;
+        }
+
+        // If the cursor is to the right of the Textbox
         int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
                                                           static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
         while ( _textOffset + maxCharacterCount <= _cursorPosition ) {
-            // If the cursor is to the right of the textBox
             ++_textOffset;
             maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
                                                       charHandler, maxWidth );
         }
+
+        _text = _text.substr( _textOffset, maxCharacterCount );
     }
 
     void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const

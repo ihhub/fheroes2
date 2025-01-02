@@ -273,14 +273,10 @@ namespace fheroes2
 
     class TextInput final : public Text
     {
+        using Text::Text;
+
     public:
         TextInput() = default;
-
-        TextInput( std::string text, const FontType fontType )
-            : Text( std::move( text ), fontType )
-        {
-            // Do nothing.
-        }
 
         void setCursorPosition( const size_t position )
         {
@@ -295,8 +291,6 @@ namespace fheroes2
         }
 
     private:
-        void computeTextOffset( const int32_t maxWidth );
-
         size_t _cursorPosition{ 0 };
         size_t _textOffset{ 0 };
     };
