@@ -782,7 +782,7 @@ void Maps::Tile::updatePassability()
     const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
     // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
+    if ( !singleObjectTile && !isDetachedObject() ) {
         const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
