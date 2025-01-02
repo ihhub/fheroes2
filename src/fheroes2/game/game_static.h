@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMESTATIC_H
-#define H2GAMESTATIC_H
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -78,5 +77,3 @@ namespace GameStatic
 
     bool isHeroWorthyToVisitXanadu( const Heroes & hero );
 }
-
-#endif

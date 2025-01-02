@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -21,8 +21,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2LOCALEVENT_H
-#define H2LOCALEVENT_H
+
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -519,5 +519,3 @@ private:
         _actionStates &= ~states;
     }
 };
-
-#endif
