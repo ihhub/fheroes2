@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -151,7 +151,15 @@ void MoraleIndicator::Redraw()
         _description.append( modificators );
     }
 
-    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _morale ? 5 : ( 0 < _morale ? 4 : 7 ) ) );
+    uint32_t spriteInx = 7;
+    if ( _morale < Morale::NORMAL ) {
+        spriteInx = 5;
+    }
+    else if ( _morale > Morale::NORMAL ) {
+        spriteInx = 4;
+    }
+
+    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::HSICONS, spriteInx );
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
         _description.append( "\n\n" );
         _description.append( _( "Entire army is undead, so morale does not apply." ) );

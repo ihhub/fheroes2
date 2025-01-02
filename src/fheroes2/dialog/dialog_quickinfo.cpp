@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -761,7 +761,16 @@ namespace
         // morale
         if ( isFullInfo ) {
             const int32_t morale = hero.GetMorale();
-            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
+
+            uint32_t spriteInx = 5;
+            if ( morale < 0 ) {
+                spriteInx = 3;
+            }
+            else if ( morale > 0 ) {
+                spriteInx = 4;
+            }
+
+            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, spriteInx );
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
                 fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
