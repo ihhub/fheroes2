@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -381,7 +381,8 @@ namespace fheroes2
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
-        const int32_t fullLineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
+        const int32_t fullLineWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
         if ( fullLineWidth < maxWidth ) {
             return;
         }
@@ -391,8 +392,8 @@ namespace fheroes2
 
         // If some characters were deleted and we have space for new characters.
         while ( _textOffset > 0 ) {
-            const int32_t lineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset - 1 ), static_cast<int32_t>( _text.size() - _textOffset + 1 ),
-                                      charHandler, _keepLineTrailingSpaces );
+            const int32_t lineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset - 1 ),
+                                                    static_cast<int32_t>( _text.size() - _textOffset + 1 ), charHandler, _keepLineTrailingSpaces );
             if ( lineWidth > maxWidth ) {
                 break;
             }
