@@ -3272,7 +3272,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
-                                               _( "The battle will be resolved instantly by the computer from the current state.\n\nThis cannot be reverted." ), Dialog::ZERO );
+                                               _( "The battle will be resolved instantly by the computer from the current state.\n\nThis cannot be reverted." ),
+                                               Dialog::ZERO );
         }
     }
 }
