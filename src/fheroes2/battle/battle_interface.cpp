@@ -3223,7 +3223,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
-    const Dialog::FrameBox box( title.height() + 7 + header.height() + 7 + autoResolveButtonReleased.height() + 15, true );
+    const Dialog::FrameBox box( title.height( title.width() ) + 7 + header.height( header.width() ) + 7 + autoResolveButtonReleased.height() + 15, true );
     const fheroes2::Rect roiArea = box.GetArea();
 
     fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - cancelButtonReleased.width() / 2, roiArea.y + roiArea.height - 25, cancelButtonICN, 0, 1 );
