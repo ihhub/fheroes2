@@ -632,6 +632,7 @@ int StreamFile::closeFile( std::FILE * f )
     const int res = std::fclose( f );
 
 #ifdef __EMSCRIPTEN__
+    // The following code is not C++ code, but JavaScript code.
     // clang-format off
     EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
     // clang-format on
