@@ -1,10 +1,9 @@
-building with pthread:
+building with pthread requires emscripten sdk patching(valid for v3.1.74):
 1. modify src/dist/Makefile.web to enable pthread support
 2. modify src/engine/thread.cpp to allow spawn threads
-3. use patch sdl2_mixer.py; PR and issue description https://github.com/emscripten-core/emscripten/pull/23094
+3. use patch sdl2_mixer.py; PR, patch itself and issue description can be found here https://github.com/emscripten-core/emscripten/pull/23094
 4. check how to enable SharedArrayBuffer, options: serve with custom headers, use service worker to intercept request, use custom browser flags
-
-docker run --rm -v $(pwd):/src emscripten/emsdk:3.1.74 \
+5. docker run --rm -v $(pwd):/src emscripten/emsdk:3.1.74 \
   sh -c \
     'cp -f files/web/sdl2_mixer.py /emsdk/upstream/emscripten/tools/ports/sdl2_mixer.py && apt update && apt install -y gettext && emmake make -f Makefile.web'
 
