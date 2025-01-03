@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -40,7 +40,7 @@ fheroes2.vpk: eboot.bin param.sfo translations
 		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
 		--add files/data=files/data \
 		--add files/lang/vita_temp=files/lang \
-	fheroes2.vpk
+		fheroes2.vpk
 	rm -r files/lang/vita_temp
 
 translations: fheroes2.elf

@@ -159,8 +159,8 @@ ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)" CPPFLAGS="$(CPPFLAGS_TP)"
 endif
 	$(MAKE) -C engine
-ifeq ($(PLATFORM),web)
-	$(MAKE) -C web
+ifeq ($(PLATFORM),emscripten)
+	$(MAKE) -C fheroes2-ems
 else
 	$(MAKE) -C fheroes2
 endif
@@ -173,8 +173,8 @@ ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker clean
 endif
 	$(MAKE) -C engine clean
-ifeq ($(PLATFORM),web)
-	$(MAKE) -C web clean
+ifeq ($(PLATFORM),emscripten)
+	$(MAKE) -C fheroes2-ems clean
 else
 	$(MAKE) -C fheroes2 clean
 endif
