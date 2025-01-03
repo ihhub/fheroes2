@@ -3213,7 +3213,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     fheroes2::Text title( _( "Automatic Battle Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
     fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
-    
+
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
