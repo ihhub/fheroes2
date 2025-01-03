@@ -5053,8 +5053,7 @@ namespace
             return true;
         }
         case ICN::EMPTY_INTERFACE_BUTTON_GOOD: 
-        case ICN::EMPTY_INTERFACE_BUTTON_EVIL:
-        {
+        case ICN::EMPTY_INTERFACE_BUTTON_EVIL: {
             const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
             loadICN( originalId );
             _icnVsSprite[id].resize( 2 );
