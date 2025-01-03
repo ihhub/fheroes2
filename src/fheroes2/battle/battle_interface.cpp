@@ -3267,7 +3267,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Auto Combat" ),
-                                               _( "Lets the computer play out the battle for you.\n\nYou can interrupt it at any time by pressing any key." ),
+                                               _( "Lets the computer play out the battle for you.\n\nYou can interrupt this at any time by pressing any key." ),
                                                Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
