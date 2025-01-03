@@ -4256,22 +4256,9 @@ namespace
                  && _icnVsSprite[id][3].height() == 36 ) {
                 // Add hero action button released and pressed.
                 _icnVsSprite[id].resize( 18 );
-                Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
-                Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
-
-                // Get the button's icon colors.
-                const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
-                const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
-                const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
-                const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
-
-                // Clean-up the buttons' background
-                Fill( _icnVsSprite[id][16], 23, 5, 8, 5, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][16], 8, 10, 24, 8, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][16], 6, 18, 24, 10, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][17], 22, 6, 8, 5, backgroundPressedColor );
-                Fill( _icnVsSprite[id][17], 7, 11, 24, 8, backgroundPressedColor );
-                Fill( _icnVsSprite[id][17], 5, 19, 24, 10, backgroundPressedColor );
+                const int emptyButtonId = ( id == ICN::ADVBTNS ) ? ICN::EMPTY_INTERFACE_BUTTON_GOOD : ICN::EMPTY_INTERFACE_BUTTON_EVIL;
+                Copy( fheroes2::AGG::GetICN( emptyButtonId, 0 ), _icnVsSprite[id][16] );
+                Copy( fheroes2::AGG::GetICN( emptyButtonId, 1 ), _icnVsSprite[id][17] );
 
                 // Get the action cursor and prepare it for button. We make it a little smaller.
                 const fheroes2::Sprite & originalActionCursor = fheroes2::AGG::GetICN( ICN::ADVMCO, 9 );
@@ -4292,6 +4279,10 @@ namespace
                 Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
                 // Hind legs.
                 Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
+
+                // Get the button's icon colors.
+                const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
+                const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
 
                 // Make contour transparent and the horse figure filled with solid color.
                 const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
@@ -5058,6 +5049,32 @@ namespace
 
                 Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
             }
+
+            return true;
+        }
+        case ICN::EMPTY_INTERFACE_BUTTON_GOOD: 
+        case ICN::EMPTY_INTERFACE_BUTTON_EVIL:
+        {
+            const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
+            loadICN( originalId );
+            _icnVsSprite[id].resize( 2 );
+
+            Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
+            Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
+
+            // Get the button's icon colors.
+            const uint8_t mainReleasedColor = _icnVsSprite[originalId][2].image()[7 * 36 + 26];
+            const uint8_t mainPressedColor = _icnVsSprite[originalId][3].image()[8 * 36 + 25];
+            const uint8_t backgroundReleasedColor = _icnVsSprite[originalId][2].image()[1 * 36 + 5];
+            const uint8_t backgroundPressedColor = _icnVsSprite[originalId][3].image()[5 * 36 + 6];
+
+            // Clean-up the buttons' background
+            Fill( _icnVsSprite[id][0], 23, 5, 8, 5, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 8, 10, 24, 8, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 6, 18, 24, 10, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][1], 22, 6, 8, 5, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 7, 11, 24, 8, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 5, 19, 24, 10, backgroundPressedColor );
 
             return true;
         }
